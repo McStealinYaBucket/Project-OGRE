@@ -1,0 +1,197 @@
+G3D's MSVC port of libzip 0.9, taken from G3D's bundled zip.lib (g3d SVN r100, zip.lib/source and
+include): config.h (no HAVE_MKSTEMP/HAVE_FSEEKO under _MSC_VER), zipint.h (ZIP_EXTERN empty, mode_t,
+strcasecmp=_stricmp, snprintf=_snprintf), zip.h (ssize_t=SSIZE_T) and mkstemp.c (_mktemp + _open).
+Build need for VC9; PLAYER evidence: '%s.XXXXXX' at 0x00bc0334 (zip_close temp name) and the
+_zip_mkstemp body, see the match CSV.
+
+diff -ruN a/lib/config.h b/lib/config.h
+--- a/lib/config.h	1969-12-31 19:00:00.000000000 -0500
++++ b/lib/config.h	2026-11-12 09:24:17.922932103 -0500
+@@ -0,0 +1,11 @@
++#ifndef HAD_CONFIG_H
++#define HAD_CONFIG_H
++#ifndef _MSC_VER
++    #define HAVE_FSEEKO
++    #define HAVE_MKSTEMP
++    #define HAVE_MOVEFILEEX
++    #define HAVE_UNISTD_H
++#endif
++#define PACKAGE "libzip"
++#define VERSION "0.7.1"
++#endif /* HAD_CONFIG_H */
+diff -ruN a/lib/mkstemp.c b/lib/mkstemp.c
+--- a/lib/mkstemp.c	2026-11-12 09:24:17.912453627 -0500
++++ b/lib/mkstemp.c	2026-11-12 09:24:17.918932145 -0500
+@@ -33,108 +33,28 @@
+  * SUCH DAMAGE.
+  */
+ 
++#ifdef _MSC_VER
++
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
+-#include <assert.h>
+-#include <ctype.h>
+-#include <errno.h>
++#include <io.h>
+ #include <fcntl.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+ 
+-#ifndef O_BINARY
+-#define O_BINARY 0
+-#endif
+ 
+ 
+ 
++
+ int
+ _zip_mkstemp(char *path)
+ {
+-	int fd;   
+-	char *start, *trv;
+-	struct stat sbuf;
+-	pid_t pid;
+-
+-	/* To guarantee multiple calls generate unique names even if
+-	   the file is not created. 676 different possibilities with 7
+-	   or more X's, 26 with 6 or less. */
+-	static char xtra[2] = "aa";
+-	int xcnt = 0;
+-
+-	pid = getpid();
+-
+-	/* Move to end of path and count trailing X's. */
+-	for (trv = path; *trv; ++trv)
+-		if (*trv == 'X')
+-			xcnt++;
+-		else
+-			xcnt = 0;	
+-
+-	/* Use at least one from xtra.  Use 2 if more than 6 X's. */
+-	if (*(trv - 1) == 'X')
+-		*--trv = xtra[0];
+-	if (xcnt > 6 && *(trv - 1) == 'X')
+-		*--trv = xtra[1];
+-
+-	/* Set remaining X's to pid digits with 0's to the left. */
+-	while (*--trv == 'X') {
+-		*trv = (pid % 10) + '0';
+-		pid /= 10;
+-	}
+-
+-	/* update xtra for next call. */
+-	if (xtra[0] != 'z')
+-		xtra[0]++;
+-	else {
+-		xtra[0] = 'a';
+-		if (xtra[1] != 'z')
+-			xtra[1]++;
+-		else
+-			xtra[1] = 'a';
+-	}
+-
+-	/*
+-	 * check the target directory; if you have six X's and it
+-	 * doesn't exist this runs for a *very* long time.
+-	 */
+-	for (start = trv + 1;; --trv) {
+-		if (trv <= path)
+-			break;
+-		if (*trv == '/') {
+-			*trv = '\0';
+-			if (stat(path, &sbuf))
+-				return (0);
+-			if (!S_ISDIR(sbuf.st_mode)) {
+-				errno = ENOTDIR;
+-				return (0);
+-			}
+-			*trv = '/';
+-			break;
+-		}
+-	}
+-
+-	for (;;) {
+-		if ((fd=open(path, O_CREAT|O_EXCL|O_RDWR|O_BINARY, 0600)) >= 0)
+-			return (fd);
+-		if (errno != EEXIST)
+-			return (0);
+-
+-		/* tricky little algorithm for backward compatibility */
+-		for (trv = start;;) {
+-			if (!*trv)
+-				return (0);
+-			if (*trv == 'z')
+-				*trv++ = 'a';
+-			else {
+-				if (isdigit((unsigned char)*trv))
+-					*trv = 'a';
+-				else
+-					++*trv;
+-				break;
+-			}
+-		}
+-	}
+-	/*NOTREACHED*/
++    int ret = -1;
++
++    _mktemp(path);
++    ret = _open(path, O_RDWR|O_BINARY|O_CREAT|O_EXCL|_O_SHORT_LIVED, _S_IREAD|_S_IWRITE); 
++
++    return ret;
+ }
++
++#endif //_MSC_VER
++
+diff -ruN a/lib/zip.h b/lib/zip.h
+--- a/lib/zip.h	2026-11-12 09:24:17.912294439 -0500
++++ b/lib/zip.h	2026-11-12 09:24:17.920932124 -0500
+@@ -36,13 +36,7 @@
+ 
+ 
+ 
+-#ifndef ZIP_EXTERN
+-#ifdef _MSC_VER
+-#define ZIP_EXTERN __declspec(dllexport)
+-#else
+ #define ZIP_EXTERN
+-#endif
+-#endif
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -52,6 +46,10 @@
+ #include <stdio.h>
+ #include <time.h>
+ 
++#ifdef _MSC_VER
++    #define ssize_t SSIZE_T
++#endif
++
+ /* flags for zip_open */
+ 
+ #define ZIP_CREATE           1
+diff -ruN a/lib/zipint.h b/lib/zipint.h
+--- a/lib/zipint.h	2026-11-12 09:24:17.912350798 -0500
++++ b/lib/zipint.h	2026-11-12 09:24:17.916932166 -0500
+@@ -37,12 +37,18 @@
+ #include <zlib.h>
+ 
+ #ifdef _MSC_VER
+-#define ZIP_EXTERN __declspec(dllimport)
++#define ZIP_EXTERN
+ #endif
+ 
+ #include "zip.h"
+ #include "config.h"
+ 
++#ifdef _MSC_VER
++    #define mode_t unsigned short
++    #define strcasecmp _stricmp
++    #define snprintf _snprintf
++#endif
++
+ #ifndef HAVE_MKSTEMP
+ int _zip_mkstemp(char *);
+ #define mkstemp _zip_mkstemp

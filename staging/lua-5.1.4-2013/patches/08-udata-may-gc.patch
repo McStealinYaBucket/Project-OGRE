@@ -1,0 +1,87 @@
+Udata gains bool may_gc after len; luaS_newudata sets it, newproxy clears it, GCTM honours it;
+newproxy rejects metatable-proxy arguments.
+
+Justification (PLAYER bytes): luaS_newudata 0x0098cec0 stores byte [u+0x14] = 1 after env;
+luaB_newproxy 0x008b0250 stores byte [userdata-4] = 0 (= header+0x14) right after lua_newuserdata
+and its non-boolean branch is just luaL_error(L, "newproxy only supports the arguments nil and true")
+(string 0x00b861ec); GCTM 0x009898b0 returns early when byte [udata+0x14] == 0 after finding a __gc
+tag method. lbaselib.c includes lobject.h for the Udata type.
+
+--- a/lbaselib.c
++++ b/lbaselib.c
+@@ -18,6 +18,7 @@
+ 
+ #include "lauxlib.h"
+ #include "lualib.h"
++#include "lobject.h"  /* ROBLOX: Udata for newproxy */
+ 
+ 
+ 
+@@ -419,8 +420,10 @@
+ 
+ 
+ static int luaB_newproxy (lua_State *L) {
++  Udata *u;
+   lua_settop(L, 1);
+-  lua_newuserdata(L, 0);  /* create proxy */
++  u = cast(Udata *, lua_newuserdata(L, 0)) - 1;  /* create proxy; ROBLOX: header */
++  u->uv.may_gc = false;  /* ROBLOX: no __gc on proxies */
+   if (lua_toboolean(L, 1) == 0)
+     return 1;  /* no metatable */
+   else if (lua_isboolean(L, 1)) {
+@@ -429,16 +432,8 @@
+     lua_pushboolean(L, 1);
+     lua_rawset(L, lua_upvalueindex(1));  /* weaktable[m] = true */
+   }
+-  else {
+-    int validproxy = 0;  /* to check if weaktable[metatable(u)] == true */
+-    if (lua_getmetatable(L, 1)) {
+-      lua_rawget(L, lua_upvalueindex(1));
+-      validproxy = lua_toboolean(L, -1);
+-      lua_pop(L, 1);  /* remove value */
+-    }
+-    luaL_argcheck(L, validproxy, 1, "boolean or proxy expected");
+-    lua_getmetatable(L, 1);  /* metatable is valid; get it */
+-  }
++  else  /* ROBLOX */
++    return luaL_error(L, "newproxy only supports the arguments nil and true");
+   lua_setmetatable(L, 2);
+   return 1;
+ }
+--- a/lgc.c
++++ b/lgc.c
+@@ -457,8 +457,12 @@
+   makewhite(g, o);
+   tm = fasttm(L, udata->uv.metatable, TM_GC);
+   if (tm != NULL) {
+-    lu_byte oldah = L->allowhook;
+-    lu_mem oldt = g->GCthreshold;
++    lu_byte oldah;
++    lu_mem oldt;
++    if (!udata->uv.may_gc)  /* ROBLOX: newproxy userdata never run __gc */
++      return;
++    oldah = L->allowhook;
++    oldt = g->GCthreshold;
+     L->allowhook = 0;  /* stop debug hooks during GC tag method */
+     g->GCthreshold = 2*g->totalbytes;  /* avoid GC steps */
+     setobj2s(L, L->top, tm);
+--- a/lobject.h
++++ b/lobject.h
+@@ -219,6 +219,7 @@
+     struct Table *metatable;
+     struct Table *env;
+     size_t len;
++    bool may_gc;  /* ROBLOX: __gc metamethod allowed (newproxy clears it) */
+   } uv;
+ } Udata;
+ 
+--- a/lstring.c
++++ b/lstring.c
+@@ -103,6 +103,7 @@
+   u->uv.len = s;
+   u->uv.metatable = NULL;
+   u->uv.env = e;
++  u->uv.may_gc = true;  /* ROBLOX */
+   /* chain it on udata list (after main thread) */
+   u->uv.next = G(L)->mainthread->next;
+   G(L)->mainthread->next = obj2gco(u);

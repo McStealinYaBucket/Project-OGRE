@@ -1,0 +1,84 @@
+C++ error handling: luaD_throw throws a lua_exception; LUAI_TRY catches lua_exception& and turns a
+std::exception const& into a Lua error with luaG_runerror(L, "%s", e.what()).
+
+Justification (PLAYER bytes): RTTI .?AVlua_exception@@ at 0x00d94b14. luaD_throw 0x008ab530 builds
+{vftable 0x00b85540, L, errorJmp, committed=0} on top of std::exception::exception() and calls
+_CxxThrowException. luaD_rawrunprotected 0x008aadd0: its FuncInfo 0x00cc4ec8 has try 0 with catch
+(lua_exception&) at 0x008aae15 and catch (std::exception const&, adjectives 9) at 0x008aae30, which
+calls e.what() and luaG_runerror(L, "%s" 0x00be1f20, ...) inside an inner try whose catch
+(lua_exception&) is 0x008aae59; each catch sets byte [e+0x14] (committed) = 1 and status = -1 if 0.
+The class members match: what() 0x008aad30 = lua_tostring(L,-1); ~lua_exception 0x008aad50 resets
+errorJmp->status and pops one value unless committed; copy ctor 0x008ab5b0 commits the source.
+(2016 catches RBX::base_exception instead of std::exception; no RBX::base_exception RTTI exists in
+PLAYER.)
+
+--- a/ldo.c
++++ b/ldo.c
+@@ -91,6 +91,45 @@
+ }
+ 
+ 
++/* ROBLOX: the C++ exception thrown by luaD_throw. If C++ code catches it before
++** Lua does (it is never committed), its destructor undoes the error state. */
++class lua_exception : public std::exception
++{
++	friend void luaD_throw (lua_State*, int);
++	friend int luaD_rawrunprotected (lua_State*, Pfunc, void*);
++	struct lua_State* const L;
++	struct lua_longjmp *const errorJmp;
++	mutable bool committed;
++	lua_exception(lua_State *L, lua_longjmp *errorJmp)
++		:L(L)
++		,errorJmp(errorJmp)
++		,committed(false)
++	{
++	}
++	void commit() const { committed = true; }
++public:
++	lua_exception(const lua_exception& that)
++		:L(that.L)
++		,errorJmp(that.errorJmp)
++		,committed(that.committed)
++	{
++		that.commit();
++	}
++	virtual const char *what() const throw()
++	{
++		return lua_tostring(L, -1);
++	}
++	~lua_exception() throw()
++	{
++		if (!committed)
++		{
++			errorJmp->status = 0;
++			lua_pop(L, 1);
++		}
++	}
++};
++
++
+ void luaD_throw (lua_State *L, int errcode) {
+   if (L->errorJmp) {
+     L->errorJmp->status = errcode;
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -606,9 +606,16 @@
+ */
+ #if defined(__cplusplus)
+ /* C++ exceptions */
+-#define LUAI_THROW(L,c)	throw(c)
+-#define LUAI_TRY(L,c,a)	try { a } catch(...) \
+-	{ if ((c)->status == 0) (c)->status = -1; }
++/* ROBLOX: throw a lua_exception (ldo.c); a std::exception thrown by C++ code
++** called from Lua is turned into a Lua error */
++#include <exception>
++#define LUAI_THROW(L,c)	throw(lua_exception(L,c))
++#define LUAI_TRY(L,c,a)	try { a } \
++	catch (lua_exception& e) { e.commit(); if ((c)->status == 0) (c)->status = -1; } \
++	catch (std::exception const& e) { \
++		try { luaG_runerror(L, "%s", e.what()); } \
++		catch (lua_exception& e) { e.commit(); if ((c)->status == 0) (c)->status = -1; } \
++	}
+ #define luai_jmpbuf	int  /* dummy variable */
+ 
+ #elif defined(LUA_USE_ULONGJMP)

@@ -1,0 +1,194 @@
+target,recomp_symbol,kind,orig_address,votes,other_addresses,orig_name,orig_name_source
+PLAYER,RBX::Adorn::preSubmitPass(),FUNCTION,0x00528720,17,1,RBX::CameraSubject::onCameraWrapMouse(),ios:
+PLAYER,RBX::ProfanityFilter::ContainsProfanity(std::string const&),FUNCTION,0x00402730,9,0,RBX::Instance::canClientCreate(),ios:
+PLAYER,boost::shared_ptr<RBX::Instance>::operator=,FUNCTION,0x00469520,9,0,,
+PLAYER,RBX::Adorn::preSubmitPass(),FUNCTION,0x0040b950,5,1,RBX::GuidItem<RBX::Instance>::onGuidChanged(),ios:
+PLAYER,G3D::Vector3::maxFinite,FUNCTION,0x009dab20,4,0,"RBX::Extents::vv(G3D::Vector3 const&, G3D::Vector3 const&)",ios:
+PLAYER,"boost::function1<boost::shared_ptr<RBX::Reflection::Tuple>,boost::shared_ptr<RBX::Reflection::Tuple const> >::assign_to_own",FUNCTION,0x00437a90,4,0,,
+PLAYER,"std::_Destroy_range<std::allocator<boost::shared_ptr<RBX::Instance> > >(class boost::shared_ptr<class RBX::GuiBase> *, class boost::shared_ptr<class RBX::GuiBase> *, class std::allocator<class boost::shared_ptr<class RBX::GuiBase>> &, struct std::_Nonscalar_ptr_iterator_tag)",FUNCTION,0x00829d90,4,0,,
+PLAYER,??A?$IndexArray@VIndexedTree@RBX@@$1?getIndex@12@AAEAAHXZ@RBX@@QAEPAVIndexedTree@1@H@Z,FUNCTION,0x0082e750,3,0,RBX::IndexedMesh* RBX::IndexedTree::getTypedChild<RBX::IndexedMesh>(int),ios:
+PLAYER,"RBX::Reflection::TypedPropertyDescriptor<boost::shared_ptr<std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > const> >::getValue",FUNCTION,0x00449910,3,0,,
+PLAYER,std::_Allocate<boost::shared_ptr<RBX::Instance> >,FUNCTION,0x004f3010,3,0,"struct std::pair<class boost::condition_variable *,class boost::mutex *> * __cdecl std::_Allocate<struct std::pair<class boost::condition_variable *,class boost::mutex *>>(unsigned int,struct std::pair<class boost::condition_variable *,class boost::mutex *> *)",match:
+PLAYER,RBX::AdornBillboarder::getCamera() const,FUNCTION,0x0096bde0,2,0,RBX::PVInstance::topHashCode() const,ios:
+PLAYER,"RBX::AdornBillboarder::line2d(G3D::Vector2 const&, G3D::Vector2 const&, G3D::Color4 const&) const",FUNCTION,0x0066ee10,2,0,"public: void __thiscall RakNet::CCRakNetSlidingWindow::Update(unsigned __int64,bool)",match:
+PLAYER,RBX::Name::getNullName(),FUNCTION,0x00613a90,2,0,,
+PLAYER,boost::enable_shared_from_this<RBX::Reflection::DescribedBase>::shared_from_this,FUNCTION,0x0044b480,2,0,,
+PLAYER,boost::exception_ptr::~exception_ptr,FUNCTION,0x007e4e40,2,0,,
+PLAYER,boost::thread::~thread,FUNCTION,0x00aa2d0c,2,0,__declspec(dllimport) public: __thiscall boost::thread::~thread(void),ida:
+PLAYER,boost::unique_lock<boost::recursive_mutex>::lock,FUNCTION,0x004366c0,2,0,boost::unique_lock<boost::recursive_mutex>::lock(),ios:
+PLAYER,std::_Allocate<std::_Aux_cont>,FUNCTION,0x005cee00,2,1,,
+PLAYER,"std::vector<RBX::TypesetterBitmap::Line,std::allocator<RBX::TypesetterBitmap::Line> >::_Xlen",FUNCTION,0x00476d60,2,0,"protected: static void __cdecl std::vector<class boost::program_options::basic_option<char>,class std::allocator<class boost::program_options::basic_option<char>>>::_Xlen(void)",lib:
+PLAYER,?GetIndexFromKey@?$OrderedList@GPAUSplitPacketChannel@RakNet@@$1?SplitPacketChannelComp@2@YAHABGABQAU12@@Z@DataStructures@@QBEIABGPA_NP6AH0ABQAUSplitPacketChannel@RakNet@@@Z@Z,FUNCTION,0x005ab5b0,1,0,"public: unsigned int __thiscall DataStructures::OrderedList<struct RakNet::uint24_t,struct DataStructures::RangeNode<struct RakNet::uint24_t>,&int __cdecl DataStructures::RangeNodeComp<struct RakNet::uint24_t>(struct RakNet::uint24_t const &,struct DataStructures::RangeNode<struct RakNet::uint24_t> const &)>::GetIndexFromKey(struct RakNet::uint24_t const &,bool *,int (__cdecl *)(struct RakNet::uint24_t const &,struct DataStructures::RangeNode<struct RakNet::uint24_t> const &))const",match:
+PLAYER,?fastRemove@?$IndexArray@VIndexedTree@RBX@@$1?getIndex@12@AAEAAHXZ@RBX@@QAEXPAVIndexedTree@2@@Z,FUNCTION,0x00830340,1,0,"RBX::IndexArray<RBX::IndexedTree, &RBX::IndexedTree::getIndex()>::fastRemove(RBX::IndexedTree*)",ios:
+PLAYER,DataStructures::List<RakNet::PluginInterface2 *>::Insert,FUNCTION,0x005ca260,1,0,"public: void __thiscall DataStructures::List<struct DataStructures::RangeNode<struct RakNet::uint24_t>>::Insert(struct DataStructures::RangeNode<struct RakNet::uint24_t> const &,char const *,unsigned int)",match:
+PLAYER,DataStructures::List<RakNet::SplitPacketChannel *>::Insert,FUNCTION,0x005ca310,1,0,"public: void __thiscall DataStructures::List<struct DataStructures::RangeNode<struct RakNet::uint24_t>>::Insert(struct DataStructures::RangeNode<struct RakNet::uint24_t> const &,unsigned int,char const *,unsigned int)",match:
+PLAYER,"G3D::Array<G3D::Plane,10,32>::append",FUNCTION,0x009edf00,1,0,,
+PLAYER,G3D::Matrix3::operator==,FUNCTION,0x009d8000,1,0,public: bool __thiscall G3D::Matrix3::operator==(class G3D::Matrix3 const &)const,lib:
+PLAYER,"RBX::AdornBillboarder::convexPolygon2d(G3D::Vector2 const*, int, G3D::Color4 const&, int) const",FUNCTION,0x004805c0,1,0,"RBX::AdornRbxGfx::axes(G3D::Color4 const&, G3D::Color4 const&, G3D::Color4 const&, float)",ios:
+PLAYER,RBX::Allocator<RBX::OnDemandInstance>::operator new,FUNCTION,0x0061bf80,1,1,,
+PLAYER,RBX::Allocator<RBX::OnDemandInstance>::operator new,FUNCTION,0x00721eb0,1,1,,
+PLAYER,RBX::Assembly::getFilterPhase,FUNCTION,0x008bb760,1,0,,
+PLAYER,RBX::AssemblyHistory::wakeUp,FUNCTION,0x0095d500,1,0,,
+PLAYER,RBX::CEvent::CEvent,FUNCTION,0x009b9000,1,0,,
+PLAYER,RBX::Geometry::getFaceFromLegacyNormalId(RBX::NormalId) const,FUNCTION,0x008f0790,1,0,RBX::LegacyContentTable::FindEntry(std::string const&),ios:
+PLAYER,RBX::HttpQueueStatsItem::create,FUNCTION,0x0086f610,1,0,RBX::HttpQueueStatsItem::init(),ios:
+PLAYER,RBX::Instance::getFullName,FUNCTION,0x0061f890,1,0,,
+PLAYER,"RBX::Lua::Bridge<G3D::Vector3,1>::pushNewObject<G3D::Vector3>",FUNCTION,0x00877190,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_inverse,FUNCTION,0x008865b0,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_pointToObjectSpace,FUNCTION,0x008869e0,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_pointToWorldSpace,FUNCTION,0x00886800,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_toObjectSpace,FUNCTION,0x00886710,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_toWorldSpace,FUNCTION,0x00886620,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_vectorToObjectSpace,FUNCTION,0x00886e90,1,0,,
+PLAYER,RBX::Lua::CoordinateFrameBridge::on_vectorToWorldSpace,FUNCTION,0x00886bd0,1,0,,
+PLAYER,RBX::PartInstance::getResizeIncrement() const,FUNCTION,0x009e96c0,1,0,,
+PLAYER,RBX::PlayerChatLine::~PlayerChatLine,FUNCTION,0x00970b70,1,0,RBX::ChatLine::~ChatLine(),ios:
+PLAYER,RBX::Reflection::Type::getSingleton<RBX::Soundscape::SoundId>,FUNCTION,0x006ffcb0,1,0,RBX::Reflection::Type const& RBX::Reflection::Type::getSingleton<RBX::ContentId>(),ios:
+PLAYER,RBX::Reflection::Variant::Variant(class RBX::Reflection::Variant const &),FUNCTION,0x00447400,1,0,,
+PLAYER,RBX::ScriptStats::startCollection,FUNCTION,0x008ac4d0,1,0,,
+PLAYER,RBX::Security::Context::requirePermission,FUNCTION,0x00527310,1,0,,
+PLAYER,RBX::SetThreadName,FUNCTION,0x009b1aa0,1,0,,
+PLAYER,"RBX::StandardOut::print(enum RBX::MessageType, char const *)",FUNCTION,0x00668280,1,0,,
+PLAYER,RBX::TaskScheduler::getJobsInfo,FUNCTION,0x009b75f0,1,0,,
+PLAYER,RBX::Time::nowFast,FUNCTION,0x009bb680,1,1,,
+PLAYER,RBX::Time::nowFast,FUNCTION,0x009bb4b0,1,1,,
+PLAYER,RakNet::SocketLayer::IsPortInUse,FUNCTION,0x005c6f00,1,0,public: static int __cdecl RakNet::BitStream::NumberOfLeadingZeroes(__int64),match:
+PLAYER,RakNet::`RangeNodeComp<RakNet::uint24_t>'::OrderedList::Insert,FUNCTION,0x005cb540,1,0,"public: unsigned int __thiscall DataStructures::OrderedList<unsigned short,struct RakNet::SplitPacketChannel *,&int __cdecl RakNet::SplitPacketChannelComp(unsigned short const &,struct RakNet::SplitPacketChannel * const &)>::Insert(unsigned short const &,struct RakNet::SplitPacketChannel * const &,bool,char const *,unsigned int,int (__cdecl *)(unsigned short const &,struct RakNet::SplitPacketChannel * const &))",match:
+PLAYER,"boost::_bi::storage3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> >::storage3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> >",FUNCTION,0x005871e0,1,0,,
+PLAYER,"boost::detail::sp_counted_impl_pd<RBX::ChatService *, class RBX::Creatable<RBX::Instance>::Deleter>::`vftable'",VTABLE,0x00b19b2c,1,0,"const boost::detail::sp_counted_impl_pd<class RBX::ChatService *,class RBX::Creatable<class RBX::Instance>::Deleter>::`vftable'",rtti:
+PLAYER,"boost::detail::sp_counted_impl_pd<RBX::RuntimeScriptService *, class RBX::Creatable<RBX::Instance>::Deleter>::`vftable'",VTABLE,0x00b337b8,1,0,"const boost::detail::sp_counted_impl_pd<class RBX::RuntimeScriptService *,class RBX::Creatable<class RBX::Instance>::Deleter>::`vftable'",rtti:
+PLAYER,boost::detail::thread_data<boost::function0<void>>::`vftable',VTABLE,0x00b13128,1,0,const boost::detail::thread_data<class boost::function0<void>>::`vftable',rtti:
+PLAYER,boost::detail::thread_data_base::thread_data_base,FUNCTION,0x00aa2d04,1,0,__declspec(dllimport) public: __thiscall boost::detail::thread_data_base::thread_data_base(void),ida:
+PLAYER,"boost::enable_shared_from_this<YieldFunctionStateObject>::_internal_accept_owner<YieldFunctionStateObject,YieldFunctionStateObject>",FUNCTION,0x006678b0,1,1,,
+PLAYER,"boost::enable_shared_from_this<YieldFunctionStateObject>::_internal_accept_owner<YieldFunctionStateObject,YieldFunctionStateObject>",FUNCTION,0x005bd080,1,1,,
+PLAYER,"boost::function1<void,boost::shared_ptr<rbx::spin_mutex> >::assign_to<boost::_bi::bind_t<void,void (__cdecl*)(boost::weak_ptr<RBX::AsyncHttpQueue>,std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0>,boost::shared_ptr<rbx::spin_mutex>),boost::_bi::list3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> > > >",FUNCTION,0x0086e9d0,1,0,,
+PLAYER,boost::shared_ptr<RBX::CEvent>::shared_ptr<RBX::CEvent><RBX::CEvent>,FUNCTION,0x009b4160,1,0,,
+PLAYER,boost::simple_segregated_storage<unsigned int>::segregate,FUNCTION,0x004a2b40,1,0,,
+PLAYER,"boost::singleton_pool<XmlAttribute,24,boost::default_user_allocator_malloc_free,boost::mutex,32,0>::get_pool",FUNCTION,0x0040adc0,1,0,,
+PLAYER,boost::thread::start_thread,FUNCTION,0x00aa2d08,1,0,__declspec(dllimport) public: void __thiscall boost::thread::start_thread(void),ida:
+PLAYER,"boost::thread::timed_join<boost::date_time::subsecond_duration<boost::posix_time::time_duration,1000> >",FUNCTION,0x0082bdb0,1,0,,
+PLAYER,"eax, ??_9Instance@RBX@@$BBI@AE",UNK,0x00618cd0,1,0,,
+PLAYER,"eax, RBX::Adorn::preSubmitPass()",FUNCTION,0x00528720,1,0,RBX::CameraSubject::onCameraWrapMouse(),ios:
+PLAYER,"ecx, ??_9Instance@RBX@@$BM@AE",UNK,0x00618ce0,1,0,,
+PLAYER,"ecx, LuaProfiler::stringCache",DATA,0x00de8c8c,1,0,,
+PLAYER,"ecx, RBX::appendJobExtendedStats",FUNCTION,0x0064bcf0,1,0,,
+PLAYER,"ecx, root",DATA,0x00e24868,1,0,,
+PLAYER,"esi, root",DATA,0x00e24868,1,0,,
+PLAYER,"rbx::placement_any<RBX::Region3>::placement_any<RBX::Region3><boost::shared_ptr<std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > const> >",FUNCTION,0x00634770,1,0,,
+PLAYER,rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>::disconnectAll,FUNCTION,0x005258c0,1,0,,
+PLAYER,std::_Allocate<std::_Aux_cont>,FUNCTION,0x00429c80,1,1,,
+PLAYER,"std::_Fill<RBX::Reflection::Variant *,RBX::Reflection::Variant>",FUNCTION,0x00576df0,1,0,,
+PLAYER,"std::_Fill<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> >",FUNCTION,0x00829910,1,0,,
+PLAYER,"std::_Tree<std::_Tmap_traits<RBX::Guid::Data,RBX::Instance *,std::less<RBX::Guid::Data>,std::allocator<std::pair<RBX::Guid::Data const,RBX::Instance *> >,0> >::erase(struct RBX::Guid::Data const &)",FUNCTION,0x0058c0c0,1,0,,
+PLAYER,"std::_Tree<std::_Tmap_traits<RBX::Name const *,boost::shared_ptr<RBX::Instance>,std::less<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,boost::shared_ptr<RBX::Instance> > >,0> >::_Erase",FUNCTION,0x006eedd0,1,0,,
+PLAYER,"std::_Tree<std::_Tmap_traits<RBX::Name const *,boost::shared_ptr<RBX::Instance>,std::less<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,boost::shared_ptr<RBX::Instance> > >,0> >::erase(class std::_Tree<class std::_Tmap_traits<enum RBX::SoundType, class boost::shared_ptr<class RBX::Soundscape::SoundChannel>, struct std::less<enum RBX::SoundType>, class std::allocator<struct std::pair<enum RBX::SoundType const, class boost::shared_ptr<class RBX::Soundscape::SoundChannel>>>, 0>>::const_iterator)",FUNCTION,0x006ee640,1,0,,
+PLAYER,"std::_Uninit_copy<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >",FUNCTION,0x00829ef0,1,0,,
+PLAYER,"std::for_each<std::_Vector_const_iterator<RBX::Reflection::EventDescriptor *,std::allocator<RBX::Reflection::EventDescriptor *> >,boost::_bi::bind_t<void,boost::_mfi::cmf1<void,RBX::Reflection::EventDescriptor,RBX::Reflection::DescribedBase *>,boost::_bi::list2<boost::arg<1>,boost::_bi::value<RBX::Instance *> > > >",FUNCTION,0x0061ab70,1,0,,
+PLAYER,"std::for_each<std::_Vector_iterator<boost::shared_ptr<RBX::TaskScheduler::Job const>,std::allocator<boost::shared_ptr<RBX::TaskScheduler::Job const> > >,boost::_bi::bind_t<void,void (__cdecl*)(RBX::DataModel *,boost::shared_ptr<RBX::TaskScheduler::Job const>,std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > *),boost::_bi::list3<boost::_bi::value<RBX::DataModel *>,boost::arg<1>,boost::_bi::value<std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > *> > > >",FUNCTION,0x00633360,1,0,,
+PLAYER,"std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> >::_Buy",FUNCTION,0x0041caf0,1,0,"protected: bool __thiscall std::vector<class boost::program_options::basic_option<char>,class std::allocator<class boost::program_options::basic_option<char>>>::_Buy(unsigned int)",match:
+PLAYER,"std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> >::_Destroy",FUNCTION,0x0041cb40,1,0,,
+PLAYER,"std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> >::_Umove<RBX::Reflection::Variant *>",FUNCTION,0x00577410,1,0,,
+PLAYER,"std::vector<boost::intrusive_ptr<boost::detail::basic_cv_list_entry>,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >::_Ufill",FUNCTION,0x0082aaa0,1,0,,
+PLAYER,"std::vector<boost::intrusive_ptr<boost::detail::basic_cv_list_entry>,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >::_Umove<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *>",FUNCTION,0x0082ac90,1,0,,
+PLAYER,"std::vector<wchar_t,std::allocator<wchar_t> >::_Xlen",FUNCTION,0x0084cc70,1,0,"protected: static void __cdecl std::vector<struct std::pair<class boost::condition_variable *,class boost::mutex *>,class std::allocator<struct std::pair<class boost::condition_variable *,class boost::mutex *>>>::_Xlen(void)",match:
+PLAYER,"stdext::_Unchecked_move_backward<RBX::Reflection::Variant *,RBX::Reflection::Variant *>",FUNCTION,0x00576f70,1,0,,
+PLAYER,"stdext::_Unchecked_move_backward<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *>",FUNCTION,0x00829cd0,1,0,,
+STUDIO,RBX::Adorn::preSubmitPass(),FUNCTION,0x00606c90,17,1,public: __thiscall RakNet::CCRakNetSlidingWindow::~CCRakNetSlidingWindow(void),match:
+STUDIO,RBX::ProfanityFilter::ContainsProfanity(std::string const&),FUNCTION,0x0040c110,9,0,RBX::Instance::canClientCreate(),ios:
+STUDIO,RBX::Adorn::preSubmitPass(),FUNCTION,0x004ad970,5,1,void __cdecl boost::detail::sp_enable_shared_from_this(...),match:
+STUDIO,"boost::function1<boost::shared_ptr<RBX::Reflection::Tuple>,boost::shared_ptr<RBX::Reflection::Tuple const> >::assign_to_own",FUNCTION,0x004901d0,5,0,,
+STUDIO,boost::shared_ptr<RBX::Instance>::operator=,FUNCTION,0x00489f70,5,0,,
+STUDIO,G3D::Vector3::maxFinite,FUNCTION,0x006aea20,4,0,"RBX::Extents::vv(G3D::Vector3 const&, G3D::Vector3 const&)",ios:
+STUDIO,??A?$IndexArray@VIndexedTree@RBX@@$1?getIndex@12@AAEAAHXZ@RBX@@QAEPAVIndexedTree@1@H@Z,FUNCTION,0x009a0d10,3,0,RBX::IndexedMesh* RBX::IndexedTree::getTypedChild<RBX::IndexedMesh>(int),ios:
+STUDIO,"RBX::Reflection::TypedPropertyDescriptor<boost::shared_ptr<std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > const> >::getValue",FUNCTION,0x004355b0,3,0,,
+STUDIO,"std::_Destroy_range<std::allocator<boost::shared_ptr<RBX::Instance> > >(class boost::shared_ptr<class RBX::GuiBase> *, class boost::shared_ptr<class RBX::GuiBase> *, class std::allocator<class boost::shared_ptr<class RBX::GuiBase>> &, struct std::_Nonscalar_ptr_iterator_tag)",FUNCTION,0x007bc7a0,3,0,,
+STUDIO,RBX::AdornBillboarder::getCamera() const,FUNCTION,0x00a150d0,2,0,public: unsigned int __thiscall RakNet::SystemAddress::GetIPPROTO(void)const,match:
+STUDIO,"RBX::AdornBillboarder::line2d(G3D::Vector2 const&, G3D::Vector2 const&, G3D::Color4 const&) const",FUNCTION,0x00773760,2,0,"public: void __thiscall RakNet::CCRakNetSlidingWindow::Update(unsigned __int64,bool)",match:
+STUDIO,RBX::ScriptStats::StatCollection::~StatCollection,FUNCTION,0x006793c0,2,0,,
+STUDIO,boost::enable_shared_from_this<RBX::Reflection::DescribedBase>::shared_from_this,FUNCTION,0x004b1980,2,0,,
+STUDIO,boost::exception_ptr::~exception_ptr,FUNCTION,0x007b83e0,2,0,,
+STUDIO,boost::thread::~thread,FUNCTION,0x00b51af0,2,0,public: __thiscall boost::thread::~thread(void),ida:
+STUDIO,boost::unique_lock<boost::recursive_mutex>::lock,FUNCTION,0x0041b2f0,2,0,boost::unique_lock<boost::recursive_mutex>::lock(),ios:
+STUDIO,std::_Allocate<float>,FUNCTION,0x00942bd0,2,1,,
+STUDIO,?GetIndexFromKey@?$OrderedList@GPAUSplitPacketChannel@RakNet@@$1?SplitPacketChannelComp@2@YAHABGABQAU12@@Z@DataStructures@@QBEIABGPA_NP6AH0ABQAUSplitPacketChannel@RakNet@@@Z@Z,FUNCTION,0x0065d160,1,0,"public: unsigned int __thiscall DataStructures::OrderedList<struct RakNet::uint24_t,struct DataStructures::RangeNode<struct RakNet::uint24_t>,&int __cdecl DataStructures::RangeNodeComp<struct RakNet::uint24_t>(struct RakNet::uint24_t const &,struct DataStructures::RangeNode<struct RakNet::uint24_t> const &)>::GetIndexFromKey(struct RakNet::uint24_t const &,bool *,int (__cdecl *)(struct RakNet::uint24_t const &,struct DataStructures::RangeNode<struct RakNet::uint24_t> const &))const",match:
+STUDIO,?fastRemove@?$IndexArray@VIndexedTree@RBX@@$1?getIndex@12@AAEAAHXZ@RBX@@QAEXPAVIndexedTree@2@@Z,FUNCTION,0x009a29a0,1,0,"RBX::IndexArray<RBX::IndexedTree, &RBX::IndexedTree::getIndex()>::fastRemove(RBX::IndexedTree*)",ios:
+STUDIO,DataStructures::List<RakNet::PluginInterface2 *>::Insert,FUNCTION,0x006609e0,1,0,"public: void __thiscall DataStructures::List<struct DataStructures::RangeNode<struct RakNet::uint24_t>>::Insert(struct DataStructures::RangeNode<struct RakNet::uint24_t> const &,char const *,unsigned int)",match:
+STUDIO,DataStructures::List<RakNet::SplitPacketChannel *>::Insert,FUNCTION,0x00660a90,1,0,"public: void __thiscall DataStructures::List<struct DataStructures::RangeNode<struct RakNet::uint24_t>>::Insert(struct DataStructures::RangeNode<struct RakNet::uint24_t> const &,unsigned int,char const *,unsigned int)",match:
+STUDIO,"G3D::Array<G3D::Plane,10,32>::append",FUNCTION,0x006a9c40,1,0,,
+STUDIO,G3D::Matrix3::operator==,FUNCTION,0x006ab980,1,0,public: bool __thiscall G3D::Matrix3::operator==(class G3D::Matrix3 const &)const,lib:
+STUDIO,"RBX::AdornBillboarder::convexPolygon2d(G3D::Vector2 const*, int, G3D::Color4 const&, int) const",FUNCTION,0x0069ea70,1,0,"RBX::AdornRbxGfx::axes(G3D::Color4 const&, G3D::Color4 const&, G3D::Color4 const&, float)",ios:
+STUDIO,RBX::Allocator<RBX::OnDemandInstance>::operator new,FUNCTION,0x006f0ac0,1,1,,
+STUDIO,RBX::Allocator<RBX::OnDemandInstance>::operator new,FUNCTION,0x007bda00,1,1,,
+STUDIO,RBX::Assembly::getFilterPhase,FUNCTION,0x00966460,1,0,public: class Concurrency::details::ScheduleGroupBase * __thiscall Concurrency::details::SchedulerBase::GetAnonymousScheduleGroup(void),flirt:
+STUDIO,RBX::AssemblyHistory::wakeUp,FUNCTION,0x00a22d30,1,0,,
+STUDIO,RBX::CEvent::CEvent,FUNCTION,0x00a6af50,1,0,,
+STUDIO,RBX::Geometry::getFaceFromLegacyNormalId(RBX::NormalId) const,FUNCTION,0x009adc20,1,0,RBX::LegacyContentTable::FindEntry(std::string const&),ios:
+STUDIO,RBX::HttpQueueStatsItem::create,FUNCTION,0x009bc7a0,1,0,RBX::HttpQueueStatsItem::init(),ios:
+STUDIO,RBX::Instance::getFullName,FUNCTION,0x006f4150,1,0,,
+STUDIO,"RBX::Lua::Bridge<G3D::Vector3,1>::pushNewObject<G3D::Vector3>",FUNCTION,0x0092cf30,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_inverse,FUNCTION,0x009305b0,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_pointToObjectSpace,FUNCTION,0x009309e0,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_pointToWorldSpace,FUNCTION,0x00930800,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_toObjectSpace,FUNCTION,0x00930710,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_toWorldSpace,FUNCTION,0x00930620,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_vectorToObjectSpace,FUNCTION,0x00930e90,1,0,,
+STUDIO,RBX::Lua::CoordinateFrameBridge::on_vectorToWorldSpace,FUNCTION,0x00930bd0,1,0,,
+STUDIO,RBX::Name::getNullName(),FUNCTION,0x00703360,1,0,,
+STUDIO,RBX::PartInstance::getResizeIncrement() const,FUNCTION,0x006bdbf0,1,0,,
+STUDIO,RBX::PlayerChatLine::~PlayerChatLine,FUNCTION,0x00a1f750,1,0,RBX::ChatLine::~ChatLine(),ios:
+STUDIO,RBX::Reflection::Type::getSingleton<RBX::Soundscape::SoundId>,FUNCTION,0x00708f40,1,0,RBX::Reflection::Type const& RBX::Reflection::Type::getSingleton<RBX::ContentId>(),ios:
+STUDIO,RBX::Reflection::Variant::Variant(class RBX::Reflection::Variant const &),FUNCTION,0x004111d0,1,0,,
+STUDIO,RBX::ScriptStats::startCollection,FUNCTION,0x009ee550,1,0,,
+STUDIO,RBX::Security::Context::requirePermission,FUNCTION,0x005d7ec0,1,0,,
+STUDIO,RBX::SetThreadName,FUNCTION,0x00a69170,1,0,,
+STUDIO,"RBX::StandardOut::print(enum RBX::MessageType, char const *)",FUNCTION,0x006c9a30,1,0,,
+STUDIO,RBX::TaskScheduler::getJobsInfo,FUNCTION,0x00a6fda0,1,0,,
+STUDIO,RBX::Time::nowFast,FUNCTION,0x00a724b0,1,1,,
+STUDIO,RBX::Time::nowFast,FUNCTION,0x00a722e0,1,1,,
+STUDIO,RakNet::SocketLayer::IsPortInUse,FUNCTION,0x00665220,1,0,public: static int __cdecl RakNet::BitStream::NumberOfLeadingZeroes(__int64),match:
+STUDIO,RakNet::`RangeNodeComp<RakNet::uint24_t>'::OrderedList::Insert,FUNCTION,0x00661cc0,1,0,"public: unsigned int __thiscall DataStructures::OrderedList<unsigned short,struct RakNet::SplitPacketChannel *,&int __cdecl RakNet::SplitPacketChannelComp(unsigned short const &,struct RakNet::SplitPacketChannel * const &)>::Insert(unsigned short const &,struct RakNet::SplitPacketChannel * const &,bool,char const *,unsigned int,int (__cdecl *)(unsigned short const &,struct RakNet::SplitPacketChannel * const &))",match:
+STUDIO,__TI5?AV?$clone_impl@U?$error_info_injector@Vexception@std@@@exception_detail@boost@@@exception_detail@boost@@,UNK,0x00e296c4,1,0,__TI6?AV?$clone_impl@U?$error_info_injector@Vbad_alloc@std@@@exception_detail@boost@@@exception_detail@boost@@,ida:
+STUDIO,__TI6?AV?$clone_impl@U?$error_info_injector@Vbad_alloc@std@@@exception_detail@boost@@@exception_detail@boost@@,UNK,0x00e296c4,1,0,__TI6?AV?$clone_impl@U?$error_info_injector@Vbad_alloc@std@@@exception_detail@boost@@@exception_detail@boost@@,ida:
+STUDIO,"boost::_bi::storage3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> >::storage3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> >",FUNCTION,0x00629fb0,1,0,,
+STUDIO,boost::detail::shared_count::shared_count(class boost::detail::weak_count const &),FUNCTION,0x00433140,1,0,,
+STUDIO,"boost::detail::sp_counted_impl_pd<RBX::ChatService *, class RBX::Creatable<RBX::Instance>::Deleter>::`vftable'",VTABLE,0x00bd1bfc,1,0,"const boost::detail::sp_counted_impl_pd<class RBX::ChatService *,class RBX::Creatable<class RBX::Instance>::Deleter>::`vftable'",rtti:
+STUDIO,"boost::detail::sp_counted_impl_pd<RBX::RuntimeScriptService *, class RBX::Creatable<RBX::Instance>::Deleter>::`vftable'",VTABLE,0x00bf9c08,1,0,"const boost::detail::sp_counted_impl_pd<class RBX::RuntimeScriptService *,class RBX::Creatable<class RBX::Instance>::Deleter>::`vftable'",rtti:
+STUDIO,boost::detail::thread_data<boost::function0<void>>::`vftable',VTABLE,0x00bc9818,1,0,const boost::detail::thread_data<class boost::function0<void>>::`vftable',rtti:
+STUDIO,boost::detail::thread_data_base::thread_data_base,FUNCTION,0x00b51aec,1,0,public: __thiscall boost::detail::thread_data_base::thread_data_base(void),ida:
+STUDIO,"boost::enable_shared_from_this<YieldFunctionStateObject>::_internal_accept_owner<YieldFunctionStateObject,YieldFunctionStateObject>",FUNCTION,0x007515d0,1,1,,
+STUDIO,"boost::enable_shared_from_this<YieldFunctionStateObject>::_internal_accept_owner<YieldFunctionStateObject,YieldFunctionStateObject>",FUNCTION,0x00937730,1,1,,
+STUDIO,boost::exception_detail::error_info_injector<std::exception>::`vftable'{for `boost::exception'},VTABLE,0x00bbd6c4,1,0,const boost::exception_detail::error_info_injector<class std::bad_alloc>::`vftable'{for `boost::exception'},rtti:
+STUDIO,boost::exception_detail::error_info_injector<std::exception>::`vftable'{for `std::exception'},VTABLE,0x00bbd6cc,1,0,const boost::exception_detail::error_info_injector<class std::bad_alloc>::`vftable'{for `std::bad_alloc'},rtti:
+STUDIO,"boost::function1<unsigned long,lua_State *>::assign_to<boost::_bi::bind_t<unsigned int,unsigned int (__cdecl*)(lua_State *),boost::_bi::list1<boost::arg<1> > > >",FUNCTION,0x007dcfc0,1,0,,
+STUDIO,"boost::function1<void,boost::shared_ptr<rbx::spin_mutex> >::assign_to<boost::_bi::bind_t<void,void (__cdecl*)(boost::weak_ptr<RBX::AsyncHttpQueue>,std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0>,boost::shared_ptr<rbx::spin_mutex>),boost::_bi::list3<boost::_bi::value<boost::weak_ptr<RBX::AsyncHttpQueue> >,boost::_bi::value<std::list<RBX::AsyncHttpQueue::Request,std::allocator<RBX::AsyncHttpQueue::Request> >::_Iterator<0> >,boost::arg<1> > > >",FUNCTION,0x009bbb90,1,0,,
+STUDIO,boost::shared_ptr<RBX::CEvent>::shared_ptr<RBX::CEvent><RBX::CEvent>,FUNCTION,0x00a6bf50,1,0,,
+STUDIO,boost::shared_ptr<RBX::GuiItem>::reset,FUNCTION,0x004b0120,1,0,,
+STUDIO,boost::simple_segregated_storage<unsigned int>::segregate,FUNCTION,0x00531f00,1,0,,
+STUDIO,"boost::singleton_pool<XmlAttribute,24,boost::default_user_allocator_malloc_free,boost::mutex,32,0>::get_pool",FUNCTION,0x00415080,1,0,,
+STUDIO,boost::thread::start_thread,FUNCTION,0x00b51af4,1,0,public: void __thiscall boost::thread::start_thread(void),ida:
+STUDIO,"boost::thread::timed_join<boost::date_time::subsecond_duration<boost::posix_time::time_duration,1000> >",FUNCTION,0x009225c0,1,0,,
+STUDIO,boost::throw_exception<std::bad_alloc>,FUNCTION,0x0041fdb0,1,0,void __cdecl boost::throw_exception<class std::exception>(class std::exception const &),match:
+STUDIO,"eax, ??_9Instance@RBX@@$BBI@AE",UNK,0x006ed9e0,1,0,,
+STUDIO,"eax, RBX::Adorn::preSubmitPass()",FUNCTION,0x00606c90,1,0,public: __thiscall RakNet::CCRakNetSlidingWindow::~CCRakNetSlidingWindow(void),match:
+STUDIO,"eax, RBX::AdornBillboarder::getCamera() const",FUNCTION,0x00a150d0,1,0,public: unsigned int __thiscall RakNet::SystemAddress::GetIPPROTO(void)const,match:
+STUDIO,"ecx, ??_9Instance@RBX@@$BM@AE",UNK,0x004f5220,1,0,,
+STUDIO,"ecx, LuaProfiler::stringCache",DATA,0x00f89d14,1,0,,
+STUDIO,"ecx, RBX::appendJobExtendedStats",FUNCTION,0x007688e0,1,0,,
+STUDIO,"ecx, root",DATA,0x00fa60e8,1,0,,
+STUDIO,"esi, root",DATA,0x00fa60e8,1,0,,
+STUDIO,"rbx::placement_any<RBX::Region3>::placement_any<RBX::Region3><boost::shared_ptr<std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > const> >",FUNCTION,0x00754bd0,1,0,,
+STUDIO,std::_Allocate<float>,FUNCTION,0x004791e0,1,1,,
+STUDIO,"std::_Fill<RBX::Reflection::Variant *,RBX::Reflection::Variant>",FUNCTION,0x00624a10,1,0,,
+STUDIO,"std::_Fill<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> >",FUNCTION,0x0091fce0,1,0,,
+STUDIO,"std::_Tree<std::_Tmap_traits<RBX::Guid::Data,RBX::Instance *,std::less<RBX::Guid::Data>,std::allocator<std::pair<RBX::Guid::Data const,RBX::Instance *> >,0> >::erase(struct RBX::Guid::Data const &)",FUNCTION,0x006307d0,1,0,,
+STUDIO,"std::_Uninit_copy<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >",FUNCTION,0x00920270,1,0,,
+STUDIO,"std::for_each<std::_Vector_const_iterator<RBX::Reflection::EventDescriptor *,std::allocator<RBX::Reflection::EventDescriptor *> >,boost::_bi::bind_t<void,boost::_mfi::cmf1<void,RBX::Reflection::EventDescriptor,RBX::Reflection::DescribedBase *>,boost::_bi::list2<boost::arg<1>,boost::_bi::value<RBX::Instance *> > > >",FUNCTION,0x006ef800,1,0,,
+STUDIO,"std::for_each<std::_Vector_iterator<boost::shared_ptr<RBX::TaskScheduler::Job const>,std::allocator<boost::shared_ptr<RBX::TaskScheduler::Job const> > >,boost::_bi::bind_t<void,void (__cdecl*)(RBX::DataModel *,boost::shared_ptr<RBX::TaskScheduler::Job const>,std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > *),boost::_bi::list3<boost::_bi::value<RBX::DataModel *>,boost::arg<1>,boost::_bi::value<std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> > *> > > >",FUNCTION,0x007536e0,1,0,,
+STUDIO,"std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> >::_Destroy",FUNCTION,0x00415970,1,0,,
+STUDIO,"std::vector<RBX::Reflection::Variant,std::allocator<RBX::Reflection::Variant> >::_Umove<RBX::Reflection::Variant *>",FUNCTION,0x006350a0,1,0,,
+STUDIO,"std::vector<RBX::TypesetterBitmap::Line,std::allocator<RBX::TypesetterBitmap::Line> >::_Xlen",FUNCTION,0x004d0b50,1,0,"protected: static void __cdecl std::vector<class boost::program_options::basic_option<char>,class std::allocator<class boost::program_options::basic_option<char>>>::_Xlen(void)",lib:
+STUDIO,"std::vector<boost::intrusive_ptr<boost::detail::basic_cv_list_entry>,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >::_Ufill",FUNCTION,0x00920f30,1,0,,
+STUDIO,"std::vector<boost::intrusive_ptr<boost::detail::basic_cv_list_entry>,std::allocator<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> > >::_Umove<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *>",FUNCTION,0x009213f0,1,0,,
+STUDIO,"std::vector<wchar_t,std::allocator<wchar_t> >::_Xlen",FUNCTION,0x009ca8c0,1,0,"protected: static void __cdecl std::vector<struct std::pair<class boost::condition_variable *,class boost::mutex *>,class std::allocator<struct std::pair<class boost::condition_variable *,class boost::mutex *>>>::_Xlen(void)",match:
+STUDIO,"stdext::_Unchecked_move_backward<RBX::Reflection::Variant *,RBX::Reflection::Variant *>",FUNCTION,0x00629c90,1,0,,
+STUDIO,"stdext::_Unchecked_move_backward<boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *,boost::intrusive_ptr<boost::detail::basic_cv_list_entry> *>",FUNCTION,0x009200a0,1,0,,

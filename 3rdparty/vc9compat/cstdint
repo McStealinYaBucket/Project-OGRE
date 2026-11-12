@@ -1,0 +1,2 @@
+/* <cstdint> for VC9, which has none: see stdint.h beside it. */
+#include <stdint.h>

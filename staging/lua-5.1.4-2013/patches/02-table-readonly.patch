@@ -1,0 +1,27 @@
+Table gains a lu_byte readonly between flags and lsizenode; luaH_new clears it.
+
+Justification (PLAYER bytes): luaH_new 0x0098c3c0 allocates sizeof(Table) = 0x24 (push 0x24), stores
+metatable/array/node/lastfree/gclist/sizearray at +0xc..+0x20 and clears lsizenode (+8) and then
+readonly (+7). Every Table field access in ltable/lgc/lapi/ltm/lvm (e.g. luaH_getnum 0x0098c480,
+traversetable 0x009890f0) only matches with the shifted offsets: 455 -> 482 identical.
+
+--- a/lobject.h
++++ b/lobject.h
+@@ -338,6 +338,7 @@
+ typedef struct Table {
+   CommonHeader;
+   lu_byte flags;  /* 1<<p means tagmethod(p) is not present */ 
++  lu_byte readonly;  /* ROBLOX */
+   lu_byte lsizenode;  /* log2 of size of `node' array */
+   struct Table *metatable;
+   TValue *array;  /* array part */
+--- a/ltable.c
++++ b/ltable.c
+@@ -364,6 +364,7 @@
+   t->array = NULL;
+   t->sizearray = 0;
+   t->lsizenode = 0;
++  t->readonly = 0;  /* ROBLOX */
+   t->node = cast(Node *, dummynode);
+   setarrayvector(L, t, narray);
+   setnodevector(L, t, nhash);

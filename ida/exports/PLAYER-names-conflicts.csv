@@ -1,0 +1,182 @@
+address,oracle,names,reason
+0x00851c00,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x0083edd0,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x0070a240,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x0065e800,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x00954320,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x007153c0,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x00953b30,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x006b92f0,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x0074d8e0,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x00401210,ios1029,,rtti-slot: several oracle functions that do not look folded
+0x00963f20,ios1029,,rtti-slot pair dropped: 2 of 2 paired callees disagree
+0x0050de90,ios1029,,string-unique pair dropped: inlining level shift
+0x00512030,ios1029,,string-unique pair dropped: inlining level shift
+0x0087b610,ios1029,,string-unique pair dropped: inlining level shift
+0x009a5f30,ios1029,,string-unique pair dropped: inlining level shift
+0x009a6150,ios1029,,string-unique pair dropped: inlining level shift
+0x004351b0,ios1029,,string-set pair dropped: inlining level shift
+0x0043b1f0,ios1029,,string-set pair dropped: inlining level shift
+0x00449a60,ios1029,,string-set pair dropped: inlining level shift
+0x00565920,ios1029,,string-set pair dropped: inlining level shift
+0x00575f90,ios1029,,string-set pair dropped: inlining level shift
+0x00596e90,ios1029,,string-set pair dropped: inlining level shift
+0x0070d920,ios1029,,callgraph pair dropped: inlining level shift
+0x00861960,ios1029,,callgraph pair dropped: inlining level shift
+0x008619d0,ios1029,,callgraph pair dropped: inlining level shift
+0x00861570,ios1029,,callgraph pair dropped: inlining level shift
+0x00861880,ios1029,,callgraph pair dropped: inlining level shift
+0x008587b0,ios1029,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x0053daf0,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x0053d890,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x0070d8b0,ios1029,,callgraph pair dropped: inlining level shift
+0x00860fc0,ios1029,,callgraph pair dropped: inlining level shift
+0x00860f50,ios1029,,callgraph pair dropped: inlining level shift
+0x008610a0,ios1029,,callgraph pair dropped: inlining level shift
+0x009b9a90,ios1029,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x00861110,ios1029,,callgraph pair dropped: inlining level shift
+0x008c1c10,ios1029,,callgraph pair dropped: inlining level shift
+0x00861340,ios1029,,callgraph pair dropped: inlining level shift
+0x00861260,ios1029,,callgraph pair dropped: inlining level shift
+0x00861420,ios1029,,callgraph pair dropped: inlining level shift
+0x008615e0,ios1029,,callgraph pair dropped: inlining level shift
+0x00861030,ios1029,,callgraph pair dropped: inlining level shift
+0x008618f0,ios1029,,callgraph pair dropped: inlining level shift
+0x00861490,ios1029,,callgraph pair dropped: inlining level shift
+0x008613b0,ios1029,,callgraph pair dropped: inlining level shift
+0x007cd8c0,ios1029,,callgraph pair dropped: inlining level shift
+0x00861500,ios1029,,callgraph pair dropped: inlining level shift
+0x008611f0,ios1029,,callgraph pair dropped: inlining level shift
+0x008612d0,ios1029,,callgraph pair dropped: inlining level shift
+0x00861180,ios1029,,callgraph pair dropped: inlining level shift
+0x0076c7e0,ios1029,,callgraph pair dropped: 4 of 7 paired callees disagree
+0x004214c0,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00466e50,ios1029,,callgraph pair dropped: 3 of 6 paired callees disagree
+0x00858dc0,ios1029,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x00858f40,ios1029,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x00539790,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00427910,ios1029,,callgraph pair dropped: inlining level shift
+0x00461d90,ios1029,,callgraph pair dropped: inlining level shift
+0x004692e0,ios1029,,callgraph pair dropped: inlining level shift
+0x0046e010,ios1029,,callgraph pair dropped: inlining level shift
+0x00480b80,ios1029,,callgraph pair dropped: inlining level shift
+0x00480cd0,ios1029,,callgraph pair dropped: inlining level shift
+0x0049bea0,ios1029,,callgraph pair dropped: inlining level shift
+0x00528060,ios1029,,callgraph pair dropped: inlining level shift
+0x00528300,ios1029,,callgraph pair dropped: inlining level shift
+0x005280d0,ios1029,,callgraph pair dropped: inlining level shift
+0x005281b0,ios1029,,callgraph pair dropped: inlining level shift
+0x005284c0,ios1029,,callgraph pair dropped: inlining level shift
+0x005283e0,ios1029,,callgraph pair dropped: inlining level shift
+0x00528530,ios1029,,callgraph pair dropped: inlining level shift
+0x00580c50,ios1029,,callgraph pair dropped: inlining level shift
+0x00618ab0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062dfd0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e040,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e0b0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e120,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e200,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e270,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e2e0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e350,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e3c0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e430,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e4a0,ios1029,,callgraph pair dropped: inlining level shift
+0x0062e510,ios1029,,callgraph pair dropped: inlining level shift
+0x00656600,ios1029,,callgraph pair dropped: inlining level shift
+0x00669430,ios1029,,callgraph pair dropped: inlining level shift
+0x007bd830,ios1029,,callgraph pair dropped: inlining level shift
+0x00884d70,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00468f30,ios1029,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00851c00,mac,,rtti-slot: several oracle functions that do not look folded
+0x0083edd0,mac,,rtti-slot: several oracle functions that do not look folded
+0x0074d8e0,mac,,rtti-slot: several oracle functions that do not look folded
+0x00401210,mac,,rtti-slot: several oracle functions that do not look folded
+0x00527510,mac,,rtti-slot: several oracle functions that do not look folded
+0x00963f20,mac,,rtti-slot pair dropped: 2 of 2 paired callees disagree
+0x00462440,mac,,string-unique pair dropped: inlining level shift
+0x005917d0,mac,,string-unique pair dropped: inlining level shift
+0x0087b610,mac,,string-unique pair dropped: inlining level shift
+0x009a5f30,mac,,string-unique pair dropped: inlining level shift
+0x009a6150,mac,,string-unique pair dropped: inlining level shift
+0x0070d920,mac,,callgraph pair dropped: inlining level shift
+0x008619d0,mac,,callgraph pair dropped: inlining level shift
+0x00861570,mac,,callgraph pair dropped: inlining level shift
+0x00861880,mac,,callgraph pair dropped: inlining level shift
+0x008587b0,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x0053daf0,mac,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x0053d890,mac,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00860fc0,mac,,callgraph pair dropped: inlining level shift
+0x005987c0,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x009b9a90,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x008c1c10,mac,,callgraph pair dropped: inlining level shift
+0x008618f0,mac,,callgraph pair dropped: inlining level shift
+0x007cd8c0,mac,,callgraph pair dropped: inlining level shift
+0x0048b410,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x0076c7e0,mac,,callgraph pair dropped: 4 of 7 paired callees disagree
+0x004214c0,mac,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x0044e360,mac,,callgraph pair dropped: 2 of 5 paired callees disagree
+0x00858dc0,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x00858f40,mac,,callgraph pair dropped: 2 of 2 paired callees disagree
+0x00427910,mac,,callgraph pair dropped: inlining level shift
+0x00461d90,mac,,callgraph pair dropped: inlining level shift
+0x004692e0,mac,,callgraph pair dropped: inlining level shift
+0x0046e010,mac,,callgraph pair dropped: inlining level shift
+0x00480b80,mac,,callgraph pair dropped: inlining level shift
+0x00480cd0,mac,,callgraph pair dropped: inlining level shift
+0x00480db0,mac,,callgraph pair dropped: inlining level shift
+0x00480e20,mac,,callgraph pair dropped: inlining level shift
+0x00480f00,mac,,callgraph pair dropped: inlining level shift
+0x0049bea0,mac,,callgraph pair dropped: inlining level shift
+0x0049bf10,mac,,callgraph pair dropped: inlining level shift
+0x00528060,mac,,callgraph pair dropped: inlining level shift
+0x00528300,mac,,callgraph pair dropped: inlining level shift
+0x005280d0,mac,,callgraph pair dropped: inlining level shift
+0x005284c0,mac,,callgraph pair dropped: inlining level shift
+0x005283e0,mac,,callgraph pair dropped: inlining level shift
+0x00528530,mac,,callgraph pair dropped: inlining level shift
+0x00559e10,mac,,callgraph pair dropped: inlining level shift
+0x00559ef0,mac,,callgraph pair dropped: inlining level shift
+0x00580710,mac,,callgraph pair dropped: inlining level shift
+0x00580ef0,mac,,callgraph pair dropped: inlining level shift
+0x00580c50,mac,,callgraph pair dropped: inlining level shift
+0x005b0c70,mac,,callgraph pair dropped: inlining level shift
+0x005b9d00,mac,,callgraph pair dropped: inlining level shift
+0x00618ab0,mac,,callgraph pair dropped: inlining level shift
+0x0062dfd0,mac,,callgraph pair dropped: inlining level shift
+0x0062e040,mac,,callgraph pair dropped: inlining level shift
+0x0062e0b0,mac,,callgraph pair dropped: inlining level shift
+0x0062e120,mac,,callgraph pair dropped: inlining level shift
+0x0062e200,mac,,callgraph pair dropped: inlining level shift
+0x0062e270,mac,,callgraph pair dropped: inlining level shift
+0x0062e2e0,mac,,callgraph pair dropped: inlining level shift
+0x0062e350,mac,,callgraph pair dropped: inlining level shift
+0x0062e3c0,mac,,callgraph pair dropped: inlining level shift
+0x0062e430,mac,,callgraph pair dropped: inlining level shift
+0x0062e4a0,mac,,callgraph pair dropped: inlining level shift
+0x0062e510,mac,,callgraph pair dropped: inlining level shift
+0x00656600,mac,,callgraph pair dropped: inlining level shift
+0x00669430,mac,,callgraph pair dropped: inlining level shift
+0x007bd830,mac,,callgraph pair dropped: inlining level shift
+0x00884d70,mac,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00468f30,mac,,callgraph pair dropped: 2 of 4 paired callees disagree
+0x00427520,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_7Network7sPlayerEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_7Network7sPlayerEEEERKS0_v,oracles disagree
+0x00434c20,ios1029/mac,ios1029=_ZNK5boost9function0IiEclEv | mac=_ZNK5boost9function0IbEclEv,oracles disagree
+0x004c5500,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_13sCylinderMeshEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_13sCylinderMeshEEEERKS0_v,oracles disagree
+0x005208a0,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_16sNetworkSettingsEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_16sNetworkSettingsEEEERKS0_v,oracles disagree
+0x00520910,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_7Network7sClientEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_7Network7sClientEEEERKS0_v,oracles disagree
+0x00520980,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_7Network7sServerEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_7Network7sServerEEEERKS0_v,oracles disagree
+0x00520a60,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_12sStringValueEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_12sStringValueEEEERKS0_v,oracles disagree
+0x00520ad0,ios1029/mac,ios1029=_ZN3RBX4Name13callDoDeclareILZNS_12sObjectValueEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_12sObjectValueEEEERKS0_v,oracles disagree
+0x005276b0,ios1029/mac,ios1029=_ZN3RBX7Network6Player20onLocalPlayerNotIdleEPNS_15ServiceProviderE | mac=_ZN3RBX7Network6Player26registerLocalPlayerNotIdleEv,oracles disagree
+0x00541c20,mac,_ZN3RBX7Network6Player20onLocalPlayerNotIdleEPNS_15ServiceProviderE,"name proposed for several target functions: 0x005276b0,0x00541c20"
+0x006297a0,ios1029/mac,ios1029=_Z7vformatPKcPv | mac=_Z7vformatPKcPc,oracles disagree
+0x0082bad0,ios1029/mac,ios1029=_ZN3RBX10ThreadPool14ThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrINS_5mutexEEEEEE | mac=_ZN3RBX10ThreadPool14ThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrIN3tbb10spin_mutexEEEEEE,oracles disagree
+0x0082bc40,ios1029/mac,ios1029=_ZN3RBX18PriorityThreadPool22PriorityThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrINS_5mutexEEEEEE | mac=_ZN3RBX18PriorityThreadPool22PriorityThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrIN3tbb10spin_mutexEEEEEE,oracles disagree
+0x0082c650,ios1029/mac,ios1029=_ZN3RBX14BaseThreadPool4loopEN5boost10shared_ptrINS0_8PoolDataEEENS2_INS_5mutexEEE | mac=_ZN3RBX14BaseThreadPool4loopEN5boost10shared_ptrINS0_8PoolDataEEENS2_IN3tbb10spin_mutexEEE,oracles disagree
+0x0086f9d0,ios1029/mac,ios1029=_ZN3RBX14AsyncHttpQueue15processRequestsEN5boost8weak_ptrIS0_EESt14_List_iteratorINS0_7RequestEENS1_10shared_ptrINS_5mutexEEE | mac=_ZN3RBX14AsyncHttpQueue15processRequestsEN5boost8weak_ptrIS0_EESt14_List_iteratorINS0_7RequestEENS1_10shared_ptrIN3tbb10spin_mutexEEE,oracles disagree
+0x008a7aa0,ios1029/mac,ios1029=_Z17luaO_pushvfstringP9lua_StatePKcPv | mac=_Z17luaO_pushvfstringP9lua_StatePKcPc,oracles disagree
+0x009b59c0,ios1029/mac,ios1029=_ZN3RBX7vformatEPKcPv | mac=_ZN3RBX7vformatEPKcPc,oracles disagree
+0x009bc640,ios1029/mac,ios1029=_ZN3RBX9TCriticalEjNS_10ConfidenceE | mac=_ZN3RBX14IsValueOutlierEdjddNS_10ConfidenceE,oracles disagree
+0x009bc700,ios1029,_ZN3RBX14IsValueOutlierEdjddNS_10ConfidenceE,"name proposed for several target functions: 0x009bc640,0x009bc700"
+0x009e4ce0,ios1029/mac,ios1029=_ZN3G3D7vformatEPKcPv | mac=_ZN3G3D7vformatEPKcPc,oracles disagree

@@ -1,0 +1,29 @@
+G3D: Matrix3::toAxisAngle without the DFFlag::FixMatrixToAxisAngle branches (a later Roblox fast flag;
+the 2016 header comment shows both paths). Keeps the flag-off path only.
+PLAYER evidence: G3D::Matrix3::toAxisAngle (order-located between Matrix3::l1Norm and
+Matrix3::fromAxisAngleFast) at 0x009d8910, 510 bytes, has no flag load and no epsilon constant.
+
+--- a/G3Dcpp/Matrix3.cpp	2026-11-12 09:40:01.876924453 -0500
++++ b/G3Dcpp/Matrix3.cpp	2026-11-12 09:40:01.893293908 -0500
+@@ -1211,18 +1211,12 @@
+ 
+     rfRadians = G3D::aCos(fCos);  // in [0,PI]
+ 
+-	static const float epsilon = 0.0001f;
+-    if ((!DFFlag::FixMatrixToAxisAngle && rfRadians > 0.0f) || 
+-		(DFFlag::FixMatrixToAxisAngle && rfRadians > epsilon) ) {
+-        if ((!DFFlag::FixMatrixToAxisAngle  && rfRadians < pi()) || 
+-			(DFFlag::FixMatrixToAxisAngle && rfRadians < pi() - epsilon) ) {
++    if ( rfRadians > 0.0f ) {
++        if ( rfRadians < pi() ) {
+ 			rkAxis.x = elt[2][1] - elt[1][2];
+             rkAxis.y = elt[0][2] - elt[2][0];
+             rkAxis.z = elt[1][0] - elt[0][1];
+-			if (DFFlag::FixMatrixToAxisAngle)
+-				rkAxis.unitize(0.0f);
+-			else
+-				rkAxis.unitize();
++			rkAxis.unitize();
+         } else {
+             // angle is PI
+             float fHalfInverse;

@@ -1,0 +1,32 @@
+G3D: restore the user-defined Vector3::operator= (__fastcall) that upstream G3D 8.x declares
+(g3d SVN r30 G3D.lib/include/G3D/Vector3.h:118 and :599) and the 2016 fork dropped.
+PLAYER evidence: G3D::Plane::getEquation at 0x009e3b40 copies the normal with fld/fstp per component
+(member-wise float assignment), not the dword movs an implicit copy-assignment produces.
+
+--- a/include/G3D/Vector3.h	2026-11-12 09:36:47.674853228 -0500
++++ b/include/G3D/Vector3.h	2026-11-12 09:36:47.688810666 -0500
+@@ -100,7 +100,8 @@
+      */
+     Axis primaryAxis() const;
+ 
+-    // comparison
++    // assignment and comparison
++    Vector3& __fastcall operator= (const Vector3& rkVector);
+     bool operator== (const Vector3& rkVector) const;
+     bool operator!= (const Vector3& rkVector) const;
+     size_t hashCode() const;
+@@ -606,6 +607,14 @@
+ }
+ 
+ //----------------------------------------------------------------------------
++inline Vector3& Vector3::operator= (const Vector3& rkVector) {
++    x = rkVector.x;
++    y = rkVector.y;
++    z = rkVector.z;
++    return *this;
++}
++
++//----------------------------------------------------------------------------
+ inline bool Vector3::operator== (const Vector3& rkVector) const {
+     return ( x == rkVector.x && y == rkVector.y && z == rkVector.z );
+ }

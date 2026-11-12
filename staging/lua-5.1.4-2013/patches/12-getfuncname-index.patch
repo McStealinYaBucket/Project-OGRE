@@ -1,0 +1,25 @@
+getfuncname names the metamethod caller for OP_GETTABLE/OP_SELF ("index", key from RK(C)) and
+OP_SETTABLE ("newindex", key from RK(B)).
+
+Justification (PLAYER bytes): getfuncname 0x008a89c0 compares the calling opcode with 0x1c/0x1d/0x21
+(CALL/TAILCALL/TFORLOOP -> getobjname), then 6/0xb (GETTABLE/SELF: kname 0x008a8810 on C = bits
+14..22, returns "index" 0x00b34a00) and 9 (SETTABLE: kname on B = bits 23..31, returns "newindex"
+0x00b349ec). auxgetinfo 0x008a8be0, which inlines it differently once it grows, then matches too.
+
+--- a/ldebug.c
++++ b/ldebug.c
+@@ -550,6 +550,14 @@
+   if (GET_OPCODE(i) == OP_CALL || GET_OPCODE(i) == OP_TAILCALL ||
+       GET_OPCODE(i) == OP_TFORLOOP)
+     return getobjname(L, ci, GETARG_A(i), name);
++  else if (GET_OPCODE(i) == OP_GETTABLE || GET_OPCODE(i) == OP_SELF) {  /* ROBLOX */
++    *name = kname(ci_func(ci)->l.p, GETARG_C(i));
++    return "index";
++  }
++  else if (GET_OPCODE(i) == OP_SETTABLE) {  /* ROBLOX */
++    *name = kname(ci_func(ci)->l.p, GETARG_B(i));
++    return "newindex";
++  }
+   else
+     return NULL;  /* no useful name can be found */
+ }

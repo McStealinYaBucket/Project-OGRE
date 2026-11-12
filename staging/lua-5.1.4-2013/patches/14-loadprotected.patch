@@ -1,0 +1,189 @@
+ROBLOX luaL_loadprotected + protReader in lauxlib.c, loadstring routed through it; adds a stand-in
+header (RbxProtectedString.h) for the RBX declarations used. Needs boost 1.53 headers on the include
+path (boost/scoped_ptr.hpp).
+
+Justification (PLAYER bytes; iOS 10-29 names luaL_loadprotected 0x0082610c, protReader 0x008263a4,
+luaB_loadstring 0x00826f88 calling RBX::ProtectedString::fromTrustedSource):
+- luaL_loadprotected 0x00876140: std::string computed; ps.calculateHash(&computed) 0x0066f060;
+  if (ps.getOriginalHash() 0x0066ef40 != computed) [msvcp90 operator!=]: sendStats 0x00de4764 |= 0x200,
+  lua_load(L, getS 0x00875970, {"" , 0}, name). Else a ProtectedLoad {index +0, ps +4, ch +8,
+  scoped_ptr<MD5Hasher> +0xc, checked +0x10} is filled (stores index, checked, ps in that order),
+  hasher.reset(MD5Hasher::create() 0x00652bf0) (swap-then-delete, no self-compare: boost scoped_ptr),
+  hasher->addData(std::string(ps.getSalt() 0x0066ef10)) via vftable+8 with the string built before the
+  hasher is loaded (implicit conversion), then lua_load(L, protReader, &pl, name).
+- protReader 0x00875f10: feeds the previous char to vftable+4 addData(const char*, 1); a successful
+  readUnprotectedChar 0x0066ef50 is the out-of-line tail (so the source tests the failure first);
+  at the end, if index > 1 and not yet checked, compares a copy of getOriginalHash() with
+  hasher->toString() (vftable+0x10); on mismatch sendStats |= 0x4000, checked = true and returns
+  " ]]\r\n%" (0x00b80370) with its strlen.
+- luaB_loadstring 0x008b0750: std::string(s, l) -> fromTrustedSource 0x0066f320 ->
+  luaL_loadprotected -> load_aux, temporaries destroyed after load_aux (one full expression).
+luaL_loadbuffer is no longer referenced by Lua and is absent from PLAYER (dead-stripped).
+
+--- a/lauxlib.c
++++ b/lauxlib.c
+@@ -24,6 +24,10 @@
+ 
+ #include "lauxlib.h"
+ 
++/* ROBLOX */
++#include "boost/scoped_ptr.hpp"
++#include "RbxProtectedString.h"
++
+ 
+ #define FREELIST_REF	0	/* free list of references */
+ 
+@@ -620,6 +624,68 @@
+ }
+ 
+ 
++/* ROBLOX: load a script held in a ProtectedString. A source whose hash no
++** longer matches compiles as an empty chunk; otherwise the chunk is streamed
++** one character at a time through an MD5 of salt+source, and a mismatch found
++** at the end injects " ]]\r\n%" so the chunk fails to compile. */
++typedef struct ProtectedLoad {
++  int index;
++  const RBX::ProtectedString *ps;
++  char ch;
++  boost::scoped_ptr<RBX::MD5Hasher> hasher;
++  bool checked;
++} ProtectedLoad;
++
++
++static const char *protReader (lua_State *L, void *ud, size_t *size) {
++  ProtectedLoad *pl = (ProtectedLoad *)ud;
++  (void)L;
++  if (pl->index > 0)
++    pl->hasher->addData(&pl->ch, 1);  /* the character returned last time */
++  if (!pl->ps->readUnprotectedChar(pl->index, &pl->ch)) {
++    if (pl->index > 1 && !pl->checked) {  /* end of source: check the hash once */
++      std::string hash = pl->hasher->toString();
++      std::string original = pl->ps->getOriginalHash();
++      if (original != hash) {
++        const char *msg = " ]]\r\n%";
++        RBX::DataModel::sendStats |= HATE_LUA_HASH_CHANGED;
++        pl->checked = true;
++        *size = strlen(msg);
++        return msg;
++      }
++    }
++    *size = 0;
++    return NULL;
++  }
++  pl->index++;
++  *size = 1;
++  return &pl->ch;
++}
++
++
++LUALIB_API int luaL_loadprotected (lua_State *L, const RBX::ProtectedString& ps,
++                                   const char *name) {
++  std::string computed;
++  ps.calculateHash(&computed);
++  if (ps.getOriginalHash() != computed) {
++    LoadS ls;
++    RBX::DataModel::sendStats |= HATE_LUA_SCRIPT_HASH_CHANGED;
++    ls.s = "";
++    ls.size = 0;
++    return lua_load(L, getS, &ls, name);
++  }
++  else {
++    ProtectedLoad pl;
++    pl.index = 0;
++    pl.checked = false;
++    pl.ps = &ps;
++    pl.hasher.reset(RBX::MD5Hasher::create());
++    pl.hasher->addData(ps.getSalt());
++    return lua_load(L, protReader, &pl, name);
++  }
++}
++
++
+ 
+ /* }====================================================== */
+ 
+--- a/lauxlib.h
++++ b/lauxlib.h
+@@ -75,6 +75,9 @@
+ LUALIB_API void (luaL_unref) (lua_State *L, int t, int ref);
+ 
+ LUALIB_API int (luaL_loadfile) (lua_State *L, const char *filename);
++namespace RBX { class ProtectedString; }  /* ROBLOX */
++LUALIB_API int (luaL_loadprotected) (lua_State *L, const RBX::ProtectedString& ps,
++                                    const char *name);  /* ROBLOX */
+ LUALIB_API int (luaL_loadbuffer) (lua_State *L, const char *buff, size_t sz,
+                                   const char *name);
+ LUALIB_API int (luaL_loadstring) (lua_State *L, const char *s);
+--- a/lbaselib.c
++++ b/lbaselib.c
+@@ -19,6 +19,7 @@
+ #include "lauxlib.h"
+ #include "lualib.h"
+ #include "lobject.h"  /* ROBLOX: Udata for newproxy */
++#include "RbxProtectedString.h"  /* ROBLOX: loadstring goes through luaL_loadprotected */
+ 
+ 
+ 
+@@ -279,7 +280,8 @@
+   size_t l;
+   const char *s = luaL_checklstring(L, 1, &l);
+   const char *chunkname = luaL_optstring(L, 2, s);
+-  return load_aux(L, luaL_loadbuffer(L, s, l, chunkname));
++  return load_aux(L, luaL_loadprotected(L,  /* ROBLOX */
++      RBX::ProtectedString::fromTrustedSource(std::string(s, l)), chunkname));
+ }
+ 
+ 
+--- a/RbxProtectedString.h
++++ b/RbxProtectedString.h
+@@ -0,0 +1,50 @@
++/* Stand-in for the 2013 RBX headers the Roblox additions to lauxlib.c/lbaselib.c include
++** (Util/ProtectedString.h, Util/MD5Hasher.h, V8DataModel/DataModel.h, V8DataModel/HackDefines.h):
++** only the declarations those additions use, with the 2013 shapes PLAYER shows.
++**   ProtectedString: 0x20 bytes = std::string source + std::string* originalHash (+0x1c), dtor
++**     0x00408950 out of line; fromTrustedSource 0x0066f320, calculateHash 0x0066f060,
++**     getOriginalHash 0x0066ef40 (returns *(+0x1c)), getSalt 0x0066ef10, readUnprotectedChar 0x0066ef50.
++**   MD5Hasher: vftable dtor, addData(const char*, size_t) +4, addData(const std::string&) +8,
++**     addData(std::istream&) +0xc, toString() +0x10 (MSVC orders the addData overloads reversed);
++**     create() 0x00652bf0.
++**   DataModel::sendStats at 0x00de4764; HATE_LUA_SCRIPT_HASH_CHANGED 0x200, HATE_LUA_HASH_CHANGED 0x4000. */
++#pragma once
++#include <string>
++#include <iosfwd>
++
++namespace RBX
++{
++	class ProtectedString
++	{
++	public:
++		~ProtectedString();
++		static ProtectedString fromTrustedSource(const std::string& source);
++		void calculateHash(std::string* result) const;
++		const std::string& getOriginalHash() const;
++		const char* getSalt() const;
++		bool readUnprotectedChar(int index, char* out) const;
++	private:
++		std::string source;
++		std::string* originalHash;
++	};
++
++	class MD5Hasher
++	{
++	public:
++		virtual ~MD5Hasher() {}
++		virtual void addData(std::istream& data) = 0;
++		virtual void addData(const std::string& data) = 0;
++		virtual void addData(const char* data, size_t nBytes) = 0;
++		virtual std::string toString() = 0;
++		static MD5Hasher* create();
++	};
++
++	class DataModel
++	{
++	public:
++		static unsigned int sendStats;
++	};
++}
++
++#define HATE_LUA_SCRIPT_HASH_CHANGED	0x200
++#define HATE_LUA_HASH_CHANGED			0x4000

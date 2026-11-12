@@ -1,0 +1,17 @@
+luaconf.h: LUA_COMPAT_MOD undefined (no math.mod).
+
+Justification (PLAYER bytes): the mathlib luaL_Reg table at 0x00b859f8 runs abs..fmod, frexp ... tan
+with no "mod" entry, and luaopen_math matches identical only without the fmod->mod alias block.
+(The strlib "gfind" entry at 0x00b85bd0 is the always-present gfind_nodef, not the compat alias.)
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -341,7 +341,7 @@
+ ** CHANGE it to undefined as soon as your programs use 'math.fmod' or
+ ** the new '%' operator instead of 'math.mod'.
+ */
+-#define LUA_COMPAT_MOD
++#undef LUA_COMPAT_MOD  /* ROBLOX */
+ 
+ /*
+ @@ LUA_COMPAT_LSTR controls compatibility with old long string nesting

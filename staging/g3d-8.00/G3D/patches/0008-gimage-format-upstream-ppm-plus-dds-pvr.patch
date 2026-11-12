@@ -1,0 +1,104 @@
+G3D: GImage::Format and the 4-argument GImage::resolveFormat as in PLAYER: upstream G3D's PPM_BINARY/
+PPM_ASCII values and PPM/PGM/PBM, "TRUEVISION-XFILE" detection (g3d SVN r30 G3D.lib/include/G3D/GImage.h,
+source/GImage.cpp), followed by the fork's PVR and DDS checks. PLAYER evidence, resolveFormat 0x009df070
+(951 bytes): pushes "PPM" 0x00bbd604, "PGM" 0x00bbd600, "PBM" 0x00bbd5fc, compares "P6"/"P5"/"P3"/
+"P2"/"P1", "TRUEVISION-XFILE" 0x00bbd5e8, then data+0x2c "PVR" -> returns 11 and "DDS" -> 10, falling
+through to 9 (UNKNOWN); PPM_BINARY is 6, PPM_ASCII 7. So the enum is upstream's with the fork's DDS, PVR
+after UNKNOWN. resolveFormat 0x009df070 and stringToFormat 0x009deea0 become identical.
+
+diff -ruN c/G3Dcpp/GImage.cpp d/G3Dcpp/GImage.cpp
+--- c/G3Dcpp/GImage.cpp	2026-11-12 13:11:28.956328934 -0500
++++ d/G3Dcpp/GImage.cpp	2026-11-12 13:17:19.016461751 -0500
+@@ -399,6 +399,17 @@
+ 
+     std::string extension = toUpper(filenameExt(filename));
+ 
++    if ((extension == "PPM") || (extension == "PGM") || (extension == "PBM")) {
++        // There are two PPM formats (binary and ASCII); we handle them differently
++        if (dataLen > 3) {
++            if (!memcmp(data, "P6", 2) || !memcmp(data, "P5", 2)) {
++                return PPM_BINARY;
++            } else {
++                return PPM_ASCII;
++            }
++        }
++    }
++
+     Format tmp = stringToFormat(extension);
+     if ((tmp != AUTODETECT) && (tmp != UNKNOWN)) {
+         return tmp;
+@@ -410,6 +421,14 @@
+     // We can't look at the character if it is null.
+     debugAssert(data != NULL);              
+ 
++    if ((dataLen > 3) && (! memcmp(data, "P3", 2) || (! memcmp(data, "P2", 2)) || (! memcmp(data, "P1", 2)))) {
++        return PPM_ASCII;
++    }
++
++    if ((dataLen > 3) && (!memcmp(data, "P6", 2) ||!memcmp(data, "P5", 2))) {
++        return PPM_BINARY;
++    }
++
+     if (dataLen > 8) {
+         if (!png_sig_cmp((png_bytep)data, 0, 8)) {
+             return PNG;
+@@ -427,6 +446,20 @@
+         }
+     }
+ 
++    if (dataLen > 40) {
++        if (memcmp(&data[dataLen - 18], "TRUEVISION-XFILE", 16) == 0) {
++            return TGA;
++        }
++    }
++
++    if ((dataLen > 4) && (data[0] == 0) && (data[1] == 0) && (data[2] == 0) && (data[3] == 1)) {
++        return ICO;
++    }
++
++    if ((dataLen > 0) && (data[0] == 10)) {
++        return PCX;
++    }
++
+ 	if( dataLen>32 )
+ 	{
+ 		if( !memcmp( data+0x2c, "PVR", 3 ))
+@@ -439,24 +472,6 @@
+ 			return DDS;
+ 	}
+ 
+-    if (dataLen > 20) {
+-        uint8 imageType = data[2];
+-        uint8 bitsPerPixel = data[16];
+-        uint8 imageDescriptor = data[17];
+-
+-		if ((imageType == 2 || imageType == 10) && (bitsPerPixel == 24 || bitsPerPixel == 32) && (imageDescriptor == 0 || imageDescriptor == 8)) {
+-            return TGA;
+-		}
+-	}
+-
+-    if ((dataLen > 4) && (data[0] == 0) && (data[1] == 0) && (data[2] == 0) && (data[3] == 1)) {
+-        return ICO;
+-    }
+-
+-    if ((dataLen > 0) && (data[0] == 10)) {
+-        return PCX;
+-    }
+-
+     return UNKNOWN;
+ }
+ 
+diff -ruN c/include/G3D/GImage.h d/include/G3D/GImage.h
+--- c/include/G3D/GImage.h	2026-11-12 13:11:28.957729545 -0500
++++ d/include/G3D/GImage.h	2026-11-12 13:17:19.016348563 -0500
+@@ -108,7 +108,10 @@
+         std::string filename;
+     };
+ 
++    /** PGM, PPM, and PBM all come in two versions and are classified as PPM_* files */
+     enum Format {JPEG, BMP, TGA, PCX, ICO, PNG,
++        PPM_BINARY, PGM_BINARY = PPM_BINARY,
++        PPM_ASCII, PGM_ASCII = PPM_ASCII,
+         AUTODETECT, UNKNOWN, DDS, PVR };
+ 
+     /**

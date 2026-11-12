@@ -1,0 +1,243 @@
+G3D: the App-facing helpers PLAYER calls out of line, as upstream G3D declares them (g3d SVN r30
+G3D.lib/include/G3D/{Matrix3,Vector3,Vector2,CoordinateFrame}.h; bodies from r30 source/*.cpp). The
+2016 fork inlined them in the headers. PLAYER evidence (calls from Roblox code outside the G3D block
+0x009d5b70-0x009edf00, tools/lib/g3d_calls.py):
+  Matrix3::Matrix3(const Matrix3&)  0x009d7f30 (folded with Matrix3(const float[3][3]): rep movsd, ret 4),
+                                    315 calls in 237 functions, e.g. PartInstance::setCoordinateFrame
+                                    0x00725487; Matrix3::operator= stays inline (memcpy -> rep movsd at
+                                    0x007254de in the same function)
+  Matrix3::zero 0x009d9330, identity 0x009d93a0 (62 calls in 53 functions)
+  Vector3::zero 0x009da920 (271 calls in 151 functions), one 0x009da960, unitX 0x009da9a0,
+          unitY 0x009da9e0, unitZ 0x009daa20, inf and nan 0x009daa60 (folded: finf and fnan fold),
+          minFinite 0x009daae0 (-FLT_MAX), maxFinite 0x009dab20 (FLT_MAX), in upstream Vector3.cpp order
+  Vector2::one 0x009d6a60, zero 0x009d6aa0 (64 calls in 46 functions)
+  CoordinateFrame::CoordinateFrame() 0x009d9550 (160 calls in 130 functions): identity(), Matrix3 copy
+                                    ctor, zero().
+G3D-side result (tools/lib/g3d_match.py, PLAYER): 153 -> 174 identical; all of the above become identical,
+and CoordinateFrame::lookAt (both overloads), lerp, Quat::toRotationMatrix, Ray::set and Box::init, which
+inlined the old header bodies, become identical too.
+
+diff -ru a/G3Dcpp/CoordinateFrame.cpp b/G3Dcpp/CoordinateFrame.cpp
+--- a/G3Dcpp/CoordinateFrame.cpp	2026-11-12 13:04:07.346300948 -0500
++++ b/G3Dcpp/CoordinateFrame.cpp	2026-11-12 13:05:17.141803088 -0500
+@@ -40,6 +40,10 @@
+                   toDegrees(uframe.yaw), toDegrees(uframe.pitch), 0.0f);
+ }
+ 
++CoordinateFrame::CoordinateFrame() : 
++    rotation(Matrix3::identity()), translation(Vector3::zero()) {
++}
++
+ CoordinateFrame CoordinateFrame::fromXYZYPRRadians(float x, float y, float z, float yaw, 
+                                                    float pitch, float roll) {
+     Matrix3 rotation = Matrix3::fromAxisAngleFast(Vector3::unitY(), yaw);
+diff -ru a/G3Dcpp/Matrix3.cpp b/G3Dcpp/Matrix3.cpp
+--- a/G3Dcpp/Matrix3.cpp	2026-11-12 13:04:07.354242505 -0500
++++ b/G3Dcpp/Matrix3.cpp	2026-11-12 13:04:42.827299739 -0500
+@@ -31,6 +31,16 @@
+ 
+ const float Matrix3::EPSILON = 1e-06f;
+ 
++const Matrix3& Matrix3::zero() {
++    static Matrix3 m(0, 0, 0, 0, 0, 0, 0, 0, 0);
++    return m;
++}
++
++const Matrix3& Matrix3::identity() {
++    static Matrix3 m(1, 0, 0, 0, 1, 0, 0, 0, 1);
++    return m;
++}
++
+ const float Matrix3::ms_fSvdEpsilon = 1e-04f;
+ const int Matrix3::ms_iSvdMaxIterations = 32;
+ 
+@@ -102,6 +112,11 @@
+ }
+ 
+ //----------------------------------------------------------------------------
++Matrix3::Matrix3 (const Matrix3& rkMatrix) {
++    memcpy(elt, rkMatrix.elt, 9*sizeof(float));
++}
++
++//----------------------------------------------------------------------------
+ Matrix3::Matrix3(
+           float fEntry00, float fEntry01, float fEntry02,
+           float fEntry10, float fEntry11, float fEntry12,
+diff -ru a/G3Dcpp/Vector2.cpp b/G3Dcpp/Vector2.cpp
+--- a/G3Dcpp/Vector2.cpp	2026-11-12 13:04:07.347356413 -0500
++++ b/G3Dcpp/Vector2.cpp	2026-11-12 13:05:00.990339156 -0500
+@@ -23,6 +23,50 @@
+ namespace G3D {
+ 
+     
++const Vector2& Vector2::one() { 
++    static const Vector2 v(1, 1); return v; 
++}
++
++
++const Vector2& Vector2::zero() {
++    static Vector2 v(0, 0);
++    return v;
++}
++
++const Vector2& Vector2::unitX() {
++    static Vector2 v(1, 0);
++    return v;
++}
++
++const Vector2& Vector2::unitY() {
++    static Vector2 v(0, 1);
++    return v;
++}
++
++const Vector2& Vector2::inf() { 
++	static Vector2 v((float)G3D::finf(), (float)G3D::finf());
++	return v; 
++}
++
++
++const Vector2& Vector2::nan() { 
++	static Vector2 v((float)G3D::fnan(), (float)G3D::fnan()); 
++	return v; 
++}
++
++
++const Vector2& Vector2::minFinite() {
++	static Vector2 v(-FLT_MAX, -FLT_MAX); 
++	return v; 
++}
++
++
++const Vector2& Vector2::maxFinite() {
++	static Vector2 v(FLT_MAX, FLT_MAX); 
++	return v; 
++}
++
++
+ size_t Vector2::hashCode() const {
+     unsigned int xhash = (*(int*)(void*)(&x));
+     unsigned int yhash = (*(int*)(void*)(&y));
+diff -ru a/G3Dcpp/Vector3.cpp b/G3Dcpp/Vector3.cpp
+--- a/G3Dcpp/Vector3.cpp	2026-11-12 13:04:07.347420002 -0500
++++ b/G3Dcpp/Vector3.cpp	2026-11-12 13:05:00.990289487 -0500
+@@ -40,6 +40,16 @@
+     return v;
+ }
+ 
++const Vector3& Vector3::zero() { static const Vector3 v(0, 0, 0); return v; }
++const Vector3& Vector3::one()      { static const Vector3 v(1, 1, 1); return v; }
++const Vector3& Vector3::unitX()    { static const Vector3 v(1, 0, 0); return v; }
++const Vector3& Vector3::unitY()    { static const Vector3 v(0, 1, 0); return v; }
++const Vector3& Vector3::unitZ()    { static const Vector3 v(0, 0, 1); return v; }
++const Vector3& Vector3::inf()      { static const Vector3 v((float)G3D::finf(), (float)G3D::finf(), (float)G3D::finf()); return v; }
++const Vector3& Vector3::nan()      { static const Vector3 v((float)G3D::fnan(), (float)G3D::fnan(), (float)G3D::fnan()); return v; }
++const Vector3& Vector3::minFinite(){ static const Vector3 v(-FLT_MAX, -FLT_MAX, -FLT_MAX); return v; }
++const Vector3& Vector3::maxFinite(){ static const Vector3 v(FLT_MAX, FLT_MAX, FLT_MAX); return v; }
++
+ Vector3::Axis Vector3::primaryAxis() const {
+     
+     Axis a = X_AXIS;
+diff -ru a/include/G3D/CoordinateFrame.h b/include/G3D/CoordinateFrame.h
+--- a/include/G3D/CoordinateFrame.h	2026-11-12 13:04:07.348286390 -0500
++++ b/include/G3D/CoordinateFrame.h	2026-11-12 13:05:17.141763959 -0500
+@@ -92,10 +92,7 @@
+     /**
+      Initializes to the identity coordinate frame.
+      */
+-    CoordinateFrame() :
+-		rotation(Matrix3::identity()), translation(Vector3::zero())
+-	{
+-	}
++    CoordinateFrame();
+ 
+     CoordinateFrame(const Vector3& _translation) :
+         rotation(Matrix3::identity()), translation(_translation) {
+diff -ru a/include/G3D/Matrix3.h b/include/G3D/Matrix3.h
+--- a/include/G3D/Matrix3.h	2026-11-12 13:04:07.349015609 -0500
++++ b/include/G3D/Matrix3.h	2026-11-12 13:04:32.153291810 -0500
+@@ -50,6 +50,7 @@
+     inline Matrix3() {}
+ 
+     Matrix3 (const float aafEntry[3][3]);
++    Matrix3 (const Matrix3& rkMatrix);
+ 
+     Matrix3 (float fEntry00, float fEntry01, float fEntry02,
+              float fEntry10, float fEntry11, float fEntry12,
+@@ -350,15 +351,8 @@
+     // http://www.mindview.net/
+     // *** End of G3D comment ***
+     
+-    static const Matrix3& zero() {
+-        static Matrix3 m(0, 0, 0, 0, 0, 0, 0, 0, 0);
+-        return m;
+-    }
+-
+-    static const Matrix3& identity() {
+-        static Matrix3 m(1, 0, 0, 0, 1, 0, 0, 0, 1);
+-        return m;
+-    }
++    static const Matrix3& zero();
++    static const Matrix3& identity();
+  
+ 
+ protected:
+diff -ru a/include/G3D/Vector2.h b/include/G3D/Vector2.h
+--- a/include/G3D/Vector2.h	2026-11-12 13:04:07.349767039 -0500
++++ b/include/G3D/Vector2.h	2026-11-12 13:05:07.013939980 -0500
+@@ -153,17 +153,17 @@
+     static Vector2 random(Random& r = Random::common());
+ 
+     // Special values.
+-    // Inlined, see Matrix3::identity() for details.
+-    static const Vector2& one()       { static const Vector2 v(1, 1); return v; }
+-    static const Vector2& zero()      { static Vector2 v(0, 0); return v; }
+-    static const Vector2& unitX()     { static Vector2 v(1, 0); return v; }
+-    static const Vector2& unitY()     { static Vector2 v(0, 1); return v; }
+-    static const Vector2& inf()       { static Vector2 v((float)G3D::finf(), (float)G3D::finf()); return v; }
+-    static const Vector2& nan()       { static Vector2 v((float)G3D::fnan(), (float)G3D::fnan());  return v; }
++    // Intentionally not inlined: see Matrix3::identity() for details.
++    static const Vector2& one();
++    static const Vector2& zero();
++    static const Vector2& unitX();
++    static const Vector2& unitY();
++    static const Vector2& inf();
++    static const Vector2& nan();
+     /** smallest (most negative) representable vector */
+-    static const Vector2& minFinite() { static Vector2 v(-FLT_MAX, -FLT_MAX);  return v; }
++    static const Vector2& minFinite();
+     /** Largest representable vector */
+-    static const Vector2& maxFinite() { static Vector2 v(FLT_MAX, FLT_MAX); return v; }
++    static const Vector2& maxFinite();
+ 
+     std::string toString() const;
+ 
+diff -ru a/include/G3D/Vector3.h b/include/G3D/Vector3.h
+--- a/include/G3D/Vector3.h	2026-11-12 13:04:07.352338302 -0500
++++ b/include/G3D/Vector3.h	2026-11-12 13:05:00.990018401 -0500
+@@ -383,17 +383,17 @@
+     }
+ 
+     // Special values.
+-    static const Vector3& zero() { static const Vector3 v(0, 0, 0); return v; }
+-    static const Vector3& one()      { static const Vector3 v(1, 1, 1); return v; }
+-    static const Vector3& unitX()    { static const Vector3 v(1, 0, 0); return v; }
+-    static const Vector3& unitY()    { static const Vector3 v(0, 1, 0); return v; }
+-    static const Vector3& unitZ()    { static const Vector3 v(0, 0, 1); return v; }
+-    static const Vector3& inf()      { static const Vector3 v((float)G3D::finf(), (float)G3D::finf(), (float)G3D::finf()); return v; }
+-    static const Vector3& nan()      { static const Vector3 v((float)G3D::fnan(), (float)G3D::fnan(), (float)G3D::fnan()); return v; }
++    static const Vector3& zero();
++    static const Vector3& one();
++    static const Vector3& unitX();
++    static const Vector3& unitY();
++    static const Vector3& unitZ();
++    static const Vector3& inf();
++    static const Vector3& nan();
+     /** Smallest (most negative) representable vector */
+-    static const Vector3& minFinite(){ static const Vector3 v(-FLT_MAX, -FLT_MAX, -FLT_MAX); return v; }
++    static const Vector3& minFinite();
+     /** Largest representable vector */
+-    static const Vector3& maxFinite(){ static const Vector3 v(FLT_MAX, FLT_MAX, FLT_MAX); return v; }
++    static const Vector3& maxFinite();
+ 
+     /** Creates two orthonormal tangent vectors X and Y such that
+         if Z = this, X x Y = Z.*/

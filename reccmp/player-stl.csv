@@ -1,0 +1,8 @@
+# Generated from ida/exports/PLAYER-names.csv. Do not edit.
+address,type,size,symbol
+009ef4b3,library,22,??1_Fac_node@std@@QAE@XZ
+009ef4c9,library,33,??_G_Fac_node@std@@QAEPAXI@Z_0
+009ef521,library,62,?facet_Register@facet@locale@std@@CAXPAV123@@Z
+009ef59a,library,5,??4_Init_locks@std@@QAEAAV01@ABV01@@Z
+009f032c,library,11,??_U@YAPAXIABUnothrow_t@std@@@Z
+009f093d,library,47,??2@YAPAXIABUnothrow_t@std@@@Z

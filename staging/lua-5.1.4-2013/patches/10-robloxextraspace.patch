@@ -1,0 +1,109 @@
+LUAI_EXTRASPACE = sizeof(RobloxExtraSpace) (44 bytes) and the luai_userstate* hooks construct,
+destroy and reset it (2016 shape, 2013 layout; stand-in class, see the comment in the patch).
+
+Justification (PLAYER bytes): luaE_newthread 0x00876420 allocates 0xa4 = 0x78 + 0x2c and returns
+block+0x2c; lua_newstate 0x00876a00 allocates 0x1a4 and places the root extra space with an
+out-of-line RobloxExtraSpace() 0x00876970 under an EH state (placement new); lua_newthread
+0x008750b0 calls RobloxExtraSpace::constructChild(L1, L-0x2c) 0x00875050 (iOS 10-29 transfer
+mislabels that one "lua_newthread"), which calls RobloxExtraSpace(RobloxExtraSpace*) 0x00874f40;
+luaE_freethread 0x00876830 and lua_close 0x008768a0 call ~RobloxExtraSpace 0x008766a0 on L-0x2c;
+lua_resume 0x008ab8e0 clears bit 0 of byte [L-0x10] (yieldCaptured, a 1-bit unit of its own at
++0x1c; identity:5 is the low 5 bits of the dword at +0x18 per 0x00874f40, so 2013 used two
+allocation units where 2016 packs one, 44 vs 40 bytes). The ctor at 0x00874f40 asserts at
+luaconf.h:852 (push 0x354); the bodies are RBX code and are not reproduced here.
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -720,7 +720,55 @@
+ ** CHANGE (define) this if you really need that. This value must be
+ ** a multiple of the maximum alignment required for your machine.
+ */
+-#define LUAI_EXTRASPACE		0
++/* ROBLOX: per-thread RBX state in front of every lua_State. Stand-in for the 2013
++** class: the layout is PLAYER's (44 bytes, see RobloxExtraSpace(RobloxExtraSpace*)
++** 0x00874f40) but the members are opaque and the constructors/destructor are only
++** declared; PLAYER never inlines them into Lua code (the real ones carry
++** RBXASSERTs at luaconf.h lines 852 and 862 and RBX::Intrusive::Set calls). */
++#include <new>
++struct lua_State;
++#pragma pack(push)
++#pragma pack(8)
++class RobloxExtraSpace
++{
++	void *hook[3];          /* +0x00 RBX::Intrusive::Set<RobloxExtraSpace>::Hook */
++	void *shared[2];        /* +0x0c boost::shared_ptr<Shared> */
++	void *node;             /* +0x14 boost::intrusive_ptr<Node> */
++public:
++	unsigned int identity : 5;  /* +0x18 */
++	bool yieldCaptured : 1;     /* +0x1c, a unit of its own (bit 0) */
++private:
++	void *script[2];        /* +0x20 boost::weak_ptr<RBX::BaseScript> */
++	void *continuations;    /* +0x28 boost::scoped_ptr<Continuations> */
++public:
++	static RobloxExtraSpace* get(struct lua_State *L)
++	{
++		return L ? reinterpret_cast<RobloxExtraSpace*>(((char*) L) - sizeof(RobloxExtraSpace)) : 0;
++	}
++	static void constructRoot(lua_State *L)
++	{
++		new(get(L)) RobloxExtraSpace();
++	}
++	static void destroyRoot(lua_State *L)
++	{
++		get(L)->~RobloxExtraSpace();
++	}
++	static void constructChild(lua_State *L, RobloxExtraSpace *parent)
++	{
++		new(get(L)) RobloxExtraSpace(parent);
++	}
++	static void destroyChild(lua_State *L)
++	{
++		get(L)->~RobloxExtraSpace();
++	}
++private:
++	RobloxExtraSpace();
++	RobloxExtraSpace(RobloxExtraSpace* parent);
++	~RobloxExtraSpace();
++};
++#pragma pack(pop)
++
++#define LUAI_EXTRASPACE		sizeof(RobloxExtraSpace)
+ 
+ 
+ /*
+@@ -728,12 +776,29 @@
+ ** CHANGE them if you defined LUAI_EXTRASPACE and need to do something
+ ** extra when a thread is created/deleted/resumed/yielded.
+ */
+-#define luai_userstateopen(L)		((void)L)
+-#define luai_userstateclose(L)		((void)L)
+-#define luai_userstatethread(L,L1)	((void)L)
+-#define luai_userstatefree(L)		((void)L)
+-#define luai_userstateresume(L,n)	((void)L)
+-#define luai_userstateyield(L,n)	((void)L)
++inline void luai_userstateopen(lua_State *L)
++{
++	RobloxExtraSpace::constructRoot(L);
++}
++inline void luai_userstateclose(lua_State *L)
++{
++	RobloxExtraSpace::destroyRoot(L);
++}
++inline void luai_userstatethread(lua_State *L, lua_State *L1)
++{
++	RobloxExtraSpace::constructChild(L1, RobloxExtraSpace::get(L));
++}
++inline void luai_userstatefree(lua_State *L)
++{
++	RobloxExtraSpace::destroyChild(L);
++}
++inline void luai_userstateresume(lua_State *L, int nargs)
++{
++	RobloxExtraSpace::get(L)->yieldCaptured = false;
++}
++inline void luai_userstateyield(lua_State *L, int nresults)
++{
++}
+ 
+ 
+ /*

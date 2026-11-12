@@ -1,0 +1,3 @@
+#!/bin/sh
+# VC9 SP1 rc under wine. See winewrap.py for path translation and environment.
+exec python3 -P "$(dirname "$0")/winewrap.py" rc "$@"

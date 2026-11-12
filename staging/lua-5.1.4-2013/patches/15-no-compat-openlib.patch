@@ -1,0 +1,17 @@
+luaconf.h: LUA_COMPAT_OPENLIB undefined, so the 5.0 registration function keeps its own name
+luaI_openlib (no luaL_openlib alias). Codegen is unchanged; this only fixes the symbol name.
+
+Justification: iOS 10-29 (same source family as PLAYER) names it luaI_openlib at 0x00825acc; PLAYER
+0x00875df0 is that body (identical either way).
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -364,7 +364,7 @@
+ ** CHANGE it to undefined as soon as you replace to 'luaL_register'
+ ** your uses of 'luaL_openlib'
+ */
+-#define LUA_COMPAT_OPENLIB
++#undef LUA_COMPAT_OPENLIB  /* ROBLOX */
+ 
+ 
+ 

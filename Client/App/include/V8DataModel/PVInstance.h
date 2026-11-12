@@ -1,0 +1,48 @@
+/* V8DataModel/PVInstance.h — October 2013 (position/velocity base shell).
+   Evidence: PVInstance ctor 0x4687C8 (name + FWPVInstance* -> Instance ctor,
+     Described<PVInstance, sPVInstance, Instance, Functionality 27>).
+     sPVInstance present 34x in the 0.125 Studio PE string table.
+     TRUE position in the chain: Instance -> PVInstance -> PartInstance
+     (PartInstance isA-checks route through it; FW chain FWInstance ->
+     FWPVInstance -> FWPartInstance mirrors it).
+   TODO: full decompile (position/rotation/velocity/filtering surface).
+   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/PVInstance.h */
+
+#pragma once
+
+#include "V8Tree/Instance.h"
+#include "V8Tree/OnDemand.h"
+#include "RbxG3D/RbxRay.h"
+#include "Util/Extents.h"
+
+namespace RBX {
+
+	extern const char* const sPVInstance;
+
+	class PVInstance
+		: public DescribedNonCreatable<PVInstance, Instance, sPVInstance, Reflection::ClassDescriptor::PERSISTENT>
+		// Functionality 27 per the 0x4687C8 classDescriptor reference
+		// (Described<..., Instance, 27, Permissions 0>).
+	{
+	public:
+		PVInstance();
+		PVInstance(const char* name, FWPVInstance* fw);
+		virtual OnDemandInstance* initOnDemand();  // 0x468DD0: news OnDemandPVInstance.
+		// mac: 0x46D4E0 / 0x519920 (7B each: `xor eax,eax`).  PVInstance slots.
+		// STUB: PLAYER 0x0096bde0
+		virtual int topHashCode() const { return 0; }
+		// STUB: PLAYER 0x0096bde0
+		virtual int childHashCode() const { return 0; }
+
+		// vtable+0x78/+0x7c/+0x80: the other virtuals PVInstance adds in 2013 (ModelInstance
+		// vftable 0x00b3f6bc has 33 slots ending here; PartInstance 0x00b4c784 and iOS 10-29
+		// put the same three after childHashCode). Pure in 2016's PVInstance.h (hitTestImpl,
+		// computeExtentsWorld); legacyTraverseState is gone by 2016.
+	protected:
+		virtual bool hitTestImpl(const RbxRay& worldRay, G3D::Vector3& worldHitPoint) = 0;
+	public:
+		virtual Extents computeExtentsWorld() const = 0;
+		virtual void legacyTraverseState(const G3D::CoordinateFrame& cf) = 0;
+	};
+
+} // namespace RBX

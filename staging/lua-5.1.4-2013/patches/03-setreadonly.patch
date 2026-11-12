@@ -1,0 +1,56 @@
+ROBLOX lua_setreadonly(L, idx, bool) and the readonly check in lua_rawset (only there).
+
+Justification (PLAYER bytes): 0x00874470 (23 B, between lua_createtable and lua_getmetatable, the
+2016 source position) is index2adr + "mov byte [hvalue+7], value": lua_setreadonly. lua_rawset
+0x008745f0 tests byte [h+7] and calls luaG_runerror(L, "Attempt to modify a readonly table")
+(string 0x00b80160) and passes the cached Table* to luaH_set (hence the local h). lua_rawseti
+0x00874670 and lua_setmetatable 0x008746e0 are identical WITHOUT the check (2016 added it there
+later).
+
+--- a/lapi.c
++++ b/lapi.c
+@@ -584,6 +584,17 @@
+ }
+ 
+ 
++/* ROBLOX */
++LUA_API void lua_setreadonly (lua_State *L, int objindex, bool value) {
++  const TValue *o;
++  lua_lock(L);
++  o = index2adr(L, objindex);
++  api_check(L, ttistable(o));
++  hvalue(o)->readonly = value;
++  lua_unlock(L);
++}
++
++
+ LUA_API int lua_getmetatable (lua_State *L, int objindex) {
+   const TValue *obj;
+   Table *mt = NULL;
+@@ -670,11 +681,15 @@
+ 
+ LUA_API void lua_rawset (lua_State *L, int idx) {
+   StkId t;
++  Table *h;
+   lua_lock(L);
+   api_checknelems(L, 2);
+   t = index2adr(L, idx);
+   api_check(L, ttistable(t));
+-  setobj2t(L, luaH_set(L, hvalue(t), L->top-2), L->top-1);
++  h = hvalue(t);
++  if (h->readonly)  /* ROBLOX */
++    luaG_runerror(L, "Attempt to modify a readonly table");
++  setobj2t(L, luaH_set(L, h, L->top-2), L->top-1);
+   luaC_barriert(L, hvalue(t), L->top-1);
+   L->top -= 2;
+   lua_unlock(L);
+--- a/lua.h
++++ b/lua.h
+@@ -179,6 +179,7 @@
+ LUA_API void  (lua_rawget) (lua_State *L, int idx);
+ LUA_API void  (lua_rawgeti) (lua_State *L, int idx, int n);
+ LUA_API void  (lua_createtable) (lua_State *L, int narr, int nrec);
++LUA_API void  (lua_setreadonly) (lua_State *L, int idx, bool value);  /* ROBLOX */
+ LUA_API void *(lua_newuserdata) (lua_State *L, size_t sz);
+ LUA_API int   (lua_getmetatable) (lua_State *L, int objindex);
+ LUA_API void  (lua_getfenv) (lua_State *L, int idx);

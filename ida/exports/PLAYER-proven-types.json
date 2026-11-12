@@ -1,0 +1,1616 @@
+{
+ "pdb": "RobloxPlayerBeta.pdb",
+ "classes": {
+  "RBX::Debugable": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VDebugable@RBX@@"
+  },
+  "RBX::Object": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VObject@RBX@@"
+  },
+  "RBX::Reflection::EventSource": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VEventSource@Reflection@RBX@@"
+  },
+  "RBX::Reflection::DescribedBase": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::EventSource",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>",
+     "offset": 4,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "descriptor",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::ClassDescriptor",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDescribedBase@Reflection@RBX@@"
+  },
+  "RBX::GuidItem<RBX::Instance>": {
+   "size": 20,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "registry",
+     "offset": 4,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>",
+     "scalar": null
+    },
+    {
+     "name": "guid",
+     "offset": 12,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Guid",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "V?$GuidItem@VInstance@RBX@@@RBX@@"
+  },
+  "RBX::Limits::Countable": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "counter",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Limits::Counter>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VCountable@Limits@RBX@@"
+  },
+  "RBX::Instance": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Debugable",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::GuidItem<RBX::Instance>",
+     "offset": 4,
+     "size": 20,
+     "empty": false
+    },
+    {
+     "name": "RBX::AbstractFactoryProduct<RBX::Instance>",
+     "offset": 24,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::Described<RBX::Instance, char const *const RBX::sInstance, RBX::Reflection::DescribedBase, 27, 0>",
+     "offset": 28,
+     "size": 16,
+     "empty": false
+    },
+    {
+     "name": "RBX::Limits::Countable",
+     "offset": 44,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "RBX::Diagnostics::Countable<RBX::Instance>",
+     "offset": 52,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 53,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "parent",
+     "offset": 56,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Instance",
+     "scalar": null
+    },
+    {
+     "name": "children",
+     "offset": 60,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > >",
+     "scalar": null
+    },
+    {
+     "name": "isSettingParent",
+     "offset": 68,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "fwBase",
+     "offset": 72,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::FWBase>",
+     "scalar": null
+    },
+    {
+     "name": "onDemandPtr",
+     "offset": 80,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::OnDemandInstance>",
+     "scalar": null
+    },
+    {
+     "name": "combinedSignal",
+     "offset": 84,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Instance::CombinedSignalType,RBX::Instance::ICombinedSignalData const *)>",
+     "scalar": null
+    },
+    {
+     "name": "ancestryChangedSignal",
+     "offset": 88,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "propertyChangedSignal",
+     "offset": 92,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Reflection::PropertyDescriptor const *)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VInstance@RBX@@"
+  },
+  "RBX::ServiceProvider": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::ServiceProvider, RBX::Instance, char const *const RBX::sServiceProvider, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "serviceArray",
+     "offset": 96,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > >",
+     "scalar": null
+    },
+    {
+     "name": "serviceMap",
+     "offset": 112,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::Name const *,boost::shared_ptr<RBX::Instance>,std::less<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,boost::shared_ptr<RBX::Instance> > > >",
+     "scalar": null
+    },
+    {
+     "name": "closingSignal",
+     "offset": 124,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "closingLateSignal",
+     "offset": 128,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "serviceAddedSignal",
+     "offset": 132,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "serviceRemovingSignal",
+     "offset": 136,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VServiceProvider@RBX@@"
+  },
+  "RBX::VerbContainer": {
+   "size": 20,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "verbs",
+     "offset": 4,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::Name const *,RBX::Verb *,std::less<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,RBX::Verb *> > >",
+     "scalar": null
+    },
+    {
+     "name": "parent",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::VerbContainer",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VVerbContainer@RBX@@"
+  },
+  "RBX::Verb": {
+   "size": 12,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Debugable",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "name",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "container",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::VerbContainer",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VVerb@RBX@@"
+  },
+  "RBX::Reflection::ClassDescriptor": {
+   "size": 524,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Descriptor",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>",
+     "offset": 16,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor>",
+     "offset": 112,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>",
+     "offset": 208,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor>",
+     "offset": 304,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor>",
+     "offset": 400,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "security",
+     "offset": 496,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::Security::Permissions",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "derivedClasses",
+     "offset": 500,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::ClassDescriptor *,std::allocator<RBX::Reflection::ClassDescriptor *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 516,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::ClassDescriptor",
+     "scalar": null
+    },
+    {
+     "name": "bReplicateType",
+     "offset": 520,
+     "size": 4,
+     "kind": "bitfield",
+     "type": null,
+     "scalar": "T_UINT4",
+     "bits": [
+      "bReplicateType:2@0",
+      "bCanXmlWrite:1@2",
+      "bIsScriptable:1@3"
+     ]
+    }
+   ],
+   "base": false,
+   "unique": "VClassDescriptor@Reflection@RBX@@"
+  },
+  "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "descriptors",
+     "offset": 0,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>::Collection",
+     "scalar": null
+    },
+    {
+     "name": "descriptorLookup",
+     "offset": 16,
+     "size": 60,
+     "kind": "class",
+     "type": "rbx::trie<RBX::Reflection::PropertyDescriptor *,50>",
+     "scalar": null
+    },
+    {
+     "name": "derivedContainers",
+     "offset": 76,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor> *,std::allocator<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor> *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 92,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "V?$MemberDescriptorContainer@VPropertyDescriptor@Reflection@RBX@@@Reflection@RBX@@"
+  },
+  "RBX::Name": {
+   "size": 32,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "sortIndex",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    },
+    {
+     "name": "str",
+     "offset": 4,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VName@RBX@@"
+  },
+  "RBX::DataModelJob": {
+   "size": 536,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::TaskScheduler::Job",
+     "offset": 0,
+     "size": 528,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "taskType",
+     "offset": 528,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::DataModelJob::TaskType",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "isPerPlayer",
+     "offset": 532,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VDataModelJob@RBX@@"
+  },
+  "RBX::DataModel::GenericJob": {
+   "size": 584,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "tasks",
+     "offset": 544,
+     "size": 36,
+     "kind": "class",
+     "type": "rbx::timestamped_safe_queue<boost::function<void __cdecl(RBX::DataModel *)> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGenericJob@DataModel@RBX@@"
+  },
+  "RBX::GcJob": {
+   "size": 552,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "scriptContext",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::ScriptContext>",
+     "scalar": null
+    },
+    {
+     "name": "frequency",
+     "offset": 544,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VGcJob@RBX@@"
+  },
+  "RBX::LibraryService": {
+   "size": 104,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "context",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ScriptContext",
+     "scalar": null
+    },
+    {
+     "name": "librariesRegistered",
+     "offset": 4,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "delayedQueue",
+     "offset": 8,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<boost::shared_ptr<RBX::LibraryService::LibraryStateObject>,std::allocator<boost::shared_ptr<RBX::LibraryService::LibraryStateObject> > >",
+     "scalar": null
+    },
+    {
+     "name": "definitions",
+     "offset": 20,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::LibraryService::LibraryDefinition,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,RBX::LibraryService::LibraryDefinition> > >",
+     "scalar": null
+    },
+    {
+     "name": "developmentLibraries",
+     "offset": 32,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Script>,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,boost::shared_ptr<RBX::Script> > > >",
+     "scalar": null
+    },
+    {
+     "name": "libraryExceptionMap",
+     "offset": 44,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >",
+     "scalar": null
+    },
+    {
+     "name": "suspendedThreads",
+     "offset": 56,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::list<boost::shared_ptr<RBX::LibraryService::LibraryStateObject>,std::allocator<boost::shared_ptr<RBX::LibraryService::LibraryStateObject> > >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,std::list<boost::shared_ptr<RBX::LibraryService::LibraryStateObject>,std::allocator<boost::shared_ptr<RBX::LibraryService::LibraryStateObject> > > > > >",
+     "scalar": null
+    },
+    {
+     "name": "markedLibraries",
+     "offset": 68,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::hash<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::equal_to<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >",
+     "scalar": null
+    },
+    {
+     "name": "resumeCallbacks",
+     "offset": 92,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<boost::function<void __cdecl(void)>,std::allocator<boost::function<void __cdecl(void)> > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLibraryService@RBX@@"
+  },
+  "RBX::MovingAssemblyStage": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IWorldStage",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "numJoints",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "listHead",
+     "offset": 20,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Joint",
+     "scalar": null
+    },
+    {
+     "name": "listTail",
+     "offset": 24,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Joint",
+     "scalar": null
+    },
+    {
+     "name": "uiStepJoints",
+     "offset": 28,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VMovingAssemblyStage@RBX@@"
+  },
+  "RBX::DataModelArbiter": {
+   "size": 2592,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::SimpleThrottlingArbiter",
+     "offset": 0,
+     "size": 2096,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x830",
+     "offset": 2096,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Limits::Counter>",
+     "scalar": null
+    },
+    {
+     "name": "lookup",
+     "offset": 2104,
+     "size": 484,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDataModelArbiter@RBX@@"
+  },
+  "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "weak_this_",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::Reflection::DescribedBase>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$enable_shared_from_this@VDescribedBase@Reflection@RBX@@@boost@@"
+  },
+  "RBX::Diagnostics::Countable<RBX::Instance>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Countable@VInstance@RBX@@@Diagnostics@RBX@@"
+  },
+  "RBX::AbstractFactoryProduct<RBX::Instance>": {
+   "size": 4,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Creatable<RBX::Instance>",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$AbstractFactoryProduct@VInstance@RBX@@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Instance, char const *const RBX::sInstance, RBX::Reflection::DescribedBase, 27, 0>": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::DescribedBase",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VInstance@RBX@@$E?sInstance@2@3QBDBVDescribedBase@Reflection@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "boost::noncopyable_::noncopyable": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "Vnoncopyable@noncopyable_@boost@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::ServiceProvider, RBX::Instance, char const *const RBX::sServiceProvider, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::ServiceProvider, char const *const RBX::sServiceProvider, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VServiceProvider@RBX@@VInstance@2@$E?sServiceProvider@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Descriptor": {
+   "size": 16,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 4,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "isDeprecated",
+     "offset": 4,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "preferred",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::Descriptor",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VDescriptor@Reflection@RBX@@"
+  },
+  "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "descriptors",
+     "offset": 0,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor>::Collection",
+     "scalar": null
+    },
+    {
+     "name": "descriptorLookup",
+     "offset": 16,
+     "size": 60,
+     "kind": "class",
+     "type": "rbx::trie<RBX::Reflection::EventDescriptor *,50>",
+     "scalar": null
+    },
+    {
+     "name": "derivedContainers",
+     "offset": 76,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor> *,std::allocator<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor> *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 92,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$MemberDescriptorContainer@VEventDescriptor@Reflection@RBX@@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "descriptors",
+     "offset": 0,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>::Collection",
+     "scalar": null
+    },
+    {
+     "name": "descriptorLookup",
+     "offset": 16,
+     "size": 60,
+     "kind": "class",
+     "type": "rbx::trie<RBX::Reflection::FunctionDescriptor *,50>",
+     "scalar": null
+    },
+    {
+     "name": "derivedContainers",
+     "offset": 76,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor> *,std::allocator<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor> *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 92,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$MemberDescriptorContainer@VFunctionDescriptor@Reflection@RBX@@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "descriptors",
+     "offset": 0,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor>::Collection",
+     "scalar": null
+    },
+    {
+     "name": "descriptorLookup",
+     "offset": 16,
+     "size": 60,
+     "kind": "class",
+     "type": "rbx::trie<RBX::Reflection::YieldFunctionDescriptor *,50>",
+     "scalar": null
+    },
+    {
+     "name": "derivedContainers",
+     "offset": 76,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor> *,std::allocator<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor> *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 92,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::YieldFunctionDescriptor>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$MemberDescriptorContainer@VYieldFunctionDescriptor@Reflection@RBX@@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "descriptors",
+     "offset": 0,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor>::Collection",
+     "scalar": null
+    },
+    {
+     "name": "descriptorLookup",
+     "offset": 16,
+     "size": 60,
+     "kind": "class",
+     "type": "rbx::trie<RBX::Reflection::CallbackDescriptor *,50>",
+     "scalar": null
+    },
+    {
+     "name": "derivedContainers",
+     "offset": 76,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor> *,std::allocator<RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor> *> >",
+     "scalar": null
+    },
+    {
+     "name": "base",
+     "offset": 92,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::CallbackDescriptor>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$MemberDescriptorContainer@VCallbackDescriptor@Reflection@RBX@@@Reflection@RBX@@"
+  },
+  "RBX::TaskScheduler::Job": {
+   "size": 528,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 8,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::enable_shared_from_this<RBX::TaskScheduler::Job>",
+     "offset": 8,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "RBX::Diagnostics::Countable<RBX::TaskScheduler::Job>",
+     "offset": 16,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::TaskScheduler::SleepingTag>,boost::intrusive::none,boost::intrusive::none>",
+     "offset": 20,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::TaskScheduler::WaitingTag>,boost::intrusive::none,boost::intrusive::none>",
+     "offset": 28,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "lastThreadUsed",
+     "offset": 36,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::TaskScheduler::Thread>",
+     "scalar": null
+    },
+    {
+     "name": "coordinatorMutex",
+     "offset": 44,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::mutex",
+     "scalar": null
+    },
+    {
+     "name": "coordinators",
+     "offset": 68,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<boost::shared_ptr<RBX::Tasks::Coordinator>,std::allocator<boost::shared_ptr<RBX::Tasks::Coordinator> > >",
+     "scalar": null
+    },
+    {
+     "name": "sharedArbiter",
+     "offset": 84,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Arbiter>",
+     "scalar": null
+    },
+    {
+     "name": "weakArbiter",
+     "offset": 92,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::TaskScheduler::Arbiter>",
+     "scalar": null
+    },
+    {
+     "name": "baldArbiter",
+     "offset": 100,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::TaskScheduler::Arbiter",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 104,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "stepBudget",
+     "offset": 136,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "stepStartTime",
+     "offset": 144,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "allotedConcurrency",
+     "offset": 152,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "state",
+     "offset": 156,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::TaskScheduler::Job::State",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "isRemoveRequested",
+     "offset": 160,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "timeofLastStep",
+     "offset": 168,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "timeofLastSleep",
+     "offset": 176,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "timespanOfLastStep",
+     "offset": 184,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "currentError",
+     "offset": 192,
+     "size": 16,
+     "kind": "structure",
+     "type": "RBX::TaskScheduler::Job::Error",
+     "scalar": null
+    },
+    {
+     "name": "priority",
+     "offset": 208,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "wakeTime",
+     "offset": 216,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "overStepTimeThresholdCount",
+     "offset": 224,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "joinEvent",
+     "offset": 228,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::CEvent>",
+     "scalar": null
+    },
+    {
+     "name": "dutyCycle",
+     "offset": 240,
+     "size": 112,
+     "kind": "class",
+     "type": "RBX::RunningAverageDutyCycle<1>",
+     "scalar": null
+    },
+    {
+     "name": "sleepRate",
+     "offset": 352,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "runningAverageError",
+     "offset": 400,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "dutyCycleWindow",
+     "offset": 448,
+     "size": 80,
+     "kind": "class",
+     "type": "RBX::WindowAverageDutyCycle<1>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VJob@TaskScheduler@RBX@@"
+  },
+  "RBX::IWorldStage": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IStage",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "VIWorldStage@RBX@@"
+  },
+  "RBX::SimpleThrottlingArbiter": {
+   "size": 2096,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::TaskScheduler::Arbiter",
+     "offset": 0,
+     "size": 2088,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "throttled",
+     "offset": 2088,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "updatingThrottle",
+     "offset": 2092,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VSimpleThrottlingArbiter@RBX@@"
+  },
+  "RBX::Creatable<RBX::Instance>": {
+   "size": 4,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Object",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Creatable@VInstance@RBX@@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::ServiceProvider, char const *const RBX::sServiceProvider, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VServiceProvider@RBX@@$E?sServiceProvider@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sServiceProvider@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "boost::enable_shared_from_this<RBX::TaskScheduler::Job>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "weak_this_",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$enable_shared_from_this@VJob@TaskScheduler@RBX@@@boost@@"
+  },
+  "RBX::Diagnostics::Countable<RBX::TaskScheduler::Job>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Countable@VJob@TaskScheduler@RBX@@@Diagnostics@RBX@@"
+  },
+  "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::TaskScheduler::SleepingTag>,boost::intrusive::none,boost::intrusive::none>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::TaskScheduler::SleepingTag,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$list_base_hook@U?$tag@USleepingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
+  },
+  "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::TaskScheduler::WaitingTag>,boost::intrusive::none,boost::intrusive::none>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::TaskScheduler::WaitingTag,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$list_base_hook@U?$tag@UWaitingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
+  },
+  "RBX::IStage": {
+   "size": 16,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "upstream",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IStage",
+     "scalar": null
+    },
+    {
+     "name": "downstream",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IStage",
+     "scalar": null
+    },
+    {
+     "name": "world",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::World",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIStage@RBX@@"
+  },
+  "RBX::TaskScheduler::Arbiter": {
+   "size": 2088,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "activityMeter",
+     "offset": 8,
+     "size": 2080,
+     "kind": "class",
+     "type": "RBX::ActivityMeter<2>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VArbiter@TaskScheduler@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sServiceProvider@2@3QBDB@RBX@@"
+  },
+  "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::no_default_definer",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@USleepingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::TaskScheduler::WaitingTag,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::no_default_definer",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::WaitingTag,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@UWaitingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::no_default_definer": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "Uno_default_definer@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::list_node<void *>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@USleepingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::WaitingTag,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::list_node<void *>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@UWaitingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::list_node<void *>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "next_",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "boost::intrusive::list_node<void *>",
+     "scalar": null
+    },
+    {
+     "name": "prev_",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "boost::intrusive::list_node<void *>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "U?$list_node@PAX@intrusive@boost@@"
+  }
+ },
+ "missing": []
+}

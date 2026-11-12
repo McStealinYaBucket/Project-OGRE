@@ -1,0 +1,21 @@
+# Generated from ida/exports/PLAYER-names.csv. Do not edit.
+address,type,size,symbol
+0041b040,library,26,?AtlThrowLastWin32@ATL@@YGXXZ
+009eeee4,library,28,??0_ATL_BASE_MODULE70@ATL@@QAE@XZ
+009eef00,library,24,??1CAtlBaseModule@ATL@@QAE@XZ
+009eef18,library,79,?GetHInstanceAt@CAtlBaseModule@ATL@@QAEPAUHINSTANCE__@@H@Z
+009eef67,library,64,??0CAtlBaseModule@ATL@@QAE@XZ
+009eefa7,library,27,??1CWin32Heap@ATL@@UAE@XZ
+009eefd9,library,29,?Free@CWin32Heap@ATL@@UAEXPAX@Z
+009eeff6,library,58,?Reallocate@CWin32Heap@ATL@@UAEPAXPAXI@Z
+009ef068,library,49,??0CAtlStringMgr@ATL@@QAE@PAUIAtlMemMgr@1@@Z
+009ef099,library,14,?Free@CAtlStringMgr@ATL@@UAEXPAUCStringData@2@@Z
+009ef0a7,library,14,?GetNilString@CAtlStringMgr@ATL@@UAEPAUCStringData@2@XZ
+009ef0b8,library,34,??_GCAtlStringMgr@ATL@@UAEPAXI@Z
+009ef100,library,100,?Allocate@CAtlStringMgr@ATL@@UAEPAUCStringData@2@HH@Z
+009ef164,library,91,?Reallocate@CAtlStringMgr@ATL@@UAEPAUCStringData@2@PAU32@HH@Z
+009ef357,library,40,?AtlWinModuleInit@ATL@@YGJPAU_ATL_WIN_MODULE70@1@@Z
+009ef39e,library,43,??A?$CSimpleArray@GV?$CSimpleArrayEqualHelper@G@ATL@@@ATL@@QAEAAGH@Z
+009ef3e6,library,100,?AtlWinModuleTerm@ATL@@YGJPAU_ATL_WIN_MODULE70@1@PAUHINSTANCE__@@@Z
+009ef472,library,26,??1CAtlWinModule@ATL@@QAE@XZ
+00a8f30c,library,40,??__Eg_strheap@ATL@@YAXXZ

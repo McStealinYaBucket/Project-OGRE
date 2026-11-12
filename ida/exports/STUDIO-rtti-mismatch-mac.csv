@@ -1,0 +1,219 @@
+class,reason,msvc_slots_per_vftable,itanium_slots_per_group
+ArbiterItem,"slot count, vftable 0",7,8
+AuthenticationHelper,"slot count, vftable 0",11,12
+AuthoringSettings,"slot count, vftable 0",28 1 2 3,32 1 3 4
+AutoSaveDialog,"slot count, vftable 0",53 6,57 2
+BasicFindDialog,"slot count, vftable 0",55 6,59 2
+BoolPropertyItem,"slot count, vftable 0",23,24
+BreakpointItem,"slot count, vftable 0",9,10
+BreakpointsTreeWidget,"slot count, vftable 0",98 6,102 2
+BreakpointsWidget,"slot count, vftable 0",50 6,54 2
+BrickColorPropertyItem,"slot count, vftable 0",23,24
+CallStackTreeWidget,"slot count, vftable 0",98 6,102 2
+CallStackWidget,"slot count, vftable 0",50 6,54 2
+CategoryItem,"slot count, vftable 0",7,8
+CheckSyntaxThread,"slot count, vftable 0",12,13
+ClassListWidget,"slot count, vftable 0",94 6,98 2
+ColorPickerFrame,"slot count, vftable 0",52 6,56 2
+ColorPickerToolButton,"slot count, vftable 0",54 6,58 2
+ColorPropertyItem,"slot count, vftable 0",23,24
+ContentPropertyItem,"slot count, vftable 0",23,24
+CopyVerb,"slot count, vftable 0",7,8
+CreatePopupException,"slot count, vftable 0",2,3
+CustomToolButton,"slot count, vftable 0",54 6,58 2
+CutVerb,"slot count, vftable 0",7,8
+DebuggerClientManager,"slot count, vftable 0",11,12
+DebuggerToolTipWidget,"slot count, vftable 0",96 6,100 2
+DebuggerTreeWidget,"slot count, vftable 0",98 6,102 2
+DeclarationView,"slot count, vftable 0",61 6,65 2
+DirPropertyItem,"slot count, vftable 0",23,24
+DocDockWidget,"slot count, vftable 0",50 6,54 2
+DocTabManager,"slot count, vftable 0",11,12
+DoublePropertyItem,"slot count, vftable 0",23,24
+EnumPropertyItem,"slot count, vftable 0",23,24
+FaceComponentItem,"slot count, vftable 0",23,24
+FacesPropertyItem,"slot count, vftable 0",23,24
+FindDialog,"slot count, vftable 0",55 6,59 2
+FontPropertyItem,"slot count, vftable 0",23,24
+InsertModelVerb,"slot count, vftable 0",7,8
+InsertObjectListWidget,"slot count, vftable 0",94 6,98 2
+InsertObjectListWidgetItem,"slot count, vftable 0",8,9
+InsertObjectWidget,"slot count, vftable 0",50 6,54 2
+InsertServiceDialog,"slot count, vftable 0",53 6,57 2
+InstanceUpdateHandler,"slot count, vftable 0",9,10
+IntPropertyItem,"slot count, vftable 0",23,24
+LeaveGameVerb,"slot count, vftable 0",7,8
+MachineConfig,"slot count, vftable 0",11,12
+MaterialPickerFrame,"slot count, vftable 0",52 6,56 2
+MaterialPickerToolButton,"slot count, vftable 0",54 6,58 2
+MemberListWidget,"slot count, vftable 0",94 6,98 2
+NoEditDelegate,"slot count, vftable 0",20,21
+ObjectBrowserItem,"slot count, vftable 0",8,9
+Ogre::RbxEntity,"slot count, vftable 0",64 4 6,66 5 2
+PasteVerb,"slot count, vftable 0",11 7,14 8
+PickerFrame,"slot count, vftable 0",52 6,56 2
+PlaySoloVerb,"slot count, vftable 0",7,8
+PopupLaunchEditor,"slot count, vftable 0",50 6,54 2
+PropertyItem,"slot count, vftable 0",23,24
+PropertyItemUpdateJob,"slot count, vftable 0",7,8
+PropertyTreeWidget,"slot count, vftable 0",98 6,102 2
+PublishSelectionToRobloxVerb,"slot count, vftable 0",7,8
+PublishToRobloxAsVerb,"slot count, vftable 0",7,8
+PublishToRobloxVerb,"slot count, vftable 0",7,8
+QDebuggerClient,"slot count, vftable 0",11,12
+QOgreWidget,"slot count, vftable 0",50 6,54 2
+QtUtilities::RBXMessageBox,"slot count, vftable 0",53 6,57 2
+RBX::BodyAngularVelocity,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyForce,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyGyro,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyMover,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyPosition,"slot count, vftable 4",30 1 2 3 19 6 8 2,39 1 3 4 27 7 9 3
+RBX::BodyThrust,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyVelocity,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BoundVerb,"slot count, vftable 0",7,8
+RBX::DataModel::SerializationException,"slot count, vftable 0",2,3
+RBX::Humanoid,"slot count, vftable 4",28 1 2 3 19 6 8 12 17 1 2 1,53 1 3 4 27 7 9 12 19 2 3
+"RBX::Reflection::BoundProp<QDir,1>","slot count, vftable 0",14,15
+"RBX::Reflection::BoundProp<QFont,1>","slot count, vftable 0",14,15
+RBX::Reflection::EnumDesc<AuthoringSettings::HoverAnimateSpeed>,"slot count, vftable 0",5,6
+RBX::Reflection::EnumDesc<AuthoringSettings::ListDisplayMode>,"slot count, vftable 0",5,6
+RBX::Reflection::EnumDesc<AuthoringSettings::OutputLayoutMode>,"slot count, vftable 0",5,6
+RBX::Reflection::EnumDesc<AuthoringSettings::PermissionLevelShown>,"slot count, vftable 0",5,6
+"RBX::Reflection::EnumPropDescriptor<AuthoringSettings,AuthoringSettings::HoverAnimateSpeed>","slot count, vftable 0",20,21
+"RBX::Reflection::EnumPropDescriptor<AuthoringSettings,AuthoringSettings::ListDisplayMode>","slot count, vftable 0",20,21
+"RBX::Reflection::EnumPropDescriptor<AuthoringSettings,AuthoringSettings::OutputLayoutMode>","slot count, vftable 0",20,21
+"RBX::Reflection::EnumPropDescriptor<AuthoringSettings,AuthoringSettings::PermissionLevelShown>","slot count, vftable 0",20,21
+"RBX::Reflection::EnumPropDescriptor<AuthoringSettings,RBX::ChangeHistoryService::RuntimeUndoBehavior>","slot count, vftable 0",20,21
+RBX::Reflection::Metadata::Callbacks,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Class,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Classes,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Events,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Functions,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Item,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Member,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Properties,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::Reflection,"slot count, vftable 0",28 1 2 3,32 1 3 4
+RBX::Reflection::Metadata::YieldFunctions,"slot count, vftable 0",28 1 2 3,32 1 3 4
+"RBX::Reflection::PropDescriptor<AuthoringSettings,bool>","slot count, vftable 0",14,15
+"RBX::Reflection::PropDescriptor<AuthoringSettings,float>","slot count, vftable 0",14,15
+RBX::Reflection::TType<QDir>,"slot count, vftable 0",1,2
+RBX::Reflection::TType<QFont>,"slot count, vftable 0",1,2
+RBX::Reflection::TypedPropertyDescriptor<QDir>,"slot count, vftable 0",14,15
+RBX::Reflection::TypedPropertyDescriptor<QFont>,"slot count, vftable 0",2,15
+RBX::Rocket,"slot count, vftable 4",30 1 2 3 19 6 8 2,39 1 3 4 27 7 9 3
+RBX::SkateboardPlatform,"slot count, vftable 9",67 1 2 3 1 6 12 10 1 19 6 8 1,95 1 3 4 1 6 12 12 1 27 7 9
+RBX::VehicleSeat,"slot count, vftable 9",65 1 2 3 1 6 12 10 1 19 6 8 1,93 1 3 4 1 6 12 12 1 27 7 9
+RBXTextUserData,"slot count, vftable 0",1,2
+RbxContent,"slot count, vftable 0",11,12
+RbxWorkspace,"slot count, vftable 0",11,12
+RedoVerb,"slot count, vftable 0",7,8
+RefPropertyItem,"slot count, vftable 0",23,24
+RenderStatsItem,"slot count, vftable 0",29 1 2 3,33 1 3 4
+ReplaceDialog,"slot count, vftable 0",55 6,59 2
+Roblox,"slot count, vftable 0",11 3,14 4
+RobloxBasicDoc,"slot count, vftable 0",27,28
+RobloxBrowser,"slot count, vftable 0",51 6,55 2
+RobloxCategoryItem,"slot count, vftable 0",7,8
+RobloxCategoryItemDelegate,"slot count, vftable 0",20,21
+RobloxCookieJar,"slot count, vftable 0",13,14
+RobloxCustomEvent,"slot count, vftable 0",1,2
+RobloxCustomEventWithArg,"slot count, vftable 0",1,2
+RobloxDiagnosticsView,"slot count, vftable 0",96 6,100 2
+RobloxDiagnosticsViewItem,"slot count, vftable 0",7,8
+RobloxDocManager,"slot count, vftable 0",11,12
+RobloxGoogleAnalytics,"slot count, vftable 0",11,12
+RobloxIDEDoc,"slot count, vftable 0",11 27,31 28
+RobloxMainWindow,"slot count, vftable 0",51 6,55 2
+RobloxNetworkAccessManager,"slot count, vftable 0",12,13
+RobloxNetworkReply,"slot count, vftable 0",11,12
+RobloxObjectBrowserDoc,"slot count, vftable 0",11 27,29 28
+RobloxPluginHost,"slot count, vftable 0",11 6,20 8
+RobloxPropertyWidget,"slot count, vftable 0",50 6,54 2
+RobloxReportView,"slot count, vftable 0",96 6,100 2
+RobloxScriptDoc,"slot count, vftable 0",11 27,31 28
+RobloxScriptReview,"slot count, vftable 0",97 6,101 2
+RobloxScriptReview::ScriptPerfUpdateJob,"slot count, vftable 0",7,8
+RobloxSettings,"slot count, vftable 0",11,12
+RobloxSettingsDialog,"slot count, vftable 0",53 6,57 2
+RobloxTaskScheduler,"slot count, vftable 0",96 6,100 2
+RobloxTextOutputWidget,"slot count, vftable 0",56 6,60 2
+RobloxToolBox,"slot count, vftable 0",50 6,54 2
+RobloxTreeWidget,vftable count,96 6 9 5,109 2
+RobloxTreeWidgetItem,"slot count, vftable 0",7 9,15 10
+RobloxUser,"slot count, vftable 0",11,12
+RobloxView,"slot count, vftable 0",11 3,14 4
+RobloxView::RenderJob,"slot count, vftable 0",7,8
+RobloxView::RenderRequestJob,"slot count, vftable 0",7,8
+RobloxView::WrapMouseJob,"slot count, vftable 0",7,8
+RobloxWebDoc,"slot count, vftable 0",11 27,29 28
+RobloxWebPage,"slot count, vftable 0",23,24
+ScreenshotVerb,"slot count, vftable 0",11 7,14 8
+ScriptSideWidget,"slot count, vftable 0",50 6,54 2
+ScriptSyntaxHighlighter,"slot count, vftable 0",12,13
+ScriptTextEditor,vftable count,56 6 5,65 2
+SelectionPropertyTree,"slot count, vftable 0",98 6,102 2
+SelectionSaveToFileVerb,"slot count, vftable 0",7,8
+SettingsItem,"slot count, vftable 0",7,8
+ShortcutHelpDialog,"slot count, vftable 0",53 6,57 2
+ShutdownClientAndSaveVerb,"slot count, vftable 0",7,8
+ShutdownClientVerb,"slot count, vftable 0",7,8
+SignalConnector,"slot count, vftable 0",11,12
+StackDetailsItem,"slot count, vftable 0",9,10
+StartPlayerVerb,"slot count, vftable 0",7,8
+StartServerVerb,"slot count, vftable 0",7,8
+StringPropertyItem,"slot count, vftable 0",23,24
+TSJobItem,"slot count, vftable 0",7,8
+Toggle3DGridVerb,"slot count, vftable 0",7,8
+ToggleAxisWidgetVerb,"slot count, vftable 0",7,8
+ToggleCollisionCheckVerb,"slot count, vftable 0",7,8
+ToggleFullscreenVerb,"slot count, vftable 0",7,8
+UDim2ComponentItem,"slot count, vftable 0",23,24
+UDim2PropertyItem,"slot count, vftable 0",23,24
+UndoVerb,"slot count, vftable 0",7,8
+UpdateToolbarThread,"slot count, vftable 0",12,13
+UpdateUIManager,"slot count, vftable 0",11,12
+UploadDialog,"slot count, vftable 0",53 6,57 2
+UserInputJob,"slot count, vftable 0",7,8
+VectorPropertyItem,"slot count, vftable 0",23,24
+WatchItem,"slot count, vftable 0",9,10
+WatchTreeWidget,"slot count, vftable 0",98 6,102 2
+WatchWidget,"slot count, vftable 0",50 6,54 2
+WebDialog,"slot count, vftable 0",53 6,57 2
+boost::detail::sp_counted_impl_p<PropertyItemUpdateJob>,"slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3,RBX::POLY::CornerWedgeMesh,RBX::Vector3Comparer>::Token>","slot count, vftable 0",3,6
+boost::detail::sp_counted_impl_p<RobloxScriptReview::ScriptPerfUpdateJob>,"slot count, vftable 0",5,6
+boost::detail::sp_counted_impl_p<RobloxView::RenderRequestJob>,"slot count, vftable 0",5,6
+boost::detail::sp_counted_impl_p<RobloxView::WrapMouseJob>,"slot count, vftable 0",5,6
+boost::detail::sp_counted_impl_p<UserInputJob>,"slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_p<std::basic_ifstream<char,std::char_traits<char>>>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<AuthoringSettings*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Callbacks*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Class*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Classes*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Events*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Functions*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Member*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Properties*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::Reflection*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RBX::Reflection::Metadata::YieldFunctions*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::sp_counted_impl_pd<RenderStatsItem*,RBX::Creatable<RBX::Instance>::Deleter>","slot count, vftable 0",5,6
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list1<boost::_bi::value<boost::shared_ptr<RBX::DataModel>>>>>","slot count, vftable 0",2,4
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list1<boost::_bi::value<boost::weak_ptr<RBX::DataModel>>>>>","slot count, vftable 0",2,4
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list2<boost::_bi::value<QString>,boost::_bi::value<XmlElement*>>>>","slot count, vftable 0",2,4
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list2<boost::_bi::value<boost::shared_ptr<RBX::BaseThreadPool::PoolData>>,boost::_bi::value<boost::shared_ptr<tbb::spin_mutex>>>>>","slot count, vftable 0",2,4
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list2<boost::_bi::value<boost::shared_ptr<RBX::DataModel>>,boost::_bi::value<std::string>>>>","slot count, vftable 0",2,4
+boost::detail::thread_data<boost::function0<void>>,"slot count, vftable 0",2,4
+boost::exception,"slot count, vftable 0",1,2
+"boost::io::basic_altstringbuf<char,std::char_traits<char>,std::allocator<char>>","slot count, vftable 0",14,14
+"boost::io::basic_oaltstringstream<char,std::char_traits<char>,std::allocator<char>>",vftable count,1,2 2
+"boost::iostreams::detail::chainbuf<boost::iostreams::chain<boost::iostreams::input,char,std::char_traits<char>,std::allocator<char>>,boost::iostreams::input,boost::iostreams::public_>","slot count, vftable 0",14 2,14 3
+"boost::iostreams::detail::filtering_stream_base<boost::iostreams::chain<boost::iostreams::output,char,std::char_traits<char>,std::allocator<char>>,boost::iostreams::public_>",vftable count,2 1,3 2 2
+"boost::iostreams::filtering_stream<boost::iostreams::output,char,std::char_traits<char>,std::allocator<char>,boost::iostreams::public_>",vftable count,2 1,3 2 2
+"boost::iostreams::filtering_streambuf<boost::iostreams::input,char,std::char_traits<char>,std::allocator<char>,boost::iostreams::public_>","slot count, vftable 0",14 2,14 3
+"boost::iostreams::stream<boost::iostreams::basic_array_source<char>,std::char_traits<char>,std::allocator<char>>",vftable count,1,2 2
+"boost::iostreams::stream_buffer<boost::iostreams::basic_array_source<char>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input_seekable>","slot count, vftable 0",21,21
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_compressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_compressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::output>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_decompressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_null_device<char,boost::iostreams::input>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_null_device<char,boost::iostreams::output>,std::char_traits<char>,std::allocator<char>,boost::iostreams::output>","slot count, vftable 0",23,23

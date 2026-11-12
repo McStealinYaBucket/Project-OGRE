@@ -1,0 +1,83 @@
+--- a/reccmp/analysis/funcinfo.py
++++ b/reccmp/analysis/funcinfo.py
+@@ -11,7 +11,8 @@
+ # - 0x19930520: up to VC6
+ # - 0x19930521: VC7.x(2002-2003)
+ # - 0x19930522: VC8 (2005)
+-FUNCINFO_MAGIC_RE = re.compile(rb"\x20\x05\x93\x19", flags=re.S)
++# OGRE: accept all three. VC9 writes 0x19930522; the fields read here are at the same offsets.
++FUNCINFO_MAGIC_RE = re.compile(rb"[\x20\x21\x22]\x05\x93\x19", flags=re.S)
+ 
+ 
+ # Match `mov eax, ____` instructions followed by jmp opcode. `B8 .... E9`
+--- a/reccmp/analysis/imports.py
++++ b/reccmp/analysis/imports.py
+@@ -1,6 +1,6 @@
+ import re
+ import struct
+-from typing import Iterator, NamedTuple
++from typing import Iterable, Iterator, NamedTuple
+ from typing_extensions import Buffer
+ from reccmp.formats import PEImage
+ 
+@@ -28,13 +28,15 @@
+         yield (base_addr + match.start() - 2, jmp_dest)
+ 
+ 
+-def find_import_thunks(image: PEImage) -> Iterator[ImportThunk]:
++def find_import_thunks(
++    image: PEImage, extra_import_addrs: Iterable[int] = ()
++) -> Iterator[ImportThunk]:
+     """Imported functions may generate a thunk function somewhere in the code section.
+     These are 6-byte JMP instructions with absolute offset.
+     The functions given may or may not be thunks. For example: MSVC  _getSystemCP function
+     """
+ 
+-    import_addrs = set(imp.addr for imp in image.imports)
++    import_addrs = set(imp.addr for imp in image.imports) | set(extra_import_addrs)
+     if not import_addrs:
+         return
+ 
+--- a/reccmp/compare/analyze.py
++++ b/reccmp/compare/analyze.py
+@@ -169,7 +169,14 @@
+         return
+ 
+     with db.batch() as batch:
+-        for thunk in find_import_thunks(binfile):
++        # OGRE: also find `jmp [slot]` thunks to IMPORT entities that came from a CSV.
++        extra = [
++            addr
++            for ent in db.get_all()
++            if ent.get("type") == EntityType.IMPORT
++            and (addr := ent.addr(image_id)) is not None
++        ]
++        for thunk in find_import_thunks(binfile, extra):
+             batch.set(
+                 image_id,
+                 thunk.addr,
+--- a/reccmp/compare/csv.py
++++ b/reccmp/compare/csv.py
+@@ -85,6 +85,9 @@
+     "widechar": EntityType.WIDECHAR,
+     "float": EntityType.FLOAT,
+     "vtable": EntityType.VTABLE,
++    # OGRE: an IAT slot named "DLL::function", for images whose import directory is not the IAT
++    # the code calls through (VMProtect moves the directory; the linker's IAT stays in .rdata).
++    "import": EntityType.IMPORT,
+ }
+ 
+ 
+--- a/reccmp/compare/match_msvc.py
++++ b/reccmp/compare/match_msvc.py
+@@ -496,7 +496,9 @@
+             continue
+ 
+         assert isinstance(ent.orig_addr, int)
+-        orig_imports[name.upper()] = ent.orig_addr
++        # OGRE: keep the lowest address when a name appears twice (a CSV-supplied linker IAT slot
++        # below a protector's copy of the same import), so recomp imports pair with the slot code uses.
++        orig_imports.setdefault(name.upper(), ent.orig_addr)
+ 
+     with db.batch() as batch:
+         for ent in db.unmatched(ImageId.RECOMP):

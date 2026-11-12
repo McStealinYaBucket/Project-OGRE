@@ -1,0 +1,58 @@
+f_parser loads precompiled chunks only when FFlag::LuaEnableBytecode is set (default false); adds a
+FastLog.h stand-in with the 2013 FASTFLAGVARIABLE shape.
+
+Justification (PLAYER bytes): f_parser 0x008ab3d0 selects luaU_undump 0x009927e0 only if
+c == 0x1b AND byte [0x00e13a24] != 0, else luaY_parser 0x00991d00. 0x00e13a24 is registered by the
+dynamic initializer 0x00a82e60 as FLog::RegisterFlag("LuaEnableBytecode" 0x00b855d0, &flag, NULL, 0)
+and its initial value on disk is 0. PLAYER has no "PlaceFilter_" strings, so the 2013
+FASTFLAGVARIABLE did not yet declare the PlaceFilter_ string the existing trees FastLog.h has.
+
+--- a/FastLog.h
++++ b/FastLog.h
+@@ -0,0 +1,24 @@
++/* Stand-in for the 2013 RBX Log library header (Log/include/FastLog.h): only the fast-flag
++** declarations the Lua sources use. 2013 FASTFLAGVARIABLE has no PlaceFilter_ string (none in
++** PLAYER) and registers through FLog::RegisterFlag(name, &var, NULL, FASTVARTYPE_STATIC)
++** (PLAYER initializer 0x00a82e60 for LuaEnableBytecode). */
++#pragma once
++#include <stddef.h>
++
++namespace FLog
++{
++	enum FastVarType
++	{
++		FASTVARTYPE_STATIC = 0,
++		FASTVARTYPE_DYNAMIC = 1,
++		FASTVARTYPE_SYNC = 2
++	};
++	int RegisterFlag(const char* flagName, bool* flagVar, bool** isSync = NULL, FastVarType fastVarType = FASTVARTYPE_STATIC);
++}
++
++#define FASTFLAG(var) namespace FFlag { extern bool var; }
++#define FASTFLAGVARIABLE(var, defaultvalue) \
++	namespace FFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FLog::FASTVARTYPE_STATIC); }
++#define DYNAMIC_FASTFLAG(var) namespace DFFlag { extern bool var; }
++#define DYNAMIC_FASTFLAGVARIABLE(var, defaultvalue) \
++	namespace DFFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FLog::FASTVARTYPE_DYNAMIC); }
+--- a/ldo.c
++++ b/ldo.c
+@@ -30,6 +30,10 @@
+ #include "lvm.h"
+ #include "lzio.h"
+ 
++#include "FastLog.h"
++
++FASTFLAGVARIABLE(LuaEnableBytecode, false)  /* ROBLOX: precompiled chunks only when enabled */
++
+ 
+ 
+ 
+@@ -533,7 +537,7 @@
+   struct SParser *p = cast(struct SParser *, ud);
+   int c = luaZ_lookahead(p->z);
+   luaC_checkGC(L);
+-  tf = ((c == LUA_SIGNATURE[0]) ? luaU_undump : luaY_parser)(L, p->z,
++  tf = ((c == LUA_SIGNATURE[0] && FFlag::LuaEnableBytecode) ? luaU_undump : luaY_parser)(L, p->z,
+                                                              &p->buff, p->name);
+   cl = luaF_newLclosure(L, tf->nups, hvalue(gt(L)));
+   cl->l.p = tf;

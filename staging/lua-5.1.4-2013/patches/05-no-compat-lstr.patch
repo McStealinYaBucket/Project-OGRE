@@ -1,0 +1,16 @@
+luaconf.h: LUA_COMPAT_LSTR undefined (no nested [[ ]] handling).
+
+Justification (PLAYER bytes): read_long_string 0x0098e110 has no "nesting of [[...]] is deprecated"
+branch (that string is absent from PLAYER) and matches identical only with the macro undefined.
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -349,7 +349,7 @@
+ ** CHANGE it to 2 if you want the old behaviour, or undefine it to turn
+ ** off the advisory error when nesting [[...]].
+ */
+-#define LUA_COMPAT_LSTR		1
++#undef LUA_COMPAT_LSTR  /* ROBLOX */
+ 
+ /*
+ @@ LUA_COMPAT_GFIND controls compatibility with old 'string.gfind' name.

@@ -1,0 +1,518 @@
+# Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
+# Library rows skipped for all libraries: not identical 212, not a kept function 49.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1383, static name 337, not in our link 18, folded in our link 0.
+address,type,size,symbol,name
+00873950,library,126,,index2adr
+008739d0,library,34,?luaA_pushobject@@YAXPAUlua_State@@PBUlua_TValue@@@Z,"void __cdecl luaA_pushobject(struct lua_State *, struct lua_TValue const *)"
+00873a00,library,99,?lua_checkstack@@YAHPAUlua_State@@H@Z,"int __cdecl lua_checkstack(struct lua_State *, int)"
+00873a70,library,79,?lua_xmove@@YAXPAUlua_State@@0H@Z,"void __cdecl lua_xmove(struct lua_State *, struct lua_State *, int)"
+00873ac0,library,17,?lua_setlevel@@YAXPAUlua_State@@0@Z,"void __cdecl lua_setlevel(struct lua_State *, struct lua_State *)"
+00873ae0,library,18,?lua_atpanic@@YAP6AHPAUlua_State@@@Z0P6AH0@Z@Z,"int (__cdecl * __cdecl lua_atpanic(struct lua_State *, int (__cdecl *)(struct lua_State *)))(struct lua_State *)"
+00873b00,library,14,?lua_gettop@@YAHPAUlua_State@@@Z,int __cdecl lua_gettop(struct lua_State *)
+00873b10,library,75,?lua_settop@@YAXPAUlua_State@@H@Z,"void __cdecl lua_settop(struct lua_State *, int)"
+00873b60,library,65,?lua_remove@@YAXPAUlua_State@@H@Z,"void __cdecl lua_remove(struct lua_State *, int)"
+00873bb0,library,80,?lua_insert@@YAXPAUlua_State@@H@Z,"void __cdecl lua_insert(struct lua_State *, int)"
+00873c00,library,182,?lua_replace@@YAXPAUlua_State@@H@Z,"void __cdecl lua_replace(struct lua_State *, int)"
+00873cc0,library,41,?lua_pushvalue@@YAXPAUlua_State@@H@Z,"void __cdecl lua_pushvalue(struct lua_State *, int)"
+00873cf0,library,28,?lua_type@@YAHPAUlua_State@@H@Z,"int __cdecl lua_type(struct lua_State *, int)"
+00873d10,library,23,?lua_typename@@YAPBDPAUlua_State@@H@Z,"char const * __cdecl lua_typename(struct lua_State *, int)"
+00873d30,library,36,?lua_iscfunction@@YAHPAUlua_State@@H@Z,"int __cdecl lua_iscfunction(struct lua_State *, int)"
+00873d60,library,52,?lua_isnumber@@YAHPAUlua_State@@H@Z,"int __cdecl lua_isnumber(struct lua_State *, int)"
+00873da0,library,42,?lua_isstring@@YAHPAUlua_State@@H@Z,"int __cdecl lua_isstring(struct lua_State *, int)"
+00873dd0,library,63,?lua_rawequal@@YAHPAUlua_State@@HH@Z,"int __cdecl lua_rawequal(struct lua_State *, int, int)"
+00873e10,library,64,?lua_lessthan@@YAHPAUlua_State@@HH@Z,"int __cdecl lua_lessthan(struct lua_State *, int, int)"
+00873e50,library,51,?lua_tonumber@@YANPAUlua_State@@H@Z,"double __cdecl lua_tonumber(struct lua_State *, int)"
+00873e90,library,64,?lua_tointeger@@YAHPAUlua_State@@H@Z,"int __cdecl lua_tointeger(struct lua_State *, int)"
+00873ed0,library,39,?lua_toboolean@@YAHPAUlua_State@@H@Z,"int __cdecl lua_toboolean(struct lua_State *, int)"
+00873f00,library,110,?lua_tolstring@@YAPBDPAUlua_State@@HPAI@Z,"char const * __cdecl lua_tolstring(struct lua_State *, int, unsigned int *)"
+00873f70,library,108,?lua_objlen@@YAIPAUlua_State@@H@Z,"unsigned int __cdecl lua_objlen(struct lua_State *, int)"
+00873fe0,library,38,?lua_touserdata@@YAPAXPAUlua_State@@H@Z,"void * __cdecl lua_touserdata(struct lua_State *, int)"
+00874010,library,25,?lua_tothread@@YAPAUlua_State@@PAU1@H@Z,"struct lua_State * __cdecl lua_tothread(struct lua_State *, int)"
+00874030,library,108,?lua_topointer@@YAPBXPAUlua_State@@H@Z,"void const * __cdecl lua_topointer(struct lua_State *, int)"
+008740a0,library,19,?lua_pushnil@@YAXPAUlua_State@@@Z,void __cdecl lua_pushnil(struct lua_State *)
+008740c0,library,25,?lua_pushnumber@@YAXPAUlua_State@@N@Z,"void __cdecl lua_pushnumber(struct lua_State *, double)"
+008740e0,library,25,?lua_pushinteger@@YAXPAUlua_State@@H@Z,"void __cdecl lua_pushinteger(struct lua_State *, int)"
+00874100,library,64,?lua_pushlstring@@YAXPAUlua_State@@PBDI@Z,"void __cdecl lua_pushlstring(struct lua_State *, char const *, unsigned int)"
+00874140,library,102,?lua_pushstring@@YAXPAUlua_State@@PBD@Z,"void __cdecl lua_pushstring(struct lua_State *, char const *)"
+008741b0,library,46,?lua_pushvfstring@@YAPBDPAUlua_State@@PBDPAD@Z,"char const * __cdecl lua_pushvfstring(struct lua_State *, char const *, char *)"
+008741e0,library,46,?lua_pushfstring@@YAPBDPAUlua_State@@PBDZZ,"char const * __cdecl lua_pushfstring(struct lua_State *, char const *, ...)"
+00874210,library,149,?lua_pushcclosure@@YAXPAUlua_State@@P6AH0@ZH@Z,"void __cdecl lua_pushcclosure(struct lua_State *, int (__cdecl *)(struct lua_State *), int)"
+008742b0,library,30,?lua_pushboolean@@YAXPAUlua_State@@H@Z,"void __cdecl lua_pushboolean(struct lua_State *, int)"
+008742d0,library,25,?lua_pushlightuserdata@@YAXPAUlua_State@@PAX@Z,"void __cdecl lua_pushlightuserdata(struct lua_State *, void *)"
+008742f0,library,34,?lua_pushthread@@YAHPAUlua_State@@@Z,int __cdecl lua_pushthread(struct lua_State *)
+00874320,library,36,?lua_gettable@@YAXPAUlua_State@@H@Z,"void __cdecl lua_gettable(struct lua_State *, int)"
+00874350,library,91,?lua_getfield@@YAXPAUlua_State@@HPBD@Z,"void __cdecl lua_getfield(struct lua_State *, int, char const *)"
+008743b0,library,58,?lua_rawget@@YAXPAUlua_State@@H@Z,"void __cdecl lua_rawget(struct lua_State *, int)"
+008743f0,library,57,?lua_rawgeti@@YAXPAUlua_State@@HH@Z,"void __cdecl lua_rawgeti(struct lua_State *, int, int)"
+00874430,library,64,?lua_createtable@@YAXPAUlua_State@@HH@Z,"void __cdecl lua_createtable(struct lua_State *, int, int)"
+00874470,library,23,?lua_setreadonly@@YAXPAUlua_State@@H_N@Z,"void __cdecl lua_setreadonly(struct lua_State *, int, bool)"
+00874490,library,86,?lua_getmetatable@@YAHPAUlua_State@@H@Z,"int __cdecl lua_getmetatable(struct lua_State *, int)"
+008744f0,library,104,?lua_getfenv@@YAXPAUlua_State@@H@Z,"void __cdecl lua_getfenv(struct lua_State *, int)"
+00874560,library,43,?lua_settable@@YAXPAUlua_State@@H@Z,"void __cdecl lua_settable(struct lua_State *, int)"
+00874590,library,94,?lua_setfield@@YAXPAUlua_State@@HPBD@Z,"void __cdecl lua_setfield(struct lua_State *, int, char const *)"
+008745f0,library,127,?lua_rawset@@YAXPAUlua_State@@H@Z,"void __cdecl lua_rawset(struct lua_State *, int)"
+00874670,library,106,?lua_rawseti@@YAXPAUlua_State@@HH@Z,"void __cdecl lua_rawseti(struct lua_State *, int, int)"
+008746e0,library,161,?lua_setmetatable@@YAHPAUlua_State@@H@Z,"int __cdecl lua_setmetatable(struct lua_State *, int)"
+00874790,library,135,?lua_setfenv@@YAHPAUlua_State@@H@Z,"int __cdecl lua_setfenv(struct lua_State *, int)"
+00874820,library,56,?lua_call@@YAXPAUlua_State@@HH@Z,"void __cdecl lua_call(struct lua_State *, int, int)"
+00874860,library,25,,f_call
+00874880,library,109,?lua_pcall@@YAHPAUlua_State@@HHH@Z,"int __cdecl lua_pcall(struct lua_State *, int, int, int)"
+008748f0,library,64,?lua_load@@YAHPAUlua_State@@P6APBD0PAXPAI@Z1PBD@Z,"int __cdecl lua_load(struct lua_State *, char const * (__cdecl *)(struct lua_State *, void *, unsigned int *), void *, char const *)"
+00874930,library,56,?lua_dump@@YAHPAUlua_State@@P6AH0PBXIPAX@Z2@Z,"int __cdecl lua_dump(struct lua_State *, int (__cdecl *)(struct lua_State *, void const *, unsigned int, void *), void *)"
+00874970,library,9,?lua_status@@YAHPAUlua_State@@@Z,int __cdecl lua_status(struct lua_State *)
+00874980,library,244,?lua_gc@@YAHPAUlua_State@@HH@Z,"int __cdecl lua_gc(struct lua_State *, int, int)"
+00874a80,library,16,?lua_error@@YAHPAUlua_State@@@Z,int __cdecl lua_error(struct lua_State *)
+00874a90,library,51,?lua_next@@YAHPAUlua_State@@H@Z,"int __cdecl lua_next(struct lua_State *, int)"
+00874ad0,library,115,?lua_concat@@YAXPAUlua_State@@H@Z,"void __cdecl lua_concat(struct lua_State *, int)"
+00874b50,library,82,?lua_newuserdata@@YAPAXPAUlua_State@@I@Z,"void * __cdecl lua_newuserdata(struct lua_State *, unsigned int)"
+00874bb0,library,135,?lua_getupvalue@@YAPBDPAUlua_State@@HH@Z,"char const * __cdecl lua_getupvalue(struct lua_State *, int, int)"
+00874c40,library,174,?lua_setupvalue@@YAPBDPAUlua_State@@HH@Z,"char const * __cdecl lua_setupvalue(struct lua_State *, int, int)"
+00875050,library,81,?constructChild@RobloxExtraSpace@@SAXPAUlua_State@@PAV1@@Z,"public: static void __cdecl RobloxExtraSpace::constructChild(struct lua_State *, class RobloxExtraSpace *)"
+008750b0,library,68,?lua_newthread@@YAPAUlua_State@@PAU1@@Z,struct lua_State * __cdecl lua_newthread(struct lua_State *)
+00875100,library,104,?luaL_where@@YAXPAUlua_State@@H@Z,"void __cdecl luaL_where(struct lua_State *, int)"
+00875170,library,48,?luaL_error@@YAHPAUlua_State@@PBDZZ,"int __cdecl luaL_error(struct lua_State *, char const *, ...)"
+008751a0,library,91,?luaL_newmetatable@@YAHPAUlua_State@@PBD@Z,"int __cdecl luaL_newmetatable(struct lua_State *, char const *)"
+00875200,library,44,?luaL_checkstack@@YAXPAUlua_State@@HPBD@Z,"void __cdecl luaL_checkstack(struct lua_State *, int, char const *)"
+00875230,library,90,?luaL_getmetafield@@YAHPAUlua_State@@HPBD@Z,"int __cdecl luaL_getmetafield(struct lua_State *, int, char const *)"
+00875290,library,86,?luaL_callmeta@@YAHPAUlua_State@@HPBD@Z,"int __cdecl luaL_callmeta(struct lua_State *, int, char const *)"
+008752f0,library,229,?luaL_findtable@@YAPBDPAUlua_State@@HPBDH@Z,"char const * __cdecl luaL_findtable(struct lua_State *, int, char const *, int)"
+008753e0,library,112,,adjuststack
+00875450,library,49,?luaL_prepbuffer@@YAPADPAUluaL_Buffer@@@Z,char * __cdecl luaL_prepbuffer(struct luaL_Buffer *)
+00875490,library,87,?luaL_addlstring@@YAXPAUluaL_Buffer@@PBDI@Z,"void __cdecl luaL_addlstring(struct luaL_Buffer *, char const *, unsigned int)"
+008754f0,library,63,?luaL_pushresult@@YAXPAUluaL_Buffer@@@Z,void __cdecl luaL_pushresult(struct luaL_Buffer *)
+00875530,library,128,?luaL_addvalue@@YAXPAUluaL_Buffer@@@Z,void __cdecl luaL_addvalue(struct luaL_Buffer *)
+008755b0,library,24,?luaL_buffinit@@YAXPAUlua_State@@PAUluaL_Buffer@@@Z,"void __cdecl luaL_buffinit(struct lua_State *, struct luaL_Buffer *)"
+008755d0,library,170,?luaL_ref@@YAHPAUlua_State@@H@Z,"int __cdecl luaL_ref(struct lua_State *, int)"
+00875680,library,85,?luaL_unref@@YAXPAUlua_State@@HH@Z,"void __cdecl luaL_unref(struct lua_State *, int, int)"
+008756e0,library,96,,getF
+00875740,library,63,,errfile
+00875780,library,484,?luaL_loadfile@@YAHPAUlua_State@@PBD@Z,"int __cdecl luaL_loadfile(struct lua_State *, char const *)"
+00875970,library,30,,getS
+00875990,library,41,,l_alloc
+008759c0,library,45,,panic
+008759f0,library,40,?luaL_newstate@@YAPAUlua_State@@XZ,struct lua_State * __cdecl luaL_newstate(void)
+00875a20,library,209,?luaL_argerror@@YAHPAUlua_State@@HPBD@Z,"int __cdecl luaL_argerror(struct lua_State *, int, char const *)"
+00875b00,library,138,?luaL_checkudata@@YAPAXPAUlua_State@@HPBD@Z,"void * __cdecl luaL_checkudata(struct lua_State *, int, char const *)"
+00875b90,library,80,?luaL_checktype@@YAXPAUlua_State@@HH@Z,"void __cdecl luaL_checktype(struct lua_State *, int, int)"
+00875be0,library,43,?luaL_checkany@@YAXPAUlua_State@@H@Z,"void __cdecl luaL_checkany(struct lua_State *, int)"
+00875c10,library,88,?luaL_checklstring@@YAPBDPAUlua_State@@HPAI@Z,"char const * __cdecl luaL_checklstring(struct lua_State *, int, unsigned int *)"
+00875c70,library,87,?luaL_optlstring@@YAPBDPAUlua_State@@HPBDPAI@Z,"char const * __cdecl luaL_optlstring(struct lua_State *, int, char const *, unsigned int *)"
+00875cd0,library,119,?luaL_checknumber@@YANPAUlua_State@@H@Z,"double __cdecl luaL_checknumber(struct lua_State *, int)"
+00875d50,library,97,?luaL_checkinteger@@YAHPAUlua_State@@H@Z,"int __cdecl luaL_checkinteger(struct lua_State *, int)"
+00875dc0,library,44,?luaL_optinteger@@YAHPAUlua_State@@HH@Z,"int __cdecl luaL_optinteger(struct lua_State *, int, int)"
+00875df0,library,283,?luaI_openlib@@YAXPAUlua_State@@PBDPBUluaL_Reg@@H@Z,"void __cdecl luaI_openlib(struct lua_State *, char const *, struct luaL_Reg const *, int)"
+00875f10,library,346,,protReader
+00876070,library,169,?luaL_checkoption@@YAHPAUlua_State@@HPBDQBQBD@Z,"int __cdecl luaL_checkoption(struct lua_State *, int, char const *, char const *const *const)"
+00876120,library,26,?luaL_register@@YAXPAUlua_State@@PBDPBUluaL_Reg@@@Z,"void __cdecl luaL_register(struct lua_State *, char const *, struct luaL_Reg const *)"
+00876140,library,328,?luaL_loadprotected@@YAHPAUlua_State@@ABVProtectedString@RBX@@PBD@Z,"int __cdecl luaL_loadprotected(struct lua_State *, class RBX::ProtectedString const &, char const *)"
+00876290,library,125,,stack_init
+00876310,library,119,,f_luaopen
+00876390,library,144,,close_state
+00876420,library,158,?luaE_newthread@@YAPAUlua_State@@PAU1@@Z,struct lua_State * __cdecl luaE_newthread(struct lua_State *)
+008764c0,library,12,,callallgcTM
+00876830,library,99,?luaE_freethread@@YAXPAUlua_State@@0@Z,"void __cdecl luaE_freethread(struct lua_State *, struct lua_State *)"
+008768a0,library,100,?lua_close@@YAXPAUlua_State@@@Z,void __cdecl lua_close(struct lua_State *)
+00876a00,library,404,?lua_newstate@@YAPAUlua_State@@P6APAXPAX0II@Z0@Z,"struct lua_State * __cdecl lua_newstate(void * (__cdecl *)(void *, void *, unsigned int, unsigned int), void *)"
+008907c0,library,31,?reset@?$scoped_ptr@VMD5Hasher@RBX@@@boost@@QAEXPAVMD5Hasher@RBX@@@Z,public: void __thiscall boost::scoped_ptr<class RBX::MD5Hasher>::reset(class RBX::MD5Hasher *)
+008a78c0,library,46,?luaO_int2fb@@YAHI@Z,int __cdecl luaO_int2fb(unsigned int)
+008a78f0,library,24,?luaO_fb2int@@YAHH@Z,int __cdecl luaO_fb2int(int)
+008a7910,library,39,?luaO_log2@@YAHI@Z,int __cdecl luaO_log2(unsigned int)
+008a7940,library,88,?luaO_rawequalObj@@YAHPBUlua_TValue@@0@Z,"int __cdecl luaO_rawequalObj(struct lua_TValue const *, struct lua_TValue const *)"
+008a79a0,library,164,?luaO_str2d@@YAHPBDPAN@Z,"int __cdecl luaO_str2d(char const *, double *)"
+008a7a50,library,77,,pushstr
+008a7aa0,library,743,?luaO_pushvfstring@@YAPBDPAUlua_State@@PBDPAD@Z,"char const * __cdecl luaO_pushvfstring(struct lua_State *, char const *, char *)"
+008a7d90,library,24,?luaO_pushfstring@@YAPBDPAUlua_State@@PBDZZ,"char const * __cdecl luaO_pushfstring(struct lua_State *, char const *, ...)"
+008a7db0,library,325,?luaO_chunkid@@YAXPADPBDI@Z,"void __cdecl luaO_chunkid(char *, char const *, unsigned int)"
+008a7f00,library,67,,currentline
+008a7f50,library,46,?lua_sethook@@YAHPAUlua_State@@P6AX0PAUlua_Debug@@@ZHH@Z,"int __cdecl lua_sethook(struct lua_State *, void (__cdecl *)(struct lua_State *, struct lua_Debug *), int, int)"
+008a7f80,library,8,?lua_gethook@@YAP6AXPAUlua_State@@PAUlua_Debug@@@Z0@Z,"void (__cdecl * __cdecl lua_gethook(struct lua_State *))(struct lua_State *, struct lua_Debug *)"
+008a7f90,library,9,?lua_gethookmask@@YAHPAUlua_State@@@Z,int __cdecl lua_gethookmask(struct lua_State *)
+008a7fa0,library,8,?lua_gethookcount@@YAHPAUlua_State@@@Z,int __cdecl lua_gethookcount(struct lua_State *)
+008a7fb0,library,119,?lua_getstack@@YAHPAUlua_State@@HPAUlua_Debug@@@Z,"int __cdecl lua_getstack(struct lua_State *, int, struct lua_Debug *)"
+008a8030,library,107,,findlocal
+008a80a0,library,69,?lua_getlocal@@YAPBDPAUlua_State@@PBUlua_Debug@@H@Z,"char const * __cdecl lua_getlocal(struct lua_State *, struct lua_Debug const *, int)"
+008a80f0,library,80,?lua_setlocal@@YAPBDPAUlua_State@@PBUlua_Debug@@H@Z,"char const * __cdecl lua_setlocal(struct lua_State *, struct lua_Debug const *, int)"
+008a8140,library,116,,funcinfo
+008a81c0,library,141,,collectvalidlines
+008a8250,library,94,,precheck
+008a82b0,library,38,?luaG_checkopenop@@YAHI@Z,int __cdecl luaG_checkopenop(unsigned int)
+008a82e0,library,80,,checkArgMode
+008a8330,library,1204,,symbexec
+008a87f0,library,29,?luaG_checkcode@@YAHPBUProto@@@Z,int __cdecl luaG_checkcode(struct Proto const *)
+008a8810,library,38,,kname
+008a8840,library,384,,getobjname
+008a89c0,library,228,,getfuncname
+008a8ab0,library,110,,addinfo
+008a8b20,library,135,?luaG_errormsg@@YAXPAUlua_State@@@Z,void __cdecl luaG_errormsg(struct lua_State *)
+008a8bb0,library,38,?luaG_runerror@@YAXPAUlua_State@@PBDZZ,"void __cdecl luaG_runerror(struct lua_State *, char const *, ...)"
+008a8be0,library,334,,auxgetinfo
+008a8d30,library,169,?lua_getinfo@@YAHPAUlua_State@@PBDPAUlua_Debug@@@Z,"int __cdecl lua_getinfo(struct lua_State *, char const *, struct lua_Debug *)"
+008a8de0,library,141,?luaG_typeerror@@YAXPAUlua_State@@PBUlua_TValue@@PBD@Z,"void __cdecl luaG_typeerror(struct lua_State *, struct lua_TValue const *, char const *)"
+008a8e70,library,38,?luaG_concaterror@@YAXPAUlua_State@@PAUlua_TValue@@1@Z,"void __cdecl luaG_concaterror(struct lua_State *, struct lua_TValue *, struct lua_TValue *)"
+008a8ea0,library,56,?luaG_aritherror@@YAXPAUlua_State@@PBUlua_TValue@@1@Z,"void __cdecl luaG_aritherror(struct lua_State *, struct lua_TValue const *, struct lua_TValue const *)"
+008a8ee0,library,81,?luaG_ordererror@@YAHPAUlua_State@@PBUlua_TValue@@1@Z,"int __cdecl luaG_ordererror(struct lua_State *, struct lua_TValue const *, struct lua_TValue const *)"
+008aacb0,library,120,?luaD_seterrorobj@@YAXPAUlua_State@@HPAUlua_TValue@@@Z,"void __cdecl luaD_seterrorobj(struct lua_State *, int, struct lua_TValue *)"
+008aad30,library,17,?what@lua_exception@@UBEPBDXZ,public: virtual char const * __thiscall lua_exception::what(void) const
+008aad50,library,48,??1lua_exception@@UAE@XZ,public: virtual __thiscall lua_exception::~lua_exception(void)
+008aad80,library,69,??_Glua_exception@@UAEPAXI@Z,public: virtual void * __thiscall lua_exception::`scalar deleting dtor'(unsigned int)
+008aadd0,library,193,?luaD_rawrunprotected@@YAHPAUlua_State@@P6AX0PAX@Z1@Z,"int __cdecl luaD_rawrunprotected(struct lua_State *, void (__cdecl *)(struct lua_State *, void *), void *)"
+008aaea0,library,142,,correctstack
+008aaf30,library,89,?luaD_reallocstack@@YAXPAUlua_State@@H@Z,"void __cdecl luaD_reallocstack(struct lua_State *, int)"
+008aaf90,library,123,?luaD_reallocCI@@YAXPAUlua_State@@H@Z,"void __cdecl luaD_reallocCI(struct lua_State *, int)"
+008ab010,library,41,?luaD_growstack@@YAXPAUlua_State@@H@Z,"void __cdecl luaD_growstack(struct lua_State *, int)"
+008ab040,library,216,?luaD_callhook@@YAXPAUlua_State@@HH@Z,"void __cdecl luaD_callhook(struct lua_State *, int, int)"
+008ab120,library,106,,adjust_varargs
+008ab190,library,142,,tryfuncTM
+008ab220,library,81,,callrethooks
+008ab280,library,135,?luaD_poscall@@YAHPAUlua_State@@PAUlua_TValue@@@Z,"int __cdecl luaD_poscall(struct lua_State *, struct lua_TValue *)"
+008ab310,library,114,,resume_error
+008ab390,library,53,?lua_yield@@YAHPAUlua_State@@H@Z,"int __cdecl lua_yield(struct lua_State *, int)"
+008ab3d0,library,222,,f_parser
+008ab4b0,library,113,,resetstack
+008ab530,library,116,?luaD_throw@@YAXPAUlua_State@@H@Z,"void __cdecl luaD_throw(struct lua_State *, int)"
+008ab5b0,library,47,??0lua_exception@@QAE@ABV0@@Z,public: __thiscall lua_exception::lua_exception(class lua_exception const &)
+008ab5e0,library,61,,growCI
+008ab620,library,445,?luaD_precall@@YAHPAUlua_State@@PAUlua_TValue@@H@Z,"int __cdecl luaD_precall(struct lua_State *, struct lua_TValue *, int)"
+008ab7e0,library,128,?luaD_call@@YAXPAUlua_State@@PAUlua_TValue@@H@Z,"void __cdecl luaD_call(struct lua_State *, struct lua_TValue *, int)"
+008ab860,library,123,,resume
+008ab8e0,library,167,?lua_resume@@YAHPAUlua_State@@H@Z,"int __cdecl lua_resume(struct lua_State *, int)"
+008ab990,library,252,?luaD_pcall@@YAHPAUlua_State@@P6AX0PAX@Z1HH@Z,"int __cdecl luaD_pcall(struct lua_State *, void (__cdecl *)(struct lua_State *, void *), void *, int, int)"
+008aba90,library,99,?luaD_protectedparser@@YAHPAUlua_State@@PAUZio@@PBD@Z,"int __cdecl luaD_protectedparser(struct lua_State *, struct Zio *, char const *)"
+008aca10,library,129,,foreachi
+008acaa0,library,131,,foreach
+008acb30,library,149,,maxn
+008acbd0,library,40,,getn
+008acc00,library,44,,setn
+008acc30,library,157,,tinsert
+008accd0,library,131,,tremove
+008acd60,library,309,,tconcat
+008acea0,library,1011,,auxsort
+008ad2a0,library,92,,sort
+008ad300,library,29,?luaopen_table@@YAHPAUlua_State@@@Z,int __cdecl luaopen_table(struct lua_State *)
+008ad320,library,34,,math_abs
+008ad350,library,34,,math_sin
+008ad380,library,43,,math_sinh
+008ad3b0,library,34,,math_cos
+008ad3e0,library,43,,math_cosh
+008ad410,library,36,,math_tan
+008ad440,library,43,,math_tanh
+008ad470,library,43,,math_asin
+008ad4a0,library,43,,math_acos
+008ad4d0,library,36,,math_atan
+008ad500,library,61,,math_atan2
+008ad540,library,41,,math_ceil
+008ad570,library,40,,math_floor
+008ad5a0,library,67,,math_fmod
+008ad5f0,library,79,,math_modf
+008ad640,library,34,,math_sqrt
+008ad670,library,67,,math_pow
+008ad6c0,library,38,,math_log
+008ad6f0,library,38,,math_log10
+008ad720,library,54,,math_exp
+008ad760,library,38,,math_deg
+008ad790,library,38,,math_rad
+008ad7c0,library,63,,math_frexp
+008ad800,library,57,,math_ldexp
+008ad840,library,109,,math_min
+008ad8b0,library,111,,math_max
+008ad920,library,269,,math_random
+008ada30,library,25,,math_randomseed
+008ada50,library,94,?luaopen_math@@YAHPAUlua_State@@@Z,int __cdecl luaopen_math(struct lua_State *)
+008adab0,library,41,,str_len
+008adae0,library,172,,str_sub
+008adb90,library,147,,str_reverse
+008adc30,library,145,,str_lower
+008adcd0,library,145,,str_upper
+008add70,library,116,,str_rep
+008addf0,library,212,,str_byte
+008aded0,library,152,,str_char
+008adf70,library,26,,writer
+008adf90,library,106,,str_dump
+008ae000,library,105,,classend
+008ae070,library,290,,match_class
+008ae1a0,library,143,,matchbracketclass
+008ae230,library,109,,matchbalance
+008ae2a0,library,146,,max_expand
+008ae340,library,133,,min_expand
+008ae3d0,library,72,,start_capture
+008ae420,library,90,,end_capture
+008ae480,library,138,,match_capture
+008ae510,library,718,,match
+008ae7e0,library,183,,lmemfind
+008ae8a0,library,118,,push_onecapture
+008ae920,library,73,,push_captures
+008ae970,library,436,,str_find_aux
+008aeb30,library,16,,str_find
+008aeb40,library,16,,str_match
+008aeb50,library,358,,gmatch_aux
+008aecc0,library,64,,gmatch
+008aed00,library,19,,gfind_nodef
+008aed20,library,217,,add_s
+008aee00,library,260,,add_value
+008aef10,library,399,,str_gsub
+008af0a0,library,337,,addquoted
+008af200,library,219,,scanformat
+008af2e0,library,748,,str_format
+008af5d0,library,83,,createmetatable
+008af630,library,36,?luaopen_string@@YAHPAUlua_State@@@Z,int __cdecl luaopen_string(struct lua_State *)
+008af660,library,203,,luaB_print
+008af730,library,273,,luaB_tonumber
+008af850,library,83,,luaB_error
+008af8b0,library,67,,luaB_getmetatable
+008af900,library,115,,luaB_setmetatable
+008af980,library,174,,getfunc
+008afa30,library,66,,luaB_getfenv
+008afa80,library,150,,luaB_setfenv
+008afb20,library,48,,luaB_rawequal
+008afb50,library,49,,luaB_rawget
+008afb90,library,57,,luaB_rawset
+008afbd0,library,32,,luaB_gcinfo
+008afbf0,library,162,,luaB_collectgarbage
+008afca0,library,45,,luaB_type
+008afcd0,library,61,,luaB_next
+008afd10,library,50,,luaB_pairs
+008afd50,library,64,,ipairsaux
+008afd90,library,52,,luaB_ipairs
+008afdd0,library,62,,luaB_loadfile
+008afe10,library,124,,generic_reader
+008afe90,library,95,,luaB_load
+008afef0,library,77,,luaB_dofile
+008aff40,library,70,,luaB_assert
+008aff90,library,160,,luaB_unpack
+008b0030,library,124,,luaB_select
+008b00b0,library,70,,luaB_pcall
+008b0100,library,74,,luaB_xpcall
+008b0150,library,244,,luaB_tostring
+008b0250,library,127,,luaB_newproxy
+008b02d0,library,103,,costatus
+008b0340,library,70,,luaB_costatus
+008b0390,library,188,,auxresume
+008b0450,library,119,,luaB_coresume
+008b04d0,library,98,,luaB_auxwrap
+008b0540,library,89,,luaB_cocreate
+008b05a0,library,34,,luaB_cowrap
+008b05d0,library,23,,luaB_yield
+008b05f0,library,34,,luaB_corunning
+008b0620,library,241,,base_open
+008b0720,library,36,?luaopen_base@@YAHPAUlua_State@@@Z,int __cdecl luaopen_base(struct lua_State *)
+008b0750,library,196,,luaB_loadstring
+00988f70,library,212,,reallymarkobject
+00989050,library,145,?luaC_separateudata@@YAIPAUlua_State@@H@Z,"unsigned int __cdecl luaC_separateudata(struct lua_State *, int)"
+009890f0,library,431,,traversetable
+009892a0,library,200,,traverseproto
+00989370,library,153,,traverseclosure
+00989410,library,230,,traversestack
+00989500,library,248,,propagatemark
+00989600,library,243,,cleartable
+00989700,library,148,,freeobj
+009897a0,library,140,,sweeplist
+00989830,library,115,,checkSizes
+009898b0,library,196,,GCTM
+00989980,library,32,?luaC_callGCTM@@YAXPAUlua_State@@@Z,void __cdecl luaC_callGCTM(struct lua_State *)
+009899a0,library,63,?luaC_freeall@@YAXPAUlua_State@@@Z,void __cdecl luaC_freeall(struct lua_State *)
+009899e0,library,52,,markmt
+00989a20,library,105,,markroot
+00989a90,library,59,,remarkupvals
+00989ad0,library,378,,atomic
+00989c50,library,252,,singlestep
+00989d50,library,125,?luaC_step@@YAXPAUlua_State@@@Z,void __cdecl luaC_step(struct lua_State *)
+00989dd0,library,106,?luaC_fullgc@@YAXPAUlua_State@@@Z,void __cdecl luaC_fullgc(struct lua_State *)
+00989e40,library,49,?luaC_barrierf@@YAXPAUlua_State@@PATGCObject@@1@Z,"void __cdecl luaC_barrierf(struct lua_State *, union GCObject *, union GCObject *)"
+00989e80,library,25,?luaC_barrierback@@YAXPAUlua_State@@PAUTable@@@Z,"void __cdecl luaC_barrierback(struct lua_State *, struct Table *)"
+00989ea0,library,35,?luaC_link@@YAXPAUlua_State@@PATGCObject@@E@Z,"void __cdecl luaC_link(struct lua_State *, union GCObject *, unsigned char)"
+00989ed0,library,94,?luaC_linkupval@@YAXPAUlua_State@@PAUUpVal@@@Z,"void __cdecl luaC_linkupval(struct lua_State *, struct UpVal *)"
+00989f30,library,84,?luaT_init@@YAXPAUlua_State@@@Z,void __cdecl luaT_init(struct lua_State *)
+00989f90,library,40,?luaT_gettm@@YAPBUlua_TValue@@PAUTable@@W4TMS@@PATTString@@@Z,"struct lua_TValue const * __cdecl luaT_gettm(struct Table *, enum TMS, union TString *)"
+00989fc0,library,85,?luaT_gettmbyobj@@YAPBUlua_TValue@@PAUlua_State@@PBU1@W4TMS@@@Z,"struct lua_TValue const * __cdecl luaT_gettmbyobj(struct lua_State *, struct lua_TValue const *, enum TMS)"
+0098a020,library,68,?luaV_tonumber@@YAPBUlua_TValue@@PBU1@PAU1@@Z,"struct lua_TValue const * __cdecl luaV_tonumber(struct lua_TValue const *, struct lua_TValue *)"
+0098a070,library,102,?luaV_tostring@@YAHPAUlua_State@@PAUlua_TValue@@@Z,"int __cdecl luaV_tostring(struct lua_State *, struct lua_TValue *)"
+0098a0e0,library,132,,traceexec
+0098a170,library,162,,callTMres
+0098a220,library,146,,callTM
+0098a2c0,library,226,?luaV_gettable@@YAXPAUlua_State@@PBUlua_TValue@@PAU2@2@Z,"void __cdecl luaV_gettable(struct lua_State *, struct lua_TValue const *, struct lua_TValue *, struct lua_TValue *)"
+0098a3b0,library,307,?luaV_settable@@YAXPAUlua_State@@PBUlua_TValue@@PAU2@2@Z,"void __cdecl luaV_settable(struct lua_State *, struct lua_TValue const *, struct lua_TValue *, struct lua_TValue *)"
+0098a4f0,library,76,,call_binTM
+0098a540,library,132,,get_compTM
+0098a5d0,library,124,,call_orderTM
+0098a650,library,105,,l_strcmp
+0098a6c0,library,129,?luaV_lessthan@@YAHPAUlua_State@@PBUlua_TValue@@1@Z,"int __cdecl luaV_lessthan(struct lua_State *, struct lua_TValue const *, struct lua_TValue const *)"
+0098a750,library,126,,lessequal
+0098a7d0,library,260,?luaV_equalval@@YAHPAUlua_State@@PBUlua_TValue@@1@Z,"int __cdecl luaV_equalval(struct lua_State *, struct lua_TValue const *, struct lua_TValue const *)"
+0098a8e0,library,600,?luaV_concat@@YAXPAUlua_State@@HH@Z,"void __cdecl luaV_concat(struct lua_State *, int, int)"
+0098ab40,library,448,,Arith
+0098ad00,library,4480,?luaV_execute@@YAXPAUlua_State@@H@Z,"void __cdecl luaV_execute(struct lua_State *, int)"
+0098be80,library,59,,hashnum
+0098bec0,library,136,,mainposition
+0098bf50,library,183,,findindex
+0098c010,library,222,?luaH_next@@YAHPAUlua_State@@PAUTable@@PAUlua_TValue@@@Z,"int __cdecl luaH_next(struct lua_State *, struct Table *, struct lua_TValue *)"
+0098c0f0,library,93,,computesizes
+0098c150,library,113,,numusearray
+0098c1d0,library,201,,numusehash
+0098c2a0,library,90,,setarrayvector
+0098c300,library,182,,setnodevector
+0098c3c0,library,90,?luaH_new@@YAPAUTable@@PAUlua_State@@HH@Z,"struct Table * __cdecl luaH_new(struct lua_State *, int, int)"
+0098c420,library,82,?luaH_free@@YAXPAUlua_State@@PAUTable@@@Z,"void __cdecl luaH_free(struct lua_State *, struct Table *)"
+0098c480,library,155,?luaH_getnum@@YAPBUlua_TValue@@PAUTable@@H@Z,"struct lua_TValue const * __cdecl luaH_getnum(struct Table *, int)"
+0098c520,library,56,?luaH_getstr@@YAPBUlua_TValue@@PAUTable@@PATTString@@@Z,"struct lua_TValue const * __cdecl luaH_getstr(struct Table *, union TString *)"
+0098c560,library,165,?luaH_get@@YAPBUlua_TValue@@PAUTable@@PBU1@@Z,"struct lua_TValue const * __cdecl luaH_get(struct Table *, struct lua_TValue const *)"
+0098c610,library,98,?luaH_set@@YAPAUlua_TValue@@PAUlua_State@@PAUTable@@PBU1@@Z,"struct lua_TValue * __cdecl luaH_set(struct lua_State *, struct Table *, struct lua_TValue const *)"
+0098c680,library,69,?luaH_setnum@@YAPAUlua_TValue@@PAUlua_State@@PAUTable@@H@Z,"struct lua_TValue * __cdecl luaH_setnum(struct lua_State *, struct Table *, int)"
+0098c6d0,library,158,,unbound_search
+0098c770,library,91,?luaH_getn@@YAHPAUTable@@@Z,int __cdecl luaH_getn(struct Table *)
+0098c7d0,library,472,,resize
+0098c9b0,library,65,?luaH_resizearray@@YAXPAUlua_State@@PAUTable@@H@Z,"void __cdecl luaH_resizearray(struct lua_State *, struct Table *, int)"
+0098ca00,library,289,,rehash
+0098cb30,library,236,,newkey
+0098cc20,library,67,?luaH_setstr@@YAPAUlua_TValue@@PAUlua_State@@PAUTable@@PATTString@@@Z,"struct lua_TValue * __cdecl luaH_setstr(struct lua_State *, struct Table *, union TString *)"
+0098cc70,library,189,?luaS_resize@@YAXPAUlua_State@@H@Z,"void __cdecl luaS_resize(struct lua_State *, int)"
+0098cd30,library,151,,newlstr
+0098cdd0,library,229,?luaS_newlstr@@YAPATTString@@PAUlua_State@@PBDI@Z,"union TString * __cdecl luaS_newlstr(struct lua_State *, char const *, unsigned int)"
+0098cec0,library,99,?luaS_newudata@@YAPATUdata@@PAUlua_State@@IPAUTable@@@Z,"union Udata * __cdecl luaS_newudata(struct lua_State *, unsigned int, struct Table *)"
+0098cf30,library,64,?luaF_newCclosure@@YAPATClosure@@PAUlua_State@@HPAUTable@@@Z,"union Closure * __cdecl luaF_newCclosure(struct lua_State *, int, struct Table *)"
+0098cf70,library,86,?luaF_newLclosure@@YAPATClosure@@PAUlua_State@@HPAUTable@@@Z,"union Closure * __cdecl luaF_newLclosure(struct lua_State *, int, struct Table *)"
+0098cfd0,library,50,?luaF_newupval@@YAPAUUpVal@@PAUlua_State@@@Z,struct UpVal * __cdecl luaF_newupval(struct lua_State *)
+0098d010,library,135,?luaF_findupval@@YAPAUUpVal@@PAUlua_State@@PAUlua_TValue@@@Z,"struct UpVal * __cdecl luaF_findupval(struct lua_State *, struct lua_TValue *)"
+0098d0a0,library,49,?luaF_freeupval@@YAXPAUlua_State@@PAUUpVal@@@Z,"void __cdecl luaF_freeupval(struct lua_State *, struct UpVal *)"
+0098d0e0,library,161,?luaF_close@@YAXPAUlua_State@@PAUlua_TValue@@@Z,"void __cdecl luaF_close(struct lua_State *, struct lua_TValue *)"
+0098d190,library,96,?luaF_newproto@@YAPAUProto@@PAUlua_State@@@Z,struct Proto * __cdecl luaF_newproto(struct lua_State *)
+0098d1f0,library,152,?luaF_freeproto@@YAXPAUlua_State@@PAUProto@@@Z,"void __cdecl luaF_freeproto(struct lua_State *, struct Proto *)"
+0098d290,library,63,?luaF_freeclosure@@YAXPAUlua_State@@PATClosure@@@Z,"void __cdecl luaF_freeclosure(struct lua_State *, union Closure *)"
+0098d2d0,library,73,?luaF_getlocalname@@YAPBDPBUProto@@HH@Z,"char const * __cdecl luaF_getlocalname(struct Proto const *, int, int)"
+0098d320,library,60,?luaZ_fill@@YAHPAUZio@@@Z,int __cdecl luaZ_fill(struct Zio *)
+0098d360,library,81,?luaZ_lookahead@@YAHPAUZio@@@Z,int __cdecl luaZ_lookahead(struct Zio *)
+0098d3c0,library,39,?luaZ_init@@YAXPAUlua_State@@PAUZio@@P6APBD0PAXPAI@Z2@Z,"void __cdecl luaZ_init(struct lua_State *, struct Zio *, char const * (__cdecl *)(struct lua_State *, void *, unsigned int *), void *)"
+0098d3f0,library,138,?luaZ_read@@YAIPAUZio@@PAXI@Z,"unsigned int __cdecl luaZ_read(struct Zio *, void *, unsigned int)"
+0098d480,library,87,?luaZ_openspace@@YAPADPAUlua_State@@PAUMbuffer@@I@Z,"char * __cdecl luaZ_openspace(struct lua_State *, struct Mbuffer *, unsigned int)"
+0098d4e0,library,127,,DumpString
+0098d560,library,309,,DumpConstants
+0098d6a0,library,326,,DumpDebug
+0098d7f0,library,358,,DumpFunction
+0098d960,library,115,?luaU_dump@@YAHPAUlua_State@@PBUProto@@P6AH0PBXIPAX@Z3H@Z,"int __cdecl luaU_dump(struct lua_State *, struct Proto const *, int (__cdecl *)(struct lua_State *, void const *, unsigned int, void *), void *, int)"
+0098d9e0,library,21,?luaM_toobig@@YAPAXPAUlua_State@@@Z,void * __cdecl luaM_toobig(struct lua_State *)
+0098da00,library,75,?luaM_realloc_@@YAPAXPAUlua_State@@PAXII@Z,"void * __cdecl luaM_realloc_(struct lua_State *, void *, unsigned int, unsigned int)"
+0098da50,library,137,?luaM_growaux_@@YAPAXPAUlua_State@@PAXPAHIHPBD@Z,"void * __cdecl luaM_growaux_(struct lua_State *, void *, int *, unsigned int, int, char const *)"
+0098dae0,library,113,,save
+0098db60,library,73,?luaX_init@@YAXPAUlua_State@@@Z,void __cdecl luaX_init(struct lua_State *)
+0098dbb0,library,83,?luaX_token2str@@YAPBDPAULexState@@H@Z,"char const * __cdecl luaX_token2str(struct LexState *, int)"
+0098dc10,library,150,?luaX_lexerror@@YAXPAULexState@@PBDH@Z,"void __cdecl luaX_lexerror(struct LexState *, char const *, int)"
+0098dcb0,library,23,?luaX_syntaxerror@@YAXPAULexState@@PBD@Z,"void __cdecl luaX_syntaxerror(struct LexState *, char const *)"
+0098dcd0,library,70,?luaX_newstring@@YAPATTString@@PAULexState@@PBDI@Z,"union TString * __cdecl luaX_newstring(struct LexState *, char const *, unsigned int)"
+0098dd20,library,135,,inclinenumber
+0098ddb0,library,135,?luaX_setinput@@YAXPAUlua_State@@PAULexState@@PAUZio@@PATTString@@@Z,"void __cdecl luaX_setinput(struct lua_State *, struct LexState *, struct Zio *, union TString *)"
+0098de40,library,85,,check_next
+0098dea0,library,208,,trydecpoint
+0098df70,library,270,,read_numeral
+0098e080,library,142,,skip_sep
+0098e110,library,579,,read_long_string
+0098e360,library,1120,,read_string
+0098e7c0,library,1696,,llex
+0098ee60,library,69,?luaX_next@@YAXPAULexState@@@Z,void __cdecl luaX_next(struct LexState *)
+0098eeb0,library,24,?luaX_lookahead@@YAXPAULexState@@@Z,void __cdecl luaX_lookahead(struct LexState *)
+0098eed0,library,78,,errorlimit
+0098ef20,library,104,,check_match
+0098ef90,library,32,,codestring
+0098efb0,library,88,,checkname
+0098f010,library,158,,registerlocalvar
+0098f0b0,library,53,,adjustlocalvars
+0098f0f0,library,57,,removevars
+0098f130,library,311,,indexupvalue
+0098f270,library,222,,singlevaraux
+0098f350,library,101,,singlevar
+0098f3c0,library,106,,adjust_assign
+0098f430,library,69,,leaveblock
+0098f480,library,243,,pushclosure
+0098f580,library,179,,open_func
+0098f640,library,465,,close_func
+0098f820,library,75,,yindex
+0098f870,library,204,,recfield
+0098f940,library,92,,lastlistfield
+0098f9a0,library,642,,constructor
+0098fc30,library,306,,parlist
+0098fd70,library,332,,body
+0098fec0,library,59,,explist1
+0098ff00,library,314,,funcargs
+00990040,library,104,,prefixexp
+009900b0,library,739,,primaryexp
+009903a0,library,480,,simpleexp
+00990580,library,431,,getbinopr
+00990730,library,276,,subexpr
+00990850,library,128,,block
+009908d0,library,95,,check_conflict
+00990930,library,346,,assignment
+00990a90,library,96,,breakstat
+00990af0,library,296,,whilestat
+00990c20,library,340,,repeatstat
+00990d80,library,413,,forbody
+00990f20,library,550,,fornum
+00991150,library,627,,forlist
+009913d0,library,269,,forstat
+009914e0,library,120,,test_then_block
+00991560,library,182,,ifstat
+00991620,library,259,,localfunc
+00991730,library,273,,localstat
+00991850,library,226,,funcname
+00991940,library,67,,funcstat
+00991990,library,93,,exprstat
+009919f0,library,288,,retstat
+00991b10,library,312,,statement
+00991c50,library,164,,chunk
+00991d00,library,196,?luaY_parser@@YAPAUProto@@PAUlua_State@@PAUZio@@PAUMbuffer@@PBD@Z,"struct Proto * __cdecl luaY_parser(struct lua_State *, struct Zio *, struct Mbuffer *, char const *)"
+00991dd0,library,107,,LoadInt
+00991e40,library,162,,LoadString
+00991ef0,library,132,,LoadCode
+00991f80,library,668,,LoadConstants
+00992220,library,700,,LoadDebug
+009924e0,library,503,,LoadFunction
+009926e0,library,49,?luaU_header@@YAXPAD@Z,void __cdecl luaU_header(char *)
+00992720,library,179,,LoadHeader
+009927e0,library,102,?luaU_undump@@YAPAUProto@@PAUlua_State@@PAUZio@@PAUMbuffer@@PBD@Z,"struct Proto * __cdecl luaU_undump(struct lua_State *, struct Zio *, struct Mbuffer *, char const *)"
+009a6740,library,74,,fixjump
+009a6790,library,11,?luaK_getlabel@@YAHPAUFuncState@@@Z,int __cdecl luaK_getlabel(struct FuncState *)
+009a67a0,library,93,,need_value
+009a6800,library,126,,patchtestreg
+009a6880,library,130,,removevalues
+009a6910,library,188,,patchlistaux
+009a69d0,library,76,?luaK_concat@@YAXPAUFuncState@@PAHH@Z,"void __cdecl luaK_concat(struct FuncState *, int *, int)"
+009a6a20,library,56,?luaK_checkstack@@YAXPAUFuncState@@H@Z,"void __cdecl luaK_checkstack(struct FuncState *, int)"
+009a6a60,library,63,?luaK_reserveregs@@YAXPAUFuncState@@H@Z,"void __cdecl luaK_reserveregs(struct FuncState *, int)"
+009a6aa0,library,27,,freeexp
+009a6ac0,library,213,,addk
+009a6ba0,library,37,?luaK_stringK@@YAHPAUFuncState@@PATTString@@@Z,"int __cdecl luaK_stringK(struct FuncState *, union TString *)"
+009a6bd0,library,38,?luaK_numberK@@YAHPAUFuncState@@N@Z,"int __cdecl luaK_numberK(struct FuncState *, double)"
+009a6c00,library,45,,nilK
+009a6c30,library,129,?luaK_setreturns@@YAXPAUFuncState@@PAUexpdesc@@H@Z,"void __cdecl luaK_setreturns(struct FuncState *, struct expdesc *, int)"
+009a6cc0,library,88,?luaK_setoneret@@YAXPAUFuncState@@PAUexpdesc@@@Z,"void __cdecl luaK_setoneret(struct FuncState *, struct expdesc *)"
+009a6d20,library,67,,invertjump
+009a6d70,library,252,,constfolding
+009a6e70,library,21,?luaK_fixline@@YAXPAUFuncState@@H@Z,"void __cdecl luaK_fixline(struct FuncState *, int)"
+009a6e90,library,155,,luaK_code
+009a6f30,library,48,?luaK_codeABC@@YAHPAUFuncState@@W4OpCode@@HHH@Z,"int __cdecl luaK_codeABC(struct FuncState *, enum OpCode, int, int, int)"
+009a6f60,library,41,?luaK_codeABx@@YAHPAUFuncState@@W4OpCode@@HI@Z,"int __cdecl luaK_codeABx(struct FuncState *, enum OpCode, int, unsigned int)"
+009a6f90,library,141,?luaK_setlist@@YAXPAUFuncState@@HHH@Z,"void __cdecl luaK_setlist(struct FuncState *, int, int, int)"
+009a7020,library,150,?luaK_nil@@YAXPAUFuncState@@HH@Z,"void __cdecl luaK_nil(struct FuncState *, int, int)"
+009a70c0,library,59,?luaK_jump@@YAHPAUFuncState@@@Z,int __cdecl luaK_jump(struct FuncState *)
+009a7100,library,43,?luaK_ret@@YAXPAUFuncState@@HH@Z,"void __cdecl luaK_ret(struct FuncState *, int, int)"
+009a7130,library,91,,condjump
+009a7190,library,29,?luaK_patchtohere@@YAXPAUFuncState@@H@Z,"void __cdecl luaK_patchtohere(struct FuncState *, int)"
+009a71b0,library,256,?luaK_dischargevars@@YAXPAUFuncState@@PAUexpdesc@@@Z,"void __cdecl luaK_dischargevars(struct FuncState *, struct expdesc *)"
+009a72b0,library,280,,discharge2reg
+009a73d0,library,83,,discharge2anyreg
+009a7430,library,277,,exp2reg
+009a7550,library,114,?luaK_exp2nextreg@@YAXPAUFuncState@@PAUexpdesc@@@Z,"void __cdecl luaK_exp2nextreg(struct FuncState *, struct expdesc *)"
+009a75d0,library,78,?luaK_exp2anyreg@@YAHPAUFuncState@@PAUexpdesc@@@Z,"int __cdecl luaK_exp2anyreg(struct FuncState *, struct expdesc *)"
+009a7620,library,26,?luaK_exp2val@@YAXPAUFuncState@@PAUexpdesc@@@Z,"void __cdecl luaK_exp2val(struct FuncState *, struct expdesc *)"
+009a7640,library,252,?luaK_exp2RK@@YAHPAUFuncState@@PAUexpdesc@@@Z,"int __cdecl luaK_exp2RK(struct FuncState *, struct expdesc *)"
+009a7740,library,236,?luaK_storevar@@YAXPAUFuncState@@PAUexpdesc@@1@Z,"void __cdecl luaK_storevar(struct FuncState *, struct expdesc *, struct expdesc *)"
+009a7830,library,230,?luaK_self@@YAXPAUFuncState@@PAUexpdesc@@1@Z,"void __cdecl luaK_self(struct FuncState *, struct expdesc *, struct expdesc *)"
+009a7920,library,122,,jumponcond
+009a79a0,library,153,?luaK_goiftrue@@YAXPAUFuncState@@PAUexpdesc@@@Z,"void __cdecl luaK_goiftrue(struct FuncState *, struct expdesc *)"
+009a7a40,library,138,,luaK_goiffalse
+009a7ad0,library,192,,codenot
+009a7b90,library,32,?luaK_indexed@@YAXPAUFuncState@@PAUexpdesc@@1@Z,"void __cdecl luaK_indexed(struct FuncState *, struct expdesc *, struct expdesc *)"
+009a7bb0,library,238,,codearith
+009a7ca0,library,149,,codecomp
+009a7d40,library,160,?luaK_prefix@@YAXPAUFuncState@@W4UnOpr@@PAUexpdesc@@@Z,"void __cdecl luaK_prefix(struct FuncState *, enum UnOpr, struct expdesc *)"
+009a7de0,library,167,?luaK_infix@@YAXPAUFuncState@@W4BinOpr@@PAUexpdesc@@@Z,"void __cdecl luaK_infix(struct FuncState *, enum BinOpr, struct expdesc *)"
+009a7e90,library,700,?luaK_posfix@@YAXPAUFuncState@@W4BinOpr@@PAUexpdesc@@2@Z,"void __cdecl luaK_posfix(struct FuncState *, enum BinOpr, struct expdesc *, struct expdesc *)"
+009a8150,library,63,?luaK_patchlist@@YAXPAUFuncState@@HH@Z,"void __cdecl luaK_patchlist(struct FuncState *, int, int)"
+00a82e60,library,28,,??__ELuaEnableBytecodeIniter@FFlag@@YAXXZ

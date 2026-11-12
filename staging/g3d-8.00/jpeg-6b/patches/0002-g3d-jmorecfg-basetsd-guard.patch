@@ -1,0 +1,25 @@
+G3D's bundled jmorecfg.h (g3d SVN jpeg.lib/include): skip 'typedef long INT32' when <basetsd.h> was
+included and #undef FAR first. Build need: G3D's GImage_jpeg.cpp includes <windows.h> before jpeglib.h
+(C2371 INT32 redefinition without it). No codegen effect.
+
+--- a/jmorecfg.h	2026-11-12 09:27:16.022535002 -0500
++++ b/jmorecfg.h	2026-11-12 09:27:16.024066574 -0500
+@@ -158,8 +158,10 @@
+ /* INT32 must hold at least signed 32-bit values. */
+ 
+ #ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
++#if (!defined(_BASETSD_H_) && !defined(_BASETSD_H)) 
+ typedef long INT32;
+ #endif
++#endif
+ 
+ /* Datatype used for image dimensions.  The JPEG standard only supports
+  * images up to 64K*64K due to 16-bit fields in SOF markers.  Therefore
+@@ -212,6 +214,7 @@
+ #ifdef NEED_FAR_POINTERS
+ #define FAR  far
+ #else
++#undef FAR
+ #define FAR
+ #endif
+ 

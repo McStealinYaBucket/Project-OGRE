@@ -1,0 +1,17 @@
+luaconf.h: LUA_COMPAT_VARARG undefined (no implicit "arg" table for vararg functions).
+
+Justification (PLAYER bytes): parlist 0x0098fc30 does not declare the "arg" local / VARARG_NEEDSARG,
+and adjust_varargs 0x008ab120 (then a separate function; it was unlocatable before) has no
+"arg" table construction; both match identical only with the macro undefined.
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -334,7 +334,7 @@
+ ** CHANGE it to undefined as soon as your programs use only '...' to
+ ** access vararg parameters (instead of the old 'arg' table).
+ */
+-#define LUA_COMPAT_VARARG
++#undef LUA_COMPAT_VARARG  /* ROBLOX */
+ 
+ /*
+ @@ LUA_COMPAT_MOD controls compatibility with old math.mod function.

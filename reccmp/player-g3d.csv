@@ -1,0 +1,175 @@
+# Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
+# Library rows skipped for all libraries: not identical 212, not a kept function 49.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1383, static name 337, not in our link 18, folded in our link 0.
+address,type,size,symbol,name
+0048fa90,library,31,??4Rect@RBX@@QAEAAV01@ABV01@@Z,??4Rect@RBX@@QAEAAV01@ABV01@@Z
+005a6560,library,149,?isFinite@Vector3@G3D@@QBE_NXZ,?isFinite@Vector3@G3D@@QBE_NXZ
+009d6a60,library,49,?one@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::one(void)
+009d6aa0,library,44,?zero@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::zero(void)
+009d6ad0,library,47,??KVector2@G3D@@QBE?AV01@M@Z,public: class G3D::Vector2 __thiscall G3D::Vector2::operator/(float) const
+009d6b00,library,41,??_0Vector2@G3D@@QAEAAV01@M@Z,public: class G3D::Vector2 & __thiscall G3D::Vector2::operator/=(float)
+009d6b30,library,17,?yx@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::yx(void) const
+009d6b50,library,71,??0Vector2int16@G3D@@QAE@ABVVector2@1@@Z,public: __thiscall G3D::Vector2int16::Vector2int16(class G3D::Vector2 const &)
+009d6ba0,library,23,??0Vector2int16@G3D@@QAE@QAH@Z,public: __thiscall G3D::Vector2int16::Vector2int16(int *const)
+009d6bc0,library,21,?yx@Vector2int16@G3D@@QBE?AV12@XZ,public: class G3D::Vector2int16 __thiscall G3D::Vector2int16::yx(void) const
+009d6cf0,library,116,?initTime@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::initTime(void)
+009d6f10,library,76,?cpuid@System@G3D@@CAXW4CPUIDFunction@12@AAI111@Z,"private: static void __cdecl G3D::System::cpuid(enum G3D::System::CPUIDFunction, unsigned int &, unsigned int &, unsigned int &, unsigned int &)"
+009d6f60,library,197,?getStandardProcessorExtensions@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::getStandardProcessorExtensions(void)
+009d7030,library,772,?init@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::init(void)
+009d7570,library,216,??0System@G3D@@AAE@XZ,private: __thiscall G3D::System::System(void)
+009d77c0,library,90,?instance@System@G3D@@CAAAV12@XZ,private: static class G3D::System & __cdecl G3D::System::instance(void)
+009d7820,library,91,?time@System@G3D@@SANXZ,public: static double __cdecl G3D::System::time(void)
+009d7980,library,60,?red@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::red(void)
+009d79c0,library,60,?green@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::green(void)
+009d7a00,library,60,?blue@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::blue(void)
+009d7a40,library,68,?purple@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::purple(void)
+009d7a90,library,68,?cyan@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::cyan(void)
+009d7ae0,library,60,?yellow@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::yellow(void)
+009d7b20,library,60,?brown@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::brown(void)
+009d7b60,library,68,?orange@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::orange(void)
+009d7bb0,library,52,?black@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::black(void)
+009d7bf0,library,52,?zero@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::zero(void)
+009d7c30,library,57,?gray@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::gray(void)
+009d7c70,library,57,?white@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::white(void)
+009d7cb0,library,25,??0Color3@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Vector3 const &)
+009d7cd0,library,66,??0Color3@G3D@@QAE@ABVColor3uint8@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Color3uint8 const &)
+009d7e40,library,8,?inf@G3D@@YANXZ,double __cdecl G3D::inf(void)
+009d7e50,library,8,?finf@G3D@@YAMXZ,float __cdecl G3D::finf(void)
+009d7e60,library,75,?iRandom@G3D@@YAHHH@Z,"int __cdecl G3D::iRandom(int, int)"
+009d7eb0,library,125,?isNaN@G3D@@YA_NM@Z,bool __cdecl G3D::isNaN(float)
+009d7f30,library,22,??4Matrix3@G3D@@QAEAAV01@ABV01@@Z,??4Matrix3@G3D@@QAEAAV01@ABV01@@Z
+009d7f50,library,101,?set@Matrix3@G3D@@QAEXMMMMMMMMM@Z,"public: void __thiscall G3D::Matrix3::set(float, float, float, float, float, float, float, float, float)"
+009d7fc0,library,30,?column@Matrix3@G3D@@QBE?AVVector3@2@H@Z,public: class G3D::Vector3 __thiscall G3D::Matrix3::column(int) const
+009d7fe0,library,30,?setColumn@Matrix3@G3D@@QAEXHABVVector3@2@@Z,"public: void __thiscall G3D::Matrix3::setColumn(int, class G3D::Vector3 const &)"
+009d8050,library,22,??9GLight@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::GLight::operator!=(class G3D::GLight const &) const
+009d8070,library,115,??HMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator+(class G3D::Matrix3 const &) const
+009d80f0,library,254,??DMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator*(class G3D::Matrix3 const &) const
+009d81f0,library,91,??YMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator+=(class G3D::Matrix3 const &)
+009d8250,library,91,??ZMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator-=(class G3D::Matrix3 const &)
+009d82b0,library,268,??XMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator*=(class G3D::Matrix3 const &)
+009d83c0,library,85,??GMatrix3@G3D@@QBE?AV01@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator-(void) const
+009d8420,library,66,??DG3D@@YA?AVMatrix3@0@NABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(double, class G3D::Matrix3 const &)"
+009d8470,library,33,??DG3D@@YA?AVMatrix3@0@MABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(float, class G3D::Matrix3 const &)"
+009d84a0,library,49,?transpose@Matrix3@G3D@@QBE?AV12@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::transpose(void) const
+009d84e0,library,389,?inverse@Matrix3@G3D@@QBE_NAAV12@M@Z,"public: bool __thiscall G3D::Matrix3::inverse(class G3D::Matrix3 &, float) const"
+009d8670,library,500,?orthonormalize@Matrix3@G3D@@QAEXXZ,public: void __thiscall G3D::Matrix3::orthonormalize(void)
+009d8870,library,149,?l1Norm@Matrix3@G3D@@QBEMXZ,public: float __thiscall G3D::Matrix3::l1Norm(void) const
+009d8910,library,510,?toAxisAngle@Matrix3@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Matrix3::toAxisAngle(class G3D::Vector3 &, float &) const"
+009d8b10,library,285,?fromAxisAngleFast@Matrix3@G3D@@SA?AV12@ABVVector3@2@M@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromAxisAngleFast(class G3D::Vector3 const &, float)"
+009d8c30,library,184,?toEulerAnglesXYZ@Matrix3@G3D@@QBE_NAAM00@Z,"public: bool __thiscall G3D::Matrix3::toEulerAnglesXYZ(float &, float &, float &) const"
+009d8cf0,library,393,?_mul@Matrix3@G3D@@CAXABV12@0AAV12@@Z,"private: static void __cdecl G3D::Matrix3::_mul(class G3D::Matrix3 const &, class G3D::Matrix3 const &, class G3D::Matrix3 &)"
+009d8e80,library,388,?isOrthonormal@Matrix3@G3D@@QBE_NXZ,public: bool __thiscall G3D::Matrix3::isOrthonormal(void) const
+009d9010,library,371,??0Matrix3@G3D@@QAE@ABVQuat@1@@Z,public: __thiscall G3D::Matrix3::Matrix3(class G3D::Quat const &)
+009d9190,library,103,??0Matrix3@G3D@@QAE@MMMMMMMMM@Z,"public: __thiscall G3D::Matrix3::Matrix3(float, float, float, float, float, float, float, float, float)"
+009d9200,library,290,?fromEulerAnglesXYZ@Matrix3@G3D@@SA?AV12@MMM@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromEulerAnglesXYZ(float, float, float)"
+009d9330,library,100,?zero@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::zero(void)
+009d93a0,library,108,?identity@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::identity(void)
+009d9410,library,141,?inverse@Matrix3@G3D@@QBE?AV12@M@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::inverse(float) const
+009d9550,library,42,??0CoordinateFrame@G3D@@QAE@XZ,public: __thiscall G3D::CoordinateFrame::CoordinateFrame(void)
+009d9580,library,309,?fuzzyEq@CoordinateFrame@G3D@@QBE_NABV12@@Z,public: bool __thiscall G3D::CoordinateFrame::fuzzyEq(class G3D::CoordinateFrame const &) const
+009d96c0,library,19,?toMatrix4@CoordinateFrame@G3D@@QBE?AVMatrix4@2@XZ,public: class G3D::Matrix4 __thiscall G3D::CoordinateFrame::toMatrix4(void) const
+009d96e0,library,346,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toObjectSpace(class G3D::Plane const &) const
+009d9840,library,346,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Plane const &) const
+009d99a0,library,335,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVLine@2@ABV32@@Z,public: class G3D::Line __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Line const &) const
+009d9af0,library,1411,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABV32@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Box const &) const
+009da080,library,326,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVRbxRay@RBX@@ABV34@@Z,public: class RBX::RbxRay __thiscall G3D::CoordinateFrame::toObjectSpace(class RBX::RbxRay const &) const
+009da1d0,library,813,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@V32@@Z,"public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &, class G3D::Vector3)"
+009da500,library,351,?lerp@CoordinateFrame@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::CoordinateFrame __thiscall G3D::CoordinateFrame::lerp(class G3D::CoordinateFrame const &, float) const"
+009da660,library,57,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABVAABox@2@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::AABox const &) const
+009da6a0,library,550,?AABBtoWorldSpace@CoordinateFrame@G3D@@QBE?AVAABox@2@ABV32@@Z,public: class G3D::AABox __thiscall G3D::CoordinateFrame::AABBtoWorldSpace(class G3D::AABox const &) const
+009da8d0,library,45,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@@Z,public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &)
+009da900,library,30,??0Vector3@G3D@@QAE@ABVVector2@1@M@Z,"public: __thiscall G3D::Vector3::Vector3(class G3D::Vector2 const &, float)"
+009da920,library,52,?zero@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::zero(void)
+009da960,library,57,?one@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::one(void)
+009da9a0,library,60,?unitX@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitX(void)
+009da9e0,library,60,?unitY@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitY(void)
+009daa20,library,60,?unitZ@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitZ(void)
+009daa60,library,118,?inf@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::inf(void)
+009daae0,library,57,?minFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::minFinite(void)
+009dab60,library,50,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,public: enum G3D::Vector3::Axis __thiscall G3D::Vector3::primaryAxis(void) const
+009daba0,library,46,??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int16 const &)
+009dabd0,library,46,?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,public: static class G3D::Vector3 __cdecl G3D::Vector3::random(class G3D::Random &)
+009dac00,library,136,?unitize@Color3@G3D@@QAEMM@Z,public: float __thiscall G3D::Color3::unitize(float)
+009dac90,library,240,?generateOrthonormalBasis@Vector3@G3D@@SAXAAV12@00_N@Z,"public: static void __cdecl G3D::Vector3::generateOrthonormalBasis(class G3D::Vector3 &, class G3D::Vector3 &, class G3D::Vector3 &, bool)"
+009dad80,library,79,?toVector3int16@Vector3@G3D@@QBE?AVVector3int16@2@XZ,public: class G3D::Vector3int16 __thiscall G3D::Vector3::toVector3int16(void) const
+009dadd0,library,17,?xy@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xy(void) const
+009dadf0,library,17,?xz@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xz(void) const
+009dae10,library,25,?xxx@Vector3@G3D@@QBE?AV12@XZ,?xxx@Vector3@G3D@@QBE?AV12@XZ
+009dae30,library,23,?yxz@Vector3@G3D@@QBE?AV12@XZ,?yxz@Vector3@G3D@@QBE?AV12@XZ
+009daed0,library,16,?alloc@MemoryManager@G3D@@UAEPAXI@Z,public: virtual void * __thiscall G3D::MemoryManager::alloc(unsigned int)
+009daee0,library,14,?free@MemoryManager@G3D@@UAEXPAX@Z,public: virtual void __thiscall G3D::MemoryManager::free(void *)
+009dafc0,library,111,??0Matrix4@G3D@@QAE@ABVCoordinateFrame@1@@Z,public: __thiscall G3D::Matrix4::Matrix4(class G3D::CoordinateFrame const &)
+009db030,library,82,?upper3x3@Matrix4@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix4::upper3x3(void) const
+009db090,library,52,??0Matrix4@G3D@@QAE@XZ,public: __thiscall G3D::Matrix4::Matrix4(void)
+009db0d0,library,136,??DMatrix4@G3D@@QBE?AVVector4@1@ABV21@@Z,public: class G3D::Vector4 __thiscall G3D::Matrix4::operator*(class G3D::Vector4 const &) const
+009db160,library,168,?identity@Matrix4@G3D@@SAABV12@XZ,public: static class G3D::Matrix4 const & __cdecl G3D::Matrix4::identity(void)
+009db210,library,142,??0Color3uint8@G3D@@QAE@ABVColor3@1@@Z,public: __thiscall G3D::Color3uint8::Color3uint8(class G3D::Color3 const &)
+009db2a0,library,185,??0Color4uint8@G3D@@QAE@ABVColor4@1@@Z,public: __thiscall G3D::Color4uint8::Color4uint8(class G3D::Color4 const &)
+009db360,library,97,??0Vector3int16@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Vector3int16::Vector3int16(class G3D::Vector3 const &)
+009db3d0,library,51,?zero@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::zero(void)
+009db410,library,49,?one@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::one(void)
+009db450,library,137,?inf@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::inf(void)
+009db4e0,library,60,?clear@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::clear(void)
+009db520,library,128,??KColor4@G3D@@QBE?AV01@M@Z,public: class G3D::Color4 __thiscall G3D::Color4::operator/(float) const
+009db5a0,library,23,?xyz@Vector3@G3D@@QBE?AV12@XZ,?xyz@Vector3@G3D@@QBE?AV12@XZ
+009db850,library,246,?loadIntoMemory@BinaryInput@G3D@@AAEX_J0@Z,"private: void __thiscall G3D::BinaryInput::loadIntoMemory(__int64, __int64)"
+009dc180,library,91,?filenameExt@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::filenameExt(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009dc1e0,library,83,?filenameContainsWildcards@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"bool __cdecl G3D::filenameContainsWildcards(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009de8d0,library,101,??0Random@G3D@@QAE@I_N@Z,"public: __thiscall G3D::Random::Random(unsigned int, bool)"
+009de940,library,71,?bits@Random@G3D@@UAEIXZ,public: virtual unsigned int __thiscall G3D::Random::bits(void)
+009de990,library,446,?generate@Random@G3D@@MAEXXZ,protected: virtual void __thiscall G3D::Random::generate(void)
+009deb50,library,88,?integer@Random@G3D@@UAEHHH@Z,"public: virtual int __thiscall G3D::Random::integer(int, int)"
+009debb0,library,157,?gaussian@Random@G3D@@UAEMMM@Z,"public: virtual float __thiscall G3D::Random::gaussian(float, float)"
+009dec50,library,90,?cosHemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::cosHemi(float &, float &, float &)"
+009decb0,library,101,?cosPowHemi@Random@G3D@@UAEXMAAM00@Z,"public: virtual void __thiscall G3D::Random::cosPowHemi(float, float &, float &, float &)"
+009ded20,library,33,?hemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::hemi(float &, float &, float &)"
+009ded50,library,172,?sphere@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::sphere(float &, float &, float &)"
+009dee00,library,50,??_ERandom@G3D@@UAEPAXI@Z,??_ERandom@G3D@@UAEPAXI@Z
+009dee40,library,96,?common@Random@G3D@@SAAAV12@XZ,public: static class G3D::Random & __cdecl G3D::Random::common(void)
+009deea0,library,449,?stringToFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::stringToFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009df070,library,951,?resolveFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBEHW4312@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::resolveFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, unsigned char const *, int, enum G3D::GImage::Format)"
+009df4e0,library,540,?collisionLocationForMovingPointFixedAABox@CollisionDetection@G3D@@SA_NABVVector3@2@0ABVAABox@2@AAV32@AA_N2@Z,"public: static bool __cdecl G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::AABox const &, class G3D::Vector3 &, bool &, class G3D::Vector3 &)"
+009dfcf0,library,745,?collisionTimeForMovingPointFixedSphere@CollisionDetection@G3D@@SAMABVVector3@2@0ABVSphere@2@AAV32@2_N@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Sphere const &, class G3D::Vector3 &, class G3D::Vector3 &, bool)"
+009e0090,library,899,?collisionTimeForMovingPointFixedCapsule@CollisionDetection@G3D@@SAMABVVector3@2@0ABVCapsule@2@AAV32@2@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Capsule const &, class G3D::Vector3 &, class G3D::Vector3 &)"
+009e3860,library,121,??0Color4@G3D@@QAE@ABVColor4uint8@1@@Z,public: __thiscall G3D::Color4::Color4(class G3D::Color4uint8 const &)
+009e38e0,library,275,??0Plane@G3D@@QAE@ABVVector3@1@00@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Vector3 const &)"
+009e3a00,library,159,??0Plane@G3D@@QAE@ABVVector3@1@0@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &)"
+009e3aa0,library,148,?fromEquation@Plane@G3D@@SA?AV12@MMMM@Z,"public: static class G3D::Plane __cdecl G3D::Plane::fromEquation(float, float, float, float)"
+009e3b40,library,44,?getEquation@Plane@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Plane::getEquation(class G3D::Vector3 &, float &) const"
+009e4b80,library,169,??0LightingParameters@G3D@@QAE@XZ,public: __thiscall G3D::LightingParameters::LightingParameters(void)
+009e4c30,library,65,?toString@Sphere@G3D@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ,"public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall G3D::Sphere::toString(void) const"
+009e4c80,library,92,?contains@Sphere@G3D@@QBE_NABVVector3@2@@Z,public: bool __thiscall G3D::Sphere::contains(class G3D::Vector3 const &) const
+009e4ce0,library,276,?vformat@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDPAD@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::vformat(char const *, char *)"
+009e4e00,library,38,?format@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::format(char const *, ...)"
+009e4e30,library,277,?intersection@Line@G3D@@QBE?AVVector3@2@ABVPlane@2@@Z,public: class G3D::Vector3 __thiscall G3D::Line::intersection(class G3D::Plane const &) const
+009e4f50,library,143,?closestPoint@Line@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::Line::closestPoint(class G3D::Vector3 const &) const
+009e4fe0,library,24,?point@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::point(void) const
+009e5000,library,24,?direction@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::direction(void) const
+009e5020,library,373,??0Quat@G3D@@QAE@ABVMatrix3@1@@Z,public: __thiscall G3D::Quat::Quat(class G3D::Matrix3 const &)
+009e51a0,library,245,?nlerp@Quat@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::Quat __thiscall G3D::Quat::nlerp(class G3D::Quat const &, float) const"
+009e52a0,library,57,?toRotationMatrix@Quat@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Quat::toRotationMatrix(void) const
+009e52e0,library,585,?slerp@Quat@G3D@@QBE?AV12@ABV12@MM@Z,"public: class G3D::Quat __thiscall G3D::Quat::slerp(class G3D::Quat const &, float, float) const"
+009e5530,library,57,??0Cylinder@G3D@@QAE@ABVVector3@1@0M@Z,??0Cylinder@G3D@@QAE@ABVVector3@1@0M@Z
+009e55f0,library,185,?PromptDlgProc@_internal@G3D@@YGHPAUHWND__@@IIJ@Z,"int __stdcall G3D::_internal::PromptDlgProc(struct HWND__*, unsigned int, unsigned int, long)"
+009e56b0,library,248,,G3D::textPrompt
+009e57b0,library,96,?AppendData@DialogTemplate@_internal@G3D@@IAEXPBXH@Z,"protected: void __thiscall G3D::_internal::DialogTemplate::AppendData(void const *, int)"
+009e5810,library,89,?AppendString@DialogTemplate@_internal@G3D@@IAEXPBD@Z,protected: void __thiscall G3D::_internal::DialogTemplate::AppendString(char const *)
+009e5870,library,190,??0DialogTemplate@_internal@G3D@@QAE@PBDKHHHH0G@Z,"public: __thiscall G3D::_internal::DialogTemplate::DialogTemplate(char const *, unsigned long, int, int, int, int, char const *, unsigned short)"
+009e5930,library,207,?AddButton@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddButton(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)"
+009e5a00,library,207,?AddEditBox@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddEditBox(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)"
+009e5ad0,library,328,,G3D::guiPrompt
+009e5c20,library,44,?prompt@G3D@@YAHPBD0PAPBDH_N@Z,"int __cdecl G3D::prompt(char const *, char const *, char const **, int, bool)"
+009e5c50,library,28,?crc32@Crypto@G3D@@SAIPBXI@Z,"public: static unsigned int __cdecl G3D::Crypto::crc32(void const *, unsigned int)"
+009e5c70,library,207,,G3D::getRootKeyFromString
+009e5d40,library,205,?readInt32@RegistryUtil@G3D@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0AAH@Z,"public: static bool __cdecl G3D::RegistryUtil::readInt32(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int &)"
+009e5e10,library,84,?beginsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::beginsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009e5e70,library,117,?endsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::endsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009e5ef0,library,191,?toUpper@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toUpper(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009e5fb0,library,191,?toLower@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toLower(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)"
+009e60d0,library,1327,?parseFilename@G3D@@YAXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAV23@AAV?$Array@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@$09$0CA@@1@11@Z,"void __cdecl G3D::parseFilename(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class G3D::Array<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, 10, 32> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &)"
+009e6bb0,library,902,?set@Ray@G3D@@QAEXABVVector3@2@0@Z,"public: void __thiscall G3D::Ray::set(class G3D::Vector3 const &, class G3D::Vector3 const &)"
+009e6f40,library,543,?init@Box@G3D@@AAEXABVVector3@2@0@Z,"private: void __thiscall G3D::Box::init(class G3D::Vector3 const &, class G3D::Vector3 const &)"
+009e7160,library,243,??0Box@G3D@@QAE@ABVAABox@1@@Z,public: __thiscall G3D::Box::Box(class G3D::AABox const &)
+009e9180,library,269,,G3D::rangematch
+009e9290,library,649,?g3dfnmatch@G3D@@YAHPBD0H@Z,"int __cdecl G3D::g3dfnmatch(char const *, char const *, int)"
+009e97b0,library,434,?closestPoint@LineSegment@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::LineSegment::closestPoint(class G3D::Vector3 const &) const

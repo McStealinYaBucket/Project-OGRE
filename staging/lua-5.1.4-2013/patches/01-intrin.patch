@@ -1,0 +1,21 @@
+Make <intrin.h> (and through it <emmintrin.h>/<xmmintrin.h>) visible in every Lua TU, via luaconf.h.
+
+Justification (PLAYER bytes): with VC9 /arch:SSE and no __m128 type visible, the compiler passes
+the first argument of static functions in ebx (custom static convention). PLAYER does not: newlstr
+0x0098cd30, luaS_newlstr 0x0098cdd0, fixjump 0x009a6740, patchlistaux 0x009a6910 and ~90 more Lua
+functions only match with the intrinsics header visible (tools/lib/lua_match.py, pristine source:
+360 -> 455 identical). Where it came from in 2013: the real luaconf.h includes rbx/Debug.h (for
+RBXASSERT; PLAYER asserts at luaconf.h:852), which includes Base/include/RbxPlatform.h, which on
+WIN32 includes <windows.h> and <intrin.h>; VC9's intrin.h includes emmintrin.h, xmmintrin.h and
+mmintrin.h. <intrin.h> here and <xmmintrin.h> alone give the same bytes (both measured: 514/514).
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -10,6 +10,7 @@
+ 
+ #include <limits.h>
+ #include <stddef.h>
++#include <intrin.h>  /* ROBLOX: via rbx/Debug.h -> RbxPlatform.h */
+ 
+ 
+ /*

@@ -1,0 +1,882 @@
+target,address,size,name,demangled,library,version,identical,masked_diff_bytes,obj,evidence
+PLAYER,0x0048fa90,31,??0Color4@G3D@@QAE@ABVVector4@1@@Z,public: __thiscall G3D::Color4::Color4(class G3D::Vector4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+PLAYER,0x0048fa90,31,??0Vector4@G3D@@QAE@ABVColor4@1@@Z,public: __thiscall G3D::Vector4::Vector4(class G3D::Color4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+PLAYER,0x005a6560,149,?isFinite@Color3@G3D@@QBE_NXZ,public: bool __thiscall G3D::Color3::isFinite(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+PLAYER,0x005c6cc0,6,?realloc@System@G3D@@SAPAXPAXI@Z,"public: static void * __cdecl G3D::System::realloc(void *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/System.obj,"reloc: referenced by G3D::BinaryInput::loadIntoMemory@0x009db850; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+PLAYER,0x006be550,3,?isThreadsafe@MemoryManager@G3D@@UBE_NXZ,public: virtual bool __thiscall G3D::MemoryManager::isThreadsafe(void) const,G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,"data: entry of ?_7MemoryManager at 0x00bbd400; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+PLAYER,0x009d5b70,234,_ZN3G3D3LogC2ERKSsi,"G3D::Log::Log(std::string const&, int)",G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d5c60,162,_ZN3G3D3Log6commonEv,G3D::Log::common(),G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d5d10,36,sub_9D5D10,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d5d40,84,_ZN3G3D3Log7sectionERKSs,G3D::Log::section(std::string const&),G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; mac: name
+PLAYER,0x009d5da0,65,sub_9D5DA0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d5df0,162,_ZN3G3D3Log11printHeaderEv,G3D::Log::printHeader(),G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d5ea0,242,_ZN3G3D3LogD2Ev,G3D::Log::~Log(),G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d5fa0,65,sub_9D5FA0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d5ff0,30,_ZN3G3D3LogD0Ev,"G3D::Log::~Log() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d6010,104,sub_9D6010,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d6080,604,_ZN3G3D9_internalL18createErrorMessageEPKcRKSsS2_iRSsS5_,"G3D::_internal::createErrorMessage(char const*, std::string const&, char const*, int, std::string&, std::string&)",G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d62e0,101,sub_9D62E0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d6350,82,sub_9D6350,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d63b0,10,sub_9D63B0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d63c0,10,sub_9D63C0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d63d0,192,sub_9D63D0,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d6490,120,sub_9D6490,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d6510,607,sub_9D6510,,G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name
+PLAYER,0x009d6780,726,_ZN3G3D9_internal18_handleErrorCheck_EPKcRKSsS2_ib,"G3D::_internal::_handleErrorCheck_(char const*, std::string const&, char const*, int, bool)",G3D,8.00-roblox,no,,,no compiled counterpart (file not in the fork); G3D block run up to the last G3D:: name; ios: name
+PLAYER,0x009d6a60,49,?one@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009d6aa0,44,?zero@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009d6ad0,47,??KVector2@G3D@@QBE?AV01@M@Z,public: class G3D::Vector2 __thiscall G3D::Vector2::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009d6b00,41,??_0Vector2@G3D@@QAEAAV01@M@Z,public: class G3D::Vector2 & __thiscall G3D::Vector2::operator/=(float),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009d6b30,17,?yx@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009d6b30,17,?yx@Vector2@G3D@@QBE?AV12@XZ,public: class G3D::Vector2 __thiscall G3D::Vector2::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009d6b30,17,?yx@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009d6b30,17,?yx@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009d6b50,71,??0Vector2int16@G3D@@QAE@ABVVector2@1@@Z,public: __thiscall G3D::Vector2int16::Vector2int16(class G3D::Vector2 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+PLAYER,0x009d6ba0,23,??0Vector2int16@G3D@@QAE@QAH@Z,public: __thiscall G3D::Vector2int16::Vector2int16(int *const),G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+PLAYER,0x009d6bc0,21,?yx@Vector2int16@G3D@@QBE?AV12@XZ,public: class G3D::Vector2int16 __thiscall G3D::Vector2int16::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+PLAYER,0x009d6be0,32,sub_9D6BE0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector2int16.obj@0x009d6bc0 and System.obj@0x009d6cf0
+PLAYER,0x009d6c00,124,sub_9D6C00,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector2int16.obj@0x009d6bc0 and System.obj@0x009d6cf0
+PLAYER,0x009d6c80,97,sub_9D6C80,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector2int16.obj@0x009d6bc0 and System.obj@0x009d6cf0
+PLAYER,0x009d6cf0,116,?initTime@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::initTime(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x009d7030
+PLAYER,0x009d6d70,76,sub_9D6D70,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d6cf0 and System.obj@0x009d6dc0
+PLAYER,0x009d6dc0,6,?malloc@System@G3D@@SAPAXI@Z,public: static void * __cdecl G3D::System::malloc(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::vformat@0x009e4ce0 (+2)
+PLAYER,0x009d6dd0,6,?free@System@G3D@@SAXPAX@Z,public: static void __cdecl G3D::System::free(void *),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::vformat@0x009e4ce0 (+1)
+PLAYER,0x009d6de0,267,_ZN3G3D6System13alignedMallocEmm,"G3D::System::alignedMalloc(unsigned long, unsigned long)",G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d6dd0 and System.obj@0x009d6f10; ios: name
+PLAYER,0x009d6ef0,22,sub_9D6EF0,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d6dd0 and System.obj@0x009d6f10
+PLAYER,0x009d6f10,76,?cpuid@System@G3D@@CAXW4CPUIDFunction@12@AAI111@Z,"private: static void __cdecl G3D::System::cpuid(enum G3D::System::CPUIDFunction, unsigned int &, unsigned int &, unsigned int &, unsigned int &)",G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x009d7030
+PLAYER,0x009d6f60,197,?getStandardProcessorExtensions@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::getStandardProcessorExtensions(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x009d7030
+PLAYER,0x009d7030,772,?init@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::init(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::System@0x009d7570
+PLAYER,0x009d7340,160,sub_9D7340,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d7030 and System.obj@0x009d7570
+PLAYER,0x009d73e0,385,sub_9D73E0,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d7030 and System.obj@0x009d7570
+PLAYER,0x009d7570,216,??0System@G3D@@AAE@XZ,private: __thiscall G3D::System::System(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::instance@0x009d77c0
+PLAYER,0x009d7650,359,sub_9D7650,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x009d7570 and System.obj@0x009d77c0
+PLAYER,0x009d77c0,90,?instance@System@G3D@@CAAAV12@XZ,private: static class G3D::System & __cdecl G3D::System::instance(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::time@0x009d7820 (+2)
+PLAYER,0x009d7820,91,?time@System@G3D@@SANXZ,public: static double __cdecl G3D::System::time(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,search: unique masked body in .text
+PLAYER,0x009d7880,251,sub_9D7880,,G3D,8.00-roblox,no,,,no compiled counterpart; between System.obj@0x009d7820 and Color3.obj@0x009d7980
+PLAYER,0x009d7980,60,?red@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::red(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+PLAYER,0x009d79c0,60,?green@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::green(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+PLAYER,0x009d7a00,60,?blue@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::blue(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+PLAYER,0x009d7a40,68,?purple@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::purple(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7a90,68,?cyan@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::cyan(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7ae0,60,?yellow@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::yellow(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7b20,60,?brown@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::brown(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7b60,68,?orange@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::orange(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7bb0,52,?black@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::black(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::black(void)
+PLAYER,0x009d7bf0,52,?zero@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::zero(void)
+PLAYER,0x009d7c30,57,?gray@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::gray(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7c70,57,?white@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::white(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::white(void)
+PLAYER,0x009d7cb0,25,??0Color3@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7cb0,25,??0Vector3@G3D@@QAE@ABVColor3@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Color3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009d7cd0,66,??0Color3@G3D@@QAE@ABVColor3uint8@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Color3uint8 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009d7d20,276,sub_9D7D20,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x009d7cd0 and g3dmath.obj@0x009d7e40
+PLAYER,0x009d7e40,8,?inf@G3D@@YANXZ,double __cdecl G3D::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::fuzzyEq@0x0048f6b0 (+6)
+PLAYER,0x009d7e50,8,?finf@G3D@@YAMXZ,float __cdecl G3D::finf(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::isFinite@0x005a6520 (+31)
+PLAYER,0x009d7e50,8,?fnan@G3D@@YAMXZ,float __cdecl G3D::fnan(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::Color4::nan@0x009db450 (+10)
+PLAYER,0x009d7e60,75,?iRandom@G3D@@YAHHH@Z,"int __cdecl G3D::iRandom(int, int)",G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,search: unique masked body in .text
+PLAYER,0x009d7eb0,125,?isNaN@G3D@@YA_NM@Z,bool __cdecl G3D::isNaN(float),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::isFinite@0x005a6520 (+8)
+PLAYER,0x009d7f30,22,??0Matrix3@G3D@@QAE@QAY02$$CBM@Z,public: __thiscall G3D::Matrix3::Matrix3(float const (*const)[3]),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d7f30,22,??0Matrix3@G3D@@QAE@ABV01@@Z,public: __thiscall G3D::Matrix3::Matrix3(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::CoordinateFrame@0x004a2360 (+11)
+PLAYER,0x009d7f50,101,?set@Matrix3@G3D@@QAEXMMMMMMMMM@Z,"public: void __thiscall G3D::Matrix3::set(float, float, float, float, float, float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d7fc0,30,?column@Matrix3@G3D@@QBE?AVVector3@2@H@Z,public: class G3D::Vector3 __thiscall G3D::Matrix3::column(int) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::lookVector@0x006b3a10 (+2)
+PLAYER,0x009d7fe0,30,?setColumn@Matrix3@G3D@@QAEXHABVVector3@2@@Z,"public: void __thiscall G3D::Matrix3::setColumn(int, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x009da1d0 (+2)
+PLAYER,0x009d8000,317,??8GLight@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::GLight::operator==(class G3D::GLight const &) const,G3D,8.00-roblox,no,312,obj/G3D/GLight.obj,reloc: referenced by G3D::GLight::operator!=@0x009d8050
+PLAYER,0x009d8000,68,??8Matrix3@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix3::operator==(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::operator!=@0x009d8050
+PLAYER,0x009d8000,68,??8Matrix4@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix4::operator==(class G3D::Matrix4 const &) const,G3D,8.00-roblox,no,3,obj/G3D/Matrix4.obj,reloc: referenced by G3D::Matrix4::operator!=@0x009d8050
+PLAYER,0x009d8050,22,??9GLight@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::GLight::operator!=(class G3D::GLight const &) const,G3D,8.00-roblox,yes,0,obj/G3D/GLight.obj,search: unique masked body in .text
+PLAYER,0x009d8050,22,??9Matrix3@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix3::operator!=(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8050,22,??9Matrix4@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix4::operator!=(class G3D::Matrix4 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+PLAYER,0x009d8070,115,??HMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator+(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d80f0,254,??DMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator*(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::fromEulerAnglesXYZ@0x009d9200 (+1)
+PLAYER,0x009d81f0,91,??YMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator+=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8250,91,??ZMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator-=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d82b0,268,??XMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator*=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d83c0,85,??GMatrix3@G3D@@QBE?AV01@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator-(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8420,66,??DG3D@@YA?AVMatrix3@0@NABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(double, class G3D::Matrix3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::operator*@0x009d8470
+PLAYER,0x009d8470,33,??DG3D@@YA?AVMatrix3@0@MABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(float, class G3D::Matrix3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d84a0,49,?transpose@Matrix3@G3D@@QBE?AV12@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::transpose(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d84e0,389,?inverse@Matrix3@G3D@@QBE_NAAV12@M@Z,"public: bool __thiscall G3D::Matrix3::inverse(class G3D::Matrix3 &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::inverse@0x009d9410
+PLAYER,0x009d8670,500,?orthonormalize@Matrix3@G3D@@QAEXXZ,public: void __thiscall G3D::Matrix3::orthonormalize(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8870,149,?l1Norm@Matrix3@G3D@@QBEMXZ,public: float __thiscall G3D::Matrix3::l1Norm(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8910,510,?toAxisAngle@Matrix3@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Matrix3::toAxisAngle(class G3D::Vector3 &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8b10,285,?fromAxisAngleFast@Matrix3@G3D@@SA?AV12@ABVVector3@2@M@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromAxisAngleFast(class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::fromAxisAngle@0x008815f0 (+2)
+PLAYER,0x009d8c30,184,?toEulerAnglesXYZ@Matrix3@G3D@@QBE_NAAM00@Z,"public: bool __thiscall G3D::Matrix3::toEulerAnglesXYZ(float &, float &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8cf0,393,?_mul@Matrix3@G3D@@CAXABV12@0AAV12@@Z,"private: static void __cdecl G3D::Matrix3::_mul(class G3D::Matrix3 const &, class G3D::Matrix3 const &, class G3D::Matrix3 &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d8e80,388,?isOrthonormal@Matrix3@G3D@@QBE_NXZ,public: bool __thiscall G3D::Matrix3::isOrthonormal(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d9010,371,??0Matrix3@G3D@@QAE@ABVQuat@1@@Z,public: __thiscall G3D::Matrix3::Matrix3(class G3D::Quat const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Quat::toRotationMatrix@0x009e52a0
+PLAYER,0x009d9190,103,??0Matrix3@G3D@@QAE@MMMMMMMMM@Z,"public: __thiscall G3D::Matrix3::Matrix3(float, float, float, float, float, float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix4::upper3x3@0x009db030
+PLAYER,0x009d9200,290,?fromEulerAnglesXYZ@Matrix3@G3D@@SA?AV12@MMM@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromEulerAnglesXYZ(float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d9330,100,?zero@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Quat::toRotationMatrix@0x009e52a0
+PLAYER,0x009d93a0,108,?identity@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::identity(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::CoordinateFrame@0x009d9550
+PLAYER,0x009d9410,141,?inverse@Matrix3@G3D@@QBE?AV12@M@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::inverse(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+PLAYER,0x009d94a0,165,sub_9D94A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x009d9410 and CoordinateFrame.obj@0x009d9550
+PLAYER,0x009d9550,42,??0CoordinateFrame@G3D@@QAE@XZ,public: __thiscall G3D::CoordinateFrame::CoordinateFrame(void),G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::LightingParameters::LightingParameters@0x009e4b80 (+1)
+PLAYER,0x009d9580,309,?fuzzyEq@CoordinateFrame@G3D@@QBE_NABV12@@Z,public: bool __thiscall G3D::CoordinateFrame::fuzzyEq(class G3D::CoordinateFrame const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009d96c0,19,?toMatrix4@CoordinateFrame@G3D@@QBE?AVMatrix4@2@XZ,public: class G3D::Matrix4 __thiscall G3D::CoordinateFrame::toMatrix4(void) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009d96e0,346,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toObjectSpace(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009d9840,346,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009d99a0,335,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVLine@2@ABV32@@Z,public: class G3D::Line __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Line const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009d9af0,1411,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABV32@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Box const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x009da660
+PLAYER,0x009da080,326,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVRbxRay@RBX@@ABV34@@Z,public: class RBX::RbxRay __thiscall G3D::CoordinateFrame::toObjectSpace(class RBX::RbxRay const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009da1d0,813,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@V32@@Z,"public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &, class G3D::Vector3)",G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x009da8d0 (+2)
+PLAYER,0x009da500,351,?lerp@CoordinateFrame@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::CoordinateFrame __thiscall G3D::CoordinateFrame::lerp(class G3D::CoordinateFrame const &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009da660,57,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABVAABox@2@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::AABox const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009da6a0,550,?AABBtoWorldSpace@CoordinateFrame@G3D@@QBE?AVAABox@2@ABV32@@Z,public: class G3D::AABox __thiscall G3D::CoordinateFrame::AABBtoWorldSpace(class G3D::AABox const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009da8d0,45,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@@Z,public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+PLAYER,0x009da900,30,??0Vector3@G3D@@QAE@ABVVector2@1@M@Z,"public: __thiscall G3D::Vector3::Vector3(class G3D::Vector2 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009da920,52,?zero@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox@0x009df4e0 (+2)
+PLAYER,0x009da960,57,?one@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Ray::set@0x009e6bb0
+PLAYER,0x009da9a0,60,?unitX@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitX(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x009e6f40 (+1)
+PLAYER,0x009da9e0,60,?unitY@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitY(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x009e6f40 (+5)
+PLAYER,0x009daa20,60,?unitZ@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitZ(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x009e6f40 (+2)
+PLAYER,0x009daa60,118,?inf@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere@0x009dfcf0 (+3)
+PLAYER,0x009daa60,118,?nan@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009daae0,57,?minFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::minFinite(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Plane::halfSpaceContains@0x0074f220 (+2)
+PLAYER,0x009dab20,57,?maxFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Plane::halfSpaceContains@0x0074f220 (+2)
+PLAYER,0x009dab60,50,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,public: enum G3D::Vector3::Axis __thiscall G3D::Vector3::primaryAxis(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009daba0,46,??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int16 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dabd0,46,?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,public: static class G3D::Vector3 __cdecl G3D::Vector3::random(class G3D::Random &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dac00,136,?unitize@Color3@G3D@@QAEMM@Z,public: float __thiscall G3D::Color3::unitize(float),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+PLAYER,0x009dac00,136,?unitize@Vector3@G3D@@QAEMM@Z,public: float __thiscall G3D::Vector3::unitize(float),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x009da1d0 (+6)
+PLAYER,0x009dac90,240,?generateOrthonormalBasis@Vector3@G3D@@SAXAAV12@00_N@Z,"public: static void __cdecl G3D::Vector3::generateOrthonormalBasis(class G3D::Vector3 &, class G3D::Vector3 &, class G3D::Vector3 &, bool)",G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dad80,79,?toVector3int16@Vector3@G3D@@QBE?AVVector3int16@2@XZ,public: class G3D::Vector3int16 __thiscall G3D::Vector3::toVector3int16(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dadd0,17,?xy@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009dadd0,17,?xy@Vector2@G3D@@QBE?AV12@XZ,public: class G3D::Vector2 __thiscall G3D::Vector2::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009dadd0,17,?xy@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dadd0,17,?xy@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009dadf0,17,?xz@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009dadf0,17,?xz@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dadf0,17,?xz@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009dae10,25,?xxx@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009dae10,25,?xxx@Vector2@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector2::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+PLAYER,0x009dae10,25,?xxx@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dae10,25,?xxx@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009dae30,23,?yxz@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009dae30,23,?yxz@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009dae30,23,?yxz@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009dae50,17,sub_9DAE50,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009dae30 and MemoryManager.obj@0x009daed0
+PLAYER,0x009dae70,37,sub_9DAE70,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009dae30 and MemoryManager.obj@0x009daed0
+PLAYER,0x009daea0,7,_ZN3G3D22ReferenceCountedObjectD2Ev,G3D::ReferenceCountedObject::~ReferenceCountedObject(),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009dae30 and MemoryManager.obj@0x009daed0; ios: name
+PLAYER,0x009daeb0,31,_ZN3G3D22ReferenceCountedObjectD0Ev,"G3D::ReferenceCountedObject::~ReferenceCountedObject() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009dae30 and MemoryManager.obj@0x009daed0; ios: name
+PLAYER,0x009daed0,16,?alloc@MemoryManager@G3D@@UAEPAXI@Z,public: virtual void * __thiscall G3D::MemoryManager::alloc(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,match: G3D::MemoryManager::alloc(unsigned int)
+PLAYER,0x009daee0,14,?free@MemoryManager@G3D@@UAEXPAX@Z,public: virtual void __thiscall G3D::MemoryManager::free(void *),G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,match: G3D::MemoryManager::free(void *)
+PLAYER,0x009daef0,30,_ZN3G3D13MemoryManagerD0Ev,"G3D::MemoryManager::~MemoryManager() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between MemoryManager.obj@0x009daee0 and Matrix4.obj@0x009dafc0; ios: name
+PLAYER,0x009daf10,172,sub_9DAF10,,G3D,8.00-roblox,no,,,no compiled counterpart; between MemoryManager.obj@0x009daee0 and Matrix4.obj@0x009dafc0
+PLAYER,0x009dafc0,111,??0Matrix4@G3D@@QAE@ABVCoordinateFrame@1@@Z,public: __thiscall G3D::Matrix4::Matrix4(class G3D::CoordinateFrame const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,reloc: referenced by G3D::CoordinateFrame::toMatrix4@0x009d96c0
+PLAYER,0x009db030,82,?upper3x3@Matrix4@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix4::upper3x3(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+PLAYER,0x009db090,52,??0Matrix4@G3D@@QAE@XZ,public: __thiscall G3D::Matrix4::Matrix4(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+PLAYER,0x009db0d0,136,??DMatrix4@G3D@@QBE?AVVector4@1@ABV21@@Z,public: class G3D::Vector4 __thiscall G3D::Matrix4::operator*(class G3D::Vector4 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+PLAYER,0x009db160,168,?identity@Matrix4@G3D@@SAABV12@XZ,public: static class G3D::Matrix4 const & __cdecl G3D::Matrix4::identity(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+PLAYER,0x009db210,142,??0Color3uint8@G3D@@QAE@ABVColor3@1@@Z,public: __thiscall G3D::Color3uint8::Color3uint8(class G3D::Color3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3uint8.obj,search: unique masked body in .text
+PLAYER,0x009db2a0,185,??0Color4uint8@G3D@@QAE@ABVColor4@1@@Z,public: __thiscall G3D::Color4uint8::Color4uint8(class G3D::Color4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4uint8.obj,search: unique masked body in .text
+PLAYER,0x009db360,97,??0Vector3int16@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Vector3int16::Vector3int16(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+PLAYER,0x009db3d0,51,?zero@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+PLAYER,0x009db410,49,?one@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+PLAYER,0x009db450,137,?inf@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,reloc: referenced by G3D::Color4::operator/@0x009db520
+PLAYER,0x009db450,137,?nan@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: unique masked body in .text
+PLAYER,0x009db450,137,?inf@Vector4@G3D@@SAABV12@XZ,public: static class G3D::Vector4 const & __cdecl G3D::Vector4::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,reloc: referenced by G3D::Vector4::operator/@0x009db520
+PLAYER,0x009db450,137,?nan@Vector4@G3D@@SAABV12@XZ,public: static class G3D::Vector4 const & __cdecl G3D::Vector4::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009db4e0,60,?clear@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::clear(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: only masked-body hit between located neighbours
+PLAYER,0x009db520,128,??KColor4@G3D@@QBE?AV01@M@Z,public: class G3D::Color4 __thiscall G3D::Color4::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: unique masked body in .text
+PLAYER,0x009db520,128,??KVector4@G3D@@QBE?AV01@M@Z,public: class G3D::Vector4 __thiscall G3D::Vector4::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009db5a0,23,?xyz@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+PLAYER,0x009db5a0,23,?xyz@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+PLAYER,0x009db5a0,23,?xyz@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+PLAYER,0x009db5c0,361,?decompress@BinaryInput@G3D@@AAEXXZ,private: void __thiscall G3D::BinaryInput::decompress(void),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009db5a0 and BinaryInput.obj@0x009db850; lib: name
+PLAYER,0x009db730,101,sub_9DB730,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009db5a0 and BinaryInput.obj@0x009db850
+PLAYER,0x009db7a0,30,??1BinaryInput@G3D@@UAE@XZ,public: virtual __thiscall G3D::BinaryInput::~BinaryInput(void),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009db5a0 and BinaryInput.obj@0x009db850; lib: name
+PLAYER,0x009db7c0,136,sub_9DB7C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x009db5a0 and BinaryInput.obj@0x009db850
+PLAYER,0x009db850,246,?loadIntoMemory@BinaryInput@G3D@@AAEX_J0@Z,"private: void __thiscall G3D::BinaryInput::loadIntoMemory(__int64, __int64)",G3D,8.00-roblox,yes,0,obj/G3D/BinaryInput.obj,reloc: referenced by G3D::BinaryInput::readUInt16@0x004ee520 (+3)
+PLAYER,0x009db950,103,sub_9DB950,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009db9c0,194,sub_9DB9C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009dba90,439,sub_9DBA90,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009dbc50,837,_ZN3G3D11BinaryInputC2ERKSsNS_9G3DEndianEb,"G3D::BinaryInput::BinaryInput(std::string const&, G3D::G3DEndian, bool)",G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180; ios: name
+PLAYER,0x009dbfa0,21,sub_9DBFA0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009dbfc0,66,sub_9DBFC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009dc010,361,sub_9DC010,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x009db850 and fileutils.obj@0x009dc180
+PLAYER,0x009dc180,91,?filenameExt@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::filenameExt(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,reloc: referenced by G3D::GImage::resolveFormat@0x009df070
+PLAYER,0x009dc1e0,83,?filenameContainsWildcards@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"bool __cdecl G3D::filenameContainsWildcards(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,search: unique masked body in .text
+PLAYER,0x009dc240,15,sub_9DC240,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc250,97,sub_9DC250,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc2c0,122,sub_9DC2C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc340,332,sub_9DC340,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc490,211,sub_9DC490,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc570,65,sub_9DC570,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc5c0,136,sub_9DC5C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc650,168,sub_9DC650,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc700,180,sub_9DC700,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc7c0,263,sub_9DC7C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc8d0,160,sub_9DC8D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dc970,157,sub_9DC970,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dca10,157,sub_9DCA10,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcab0,353,sub_9DCAB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcc20,8,sub_9DCC20,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcc30,333,sub_9DCC30,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcd80,77,sub_9DCD80,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcdd0,204,sub_9DCDD0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcea0,90,sub_9DCEA0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcf00,76,sub_9DCF00,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcf50,116,sub_9DCF50,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dcfd0,49,sub_9DCFD0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd010,278,sub_9DD010,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd130,123,_ZN3G3D5TableISsb9HashTraitISsE11EqualsTraitISsEED2Ev,"G3D::Table<std::string, bool, HashTrait<std::string>, EqualsTrait<std::string>>::~Table()",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009dd1b0,30,_ZN3G3D5TableISsb9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Table<std::string, bool, HashTrait<std::string>, EqualsTrait<std::string>>::~Table() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009dd1d0,14,sub_9DD1D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd1e0,88,sub_9DD1E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd240,748,sub_9DD240,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd530,39,_ZN3G3D3SetISs9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Set<std::string, HashTrait<std::string>, EqualsTrait<std::string>>::~Set() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009dd560,175,sub_9DD560,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd610,213,sub_9DD610,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd6f0,123,_ZN3G3D5TableISsNS_10FileSystem3DirE9HashTraitISsE11EqualsTraitISsEED2Ev,"G3D::Table<std::string, G3D::FileSystem::Dir, HashTrait<std::string>, EqualsTrait<std::string>>::~Table()",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009dd770,157,sub_9DD770,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd810,30,_ZN3G3D5TableISsNS_10FileSystem3DirE9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Table<std::string, G3D::FileSystem::Dir, HashTrait<std::string>, EqualsTrait<std::string>>::~Table() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009dd830,102,sub_9DD830,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd8a0,81,sub_9DD8A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dd900,439,sub_9DD900,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddac0,105,sub_9DDAC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddb30,94,_ZN3G3D17FileSystemDeleterD1Ev,G3D::FileSystemDeleter::~FileSystemDeleter(),G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0; ios: name
+PLAYER,0x009ddb90,11,sub_9DDB90,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddba0,46,sub_9DDBA0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddbd0,495,sub_9DDBD0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009dddc0,280,sub_9DDDC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddee0,270,sub_9DDEE0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009ddff0,352,sub_9DDFF0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de150,1031,sub_9DE150,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de560,717,sub_9DE560,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de830,57,sub_9DE830,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de870,50,sub_9DE870,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de8b0,32,sub_9DE8B0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009dc1e0 and Random.obj@0x009de8d0
+PLAYER,0x009de8d0,101,??0Random@G3D@@QAE@I_N@Z,"public: __thiscall G3D::Random::Random(unsigned int, bool)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,reloc: referenced by G3D::Random::common@0x009dee40
+PLAYER,0x009de940,71,?bits@Random@G3D@@UAEIXZ,public: virtual unsigned int __thiscall G3D::Random::bits(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009de990,446,?generate@Random@G3D@@MAEXXZ,protected: virtual void __thiscall G3D::Random::generate(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009deb50,88,?integer@Random@G3D@@UAEHHH@Z,"public: virtual int __thiscall G3D::Random::integer(int, int)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009debb0,157,?gaussian@Random@G3D@@UAEMMM@Z,"public: virtual float __thiscall G3D::Random::gaussian(float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009dec50,90,?cosHemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::cosHemi(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009decb0,101,?cosPowHemi@Random@G3D@@UAEXMAAM00@Z,"public: virtual void __thiscall G3D::Random::cosPowHemi(float, float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009ded20,33,?hemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::hemi(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009ded50,172,?sphere@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::sphere(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009dee00,50,??_GRandom@G3D@@UAEPAXI@Z,public: virtual void * __thiscall G3D::Random::`scalar deleting dtor'(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,inline/template COMDAT (select-any) inside its TU span; search: unique masked body in .text
+PLAYER,0x009dee40,96,?common@Random@G3D@@SAAAV12@XZ,public: static class G3D::Random & __cdecl G3D::Random::common(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+PLAYER,0x009deea0,449,?stringToFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::stringToFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/GImage.obj,reloc: referenced by G3D::GImage::resolveFormat@0x009df070
+PLAYER,0x009df070,951,?resolveFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBEHW4312@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::resolveFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, unsigned char const *, int, enum G3D::GImage::Format)",G3D,8.00-roblox,yes,0,obj/G3D/GImage.obj,search: unique masked body in .text
+PLAYER,0x009df430,7,sub_9DF430,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x009df070 and CollisionDetection.obj@0x009df4e0
+PLAYER,0x009df440,116,sub_9DF440,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x009df070 and CollisionDetection.obj@0x009df4e0
+PLAYER,0x009df4c0,31,_ZN3G3D11LineSegmentD0Ev,"G3D::LineSegment::~LineSegment() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x009df070 and CollisionDetection.obj@0x009df4e0; ios: name
+PLAYER,0x009df4e0,540,?collisionLocationForMovingPointFixedAABox@CollisionDetection@G3D@@SA_NABVVector3@2@0ABVAABox@2@AAV32@AA_N2@Z,"public: static bool __cdecl G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::AABox const &, class G3D::Vector3 &, bool &, class G3D::Vector3 &)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+PLAYER,0x009df700,1543,?findRayCapsuleIntersectionAux@G3D@@YAHABVVector3@1@0ABVCapsule@1@QAN@Z,"int __cdecl G3D::findRayCapsuleIntersectionAux(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Capsule const &, double *const)",G3D,8.00-roblox,no,1361,obj/G3D/CollisionDetection.obj,xref: only function referencing 3 of its located callees/data (similarity 0.96)
+PLAYER,0x009dfcf0,745,?collisionTimeForMovingPointFixedSphere@CollisionDetection@G3D@@SAMABVVector3@2@0ABVSphere@2@AAV32@2_N@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Sphere const &, class G3D::Vector3 &, class G3D::Vector3 &, bool)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+PLAYER,0x009dffe0,171,?findRayCapsuleIntersection@G3D@@YA_NABVRay@1@ABVCapsule@1@AAHQAVVector3@1@@Z,"bool __cdecl G3D::findRayCapsuleIntersection(class G3D::Ray const &, class G3D::Capsule const &, int &, class G3D::Vector3 *const)",G3D,8.00-roblox,no,157,obj/G3D/CollisionDetection.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x009e0090
+PLAYER,0x009e0090,899,?collisionTimeForMovingPointFixedCapsule@CollisionDetection@G3D@@SAMABVVector3@2@0ABVCapsule@2@AAV32@2@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Capsule const &, class G3D::Vector3 &, class G3D::Vector3 &)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+PLAYER,0x009e0420,735,_crc32_little,_crc32_little,zlib,1.2.3,yes,0,obj/zlib/crc32.obj,reloc: referenced by crc32@0x009e0700
+PLAYER,0x009e0700,29,_crc32@12,_crc32@12,zlib,1.2.3,yes,0,obj/zlib/crc32.obj,reloc: referenced by deflate@0x009e07a0 (+31)
+PLAYER,0x009e0720,39,_putShortMSB,_putShortMSB,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate@0x009e07a0 (+4)
+PLAYER,0x009e0750,78,_flush_pending,_flush_pending,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate@0x009e07a0 (+9)
+PLAYER,0x009e07a0,1991,_deflate@8,_deflate@8,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by add_data_uncomp@0x009e77f0
+PLAYER,0x009e0f70,214,_deflateEnd@4,_deflateEnd@4,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateInit2_@0x009e1e80 (+3)
+PLAYER,0x009e1050,136,_lm_init,_lm_init,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateReset@0x009e1df0
+PLAYER,0x009e10e0,344,_longest_match,_longest_match,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_fast@0x009e1600 (+1)
+PLAYER,0x009e1240,159,_longest_match_fast,_longest_match_fast,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_fast@0x009e1600 (+1)
+PLAYER,0x009e12e0,330,_fill_window,_fill_window,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_stored@0x009e1430 (+2)
+PLAYER,0x009e1430,462,_deflate_stored,_deflate_stored,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+PLAYER,0x009e1600,878,_deflate_fast,_deflate_fast,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+PLAYER,0x009e1970,1146,_deflate_slow,_deflate_slow,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+PLAYER,0x009e1df0,144,_deflateReset@4,_deflateReset@4,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateInit2_@0x009e1e80
+PLAYER,0x009e1e80,541,_deflateInit2_@32,_deflateInit2_@32,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by add_data_uncomp@0x009e77f0
+PLAYER,0x009e20a0,97,_inflateReset@4,_inflateReset@4,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflateInit2_@0x009e2110
+PLAYER,0x009e2110,206,_inflateInit2_@16,_inflateInit2_@16,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflateInit_@0x009e21e0 (+1)
+PLAYER,0x009e21e0,25,_inflateInit_@12,_inflateInit_@12,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x009e7260
+PLAYER,0x009e2200,224,_updatewindow,_updatewindow,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflate@0x009e22e0
+PLAYER,0x009e22e0,5356,_inflate@8,_inflate@8,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x009e7260 (+1)
+PLAYER,0x009e37d0,78,_inflateEnd@4,_inflateEnd@4,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x009e7260 (+2)
+PLAYER,0x009e3820,60,sub_9E3820,,G3D-block,,no,,,no compiled counterpart; between inflate.obj@0x009e37d0 and Color4.obj@0x009e3860
+PLAYER,0x009e3860,121,??0Color4@G3D@@QAE@ABVColor4uint8@1@@Z,public: __thiscall G3D::Color4::Color4(class G3D::Color4uint8 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: unique masked body in .text
+PLAYER,0x009e38e0,275,??0Plane@G3D@@QAE@ABVVector3@1@00@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,search: unique masked body in .text
+PLAYER,0x009e3a00,159,??0Plane@G3D@@QAE@ABVVector3@1@0@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,reloc: referenced by G3D::CoordinateFrame::toObjectSpace@0x009d96e0 (+1)
+PLAYER,0x009e3aa0,148,?fromEquation@Plane@G3D@@SA?AV12@MMMM@Z,"public: static class G3D::Plane __cdecl G3D::Plane::fromEquation(float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,search: unique masked body in .text
+PLAYER,0x009e3b40,44,?getEquation@Plane@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Plane::getEquation(class G3D::Vector3 &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,reloc: referenced by G3D::Line::intersection@0x009e4e30
+PLAYER,0x009e3b70,4962,?setTime@LightingParameters@G3D@@QAEXN@Z,public: void __thiscall G3D::LightingParameters::setTime(double),G3D,8.00-roblox,no,3276,obj/G3D/LightingParameters.obj,reloc: referenced by G3D::LightingParameters::LightingParameters@0x009e4b80
+PLAYER,0x009e4b80,169,??0LightingParameters@G3D@@QAE@XZ,public: __thiscall G3D::LightingParameters::LightingParameters(void),G3D,8.00-roblox,yes,0,obj/G3D/LightingParameters.obj,search: unique masked body in .text
+PLAYER,0x009e4c30,65,?toString@Sphere@G3D@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ,"public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall G3D::Sphere::toString(void) const",G3D,8.00-roblox,yes,0,obj/G3D/Sphere.obj,search: unique masked body in .text
+PLAYER,0x009e4c80,92,?contains@Sphere@G3D@@QBE_NABVVector3@2@@Z,public: bool __thiscall G3D::Sphere::contains(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Sphere.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere@0x009dfcf0
+PLAYER,0x009e4ce0,276,?vformat@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDPAD@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::vformat(char const *, char *)",G3D,8.00-roblox,yes,0,obj/G3D/format.obj,reloc: referenced by G3D::format@0x009e4e00
+PLAYER,0x009e4e00,38,?format@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::format(char const *, ...)",G3D,8.00-roblox,yes,0,obj/G3D/format.obj,reloc: referenced by G3D::Sphere::toString@0x009e4c30
+PLAYER,0x009e4e30,277,?intersection@Line@G3D@@QBE?AVVector3@2@ABVPlane@2@@Z,public: class G3D::Vector3 __thiscall G3D::Line::intersection(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,search: unique masked body in .text
+PLAYER,0x009e4f50,143,?closestPoint@Line@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::Line::closestPoint(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,search: unique masked body in .text
+PLAYER,0x009e4fe0,24,?point@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::point(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x009d99a0
+PLAYER,0x009e5000,24,?direction@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::direction(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x009d99a0
+PLAYER,0x009e5020,373,??0Quat@G3D@@QAE@ABVMatrix3@1@@Z,public: __thiscall G3D::Quat::Quat(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x009da500 (+1)
+PLAYER,0x009e51a0,245,?nlerp@Quat@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::Quat __thiscall G3D::Quat::nlerp(class G3D::Quat const &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::Quat::slerp@0x009e52e0
+PLAYER,0x009e52a0,57,?toRotationMatrix@Quat@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Quat::toRotationMatrix(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x009da500
+PLAYER,0x009e52e0,585,?slerp@Quat@G3D@@QBE?AV12@ABV12@MM@Z,"public: class G3D::Quat __thiscall G3D::Quat::slerp(class G3D::Quat const &, float, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x009da500
+PLAYER,0x009e5530,57,??0Capsule@G3D@@QAE@ABVVector3@1@0M@Z,"public: __thiscall G3D::Capsule::Capsule(class G3D::Vector3 const &, class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Capsule.obj,search: unique masked body in .text
+PLAYER,0x009e5530,57,??0Cylinder@G3D@@QAE@ABVVector3@1@0M@Z,"public: __thiscall G3D::Cylinder::Cylinder(class G3D::Vector3 const &, class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Cylinder.obj,search: unique masked body in .text
+PLAYER,0x009e5570,70,sub_9E5570,,G3D,8.00-roblox,no,,,no compiled counterpart; between Cylinder.obj@0x009e5530 and prompt.obj@0x009e55f0
+PLAYER,0x009e55c0,44,sub_9E55C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Cylinder.obj@0x009e5530 and prompt.obj@0x009e55f0
+PLAYER,0x009e55f0,185,?PromptDlgProc@_internal@G3D@@YGHPAUHWND__@@IIJ@Z,"int __stdcall G3D::_internal::PromptDlgProc(struct HWND__*, unsigned int, unsigned int, long)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::guiPrompt@0x009e5ad0
+PLAYER,0x009e56b0,248,?textPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::textPrompt(char const *, char const *, char const **, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::prompt@0x009e5c20
+PLAYER,0x009e57b0,96,?AppendData@DialogTemplate@_internal@G3D@@IAEXPBXH@Z,"protected: void __thiscall G3D::_internal::DialogTemplate::AppendData(void const *, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::_internal::DialogTemplate::AppendString@0x009e5810 (+11)
+PLAYER,0x009e5810,89,?AppendString@DialogTemplate@_internal@G3D@@IAEXPBD@Z,protected: void __thiscall G3D::_internal::DialogTemplate::AppendString(char const *),G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::_internal::DialogTemplate::DialogTemplate@0x009e5870 (+3)
+PLAYER,0x009e5870,190,??0DialogTemplate@_internal@G3D@@QAE@PBDKHHHH0G@Z,"public: __thiscall G3D::_internal::DialogTemplate::DialogTemplate(char const *, unsigned long, int, int, int, int, char const *, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x009e5ad0
+PLAYER,0x009e5930,207,?AddButton@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddButton(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x009e5ad0
+PLAYER,0x009e5a00,207,?AddEditBox@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddEditBox(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x009e5ad0
+PLAYER,0x009e5ad0,328,?guiPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::guiPrompt(char const *, char const *, char const **, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::prompt@0x009e5c20
+PLAYER,0x009e5c20,44,?prompt@G3D@@YAHPBD0PAPBDH_N@Z,"int __cdecl G3D::prompt(char const *, char const *, char const **, int, bool)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,search: unique masked body in .text
+PLAYER,0x009e5c50,28,?crc32@Crypto@G3D@@SAIPBXI@Z,"public: static unsigned int __cdecl G3D::Crypto::crc32(void const *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/Crypto.obj,search: unique masked body in .text
+PLAYER,0x009e5c70,207,?getRootKeyFromString@G3D@@YAPAUHKEY__@@PBDI@Z,"struct HKEY__* __cdecl G3D::getRootKeyFromString(char const *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/RegistryUtil.obj,reloc: referenced by G3D::RegistryUtil::readInt32@0x009e5d40
+PLAYER,0x009e5d40,205,?readInt32@RegistryUtil@G3D@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0AAH@Z,"public: static bool __cdecl G3D::RegistryUtil::readInt32(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int &)",G3D,8.00-roblox,yes,0,obj/G3D/RegistryUtil.obj,reloc: referenced by G3D::System::init@0x009d7030
+PLAYER,0x009e5e10,84,?beginsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::beginsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: unique masked body in .text
+PLAYER,0x009e5e70,117,?endsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::endsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: unique masked body in .text
+PLAYER,0x009e5ef0,191,?toUpper@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toUpper(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,reloc: referenced by G3D::GImage::stringToFormat@0x009deea0 (+1)
+PLAYER,0x009e5fb0,191,?toLower@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toLower(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: only masked-body hit between located neighbours
+PLAYER,0x009e6070,96,sub_9E6070,,G3D,8.00-roblox,no,,,no compiled counterpart; between stringutils.obj@0x009e5fb0 and fileutils.obj@0x009e60d0
+PLAYER,0x009e60d0,1327,?parseFilename@G3D@@YAXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAV23@AAV?$Array@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@$09$0CA@@1@11@Z,"void __cdecl G3D::parseFilename(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class G3D::Array<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, 10, 32> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,search: unique masked body in .text
+PLAYER,0x009e6600,1443,sub_9E6600,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x009e60d0 and Ray.obj@0x009e6bb0
+PLAYER,0x009e6bb0,902,?set@Ray@G3D@@QAEXABVVector3@2@0@Z,"public: void __thiscall G3D::Ray::set(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Ray.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x009e0090
+PLAYER,0x009e6f40,543,?init@Box@G3D@@AAEXABVVector3@2@0@Z,"private: void __thiscall G3D::Box::init(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Box.obj,reloc: referenced by G3D::Box::Box@0x009e7160
+PLAYER,0x009e7160,243,??0Box@G3D@@QAE@ABVAABox@1@@Z,public: __thiscall G3D::Box::Box(class G3D::AABox const &),G3D,8.00-roblox,yes,0,obj/G3D/Box.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x009da660
+PLAYER,0x009e7260,169,_uncompress@16,_uncompress@16,zlib,1.2.3,yes,0,obj/zlib/uncompr.obj,search: unique masked body in .text
+PLAYER,0x009e7310,58,_ch_set_error,_ch_set_error,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x009e7a20
+PLAYER,0x009e7350,249,_copy_data,_copy_data,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e7450,217,_write_cdir,_write_cdir,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e7530,102,__zip_cdir_set_comment,__zip_cdir_set_comment,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e75a0,86,__zip_changed,__zip_changed,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e7600,212,__zip_create_temp_output,__zip_create_temp_output,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e76e0,28,__zip_torrentzip_cmp,__zip_torrentzip_cmp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e7700,237,_add_data_comp,_add_data_comp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x009e7a20
+PLAYER,0x009e77f0,551,_add_data_uncomp,_add_data_uncomp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x009e7a20
+PLAYER,0x009e7a20,575,_add_data,_add_data,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009e7c60,1901,_zip_close,_zip_close,libzip,0.9,yes,0,obj/libzip/zip_close.obj,search: unique masked body in .text
+PLAYER,0x009e83d0,143,_zip_fclose,_zip_fclose,libzip,0.9,yes,0,obj/libzip/zip_fclose.obj,reloc: referenced by zip_fopen_index@0x009ed710 (+4)
+PLAYER,0x009e8460,404,_zip_fread,_zip_fread,libzip,0.9,yes,0,obj/libzip/zip_fread.obj,reloc: referenced by read_zip@0x009ed0c0 (+1)
+PLAYER,0x009e8600,48,_zip_fopen,_zip_fopen,libzip,0.9,yes,0,obj/libzip/zip_fopen.obj,search: unique masked body in .text
+PLAYER,0x009e8630,54,_zip_stat,_zip_stat,libzip,0.9,yes,0,obj/libzip/zip_stat.obj,search: unique masked body in .text
+PLAYER,0x009e8670,48,_zip_stat_init,_zip_stat_init,libzip,0.9,yes,0,obj/libzip/zip_stat_init.obj,search: unique masked body in .text
+PLAYER,0x009e86a0,61,_set_error,_set_error,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x009e8df0
+PLAYER,0x009e86e0,567,__zip_readcdir,__zip_readcdir,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x009e8df0
+PLAYER,0x009e8920,202,__zip_check_torrentzip,__zip_check_torrentzip,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x009e9010
+PLAYER,0x009e89f0,147,__zip_allocate_new,__zip_allocate_new,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x009e9010 (+2)
+PLAYER,0x009e8a90,112,__zip_file_exists,__zip_file_exists,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x009e9010
+PLAYER,0x009e8b00,182,__zip_memmem,__zip_memmem,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x009e8df0 (+1)
+PLAYER,0x009e8bc0,559,__zip_checkcons,__zip_checkcons,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x009e8df0 (+2)
+PLAYER,0x009e8df0,530,__zip_find_central_dir,__zip_find_central_dir,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x009e9010
+PLAYER,0x009e9010,356,_zip_open,_zip_open,libzip,0.9,yes,0,obj/libzip/zip_open.obj,search: unique masked body in .text
+PLAYER,0x009e9180,269,?rangematch@G3D@@YAHPBDDHPAPAD@Z,"int __cdecl G3D::rangematch(char const *, char, int, char **)",G3D,8.00-roblox,yes,0,obj/G3D/g3dfnmatch.obj,reloc: referenced by G3D::g3dfnmatch@0x009e9290
+PLAYER,0x009e9290,649,?g3dfnmatch@G3D@@YAHPBD0H@Z,"int __cdecl G3D::g3dfnmatch(char const *, char const *, int)",G3D,8.00-roblox,yes,0,obj/G3D/g3dfnmatch.obj,search: unique masked body in .text
+PLAYER,0x009e9520,391,_zip_stat_index,_zip_stat_index,libzip,0.9,yes,0,obj/libzip/zip_stat_index.obj,reloc: referenced by zip_source_zip@0x009ed250 (+1)
+PLAYER,0x009e96b0,16,_zip_get_num_files,_zip_get_num_files,libzip,0.9,yes,0,obj/libzip/zip_get_num_files.obj,search: unique masked body in .text
+PLAYER,0x009e96c0,231,sub_9E96C0,,G3D-block,,no,,,no compiled counterpart; between zip_get_num_files.obj@0x009e96b0 and LineSegment.obj@0x009e97b0
+PLAYER,0x009e97b0,434,?closestPoint@LineSegment@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::LineSegment::closestPoint(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/LineSegment.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x009e0090
+PLAYER,0x009e9970,624,_adler32@12,_adler32@12,zlib,1.2.3,yes,0,obj/zlib/adler32.obj,reloc: referenced by deflate@0x009e07a0 (+6)
+PLAYER,0x009e9be0,117,_init_block,_init_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_init@0x009eade0 (+1)
+PLAYER,0x009e9c60,196,_pqdownheap,_pqdownheap,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x009eaed0 (+2)
+PLAYER,0x009e9d30,531,_gen_bitlen,_gen_bitlen,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x009eaed0
+PLAYER,0x009e9f50,222,_scan_tree,_scan_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_bl_tree@0x009eb0d0 (+1)
+PLAYER,0x009ea030,1291,_send_tree,_send_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by send_all_trees@0x009ea540 (+1)
+PLAYER,0x009ea540,602,_send_all_trees,_send_all_trees,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x009eb430
+PLAYER,0x009ea7a0,1015,_compress_block,_compress_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x009eb430 (+1)
+PLAYER,0x009eaba0,201,_set_data_type,_set_data_type,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x009eb430
+PLAYER,0x009eac70,114,_bi_flush,_bi_flush,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_align@0x009eb240 (+2)
+PLAYER,0x009eacf0,85,_bi_windup,_bi_windup,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by copy_block@0x009ead50 (+1)
+PLAYER,0x009ead50,138,_copy_block,_copy_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_stored_block@0x009eb1a0 (+1)
+PLAYER,0x009eade0,100,__tr_init,__tr_init,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflateReset@0x009e1df0
+PLAYER,0x009eae50,113,_gen_codes,_gen_codes,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x009eaed0
+PLAYER,0x009eaed0,497,_build_tree,_build_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_bl_tree@0x009eb0d0 (+2)
+PLAYER,0x009eb0d0,199,_build_bl_tree,_build_bl_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x009eb430
+PLAYER,0x009eb1a0,157,__tr_stored_block,__tr_stored_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate@0x009e07a0 (+1)
+PLAYER,0x009eb240,493,__tr_align,__tr_align,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate@0x009e07a0
+PLAYER,0x009eb430,516,__tr_flush_block,__tr_flush_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate_stored@0x009e1430 (+7)
+PLAYER,0x009eb640,20,_zcalloc,_zcalloc,zlib,1.2.3,yes,0,obj/zlib/zutil.obj,reloc: referenced by deflateInit2_@0x009e1e80 (+1)
+PLAYER,0x009eb660,13,_zcfree,_zcfree,zlib,1.2.3,yes,0,obj/zlib/zutil.obj,reloc: referenced by deflateInit2_@0x009e1e80 (+1)
+PLAYER,0x009eb670,1110,_inflate_fast,_inflate_fast,zlib,1.2.3,yes,0,obj/zlib/inffast.obj,reloc: referenced by inflate@0x009e22e0
+PLAYER,0x009ebad0,1226,_inflate_table,_inflate_table,zlib,1.2.3,yes,0,obj/zlib/inftrees.obj,reloc: referenced by inflate@0x009e22e0 (+2)
+PLAYER,0x009ebfa0,249,__zip_name_locate,__zip_name_locate,libzip,0.9,yes,0,obj/libzip/zip_name_locate.obj,reloc: referenced by zip_name_locate@0x009ec0a0
+PLAYER,0x009ec0a0,28,_zip_name_locate,_zip_name_locate,libzip,0.9,yes,0,obj/libzip/zip_name_locate.obj,reloc: referenced by zip_fopen@0x009e8600 (+1)
+PLAYER,0x009ec0c0,19,__zip_error_copy,__zip_error_copy,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by zip_fopen_index@0x009ed710 (+3)
+PLAYER,0x009ec0e0,58,__zip_error_get,__zip_error_get,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by zip_file_error_get@0x009eda20 (+2)
+PLAYER,0x009ec120,15,__zip_error_init,__zip_error_init,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by _zip_file_new@0x009ed650 (+1)
+PLAYER,0x009ec130,22,__zip_error_set,__zip_error_set,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by copy_data@0x009e7350 (+73)
+PLAYER,0x009ec150,230,__zip_filerange_crc,__zip_filerange_crc,libzip,0.9,yes,0,obj/libzip/zip_filerange_crc.obj,reloc: referenced by write_cdir@0x009e7450 (+1)
+PLAYER,0x009ec240,43,_zip_get_archive_flag,_zip_get_archive_flag,libzip,0.9,yes,0,obj/libzip/zip_get_archive_flag.obj,reloc: referenced by write_cdir@0x009e7450 (+9)
+PLAYER,0x009ec270,129,__zip_cdir_new,__zip_cdir_new,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x009e7c60 (+1)
+PLAYER,0x009ec300,57,__zip_dirent_finalize,__zip_dirent_finalize,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x009e7c60 (+4)
+PLAYER,0x009ec340,79,__zip_dirent_init,__zip_dirent_init,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x009e7c60 (+1)
+PLAYER,0x009ec390,227,__zip_dirent_torrent_normalize,__zip_dirent_torrent_normalize,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by add_data@0x009e7a20 (+1)
+PLAYER,0x009ec480,120,__zip_d2u_time,__zip_d2u_time,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_dirent_read@0x009ec670
+PLAYER,0x009ec500,38,__zip_read2,__zip_read2,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_readcdir@0x009e86e0 (+2)
+PLAYER,0x009ec530,44,__zip_read4,__zip_read4,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_readcdir@0x009e86e0 (+1)
+PLAYER,0x009ec560,136,__zip_readfpstr,__zip_readfpstr,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_dirent_read@0x009ec670
+PLAYER,0x009ec5f0,113,__zip_cdir_free,__zip_cdir_free,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x009e7c60 (+9)
+PLAYER,0x009ec670,1277,__zip_dirent_read,__zip_dirent_read,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x009e7c60 (+3)
+PLAYER,0x009ecb70,849,__zip_dirent_write,__zip_dirent_write,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by add_data@0x009e7a20 (+3)
+PLAYER,0x009eced0,383,__zip_cdir_write,__zip_cdir_write,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by write_cdir@0x009e7450
+PLAYER,0x009ed050,63,__zip_memdup,__zip_memdup,libzip,0.9,yes,0,obj/libzip/zip_memdup.obj,reloc: referenced by _zip_cdir_set_comment@0x009e7530 (+3)
+PLAYER,0x009ed090,34,__zip_mkstemp,__zip_mkstemp,libzip,0.9,yes,0,obj/libzip/mkstemp.obj,reloc: referenced by _zip_create_temp_output@0x009e7600
+PLAYER,0x009ed0c0,392,_read_zip,_read_zip,libzip,0.9,yes,0,obj/libzip/zip_source_zip.obj,reloc: referenced by zip_source_zip@0x009ed250
+PLAYER,0x009ed250,428,_zip_source_zip,_zip_source_zip,libzip,0.9,yes,0,obj/libzip/zip_source_zip.obj,reloc: referenced by zip_close@0x009e7c60
+PLAYER,0x009ed400,130,__zip_get_name,__zip_get_name,libzip,0.9,yes,0,obj/libzip/zip_get_name.obj,reloc: referenced by _zip_name_locate@0x009ebfa0
+PLAYER,0x009ed490,28,_zip_get_name,_zip_get_name,libzip,0.9,yes,0,obj/libzip/zip_get_name.obj,reloc: referenced by zip_close@0x009e7c60 (+1)
+PLAYER,0x009ed4b0,189,__zip_free,__zip_free,libzip,0.9,yes,0,obj/libzip/zip_free.obj,reloc: referenced by zip_close@0x009e7c60 (+4)
+PLAYER,0x009ed570,211,__zip_file_fillbuf,__zip_file_fillbuf,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen_index@0x009ed710 (+2)
+PLAYER,0x009ed650,192,__zip_file_new,__zip_file_new,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen_index@0x009ed710
+PLAYER,0x009ed710,475,_zip_fopen_index,_zip_fopen_index,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen@0x009e8600 (+1)
+PLAYER,0x009ed8f0,27,_zip_error_get_sys_type,_zip_error_get_sys_type,libzip,0.9,yes,0,obj/libzip/zip_error_get_sys_type.obj,reloc: referenced by _zip_error_get@0x009ec0e0 (+2)
+PLAYER,0x009ed910,101,__zip_new,__zip_new,libzip,0.9,yes,0,obj/libzip/zip_new.obj,reloc: referenced by _zip_allocate_new@0x009e89f0
+PLAYER,0x009ed980,160,__zip_entry_new,__zip_entry_new,libzip,0.9,yes,0,obj/libzip/zip_entry_new.obj,reloc: referenced by zip_open@0x009e9010
+PLAYER,0x009eda20,16,_zip_file_error_get,_zip_file_error_get,libzip,0.9,yes,0,obj/libzip/zip_file_error_get.obj,reloc: referenced by read_zip@0x009ed0c0
+PLAYER,0x009eda30,58,_zip_source_function,_zip_source_function,libzip,0.9,yes,0,obj/libzip/zip_source_function.obj,reloc: referenced by zip_source_zip@0x009ed250
+PLAYER,0x009eda70,57,__zip_entry_free,__zip_entry_free,libzip,0.9,yes,0,obj/libzip/zip_entry_free.obj,reloc: referenced by _zip_free@0x009ed4b0
+PLAYER,0x009edab0,144,__zip_file_get_offset,__zip_file_get_offset,libzip,0.9,yes,0,obj/libzip/zip_file_get_offset.obj,reloc: referenced by zip_fopen_index@0x009ed710
+PLAYER,0x009edb40,60,__zip_unchange_data,__zip_unchange_data,libzip,0.9,yes,0,obj/libzip/zip_unchange_data.obj,reloc: referenced by _zip_entry_free@0x009eda70
+STUDIO,0x0051f420,31,??0Color4@G3D@@QAE@ABVVector4@1@@Z,public: __thiscall G3D::Color4::Color4(class G3D::Vector4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x0051f420,31,??0Vector4@G3D@@QAE@ABVColor4@1@@Z,public: __thiscall G3D::Vector4::Vector4(class G3D::Color4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x00615f80,149,?isFinite@Color3@G3D@@QBE_NXZ,public: bool __thiscall G3D::Color3::isFinite(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x0066cce0,6,?malloc@System@G3D@@SAPAXI@Z,public: static void * __cdecl G3D::System::malloc(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,"reloc: referenced by G3D::vformat@0x006b8fc0 (+2); outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x0066ccf0,6,?realloc@System@G3D@@SAPAXPAXI@Z,"public: static void * __cdecl G3D::System::realloc(void *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/System.obj,"reloc: referenced by G3D::BinaryInput::loadIntoMemory@0x006b0570; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x0066cd00,6,?free@System@G3D@@SAXPAX@Z,public: static void __cdecl G3D::System::free(void *),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,"reloc: referenced by G3D::vformat@0x006b8fc0 (+1); outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x006aa440,60,?red@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::red(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+STUDIO,0x006aa480,60,?green@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::green(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+STUDIO,0x006aa4c0,60,?blue@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::blue(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: only masked-body hit between located neighbours
+STUDIO,0x006aa500,68,?purple@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::purple(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa550,68,?cyan@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::cyan(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa5a0,60,?yellow@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::yellow(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa5e0,60,?brown@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::brown(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa620,68,?orange@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::orange(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa670,52,?black@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::black(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::black(void)
+STUDIO,0x006aa6b0,52,?zero@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::zero(void)
+STUDIO,0x006aa6f0,57,?gray@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::gray(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa730,57,?white@Color3@G3D@@SAABV12@XZ,public: static class G3D::Color3 const & __cdecl G3D::Color3::white(void),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,match: G3D::Color3::white(void)
+STUDIO,0x006aa770,25,??0Color3@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa770,25,??0Vector3@G3D@@QAE@ABVColor3@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Color3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aa790,66,??0Color3@G3D@@QAE@ABVColor3uint8@1@@Z,public: __thiscall G3D::Color3::Color3(class G3D::Color3uint8 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa7e0,82,?fromARGB@Color3@G3D@@SA?AV12@I@Z,public: static class G3D::Color3 __cdecl G3D::Color3::fromARGB(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aa840,234,_ZN3G3D3LogC2ERKSsi,"G3D::Log::Log(std::string const&, int)",G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aa930,162,_ZN3G3D3Log6commonEv,G3D::Log::common(),G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aa9e0,36,sub_6AA9E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006aaa10,84,_ZN3G3D3Log7sectionERKSs,G3D::Log::section(std::string const&),G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; mac: name
+STUDIO,0x006aaa70,65,sub_6AAA70,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006aaac0,162,_ZN3G3D3Log11printHeaderEv,G3D::Log::printHeader(),G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aab70,242,_ZN3G3D3LogD2Ev,G3D::Log::~Log(),G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aac70,65,sub_6AAC70,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006aacc0,30,_ZN3G3D3LogD0Ev,"G3D::Log::~Log() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aace0,104,sub_6AACE0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006aad50,604,_ZN3G3D9_internalL18createErrorMessageEPKcRKSsS2_iRSsS5_,"G3D::_internal::createErrorMessage(char const*, std::string const&, char const*, int, std::string&, std::string&)",G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080; ios: name
+STUDIO,0x006aafb0,101,sub_6AAFB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006ab020,82,sub_6AB020,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color3.obj@0x006aa7e0 and Vector3.obj@0x006ab080
+STUDIO,0x006ab080,37,??0Vector3@G3D@@QAE@ABVVector3int32@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int32 const &),G3D,8.00-roblox,no,36,obj/G3D/Vector3.obj,order: between G3D::Vector3::Vector3@0x006aa770 and G3D::Vector3::Vector3@0x006ae800
+STUDIO,0x006ab090,10,sub_6AB090,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector3.obj@0x006ab080 and Vector2.obj@0x006ab730
+STUDIO,0x006ab0a0,192,sub_6AB0A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector3.obj@0x006ab080 and Vector2.obj@0x006ab730
+STUDIO,0x006ab160,120,sub_6AB160,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector3.obj@0x006ab080 and Vector2.obj@0x006ab730
+STUDIO,0x006ab1e0,607,sub_6AB1E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector3.obj@0x006ab080 and Vector2.obj@0x006ab730
+STUDIO,0x006ab450,726,_ZN3G3D9_internal18_handleErrorCheck_EPKcRKSsS2_ib,"G3D::_internal::_handleErrorCheck_(char const*, std::string const&, char const*, int, bool)",G3D,8.00-roblox,no,,,no compiled counterpart; between Vector3.obj@0x006ab080 and Vector2.obj@0x006ab730; ios: name
+STUDIO,0x006ab730,49,?one@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006ab770,44,?zero@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006ab7a0,47,??KVector2@G3D@@QBE?AV01@M@Z,public: class G3D::Vector2 __thiscall G3D::Vector2::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006ab7d0,41,??_0Vector2@G3D@@QAEAAV01@M@Z,public: class G3D::Vector2 & __thiscall G3D::Vector2::operator/=(float),G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006ab800,17,?yx@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006ab800,17,?yx@Vector2@G3D@@QBE?AV12@XZ,public: class G3D::Vector2 __thiscall G3D::Vector2::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006ab800,17,?yx@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006ab800,17,?yx@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006ab820,71,??0Vector2int16@G3D@@QAE@ABVVector2@1@@Z,public: __thiscall G3D::Vector2int16::Vector2int16(class G3D::Vector2 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+STUDIO,0x006ab870,23,??0Vector2int16@G3D@@QAE@QAH@Z,public: __thiscall G3D::Vector2int16::Vector2int16(int *const),G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+STUDIO,0x006ab890,21,?yx@Vector2int16@G3D@@QBE?AV12@XZ,public: class G3D::Vector2int16 __thiscall G3D::Vector2int16::yx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2int16.obj,search: unique masked body in .text
+STUDIO,0x006ab8b0,22,??0Matrix3@G3D@@QAE@QAY02$$CBM@Z,public: __thiscall G3D::Matrix3::Matrix3(float const (*const)[3]),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ab8b0,22,??0Matrix3@G3D@@QAE@ABV01@@Z,public: __thiscall G3D::Matrix3::Matrix3(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::CoordinateFrame@0x004ad940 (+11)
+STUDIO,0x006ab8d0,101,?set@Matrix3@G3D@@QAEXMMMMMMMMM@Z,"public: void __thiscall G3D::Matrix3::set(float, float, float, float, float, float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ab940,30,?column@Matrix3@G3D@@QBE?AVVector3@2@H@Z,public: class G3D::Vector3 __thiscall G3D::Matrix3::column(int) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ab960,30,?setColumn@Matrix3@G3D@@QAEXHABVVector3@2@@Z,"public: void __thiscall G3D::Matrix3::setColumn(int, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x006ae0d0 (+2)
+STUDIO,0x006ab980,317,??8GLight@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::GLight::operator==(class G3D::GLight const &) const,G3D,8.00-roblox,no,312,obj/G3D/GLight.obj,reloc: referenced by G3D::GLight::operator!=@0x006ab9d0
+STUDIO,0x006ab980,68,??8Matrix3@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix3::operator==(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::operator!=@0x006ab9d0
+STUDIO,0x006ab980,68,??8Matrix4@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix4::operator==(class G3D::Matrix4 const &) const,G3D,8.00-roblox,no,3,obj/G3D/Matrix4.obj,reloc: referenced by G3D::Matrix4::operator!=@0x006ab9d0
+STUDIO,0x006ab9d0,22,??9GLight@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::GLight::operator!=(class G3D::GLight const &) const,G3D,8.00-roblox,yes,0,obj/G3D/GLight.obj,search: unique masked body in .text
+STUDIO,0x006ab9d0,22,??9Matrix3@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix3::operator!=(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ab9d0,22,??9Matrix4@G3D@@QBE_NABV01@@Z,public: bool __thiscall G3D::Matrix4::operator!=(class G3D::Matrix4 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+STUDIO,0x006ab9f0,115,??HMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator+(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006aba70,254,??DMatrix3@G3D@@QBE?AV01@ABV01@@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator*(class G3D::Matrix3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::fromEulerAnglesXYZ@0x006accd0 (+1)
+STUDIO,0x006abb70,91,??YMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator+=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abbd0,91,??ZMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator-=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abc30,268,??XMatrix3@G3D@@QAEAAV01@ABV01@@Z,public: class G3D::Matrix3 & __thiscall G3D::Matrix3::operator*=(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abd40,85,??GMatrix3@G3D@@QBE?AV01@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::operator-(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abda0,66,??DG3D@@YA?AVMatrix3@0@NABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(double, class G3D::Matrix3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::operator*@0x006abdf0
+STUDIO,0x006abdf0,33,??DG3D@@YA?AVMatrix3@0@MABV10@@Z,"class G3D::Matrix3 __cdecl G3D::operator*(float, class G3D::Matrix3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abe20,49,?transpose@Matrix3@G3D@@QBE?AV12@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix3::transpose(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006abe60,389,?inverse@Matrix3@G3D@@QBE_NAAV12@M@Z,"public: bool __thiscall G3D::Matrix3::inverse(class G3D::Matrix3 &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix3::inverse@0x006acee0
+STUDIO,0x006abff0,500,?orthonormalize@Matrix3@G3D@@QAEXXZ,public: void __thiscall G3D::Matrix3::orthonormalize(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac1f0,149,?l1Norm@Matrix3@G3D@@QBEMXZ,public: float __thiscall G3D::Matrix3::l1Norm(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac290,510,?toAxisAngle@Matrix3@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Matrix3::toAxisAngle(class G3D::Vector3 &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac490,285,?fromAxisAngleFast@Matrix3@G3D@@SA?AV12@ABVVector3@2@M@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromAxisAngleFast(class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac5b0,184,?toEulerAnglesXYZ@Matrix3@G3D@@QBE_NAAM00@Z,"public: bool __thiscall G3D::Matrix3::toEulerAnglesXYZ(float &, float &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac670,393,?_mul@Matrix3@G3D@@CAXABV12@0AAV12@@Z,"private: static void __cdecl G3D::Matrix3::_mul(class G3D::Matrix3 const &, class G3D::Matrix3 const &, class G3D::Matrix3 &)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ac800,334,sub_6AC800,,G3D,8.00-roblox,no,,obj/G3D/Matrix3.obj,no compiled counterpart; between Matrix3.obj@0x006ac670 and Matrix3.obj@0x006ac950
+STUDIO,0x006ac950,388,?isOrthonormal@Matrix3@G3D@@QBE_NXZ,public: bool __thiscall G3D::Matrix3::isOrthonormal(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006acae0,371,??0Matrix3@G3D@@QAE@ABVQuat@1@@Z,public: __thiscall G3D::Matrix3::Matrix3(class G3D::Quat const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Quat::toRotationMatrix@0x006ba4a0
+STUDIO,0x006acc60,103,??0Matrix3@G3D@@QAE@MMMMMMMMM@Z,"public: __thiscall G3D::Matrix3::Matrix3(float, float, float, float, float, float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Matrix4::upper3x3@0x006aef30
+STUDIO,0x006accd0,290,?fromEulerAnglesXYZ@Matrix3@G3D@@SA?AV12@MMM@Z,"public: static class G3D::Matrix3 __cdecl G3D::Matrix3::fromEulerAnglesXYZ(float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006ace00,100,?zero@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::Quat::toRotationMatrix@0x006ba4a0
+STUDIO,0x006ace70,108,?identity@Matrix3@G3D@@SAABV12@XZ,public: static class G3D::Matrix3 const & __cdecl G3D::Matrix3::identity(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,reloc: referenced by G3D::CoordinateFrame::CoordinateFrame@0x006ad450
+STUDIO,0x006acee0,141,?inverse@Matrix3@G3D@@QBE?AV12@M@Z,public: class G3D::Matrix3 __thiscall G3D::Matrix3::inverse(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix3.obj,search: unique masked body in .text
+STUDIO,0x006acf70,61,sub_6ACF70,,G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x006acee0 and g3dmath.obj@0x006ad1c0
+STUDIO,0x006acfb0,7,sub_6ACFB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x006acee0 and g3dmath.obj@0x006ad1c0
+STUDIO,0x006acfc0,31,_ZN3G3D6SphereD0Ev,"G3D::Sphere::~Sphere() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x006acee0 and g3dmath.obj@0x006ad1c0; ios: name
+STUDIO,0x006acfe0,191,sub_6ACFE0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x006acee0 and g3dmath.obj@0x006ad1c0
+STUDIO,0x006ad0a0,276,sub_6AD0A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Matrix3.obj@0x006acee0 and g3dmath.obj@0x006ad1c0
+STUDIO,0x006ad1c0,8,?inf@G3D@@YANXZ,double __cdecl G3D::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::fuzzyEq@0x0051f090 (+6)
+STUDIO,0x006ad1d0,8,?finf@G3D@@YAMXZ,float __cdecl G3D::finf(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::isFinite@0x00615f40 (+31)
+STUDIO,0x006ad1d0,8,?fnan@G3D@@YAMXZ,float __cdecl G3D::fnan(void),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::Color4::nan@0x006b00d0 (+10)
+STUDIO,0x006ad1e0,75,?iRandom@G3D@@YAHHH@Z,"int __cdecl G3D::iRandom(int, int)",G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,search: unique masked body in .text
+STUDIO,0x006ad230,125,?isNaN@G3D@@YA_NM@Z,bool __cdecl G3D::isNaN(float),G3D,8.00-roblox,yes,0,obj/G3D/g3dmath.obj,reloc: referenced by G3D::isFinite@0x00615f40 (+8)
+STUDIO,0x006ad2b0,7,sub_6AD2B0,,G3D,8.00-roblox,no,,,no compiled counterpart; between g3dmath.obj@0x006ad230 and CoordinateFrame.obj@0x006ad450
+STUDIO,0x006ad2c0,165,sub_6AD2C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between g3dmath.obj@0x006ad230 and CoordinateFrame.obj@0x006ad450
+STUDIO,0x006ad370,31,_ZN3G3D4LineD0Ev,"G3D::Line::~Line() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between g3dmath.obj@0x006ad230 and CoordinateFrame.obj@0x006ad450; ios: name
+STUDIO,0x006ad390,86,sub_6AD390,,G3D,8.00-roblox,no,,,no compiled counterpart; between g3dmath.obj@0x006ad230 and CoordinateFrame.obj@0x006ad450
+STUDIO,0x006ad3f0,95,sub_6AD3F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between g3dmath.obj@0x006ad230 and CoordinateFrame.obj@0x006ad450
+STUDIO,0x006ad450,42,??0CoordinateFrame@G3D@@QAE@XZ,public: __thiscall G3D::CoordinateFrame::CoordinateFrame(void),G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::LightingParameters::LightingParameters@0x00a98c80 (+1)
+STUDIO,0x006ad480,309,?fuzzyEq@CoordinateFrame@G3D@@QBE_NABV12@@Z,public: bool __thiscall G3D::CoordinateFrame::fuzzyEq(class G3D::CoordinateFrame const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ad5c0,19,?toMatrix4@CoordinateFrame@G3D@@QBE?AVMatrix4@2@XZ,public: class G3D::Matrix4 __thiscall G3D::CoordinateFrame::toMatrix4(void) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ad5e0,346,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toObjectSpace(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ad740,346,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z,public: class G3D::Plane __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ad8a0,335,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVLine@2@ABV32@@Z,public: class G3D::Line __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Line const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ad9f0,1411,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABV32@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::Box const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x006ae560
+STUDIO,0x006adf80,326,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVRbxRay@RBX@@ABV34@@Z,public: class RBX::RbxRay __thiscall G3D::CoordinateFrame::toObjectSpace(class RBX::RbxRay const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ae0d0,813,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@V32@@Z,"public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &, class G3D::Vector3)",G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x006ae7d0 (+2)
+STUDIO,0x006ae400,351,?lerp@CoordinateFrame@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::CoordinateFrame __thiscall G3D::CoordinateFrame::lerp(class G3D::CoordinateFrame const &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ae560,57,?toWorldSpace@CoordinateFrame@G3D@@QBE?AVBox@2@ABVAABox@2@@Z,public: class G3D::Box __thiscall G3D::CoordinateFrame::toWorldSpace(class G3D::AABox const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ae5a0,550,?AABBtoWorldSpace@CoordinateFrame@G3D@@QBE?AVAABox@2@ABV32@@Z,public: class G3D::AABox __thiscall G3D::CoordinateFrame::AABBtoWorldSpace(class G3D::AABox const &) const,G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ae7d0,45,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@@Z,public: void __thiscall G3D::CoordinateFrame::lookAt(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/CoordinateFrame.obj,search: unique masked body in .text
+STUDIO,0x006ae800,30,??0Vector3@G3D@@QAE@ABVVector2@1@M@Z,"public: __thiscall G3D::Vector3::Vector3(class G3D::Vector2 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006ae820,52,?zero@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox@0x006b49f0 (+2)
+STUDIO,0x006ae860,57,?one@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Ray::set@0x006b9b50
+STUDIO,0x006ae8a0,60,?unitX@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitX(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x006ba730 (+1)
+STUDIO,0x006ae8e0,60,?unitY@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitY(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x006ba730 (+5)
+STUDIO,0x006ae920,60,?unitZ@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitZ(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Box::init@0x006ba730 (+2)
+STUDIO,0x006ae960,118,?inf@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere@0x006b5200 (+3)
+STUDIO,0x006ae960,118,?nan@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006ae9e0,57,?minFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::minFinite(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Plane::halfSpaceContains@0x006a9800 (+2)
+STUDIO,0x006aea20,57,?maxFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::Plane::halfSpaceContains@0x006a9800 (+2)
+STUDIO,0x006aea60,50,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,public: enum G3D::Vector3::Axis __thiscall G3D::Vector3::primaryAxis(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aeaa0,46,??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int16 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aead0,46,?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,public: static class G3D::Vector3 __cdecl G3D::Vector3::random(class G3D::Random &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aeb00,136,?unitize@Color3@G3D@@QAEMM@Z,public: float __thiscall G3D::Color3::unitize(float),G3D,8.00-roblox,yes,0,obj/G3D/Color3.obj,search: unique masked body in .text
+STUDIO,0x006aeb00,136,?unitize@Vector3@G3D@@QAEMM@Z,public: float __thiscall G3D::Vector3::unitize(float),G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,reloc: referenced by G3D::CoordinateFrame::lookAt@0x006ae0d0 (+6)
+STUDIO,0x006aeb90,240,?generateOrthonormalBasis@Vector3@G3D@@SAXAAV12@00_N@Z,"public: static void __cdecl G3D::Vector3::generateOrthonormalBasis(class G3D::Vector3 &, class G3D::Vector3 &, class G3D::Vector3 &, bool)",G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aec80,79,?toVector3int16@Vector3@G3D@@QBE?AVVector3int16@2@XZ,public: class G3D::Vector3int16 __thiscall G3D::Vector3::toVector3int16(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aecd0,17,?xy@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006aecd0,17,?xy@Vector2@G3D@@QBE?AV12@XZ,public: class G3D::Vector2 __thiscall G3D::Vector2::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006aecd0,17,?xy@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aecd0,17,?xy@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::xy(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006aecf0,17,?xz@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006aecf0,17,?xz@Vector3@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector3::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aecf0,17,?xz@Vector4@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Vector4::xz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006aed10,25,?xxx@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006aed10,25,?xxx@Vector2@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector2::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector2.obj,search: unique masked body in .text
+STUDIO,0x006aed10,25,?xxx@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aed10,25,?xxx@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::xxx(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006aed30,23,?yxz@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006aed30,23,?yxz@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006aed30,23,?yxz@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::yxz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006aed50,17,sub_6AED50,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006aed30 and MemoryManager.obj@0x006aedd0
+STUDIO,0x006aed70,37,sub_6AED70,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006aed30 and MemoryManager.obj@0x006aedd0
+STUDIO,0x006aeda0,7,_ZN3G3D22ReferenceCountedObjectD2Ev,G3D::ReferenceCountedObject::~ReferenceCountedObject(),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006aed30 and MemoryManager.obj@0x006aedd0; ios: name
+STUDIO,0x006aedb0,31,_ZN3G3D22ReferenceCountedObjectD0Ev,"G3D::ReferenceCountedObject::~ReferenceCountedObject() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006aed30 and MemoryManager.obj@0x006aedd0; ios: name
+STUDIO,0x006aedd0,16,?alloc@MemoryManager@G3D@@UAEPAXI@Z,public: virtual void * __thiscall G3D::MemoryManager::alloc(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,match: G3D::MemoryManager::alloc(unsigned int)
+STUDIO,0x006aede0,14,?free@MemoryManager@G3D@@UAEXPAX@Z,public: virtual void __thiscall G3D::MemoryManager::free(void *),G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,match: G3D::MemoryManager::free(void *)
+STUDIO,0x006aedf0,30,_ZN3G3D13MemoryManagerD0Ev,"G3D::MemoryManager::~MemoryManager() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between MemoryManager.obj@0x006aede0 and Matrix4.obj@0x006aeec0; ios: name
+STUDIO,0x006aee10,172,sub_6AEE10,,G3D,8.00-roblox,no,,,no compiled counterpart; between MemoryManager.obj@0x006aede0 and Matrix4.obj@0x006aeec0
+STUDIO,0x006aeec0,111,??0Matrix4@G3D@@QAE@ABVCoordinateFrame@1@@Z,public: __thiscall G3D::Matrix4::Matrix4(class G3D::CoordinateFrame const &),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,reloc: referenced by G3D::CoordinateFrame::toMatrix4@0x006ad5c0
+STUDIO,0x006aef30,82,?upper3x3@Matrix4@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Matrix4::upper3x3(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+STUDIO,0x006aef90,52,??0Matrix4@G3D@@QAE@XZ,public: __thiscall G3D::Matrix4::Matrix4(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+STUDIO,0x006aefd0,136,??DMatrix4@G3D@@QBE?AVVector4@1@ABV21@@Z,public: class G3D::Vector4 __thiscall G3D::Matrix4::operator*(class G3D::Vector4 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+STUDIO,0x006af060,168,?identity@Matrix4@G3D@@SAABV12@XZ,public: static class G3D::Matrix4 const & __cdecl G3D::Matrix4::identity(void),G3D,8.00-roblox,yes,0,obj/G3D/Matrix4.obj,search: unique masked body in .text
+STUDIO,0x006af110,142,??0Color3uint8@G3D@@QAE@ABVColor3@1@@Z,public: __thiscall G3D::Color3uint8::Color3uint8(class G3D::Color3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color3uint8.obj,search: unique masked body in .text
+STUDIO,0x006af1a0,185,??0Color4uint8@G3D@@QAE@ABVColor4@1@@Z,public: __thiscall G3D::Color4uint8::Color4uint8(class G3D::Color4 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4uint8.obj,search: unique masked body in .text
+STUDIO,0x006af260,32,sub_6AF260,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color4uint8.obj@0x006af1a0 and System.obj@0x006af370
+STUDIO,0x006af280,124,sub_6AF280,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color4uint8.obj@0x006af1a0 and System.obj@0x006af370
+STUDIO,0x006af300,97,sub_6AF300,,G3D,8.00-roblox,no,,,no compiled counterpart; between Color4uint8.obj@0x006af1a0 and System.obj@0x006af370
+STUDIO,0x006af370,116,?initTime@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::initTime(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x006af690
+STUDIO,0x006af3f0,76,sub_6AF3F0,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006af370 and System.obj@0x006af570
+STUDIO,0x006af440,267,_ZN3G3D6System13alignedMallocEmm,"G3D::System::alignedMalloc(unsigned long, unsigned long)",G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006af370 and System.obj@0x006af570; ios: name
+STUDIO,0x006af550,22,sub_6AF550,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006af370 and System.obj@0x006af570
+STUDIO,0x006af570,76,?cpuid@System@G3D@@CAXW4CPUIDFunction@12@AAI111@Z,"private: static void __cdecl G3D::System::cpuid(enum G3D::System::CPUIDFunction, unsigned int &, unsigned int &, unsigned int &, unsigned int &)",G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x006af690
+STUDIO,0x006af5c0,197,?getStandardProcessorExtensions@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::getStandardProcessorExtensions(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::init@0x006af690
+STUDIO,0x006af690,772,?init@System@G3D@@AAEXXZ,private: void __thiscall G3D::System::init(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::System@0x006afbd0
+STUDIO,0x006af9a0,160,sub_6AF9A0,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006af690 and System.obj@0x006afbd0
+STUDIO,0x006afa40,385,sub_6AFA40,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006af690 and System.obj@0x006afbd0
+STUDIO,0x006afbd0,216,??0System@G3D@@AAE@XZ,private: __thiscall G3D::System::System(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::instance@0x006afe20
+STUDIO,0x006afcb0,359,sub_6AFCB0,,G3D,8.00-roblox,no,,obj/G3D/System.obj,no compiled counterpart; between System.obj@0x006afbd0 and System.obj@0x006afe20
+STUDIO,0x006afe20,90,?instance@System@G3D@@CAAAV12@XZ,private: static class G3D::System & __cdecl G3D::System::instance(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,reloc: referenced by G3D::System::time@0x006afe80 (+2)
+STUDIO,0x006afe80,91,?time@System@G3D@@SANXZ,public: static double __cdecl G3D::System::time(void),G3D,8.00-roblox,yes,0,obj/G3D/System.obj,search: unique masked body in .text
+STUDIO,0x006afee0,251,sub_6AFEE0,,G3D,8.00-roblox,no,,,no compiled counterpart; between System.obj@0x006afe80 and Vector3int16.obj@0x006affe0
+STUDIO,0x006affe0,97,??0Vector3int16@G3D@@QAE@ABVVector3@1@@Z,public: __thiscall G3D::Vector3int16::Vector3int16(class G3D::Vector3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+STUDIO,0x006b0050,51,?zero@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::zero(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+STUDIO,0x006b0090,49,?one@Vector3int16@G3D@@SAABV12@XZ,public: static class G3D::Vector3int16 const & __cdecl G3D::Vector3int16::one(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector3int16.obj,search: unique masked body in .text
+STUDIO,0x006b00d0,137,?inf@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,reloc: referenced by G3D::Color4::operator/@0x006b01a0
+STUDIO,0x006b00d0,137,?nan@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: unique masked body in .text
+STUDIO,0x006b00d0,137,?inf@Vector4@G3D@@SAABV12@XZ,public: static class G3D::Vector4 const & __cdecl G3D::Vector4::inf(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,reloc: referenced by G3D::Vector4::operator/@0x006b01a0
+STUDIO,0x006b00d0,137,?nan@Vector4@G3D@@SAABV12@XZ,public: static class G3D::Vector4 const & __cdecl G3D::Vector4::nan(void),G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006b0160,60,?clear@Color4@G3D@@SAABV12@XZ,public: static class G3D::Color4 const & __cdecl G3D::Color4::clear(void),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: only masked-body hit between located neighbours
+STUDIO,0x006b01a0,128,??KColor4@G3D@@QBE?AV01@M@Z,public: class G3D::Color4 __thiscall G3D::Color4::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,search: unique masked body in .text
+STUDIO,0x006b01a0,128,??KVector4@G3D@@QBE?AV01@M@Z,public: class G3D::Vector4 __thiscall G3D::Vector4::operator/(float) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006b0220,23,?xyz@Quat@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Quat::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,search: unique masked body in .text
+STUDIO,0x006b0220,23,?xyz@Vector3@G3D@@QBE?AV12@XZ,public: class G3D::Vector3 __thiscall G3D::Vector3::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector3.obj,search: unique masked body in .text
+STUDIO,0x006b0220,23,?xyz@Vector4@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Vector4::xyz(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Vector4.obj,search: unique masked body in .text
+STUDIO,0x006b0240,361,?decompress@BinaryInput@G3D@@AAEXXZ,private: void __thiscall G3D::BinaryInput::decompress(void),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570; lib: name
+STUDIO,0x006b03b0,101,??1filebuf@@UAE@XZ,public: virtual __thiscall filebuf::~filebuf(void),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570; flirt: name
+STUDIO,0x006b0420,87,sub_6B0420,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570
+STUDIO,0x006b0480,30,??_Gfilebuf@@UAEPAXI@Z,public: virtual void * __thiscall filebuf::`scalar deleting destructor'(unsigned int),G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570; flirt: name
+STUDIO,0x006b04a0,136,sub_6B04A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570
+STUDIO,0x006b0530,32,sub_6B0530,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570
+STUDIO,0x006b0550,29,sub_6B0550,,G3D,8.00-roblox,no,,,no compiled counterpart; between Vector4.obj@0x006b0220 and BinaryInput.obj@0x006b0570
+STUDIO,0x006b0570,246,?loadIntoMemory@BinaryInput@G3D@@AAEX_J0@Z,"private: void __thiscall G3D::BinaryInput::loadIntoMemory(__int64, __int64)",G3D,8.00-roblox,yes,0,obj/G3D/BinaryInput.obj,reloc: referenced by G3D::BinaryInput::readUInt16@0x0057e410 (+3)
+STUDIO,0x006b0670,258,sub_6B0670,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0780,103,sub_6B0780,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b07f0,43,sub_6B07F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0820,194,_ZN3G3D11BinaryInput10readStringEx,G3D::BinaryInput::readString(long long),G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590; ios: name
+STUDIO,0x006b08f0,184,sub_6B08F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b09b0,439,sub_6B09B0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0b70,67,sub_6B0B70,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0bc0,72,sub_6B0BC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0c10,44,sub_6B0C10,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0c40,53,sub_6B0C40,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0c80,46,sub_6B0C80,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0cb0,42,sub_6B0CB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b0ce0,837,_ZN3G3D11BinaryInputC2ERKSsNS_9G3DEndianEb,"G3D::BinaryInput::BinaryInput(std::string const&, G3D::G3DEndian, bool)",G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590; ios: name
+STUDIO,0x006b1030,439,sub_6B1030,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b11f0,442,sub_6B11F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b13b0,21,sub_6B13B0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b13d0,66,sub_6B13D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b1420,361,sub_6B1420,,G3D,8.00-roblox,no,,,no compiled counterpart; between BinaryInput.obj@0x006b0570 and fileutils.obj@0x006b1590
+STUDIO,0x006b1590,83,?filenameContainsWildcards@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"bool __cdecl G3D::filenameContainsWildcards(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,search: unique masked body in .text
+STUDIO,0x006b15f0,15,sub_6B15F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1600,97,sub_6B1600,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1670,122,sub_6B1670,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b16f0,332,sub_6B16F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1840,211,sub_6B1840,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1920,65,sub_6B1920,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1970,136,sub_6B1970,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1a00,168,sub_6B1A00,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1ab0,180,sub_6B1AB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1b70,263,sub_6B1B70,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1c80,160,sub_6B1C80,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1d20,157,sub_6B1D20,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1dc0,157,sub_6B1DC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1e60,353,sub_6B1E60,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b1fd0,72,sub_6B1FD0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2020,8,sub_6B2020,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2030,333,sub_6B2030,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2180,77,sub_6B2180,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b21d0,204,sub_6B21D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b22a0,90,sub_6B22A0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2300,76,sub_6B2300,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2350,116,sub_6B2350,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b23d0,49,sub_6B23D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2410,278,sub_6B2410,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2530,123,_ZN3G3D5TableISsb9HashTraitISsE11EqualsTraitISsEED2Ev,"G3D::Table<std::string, bool, HashTrait<std::string>, EqualsTrait<std::string>>::~Table()",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b25b0,30,_ZN3G3D5TableISsb9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Table<std::string, bool, HashTrait<std::string>, EqualsTrait<std::string>>::~Table() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b25d0,14,sub_6B25D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b25e0,88,sub_6B25E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2640,748,sub_6B2640,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2930,39,_ZN3G3D3SetISs9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Set<std::string, HashTrait<std::string>, EqualsTrait<std::string>>::~Set() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b2960,175,sub_6B2960,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2a10,213,sub_6B2A10,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2af0,123,_ZN3G3D5TableISsNS_10FileSystem3DirE9HashTraitISsE11EqualsTraitISsEED2Ev,"G3D::Table<std::string, G3D::FileSystem::Dir, HashTrait<std::string>, EqualsTrait<std::string>>::~Table()",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b2b70,157,sub_6B2B70,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2c10,30,_ZN3G3D5TableISsNS_10FileSystem3DirE9HashTraitISsE11EqualsTraitISsEED0Ev,"G3D::Table<std::string, G3D::FileSystem::Dir, HashTrait<std::string>, EqualsTrait<std::string>>::~Table() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b2c30,102,sub_6B2C30,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2ca0,81,sub_6B2CA0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2d00,439,sub_6B2D00,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2ec0,105,sub_6B2EC0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2f30,94,_ZN3G3D17FileSystemDeleterD1Ev,G3D::FileSystemDeleter::~FileSystemDeleter(),G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0; ios: name
+STUDIO,0x006b2f90,11,sub_6B2F90,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2fa0,46,sub_6B2FA0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b2fd0,495,sub_6B2FD0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b31c0,280,sub_6B31C0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b32e0,270,sub_6B32E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b33f0,352,sub_6B33F0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3550,1031,sub_6B3550,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3960,717,sub_6B3960,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3c30,57,sub_6B3C30,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3c70,50,sub_6B3C70,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3cb0,32,sub_6B3CB0,,G3D,8.00-roblox,no,,,no compiled counterpart; between fileutils.obj@0x006b1590 and Random.obj@0x006b3cd0
+STUDIO,0x006b3cd0,101,??0Random@G3D@@QAE@I_N@Z,"public: __thiscall G3D::Random::Random(unsigned int, bool)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,reloc: referenced by G3D::Random::common@0x006b4240
+STUDIO,0x006b3d40,71,?bits@Random@G3D@@UAEIXZ,public: virtual unsigned int __thiscall G3D::Random::bits(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b3d90,446,?generate@Random@G3D@@MAEXXZ,protected: virtual void __thiscall G3D::Random::generate(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b3f50,88,?integer@Random@G3D@@UAEHHH@Z,"public: virtual int __thiscall G3D::Random::integer(int, int)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b3fb0,157,?gaussian@Random@G3D@@UAEMMM@Z,"public: virtual float __thiscall G3D::Random::gaussian(float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b4050,90,?cosHemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::cosHemi(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b40b0,101,?cosPowHemi@Random@G3D@@UAEXMAAM00@Z,"public: virtual void __thiscall G3D::Random::cosPowHemi(float, float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b4120,33,?hemi@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::hemi(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b4150,172,?sphere@Random@G3D@@UAEXAAM00@Z,"public: virtual void __thiscall G3D::Random::sphere(float &, float &, float &)",G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b4200,50,??_GRandom@G3D@@UAEPAXI@Z,public: virtual void * __thiscall G3D::Random::`scalar deleting dtor'(unsigned int),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,inline/template COMDAT (select-any) inside its TU span; search: unique masked body in .text
+STUDIO,0x006b4240,96,?common@Random@G3D@@SAAAV12@XZ,public: static class G3D::Random & __cdecl G3D::Random::common(void),G3D,8.00-roblox,yes,0,obj/G3D/Random.obj,search: unique masked body in .text
+STUDIO,0x006b42a0,449,?stringToFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::stringToFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/GImage.obj,reloc: referenced by G3D::GImage::resolveFormat@0x006b4470
+STUDIO,0x006b4470,951,?resolveFormat@GImage@G3D@@SA?AW4Format@12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBEHW4312@@Z,"public: static enum G3D::GImage::Format __cdecl G3D::GImage::resolveFormat(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, unsigned char const *, int, enum G3D::GImage::Format)",G3D,8.00-roblox,yes,0,obj/G3D/GImage.obj,search: unique masked body in .text
+STUDIO,0x006b4830,232,sub_6B4830,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x006b4470 and CollisionDetection.obj@0x006b49f0
+STUDIO,0x006b4920,31,sub_6B4920,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x006b4470 and CollisionDetection.obj@0x006b49f0
+STUDIO,0x006b4940,7,sub_6B4940,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x006b4470 and CollisionDetection.obj@0x006b49f0
+STUDIO,0x006b4950,116,sub_6B4950,,G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x006b4470 and CollisionDetection.obj@0x006b49f0
+STUDIO,0x006b49d0,31,_ZN3G3D11LineSegmentD0Ev,"G3D::LineSegment::~LineSegment() [D0, deleting: the MSVC scalar deleting destructor]",G3D,8.00-roblox,no,,,no compiled counterpart; between GImage.obj@0x006b4470 and CollisionDetection.obj@0x006b49f0; ios: name
+STUDIO,0x006b49f0,540,?collisionLocationForMovingPointFixedAABox@CollisionDetection@G3D@@SA_NABVVector3@2@0ABVAABox@2@AAV32@AA_N2@Z,"public: static bool __cdecl G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::AABox const &, class G3D::Vector3 &, bool &, class G3D::Vector3 &)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+STUDIO,0x006b4c10,1543,?findRayCapsuleIntersectionAux@G3D@@YAHABVVector3@1@0ABVCapsule@1@QAN@Z,"int __cdecl G3D::findRayCapsuleIntersectionAux(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Capsule const &, double *const)",G3D,8.00-roblox,no,1361,obj/G3D/CollisionDetection.obj,xref: only function referencing 3 of its located callees/data (similarity 0.96)
+STUDIO,0x006b5200,745,?collisionTimeForMovingPointFixedSphere@CollisionDetection@G3D@@SAMABVVector3@2@0ABVSphere@2@AAV32@2_N@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Sphere const &, class G3D::Vector3 &, class G3D::Vector3 &, bool)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+STUDIO,0x006b54f0,171,?findRayCapsuleIntersection@G3D@@YA_NABVRay@1@ABVCapsule@1@AAHQAVVector3@1@@Z,"bool __cdecl G3D::findRayCapsuleIntersection(class G3D::Ray const &, class G3D::Capsule const &, int &, class G3D::Vector3 *const)",G3D,8.00-roblox,no,157,obj/G3D/CollisionDetection.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x006b55a0
+STUDIO,0x006b55a0,899,?collisionTimeForMovingPointFixedCapsule@CollisionDetection@G3D@@SAMABVVector3@2@0ABVCapsule@2@AAV32@2@Z,"public: static float __cdecl G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Capsule const &, class G3D::Vector3 &, class G3D::Vector3 &)",G3D,8.00-roblox,yes,0,obj/G3D/CollisionDetection.obj,search: unique masked body in .text
+STUDIO,0x006b5930,735,_crc32_little,_crc32_little,zlib,1.2.3,yes,0,obj/zlib/crc32.obj,reloc: referenced by crc32@0x006b5c10
+STUDIO,0x006b5c10,29,_crc32@12,_crc32@12,zlib,1.2.3,yes,0,obj/zlib/crc32.obj,reloc: referenced by deflate@0x006b5cb0 (+31)
+STUDIO,0x006b5c30,39,_putShortMSB,_putShortMSB,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate@0x006b5cb0 (+4)
+STUDIO,0x006b5c60,78,_flush_pending,_flush_pending,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate@0x006b5cb0 (+9)
+STUDIO,0x006b5cb0,1991,_deflate@8,_deflate@8,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by add_data_uncomp@0x006bbd20
+STUDIO,0x006b6480,214,_deflateEnd@4,_deflateEnd@4,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateInit2_@0x006b7390 (+3)
+STUDIO,0x006b6560,136,_lm_init,_lm_init,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateReset@0x006b7300
+STUDIO,0x006b65f0,344,_longest_match,_longest_match,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_fast@0x006b6b10 (+1)
+STUDIO,0x006b6750,159,_longest_match_fast,_longest_match_fast,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_fast@0x006b6b10 (+1)
+STUDIO,0x006b67f0,330,_fill_window,_fill_window,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflate_stored@0x006b6940 (+2)
+STUDIO,0x006b6940,462,_deflate_stored,_deflate_stored,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+STUDIO,0x006b6b10,878,_deflate_fast,_deflate_fast,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+STUDIO,0x006b6e80,1146,_deflate_slow,_deflate_slow,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,search: unique masked body in .text
+STUDIO,0x006b7300,144,_deflateReset@4,_deflateReset@4,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by deflateInit2_@0x006b7390
+STUDIO,0x006b7390,541,_deflateInit2_@32,_deflateInit2_@32,zlib,1.2.3,yes,0,obj/zlib/deflate.obj,reloc: referenced by add_data_uncomp@0x006bbd20
+STUDIO,0x006b75b0,97,_inflateReset@4,_inflateReset@4,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflateInit2_@0x006b7620
+STUDIO,0x006b7620,206,_inflateInit2_@16,_inflateInit2_@16,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflateInit_@0x006b76f0 (+1)
+STUDIO,0x006b76f0,25,_inflateInit_@12,_inflateInit_@12,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x006bb790
+STUDIO,0x006b7710,224,_updatewindow,_updatewindow,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by inflate@0x006b77f0
+STUDIO,0x006b77f0,5356,_inflate@8,_inflate@8,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x006bb790 (+1)
+STUDIO,0x006b8ce0,78,_inflateEnd@4,_inflateEnd@4,zlib,1.2.3,yes,0,obj/zlib/inflate.obj,reloc: referenced by uncompress@0x006bb790 (+2)
+STUDIO,0x006b8d30,275,??0Plane@G3D@@QAE@ABVVector3@1@00@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,search: unique masked body in .text
+STUDIO,0x006b8e50,159,??0Plane@G3D@@QAE@ABVVector3@1@0@Z,"public: __thiscall G3D::Plane::Plane(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,reloc: referenced by G3D::CoordinateFrame::toObjectSpace@0x006ad5e0 (+1)
+STUDIO,0x006b8ef0,148,?fromEquation@Plane@G3D@@SA?AV12@MMMM@Z,"public: static class G3D::Plane __cdecl G3D::Plane::fromEquation(float, float, float, float)",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,search: unique masked body in .text
+STUDIO,0x006b8f90,44,?getEquation@Plane@G3D@@QBEXAAVVector3@2@AAM@Z,"public: void __thiscall G3D::Plane::getEquation(class G3D::Vector3 &, float &) const",G3D,8.00-roblox,yes,0,obj/G3D/Plane.obj,reloc: referenced by G3D::Line::intersection@0x006b9ee0
+STUDIO,0x006b8fc0,276,?vformat@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDPAD@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::vformat(char const *, char *)",G3D,8.00-roblox,yes,0,obj/G3D/format.obj,reloc: referenced by G3D::format@0x006b90e0
+STUDIO,0x006b90e0,38,?format@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::format(char const *, ...)",G3D,8.00-roblox,yes,0,obj/G3D/format.obj,reloc: referenced by G3D::Sphere::toString@0x006b9aa0
+STUDIO,0x006b9110,28,?crc32@Crypto@G3D@@SAIPBXI@Z,"public: static unsigned int __cdecl G3D::Crypto::crc32(void const *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/Crypto.obj,search: unique masked body in .text
+STUDIO,0x006b9130,84,?beginsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::beginsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: unique masked body in .text
+STUDIO,0x006b9190,117,?endsWith@G3D@@YA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z,"bool __cdecl G3D::endsWith(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: unique masked body in .text
+STUDIO,0x006b9210,191,?toUpper@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toUpper(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,reloc: referenced by G3D::GImage::stringToFormat@0x006b42a0 (+1)
+STUDIO,0x006b92d0,191,?toLower@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::toLower(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/stringutils.obj,search: only masked-body hit between located neighbours
+STUDIO,0x006b9390,70,sub_6B9390,,G3D,8.00-roblox,no,,,no compiled counterpart; between stringutils.obj@0x006b92d0 and prompt.obj@0x006b9410
+STUDIO,0x006b93e0,44,sub_6B93E0,,G3D,8.00-roblox,no,,,no compiled counterpart; between stringutils.obj@0x006b92d0 and prompt.obj@0x006b9410
+STUDIO,0x006b9410,185,?PromptDlgProc@_internal@G3D@@YGHPAUHWND__@@IIJ@Z,"int __stdcall G3D::_internal::PromptDlgProc(struct HWND__*, unsigned int, unsigned int, long)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::guiPrompt@0x006b98f0
+STUDIO,0x006b94d0,248,?textPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::textPrompt(char const *, char const *, char const **, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::prompt@0x006b9a40
+STUDIO,0x006b95d0,96,?AppendData@DialogTemplate@_internal@G3D@@IAEXPBXH@Z,"protected: void __thiscall G3D::_internal::DialogTemplate::AppendData(void const *, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::_internal::DialogTemplate::AppendString@0x006b9630 (+11)
+STUDIO,0x006b9630,89,?AppendString@DialogTemplate@_internal@G3D@@IAEXPBD@Z,protected: void __thiscall G3D::_internal::DialogTemplate::AppendString(char const *),G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::_internal::DialogTemplate::DialogTemplate@0x006b9690 (+3)
+STUDIO,0x006b9690,190,??0DialogTemplate@_internal@G3D@@QAE@PBDKHHHH0G@Z,"public: __thiscall G3D::_internal::DialogTemplate::DialogTemplate(char const *, unsigned long, int, int, int, int, char const *, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x006b98f0
+STUDIO,0x006b9750,207,?AddButton@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddButton(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x006b98f0
+STUDIO,0x006b9820,207,?AddEditBox@DialogTemplate@_internal@G3D@@QAEXPBDKKHHHHG@Z,"public: void __thiscall G3D::_internal::DialogTemplate::AddEditBox(char const *, unsigned long, unsigned long, int, int, int, int, unsigned short)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,inline/template COMDAT (select-any) inside its TU span; reloc: referenced by G3D::guiPrompt@0x006b98f0
+STUDIO,0x006b98f0,328,?guiPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::guiPrompt(char const *, char const *, char const **, int)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,reloc: referenced by G3D::prompt@0x006b9a40
+STUDIO,0x006b9a40,44,?prompt@G3D@@YAHPBD0PAPBDH_N@Z,"int __cdecl G3D::prompt(char const *, char const *, char const **, int, bool)",G3D,8.00-roblox,yes,0,obj/G3D/prompt.obj,search: unique masked body in .text
+STUDIO,0x006b9a70,43,sub_6B9A70,,G3D,8.00-roblox,no,,,no compiled counterpart; between prompt.obj@0x006b9a40 and Sphere.obj@0x006b9aa0
+STUDIO,0x006b9aa0,65,?toString@Sphere@G3D@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ,"public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall G3D::Sphere::toString(void) const",G3D,8.00-roblox,yes,0,obj/G3D/Sphere.obj,search: unique masked body in .text
+STUDIO,0x006b9af0,92,?contains@Sphere@G3D@@QBE_NABVVector3@2@@Z,public: bool __thiscall G3D::Sphere::contains(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Sphere.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedSphere@0x006b5200
+STUDIO,0x006b9b50,902,?set@Ray@G3D@@QAEXABVVector3@2@0@Z,"public: void __thiscall G3D::Ray::set(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Ray.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x006b55a0
+STUDIO,0x006b9ee0,277,?intersection@Line@G3D@@QBE?AVVector3@2@ABVPlane@2@@Z,public: class G3D::Vector3 __thiscall G3D::Line::intersection(class G3D::Plane const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,search: unique masked body in .text
+STUDIO,0x006ba000,143,?closestPoint@Line@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::Line::closestPoint(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,search: unique masked body in .text
+STUDIO,0x006ba090,24,?point@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::point(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x006ad8a0
+STUDIO,0x006ba0b0,24,?direction@Line@G3D@@QBE?AVVector3@2@XZ,public: class G3D::Vector3 __thiscall G3D::Line::direction(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Line.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x006ad8a0
+STUDIO,0x006ba0d0,272,sub_6BA0D0,,G3D,8.00-roblox,no,,,no compiled counterpart; between Line.obj@0x006ba0b0 and Capsule.obj@0x006ba1e0
+STUDIO,0x006ba1e0,57,??0Capsule@G3D@@QAE@ABVVector3@1@0M@Z,"public: __thiscall G3D::Capsule::Capsule(class G3D::Vector3 const &, class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Capsule.obj,search: unique masked body in .text
+STUDIO,0x006ba1e0,57,??0Cylinder@G3D@@QAE@ABVVector3@1@0M@Z,"public: __thiscall G3D::Cylinder::Cylinder(class G3D::Vector3 const &, class G3D::Vector3 const &, float)",G3D,8.00-roblox,yes,0,obj/G3D/Cylinder.obj,search: unique masked body in .text
+STUDIO,0x006ba220,373,??0Quat@G3D@@QAE@ABVMatrix3@1@@Z,public: __thiscall G3D::Quat::Quat(class G3D::Matrix3 const &),G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x006ae400 (+1)
+STUDIO,0x006ba3a0,245,?nlerp@Quat@G3D@@QBE?AV12@ABV12@M@Z,"public: class G3D::Quat __thiscall G3D::Quat::nlerp(class G3D::Quat const &, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::Quat::slerp@0x006ba4e0
+STUDIO,0x006ba4a0,57,?toRotationMatrix@Quat@G3D@@QBE?AVMatrix3@2@XZ,public: class G3D::Matrix3 __thiscall G3D::Quat::toRotationMatrix(void) const,G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x006ae400
+STUDIO,0x006ba4e0,585,?slerp@Quat@G3D@@QBE?AV12@ABV12@MM@Z,"public: class G3D::Quat __thiscall G3D::Quat::slerp(class G3D::Quat const &, float, float) const",G3D,8.00-roblox,yes,0,obj/G3D/Quat.obj,reloc: referenced by G3D::CoordinateFrame::lerp@0x006ae400
+STUDIO,0x006ba730,543,?init@Box@G3D@@AAEXABVVector3@2@0@Z,"private: void __thiscall G3D::Box::init(class G3D::Vector3 const &, class G3D::Vector3 const &)",G3D,8.00-roblox,yes,0,obj/G3D/Box.obj,reloc: referenced by G3D::Box::Box@0x006ba950
+STUDIO,0x006ba950,243,??0Box@G3D@@QAE@ABVAABox@1@@Z,public: __thiscall G3D::Box::Box(class G3D::AABox const &),G3D,8.00-roblox,yes,0,obj/G3D/Box.obj,reloc: referenced by G3D::CoordinateFrame::toWorldSpace@0x006ae560
+STUDIO,0x006baa50,207,?getRootKeyFromString@G3D@@YAPAUHKEY__@@PBDI@Z,"struct HKEY__* __cdecl G3D::getRootKeyFromString(char const *, unsigned int)",G3D,8.00-roblox,yes,0,obj/G3D/RegistryUtil.obj,reloc: referenced by G3D::RegistryUtil::readInt32@0x006bab20
+STUDIO,0x006bab20,205,?readInt32@RegistryUtil@G3D@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0AAH@Z,"public: static bool __cdecl G3D::RegistryUtil::readInt32(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int &)",G3D,8.00-roblox,yes,0,obj/G3D/RegistryUtil.obj,reloc: referenced by G3D::System::init@0x006af690
+STUDIO,0x006babf0,91,?filenameExt@G3D@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV23@@Z,"class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::filenameExt(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,reloc: referenced by G3D::GImage::resolveFormat@0x006b4470
+STUDIO,0x006bac50,96,sub_6BAC50,,G3D,8.00-roblox,no,,obj/G3D/fileutils.obj,no compiled counterpart; between fileutils.obj@0x006babf0 and fileutils.obj@0x006bacb0
+STUDIO,0x006bacb0,1327,?parseFilename@G3D@@YAXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAV23@AAV?$Array@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@$09$0CA@@1@11@Z,"void __cdecl G3D::parseFilename(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class G3D::Array<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, 10, 32> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> &)",G3D,8.00-roblox,yes,0,obj/G3D/fileutils.obj,search: unique masked body in .text
+STUDIO,0x006bb1e0,1443,sub_6BB1E0,,G3D-block,,no,,,no compiled counterpart; between fileutils.obj@0x006bacb0 and uncompr.obj@0x006bb790
+STUDIO,0x006bb790,169,_uncompress@16,_uncompress@16,zlib,1.2.3,yes,0,obj/zlib/uncompr.obj,search: unique masked body in .text
+STUDIO,0x006bb840,58,_ch_set_error,_ch_set_error,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x006bbf50
+STUDIO,0x006bb880,249,_copy_data,_copy_data,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bb980,217,_write_cdir,_write_cdir,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bba60,102,__zip_cdir_set_comment,__zip_cdir_set_comment,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bbad0,86,__zip_changed,__zip_changed,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bbb30,212,__zip_create_temp_output,__zip_create_temp_output,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bbc10,28,__zip_torrentzip_cmp,__zip_torrentzip_cmp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bbc30,237,_add_data_comp,_add_data_comp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x006bbf50
+STUDIO,0x006bbd20,551,_add_data_uncomp,_add_data_uncomp,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by add_data@0x006bbf50
+STUDIO,0x006bbf50,575,_add_data,_add_data,libzip,0.9,yes,0,obj/libzip/zip_close.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006bc190,1901,_zip_close,_zip_close,libzip,0.9,yes,0,obj/libzip/zip_close.obj,search: unique masked body in .text
+STUDIO,0x006bc900,143,_zip_fclose,_zip_fclose,libzip,0.9,yes,0,obj/libzip/zip_fclose.obj,reloc: referenced by zip_fopen_index@0x006c1c40 (+4)
+STUDIO,0x006bc990,404,_zip_fread,_zip_fread,libzip,0.9,yes,0,obj/libzip/zip_fread.obj,reloc: referenced by read_zip@0x006c15f0 (+1)
+STUDIO,0x006bcb30,48,_zip_fopen,_zip_fopen,libzip,0.9,yes,0,obj/libzip/zip_fopen.obj,search: unique masked body in .text
+STUDIO,0x006bcb60,54,_zip_stat,_zip_stat,libzip,0.9,yes,0,obj/libzip/zip_stat.obj,search: unique masked body in .text
+STUDIO,0x006bcba0,48,_zip_stat_init,_zip_stat_init,libzip,0.9,yes,0,obj/libzip/zip_stat_init.obj,search: unique masked body in .text
+STUDIO,0x006bcbd0,61,_set_error,_set_error,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x006bd320
+STUDIO,0x006bcc10,567,__zip_readcdir,__zip_readcdir,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x006bd320
+STUDIO,0x006bce50,202,__zip_check_torrentzip,__zip_check_torrentzip,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x006bd540
+STUDIO,0x006bcf20,147,__zip_allocate_new,__zip_allocate_new,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x006bd540 (+2)
+STUDIO,0x006bcfc0,112,__zip_file_exists,__zip_file_exists,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x006bd540
+STUDIO,0x006bd030,182,__zip_memmem,__zip_memmem,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x006bd320 (+1)
+STUDIO,0x006bd0f0,559,__zip_checkcons,__zip_checkcons,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by _zip_find_central_dir@0x006bd320 (+2)
+STUDIO,0x006bd320,530,__zip_find_central_dir,__zip_find_central_dir,libzip,0.9,yes,0,obj/libzip/zip_open.obj,reloc: referenced by zip_open@0x006bd540
+STUDIO,0x006bd540,356,_zip_open,_zip_open,libzip,0.9,yes,0,obj/libzip/zip_open.obj,search: unique masked body in .text
+STUDIO,0x006bd6b0,269,?rangematch@G3D@@YAHPBDDHPAPAD@Z,"int __cdecl G3D::rangematch(char const *, char, int, char **)",G3D,8.00-roblox,yes,0,obj/G3D/g3dfnmatch.obj,reloc: referenced by G3D::g3dfnmatch@0x006bd7c0
+STUDIO,0x006bd7c0,649,?g3dfnmatch@G3D@@YAHPBD0H@Z,"int __cdecl G3D::g3dfnmatch(char const *, char const *, int)",G3D,8.00-roblox,yes,0,obj/G3D/g3dfnmatch.obj,search: unique masked body in .text
+STUDIO,0x006bda50,391,_zip_stat_index,_zip_stat_index,libzip,0.9,yes,0,obj/libzip/zip_stat_index.obj,reloc: referenced by zip_source_zip@0x006c1780 (+1)
+STUDIO,0x006bdbe0,16,_zip_get_num_files,_zip_get_num_files,libzip,0.9,yes,0,obj/libzip/zip_get_num_files.obj,search: unique masked body in .text
+STUDIO,0x006bdbf0,231,sub_6BDBF0,,G3D-block,,no,,,no compiled counterpart; between zip_get_num_files.obj@0x006bdbe0 and LineSegment.obj@0x006bdce0
+STUDIO,0x006bdce0,434,?closestPoint@LineSegment@G3D@@QBE?AVVector3@2@ABV32@@Z,public: class G3D::Vector3 __thiscall G3D::LineSegment::closestPoint(class G3D::Vector3 const &) const,G3D,8.00-roblox,yes,0,obj/G3D/LineSegment.obj,reloc: referenced by G3D::CollisionDetection::collisionTimeForMovingPointFixedCapsule@0x006b55a0
+STUDIO,0x006bdea0,624,_adler32@12,_adler32@12,zlib,1.2.3,yes,0,obj/zlib/adler32.obj,reloc: referenced by deflate@0x006b5cb0 (+6)
+STUDIO,0x006be110,117,_init_block,_init_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_init@0x006bf310 (+1)
+STUDIO,0x006be190,196,_pqdownheap,_pqdownheap,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x006bf400 (+2)
+STUDIO,0x006be260,531,_gen_bitlen,_gen_bitlen,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x006bf400
+STUDIO,0x006be480,222,_scan_tree,_scan_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_bl_tree@0x006bf600 (+1)
+STUDIO,0x006be560,1291,_send_tree,_send_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by send_all_trees@0x006bea70 (+1)
+STUDIO,0x006bea70,602,_send_all_trees,_send_all_trees,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x006bf960
+STUDIO,0x006becd0,1015,_compress_block,_compress_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x006bf960 (+1)
+STUDIO,0x006bf0d0,201,_set_data_type,_set_data_type,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x006bf960
+STUDIO,0x006bf1a0,114,_bi_flush,_bi_flush,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_align@0x006bf770 (+2)
+STUDIO,0x006bf220,85,_bi_windup,_bi_windup,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by copy_block@0x006bf280 (+1)
+STUDIO,0x006bf280,138,_copy_block,_copy_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_stored_block@0x006bf6d0 (+1)
+STUDIO,0x006bf310,100,__tr_init,__tr_init,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflateReset@0x006b7300
+STUDIO,0x006bf380,113,_gen_codes,_gen_codes,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_tree@0x006bf400
+STUDIO,0x006bf400,497,_build_tree,_build_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by build_bl_tree@0x006bf600 (+2)
+STUDIO,0x006bf600,199,_build_bl_tree,_build_bl_tree,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by _tr_flush_block@0x006bf960
+STUDIO,0x006bf6d0,157,__tr_stored_block,__tr_stored_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate@0x006b5cb0 (+1)
+STUDIO,0x006bf770,493,__tr_align,__tr_align,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate@0x006b5cb0
+STUDIO,0x006bf960,516,__tr_flush_block,__tr_flush_block,zlib,1.2.3,yes,0,obj/zlib/trees.obj,reloc: referenced by deflate_stored@0x006b6940 (+7)
+STUDIO,0x006bfb70,20,_zcalloc,_zcalloc,zlib,1.2.3,yes,0,obj/zlib/zutil.obj,reloc: referenced by deflateInit2_@0x006b7390 (+1)
+STUDIO,0x006bfb90,13,_zcfree,_zcfree,zlib,1.2.3,yes,0,obj/zlib/zutil.obj,reloc: referenced by deflateInit2_@0x006b7390 (+1)
+STUDIO,0x006bfba0,1110,_inflate_fast,_inflate_fast,zlib,1.2.3,yes,0,obj/zlib/inffast.obj,reloc: referenced by inflate@0x006b77f0
+STUDIO,0x006c0000,1226,_inflate_table,_inflate_table,zlib,1.2.3,yes,0,obj/zlib/inftrees.obj,reloc: referenced by inflate@0x006b77f0 (+2)
+STUDIO,0x006c04d0,249,__zip_name_locate,__zip_name_locate,libzip,0.9,yes,0,obj/libzip/zip_name_locate.obj,reloc: referenced by zip_name_locate@0x006c05d0
+STUDIO,0x006c05d0,28,_zip_name_locate,_zip_name_locate,libzip,0.9,yes,0,obj/libzip/zip_name_locate.obj,reloc: referenced by zip_fopen@0x006bcb30 (+1)
+STUDIO,0x006c05f0,19,__zip_error_copy,__zip_error_copy,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by zip_fopen_index@0x006c1c40 (+3)
+STUDIO,0x006c0610,58,__zip_error_get,__zip_error_get,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by zip_file_error_get@0x006c1f50 (+2)
+STUDIO,0x006c0650,15,__zip_error_init,__zip_error_init,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by _zip_file_new@0x006c1b80 (+1)
+STUDIO,0x006c0660,22,__zip_error_set,__zip_error_set,libzip,0.9,yes,0,obj/libzip/zip_error.obj,reloc: referenced by copy_data@0x006bb880 (+73)
+STUDIO,0x006c0680,230,__zip_filerange_crc,__zip_filerange_crc,libzip,0.9,yes,0,obj/libzip/zip_filerange_crc.obj,reloc: referenced by write_cdir@0x006bb980 (+1)
+STUDIO,0x006c0770,43,_zip_get_archive_flag,_zip_get_archive_flag,libzip,0.9,yes,0,obj/libzip/zip_get_archive_flag.obj,reloc: referenced by write_cdir@0x006bb980 (+9)
+STUDIO,0x006c07a0,129,__zip_cdir_new,__zip_cdir_new,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x006bc190 (+1)
+STUDIO,0x006c0830,57,__zip_dirent_finalize,__zip_dirent_finalize,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x006bc190 (+4)
+STUDIO,0x006c0870,79,__zip_dirent_init,__zip_dirent_init,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x006bc190 (+1)
+STUDIO,0x006c08c0,227,__zip_dirent_torrent_normalize,__zip_dirent_torrent_normalize,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by add_data@0x006bbf50 (+1)
+STUDIO,0x006c09b0,120,__zip_d2u_time,__zip_d2u_time,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_dirent_read@0x006c0ba0
+STUDIO,0x006c0a30,38,__zip_read2,__zip_read2,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_readcdir@0x006bcc10 (+2)
+STUDIO,0x006c0a60,44,__zip_read4,__zip_read4,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_readcdir@0x006bcc10 (+1)
+STUDIO,0x006c0a90,136,__zip_readfpstr,__zip_readfpstr,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by _zip_dirent_read@0x006c0ba0
+STUDIO,0x006c0b20,113,__zip_cdir_free,__zip_cdir_free,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x006bc190 (+9)
+STUDIO,0x006c0ba0,1277,__zip_dirent_read,__zip_dirent_read,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by zip_close@0x006bc190 (+3)
+STUDIO,0x006c10a0,849,__zip_dirent_write,__zip_dirent_write,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by add_data@0x006bbf50 (+3)
+STUDIO,0x006c1400,383,__zip_cdir_write,__zip_cdir_write,libzip,0.9,yes,0,obj/libzip/zip_dirent.obj,reloc: referenced by write_cdir@0x006bb980
+STUDIO,0x006c1580,63,__zip_memdup,__zip_memdup,libzip,0.9,yes,0,obj/libzip/zip_memdup.obj,reloc: referenced by _zip_cdir_set_comment@0x006bba60 (+3)
+STUDIO,0x006c15c0,34,__zip_mkstemp,__zip_mkstemp,libzip,0.9,yes,0,obj/libzip/mkstemp.obj,reloc: referenced by _zip_create_temp_output@0x006bbb30
+STUDIO,0x006c15f0,392,_read_zip,_read_zip,libzip,0.9,yes,0,obj/libzip/zip_source_zip.obj,reloc: referenced by zip_source_zip@0x006c1780
+STUDIO,0x006c1780,428,_zip_source_zip,_zip_source_zip,libzip,0.9,yes,0,obj/libzip/zip_source_zip.obj,reloc: referenced by zip_close@0x006bc190
+STUDIO,0x006c1930,130,__zip_get_name,__zip_get_name,libzip,0.9,yes,0,obj/libzip/zip_get_name.obj,reloc: referenced by _zip_name_locate@0x006c04d0
+STUDIO,0x006c19c0,28,_zip_get_name,_zip_get_name,libzip,0.9,yes,0,obj/libzip/zip_get_name.obj,reloc: referenced by zip_close@0x006bc190 (+1)
+STUDIO,0x006c19e0,189,__zip_free,__zip_free,libzip,0.9,yes,0,obj/libzip/zip_free.obj,reloc: referenced by zip_close@0x006bc190 (+4)
+STUDIO,0x006c1aa0,211,__zip_file_fillbuf,__zip_file_fillbuf,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen_index@0x006c1c40 (+2)
+STUDIO,0x006c1b80,192,__zip_file_new,__zip_file_new,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen_index@0x006c1c40
+STUDIO,0x006c1c40,475,_zip_fopen_index,_zip_fopen_index,libzip,0.9,yes,0,obj/libzip/zip_fopen_index.obj,reloc: referenced by zip_fopen@0x006bcb30 (+1)
+STUDIO,0x006c1e20,27,_zip_error_get_sys_type,_zip_error_get_sys_type,libzip,0.9,yes,0,obj/libzip/zip_error_get_sys_type.obj,reloc: referenced by _zip_error_get@0x006c0610 (+2)
+STUDIO,0x006c1e40,101,__zip_new,__zip_new,libzip,0.9,yes,0,obj/libzip/zip_new.obj,reloc: referenced by _zip_allocate_new@0x006bcf20
+STUDIO,0x006c1eb0,160,__zip_entry_new,__zip_entry_new,libzip,0.9,yes,0,obj/libzip/zip_entry_new.obj,reloc: referenced by zip_open@0x006bd540
+STUDIO,0x006c1f50,16,_zip_file_error_get,_zip_file_error_get,libzip,0.9,yes,0,obj/libzip/zip_file_error_get.obj,reloc: referenced by read_zip@0x006c15f0
+STUDIO,0x006c1f60,58,_zip_source_function,_zip_source_function,libzip,0.9,yes,0,obj/libzip/zip_source_function.obj,reloc: referenced by zip_source_zip@0x006c1780
+STUDIO,0x006c1fa0,57,__zip_entry_free,__zip_entry_free,libzip,0.9,yes,0,obj/libzip/zip_entry_free.obj,reloc: referenced by _zip_free@0x006c19e0
+STUDIO,0x006c1fe0,144,__zip_file_get_offset,__zip_file_get_offset,libzip,0.9,yes,0,obj/libzip/zip_file_get_offset.obj,reloc: referenced by zip_fopen_index@0x006c1c40
+STUDIO,0x006c2070,60,__zip_unchange_data,__zip_unchange_data,libzip,0.9,yes,0,obj/libzip/zip_unchange_data.obj,reloc: referenced by _zip_entry_free@0x006c1fa0
+STUDIO,0x0078ad10,3,?isThreadsafe@MemoryManager@G3D@@UBE_NXZ,public: virtual bool __thiscall G3D::MemoryManager::isThreadsafe(void) const,G3D,8.00-roblox,yes,0,obj/G3D/MemoryManager.obj,"data: entry of ?_7MemoryManager at 0x00be0f94; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x00a97bf0,121,??0Color4@G3D@@QAE@ABVColor4uint8@1@@Z,public: __thiscall G3D::Color4::Color4(class G3D::Color4uint8 const &),G3D,8.00-roblox,yes,0,obj/G3D/Color4.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"
+STUDIO,0x00a98c80,169,??0LightingParameters@G3D@@QAE@XZ,public: __thiscall G3D::LightingParameters::LightingParameters(void),G3D,8.00-roblox,yes,0,obj/G3D/LightingParameters.obj,"search: unique masked body in .text; outside the library block (identical copy kept elsewhere, /OPT:ICF)"

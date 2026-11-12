@@ -1,0 +1,28 @@
+# Source style for Project OGRE. C++03 (VC9 SP1), tabs, Microsoft brace style.
+BasedOnStyle: Microsoft
+Standard: c++03
+UseTab: ForContinuationAndIndentation
+TabWidth: 4
+IndentWidth: 4
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+AccessModifierOffset: -4
+IndentAccessModifiers: false
+EmptyLineBeforeAccessModifier: Always
+ColumnLimit: 120
+PointerAlignment: Left
+AlignAfterOpenBracket: BlockIndent
+BinPackArguments: false
+BinPackParameters: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AlwaysBreakTemplateDeclarations: Yes
+BraceWrapping:
+  AfterControlStatement: Never
+  AfterNamespace: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+RemoveSemicolon: true
+SpaceAfterCStyleCast: true
+# Include order can change codegen-relevant macro state; pin it with "// clang-format off" where it matters.
+IncludeBlocks: Preserve
+SortIncludes: Never

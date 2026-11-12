@@ -1,0 +1,61 @@
+G3D: BinaryInput::loadIntoMemory as upstream G3D (g3d SVN r30 G3D.lib/source/BinaryInput.cpp); the 2016
+fork replaced the body with assert(false). PLAYER evidence: loadIntoMemory 0x009db850 (246 bytes) grows
+the buffer with realloc 0x005c6cc0, throws a const char* (throw info 0x00cd556c), then fopen/fseek/fread/
+fclose through the IAT (0x00aa1804, 0x00aa1818, 0x00aa1828, 0x00aa17fc); upstream's text compiles to it
+byte for byte (masked, constants checked).
+
+diff -ruN d/G3Dcpp/BinaryInput.cpp e/G3Dcpp/BinaryInput.cpp
+--- d/G3Dcpp/BinaryInput.cpp	2026-11-12 13:16:54.947652854 -0500
++++ e/G3Dcpp/BinaryInput.cpp	2026-11-12 13:18:10.012316980 -0500
+@@ -127,7 +127,50 @@
+ #undef IMPLEMENT_READER
+ 
+ void BinaryInput::loadIntoMemory(int64 startPosition, int64 minLength) {
+-	assert(false); // should not be using this
++    // Load the next section of the file
++    debugAssertM(m_filename != "<memory>", "Read past end of file.");
++
++    int64 absPos = m_alreadyRead + m_pos;
++
++    if (m_bufferLength < minLength) {
++        // The current buffer isn't big enough to hold the chunk we want to read.
++        // This happens if there was little memory available during the initial constructor
++        // read but more memory has since been freed.
++        m_bufferLength = minLength;
++        debugAssert(m_freeBuffer);
++        m_buffer = (uint8*)System::realloc(m_buffer, m_bufferLength);
++        if (m_buffer == NULL) {
++            throw "Tried to read a larger memory chunk than could fit in memory. (2)";
++        }
++    }
++
++    m_alreadyRead = startPosition;
++
++#   ifdef G3D_WIN32
++        FILE* file = fopen(m_filename.c_str(), "rb");
++        debugAssert(file);
++        int ret = fseek(file, (off_t)m_alreadyRead, SEEK_SET);
++        debugAssert(ret == 0);
++        size_t toRead = (size_t)G3D::min(m_bufferLength, m_length - m_alreadyRead);
++        ret = fread(m_buffer, 1, toRead, file);
++        debugAssert(ret == toRead);
++        fclose(file);
++        file = NULL;
++    
++#   else
++        FILE* file = fopen(m_filename.c_str(), "rb");
++        debugAssert(file);
++        int ret = fseeko(file, (off_t)m_alreadyRead, SEEK_SET);
++        debugAssert(ret == 0);
++        size_t toRead = (size_t)G3D::min<int64>(m_bufferLength, m_length - m_alreadyRead);
++        ret = fread(m_buffer, 1, toRead, file);
++        debugAssert((size_t)ret == (size_t)toRead);
++        fclose(file);
++        file = NULL;
++#   endif
++
++    m_pos = absPos - m_alreadyRead;
++    debugAssert(m_pos >= 0);
+ }
+ 
+ 

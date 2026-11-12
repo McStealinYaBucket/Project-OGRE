@@ -1,0 +1,301 @@
+G3D: restore upstream G3D 8.x Random (thread-safe Mersenne twister) that the 2016 fork stripped:
+Spinlock lock (+0x04), m_threadsafe (+0x10), Random(uint32 seed, bool threadsafe), the lock in
+generate(), and AtomicInt32.h (a 0-byte stub in the existing tree; content from g3d SVN r30
+G3D.lib/include/G3D/AtomicInt32.h; Spinlock from r30 GMutex.h). Upstream text: r30 Random.h/Random.cpp.
+PLAYER evidence: Random::Random(uint,bool) 0x009de8d0 stores [esi+4]=0 and the bool at [esi+0x10] and
+returns 'ret 8'; Random::bits 0x009de940 reads state at +8 and index at +0xc; Random::generate
+0x009de990 tests [esi+0x10], calls Spinlock::lock (0x009de830) and unlocks with
+InterlockedCompareExchange(&lock, 0, 1) on contention.
+
+diff -ruN a/G3Dcpp/Random.cpp b/G3Dcpp/Random.cpp
+--- a/G3Dcpp/Random.cpp	2026-11-12 09:38:23.344802840 -0500
++++ b/G3Dcpp/Random.cpp	2026-11-12 09:38:57.040167008 -0500
+@@ -18,12 +18,12 @@
+     return r;
+ }
+ 
+-Random::Random(void* x) : state(NULL){
++Random::Random(void* x) : state(NULL), m_threadsafe(false) {
+     (void)x;
+ }
+ 
+ 
+-Random::Random(uint32 seed){
++Random::Random(uint32 seed, bool threadsafe) : m_threadsafe(threadsafe) {
+     const uint32 X = 1812433253UL;
+ 
+     state = new uint32[N];
+@@ -82,6 +82,16 @@
+     static const uint32 UPPER_MASK = 0xFFFFFFFF << R;
+     static const uint32 mag01[2] = {0UL, (uint32)A};
+ 
++    if (m_threadsafe) {
++        bool contention = ! lock.lock();
++        if (contention)  {
++            // Another thread just generated a set of numbers; no need for
++            // this thread to do it too
++            lock.unlock();
++            return;
++        }
++    }
++
+     // First N - M
+     for (unsigned int i = 0; i < N - M; ++i) {    
+         uint32 x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
+@@ -98,6 +108,9 @@
+     state[N - 1] = state[M - 1] ^ (y >> 1) ^ mag01[y & 1];
+     index = 0;
+ 
++    if (m_threadsafe) {
++        lock.unlock();
++    }
+ }
+ 
+     
+diff -ruN a/include/G3D/AtomicInt32.h b/include/G3D/AtomicInt32.h
+--- a/include/G3D/AtomicInt32.h	2026-11-12 09:38:23.343982821 -0500
++++ b/include/G3D/AtomicInt32.h	2026-11-12 09:38:57.027639340 -0500
+@@ -0,0 +1,164 @@
++/**
++ @file AtomicInt32.h
++
++ @maintainer Morgan McGuire, http://graphics.cs.williams.edu
++
++ @created 2005-09-01
++ @edited  2006-06-21
++ */
++#ifndef G3D_ATOMICINT32_H
++#define G3D_ATOMICINT32_H
++
++#include "G3D/platform.h"
++#include "G3D/g3dmath.h"
++
++#if defined(G3D_OSX)
++#   include <libkern/OSAtomic.h>
++#endif
++
++namespace G3D {
++
++/**
++ An integer that may safely be used on different threads without
++ external locking.
++
++ On Win32, Linux, FreeBSD, and Mac OS X this is implemented without locks.  
++
++ <B>BETA API</B>  This is unsupported and may change
++ */
++class AtomicInt32 {
++private:
++#   if defined(G3D_WIN32) 
++    volatile long           m_value;
++#   elif defined(G3D_OSX)
++    int32_t                 m_value;
++#   else
++    volatile int32          m_value;
++#   endif
++
++
++public:
++
++    /** Initial value is undefined. */
++    AtomicInt32() {}
++
++    /** Atomic set */
++    explicit AtomicInt32(const int32 x) {
++        m_value = x;
++    }
++
++    /** Atomic set */
++    AtomicInt32(const AtomicInt32& x) {
++        m_value = x.m_value;
++    }
++
++    /** Atomic set */
++    const AtomicInt32& operator=(const int32 x) {
++        m_value = x;
++        return *this;
++    }
++
++    /** Atomic set */
++    void operator=(const AtomicInt32& x) {
++        m_value = x.m_value;
++    }
++
++    /** Returns the current value */
++    int32 value() const {
++        return m_value;
++    }
++
++    /** Returns the old value, before the add. */
++    int32 add(const int32 x) {
++#       if defined(G3D_WIN32)
++
++            return InterlockedExchangeAdd(&m_value, x);
++
++#       elif defined(G3D_LINUX) || defined(G3D_FREEBSD)
++
++            int32 old;
++            asm volatile ("lock; xaddl %0,%1"
++                  : "=r"(old), "=m"(m_value) /* outputs */
++                  : "0"(x), "m"(m_value)   /* inputs */
++                  : "memory", "cc");
++            return old;
++            
++#       elif defined(G3D_OSX)
++
++            int32 old = m_value;
++            OSAtomicAdd32(x, &m_value);
++            return old;
++
++#       endif
++    }
++
++    /** Returns old value. */
++    int32 sub(const int32 x) {
++        return add(-x);
++    }
++
++    void increment() {
++#       if defined(G3D_WIN32)
++            // Note: returns the newly incremented value
++            InterlockedIncrement(&m_value);
++#       elif defined(G3D_LINUX) || defined(G3D_FREEBSD)
++            add(1);
++#       elif defined(G3D_OSX)
++            // Note: returns the newly incremented value
++            OSAtomicIncrement32(&m_value);
++#       endif
++    }
++
++    /** Returns zero if the result is zero after decrement, non-zero otherwise.*/
++    int32 decrement() {
++#       if defined(G3D_WIN32)
++            // Note: returns the newly decremented value
++            return InterlockedDecrement(&m_value);
++#       elif defined(G3D_LINUX)  || defined(G3D_FREEBSD)
++            unsigned char nz;
++
++            asm volatile ("lock; decl %1;\n\t"
++                          "setnz %%al"
++                          : "=a" (nz)
++                          : "m" (m_value)
++                          : "memory", "cc");
++            return nz;
++#       elif defined(G3D_OSX)
++            // Note: returns the newly decremented value
++            return OSAtomicDecrement32(&m_value);
++#       endif
++    }
++
++
++    /** Atomic test-and-set:  if <code>*this == comperand</code> then <code>*this := exchange</code> else do nothing.
++        In both cases, returns the old value of <code>*this</code>.
++    
++        Performs an atomic comparison of this with the Comperand value. 
++        If this is equal to the Comperand value, the Exchange value is stored in this.
++        Otherwise, no operation is performed.
++
++        Under VC6 the sign bit may be lost.
++     */ 
++    int32 compareAndSet(const int32 comperand, const int32 exchange) {
++#       if defined(G3D_WIN32)
++            return InterlockedCompareExchange(&m_value, exchange, comperand);
++#       elif defined(G3D_LINUX) || defined(G3D_FREEBSD) || defined(G3D_OSX)
++            // Based on Apache Portable Runtime
++            // http://koders.com/c/fid3B6631EE94542CDBAA03E822CA780CBA1B024822.aspx
++            int32 ret;
++            asm volatile ("lock; cmpxchgl %1, %2"
++                          : "=a" (ret)
++                          : "r" (exchange), "m" (m_value), "0"(comperand)
++                          : "memory", "cc");
++            return ret;
++
++            // Note that OSAtomicCompareAndSwap32 does not return a useful value for us
++            // so it can't satisfy the cmpxchgl contract.
++#       endif
++    }
++
++};
++
++} // namespace
++
++#endif
+diff -ruN a/include/G3D/Random.h b/include/G3D/Random.h
+--- a/include/G3D/Random.h	2026-11-12 09:38:23.343982821 -0500
++++ b/include/G3D/Random.h	2026-11-12 09:38:57.040050879 -0500
+@@ -14,6 +14,7 @@
+ 
+ #include "G3D/platform.h"
+ #include "G3D/g3dmath.h"
++#include "G3D/AtomicInt32.h"
+ 
+ namespace G3D {
+ 
+@@ -34,6 +35,38 @@
+ 
+     Not thread safe anymore, but who cares
+  */
++/** Upstream G3D 8.x G3D::Spinlock (GMutex.h), the only part of GMutex.h Random needs. */
++class Spinlock {
++private:
++
++    AtomicInt32   x;
++
++public:
++
++    inline Spinlock() : x(0) {}
++
++    /** Busy waits until the lock is unlocked, then locks it
++        exclusively.  Returns true if the lock succeeded on the first
++        try (indicating no contention). */
++    inline bool lock() {
++        bool first = true;
++        while (x.compareAndSet(0, 1) == 1) {
++            first = false;
++#           ifdef G3D_WIN32
++                Sleep(0);
++#           else
++                usleep(0);
++#           endif
++        }
++        return first;
++    }
++
++    inline void unlock() {
++        x.compareAndSet(1, 0);
++    }
++
++};
++
+ class Random {
+ protected:
+ 
+@@ -50,12 +83,19 @@
+         B = 0x9D2C5680,
+         C = 0xEFC60000};
+ 
++    /** 
++        Prevents multiple overlapping calls to generate(). 
++     */
++    Spinlock     lock;
++
+     /** State vector (these are the next N values that will be returned) */
+     uint32*      state;
+ 
+     /** Index into state */
+     int          index;
+ 
++    bool         m_threadsafe;
++
+     /** Generate the next N ints, and store them for readback later.
+         Called from bits() */
+     virtual void generate();
+@@ -66,7 +106,7 @@
+ 
+ public:
+ 
+-    Random(uint32 seed = 0xF018A4D2);
++    Random(uint32 seed = 0xF018A4D2, bool threadsafe = true);
+ 
+     virtual ~Random();
+ 

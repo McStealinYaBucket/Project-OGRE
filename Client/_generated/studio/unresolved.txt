@@ -1,0 +1,41 @@
+# STUDIO: unresolved externals with no stub (reason, decorated, demangled). Generated.
+claimed	?parse@TextXmlParser@@UAE?AV?$auto_ptr@VXmlElement@@@std@@XZ	public: virtual class std::auto_ptr<class XmlElement> __thiscall TextXmlParser::parse(void)
+data	?Asserts@FLog@@3EA	unsigned char FLog::Asserts
+data	?CloseDataModel@FLog@@3EA	unsigned char FLog::CloseDataModel
+data	?CoreScripts@FLog@@3EA	unsigned char FLog::CoreScripts
+data	?DataModelJobs@FLog@@3EA	unsigned char FLog::DataModelJobs
+data	?FWLifetime@FLog@@3EA	unsigned char FLog::FWLifetime
+data	?FWUpdate@FLog@@3EA	unsigned char FLog::FWUpdate
+data	?LegacyLock@FLog@@3EA	unsigned char FLog::LegacyLock
+data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
+data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
+data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
+data	?MutexLifetime@FLog@@3EA	unsigned char FLog::MutexLifetime
+data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
+data	?TaskSchedulerFindJob@FLog@@3EA	unsigned char FLog::TaskSchedulerFindJob
+data	?TaskSchedulerInit@FLog@@3EA	unsigned char FLog::TaskSchedulerInit
+data	?TaskSchedulerRun@FLog@@3EA	unsigned char FLog::TaskSchedulerRun
+data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
+data	?apiToken@Tokens@RBX@@3VClientFuzzySecurityToken@2@A	class RBX::ClientFuzzySecurityToken RBX::Tokens::apiToken
+data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
+data	?rbxTextBase@Security@RBX@@3ID	unsigned int const volatile RBX::Security::rbxTextBase
+data	?rbxTextSize@Security@RBX@@3ID	unsigned int const volatile RBX::Security::rbxTextSize
+unknown	??$convert@V?$shared_ptr@$$CBV?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@std@@@boost@@@Variant@Reflection@RBX@@QAEAAV?$shared_ptr@$$CBV?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@std@@@boost@@XZ	public: class boost::shared_ptr<class std::map<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, class RBX::Reflection::Variant, struct std::less<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>>, class std::allocator<struct std::pair<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const, class RBX::Reflection::Variant>>> const> & __thiscall RBX::Reflection::Variant::convert<class boost::shared_ptr<class std::map<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, class RBX::Reflection::Variant, struct std::less<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>>, class std::allocator<struct std::pair<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const, class RBX::Reflection::Variant>>> const>>(void)
+unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
+unknown	??0RobloxExtraSpace@@AAE@XZ	private: __thiscall RobloxExtraSpace::RobloxExtraSpace(void)
+unknown	??0XmlParser@@IAE@PAV?$basic_streambuf@DU?$char_traits@D@std@@@std@@@Z	protected: __thiscall XmlParser::XmlParser(class std::basic_streambuf<char, struct std::char_traits<char>> *)
+unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
+unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
+unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void __thiscall RakNet::TCPInterface::DeallocatePacket(struct RakNet::Packet *)
+unknown	?Final@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Final(void)
+unknown	?GetHash@CSHA1@@QBEPAEXZ	public: unsigned char * __thiscall CSHA1::GetHash(void) const
+unknown	?RegisterFlag@FLog@@YAHPBDPA_NPAPA_NW4FastVarType@1@@Z	int __cdecl FLog::RegisterFlag(char const *, bool *, bool **, enum FLog::FastVarType)
+unknown	?Reset@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Reset(void)
+unknown	?Send@PacketizedTCP@RakNet@@QAEXPBDIABUSystemAddress@2@_N@Z	public: void __thiscall RakNet::PacketizedTCP::Send(char const *, unsigned int, struct RakNet::SystemAddress const &, bool)
+unknown	?SendList@PacketizedTCP@RakNet@@QAE_NPAPBDPBHHABUSystemAddress@2@_N@Z	public: bool __thiscall RakNet::PacketizedTCP::SendList(char const **, int const *, int, struct RakNet::SystemAddress const &, bool)
+unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned char *, unsigned int)
+unknown	?getSalt@ProtectedString@RBX@@QBEPBDXZ	public: char const * __thiscall RBX::ProtectedString::getSalt(void) const
+unparsed	?slot_exception_handler@signals@rbx@@3V?$function@$$A6AXAAVexception@std@@@Z@boost@@A	class boost::function<void __cdecl(class std::exception &)> rbx::signals::slot_exception_handler
+unparsed	_LZ4_compressHC_limitedOutput	
+unparsed	_LZ4_compress_limitedOutput	
+unparsed	_LZ4_decompress_safe	

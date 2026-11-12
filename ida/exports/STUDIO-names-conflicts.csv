@@ -1,0 +1,77 @@
+address,oracle,names,reason
+0x0078ad10,ios1021,,rtti-slot: oracle function also paired elsewhere
+0x009a9900,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x00817390,ios1021,,rtti-slot: oracle function also paired elsewhere
+0x007ae400,ios1021,,rtti-slot: oracle function also paired elsewhere
+0x0088cd80,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x00796960,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x007fb380,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x0089b070,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x007778a0,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x0075eaf0,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x0075ebf0,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x008eb760,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x00962010,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x007fd760,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x0040ddc0,ios1021,,rtti-slot: several oracle functions that do not look folded
+0x00a28130,ios1021,,rtti-slot pair dropped: 2 of 2 paired callees disagree
+0x006509e0,ios1021,,string-unique pair dropped: inlining level shift
+0x009dfc90,ios1021,,string-unique pair dropped: inlining level shift
+0x00a5f420,ios1021,,string-unique pair dropped: inlining level shift
+0x00a5f610,ios1021,,string-unique pair dropped: inlining level shift
+0x0051ba90,ios1021,,body-match pair dropped: 2 of 2 paired callees disagree
+0x00974b90,ios1021,,string-unique pair dropped: inlining level shift
+0x00479dd0,ios1021,,string-set pair dropped: inlining level shift
+0x0047a020,ios1021,,string-set pair dropped: inlining level shift
+0x006297d0,ios1021,,string-set pair dropped: inlining level shift
+0x00629840,ios1021,,string-set pair dropped: inlining level shift
+0x009a9900,mac,,rtti-slot: several oracle functions that do not look folded
+0x0088cd80,mac,,rtti-slot: several oracle functions that do not look folded
+0x007fb380,mac,,rtti-slot: several oracle functions that do not look folded
+0x007fd760,mac,,rtti-slot: several oracle functions that do not look folded
+0x0040ddc0,mac,,rtti-slot: several oracle functions that do not look folded
+0x005d8080,mac,,rtti-slot: several oracle functions that do not look folded
+0x00a28130,mac,,rtti-slot pair dropped: 2 of 2 paired callees disagree
+0x004c9b40,mac,,string-unique pair dropped: inlining level shift
+0x004dd280,mac,,string-unique pair dropped: inlining level shift
+0x004e19c0,mac,,string-unique pair dropped: inlining level shift
+0x00637bd0,mac,,string-unique pair dropped: inlining level shift
+0x009dfc90,mac,,string-unique pair dropped: inlining level shift
+0x00a5f420,mac,,string-unique pair dropped: inlining level shift
+0x00a5f610,mac,,string-unique pair dropped: inlining level shift
+0x004cd7f0,mac,,string-set pair dropped: inlining level shift
+0x004ce4e0,mac,,string-set pair dropped: inlining level shift
+0x00974b90,mac,,string-unique pair dropped: inlining level shift
+0x004e5b10,mac,,import-set pair dropped: inlining level shift
+0x00408370,ios1021/mac,_ZNK3RBX10Reflection8EnumDescINS_20ChangeHistoryService19RuntimeUndoBehaviorEE15convertToStringEmRSs,"name proposed for several target functions: 0x00408370,0x00719380"
+0x0040ccc0,ios1021/mac,_ZNK3RBX10Reflection23TypedPropertyDescriptorIN3G3D6Color3EE11equalValuesEPKNS0_13DescribedBaseES7_,"name proposed for several target functions: 0x0040ccc0,0x007a1c30"
+0x0047eb00,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_7Network7sPlayerEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_7Network7sPlayerEEEERKS0_v,oracles disagree
+0x0047f2e0,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_9sLightingEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_9sLightingEEEERKS0_v,oracles disagree
+0x0047f5b0,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_16sNetworkSettingsEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_16sNetworkSettingsEEEERKS0_v,oracles disagree
+0x004ad970,ios1021/mac/player,_ZN3RBX13UserInputBase10removeJobsEv;_ZN5boost6detail18sp_counted_impl_pdIPNS_2io18basic_altstringbufIcSt11char_traitsIcESaIcEEENS2_22basic_oaltstringstreamIcS5_S6_E5No_OpEE7disposeEv,"name proposed for several target functions: 0x004ad970,0x00606c90"
+0x004ed3a0,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_14sInsertServiceEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_14sInsertServiceEEEERKS0_v,oracles disagree
+0x004fa690,ios1021/mac,_ZN5boost6detail17sp_counted_impl_pISt18basic_stringstreamIcSt11char_traitsIcESaIcEEE19get_untyped_deleterEv,"name proposed for several target functions: 0x004fa690,0x00a150d0"
+0x00555220,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_13sCylinderMeshEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_13sCylinderMeshEEEERKS0_v,oracles disagree
+0x005b8b70,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_7Network7sServerEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_7Network7sServerEEEERKS0_v,oracles disagree
+0x005b8c50,ios1021/mac/player,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_6sTeamsEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_6sTeamsEEEERKS0_v | player=_ZN3RBX4Name9doDeclareILZNS_6sTeamsEEEERKS0_v,oracles disagree
+0x005d8de0,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_12sStringValueEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_12sStringValueEEEERKS0_v,oracles disagree
+0x005d8e50,ios1021/mac,ios1021=_ZN3RBX4Name13callDoDeclareILZNS_12sObjectValueEEEEvv | mac=_ZN3RBX4Name9doDeclareILZNS_12sObjectValueEEEERKS0_v,oracles disagree
+0x00606c90,ios1021/mac/player,_ZN3RBX13UserInputBase10removeJobsEv;_ZN5boost6detail18sp_counted_impl_pdIPNS_2io18basic_altstringbufIcSt11char_traitsIcESaIcEEENS2_22basic_oaltstringstreamIcS5_S6_E5No_OpEE7disposeEv,"name proposed for several target functions: 0x004ad970,0x00606c90"
+0x0062a680,ios1021/mac,ios1021=_ZNK3RBX5Voxel10SerializerINS0_4GridEE11encodeCellsINS_19ClusterCellIteratorEN6RakNet9BitStreamEEEvPKS2_RT_PT0_i | mac=_ZNK3RBX5Voxel10Serializer11encodeCellsINS_19ClusterCellIteratorEN6RakNet9BitStreamEEEvPKNS0_4GridERT_PT0_i,oracles disagree
+0x006b8fc0,ios1021/mac,ios1021=_ZN3G3D7vformatEPKcPv | mac=_ZN3G3D7vformatEPKcPc,oracles disagree
+0x00719380,ios1021/mac/player,_ZNK3RBX10Reflection8EnumDescINS_20ChangeHistoryService19RuntimeUndoBehaviorEE15convertToStringEmRSs,"name proposed for several target functions: 0x00408370,0x00719380"
+0x007a1c30,ios1021/mac/player,_ZNK3RBX10Reflection23TypedPropertyDescriptorIN3G3D6Color3EE11equalValuesEPKNS0_13DescribedBaseES7_,"name proposed for several target functions: 0x0040ccc0,0x007a1c30"
+0x007ac2d0,ios1021/mac,_ZN3RBX12BackpackItem9isEnabledEv,"name proposed for several target functions: 0x007ac2d0,0x007b2520"
+0x007b2520,ios1021/mac/player,ios1021=_ZN3RBX12BackpackItem10inBackpackEv | mac=_ZN3RBX12BackpackItem10inBackpackEv | player=_ZN3RBX12BackpackItem9isEnabledEv,oracles disagree
+0x007f2670,ios1021/mac,ios1021=_Z7vformatPKcPv | mac=_Z7vformatPKcPc,oracles disagree
+0x007f2c10,ios1021/mac,ios1021=_ZN3RBX9Explosion7doBlastINS_19MegaClusterInstanceEEEvPT_RKSt6vectorIN5boost10shared_ptrINS_12PartInstanceEEESaIS9_EE | mac=_ZN3RBX9Explosion7doBlastEPNS_19MegaClusterInstanceERKSt6vectorIN5boost10shared_ptrINS_12PartInstanceEEESaIS7_EE,oracles disagree
+0x007f91d0,ios1021/mac,ios1021=_ZN3RBX13PluginManager14StateDataEntry10getToolbarESsPNS_17IStudioPluginHostE | mac=_ZN3RBX13PluginManager14StateDataEntry10getToolbarESsPNS_17IStudioPluginHostEPNS_9DataModelE,oracles disagree
+0x009222e0,ios1021/mac,ios1021=_ZN3RBX10ThreadPool14ThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrINS_5mutexEEEEEE | mac=_ZN3RBX10ThreadPool14ThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrIN3tbb10spin_mutexEEEEEE,oracles disagree
+0x00922450,ios1021/mac,ios1021=_ZN3RBX18PriorityThreadPool22PriorityThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrINS_5mutexEEEEEE | mac=_ZN3RBX18PriorityThreadPool22PriorityThreadPoolData11getNextTaskERN5boost8functionIFvNS2_10shared_ptrIN3tbb10spin_mutexEEEEEE,oracles disagree
+0x00922df0,ios1021/mac,ios1021=_ZN3RBX14BaseThreadPool4loopEN5boost10shared_ptrINS0_8PoolDataEEENS2_INS_5mutexEEE | mac=_ZN3RBX14BaseThreadPool4loopEN5boost10shared_ptrINS0_8PoolDataEEENS2_IN3tbb10spin_mutexEEE,oracles disagree
+0x009bcb60,ios1021/mac,ios1021=_ZN3RBX14AsyncHttpQueue15processRequestsEN5boost8weak_ptrIS0_EESt14_List_iteratorINS0_7RequestEENS1_10shared_ptrINS_5mutexEEE | mac=_ZN3RBX14AsyncHttpQueue15processRequestsEN5boost8weak_ptrIS0_EESt14_List_iteratorINS0_7RequestEENS1_10shared_ptrIN3tbb10spin_mutexEEE,oracles disagree
+0x009ec700,ios1021/mac,ios1021=_Z17luaO_pushvfstringP9lua_StatePKcPv | mac=_Z17luaO_pushvfstringP9lua_StatePKcPc,oracles disagree
+0x00a150d0,ios1021/mac/player,_ZN5boost6detail17sp_counted_impl_pISt18basic_stringstreamIcSt11char_traitsIcESaIcEEE19get_untyped_deleterEv,"name proposed for several target functions: 0x004fa690,0x00a150d0"
+0x00a68bf0,ios1021/mac,ios1021=_ZN3RBX7vformatEPKcPv | mac=_ZN3RBX7vformatEPKcPc,oracles disagree
+0x00a72a30,ios1021/mac,ios1021=_ZN3RBX9TCriticalEjNS_10ConfidenceE | mac=_ZN3RBX14IsValueOutlierEdjddNS_10ConfidenceE,oracles disagree
+0x00a72af0,ios1021,_ZN3RBX14IsValueOutlierEdjddNS_10ConfidenceE,"name proposed for several target functions: 0x00a72a30,0x00a72af0"

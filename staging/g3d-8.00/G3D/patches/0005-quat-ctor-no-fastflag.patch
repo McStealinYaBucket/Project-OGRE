@@ -1,0 +1,59 @@
+G3D: Quat::Quat(const Matrix3&) without the DFFlag::G3DQuatConstructorFix branch (a later Roblox fast
+flag); keeps the upstream G3D 8 body (the flag-off path, same as g3d SVN r30 Quat.cpp) and drops the
+FastLog include the flag needed.
+PLAYER evidence: G3D::Quat::Quat(const Matrix3&) is byte-identical at 0x009e5020 (373 bytes) with this
+body (plus1mod3 table, double nc2, post-normalization) and not with the flag-on body.
+
+--- a/G3Dcpp/Quat.cpp	2026-11-12 09:41:16.843440393 -0500
++++ b/G3Dcpp/Quat.cpp	2026-11-12 09:41:16.857458811 -0500
+@@ -10,9 +10,6 @@
+  */
+ 
+ #include "G3D/Quat.h"
+-#include "FastLog.h"
+-
+-DYNAMIC_FASTFLAGVARIABLE(G3DQuatConstructorFix, true)
+ 
+ namespace G3D {
+ 
+@@ -48,40 +45,7 @@
+ }
+ 
+ Quat::Quat(const Matrix3& rot) {
+-    if (DFFlag::G3DQuatConstructorFix)
+     {
+-	    // Implementation from Util/Quaternion.h
+-	    float tr = rot[0][0] + rot[1][1] + rot[2][2];
+-	    if (tr > 0.0) {
+-		    float s = sqrt(tr + 1.0f);
+-		    w = s * 0.5f;
+-		    s = 0.5f / s;
+-		    x = (rot[2][1] - rot[1][2]) * s;
+-		    y = (rot[0][2] - rot[2][0]) * s;
+-		    z = (rot[1][0] - rot[0][1]) * s;
+-	    } else if ((rot[0][0] > rot[1][1]) && (rot[0][0] > rot[2][2])) {
+-		    float s = -sqrt( 1.0f + rot[0][0] - rot[1][1] - rot[2][2]);
+-		    x = s * 0.5f;
+-		    s = 0.5f / s;
+-		    y = (rot[0][1] + rot[1][0] ) * s;		// i == 0, j == 1, k == 2
+-		    z = (rot[0][2] + rot[2][0] ) * s;
+-		    w = (rot[2][1] - rot[1][2] ) * s;		// kj - jk == 21 - 12
+-	    } else if (rot[1][1] > rot[2][2]) {
+-		    float s = -sqrt( 1.0f + rot[1][1] - rot[0][0] - rot[2][2]);
+-		    y = s * 0.5f;
+-		    s = 0.5f / s;
+-		    x = (rot[0][1] + rot[1][0] ) * s;		// i == 1, j == 2, k == 0
+-		    z = (rot[1][2] + rot[2][1] ) * s;
+-		    w = (rot[0][2] - rot[2][0] ) * s;		// kj - jk == 02 - 20
+-	    } else {
+-		    float s = -sqrt( 1.0f + rot[2][2] - rot[0][0] - rot[1][1] );
+-		    z = s * 0.5f;
+-		    s = 0.5f / s;
+-		    x = (rot[0][2] + rot[2][0] ) * s;		// i == 2, j == 0, k == 1
+-		    y = (rot[1][2] + rot[2][1] ) * s;
+-		    w = (rot[1][0] - rot[0][1] ) * s;		// kj - jk == 10 - 01
+-	    }
+-    } else {
+         static const int plus1mod3[] = {1, 2, 0};
+ 
+         // Find the index of the largest diagonal component

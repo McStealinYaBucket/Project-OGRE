@@ -1,0 +1,11 @@
+#!/bin/sh
+# Stand-in for Samba's ntlm_auth (winbind package, not installed on this host).
+# Wine's NTLM security package only initialises if "ntlm_auth --version" reports >= 3.0.25.
+# Without it mspdb80.dll's RPC binding to mspdbsrv.exe fails (RpcBindingSetAuthInfoExW,
+# AuthnSvc 10) and link /DEBUG dies with LNK1101 "incorrect MSPDB80.DLL version".
+# The local ncalrpc connection never runs an NTLM exchange, so answering --version is enough.
+# tools/msvc9/winewrap.py puts this directory first on PATH. Measured 2026-11-12, wine 10.0.
+[ -n "$NTLM_FAKE_LOG" ] && echo "$*" >> "$NTLM_FAKE_LOG"
+[ "$1" = "--version" ] && { echo "Version 4.19.5"; exit 0; }
+echo "ntlm_auth stand-in: unsupported call: $*" >&2
+exit 1

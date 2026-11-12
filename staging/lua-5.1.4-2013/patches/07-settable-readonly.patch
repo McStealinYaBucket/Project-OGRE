@@ -1,0 +1,17 @@
+luaV_settable: after the primitive luaH_set, a readonly table raises luaG_runerror(L, "").
+
+Justification (PLAYER bytes): luaV_settable 0x0098a3b0 tests byte [h+7] right after the luaH_set call
+and calls luaG_runerror 0x008a8bb0 with 0x00bda1b8, which is the empty string "" (STUDIO 0x00a30140
+does the same with its "" at 0x00c8f348). Not the 2016 message.
+
+--- a/lvm.c
++++ b/lvm.c
+@@ -138,6 +138,8 @@
+     if (ttistable(t)) {  /* `t' is a table? */
+       Table *h = hvalue(t);
+       TValue *oldval = luaH_set(L, h, key); /* do a primitive set */
++      if (h->readonly)  /* ROBLOX */
++        luaG_runerror(L, "");
+       if (!ttisnil(oldval) ||  /* result is no nil? */
+           (tm = fasttm(L, h->metatable, TM_NEWINDEX)) == NULL) { /* or no TM? */
+         setobj2t(L, oldval, val);

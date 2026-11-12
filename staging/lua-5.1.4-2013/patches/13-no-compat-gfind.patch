@@ -1,0 +1,17 @@
+luaconf.h: LUA_COMPAT_GFIND undefined (no string.gfind alias of gmatch).
+
+Justification (PLAYER bytes): luaopen_string 0x008af630 is luaL_register(L, "string", strlib) +
+createmetatable + return 1, with no getfield("gmatch")/setfield("gfind") pair; identical only with the
+macro undefined. ("gfind" in the strlib table 0x00b85ba8 is gfind_nodef, present in stock either way.)
+
+--- a/luaconf.h
++++ b/luaconf.h
+@@ -356,7 +356,7 @@
+ ** CHANGE it to undefined as soon as you rename 'string.gfind' to
+ ** 'string.gmatch'.
+ */
+-#define LUA_COMPAT_GFIND
++#undef LUA_COMPAT_GFIND  /* ROBLOX */
+ 
+ /*
+ @@ LUA_COMPAT_OPENLIB controls compatibility with old 'luaL_openlib'

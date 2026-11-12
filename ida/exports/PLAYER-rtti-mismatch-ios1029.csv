@@ -1,0 +1,29 @@
+class,reason,msvc_slots_per_vftable,itanium_slots_per_group
+RBX::BodyAngularVelocity,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyForce,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyGyro,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyMover,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyPosition,"slot count, vftable 4",30 1 2 3 19 6 8 2,39 1 3 4 27 7 9 3
+RBX::BodyThrust,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::BodyVelocity,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
+RBX::Humanoid,"slot count, vftable 4",28 1 2 3 19 6 8 12 17 1 2 1,53 1 3 4 27 7 9 12 19 2 3
+RBX::Rocket,"slot count, vftable 4",30 1 2 3 19 6 8 2,39 1 3 4 27 7 9 3
+RBX::SkateboardPlatform,"slot count, vftable 9",67 1 2 3 1 6 12 10 1 19 6 8 1,95 1 3 4 1 6 12 12 1 27 7 9
+RBX::VehicleSeat,"slot count, vftable 9",65 1 2 3 1 6 12 10 1 19 6 8 1,93 1 3 4 1 6 12 12 1 27 7 9
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list1<boost::_bi::value<boost::shared_ptr<RBX::DataModel>>>>>","slot count, vftable 0",2,4
+"boost::detail::thread_data<boost::_bi::bind_t<void,void,boost::_bi::list1<boost::_bi::value<boost::weak_ptr<RBX::DataModel>>>>>","slot count, vftable 0",2,4
+boost::detail::thread_data<boost::function0<void>>,"slot count, vftable 0",2,4
+boost::exception,"slot count, vftable 0",1,2
+"boost::io::basic_altstringbuf<char,std::char_traits<char>,std::allocator<char>>","slot count, vftable 0",14,14
+"boost::io::basic_oaltstringstream<char,std::char_traits<char>,std::allocator<char>>",vftable count,1,2 2
+"boost::iostreams::detail::chainbuf<boost::iostreams::chain<boost::iostreams::input,char,std::char_traits<char>,std::allocator<char>>,boost::iostreams::input,boost::iostreams::public_>","slot count, vftable 0",14 2,14 3
+"boost::iostreams::detail::filtering_stream_base<boost::iostreams::chain<boost::iostreams::output,char,std::char_traits<char>,std::allocator<char>>,boost::iostreams::public_>",vftable count,2 1,3 2 2
+"boost::iostreams::filtering_stream<boost::iostreams::output,char,std::char_traits<char>,std::allocator<char>,boost::iostreams::public_>",vftable count,2 1,3 2 2
+"boost::iostreams::filtering_streambuf<boost::iostreams::input,char,std::char_traits<char>,std::allocator<char>,boost::iostreams::public_>","slot count, vftable 0",14 2,14 3
+"boost::iostreams::stream<boost::iostreams::basic_array_source<char>,std::char_traits<char>,std::allocator<char>>",vftable count,1,2 2
+"boost::iostreams::stream_buffer<boost::iostreams::basic_array_source<char>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input_seekable>","slot count, vftable 0",21,21
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_compressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_compressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::output>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_gzip_decompressor<std::allocator<char>>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_null_device<char,boost::iostreams::input>,std::char_traits<char>,std::allocator<char>,boost::iostreams::input>","slot count, vftable 0",23,23
+"boost::iostreams::stream_buffer<boost::iostreams::basic_null_device<char,boost::iostreams::output>,std::char_traits<char>,std::allocator<char>,boost::iostreams::output>","slot count, vftable 0",23,23

@@ -1,0 +1,6 @@
+# Python tools for Project OGRE. Install into toolchain/venv:
+#   python3 -m venv toolchain/venv && toolchain/venv/bin/pip install -r tools/requirements.txt
+# reccmp: upstream isledecomp/reccmp, pinned (installed 2026-11-11, reports version 0.1.9).
+reccmp @ git+https://github.com/isledecomp/reccmp@a0f494c0fe4d7fb06e0ae4a7f65f74a628540aec
+# Local patches on top of that commit (VMProtect IAT import rows, VC9 FuncInfo magic). Apply after
+# installing: sh tools/reccmp-patches/apply.sh

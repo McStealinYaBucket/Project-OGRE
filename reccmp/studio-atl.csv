@@ -1,0 +1,21 @@
+# Generated from ida/exports/STUDIO-names.csv. Do not edit.
+address,type,size,symbol
+00a76c20,library,26,?AtlThrowLastWin32@ATL@@YGXXZ
+00a7cd5b,library,22,??0CComCriticalSection@ATL@@QAE@XZ
+00a7cd71,library,75,?Init@CComCriticalSection@ATL@@QAEJXZ
+00a7cde8,library,28,??0_ATL_BASE_MODULE70@ATL@@QAE@XZ
+00a7ce04,library,24,??1CAtlBaseModule@ATL@@QAE@XZ
+00a7ce1c,library,79,?GetHInstanceAt@CAtlBaseModule@ATL@@QAEPAUHINSTANCE__@@H@Z
+00a7ce6b,library,64,??0CAtlBaseModule@ATL@@QAE@XZ
+00a7ceab,library,27,??1CWin32Heap@ATL@@UAE@XZ
+00a7cec6,library,23,?Allocate@CWin32Heap@ATL@@UAEPAXI@Z
+00a7cedd,library,29,?Free@CWin32Heap@ATL@@UAEXPAX@Z
+00a7cefa,library,58,?Reallocate@CWin32Heap@ATL@@UAEPAXPAXI@Z
+00a7cf34,library,23,?GetSize@CWin32Heap@ATL@@UAEIPAX@Z
+00a7cf6c,library,49,??0CAtlStringMgr@ATL@@QAE@PAUIAtlMemMgr@1@@Z
+00a7cfc1,library,14,?Free@CAtlStringMgr@ATL@@UAEXPAUCStringData@2@@Z
+00a7cfcf,library,14,?GetNilString@CAtlStringMgr@ATL@@UAEPAUCStringData@2@XZ
+00a7cfe0,library,34,??_GCAtlStringMgr@ATL@@UAEPAXI@Z
+00a7d028,library,100,?Allocate@CAtlStringMgr@ATL@@UAEPAUCStringData@2@HH@Z
+00a7d08c,library,91,?Reallocate@CAtlStringMgr@ATL@@UAEPAUCStringData@2@PAU32@HH@Z
+00b3bb26,library,40,??__Eg_strheap@ATL@@YAXXZ

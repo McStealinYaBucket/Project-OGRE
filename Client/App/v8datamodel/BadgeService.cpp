@@ -1,0 +1,20 @@
+/* App/v8datamodel/BadgeService.cpp -- October 2013 STUB (sName + empty reflection).
+   TODO: full decompile. */
+
+#include "stdafx.h"
+
+#include "V8DataModel/BadgeService.h"
+
+namespace RBX {
+	const char* const sBadgeService = "BadgeService";
+}
+
+using namespace RBX;
+
+REFLECTION_BEGIN();
+REFLECTION_END();
+
+// Class registrar (see Instance.cpp/Service.cpp note).
+namespace RBX {
+RBX_REGISTER_CLASS(RBX::BadgeService);
+}
