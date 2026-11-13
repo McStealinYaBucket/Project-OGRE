@@ -16,6 +16,15 @@ namespace RBX {
 		: public DescribedCreatable<HopperBin, BackpackItem, sHopperBin>
 	{
 	public:
+		enum BinType
+		{
+			SCRIPT_BIN = 0,
+			GAME_TOOL = 1,
+			GRAB_TOOL = 2,
+			CLONE_TOOL = 3,
+			HAMMER_TOOL = 4,
+		};
+
 		HopperBin() {}
 	};
 

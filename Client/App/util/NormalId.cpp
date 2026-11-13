@@ -602,3 +602,33 @@ namespace RBX {
 //   - StringConverter<G3D::Vector3::Axis> and StringConverter<NormalId>
 //     convertToValue specializations (Axes.cpp / EnumProperty.cpp in 2016)
 //////////////////////////////////////////////////////////////////////////////
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "Reflection/EnumConverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x0081d020
+// FUNCTION: STUDIO 0x008edf30
+template<>
+EnumDesc<G3D::Vector3::Axis>::EnumDesc()
+	: EnumDescriptor("Axis", typeid(G3D::Vector3::Axis))
+{
+	addPair(G3D::Vector3::X_AXIS, "X");
+	addPair(G3D::Vector3::Y_AXIS, "Y");
+	addPair(G3D::Vector3::Z_AXIS, "Z");
+}
+
+template<>
+const Type& Type::getSingleton<G3D::Vector3::Axis>()
+{
+	return EnumDesc<G3D::Vector3::Axis>::singleton();
+}
+
+template<> EnumRegistrar<G3D::Vector3::Axis> EnumRegistrar<G3D::Vector3::Axis>::registrar(0);
+template<> TypeRegistrar<G3D::Vector3::Axis> TypeRegistrar<G3D::Vector3::Axis>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

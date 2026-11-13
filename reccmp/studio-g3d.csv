@@ -1,6 +1,6 @@
 # Generated from ida/exports/STUDIO-lib-resolved.csv (status identical). Do not edit.
 # Library rows skipped for all libraries: not identical 202, not a kept function 33.
-# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1303, static name 332, not in our link 23, folded in our link 2.
+# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1305, static name 332, not in our link 23, folded in our link 0.
 address,type,size,symbol,name
 0051f420,library,31,??4Rect@RBX@@QAEAAV01@ABV01@@Z,??4Rect@RBX@@QAEAAV01@ABV01@@Z
 00615f80,library,149,?isFinite@Vector3@G3D@@QBE_NXZ,?isFinite@Vector3@G3D@@QBE_NXZ

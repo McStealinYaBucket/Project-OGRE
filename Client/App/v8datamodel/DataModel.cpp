@@ -488,7 +488,7 @@ namespace RBX {
 
 	std::string DataModel::arbiterName()
 	{
-		return "DataModel";		// TODO(decompile): exact string from Refl_DataModel.cpp.txt
+		return getName();	// 2013 0x0064de40: fw() + 0x1c copied (Arbiter-base this, -0xa8)
 	}
 
 	/* mac: 0x2D2E70 — parentDM null ? this DataModelArbiter : parentDM's DataModelArbiter.
@@ -3178,3 +3178,33 @@ DECOMP_SIZE_ASSERT(RBX::DataModel::GenericJob, 0x248);
 // networkStatsWindowsOn, GuiBuilder 0x1c). GuiBuilder is 0x20 (ctor 0x00644f30).
 DECOMP_SIZE_ASSERT(RBX::GuiBuilder, 0x20);
 DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x0063dbf0
+// FUNCTION: STUDIO 0x0075baa0
+template<>
+EnumDesc<Instance::SaveFilter>::EnumDesc()
+	: EnumDescriptor("SaveFilter", typeid(Instance::SaveFilter))
+{
+	addPair(Instance::SAVE_ALL, "SaveAll");
+	addPair(Instance::SAVE_WORLD, "SaveWorld");
+	addPair(Instance::SAVE_GAME, "SaveGame");
+}
+
+template<>
+const Type& Type::getSingleton<Instance::SaveFilter>()
+{
+	return EnumDesc<Instance::SaveFilter>::singleton();
+}
+
+template<> EnumRegistrar<Instance::SaveFilter> EnumRegistrar<Instance::SaveFilter>::registrar(0);
+template<> TypeRegistrar<Instance::SaveFilter> TypeRegistrar<Instance::SaveFilter>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

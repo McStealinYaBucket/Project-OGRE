@@ -10,8 +10,6 @@ address,type,size,symbol
 005bc660,library,84,??1strstreambuf@std@@UAE@XZ_2
 005d7940,library,225,??1_Locimp@locale@std@@UAE@XZ
 005de760,library,84,??1strstreambuf@std@@UAE@XZ_3
-005de820,library,84,??1strstreambuf@std@@UAE@XZ_4
-005ee7e0,library,116,??1_Locimp@locale@std@@UAE@XZ_0
 0060af40,library,84,??1strstreambuf@std@@UAE@XZ_5
 006102f0,library,84,??1strstreambuf@std@@UAE@XZ_6
 0061cf70,library,146,??1strstreambuf@std@@UAE@XZ_7
@@ -25,9 +23,6 @@ address,type,size,symbol
 006f3a80,library,88,??1strstreambuf@std@@UAE@XZ_14
 00722970,library,84,??1strstreambuf@std@@UAE@XZ_15
 0072e310,library,84,??1strstreambuf@std@@UAE@XZ_16
-00730ff0,library,84,??1strstreambuf@std@@UAE@XZ_17
-00731890,library,84,??1strstreambuf@std@@UAE@XZ_18
-00732130,library,84,??1strstreambuf@std@@UAE@XZ_19
 00778d80,library,164,??1strstreambuf@std@@UAE@XZ_21
 00781a70,library,125,??1_Locimp@locale@std@@UAE@XZ_4
 0078b8f0,library,322,??1strstreambuf@std@@UAE@XZ_22
@@ -35,7 +30,6 @@ address,type,size,symbol
 007994c0,library,84,??1strstreambuf@std@@UAE@XZ_24
 007995e0,library,84,??1strstreambuf@std@@UAE@XZ_25
 0079bac0,library,296,??1strstreambuf@std@@UAE@XZ_26
-007c05b0,library,88,??1strstreambuf@std@@UAE@XZ_27
 007cc250,library,84,??1strstreambuf@std@@UAE@XZ_28
 007dbcb0,library,84,??1strstreambuf@std@@UAE@XZ_29
 007f3590,library,84,??1strstreambuf@std@@UAE@XZ_30
@@ -49,11 +43,9 @@ address,type,size,symbol
 0083d620,library,84,??1strstreambuf@std@@UAE@XZ_40
 00844a40,library,408,??1strstreambuf@std@@UAE@XZ_41
 00858310,library,84,??1strstreambuf@std@@UAE@XZ_42
-0086b200,library,88,??1strstreambuf@std@@UAE@XZ_43
 0086c8b0,library,84,??1strstreambuf@std@@UAE@XZ_44
 00887780,library,84,??1strstreambuf@std@@UAE@XZ_45
 0088eb70,library,309,??1strstreambuf@std@@UAE@XZ_46
-008a2e00,library,173,??1strstreambuf@std@@UAE@XZ_47
 008efc60,library,84,??1strstreambuf@std@@UAE@XZ_48
 008f2d60,library,84,??1strstreambuf@std@@UAE@XZ_49
 008f2e20,library,84,??1strstreambuf@std@@UAE@XZ_50

@@ -218,7 +218,7 @@ public:
 	const OnDemandInstance* onDemandRead() const;
 	OnDemandInstance* onDemandWrite();
     
-    virtual void onGuidChanged();
+    // onGuidChanged: GuidItem<Instance>'s, not overridden in 2013 (see Instance.cpp).
 
 	// 2013 lock state = FW b21 (see above; no member).
 	bool getIsParentLocked() const

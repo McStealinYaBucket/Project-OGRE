@@ -74,14 +74,14 @@ namespace RBX {
 		IAdornableCollector* bucket;
 
 	protected:
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool shouldRender2d() const {return false;}
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool shouldRender3dAdorn() const {return false;}
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool shouldRender3dSortedAdorn() const {return false;}
 
 	public:

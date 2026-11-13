@@ -27,7 +27,6 @@ address,type,size,symbol
 00799640,library,33,??$shared_dynamic_cast@VDataModel@RBX@@VDescribedBase@Reflection@2@@RBX@@YA?AV?$shared_ptr@VDataModel@RBX@@@boost@@ABV?$shared_ptr@VDescribedBase@Reflection@RBX@@@2@@Z
 007b0ea0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_1
 007b6090,library,7,?GetMaskId@VirtualProcessor@details@Concurrency@@QBEIXZ_0
-007b60a0,library,7,?_GetResult@?$_Task_impl@_N@details@Concurrency@@QAE_NXZ_0
 00800410,library,7,?GetExecutionResourceId@VirtualProcessor@details@Concurrency@@QBEIXZ_0
 0082aba0,library,16,__mkgmtime
 0082abb0,library,16,__mkgmtime_0
@@ -35,9 +34,7 @@ address,type,size,symbol
 008919e0,library,16,__mkgmtime_1
 0089ca20,library,10,?SchedulersNeedNotifications@ResourceManager@details@Concurrency@@QAE_NXZ
 00966460,library,7,?GetAnonymousScheduleGroup@SchedulerBase@details@Concurrency@@QAEPAVScheduleGroupBase@23@XZ
-00a0a250,library,6,__RTC_NumErrors_4
 00a4c048,library,6,__RTC_NumErrors_5
-00a55420,library,6,__RTC_NumErrors_6
 00a559c0,library,93,??1filebuf@@UAE@XZ_0
 00a7d0f4,library,11,??_U@YAPAXI@Z
 00a7d104,library,27,?_AtModuleExit@@YAXP6AXXZ@Z

@@ -50,3 +50,23 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x006aa1a0
+// TEMPLATE: STUDIO 0x00827490
+// ??_ETeam@RBX@@WBM@AEPAXI@Z
+
+// TEMPLATE: PLAYER 0x006aa240
+// TEMPLATE: STUDIO 0x00826d40
+// ??$getset@P8Team@RBX@@BEHXZP812@AEXH@Z@?$PropDescriptor@VTeam@RBX@@H@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@H@Reflection@RBX@@@std@@P8Team@2@BEHXZP852@AEXH@Z@Z
+
+// TEMPLATE: PLAYER 0x006aa2a0
+// TEMPLATE: STUDIO 0x00826da0
+// ??$getset@P8Team@RBX@@BE?AVBrickColor@2@XZP812@AEXV32@@Z@?$PropDescriptor@VTeam@RBX@@VBrickColor@2@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@VBrickColor@RBX@@@Reflection@RBX@@@std@@P8Team@2@BE?AVBrickColor@2@XZP852@AEXV62@@Z@Z
+
+// TEMPLATE: PLAYER 0x006aa300
+// TEMPLATE: STUDIO 0x00826e00
+// ??$getset@P8Team@RBX@@BE_NXZP812@AEX_N@Z@?$PropDescriptor@VTeam@RBX@@_N@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@_N@Reflection@RBX@@@std@@P8Team@2@BE_NXZP852@AEX_N@Z@Z
+

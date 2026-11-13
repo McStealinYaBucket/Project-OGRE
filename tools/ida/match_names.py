@@ -282,6 +282,24 @@ FACTS = [
     (0x00e1b638, 0x00f9e820, "data4", "RBX::recguard", "src2016:",
      "recguard (rbx::atomic<int>) | 2016 Time.cpp; swapped through RbxInterlockedExchange 0x009b8f20 on entry and "
      "exit of both timer callbacks (0x009bb185, 0x009bb238)"),
+    # wave2 sync (notes/runs/2026-11-13-phase5-wave2 integrate: Arbiter::getNumPlayers removed, MATCH_FIX,
+    # FLog::GuiTargetLifetime). Checked 2026-11-13 with capstone on both targets.
+    (0x0063e220, 0x0075c0d0, "rename", "?getNumPlayers@DataModel@RBX@@UBEHXZ", "rtti:",
+     "RBX::DataModel::getNumPlayers() const | slot 7 of DataModel's DataModelArbiter-base vftable 0x00b2ff80 "
+     "(also 0x00b36d64, 0x00b3715c); body `add ecx,-0xa8` (DataModel from the +0xa8 base), find Players, ret 0 "
+     "if none, else tail-jump to Players::getNumPlayers. The 2013 Arbiter has 6 slots (ExclusiveArbiter "
+     "0x00bb8af0), so slot 6 is the deleting dtor and slot 7 this; the old rtti: names of the two were swapped"),
+    (0x0064de30, 0x0076a900, "rename", "??_EDataModel@RBX@@WKI@AEPAXI@Z", "rtti:",
+     "RBX::DataModel `vector deleting destructor' adjustor{168} | `sub ecx,0xa8; jmp` to DataModel's deleting "
+     "dtor 0x0064f1f0 (STUDIO 0x0084e250); slot 6 of vftable 0x00b2ff80 (swapped with getNumPlayers before)"),
+    (0x008b2ea0, 0x00961180, "rename", "??_EGuiMain@RBX@@WBM@AEPAXI@Z", "match:",
+     "RBX::GuiMain `vector deleting destructor' adjustor{28} | reccmp 100% vs our 0x00596af0, where our linker "
+     "folds three names (GuiMain, FactoryProduct<GuiMain>, DescribedCreatable<GuiMain>); `sub ecx,0x1c; jmp` to "
+     "the next function and slot 0 of both GuiMain vftables, so GuiMain's own (gen_reccmp_csv MATCH_FIX); the "
+     "old ScreenGui name came from a stale pairing"),
+    (0x00de3f47, 0x00f84e1f, "data1", "_ZN4FLog17GuiTargetLifetimeE", "ios:",
+     "FLog::GuiTargetLifetime (FLog channel byte) | iOS 1029 symbol; ~GuiLayerCollector loads it (`mov cl,[...]` "
+     "at PLAYER 0x008b439b, STUDIO 0x00988b9b) before FastLog"),
 ]
 
 

@@ -16,6 +16,12 @@ namespace RBX {
 		: public DescribedCreatable<HttpService, Instance, sHttpService>
 	{
 	public:
+		enum HttpContentType
+		{
+			APPLICATION_JSON = 0,
+			TEXT_PLAIN = 2,
+		};
+
 		HttpService() {}
 	};
 

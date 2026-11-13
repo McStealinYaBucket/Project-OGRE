@@ -1,50 +1,45 @@
-/* V8DataModel/ImageLabel.h -- October 2013 STUB (image surface landing).
-   Evidence: sImageLabel descriptor referenced by Workspace::start/stop
-     0x515636/0x515896 isA-checks; vtable read of __ZTVN3RBX10ImageLabelE
-     @0xEDE030: slot 49 = setImage(TextureId) 0x3F6A4A (the ChatOutput
-     bubble factories call vtable+0xC4 = this slot), slot 50 =
-     setImageRectOffset(G3D::Vector2) 0x3F6ACC, slot 51 = setImageRectSize
-     (G3D::Vector2) 0x3F6B58, slot 52 = renderBackground2d(Adorn*)
-     0x3F6E02 (slotted 49-52 TODO).  A __ZThn536 setImage thunk exists =
-     a secondary base at +536 also exposes setImage(TextureId) (that base
-     class is undecoded -- TODO).
-   TextureId typing: the binary mangles a distinct RBX::TextureId in
-     ImageLabel::setImage (no out-of-line TextureId ctors; the factories'
-     ContentIdC2ERKSs runs 0x5C1192/0x5C1707/0x5C1C01/0x5C1DDB build the
-     ContentId subobject at OFFSET 0 of the passed temp).  Landing uses
-     ContentId.h's typedef ContentId TextureId -- at every factory call
-     site the compiled form is byte-identical (temp ctor + straight
-     pass); the type-NAME distinction shows only in callee mangles
-     (DELTAs).
-   TODO: full decompile (image rendering, rect fields, secondary base,
-     the rest of the vtable).
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/ImageLabel.h */
+/* V8DataModel/ImageLabel.h -- October 2013.
+   Layout from the PLAYER ctor 0x006bdb40 (STUDIO 0x00851f80): the Described ctor ("ImageLabel"), the
+   GuiImageMixin base at +0x21c (ctor 0x006bc910), then the ImageLabel vftables, no members of its own.
+   The mixin's three setters are ImageLabel's (vftable 0x00b3a96c: 0x006bc280, 0x006bbe20, 0x006bbe70);
+   each raises its property, which these bodies do not yet. */
 
 #pragma once
 
 #include "V8DataModel/GuiLabel.h"
-#include "Util/ContentId.h"
+#include "V8DataModel/GuiMixin.h"
 
 namespace RBX {
 
 	extern const char* const sImageLabel;
 
+	// VTABLE: PLAYER 0x00b3a8c4 RBX::Debugable
+	// VTABLE: STUDIO 0x00c1c73c RBX::Debugable
+	// VTABLE: PLAYER 0x00b3a898 RBX::GuiTarget
+	// VTABLE: STUDIO 0x00c1c710 RBX::GuiTarget
+	// VTABLE: PLAYER 0x00b3a864 RBX::IAdornable
+	// VTABLE: STUDIO 0x00c1c6dc RBX::IAdornable
+	// VTABLE: PLAYER 0x00b3a96c RBX::GuiImageMixin
+	// VTABLE: STUDIO 0x00c1c7e4 RBX::GuiImageMixin
+	// SIZE 0x2d4
 	class ImageLabel
 		: public DescribedCreatable<ImageLabel, GuiLabel, sImageLabel>
-		// FactoryProduct (was mis-stubbed NonCreatable; binary EAs show
-		// FactoryProduct<ImageLabel, GuiLabel>).
+		, public GuiImageMixin  // 0x21c
 	{
+		typedef DescribedCreatable<ImageLabel, GuiLabel, sImageLabel> Super;
 	public:
-		ImageLabel() {}
+		ImageLabel();
 
-		// vtable+0xC4 (slot 49 of the primary vtable) @0x3F6A4A: Image
-		// property setter, parameter BY VALUE (mangle 8setImageENS_9Tex-
-		// tureIdE).  The binary body also raises the Image property change
-		// -- raisePropertyChanged is unported (DELTAs); store-only here.
-		virtual void setImage(TextureId value) { image = value; }
-
-	private:
-		TextureId image;  // the Image prop store (stub; prop wiring TODO).
+		/*override*/ void setImage(TextureId value);
+		/*override*/ void setImageRectOffset(G3D::Vector2 value);
+		/*override*/ void setImageRectSize(G3D::Vector2 value);
 	};
+
+	// Out-of-line copies the original emitted in this class's .obj (the Described ctor its ctor calls).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x006bdab0
+	// TEMPLATE: STUDIO 0x00851e90
+	// ??$?0PBD@?$Described@VImageLabel@RBX@@$E?sImageLabel@2@3QBDBV?$FactoryProduct@VImageLabel@RBX@@VGuiLabel@2@$E?sImageLabel@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
+	// clang-format on
 
 } // namespace RBX

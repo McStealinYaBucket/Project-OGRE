@@ -16,6 +16,15 @@ namespace RBX {
 		: public DescribedCreatable<SkateboardPlatform, BasicPartInstance, sSkateboardPlatform>
 	{
 	public:
+		enum MoveState
+		{
+			STOPPED = 0,
+			COASTING = 1,
+			PUSHING = 2,
+			STOPPING = 3,
+			AIR_FREE = 4,
+		};
+
 		SkateboardPlatform() {}
 	};
 

@@ -1703,3 +1703,36 @@ void RBX::Reflection::TypedPropertyDescriptor<RBX::ProtectedString>::writeValue(
 {
 	element->setValue(getValue(instance).getStringForImmediateUse());
 }
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x00704370
+// FUNCTION: STUDIO 0x0070d8e0
+template<>
+EnumDesc<NormalId>::EnumDesc()
+	: EnumDescriptor("NormalId", typeid(NormalId))
+{
+	addPair(NORM_Y, "Top");
+	addPair(NORM_Y_NEG, "Bottom");
+	addPair(NORM_Z, "Back");
+	addPair(NORM_Z_NEG, "Front");
+	addPair(NORM_X, "Right");
+	addPair(NORM_X_NEG, "Left");
+}
+
+template<>
+const Type& Type::getSingleton<NormalId>()
+{
+	return EnumDesc<NormalId>::singleton();
+}
+
+template<> EnumRegistrar<NormalId> EnumRegistrar<NormalId>::registrar(0);
+template<> TypeRegistrar<NormalId> TypeRegistrar<NormalId>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

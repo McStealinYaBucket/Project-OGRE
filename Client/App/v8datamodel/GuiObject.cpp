@@ -9,11 +9,14 @@
    TODO: full decompile. */
 
 #include "stdafx.h"
+#include "decomp.h"
 
 #include "V8DataModel/GuiObject.h"
+#include "V8Tree/Property.h"
 #include "V8DataModel/ScreenGui.h"
 #include "V8DataModel/BillboardGui.h"
 #include "Util/FastFlags.h"
+#include "Util/BrickColor.h"
 
 namespace RBX {
 	const char* const sGuiObject = "GuiObject";
@@ -29,34 +32,98 @@ namespace RBX {
 RBX_REGISTER_CLASS(RBX::GuiObject);
 }
 
+DECOMP_SIZE_ASSERT(RBX::GuiObject, 0x21c);
+
+// Registered at PLAYER 0x00a7bd20.
+// GLOBAL: PLAYER 0x00d6f3ad
+// GLOBAL: STUDIO 0x00efb97d
+// FFlag::BorderSizePixelUpTo100
+FASTFLAGVARIABLE(BorderSizePixelUpTo100, true)
+
 namespace RBX {
 
-	typedef DescribedNonCreatable<GuiObject, GuiBase2d, sGuiObject, Reflection::ClassDescriptor::PERSISTENT> GuiObjectSuper;
+	// GLOBAL: PLAYER 0x00e0ee0c
+	// GLOBAL: STUDIO 0x00f940d0
+	// GuiObject::prop_ClipsDescendants
+	Reflection::PropDescriptor<GuiObject, bool> GuiObject::prop_ClipsDescendants("ClipsDescendants", category_Behavior, &GuiObject::getClipping, &GuiObject::setClipping);
+	// GLOBAL: PLAYER 0x00e0ed84
+	// GLOBAL: STUDIO 0x00f9404c
+	// GuiObject::prop_BorderSizePixel
+	Reflection::PropDescriptor<GuiObject, int> GuiObject::prop_BorderSizePixel("BorderSizePixel", category_Appearance, &GuiObject::getBorderSizePixel, &GuiObject::setBorderSizePixel);
+	// GLOBAL: PLAYER 0x00e0ef78
+	// GLOBAL: STUDIO 0x00f9423c
+	// GuiObject::prop_Visible
+	Reflection::PropDescriptor<GuiObject, bool> GuiObject::prop_Visible("Visible", category_Data, &GuiObject::getVisible, &GuiObject::setVisible);
+	// GLOBAL: PLAYER 0x00e0ebac
+	// GLOBAL: STUDIO 0x00f93e74
+	// GuiObject::prop_BackgroundTransparency
+	Reflection::PropDescriptor<GuiObject, float> GuiObject::prop_BackgroundTransparency("BackgroundTransparency", category_Appearance, &GuiObject::getBackgroundTransparency, &GuiObject::setBackgroundTransparency);
 
-	// mac: 0x3A8E82: GuiBase2d(name); +513 = bool arg (signal/prop wiring TODO).
-	// Layout inits from the C2: size/position zeroed (+0x1C0-+0x1DC),
-	// visibleCache 0 (+0x1BC), visible true (+0x200 = 1),
-	// backgroundTransparency 0.0f (+0x204 = 0), clipping false (+0x1B9 = 0,
-	// C2 `mov [edi+1B9h],0`), draggable false (+0x95, zero-region),
-	// windowRectCache zero rect (+0x208..+0x214, rarc15 C2 slice
-	// 3A9325/3A932F/3A9339/3A9343/3A934D all store 0).
-	GuiObject::GuiObject(const char* name, bool unknownFlag)
-		: GuiObjectSuper(name)
-		, zIndex(1)
-		, unknown513(unknownFlag)
-		, visibleCache(0)
-		, visible(true)
-		, backgroundTransparency(0.0f)
-		, windowRectCache(G3D::Rect2D::xyxy(0.0f, 0.0f, 0.0f, 0.0f))
-		, clipping(false)
-		, draggable(false)
+	// FUNCTION: PLAYER 0x007bd3a0
+	// FUNCTION: STUDIO 0x008d9d60
+	void GuiObject::setClipping(bool value)
 	{
+		if (clipping != value)
+		{
+			clipping = value;
+			raisePropertyChanged(prop_ClipsDescendants);
+		}
 	}
 
-	// mac: 0x515636/0x515896 callee: store (render-dirty propagation TODO).
-	void GuiObject::setZIndex(int value)
+	// FUNCTION: PLAYER 0x007bd400
+	// FUNCTION: STUDIO 0x008d9dc0
+	void GuiObject::setBorderSizePixel(int value)
 	{
-		zIndex = value;
+		if (value < 0)
+			value = 0;
+		int maxValue = 1;
+		if (FFlag::BorderSizePixelUpTo100)
+			maxValue = 100;
+		if (value > maxValue)
+			value = maxValue;
+		if (borderSizePixel != value)
+		{
+			borderSizePixel = value;
+			raisePropertyChanged(prop_BorderSizePixel);
+		}
+	}
+
+	// FUNCTION: PLAYER 0x007bd540
+	// FUNCTION: STUDIO 0x008d9f00
+	void GuiObject::setVisible(bool value)
+	{
+		if (visible != value)
+		{
+			visible = value;
+			raisePropertyChanged(prop_Visible);
+			if (!visible)
+				m_unk0x1c0 = 0;
+		}
+	}
+
+	// FUNCTION: PLAYER 0x007bd610
+	// FUNCTION: STUDIO 0x008d9fd0
+	void GuiObject::setBackgroundTransparency(float value)
+	{
+		if (value != backgroundTransparency)
+		{
+			backgroundTransparency = value;
+			raisePropertyChanged(prop_BackgroundTransparency);
+		}
+	}
+
+	// FUNCTION: PLAYER 0x007bf190
+	// FUNCTION: STUDIO 0x008dbba0
+	G3D::Rect2D GuiObject::Scale9Rect2D(const G3D::Rect2D& rect, float border, float minSize)
+	{
+		float scale = 1.0f;
+		scale = std::min(scale, rect.width() / minSize);
+		scale = std::min(scale, rect.height() / minSize);
+
+		float xInset = border * scale;
+		float yInset = border * scale;
+
+		return G3D::Rect2D::xywh(rect.x0() + xInset, rect.y0() + yInset, rect.width() - xInset * 2, rect.height() - yInset * 2);
 	}
 
 	// mac: 0x3AC1EA (98B).
@@ -123,6 +190,38 @@ namespace RBX {
 	// else all four sret dwords = 0 (3ABB84..3ABB98).  A null start
 	// faults in the binary ([0+34h] read; the call site passes self,
 	// so the shape is unobservable) -- our walk is null-safe anyway.
+	// STUB: PLAYER 0x007c77c0
+	// STUB: STUDIO 0x008e4260
+	GuiObject::GuiObject(const char* name, bool active)
+		: Super(name)
+		, m_unk0x94(0)
+		, m_unk0x98(false)
+		, m_unk0x99(false)
+		, m_unk0x9a(false)
+		, m_unk0x9c(0.0f, 0.0f)
+		, varMouseEnterConnectionCount(0)
+		, varMouseLeaveConnectionCount(0)
+		, varMouseMovedConnectionCount(0)
+		, varMouseWheelForwardConnectionCount(0)
+		, varMouseWheelBackwardConnectionCount(0)
+		, varDragStoppedConnectionCount(0)
+		, varDragBeginConnectionCount(0)
+		, serverGuiObject(false)
+		, clipping(false)
+		, m_unk0x1c0(0)
+		, size()
+		, position()
+		, sizeConstraint(RelativeXY)
+		, borderSizePixel(1)
+		, backgroundColor(BrickColor(194).color3())
+		, borderColor(BrickColor(26).color3())
+		, visible(true)
+		, active(active)
+		, backgroundTransparency(0.0f)
+		, windowRectCache()
+	{
+	}
+
 	// STUB: PLAYER 0x007c87e0
 	// STUB: STUDIO 0x008e52c0
 	G3D::Rect2D GuiObject::getWindowRect(GuiBase2d* start)
@@ -167,12 +266,107 @@ namespace RBX {
 	// handleResizeERKN3G3D6Rect2DEb) base call with the INCOMING rect.
 	// In our spelling the verbatim copy = the plain Rect2D assign (a
 	// four-float copy, same observable).
-	// STUB: PLAYER 0x007c88f0
-	// STUB: STUDIO 0x008e53d0
+	// FUNCTION: PLAYER 0x007c88f0
+	// FUNCTION: STUDIO 0x008e53d0
 	void GuiObject::handleResize(const G3D::Rect2D& rect, bool flag)
 	{
 		windowRectCache = getWindowRect(this);
 		GuiBase2d::handleResize(rect, flag);
 	}
 
+} // namespace RBX
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+#include "V8DataModel/GuiButton.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x007c29c0
+// FUNCTION: STUDIO 0x008df540
+template<>
+EnumDesc<GuiObject::TweenEasingDirection>::EnumDesc()
+	: EnumDescriptor("EasingDirection", typeid(GuiObject::TweenEasingDirection))
+{
+	addPair(GuiObject::EASING_DIRECTION_IN, "In");
+	addPair(GuiObject::EASING_DIRECTION_OUT, "Out");
+	addPair(GuiObject::EASING_DIRECTION_IN_OUT, "InOut");
+}
+
+template<>
+const Type& Type::getSingleton<GuiObject::TweenEasingDirection>()
+{
+	return EnumDesc<GuiObject::TweenEasingDirection>::singleton();
+}
+
+template<> EnumRegistrar<GuiObject::TweenEasingDirection> EnumRegistrar<GuiObject::TweenEasingDirection>::registrar(0);
+template<> TypeRegistrar<GuiObject::TweenEasingDirection> TypeRegistrar<GuiObject::TweenEasingDirection>::registrar(0);
+
+// FUNCTION: PLAYER 0x007c2ae0
+// FUNCTION: STUDIO 0x008df660
+template<>
+EnumDesc<GuiObject::TweenEasingStyle>::EnumDesc()
+	: EnumDescriptor("EasingStyle", typeid(GuiObject::TweenEasingStyle))
+{
+	addPair(GuiObject::EASING_STYLE_LINEAR, "Linear");
+	addPair(GuiObject::EASING_STYLE_SINE, "Sine");
+	addPair(GuiObject::EASING_STYLE_BACK, "Back");
+	addPair(GuiObject::EASING_STYLE_QUAD, "Quad");
+	addPair(GuiObject::EASING_STYLE_QUART, "Quart");
+	addPair(GuiObject::EASING_STYLE_QUINT, "Quint");
+	addPair(GuiObject::EASING_STYLE_BOUNCE, "Bounce");
+	addPair(GuiObject::EASING_STYLE_ELASTIC, "Elastic");
+}
+
+template<>
+const Type& Type::getSingleton<GuiObject::TweenEasingStyle>()
+{
+	return EnumDesc<GuiObject::TweenEasingStyle>::singleton();
+}
+
+template<> EnumRegistrar<GuiObject::TweenEasingStyle> EnumRegistrar<GuiObject::TweenEasingStyle>::registrar(0);
+template<> TypeRegistrar<GuiObject::TweenEasingStyle> TypeRegistrar<GuiObject::TweenEasingStyle>::registrar(0);
+
+// FUNCTION: PLAYER 0x007c2c50
+// FUNCTION: STUDIO 0x008df7d0
+template<>
+EnumDesc<GuiObject::TweenStatus>::EnumDesc()
+	: EnumDescriptor("TweenStatus", typeid(GuiObject::TweenStatus))
+{
+	addPair(GuiObject::TWEEN_CANCELED, "Canceled");
+	addPair(GuiObject::TWEEN_COMPLETED, "Completed");
+}
+
+template<>
+const Type& Type::getSingleton<GuiObject::TweenStatus>()
+{
+	return EnumDesc<GuiObject::TweenStatus>::singleton();
+}
+
+template<> EnumRegistrar<GuiObject::TweenStatus> EnumRegistrar<GuiObject::TweenStatus>::registrar(0);
+template<> TypeRegistrar<GuiObject::TweenStatus> TypeRegistrar<GuiObject::TweenStatus>::registrar(0);
+
+// FUNCTION: PLAYER 0x007c2d60
+// FUNCTION: STUDIO 0x008df8e0
+template<>
+EnumDesc<GuiButton::Style>::EnumDesc()
+	: EnumDescriptor("ButtonStyle", typeid(GuiButton::Style))
+{
+	addPair(GuiButton::CUSTOM_STYLE, "Custom");
+	addPair(GuiButton::ROBLOX_RED_STYLE, "RobloxButtonDefault");
+	addPair(GuiButton::ROBLOX_GREY_STYLE, "RobloxButton");
+}
+
+template<>
+const Type& Type::getSingleton<GuiButton::Style>()
+{
+	return EnumDesc<GuiButton::Style>::singleton();
+}
+
+template<> EnumRegistrar<GuiButton::Style> EnumRegistrar<GuiButton::Style>::registrar(0);
+template<> TypeRegistrar<GuiButton::Style> TypeRegistrar<GuiButton::Style>::registrar(0);
+
+} // namespace Reflection
 } // namespace RBX

@@ -19,6 +19,7 @@
 #include "Util/Rect.h"
 #include "Gui/Adorn.h"
 #include "V8Tree/Instance.h"
+#include "Gui/GuiEvent.h"
 
 // Adorn = RBX::Adorn via the Gui/Adorn.h include above (binary
 // mangle truth label2d/menuSelect: PNS_5AdornE, batch791); no
@@ -32,15 +33,7 @@ namespace RBX {
 	class GuiEvent;    // 12B const& arg (GuiEvent.h; batch781)
 	class GuiResponse; // 16B by-value return (GuiEvent.h)
 
-	// 2013 secondary base: RTTI .?AVGuiTarget@RBX@@ at GuiItem+0x60 (GuiItem C2 0x0076a4f0 stores its
-	// vftable 0x00b47d5c, then GuiItem's 0x00b5aa88), so focus sits at +0x64. Its one slot is process;
-	// the default body (PLAYER 0x007bc510, folded) returns GuiResponse(). The Mac vtable lists
-	// GuiItem::process in the primary table only because Itanium repeats secondary-base overriders.
-	class GuiTarget
-	{
-	public:
-		virtual GuiResponse process(const GuiEvent& event);
-	};
+	// GuiTarget (the 2013 secondary base at +0x60, focus at +0x64) is in Gui/GuiEvent.h.
 
 	class GuiItem
 		: public DescribedNonCreatable<GuiItem, Instance, sGuiItem>
@@ -59,8 +52,8 @@ namespace RBX {
 		virtual void onDescendantRemoving(const shared_ptr<Instance>& instance); // 24: 0x5CD2A0
 		// STUB: PLAYER 0x00528720
 		virtual void onLoseFocus() {}                                            // 32: 0x3ECC70 (empty)
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool canLoseFocus() { return false; }                            // 33: 0x3EC660 (NON-const, mangle __ZN3RBX7GuiItem12canLoseFocusEv)
 		virtual Vector2 getPosition(Canvas canvas) const;                        // 34: 0x4D8490 (inline GUI.h, assert :64)
 		virtual Vector2 getChildPosition(const GuiItem* child, Canvas canvas) const; // 35: 0x37AD10 (inline GUI.h, assert :69)

@@ -68,6 +68,20 @@ class Players
 		, public Service
 	{
 	public:
+		enum PlayerChatType
+		{
+			PLAYER_CHAT_TYPE_ALL = 0,
+			PLAYER_CHAT_TYPE_TEAM = 1,
+			PLAYER_CHAT_TYPE_WHISPER = 2,
+		};
+
+		enum ChatOption
+		{
+			CLASSIC_CHAT = 0,
+			BUBBLE_CHAT = 1,
+			CLASSIC_AND_BUBBLE_CHAT = 2,
+		};
+
 		Players() {}
 
 		// mac: 0x2E32CC caller: direct-child count (binary reads the children
@@ -123,3 +137,11 @@ class Players
 
 } // namespace Network
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x0056a5c0
+// TEMPLATE: STUDIO 0x0080f810
+// ??1?$storage4@U?$arg@$00@boost@@V?$value@PAVInstance@RBX@@@_bi@2@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@42@V?$value@V?$shared_ptr@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@42@@_bi@boost@@QAE@XZ
+

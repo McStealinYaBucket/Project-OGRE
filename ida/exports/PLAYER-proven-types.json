@@ -2448,6 +2448,718 @@
    "base": false,
    "unique": "V?$FWFinal@VFWPartInstance@RBX@@@RBX@@"
   },
+  "RBX::DebrisService": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::DebrisService, RBX::Instance, char const *const RBX::sDebrisService, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "queue",
+     "offset": 100,
+     "size": 32,
+     "kind": "class",
+     "type": "std::queue<boost::weak_ptr<RBX::Instance>,std::deque<boost::weak_ptr<RBX::Instance>,std::allocator<boost::weak_ptr<RBX::Instance> > > >",
+     "scalar": null
+    },
+    {
+     "name": "maxItems",
+     "offset": 132,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "legacyMaxItems",
+     "offset": 136,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "timer",
+     "offset": 140,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TimerService>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDebrisService@RBX@@"
+  },
+  "RBX::Frame": {
+   "size": 676,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "style",
+     "offset": 540,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::Frame::Style",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "image",
+     "offset": 544,
+     "size": 132,
+     "kind": "class",
+     "type": "RBX::GuiDrawImage",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VFrame@RBX@@"
+  },
+  "RBX::GuiBase": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiBase, RBX::Instance, char const *const RBX::sGuiBase, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::GuiTarget",
+     "offset": 96,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::IAdornable",
+     "offset": 100,
+     "size": 20,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x78",
+     "offset": 120,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    }
+   ],
+   "base": false,
+   "unique": "VGuiBase@RBX@@"
+  },
+  "RBX::GuiBase2d": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiBase2d, RBX::GuiBase, char const *const RBX::sGuiBase2d, 27, 0>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "absolutePosition",
+     "offset": 124,
+     "size": 8,
+     "kind": "class",
+     "type": "G3D::Vector2",
+     "scalar": null
+    },
+    {
+     "name": "absoluteSize",
+     "offset": 132,
+     "size": 8,
+     "kind": "class",
+     "type": "G3D::Vector2",
+     "scalar": null
+    },
+    {
+     "name": "zIndex",
+     "offset": 140,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "guiQueue",
+     "offset": 144,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GuiQueue",
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VGuiBase2d@RBX@@"
+  },
+  "RBX::GuiBase3d": {
+   "size": 136,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiBase3d, RBX::GuiBase, char const *const RBX::sGuiBase3d, 27, 0>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "color",
+     "offset": 124,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::BrickColor",
+     "scalar": null
+    },
+    {
+     "name": "transparency",
+     "offset": 128,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "visible",
+     "offset": 132,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VGuiBase3d@RBX@@"
+  },
+  "RBX::GuiImageMixin": {
+   "size": 184,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "image",
+     "offset": 4,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::ContentId",
+     "scalar": null
+    },
+    {
+     "name": "imageRectOffset",
+     "offset": 36,
+     "size": 8,
+     "kind": "class",
+     "type": "G3D::Vector2",
+     "scalar": null
+    },
+    {
+     "name": "imageRectSize",
+     "offset": 44,
+     "size": 8,
+     "kind": "class",
+     "type": "G3D::Vector2",
+     "scalar": null
+    },
+    {
+     "name": "guiImageDraw",
+     "offset": 52,
+     "size": 132,
+     "kind": "class",
+     "type": "RBX::GuiDrawImage",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGuiImageMixin@RBX@@"
+  },
+  "RBX::GuiLabel": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiLabel, RBX::GuiObject, char const *const RBX::sGuiLabel, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VGuiLabel@RBX@@"
+  },
+  "RBX::GuiLayerCollector": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiLayerCollector, RBX::GuiBase2d, char const *const RBX::sLayerCollector, 27, 0>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "guiLayers",
+     "offset": 148,
+     "size": 32,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGuiLayerCollector@RBX@@"
+  },
+  "RBX::GuiTextMixin": {
+   "size": 84,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "filterState",
+     "offset": 0,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "text",
+     "offset": 4,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "fontSize",
+     "offset": 32,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::TextService::FontSize",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "textColor",
+     "offset": 36,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "textTransparency",
+     "offset": 48,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "textStrokeColor",
+     "offset": 52,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "textStrokeTransparency",
+     "offset": 64,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "textWrap",
+     "offset": 68,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "textScale",
+     "offset": 69,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "xAlignment",
+     "offset": 72,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::TextService::XAlignment",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "yAlignment",
+     "offset": 76,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::TextService::YAlignment",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "font",
+     "offset": 80,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::TextService::Font",
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VGuiTextMixin@RBX@@"
+  },
+  "RBX::ImageLabel": {
+   "size": 724,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    },
+    {
+     "name": "RBX::GuiImageMixin",
+     "offset": 540,
+     "size": 184,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VImageLabel@RBX@@"
+  },
+  "RBX::TextLabel": {
+   "size": 624,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    },
+    {
+     "name": "RBX::GuiTextMixin",
+     "offset": 540,
+     "size": 84,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VTextLabel@RBX@@"
+  },
+  "RBX::PhysicsInstructions": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "averageDt",
+     "offset": 0,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::Average<double>",
+     "scalar": null
+    },
+    {
+     "name": "averageDutyDt",
+     "offset": 24,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::Average<double>",
+     "scalar": null
+    },
+    {
+     "name": "timeSinceLastRadiusChange",
+     "offset": 48,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "throttleTimer",
+     "offset": 56,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "throttleAdjustTime",
+     "offset": 64,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "requestedDutyPercent",
+     "offset": 72,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "bandwidthExceeded",
+     "offset": 80,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "networkBufferHealth",
+     "offset": 88,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    }
+   ],
+   "base": false,
+   "unique": "VPhysicsInstructions@RBX@@"
+  },
+  "RBX::ScreenGui": {
+   "size": 236,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, 27, 0>",
+     "offset": 0,
+     "size": 180,
+     "empty": false
+    },
+    {
+     "name": "RBX::HeartbeatInstance",
+     "offset": 180,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "windowRect",
+     "offset": 188,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Rect2D",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xcc",
+     "offset": 204,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xcd",
+     "offset": 205,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xd0",
+     "offset": 208,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::GuiButton *,std::allocator<RBX::GuiButton *> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xe0",
+     "offset": 224,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::Name const *,RBX::InputObject::UserInputState,std::less<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,RBX::InputObject::UserInputState> > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VScreenGui@RBX@@"
+  },
+  "RBX::RunService": {
+   "size": 176,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::RunService, RBX::Instance, char const *const RBX::sRunService, 17, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "physicsJob",
+     "offset": 100,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "heartbeatTask",
+     "offset": 108,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "runState",
+     "offset": 116,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::RunState",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "totalGameTime",
+     "offset": 120,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "totalGameTimeAtLastHeartbeat",
+     "offset": 128,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "totalWallTime",
+     "offset": 136,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "skippedTimeAccumulated",
+     "offset": 144,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "steppedSignal",
+     "offset": 152,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Stepped const &)>",
+     "scalar": null
+    },
+    {
+     "name": "renderSteppedSignal",
+     "offset": 156,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Stepped const &)>",
+     "scalar": null
+    },
+    {
+     "name": "heartbeatSignal",
+     "offset": 160,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Heartbeat const &)>",
+     "scalar": null
+    },
+    {
+     "name": "runTransitionSignal",
+     "offset": 164,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::RunTransition)>",
+     "scalar": null
+    },
+    {
+     "name": "scriptSteppedSignal",
+     "offset": 168,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(double,double)>",
+     "scalar": null
+    },
+    {
+     "name": "scriptHeartbeatSignal",
+     "offset": 172,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(double)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VRunService@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -3211,6 +3923,251 @@
    "base": true,
    "unique": "V?$Allocator@VFWPartInstance@RBX@@@RBX@@"
   },
+  "RBX::DescribedNonCreatable<RBX::DebrisService, RBX::Instance, char const *const RBX::sDebrisService, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::DebrisService, char const *const RBX::sDebrisService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VDebrisService@RBX@@VInstance@2@$E?sDebrisService@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Frame, char const *const RBX::sFrame, RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiBase, RBX::Instance, char const *const RBX::sGuiBase, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiBase, char const *const RBX::sGuiBase, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiBase@RBX@@VInstance@2@$E?sGuiBase@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::GuiTarget": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VGuiTarget@RBX@@"
+  },
+  "RBX::IAdornable": {
+   "size": 20,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "index2d",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "index3d",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "index3dSorted",
+     "offset": 12,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "bucket",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IAdornableCollector",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIAdornable@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiBase2d, RBX::GuiBase, char const *const RBX::sGuiBase2d, 27, 0>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiBase2d, char const *const RBX::sGuiBase2d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>, 27, 0>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiBase2d@RBX@@VGuiBase@2@$E?sGuiBase2d@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiBase3d, RBX::GuiBase, char const *const RBX::sGuiBase3d, 27, 0>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiBase3d, char const *const RBX::sGuiBase3d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>, 27, 0>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiBase3d@RBX@@VGuiBase@2@$E?sGuiBase3d@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiLabel, RBX::GuiObject, char const *const RBX::sGuiLabel, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiLabel, char const *const RBX::sGuiLabel, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiLabel@RBX@@VGuiObject@2@$E?sGuiLabel@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiLayerCollector, RBX::GuiBase2d, char const *const RBX::sLayerCollector, 27, 0>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiLayerCollector, char const *const RBX::sLayerCollector, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>, 27, 0>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiLayerCollector@RBX@@VGuiBase2d@2@$E?sLayerCollector@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::ImageLabel, char const *const RBX::sImageLabel, RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VImageLabel@RBX@@VGuiLabel@2@$E?sImageLabel@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::TextLabel, char const *const RBX::sTextLabel, RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VTextLabel@RBX@@VGuiLabel@2@$E?sTextLabel@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, 27, 0>": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::ScreenGui, char const *const RBX::sScreenGui, RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 180,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VScreenGui@RBX@@VGuiLayerCollector@2@$E?sScreenGui@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::HeartbeatInstance": {
+   "size": 8,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "heartbeatConnection",
+     "offset": 4,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VHeartbeatInstance@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::RunService, RBX::Instance, char const *const RBX::sRunService, 17, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::RunService, char const *const RBX::sRunService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>, 17, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VRunService@RBX@@VInstance@2@$E?sRunService@2@3QBDB$0BB@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -3418,6 +4375,182 @@
    "base": true,
    "unique": "V?$Described@VTeams@RBX@@$E?sTeams@2@3QBDBV?$FactoryProduct@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDBV32@@2@$0L@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::DebrisService, char const *const RBX::sDebrisService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VDebrisService@RBX@@$E?sDebrisService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sDebrisService@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Frame, char const *const RBX::sFrame, RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VFrame@RBX@@$E?sFrame@2@3QBDBV?$FactoryProduct@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiBase, char const *const RBX::sGuiBase, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiBase@RBX@@$E?sGuiBase@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sGuiBase@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiBase2d, char const *const RBX::sGuiBase2d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>, 27, 0>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiBase2d@RBX@@$E?sGuiBase2d@2@3QBDBV?$NonFactoryProduct@VGuiBase@RBX@@$E?sGuiBase2d@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiBase3d, char const *const RBX::sGuiBase3d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>, 27, 0>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiBase3d@RBX@@$E?sGuiBase3d@2@3QBDBV?$NonFactoryProduct@VGuiBase@RBX@@$E?sGuiBase3d@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiLabel, char const *const RBX::sGuiLabel, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiLabel@RBX@@$E?sGuiLabel@2@3QBDBV?$NonFactoryProduct@VGuiObject@RBX@@$E?sGuiLabel@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiLayerCollector, char const *const RBX::sLayerCollector, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>, 27, 0>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiLayerCollector@RBX@@$E?sLayerCollector@2@3QBDBV?$NonFactoryProduct@VGuiBase2d@RBX@@$E?sLayerCollector@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::ImageLabel, char const *const RBX::sImageLabel, RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VImageLabel@RBX@@$E?sImageLabel@2@3QBDBV?$FactoryProduct@VImageLabel@RBX@@VGuiLabel@2@$E?sImageLabel@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::TextLabel, char const *const RBX::sTextLabel, RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>, 27, 0>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VTextLabel@RBX@@$E?sTextLabel@2@3QBDBV?$FactoryProduct@VTextLabel@RBX@@VGuiLabel@2@$E?sTextLabel@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::ScreenGui, char const *const RBX::sScreenGui, RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>, 27, 0>": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>",
+     "offset": 0,
+     "size": 180,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VScreenGui@RBX@@$E?sScreenGui@2@3QBDBV?$FactoryProduct@VScreenGui@RBX@@VGuiLayerCollector@2@$E?sScreenGui@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::RunService, char const *const RBX::sRunService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>, 17, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VRunService@RBX@@$E?sRunService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sRunService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -3542,6 +4675,182 @@
    "base": true,
    "unique": "V?$FactoryProduct@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDBV32@@RBX@@"
   },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sDebrisService@2@3QBDB@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiObject",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sGuiBase@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiBase",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VGuiBase@RBX@@$E?sGuiBase2d@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiBase",
+     "offset": 0,
+     "size": 124,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VGuiBase@RBX@@$E?sGuiBase3d@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiObject",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VGuiObject@RBX@@$E?sGuiLabel@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiBase2d",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VGuiBase2d@RBX@@$E?sLayerCollector@2@3QBDB@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiLabel",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VImageLabel@RBX@@VGuiLabel@2@$E?sImageLabel@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiLabel",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VTextLabel@RBX@@VGuiLabel@2@$E?sTextLabel@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiLayerCollector",
+     "offset": 0,
+     "size": 180,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VScreenGui@RBX@@VGuiLayerCollector@2@$E?sScreenGui@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sRunService@2@3QBDB@RBX@@"
+  },
   "boost::intrusive::detail::no_default_definer": {
    "size": 1,
    "vftable": false,
@@ -3583,6 +4892,335 @@
    "base": true,
    "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@UWaitingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
   },
+  "RBX::GuiObject": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char const *const RBX::sGuiObject, 27, 0>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x94",
+     "offset": 148,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0x98",
+     "offset": 152,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x99",
+     "offset": 153,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x9a",
+     "offset": 154,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x9c",
+     "offset": 156,
+     "size": 8,
+     "kind": "class",
+     "type": "G3D::Vector2",
+     "scalar": null
+    },
+    {
+     "name": "mouseEnterSignal",
+     "offset": 164,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "mouseLeaveSignal",
+     "offset": 172,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "mouseMovedSignal",
+     "offset": 180,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "mouseWheelForwardSignal",
+     "offset": 188,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "mouseWheelBackwardSignal",
+     "offset": 196,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "varMouseEnterConnectionCount",
+     "offset": 204,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xd0",
+     "offset": 208,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "varMouseLeaveConnectionCount",
+     "offset": 236,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xf0",
+     "offset": 240,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "varMouseMovedConnectionCount",
+     "offset": 268,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x110",
+     "offset": 272,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "varMouseWheelForwardConnectionCount",
+     "offset": 300,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x130",
+     "offset": 304,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "varMouseWheelBackwardConnectionCount",
+     "offset": 332,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x150",
+     "offset": 336,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "dragStoppedSignal",
+     "offset": 364,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "dragBeginSignal",
+     "offset": 372,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(RBX::UDim2)>",
+     "scalar": null
+    },
+    {
+     "name": "varDragStoppedConnectionCount",
+     "offset": 380,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x180",
+     "offset": 384,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "varDragBeginConnectionCount",
+     "offset": 412,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x1a0",
+     "offset": 416,
+     "size": 28,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "serverGuiObject",
+     "offset": 444,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "clipping",
+     "offset": 445,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x1c0",
+     "offset": 448,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "size",
+     "offset": 452,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::UDim2",
+     "scalar": null
+    },
+    {
+     "name": "position",
+     "offset": 468,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::UDim2",
+     "scalar": null
+    },
+    {
+     "name": "sizeConstraint",
+     "offset": 484,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GuiObject::SizeConstraint",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "borderSizePixel",
+     "offset": 488,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "backgroundColor",
+     "offset": 492,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "borderColor",
+     "offset": 504,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "visible",
+     "offset": 516,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "active",
+     "offset": 517,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "backgroundTransparency",
+     "offset": 520,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "windowRectCache",
+     "offset": 524,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Rect2D",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VGuiObject@RBX@@"
+  },
   "boost::intrusive::list_node<void *>": {
    "size": 8,
    "vftable": false,
@@ -3608,6 +5246,54 @@
    ],
    "base": true,
    "unique": "U?$list_node@PAX@intrusive@boost@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char const *const RBX::sGuiObject, 27, 0>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GuiObject, char const *const RBX::sGuiObject, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>, 27, 0>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuiObject@RBX@@VGuiBase2d@2@$E?sGuiObject@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GuiObject, char const *const RBX::sGuiObject, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>, 27, 0>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuiObject@RBX@@$E?sGuiObject@2@3QBDBV?$NonFactoryProduct@VGuiBase2d@RBX@@$E?sGuiObject@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GuiBase2d",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VGuiBase2d@RBX@@$E?sGuiObject@2@3QBDB@RBX@@"
   }
  },
  "missing": [],

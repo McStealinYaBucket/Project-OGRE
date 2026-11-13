@@ -12,9 +12,9 @@ Keep in mind that this code reproduces the original release as it was, bugs incl
 
 <p align="center"><a href="https://mcstealinyabucket.github.io/Project-OGRE/PLAYERPROGRESS.HTML"><img src="docs/PLAYERPROGRESS.SVG" width="45%"></a> <a href="https://mcstealinyabucket.github.io/Project-OGRE/STUDIOPROGRESS.HTML"><img src="docs/STUDIOPROGRESS.SVG" width="45%"></a></p>
 
-About 11% of the Player's functions (4,621 of 40,527) compile to exactly the same instructions as the original, and about 10.6% of Studio's (4,474 of 42,371). About half of those are third-party code, which is matched in full or nearly: Lua 5.1.4 with Roblox's changes, G3D 8.00 with its zlib and libzip, boost 1.53 and RakNet 4.036. Outside the libraries, about 2,500 functions match exactly in the Player and 2,400 in Studio. The images show reccmp's own figures: "Implemented" is the share of functions it can pair with our code at any score (about 15%), and the bar is weighted by how closely each one matches.
+About 14% of the Player's functions (5,664 of 40,534) compile to exactly the same instructions as the original, and about 13% of Studio's (5,544 of 42,377). About 40% of those are third-party code, which is matched in full or nearly: Lua 5.1.4 with Roblox's changes, G3D 8.00 with its zlib and libzip, boost 1.53 and RakNet 4.036. Outside the libraries, about 3,300 functions match exactly in the Player and 3,200 in Studio. The images show reccmp's own figures: "Implemented" is the share of functions it can pair with our code at any score (about 18%), and the bar is weighted by how closely each one matches.
 
-The engine core starts from an earlier partial decompilation of the `App` library. It is being re-measured and its class layouts corrected against the 2013 binaries, beginning with `Instance`, the reflection system, `DataModel` and `ScriptContext`. Work on the engine subsystems has started with math, the core services, scripting and content loading.
+The engine core starts from an earlier partial decompilation of the `App` library. It is being re-measured and its class layouts corrected against the 2013 binaries, beginning with `Instance`, the reflection system, `DataModel` and `ScriptContext`. Work on the engine subsystems has started with math, the core services, scripting, content loading and the GUI.
 
 ## Building
 

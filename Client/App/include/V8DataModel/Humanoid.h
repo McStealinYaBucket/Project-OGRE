@@ -16,6 +16,19 @@ namespace RBX {
 		: public DescribedCreatable<Humanoid, Instance, sHumanoid>
 	{
 	public:
+		enum NameOcclusion
+		{
+			NAME_OCCLUSION_NONE = 0,
+			NAME_OCCLUSION_ENEMY = 1,
+			NAME_OCCLUSION_ALL = 2,
+		};
+
+		enum Status
+		{
+			POISON_STATUS = 0,
+			CONFUSION_STATUS = 1,
+		};
+
 		Humanoid() {}
 	};
 

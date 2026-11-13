@@ -152,3 +152,102 @@ namespace RBX {
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::TextService);
 }
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x0073aa20
+// FUNCTION: STUDIO 0x00885160
+template<>
+EnumDesc<TextService::FontSize>::EnumDesc()
+	: EnumDescriptor("FontSize", typeid(TextService::FontSize))
+{
+	addPair(TextService::SIZE_8, "Size8");
+	addPair(TextService::SIZE_9, "Size9");
+	addPair(TextService::SIZE_10, "Size10");
+	addPair(TextService::SIZE_11, "Size11");
+	addPair(TextService::SIZE_12, "Size12");
+	addPair(TextService::SIZE_14, "Size14");
+	addPair(TextService::SIZE_18, "Size18");
+	addPair(TextService::SIZE_24, "Size24");
+	addPair(TextService::SIZE_36, "Size36");
+	addPair(TextService::SIZE_48, "Size48");
+}
+
+template<>
+const Type& Type::getSingleton<TextService::FontSize>()
+{
+	return EnumDesc<TextService::FontSize>::singleton();
+}
+
+template<> EnumRegistrar<TextService::FontSize> EnumRegistrar<TextService::FontSize>::registrar(0);
+template<> TypeRegistrar<TextService::FontSize> TypeRegistrar<TextService::FontSize>::registrar(0);
+
+// FUNCTION: PLAYER 0x0073aba0
+// FUNCTION: STUDIO 0x008852e0
+template<>
+EnumDesc<TextService::Font>::EnumDesc()
+	: EnumDescriptor("Font", typeid(TextService::Font))
+{
+	addPair(TextService::FONT_0, "Legacy");
+	addPair(TextService::FONT_1, "Arial");
+	addPair(TextService::FONT_2, "ArialBold");
+	addPair(TextService::FONT_3, "SourceSans");
+	addPair(TextService::FONT_4, "SourceSansBold");
+}
+
+template<>
+const Type& Type::getSingleton<TextService::Font>()
+{
+	return EnumDesc<TextService::Font>::singleton();
+}
+
+template<> EnumRegistrar<TextService::Font> EnumRegistrar<TextService::Font>::registrar(0);
+template<> TypeRegistrar<TextService::Font> TypeRegistrar<TextService::Font>::registrar(0);
+
+// FUNCTION: PLAYER 0x0073ace0
+// FUNCTION: STUDIO 0x00885420
+template<>
+EnumDesc<TextService::XAlignment>::EnumDesc()
+	: EnumDescriptor("TextXAlignment", typeid(TextService::XAlignment))
+{
+	addPair(TextService::XALIGNMENT_LEFT, "Left");
+	addPair(TextService::XALIGNMENT_CENTER, "Center");
+	addPair(TextService::XALIGNMENT_RIGHT, "Right");
+}
+
+template<>
+const Type& Type::getSingleton<TextService::XAlignment>()
+{
+	return EnumDesc<TextService::XAlignment>::singleton();
+}
+
+template<> EnumRegistrar<TextService::XAlignment> EnumRegistrar<TextService::XAlignment>::registrar(0);
+template<> TypeRegistrar<TextService::XAlignment> TypeRegistrar<TextService::XAlignment>::registrar(0);
+
+// FUNCTION: PLAYER 0x0073ae00
+// FUNCTION: STUDIO 0x00885540
+template<>
+EnumDesc<TextService::YAlignment>::EnumDesc()
+	: EnumDescriptor("TextYAlignment", typeid(TextService::YAlignment))
+{
+	addPair(TextService::YALIGNMENT_TOP, "Top");
+	addPair(TextService::YALIGNMENT_CENTER, "Center");
+	addPair(TextService::YALIGNMENT_BOTTOM, "Bottom");
+}
+
+template<>
+const Type& Type::getSingleton<TextService::YAlignment>()
+{
+	return EnumDesc<TextService::YAlignment>::singleton();
+}
+
+template<> EnumRegistrar<TextService::YAlignment> EnumRegistrar<TextService::YAlignment>::registrar(0);
+template<> TypeRegistrar<TextService::YAlignment> TypeRegistrar<TextService::YAlignment>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

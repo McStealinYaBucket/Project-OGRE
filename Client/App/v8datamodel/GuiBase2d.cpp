@@ -1,21 +1,15 @@
-/* App/v8datamodel/GuiBase2d.cpp — October 2013 (ctor shell).
-   Evidence: GuiBase2d C2 0x6E4B32.
-   Now also carries the resize arc: getChildRect2D 0x3F6380,
-   notifyChildHandleResize (GCC-unnamed sub_6E501D) and
-   GuiBase2d::handleResize 0x6E4F28 (all rarc12/13/14-raw-verified,
-   comments carry the raw lines), and the RENDER HALF over the
-   already-landed GfxBase/IAdornable.h second base: GuiBase2d::
-   shouldRender2d 0x4C6960 (7B return-0 final overrider), isVisible
-   0x3F5500 (84B strict rect-intersection), recursiveRender2d
-   0x6E4E7E (NON-virtual; the +0x60 face slot-6 vcall then the
-   read-bumped Instances walk) and RecursiveRenderChildren 0x6E4E26
-   (88B static; no-receiver frame) -- rarc17-raw-verified, comments
-   carry the raw lines.  TODO: full decompile. */
+/* App/v8datamodel/GuiBase2d.cpp -- October 2013.
+   No 2013 assert names this file; the 2016 path. Written from the PLAYER bodies 0x007bc530-0x007bcee0
+   (the .obj also holds Rect2D::xywh 0x007bc730, the GetImpl ctor 0x007bc800, Name::doDeclare
+   0x007bc850, visitChildren<ResizeChildren binder> 0x007bc9d0, the Described ctor 0x007bcab0 and the
+   PropDescriptor ctor 0x007bcb30). The props' initializers are PLAYER 0x00a7bc50 / 0x00a7bc90. */
 
 #include "stdafx.h"
+#include "decomp.h"
 
 #include "V8DataModel/GuiBase2d.h"
 #include "V8Tree/Instance.h"
+#include "V8Tree/Property.h"
 #include "Util/FastFlags.h"
 
 namespace RBX {
@@ -32,195 +26,115 @@ namespace RBX {
 RBX_REGISTER_CLASS(RBX::GuiBase2d);
 }
 
+DECOMP_SIZE_ASSERT(RBX::GuiBase2d, 0x94);
+
 namespace RBX {
 
-	typedef DescribedNonCreatable<GuiBase2d, GuiBase, sGuiBase2d, Reflection::ClassDescriptor::PERSISTENT> GuiBase2dSuper;
+	// GLOBAL: PLAYER 0x00e0e8a4
+	// GLOBAL: STUDIO 0x00f93b7c
+	// GuiBase2d::prop_AbsoluteSize
+	Reflection::PropDescriptor<GuiBase2d, G3D::Vector2> GuiBase2d::prop_AbsoluteSize("AbsoluteSize", category_Data, &GuiBase2d::getAbsoluteSize, NULL, Reflection::PropertyDescriptor::UI);
+	// GLOBAL: PLAYER 0x00e0e8d8
+	// GLOBAL: STUDIO 0x00f93ba8
+	// GuiBase2d::prop_AbsolutePosition
+	Reflection::PropDescriptor<GuiBase2d, G3D::Vector2> GuiBase2d::prop_AbsolutePosition("AbsolutePosition", category_Data, &GuiBase2d::getAbsolutePosition, NULL, Reflection::PropertyDescriptor::UI);
 
-	// mac: 0x6E4B32: GuiBase(name); +30/+31/+32/+33 = 0; +34 = 1; +35 = 0.
-	// (+30..+33 are absolutePosition/absoluteSize, zero origin/size.)
-	GuiBase2d::GuiBase2d(const char* name)
-		: GuiBase2dSuper(name)
-		, absolutePosition(0.0f, 0.0f)
-		, absoluteSize(0.0f, 0.0f)
-		, unknown34(1)
-		, unknown35(0)
-	{
-	}
-
-	// mac: 0x6E4D56 (98B).  NaN-aware compare (NaN always stores, like the
-	// GuiObject setters); raise skipped (see header DELTA).
+	// FUNCTION: PLAYER 0x007bc530
+	// FUNCTION: STUDIO 0x008d8f60
 	bool GuiBase2d::setAbsolutePosition(const G3D::Vector2& value)
 	{
-		if (absolutePosition == value)
-			return false;
-		absolutePosition = value;
-		return true;
-	}
-
-	// mac: 0x6E4DB8 (110B).
-	bool GuiBase2d::setAbsoluteSize(const G3D::Vector2& value)
-	{
-		if (absoluteSize == value)
-			return false;
-		absoluteSize = value;
-		return true;
-	}
-
-	// mac: 0x3F6380 (31B, ZTV slot 37; raw 3F6393 call __ZNK3RBX9GuiBase2d9
-	// getRect2DEv tail with __stdcall retn 4 = the sret artifact):
-	// getChildRect2D forwards to getRect2D, full stop.
-	// STUB: PLAYER 0x006bd920
-	// STUB: STUDIO 0x0083aa70
-	G3D::Rect2D GuiBase2d::getChildRect2D() const
-	{
-		return getRect2D();
-	}
-
-	// mac: 0x6E4C4C (266B).
-	// STUB: PLAYER 0x007bc5d0
-	// STUB: STUDIO 0x008d9000
-	bool GuiBase2d::recalculateAbsoluteSizeAndPosition(const G3D::Rect2D& rect)
-	{
-		// DEVIATION (toolchain): the binary uses lrintf (banker's); VS2012
-		// has neither lrintf nor _lrintf, so G3D::iRound (half-away) stands
-		// in.  Identical except on exact .5 fractions.
-		G3D::Vector2 pos;
-		G3D::Vector2 size;
-		if (FFlag::RoundGuiAbsoluteSizeAndPosition)
+		if (absolutePosition != value)
 		{
-			pos = G3D::Vector2((float)G3D::iRound(rect.x0y0().x),
-				(float)G3D::iRound(rect.x0y0().y));
-			size = G3D::Vector2(
-				(float)G3D::iRound(rect.x1y1().x - rect.x0y0().x),
-				(float)G3D::iRound(rect.x1y1().y - rect.x0y0().y));
+			absolutePosition = value;
+			raisePropertyChanged(prop_AbsolutePosition);
+			return true;
 		}
-		else
-		{
-			pos = rect.x0y0();
-			size = rect.x1y1() - rect.x0y0();
-		}
-		bool moved = setAbsolutePosition(pos);
-		bool resized = setAbsoluteSize(size);
-		return moved || resized;
-	}
-
-	// mac: 0x6E50D6 (101B).  minss/maxss as ternaries (NaN-equivalent, proven at
-	// Primitive::clipToSafeSize).
-	// STUB: PLAYER 0x007bc7e0
-	// STUB: STUDIO 0x008d9210
-	G3D::Rect2D GuiBase2d::getRect2D() const
-	{
-		float x0 = absolutePosition.x + absoluteSize.x;
-		float y0 = absolutePosition.y + absoluteSize.y;
-		return G3D::Rect2D::xyxy(
-			x0 < absolutePosition.x ? x0 : absolutePosition.x,
-			y0 < absolutePosition.y ? y0 : absolutePosition.y,
-			x0 > absolutePosition.x ? x0 : absolutePosition.x,
-			y0 > absolutePosition.y ? y0 : absolutePosition.y);
-	}
-
-	// sub_6E501D (101B): the GCC-UNNAMED static behind handleResize's
-	// children walk (bound by the binary through boost._bi
-	// list3<arg<1>, value<G3D::Rect2D>, value<bool>>; our direct static
-	// call stages the same evaluation).  Raw 6E502E..6E5081: child.get()
-	// null-check FIRST (6E502E test/jz-out), then the isA gate --
-	// [child+0x30] descriptor (our landed getDescriptor(),
-	// Reflection/object.h) isA(sGuiBase2d described,
-	// ClassDescriptor::isA 0x157C0E) -- then the tail: esi -= 0x24
-	// (chunk-crawl undo), [child vptr+0x98] vcall = child->
-	// handleResize(rect, flag) -- slot 38, ZTV-proven (rarc13), i.e.
-	// the recursion re-enters the OVERRIDING handle (GuiObject's when
-	// the child is a GuiObject).
-	static void notifyChildHandleResize(
-		const boost::shared_ptr<Instance>& child,
-		const G3D::Rect2D& rect, bool flag)
-	{
-		if (child.get() == NULL)
-			return;
-		if (!child->getDescriptor().isA(GuiBase2d::classDescriptor()))
-			return;
-		static_cast<GuiBase2d*>(child.get())->handleResize(rect, flag);
-	}
-
-	// mac: 0x6E4F28 (245B, __ZN3RBX9GuiBase2d12handleResizeERKN3G3D6Rect2DEb:
-	// raw 6E4F31 sub esp,4Ch) -- ZTV slot 38 (rarc13).  Binary order:
-	// vcall slot 39 (recalculate -- our now-virtual member) with the
-	// pending rect; gate (changed || flag); slot-37 sret fills the
-	// binder's value<G3D::Rect2D>; THEN the children pair read-bump
-	// (lock-inc [ctrl+4] = read()'s landed shape) and the walk.  The
-	// child receives the PARENT'S child-rect (not the incoming rect).
-	// DEVIATIONS: the walk = our getChildren2() snapshot loop (same
-	// px/ctrl semantics, rarc14-proven pair); the bind-call = the
-	// direct static; the GCC EH tail = compiler-managed (not spelled).
-	// STUB: PLAYER 0x007bce50
-	// STUB: STUDIO 0x008d9800
-	void GuiBase2d::handleResize(const G3D::Rect2D& rect, bool flag)
-	{
-		bool changed = recalculateAbsoluteSizeAndPosition(rect);
-		if (changed || flag)
-		{
-			G3D::Rect2D childRect = getChildRect2D();
-			boost::shared_ptr<const Instances> snapshot = getChildren2();
-			if (snapshot)
-			{
-				for (Instances::const_iterator iter = snapshot->begin();
-					iter != snapshot->end(); ++iter)
-					notifyChildHandleResize(*iter, childRect, flag);
-			}
-		}
-	}
-
-	// ZTV slot 40 (code-keyed rarc13/rarc17, vptr+0xA0; mangle
-	// __ZNK3RBX9GuiBase2d14shouldRender2dEv = CONST): 0x4C6960 (7B),
-	// xor eax,eax; retn.  The final overrider of the IAdornable face
-	// slot 0 -- the merged ZTV's face section routes the Thn96
-	// adjustor here (rarc17 row 63).
-	bool GuiBase2d::shouldRender2d() const
-	{
 		return false;
 	}
 
-	// ZTV slot 41 (vptr+0xA4; mangle
-	// __ZNK3RBX9GuiBase2d9isVisibleERKN3G3D6Rect2DE = CONST):
-	// mac: 0x3F5500 (84B).  getRect2D() sret (3F550D..3F5518) then the
-	// strict-inequality intersection test (raw 3F551D..3F5549:
-	// ours[2] > other[0], ours[3] > other[1], other[2] > ours[0],
-	// other[3] > ours[1]; ucomiss+setnbe = NaN-false = the C++ float
-	// '>'; the final-overrider proof = rarc17 row 66 Thn96).  The
-	// plain local = no aliasing hazard (the const& and the fresh
-	// rect never overlap).
-	bool GuiBase2d::isVisible(const G3D::Rect2D& rect) const
+	// FUNCTION: PLAYER 0x007bc580
+	// FUNCTION: STUDIO 0x008d8fb0
+	bool GuiBase2d::setAbsoluteSize(const G3D::Vector2& value)
 	{
-		const G3D::Rect2D ours = getRect2D();
-		return ours.x1y1().x > rect.x0y0().x
-			&& ours.x1y1().y > rect.x0y0().y
-			&& rect.x1y1().x > ours.x0y0().x
-			&& rect.x1y1().y > ours.x0y0().y;
+		if (absoluteSize != value)
+		{
+			absoluteSize = value;
+			raisePropertyChanged(prop_AbsoluteSize);
+			return true;
+		}
+		return false;
 	}
 
-	// mac: 0x6E4E7E (170B): see GuiBase2d.h (the ZTV-absent non-virtual +
-	// the +0x60 face slot-6 vcall shape).
+	// STUB: PLAYER 0x007bc5d0
+	// STUB: STUDIO 0x008d9000
+	bool GuiBase2d::recalculateAbsoluteSizeAndPosition(const G3D::Rect2D& viewport)
+	{
+		G3D::Vector2 position = viewport.x0y0();
+		if (FFlag::RoundGuiAbsoluteSizeAndPosition)
+			position = G3D::Vector2((float)G3D::iRound(position.x), (float)G3D::iRound(position.y));
+		bool result = setAbsolutePosition(position);
+
+		G3D::Vector2 size = viewport.x1y1() - viewport.x0y0();
+		if (FFlag::RoundGuiAbsoluteSizeAndPosition)
+			size = G3D::Vector2((float)G3D::iRound(size.x), (float)G3D::iRound(size.y));
+		return setAbsoluteSize(size) || result;
+	}
+
+	// FUNCTION: PLAYER 0x007bc7e0
+	// FUNCTION: STUDIO 0x008d9210
+	G3D::Rect2D GuiBase2d::getRect2D() const
+	{
+		return G3D::Rect2D::xywh(absolutePosition, absoluteSize);
+	}
+
+	// FUNCTION: PLAYER 0x007bcc40
+	// FUNCTION: STUDIO 0x008d9600
+	GuiBase2d::GuiBase2d(const char* name)
+		: Super(name)
+		, absolutePosition(0.0f, 0.0f)
+		, absoluteSize(0.0f, 0.0f)
+		, zIndex(GuiBase::minZIndex2d())
+		, guiQueue(GUIQUEUE_GENERAL)
+	{
+	}
+
+	// FUNCTION: PLAYER 0x007bccc0
+	// FUNCTION: STUDIO 0x008d9670
+	void GuiBase2d::RecursiveRenderChildren(shared_ptr<Instance> instance, RBX::Adorn* adorn)
+	{
+		if (GuiBase2d* guiBase = Instance::fastDynamicCast<GuiBase2d>(instance.get()))
+			guiBase->recursiveRender2d(adorn);
+	}
+
+	// FUNCTION: PLAYER 0x007bcd60
+	// FUNCTION: STUDIO 0x008d9710
 	void GuiBase2d::recursiveRender2d(RBX::Adorn* adorn)
 	{
 		render2d(adorn);
-		boost::shared_ptr<const Instances> snapshot = getChildren2();
-		if (snapshot)
-		{
-			for (Instances::const_iterator iter = snapshot->begin();
-				iter != snapshot->end(); ++iter)
-				RecursiveRenderChildren(*iter, adorn);
-		}
+		visitChildren(boost::bind(&GuiBase2d::RecursiveRenderChildren, _1, adorn));
 	}
 
-	// mac: 0x6E4E26 (88B): see GuiBase2d.h (the static + invisible-pointer
-	// note -- the mangle frame (sp*, adorn) matches ours exactly).
-	void GuiBase2d::RecursiveRenderChildren(boost::shared_ptr<Instance> child, RBX::Adorn* adorn)
+	// FUNCTION: PLAYER 0x007bcda0
+	// FUNCTION: STUDIO 0x008d9750
+	static void ResizeChildren(shared_ptr<Instance> instance, const G3D::Rect2D& viewport, bool force)
 	{
-		if (child.get() != NULL
-			&& child->getDescriptor().isA(GuiBase2d::classDescriptor()))
-		{
-			static_cast<GuiBase2d*>(child.get())->recursiveRender2d(adorn);
-		}
+		if (GuiBase2d* guiBase = Instance::fastDynamicCast<GuiBase2d>(instance.get()))
+			guiBase->handleResize(viewport, force);
+	}
+
+	// FUNCTION: PLAYER 0x007bce50
+	// FUNCTION: STUDIO 0x008d9800
+	void GuiBase2d::handleResize(const G3D::Rect2D& viewport, bool force)
+	{
+		if (recalculateAbsoluteSizeAndPosition(viewport) || force)
+			visitChildren(boost::bind(&ResizeChildren, _1, getChildRect2D(), force));
+	}
+
+	// FUNCTION: PLAYER 0x007bcee0
+	// FUNCTION: STUDIO 0x008d9890
+	bool GuiBase2d::askAddChild(const Instance* instance) const
+	{
+		return Instance::fastDynamicCast<GuiBase2d>(instance) != NULL;
 	}
 
 } // namespace RBX

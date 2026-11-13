@@ -16,6 +16,16 @@ namespace RBX {
 		: public DescribedNonCreatable<PrismInstance, PartInstance, sPrism>
 	{
 	public:
+		enum NumSidesEnum
+		{
+			sides3 = 3,
+			sides5 = 5,
+			sides6 = 6,
+			sides8 = 8,
+			sides10 = 10,
+			sides20 = 20,
+		};
+
 		PrismInstance() {}
 	};
 

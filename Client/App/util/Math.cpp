@@ -455,34 +455,6 @@ float Math::averageRotationClose(float aRot, float bRot)	// computes average aRo
 	2.	elevation == 0
 	3.  heading == focus heading
 */
-// FUNCTION: PLAYER 0x007588b0
-// FUNCTION: STUDIO 0x00897a30
-CoordinateFrame Math::getFocusSpace(const CoordinateFrame& focus)
-{
-	float heading, elevation;
-	getHeadingElevation(focus, heading, elevation);
-	CoordinateFrame answer(focus);
-	setHeadingElevation(answer, heading, 0.0f);
-	return answer;
-}
-// FUNCTION: PLAYER 0x00758010
-// FUNCTION: STUDIO 0x00897190
-void Math::getHeadingElevation(const CoordinateFrame& c, float& heading, float& elevation)
-{
-	Vector3 look = c.lookVector();
-	heading = getHeading(look);
-	elevation = getElevation(look);
-}
-// FUNCTION: PLAYER 0x00758060
-// FUNCTION: STUDIO 0x008971e0
-void Math::setHeadingElevation(CoordinateFrame& c, float heading, float elevation)
-{
-	float elevationVector = sinf(elevation);
-	float xzLength = sqrtf(1 - elevationVector * elevationVector);
-	Vector3 look(-sinf(heading) * xzLength, elevationVector, -cosf(heading) * xzLength);
-	Vector3 lookAt = c.translation + look.direction();
-	c.lookAt(lookAt);
-}
 // FUNCTION: PLAYER 0x007570c0
 // FUNCTION: STUDIO 0x00896240
 bool Math::lessThan(const Vector3& min, const Vector3& max)
@@ -490,75 +462,6 @@ bool Math::lessThan(const Vector3& min, const Vector3& max)
 	return (	(min.x < max.x)
 			&&	(min.y < max.y)
 			&&	(min.z < max.z)	);
-}
-// FUNCTION: PLAYER 0x00759a40
-// FUNCTION: STUDIO 0x00898bc0
-bool Math::isDenormal(float f)
-{
-	return (boost::math::fpclassify<float>(f) == FP_SUBNORMAL);
-}
-// FUNCTION: PLAYER 0x00759aa0
-// FUNCTION: STUDIO 0x00898c20
-bool Math::isNanInf(float f)
-{
-	return !boost::math::isfinite<float>(f);
-}
-static inline bool isNanInfDenorm(float f)
-{
-	int fpClass = boost::math::fpclassify<float>(f);
-	return ((fpClass != FP_ZERO) && (fpClass != FP_NORMAL));
-}
-// FUNCTION: PLAYER 0x00759ad0
-// FUNCTION: STUDIO 0x00898c50
-bool Math::isNanInfVector3(const Vector3& v)
-{
-	return (isNanInf(v.x) || isNanInf(v.y) || isNanInf(v.z));
-}
-// FUNCTION: PLAYER 0x00759b40
-// FUNCTION: STUDIO 0x00898cc0
-bool Math::isNanInfDenormVector3(const Vector3& v)
-{
-	return (isNanInfDenorm(v.x) || isNanInfDenorm(v.y) || isNanInfDenorm(v.z));
-}
-// FUNCTION: PLAYER 0x00759be0
-// FUNCTION: STUDIO 0x00898d60
-bool Math::hasNanOrInf(const Matrix3& m)
-{
-	for (int i = 0; i < 3; ++i)
-		for (int j = 0; j < 3; ++j)
-			if (Math::isNanInf(m[i][j]))
-				return true;
-	return false;
-}
-// FUNCTION: PLAYER 0x00759c40
-// FUNCTION: STUDIO 0x00898dc0
-bool Math::fixDenorm(Vector3& v)
-{
-	bool result = false;
-	if (isDenormal(v.x))
-	{
-		v.x = 0;
-		result = true;
-	}
-	if (isDenormal(v.y))
-	{
-		v.y = 0;
-		result = true;
-	}
-	if (isDenormal(v.z))
-	{
-		v.z = 0;
-		result = true;
-	}
-	return result;
-}
-// FUNCTION: PLAYER 0x00758b00
-// FUNCTION: STUDIO 0x00897c80
-unsigned char Math::rotationToByte(float angle)
-{
-	float wrapped = static_cast<float>(Math::radWrap(angle));
-	unsigned char answer = rotationToByteBase(wrapped);
-	return answer;
 }
 // FUNCTION: PLAYER 0x007570f0
 // FUNCTION: STUDIO 0x00896270
@@ -621,25 +524,108 @@ Matrix3 Math::momentToWorldSpace(const Matrix3& iBody, const Matrix3& bodyRotati
 {
 	return bodyRotation * iBody * bodyRotation.transpose();
 }
+static inline bool isNanInfDenorm(float f)
+{
+	int fpClass = boost::math::fpclassify<float>(f);
+	return ((fpClass != FP_ZERO) && (fpClass != FP_NORMAL));
+}
 // FUNCTION: PLAYER 0x007573b0
 // FUNCTION: STUDIO 0x00896530
 Vector3 Math::toDiagonal(const Matrix3& m)
 {
 	return Vector3(m[0][0], m[1][1], m[2][2]);
 }
-// FUNCTION: PLAYER 0x0075a460
-// FUNCTION: STUDIO 0x008995e0
-Matrix3 Math::fromVectorToVectorRotation( const Vector3& fromVec, const Vector3& toVec )
+// FUNCTION: PLAYER 0x00758010
+// FUNCTION: STUDIO 0x00897190
+void Math::getHeadingElevation(const CoordinateFrame& c, float& heading, float& elevation)
 {
-	Matrix3 rotMatrix = Matrix3::identity();
-	Vector3 rotationAxis = fromVec.cross(toVec);
-	if( rotationAxis.magnitude() > kEpsilon )
+	Vector3 look = c.lookVector();
+	heading = getHeading(look);
+	elevation = getElevation(look);
+}
+// FUNCTION: PLAYER 0x00758060
+// FUNCTION: STUDIO 0x008971e0
+void Math::setHeadingElevation(CoordinateFrame& c, float heading, float elevation)
+{
+	float elevationVector = sinf(elevation);
+	float xzLength = sqrtf(1 - elevationVector * elevationVector);
+	Vector3 look(-sinf(heading) * xzLength, elevationVector, -cosf(heading) * xzLength);
+	Vector3 lookAt = c.translation + look.direction();
+	c.lookAt(lookAt);
+}
+// FUNCTION: PLAYER 0x007588b0
+// FUNCTION: STUDIO 0x00897a30
+CoordinateFrame Math::getFocusSpace(const CoordinateFrame& focus)
+{
+	float heading, elevation;
+	getHeadingElevation(focus, heading, elevation);
+	CoordinateFrame answer(focus);
+	setHeadingElevation(answer, heading, 0.0f);
+	return answer;
+}
+// FUNCTION: PLAYER 0x00758b00
+// FUNCTION: STUDIO 0x00897c80
+unsigned char Math::rotationToByte(float angle)
+{
+	float wrapped = static_cast<float>(Math::radWrap(angle));
+	unsigned char answer = rotationToByteBase(wrapped);
+	return answer;
+}
+// STUB: PLAYER 0x00759a40
+// STUB: STUDIO 0x00898bc0
+bool Math::isDenormal(float f)
+{
+	return (boost::math::fpclassify<float>(f) == FP_SUBNORMAL);
+}
+// FUNCTION: PLAYER 0x00759aa0
+// FUNCTION: STUDIO 0x00898c20
+bool Math::isNanInf(float f)
+{
+	return !boost::math::isfinite<float>(f);
+}
+// FUNCTION: PLAYER 0x00759ad0
+// FUNCTION: STUDIO 0x00898c50
+bool Math::isNanInfVector3(const Vector3& v)
+{
+	return (isNanInf(v.x) || isNanInf(v.y) || isNanInf(v.z));
+}
+// STUB: PLAYER 0x00759b40
+// STUB: STUDIO 0x00898cc0
+bool Math::isNanInfDenormVector3(const Vector3& v)
+{
+	return (isNanInfDenorm(v.x) || isNanInfDenorm(v.y) || isNanInfDenorm(v.z));
+}
+// FUNCTION: PLAYER 0x00759be0
+// FUNCTION: STUDIO 0x00898d60
+bool Math::hasNanOrInf(const Matrix3& m)
+{
+	for (int i = 0; i < 3; ++i)
+		for (int j = 0; j < 3; ++j)
+			if (Math::isNanInf(m[i][j]))
+				return true;
+	return false;
+}
+// FUNCTION: PLAYER 0x00759c40
+// FUNCTION: STUDIO 0x00898dc0
+bool Math::fixDenorm(Vector3& v)
+{
+	bool result = false;
+	if (isDenormal(v.x))
 	{
-		float rotAngle = acos(fromVec.dot(toVec)/(fromVec.magnitude() * toVec.magnitude()));
-		rotationAxis /= rotationAxis.magnitude();
-		rotMatrix = fromRotationAxisAndAngle(rotationAxis, rotAngle);
+		v.x = 0;
+		result = true;
 	}
-	return rotMatrix;
+	if (isDenormal(v.y))
+	{
+		v.y = 0;
+		result = true;
+	}
+	if (isDenormal(v.z))
+	{
+		v.z = 0;
+		result = true;
+	}
+	return result;
 }
 // FUNCTION: PLAYER 0x00759ca0
 // FUNCTION: STUDIO 0x00898e20
@@ -678,6 +664,20 @@ Matrix3 Math::fromDirectionCosines(	const Vector3& fromX, const Vector3& fromY, 
 	float r22 = toZ.dot(fromZ);
 	Matrix3 rotMatrix(r00, r01, r02, r10, r11, r12, r20, r21, r22);
 	Math::orthonormalizeIfNecessary(rotMatrix);
+	return rotMatrix;
+}
+// FUNCTION: PLAYER 0x0075a460
+// FUNCTION: STUDIO 0x008995e0
+Matrix3 Math::fromVectorToVectorRotation( const Vector3& fromVec, const Vector3& toVec )
+{
+	Matrix3 rotMatrix = Matrix3::identity();
+	Vector3 rotationAxis = fromVec.cross(toVec);
+	if( rotationAxis.magnitude() > kEpsilon )
+	{
+		float rotAngle = acos(fromVec.dot(toVec)/(fromVec.magnitude() * toVec.magnitude()));
+		rotationAxis /= rotationAxis.magnitude();
+		rotMatrix = fromRotationAxisAndAngle(rotationAxis, rotAngle);
+	}
 	return rotMatrix;
 }
 /*

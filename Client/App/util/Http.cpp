@@ -1,30 +1,183 @@
-// Reconstructed October 2013 implementation for util/Darwin/Http.cpp
-// Evidence: October 23 2013 symbolled Studio (Mach-O i386).
-// Original path (assert string in Http::init, 0x1FA134):
-//   /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/util/Darwin/Http.cpp line 67
+// October 2013 util/Http.cpp (Windows). The one 2013 assert, RBXASSERT(false) in httpGetPostImpl,
+// is at Http.cpp:100 in both PLAYER and STUDIO; the functions down to get() are in PLAYER address
+// order (0x00622980-0x00623310). Below them, the Mac-derived remainder (init, async get/post, trust
+// checks) still awaits the 2013 Windows bytes; its "mac:" addresses are MACSTUDIO ones.
 
 #include "Util/Http.h"
-
+#include "Util/standardout.h"
 #include <sstream>
-
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "rbx/Debug.h"
+#include "rbx/rbxtime.h"
 #include "util/ThreadPool.h"
 
 #ifdef _WIN32
 #include "RbxPlatform.h"
-#include <wininet.h>
-#pragma comment(lib, "wininet.lib")
-// OGRE vc9: was <zlib/zlib.h> from a 2016 Contribs zlib 1.2.8. PLAYER links one zlib, G3D's bundled
-// 1.2.3, built stdcall (deflateInit2_ 0x009e1e80 ends ret 0x20), so callers need ZLIB_WINAPI.
-#ifndef ZLIB_WINAPI
-#define ZLIB_WINAPI
 #endif
-#include <zlib.h>
-// (static-lib compile-check stage does not resolve externals).
+
+namespace RBX
+{
+
+// GLOBAL: PLAYER 0x00de3eb4
+// GLOBAL: STUDIO 0x00f66e9c
+std::string Http::accessKey;
+std::string Http::gameSessionID;
+std::string Http::gameID;
+std::string Http::placeID;
+std::string Http::requester;
+
+int Http::playerCount = 0;
+Http::API Http::defaultApi = Http::Uninitialized;
+// GLOBAL: PLAYER 0x00de3e78
+// GLOBAL: STUDIO 0x00f66e60
+RBX::mutex *Http::robloxResponceLock = NULL;
+// GLOBAL: PLAYER 0x00de3e7c
+// GLOBAL: STUDIO 0x00f66e64
+RBX::mutex *Http::cdnResponceLock = NULL;
+RBX::ThreadPool *Http::httpThreadPool = NULL; // dword_FAE0A0 / copied to dword_FAE0B0
+long Http::cdnSuccessCount = 0;
+Http::MutexGuard Http::lockGuard;
+
+// mac: 0x1FF782 - news two RBX::mutex objects (sizeof == 0x2C) into the static pointers (static init).
+// FUNCTION: PLAYER 0x00622980
+// FUNCTION: STUDIO 0x006cac90
+Http::MutexGuard::MutexGuard()
+{
+	robloxResponceLock = new mutex();
+	cdnResponceLock = new mutex();
+}
+
+// FUNCTION: PLAYER 0x00622a60
+// FUNCTION: STUDIO 0x006cb180
+RBX::mutex *Http::getRobloxResponceLock()
+{
+	return robloxResponceLock;
+}
+
+// FUNCTION: PLAYER 0x00622a70
+// FUNCTION: STUDIO 0x006cb190
+RBX::mutex *Http::getCdnResponceLock()
+{
+	return cdnResponceLock;
+}
+
+// FUNCTION: PLAYER 0x00622a80
+// FUNCTION: STUDIO 0x006cb1a0
+http_status_error::http_status_error(int statusCode)
+	: std::runtime_error(format("statusCode = %d", statusCode))
+	, statusCode(statusCode)
+{
+}
+
+#ifdef _WIN32
+// FUNCTION: PLAYER 0x00622b20
+// FUNCTION: STUDIO 0x006cb220
+void Http::ThrowLastError(int err, const char* url, const char* message)
+{
+	char buffer[256];
+	if (::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT),
+			buffer, 256, NULL) == 0)
+		throw RBX::runtime_error("%s: %s, err=0x%X", url, message, err);
+	else
+		throw RBX::runtime_error("%s: %s, %s", url, message, buffer);
+}
 #endif
+
+// FUNCTION: PLAYER 0x00622bc0
+// FUNCTION: STUDIO 0x006cb2c0
+void Http::httpGetPostImpl(bool isPost, std::istream& dataStream, bool compressData,
+	const std::map<std::string, std::string>& additionalHeaders,
+	bool allowExternal, std::string& response)
+{
+	// if/else chain (test eax / cmp eax,1, two tail jumps); the default RBXASSERT is 2013 line 100.
+	if (instanceApi == WinInet)
+		httpGetPostWinInet(isPost, dataStream, compressData, additionalHeaders, allowExternal, response);
+	else if (instanceApi == WinHttp)
+		httpGetPostWinHttp(isPost, dataStream, compressData, additionalHeaders, allowExternal, response);
+	else
+		RBXASSERT(false);
+
+
+}
+
+// FUNCTION: PLAYER 0x00622c20
+// FUNCTION: STUDIO 0x006cb320
+void Http::post(std::istream& input, bool compress, std::string& response, bool externalRequest)
+{
+	httpGetPostImpl(true, input, compress, additionalHeaders, externalRequest, response);
+}
+
+// Statics of get() (defined below the line-100 block so the assert keeps its 2013 line).
+long Http::cdnFailureCount = 0;
+long Http::alternateCdnSuccessCount = 0;
+long Http::alternateCdnFailureCount = 0;
+double Http::lastCdnFailureTimeSpan = 0;
+long Http::robloxSuccessCount = 0;
+long Http::robloxFailureCount = 0;
+WindowAverage<double, double> Http::robloxResponce(256);
+WindowAverage<double, double> Http::cdnResponce(256);
+
+// STUB: PLAYER 0x00622cb0
+// STUB: STUDIO 0x006cb3b0
+void Http::onWinHttpRedirect(unsigned long dwInternetStatus, std::string redirectUrl)
+{
+	size_t pos = redirectUrl.find("bg.roblox");
+	if (pos != std::string::npos)
+	{
+		alternateUrl = redirectUrl.substr(0, pos);
+		alternateUrl += redirectUrl.substr(pos + 2);
+	}
+	else
+	{
+		pos = redirectUrl.find("-cf.roblox");
+		if (pos != std::string::npos)
+		{
+			alternateUrl = redirectUrl.substr(0, pos);
+			alternateUrl += redirectUrl.substr(pos + 3);
+		}
+	}
+}
+
+// mac: 0x1FF710 (complete dtor) / 0x1FB9D0 (thunk)
+Http::MutexGuard::~MutexGuard()
+{
+	if (robloxResponceLock)
+	{
+		delete robloxResponceLock;
+		robloxResponceLock = NULL;
+	}
+	if (cdnResponceLock)
+	{
+		delete cdnResponceLock;
+		cdnResponceLock = NULL;
+	}
+}
+
+// FUNCTION: PLAYER 0x00622ec0
+// FUNCTION: STUDIO 0x006cb6a0
+void Http::ThrowIfFailure(bool success, const char* url, const char* message)
+{
+	if (!success)
+	{
+#ifdef _WIN32
+		ThrowLastError(GetLastError(), url, message);
+#else
+		throw RBX::runtime_error("%s: %s", url, message);
+#endif
+	}
+}
+
+// FUNCTION: PLAYER 0x00623040
+// FUNCTION: STUDIO 0x006cb840
+void Http::ThrowIfFailure(bool success, const char* message)
+{
+	ThrowIfFailure(success, url.c_str(), message);
+}
+
+
+} // namespace RBX
 
 // sub_1FB9B3 - initializes the trusted roblox domain list (call_once target)
 namespace RBX
@@ -106,49 +259,6 @@ static void asyncPostStreamWorker(Http* h, boost::shared_ptr<std::istream> strea
 
 // - rbx_isRobloxSite (0x5FE6F7) and rbx_isMoneySite (0x5FE861) are free
 
-
-
-
-// statics (addresses are .bss slots referenced by the decompiled code)
-std::string Http::accessKey;
-std::string Http::gameSessionID;
-std::string Http::gameID;
-std::string Http::placeID;
-std::string Http::requester;
-
-int Http::playerCount = 0;
-
-Http::API Http::defaultApi = Http::Uninitialized;
-RBX::mutex *Http::robloxResponceLock = NULL; // dword_FAE0A4-ish slot
-RBX::mutex *Http::cdnResponceLock = NULL;
-RBX::ThreadPool *Http::httpThreadPool = NULL; // dword_FAE0A0 / copied to dword_FAE0B0
-long Http::cdnSuccessCount = 0;
-
-Http::MutexGuard Http::lockGuard;
-
-// mac: 0x1FF782 - news two RBX::mutex objects (sizeof == 0x2C) and stores them in
-// the static pointers. Runs during static initialization.
-Http::MutexGuard::MutexGuard()
-{
-	robloxResponceLock = new mutex();
-	cdnResponceLock = new mutex();
-}
-
-// mac: 0x1FF710 (complete dtor) / 0x1FB9D0 (thunk)
-Http::MutexGuard::~MutexGuard()
-{
-	if (robloxResponceLock)
-	{
-		delete robloxResponceLock;
-		robloxResponceLock = NULL;
-	}
-	if (cdnResponceLock)
-	{
-		delete cdnResponceLock;
-		cdnResponceLock = NULL;
-	}
-}
-
 // mac: 0x1FA134 - Http::init(RBX::Http::API)
 // Assert string verbatim from binary:
 //   "Http::defaultApi==Http::Uninitialized file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/util/Darwin/Http.cpp line: 67"
@@ -165,327 +275,81 @@ void Http::init(API api)
 	defaultApi = api;
 }
 
-// mac: 0x1FA110
-RBX::mutex *Http::getRobloxResponceLock()
-{
-	return robloxResponceLock;
-}
-
-// mac: 0x1FA122
-RBX::mutex *Http::getCdnResponceLock()
-{
-	return cdnResponceLock;
-}
-
-// mac: 0x1FA24C - Http::ThrowIfFailure(bool, const char*, const char*)
-// Binary throws std::runtime_error("%s: %s") when success is false.
-void Http::ThrowIfFailure(bool success, const char* url, const char* message)
-{
-	if (!success)
-	{
-		throw std::runtime_error(std::string(url) + ": " + message);
-	}
-}
-
-http_status_error::http_status_error(int statusCode)
-	: std::runtime_error(format("HTTP status %d", statusCode))
-	, statusCode(statusCode)
-{
-}
-
-http_status_error::http_status_error(int statusCode, const std::string& message)
-	: std::runtime_error(message)
-	, statusCode(statusCode)
-{
-}
-
-#ifdef _WIN32
-namespace {
-	// RAII wrapper for the three WinInet handles (binary closes each explicitly
-	// via InternetCloseHandle on every path; behaviorally identical).
-	struct WinInetHandles
-	{
-		HINTERNET hOpen;
-		HINTERNET hConnect;
-		HINTERNET hRequest;
-		WinInetHandles() : hOpen(NULL), hConnect(NULL), hRequest(NULL) {}
-		~WinInetHandles()
-		{
-			if (hRequest) InternetCloseHandle(hRequest);
-			if (hConnect) InternetCloseHandle(hConnect);
-			if (hOpen) InternetCloseHandle(hOpen);
-		}
-	};
-
-	// gzip inflate for Content-Encoding: gzip responses (sub_68CA00/68CC90 path).
-	// Binary inits its helper with windowBits 15 (observed at sub_91E4B0); standard
-	// gzip decoding needs 15+16 — used here with a plain-15 fallback.
-	// TODO(decompile): confirm exact wrapper/args from sub_68CA00.
-	static bool inflateGzip(const std::string& in, std::string& out)
-	{
-		z_stream strm;
-		memset(&strm, 0, sizeof(strm));
-		strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(in.data()));
-		strm.avail_in = static_cast<uInt>(in.size());
-
-		for (int windowBits = 15 + 16; ; windowBits = 15)
-		{
-			if (inflateInit2(&strm, windowBits) != Z_OK)
-				return false;
-			std::string result;
-			char buf[4096];
-			int ret;
-			do {
-				strm.next_out = reinterpret_cast<Bytef*>(buf);
-				strm.avail_out = sizeof(buf);
-				ret = inflate(&strm, Z_NO_FLUSH);
-				if (ret != Z_OK && ret != Z_STREAM_END)
-				{
-					inflateEnd(&strm);
-					if (windowBits > 15)
-						break;  // retry as plain zlib wrapper
-					return false;
-				}
-				result.append(buf, sizeof(buf) - strm.avail_out);
-			} while (ret != Z_STREAM_END);
-			inflateEnd(&strm);
-			if (ret == Z_STREAM_END)
-			{
-				out.swap(result);
-				return true;
-			}
-		}
-	}
-
-	// gzip deflate for compressData POST bodies (sub_68C700 path).
-	// TODO(decompile): confirm exact wrapper/level from sub_68C700; Roblox-Content-*
-	// hash headers (sub_9B66D0, bodies > 0x2710) still pending.
-	static bool deflateGzip(const std::string& in, std::string& out)
-	{
-		z_stream strm;
-		memset(&strm, 0, sizeof(strm));
-		if (deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, 15 + 16, 8,
-			Z_DEFAULT_STRATEGY) != Z_OK)
-			return false;
-		strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(in.data()));
-		strm.avail_in = static_cast<uInt>(in.size());
-		std::string result;
-		char buf[4096];
-		int ret;
-		do {
-			strm.next_out = reinterpret_cast<Bytef*>(buf);
-			strm.avail_out = sizeof(buf);
-			ret = deflate(&strm, Z_FINISH);
-			if (ret != Z_OK && ret != Z_STREAM_END)
-			{
-				deflateEnd(&strm);
-				return false;
-			}
-			result.append(buf, sizeof(buf) - strm.avail_out);
-		} while (ret != Z_STREAM_END);
-		deflateEnd(&strm);
-		out.swap(result);
-		return true;
-	}
-}
-#endif
-
-// mac: 0x1FA2CA - Http::httpGetPostImpl(bool, std::istream&, bool,
-//     const std::map<std::string,std::string>&, bool, std::string&)
-// Mac build: validates trust for non-external requests (call_once guarded
-// domain-list init at unk_FAE0B4 / sub_1FB9B3), then forwards to
-// RBX::Cocoa::httpGetPostCocoa (0x5FE9D1).
-void Http::httpGetPostImpl(bool isPost, std::istream& dataStream, bool compressData,
-	const std::map<std::string, std::string>& additionalHeaders,
-	bool allowExternal, std::string& response)
-{
-	if (!allowExternal)
-	{
-		static boost::once_flag domainsInitialized = BOOST_ONCE_INIT;
-		boost::call_once(initRobloxDomains, domainsInitialized); // sub_1FB9B3 target
-		ThrowIfFailure(isRobloxSite(url.c_str()), url.c_str(), "Unauthorized to connect to non-Roblox website");
-	}
-#ifdef RBX_PLATFORM_DARWIN
-	Cocoa::httpGetPostCocoa(url, response, compressData, dataStream, isPost, additionalHeaders, response);
-#else
-	// Windows path — reconstructed from the 0.125 Studio PE (sub_91E4B0).
-	// A parallel WinHTTP implementation (sub_91CD80) also exists in the binary;
-	// instanceApi selects (WinHTTP port TODO).
-	if (instanceApi == WinHttp)
-		throw std::runtime_error("Http: WinHTTP transport not yet reconstructed (sub_91CD80)");
-	httpGetPostWinInet(isPost, dataStream, compressData, additionalHeaders, allowExternal, response);
-#endif
-}
-
-// mac: 0x1FA366 - Http::post(std::istream&, bool, std::string&, bool)
-void Http::post(std::istream& input, bool compress, std::string& response, bool externalRequest)
-{
-	httpGetPostImpl(true, input, compress, additionalHeaders, externalRequest, response);
-}
-
-#ifdef _WIN32
-// Windows transport — reconstructed from the 0.125 Studio PE (sub_91E4B0, WinInet/ANSI).
-// Verified constants: UA "Roblox/WinInet" (0xC0EA78), HTTP/1.0, error strings
-// "empty url" / "trust check failed for %s" / "'%s' is missing a hostName" /
-// "InternetOpen failed for %s" / "InternetConnect failed for %s" /
-// "HttpOpenRequest failed for %s" / "HttpAddRequestHeaders failed" /
-// "HttpQueryInfo failed"; additional-header "Key: Value\r\n" loop; status query
-// HTTP_QUERY_STATUS_CODE|HTTP_QUERY_FLAG_NUMBER (0x20000013); http_status_error
-// on non-200/201 (reason via sub_919C00/sub_6CB1A0 in the binary).
-// TODO(decompile, sub_91E4B0 details still open):
-//   - URL parse uses a custom cracker (sub_6CB7F0/sub_6CC4E0, 2049-byte buffers);
-//     InternetCrackUrlA used here (equivalent for standard URLs).
-//   - szReferrer global passed to HttpOpenRequestA (content unknown).
-//   - Non-secure flags raw 0x400040 from the binary (decode pending).
-//   - gzip round-trip implemented via vendored zlib 1.2.8 (inflateGzip/deflateGzip);
-//     exact binary wrapper/level (sub_68CA00 windowBits 15 observed, sub_68C700) TODO;
-//     inflate-failure path (sub_68CC90) TODO.
-//   - POST bodies: Roblox-Content-Size/First/Last/Hash via HttpSendRequestExA/
-//     InternetWriteFile/HttpEndRequestA (sub_9B66D0, bodies > 0x2710) still pending;
-//     simple HttpSendRequestA(body) used until then.
-//   - Secure-connection cert pinning (.roblox.com/.robloxlabs.com check loop).
-//   - GET status-callback (sub_91DF20) + InternetSetOptionA(0x2D) progress path.
-void Http::httpGetPostWinInet(bool isPost, std::istream& dataStream, bool compressData,
-	const std::map<std::string, std::string>& additionalHeaders,
-	bool allowExternal, std::string& response)
-{
-	if (url.empty())
-		throw std::runtime_error("empty url");
-
-	if (!trustCheck(url.c_str(), allowExternal))
-		throw std::runtime_error(format("trust check failed for %s", url.c_str()));
-
-	// Crack the URL (binary: custom sub_6CC4E0; equivalent standard parse here)
-	char hostName[256] = {0};
-	char userName[128] = {0};
-	char password[128] = {0};
-	char urlPath[2048] = {0};
-	URL_COMPONENTSA parts;
-	memset(&parts, 0, sizeof(parts));
-	parts.dwStructSize = sizeof(parts);
-	parts.lpszHostName = hostName;
-	parts.dwHostNameLength = ARRAYSIZE(hostName);
-	parts.lpszUserName = userName;
-	parts.dwUserNameLength = ARRAYSIZE(userName);
-	parts.lpszPassword = password;
-	parts.dwPasswordLength = ARRAYSIZE(password);
-	parts.lpszUrlPath = urlPath;
-	parts.dwUrlPathLength = ARRAYSIZE(urlPath);
-	if (!InternetCrackUrlA(url.c_str(), 0, 0, &parts) || hostName[0] == '\0')
-		throw std::runtime_error(format("'%s' is missing a hostName", url.c_str()));
-
-	bool secure = (parts.nScheme == INTERNET_SCHEME_HTTPS);
-
-	WinInetHandles h;
-	h.hOpen = InternetOpenA("Roblox/WinInet", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-	if (!h.hOpen)
-		throw std::runtime_error(format("InternetOpen failed for %s", url.c_str()));
-
-	h.hConnect = InternetConnectA(h.hOpen, hostName, parts.nPort,
-		userName[0] ? userName : NULL, password[0] ? password : NULL,
-		INTERNET_SERVICE_HTTP, 0, 0);
-	if (!h.hConnect)
-		throw std::runtime_error(format("InternetConnect failed for %s", url.c_str()));
-
-	// Binary: secure ? INTERNET_FLAG_SECURE (0x800000) : raw 0x400040.
-	DWORD flags = secure ? INTERNET_FLAG_SECURE : 0x400040;
-	h.hRequest = HttpOpenRequestA(h.hConnect, isPost ? "POST" : "GET", urlPath,
-		"HTTP/1.0", NULL /* TODO: szReferrer global */, NULL, flags, 0);
-	if (!h.hRequest)
-		throw std::runtime_error(format("HttpOpenRequest failed for %s", url.c_str()));
-
-	for (std::map<std::string, std::string>::const_iterator it = additionalHeaders.begin();
-		it != additionalHeaders.end(); ++it)
-	{
-		std::string header = it->first + ": " + it->second + "\r\n";
-		ThrowIfFailure(HttpAddRequestHeadersA(h.hRequest, header.c_str(),
-			static_cast<DWORD>(header.size()), HTTP_ADDREQ_FLAG_ADD) != FALSE,
-			url.c_str(), "HttpAddRequestHeaders failed");
-	}
-
-	// Binary always advertises gzip (sub_91E4B0 sends "Accept-Encoding: gzip").
-	ThrowIfFailure(HttpAddRequestHeadersA(h.hRequest, "Accept-Encoding: gzip\r\n",
-		static_cast<DWORD>(strlen("Accept-Encoding: gzip\r\n")), HTTP_ADDREQ_FLAG_ADD) != FALSE,
-		url.c_str(), "HttpAddRequestHeaders failed");
-
-	// Body for POST. Binary gzips when compressData (sub_68C700) via the
-	// Ex/WriteFile/EndRequest path with Roblox-Content-* hash headers for large
-	// bodies (sub_9B66D0 — TODO); simple deflate + Content-Encoding used here.
-	std::string body;
-	std::string contentEncoding;
-	if (isPost)
-	{
-		body.assign(std::istreambuf_iterator<char>(dataStream), std::istreambuf_iterator<char>());
-		if (compressData && !body.empty())
-		{
-			std::string gzipped;
-			if (deflateGzip(body, gzipped))
-			{
-				body.swap(gzipped);
-				contentEncoding = "Content-Encoding: gzip\r\n";
-			}
-		}
-		if (!contentEncoding.empty())
-			ThrowIfFailure(HttpAddRequestHeadersA(h.hRequest, contentEncoding.c_str(),
-				static_cast<DWORD>(contentEncoding.size()), HTTP_ADDREQ_FLAG_ADD) != FALSE,
-				url.c_str(), "HttpAddRequestHeaders failed");
-	}
-
-	ThrowIfFailure(HttpSendRequestA(h.hRequest, NULL, 0,
-		isPost ? const_cast<char*>(body.data()) : NULL,
-		isPost ? static_cast<DWORD>(body.size()) : 0) != FALSE,
-		url.c_str(), format("HttpSendRequest failed: %u", GetLastError()).c_str());
-
-	DWORD statusCode = 0;
-	DWORD statusLen = sizeof(statusCode);
-	ThrowIfFailure(HttpQueryInfoA(h.hRequest,
-		HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
-		&statusCode, &statusLen, NULL) != FALSE,
-		url.c_str(), "HttpQueryInfo failed");
-
-	// Read the response (binary read helper sub_91DAA0: QueryDataAvailable +
-	// ERROR_IO_PENDING retry + InternetReadFile; straight read loop here).
-	response.clear();
-	char buf[4096];
-	DWORD read = 0;
-	while (InternetReadFile(h.hRequest, buf, sizeof(buf), &read) && read != 0)
-		response.append(buf, buf + read);
-
-	// Inflate gzip responses (binary checks Content-Encoding == "gzip", sub_68CA00).
-	{
-		char contentEncoding[64] = {0};
-		DWORD encodingLen = sizeof(contentEncoding);
-		if (HttpQueryInfoA(h.hRequest, HTTP_QUERY_CONTENT_ENCODING,
-			contentEncoding, &encodingLen, NULL)
-			&& _stricmp(contentEncoding, "gzip") == 0)
-		{
-			std::string inflated;
-			if (inflateGzip(response, inflated))
-				response.swap(inflated);
-			// TODO(decompile): binary behavior on inflate failure (sub_68CC90 path).
-		}
-	}
-
-	if (statusCode != 200 && statusCode != 201)
-	{
-		char statusText[512] = {0};
-		DWORD textLen = sizeof(statusText);
-		HttpQueryInfoA(h.hRequest, HTTP_QUERY_STATUS_TEXT, statusText, &textLen, NULL);
-		throw http_status_error(static_cast<int>(statusCode), statusText[0] ? statusText : "HTTP error");
-	}
-}
-#endif
+// Http::httpGetPostWinInet is in util/WinInet.cpp, httpGetPostWinHttp in util/WinHttp.cpp.
 
 // mac: 0x1FB406 - Http::get(std::string&, bool)
 // STUB: PLAYER 0x00623310
 // STUB: STUDIO 0x006cbf50
 void Http::get(std::string& response, bool allowExternal)
 {
-	std::istringstream dataStream;
-	httpGetPostImpl(false, dataStream, false, additionalHeaders, allowExternal, response);
-	if (isCdnUrl(url))
+	Time startTime = Time::now<Time::Fast>();
+	std::istringstream dummy;
+	bool shouldRetry = true;
+	try
 	{
-		InterlockedIncrement(&cdnSuccessCount);
+		try
+		{
+			httpGetPostImpl(false, dummy, false, additionalHeaders, allowExternal, response);
+		}
+		catch (RBX::http_status_error& e)
+		{
+			if (e.statusCode == 202)
+				shouldRetry = false;
+			throw;
+		}
+		const double elapsed = (Time::now<Time::Fast>() - startTime).seconds();
+		if (!alternateUrl.empty())
+		{
+			RbxInterlockedIncrement(&cdnSuccessCount);
+			if (cdnResponceLock)
+			{
+				RBX::mutex::scoped_lock lock(*cdnResponceLock);
+				cdnResponce.sample(elapsed);
+			}
+		}
+		else
+		{
+			RbxInterlockedIncrement(&robloxSuccessCount);
+			if (robloxResponceLock)
+			{
+				RBX::mutex::scoped_lock lock(*robloxResponceLock);
+				robloxResponce.sample(elapsed);
+			}
+		}
+	}
+	catch (RBX::base_exception& e)
+	{
+		if (!shouldRetry)
+			throw;
+
+		response.clear();
+		const double elapsed = (Time::now<Time::Fast>() - startTime).seconds();
+		if (!alternateUrl.empty())
+		{
+			RbxInterlockedIncrement(&cdnFailureCount);
+			lastCdnFailureTimeSpan = elapsed;
+			RBX::StandardOut::singleton()->printf(RBX::MESSAGE_WARNING,
+				"httpGet %s failed. Trying alternate %s. Error: %s.  Elapsed time: %g",
+				url.c_str(), alternateUrl.c_str(), e.what(), elapsed);
+			try
+			{
+				httpGetPostImpl(false, dummy, false, additionalHeaders, allowExternal, response);
+				RbxInterlockedIncrement(&alternateCdnSuccessCount);
+			}
+			catch (RBX::base_exception&)
+			{
+				RbxInterlockedIncrement(&alternateCdnFailureCount);
+				throw;
+			}
+		}
+		else
+		{
+			RbxInterlockedIncrement(&robloxFailureCount);
+			RBX::StandardOut::singleton()->printf(RBX::MESSAGE_WARNING,
+				"httpGet %s failed. Trying again. Error: %s.  Elapsed time: %g",
+				url.c_str(), e.what(), elapsed);
+			httpGetPostImpl(false, dummy, false, additionalHeaders, allowExternal, response);
+		}
 	}
 }
 
@@ -542,6 +406,8 @@ bool Http::isMoneySite(const char* url)
 }
 
 // mac: 0x1FB95C - Http::trustCheck(const char*, bool)
+// STUB: PLAYER 0x00624210
+// STUB: STUDIO 0x006cd090
 bool Http::trustCheck(const char* url, bool allowExternal)
 {
 	static boost::once_flag domainsInitialized = BOOST_ONCE_INIT;

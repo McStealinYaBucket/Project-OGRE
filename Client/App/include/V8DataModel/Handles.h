@@ -16,6 +16,12 @@ namespace RBX {
 		: public DescribedCreatable<Handles, HandlesBase, sHandles>
 	{
 	public:
+		enum VisualStyle
+		{
+			RESIZE_HANDLES = 0,
+			MOVEMENT_HANDLES = 1,
+		};
+
 		Handles() {}
 	};
 

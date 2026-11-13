@@ -16,6 +16,13 @@ namespace RBX {
 		: public DescribedCreatable<ExtrudedPartInstance, PartInstance, sExtrudedPart>
 	{
 	public:
+		enum VisualTrussStyle
+		{
+			FULL_ALTERNATING_CROSS_BEAM = 0,
+			BRIDGE_STYLE_CROSS_BEAM = 1,
+			NO_CROSS_BEAM = 2,
+		};
+
 		ExtrudedPartInstance() {}
 	};
 

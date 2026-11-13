@@ -137,6 +137,8 @@ The biggest risk is the one 2007 did not have: **no PDB means nothing records th
 
 **Fifth pass, 2026-11-13 morning** (`notes/runs/2026-11-13-phase5-wave1/phase4-exit.md`): `Object` and `AbstractFactoryProduct` lost `novtable`; both Instance ctors and `~Instance` are at 100% in both targets; `BOOST_THREAD_DYN_LINK`/`BOOST_SYSTEM_DYN_LINK` are on; the 12 Base log channels are defined; vftables now pair by RTTI name (PLAYER 1,282 of 2,886 at 100%). Instance's `{for Described}` and `{for AbstractFactoryProduct}` vftables are at 100%; **`{for Debugable}` (0.714) and `{for GuidItem}` (0) are held by the twin trivial bodies** (CLAUDE.md Gotchas), so the exit criterion is still open. Most reflection descriptor templates have no instantiation at 100% yet (`tools/template_vtables.py`).
 
+**Sixth pass, 2026-11-13 afternoon** (`notes/runs/2026-11-13-phase5-wave2/`): **the Instance half of the exit criterion is met.** All four Instance vftables are at 100% in both targets, once the cause of the duplicate trivial bodies was proven (`/LTCG /DEBUG` keeps LTCG and native COMDATs apart; CLAUDE.md Gotchas) and a stand-in shell class reproduced it. The template half is partly met: TType 36/36, BoundFuncDesc 23/34, DescribedCreatable, FactoryProduct, NonFactoryProduct and 65 of 72 EnumDesc vftables have instantiations at 100%; FuncDesc, EnumPropDescriptor, EventDescImpl, CallbackDesc and SetImpl do not, because their bodies call shell copies that only the real shell code will produce. Next: write the 2013 client-shell classes to replace the stand-in.
+
 **Goal:** the classes everything else inherits from, matched constructor, destructor and scalar deleting destructor first, so every later class can be wired onto a proven base.
 
 Most of these classes live in App, so the existing decomp most likely covers much of this phase already. For each class below, start from the existing tree: if its ctor, dtor and scalar deleting dtor already score 100% after Phase 3, the class is proven, so move on. If not, fix that trio first, before any of its methods, because a wrong layout there is what holds the rest of the existing App code below 100%.
@@ -157,7 +159,7 @@ For each class: diff the 2016 header against the 2013 vftable, write the header 
 
 ## Phase 5: Engine subsystems (breadth)
 
-**Status:** started 2026-11-13. After the first wave (`notes/runs/2026-11-13-phase5-wave1/`), PLAYER functions at 100% per row: 5b (DataModel and core services) 200 / 1,372 (14.6%), 5e (script) 246 / 848 (29.0%), 5g (content, Http) 177 / 475 (37.3%). Our tree instantiates 9 of 2013's ~162 `EnumDesc<T>`; WinHttp.cpp and WinInet.cpp do not exist yet. Row 5a (math) at 133 / 154 functions (86.4%, `tools/row_coverage.py`): Math 81/81, Extents 10/10, Face 10/10, NormalId 11/11, IndexedMesh 11/15, Region3 4/5, InterpolatedCFrame 2/18, Frustum 1/1. Quaternion, Units, PV, Velocity, Region3int16 and Vector3int16 have no out-of-line Windows body. Next by unnamed-function count (`ida/exports/PLAYER-app-unnamed-by-class.csv`): DataModel 255, ScriptContext 224, EnumDesc 143, Lua bridges 135, GuiService 109, ContentProvider 108.
+**Status:** started 2026-11-13. After the second wave (`notes/runs/2026-11-13-phase5-wave2/`), PLAYER functions at 100% per row: 5a 131/154, 5b 447/1,604, 5e 254/848, 5g 299/601 (WinHttp.cpp and WinInet.cpp written), 5h (GUI) 120/1,038; 70 of 91 App/Network `EnumDesc<T>` instantiated, all at 100%. After the first wave (`notes/runs/2026-11-13-phase5-wave1/`), PLAYER functions at 100% per row: 5b (DataModel and core services) 200 / 1,372 (14.6%), 5e (script) 246 / 848 (29.0%), 5g (content, Http) 177 / 475 (37.3%). Our tree instantiates 9 of 2013's ~162 `EnumDesc<T>`; WinHttp.cpp and WinInet.cpp do not exist yet. Row 5a (math) at 133 / 154 functions (86.4%, `tools/row_coverage.py`): Math 81/81, Extents 10/10, Face 10/10, NormalId 11/11, IndexedMesh 11/15, Region3 4/5, InterpolatedCFrame 2/18, Frustum 1/1. Quaternion, Units, PV, Velocity, Region3int16 and Vector3int16 have no out-of-line Windows body. Next by unnamed-function count (`ida/exports/PLAYER-app-unnamed-by-class.csv`): DataModel 255, ScriptContext 224, EnumDesc 143, Lua bridges 135, GuiService 109, ContentProvider 108.
 
 Rows 5a–5e and 5h are mostly App code, so they start from the existing ~55%. Add each subsystem's measured existing coverage from Phase 3 to its Notes cell, and finish partially covered App subsystems before opening non-App ones (network, rendering, the client shell), so the App number reaches 100% as one milestone.
 
@@ -224,10 +226,10 @@ Do not pick one without the user's decision.
 | Area | PLAYER impl/total | STUDIO impl/total | Notes |
 |---|---|---|---|
 | Phase 0 facts | done | done | 2026-11-11. VS2008 SP1, LTCG minority, PLAYER is VMProtect-wrapped: decision pending |
-| App (existing decomp) | claimed ~55% / measured 90 FUNCTION of 1,036 markers at first sweep; **510 FUNCTION + 24 FOLDED, 686 STUB** after Phase 5's first wave | 495 + 24, 678 STUB | |
-| **Whole binary (reccmp)** | **4,621 functions at 100% (2,506 non-library)**; paired ("Implemented") 6,133 / 40,527 (15.1%), `--nolib` 3,739 / 38,073 | **4,474 at 100% (2,417)**; paired 5,923 / 42,371 (14.0%), `--nolib` 3,656 / 39,950 | 2026-11-13 07:20. "Implemented" counts functions reccmp pairs, at any score; the 100% count is the matching figure. `--nolib` counts CSV-paired functions too (oracle signatures, position data); "Implemented" skips STUB markers; entries count functions plus vftables |
-| Vftables (reccmp-vtable) | 1,282 / 2,886 at 100% (RTTI pairing since 2026-11-13) | 1,325 / 2,815 | `tools/vtable_structural.py` |
-| Phase 5 rows (functions at 100%) | 5a 133 / 154, 5b 200 / 1,372, 5e 246 / 848, 5g 177 / 475 | | `tools/row_coverage.py` |
+| App (existing decomp) | claimed ~55% / measured 90 FUNCTION of 1,036 markers at first sweep; **633 FUNCTION + 31 FOLDED, 686 STUB** after Phase 5's second wave | 612 + 31, 684 STUB | |
+| **Whole binary (reccmp)** | **5,664 functions at 100% (3,321 non-library)**; paired ("Implemented") 7,383 / 40,534 (18.2%), `--nolib` 4,760 / 37,866 | **5,544 at 100% (3,233)**; paired 7,200 / 42,377 (17.0%), `--nolib` 4,673 / 39,719 | 2026-11-13 18:10. "Implemented" counts functions reccmp pairs, at any score; the 100% count is the matching figure. `--nolib` counts CSV-paired functions too (oracle signatures, position data); "Implemented" skips STUB markers; entries count functions plus vftables |
+| Vftables (reccmp-vtable) | 2,051 / 3,110 at 100% (RTTI pairing since 2026-11-13) | 2,094 / 3,039 | `tools/vtable_structural.py` |
+| Phase 5 rows (functions at 100%) | 5a 131 / 154, 5b 447 / 1,604, 5e 254 / 848, 5g 299 / 601, 5h 120 / 1,038 | | `tools/row_coverage.py` |
 | Third party (library) | 1,848 library entries at 100% (G3D CSV rows 205 identical after patches 0006–0010) | 1,780 | `__FILE__` paths fixed; misses now per-TU statics, link-order inline copies |
 | Core object model | | | |
 | … | | | |
@@ -236,9 +238,9 @@ Do not pick one without the user's decision.
 
 | DB | Last snapshot | Named % | Notes |
 |---|---|---|---|
-| `ida/PLAYER.i64` (Oct 23) | `PLAYER-10-wave1-sync` | 24% (11,715 / 49,091; 3,897 `match:`) | 2026-11-12; 221 adjustor-thunk targets split; 48 proven types, `this` typed on 34 functions |
+| `ida/PLAYER.i64` (Oct 23) | `PLAYER-11-wave2-sync` | 25% (12,470 / 49,091; 4,602 `match:`) | 2026-11-12; 221 adjustor-thunk targets split; 48 proven types, `this` typed on 34 functions |
 | `ida/PLAYER_1015.i64` | `PLAYER_1015-00-autoanalysis` | 3% (1,391 / 44,866) | |
-| `ida/STUDIO.i64` | `STUDIO-10-wave1-sync` | 28% (12,493 / 44,815; 3,746 `match:`) | Different source line from PLAYER; 33 false FLIRT names removed; 48 proven types |
+| `ida/STUDIO.i64` | `STUDIO-11-wave2-sync` | 30% (13,279 / 44,815; 4,508 `match:`) | Different source line from PLAYER; 33 false FLIRT names removed; 48 proven types |
 | `ida/MACSTUDIO.i64` | `MACSTUDIO-00-autoanalysis` | 90% (64,643 / 71,887) | |
 | `ida/IOS_1014.i64` | `IOS_1014-00-autoanalysis` | 99% | |
 | `ida/IOS_1021.i64` | `IOS_1021-00-autoanalysis` | 99% | Closest to STUDIO |

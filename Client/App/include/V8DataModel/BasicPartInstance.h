@@ -22,6 +22,13 @@ namespace RBX {
 		: public DescribedCreatable<BasicPartInstance, FormFactorPart, sBasicPart>
 	{
 	public:
+		enum LegacyPartType
+		{
+			BALL_LEGACY_PART = 0,
+			BLOCK_LEGACY_PART = 1,
+			CYLINDER_LEGACY_PART = 2,
+		};
+
 		BasicPartInstance() {}
 	};
 

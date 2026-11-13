@@ -239,16 +239,23 @@ set(OGRE_BOOST_STATIC_SOURCES)
 foreach(f filesystem/src/codecvt_error_category filesystem/src/operations filesystem/src/path
         filesystem/src/path_traits filesystem/src/portability filesystem/src/unique_path
         filesystem/src/utf8_codecvt_facet filesystem/src/windows_file_codecvt
-        iostreams/src/file_descriptor iostreams/src/gzip iostreams/src/mapped_file iostreams/src/zlib
-        program_options/src/cmdline program_options/src/config_file program_options/src/convert
-        program_options/src/options_description program_options/src/parsers
-        program_options/src/positional_options program_options/src/split
-        program_options/src/utf8_codecvt_facet program_options/src/value_semantic
-        program_options/src/variables_map program_options/src/winmain)
+        iostreams/src/file_descriptor iostreams/src/gzip iostreams/src/mapped_file iostreams/src/zlib)
     list(APPEND OGRE_BOOST_STATIC_SOURCES "${OGRE_BOOST_SRC}/${f}.cpp")
 endforeach()
 ogre_library(boost_static SOURCES ${OGRE_BOOST_STATIC_SOURCES} FLAGS ${OGRE_BOOST_FLAGS})
 target_include_directories(boost_static PRIVATE "${OGRE_BOOST_INCLUDE}" "${OGRE_G3D}/zlib")
+# program_options is its own library only for its link position: PLAYER's sits in the client shell
+# (0x00473c10.., LTCG), so it links right after player_client, ahead of App; STUDIO keeps it last.
+set(OGRE_BOOST_PO_SOURCES)
+foreach(f cmdline config_file convert options_description parsers positional_options split
+        utf8_codecvt_facet value_semantic variables_map winmain)
+    list(APPEND OGRE_BOOST_PO_SOURCES "${OGRE_BOOST_SRC}/program_options/src/${f}.cpp")
+endforeach()
+# Native, not /GL: compiled with the shell's flags (/GL /GS /fp:precise) it is closer to the 2013
+# config but measured -154 PLAYER entries at 100% (2026-11-13: its LTCG bodies fold with the shell's
+# trivial Instance virtuals, canClientCreate 0x00402730 went absent).
+ogre_library(boost_po SOURCES ${OGRE_BOOST_PO_SOURCES} FLAGS ${OGRE_BOOST_FLAGS})
+target_include_directories(boost_po PRIVATE "${OGRE_BOOST_INCLUDE}")
 
 # boost.dll: Boost.Thread + Boost.System, a DLL beside both exes; the exes link its import library.
 add_library(boost SHARED "${OGRE_BOOST_SRC}/system/src/error_code.cpp" "${OGRE_BOOST_SRC}/thread/src/win32/thread.cpp"
@@ -376,6 +383,14 @@ if(OGRE_PRIOR_APP)
     ogre_prior_sources(GfxBase GLOBS Rendering/GfxBase/*.cpp)
     ogre_prior_sources(RbxG3D GLOBS Rendering/RbxG3D/*.cpp)
     ogre_prior_sources(RbxOgre GLOBS Rendering/RbxOgre/*.cpp)
+    # The shells see App's headers too: Client/ClientBase/placeholder.cpp's Instance stand-in makes the
+    # /GL shell emit Instance's inline virtuals, which the original keeps as separate LTCG copies
+    # (PLAYER verifyAddChild 0x004027c0 beside the engine's 0x00575d00; see that file).
+    foreach(lib player_client studio_client)
+        target_include_directories(${lib} PRIVATE ${OGRE_PRIOR_INCLUDES})
+        target_compile_definitions(${lib} PRIVATE BOOST_ALL_NO_LIB _CRT_SECURE_NO_WARNINGS
+            _SCL_SECURE_NO_WARNINGS ROBLOX_BOOST_CONFIGS BOOST_THREAD_DYN_LINK BOOST_SYSTEM_DYN_LINK)
+    endforeach()
 endif()
 
 # --- Executables ------------------------------------------------------------------------------------
@@ -433,10 +448,12 @@ endfunction()
 # RbxOgre copies of App headers carry its Client\App\Include spelling. STUDIO's order differs.
 # boost_static goes last, as a prebuilt Contrib2 .lib would: PLAYER keeps App's /GS- copy of the
 # inline boost::filesystem::path::string 0x00660160 (lost, 0.49, with boost_static before App).
-set(OGRE_PLAYER_LIBS player_client RbxOgre Network GfxAdapters App Base AppDraw GfxBase g3d RbxG3D
+# PLAYER's program_options (boost_po) follows the shell: its /GS boost::throw_exception<logic_error>
+# copies (error_info_injector<logic_error> 0x004746e0) must win over App's (WinHttp.cpp, /GS-).
+set(OGRE_PLAYER_LIBS player_client boost_po RbxOgre Network GfxAdapters App Base AppDraw GfxBase g3d RbxG3D
     boost_static decomp_util)
 set(OGRE_STUDIO_LIBS studio_client RbxOgre Network GfxAdapters RbxG3D g3d GfxBase App Base AppDraw
-    boost_static decomp_util)
+    boost_static boost_po decomp_util)
 foreach(t player studio)
     file(GLOB stubs CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/Client/_generated/${t}/*.cpp")
     if(stubs AND OGRE_PRIOR_APP)

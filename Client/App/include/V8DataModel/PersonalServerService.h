@@ -19,6 +19,15 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum PrivilegeType
+		{
+			PRIVILEGE_BANNED = 0,
+			PRIVILEGE_VISITOR = 10,
+			PRIVILEGE_MEMBER = 128,
+			PRIVILEGE_ADMIN = 240,
+			PRIVILEGE_OWNER = 255,
+		};
+
 		PersonalServerService() {}
 	};
 

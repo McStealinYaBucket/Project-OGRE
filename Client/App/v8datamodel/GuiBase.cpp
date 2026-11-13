@@ -1,8 +1,10 @@
-/* App/v8datamodel/GuiBase.cpp — October 2013 (ctor shell).
-   Evidence: GuiBase C2 0x3949CA (Instance(name, NULL) + members).
-   TODO: full decompile. */
+/* App/v8datamodel/GuiBase.cpp -- October 2013.
+   No 2013 assert names this file; the 2016 path. In PLAYER its .obj holds Name::doDeclare<sGuiBase>
+   0x007bc370, the Described ctor 0x007bc440 and the GuiBase ctor 0x007bc4b0. */
 
 #include "stdafx.h"
+
+#include "decomp.h"
 
 #include "V8DataModel/GuiBase.h"
 
@@ -20,16 +22,15 @@ namespace RBX {
 RBX_REGISTER_CLASS(RBX::GuiBase);
 }
 
+DECOMP_SIZE_ASSERT(RBX::GuiBase, 0x7c);
+
 namespace RBX {
 
-	// mac: 0x3949CA: Instance(name, NULL); +25/+26/+27 = -1; +28/+29 = 0.
+	// FUNCTION: PLAYER 0x007bc4b0
+	// FUNCTION: STUDIO 0x008d8ed0
 	GuiBase::GuiBase(const char* name)
-		: DescribedNonCreatable<GuiBase, Instance, sGuiBase, Reflection::ClassDescriptor::PERSISTENT>(name, (FWInstance*)NULL)
-		, unknown25(-1)
-		, unknown26(-1)
-		, unknown27(-1)
-		, unknown28(0)
-		, unknown29(0)
+		: Super(name)
+		, m_unk0x78(0.0f)
 	{
 	}
 

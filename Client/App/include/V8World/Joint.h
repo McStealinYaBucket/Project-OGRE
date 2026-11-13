@@ -114,11 +114,11 @@ namespace RBX {
 		virtual void setPhysics() {}
 		// vtable+0x34/+0x38. mac: 0x57A260 / 0x575C40 (7B each, batch231):
 		// base answers false (stepper families override).
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool canStepWorld() const { return false; }
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
+		// FUNCTION: PLAYER 0x00927cc0 FOLDED
+		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool canStepUi() const { return false; }
 		// vtable+0x3c. PLAYER 0x00528720 (empty, folded).
 		virtual void stepWorld() {}

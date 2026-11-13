@@ -172,3 +172,63 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x007e4da0
+// TEMPLATE: STUDIO 0x008a8960
+// ?_Dec@const_iterator@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@@std@@@2@$0A@@std@@@std@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x007e4e00
+// TEMPLATE: STUDIO 0x008a89c0
+// ?removeSafeChatMenu@GuiBuilder@RBX@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x007e4e20
+// TEMPLATE: STUDIO 0x008a89e0
+// ?addSafeChatMenu@GuiBuilder@RBX@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x007e5030
+// TEMPLATE: STUDIO 0x008a8bb0
+// ??$?0PAVEquationDisplay@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVEquationDisplay@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007e50c0
+// TEMPLATE: STUDIO 0x008a8c40
+// ??$?0PAVRelativePanel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVRelativePanel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007e51e0
+// TEMPLATE: STUDIO 0x008a8d60
+// ??$?0PAVChatWidget@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVChatWidget@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007e5270
+// TEMPLATE: STUDIO 0x008a8df0
+// ??$?0PAVChatButton@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVChatButton@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007e5300
+// TEMPLATE: STUDIO 0x008a8e80
+// ??$?0PAVTextDisplay@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVTextDisplay@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007e5410
+// TEMPLATE: STUDIO 0x008a8f90
+// ??0?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@@std@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@ABUData@GuiBuilder@RBX@@@Z
+
+// TEMPLATE: PLAYER 0x007e6000
+// TEMPLATE: STUDIO 0x008a9b80
+// ?insert@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@@std@@@2@$0A@@std@@@std@@QAE?AU?$pair@Viterator@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@@std@@@2@$0A@@std@@@std@@_N@2@ABU?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@UData@GuiBuilder@RBX@@@2@@Z
+
+// TEMPLATE: PLAYER 0x007e60e0
+// TEMPLATE: STUDIO 0x008a9c60
+// ??$create@VEquationDisplay@RBX@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V34@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VEquationDisplay@RBX@@@boost@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z
+
+// TEMPLATE: PLAYER 0x007e6210
+// TEMPLATE: STUDIO 0x008a9d90
+// ??$create@VRelativePanel@RBX@@VLayout@2@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VRelativePanel@RBX@@@boost@@VLayout@1@@Z
+
+// TEMPLATE: PLAYER 0x007e64d0
+// TEMPLATE: STUDIO 0x008aa050
+// ??$create@VTextDisplay@RBX@@PBDPBD@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VTextDisplay@RBX@@@boost@@PBD0@Z
+
+// TEMPLATE: PLAYER 0x007e65e0
+// TEMPLATE: STUDIO 0x008aa160
+// ??$create@VEquationDisplay@RBX@@PBDPBD@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VEquationDisplay@RBX@@@boost@@PBD0@Z
+

@@ -291,3 +291,34 @@ namespace RBX {
 DECOMP_SIZE_ASSERT(RBX::DataModelJob, 0x218);
 DECOMP_SIZE_ASSERT(RBX::GcJob, 0x228);
 DECOMP_SIZE_ASSERT(RBX::DataModelArbiter, 0xa20);
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x0070d1f0
+// FUNCTION: STUDIO 0x008458c0
+template<>
+EnumDesc<DataModelArbiter::ConcurrencyModel>::EnumDesc()
+	: EnumDescriptor("ConcurrencyModel", typeid(DataModelArbiter::ConcurrencyModel))
+{
+	addPair(DataModelArbiter::Serial, "Serial");
+	addPair(DataModelArbiter::Safe, "Safe");
+	addPair(DataModelArbiter::Logical, "Logical");
+	addPair(DataModelArbiter::Empirical, "Empirical");
+}
+
+template<>
+const Type& Type::getSingleton<DataModelArbiter::ConcurrencyModel>()
+{
+	return EnumDesc<DataModelArbiter::ConcurrencyModel>::singleton();
+}
+
+template<> EnumRegistrar<DataModelArbiter::ConcurrencyModel> EnumRegistrar<DataModelArbiter::ConcurrencyModel>::registrar(0);
+template<> TypeRegistrar<DataModelArbiter::ConcurrencyModel> TypeRegistrar<DataModelArbiter::ConcurrencyModel>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

@@ -19,6 +19,14 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum AccessType
+		{
+			ME = 0,
+			FRIENDS = 1,
+			EVERYONE = 2,
+			INVITEONLY = 3,
+		};
+
 		AssetService() {}
 	};
 

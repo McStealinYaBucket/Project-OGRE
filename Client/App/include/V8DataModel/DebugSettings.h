@@ -17,6 +17,13 @@ namespace RBX {
 		: public DescribedCreatable<DebugSettings, GlobalAdvancedSettings, sDebugSettings>
 	{
 	public:
+		enum ErrorReporting
+		{
+			DontReport = 0,
+			Prompt = 1,
+			Report = 2,
+		};
+
 		DebugSettings()
 			: stackTracingEnabled(true),
 			  isFmodProfilingEnabled(false)

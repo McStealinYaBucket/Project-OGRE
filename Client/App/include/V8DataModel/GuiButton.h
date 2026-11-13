@@ -16,6 +16,13 @@ namespace RBX {
 		: public DescribedNonCreatable<GuiButton, GuiObject, sGuiButton>
 	{
 	public:
+		enum Style
+		{
+			CUSTOM_STYLE = 0,
+			ROBLOX_RED_STYLE = 1,
+			ROBLOX_GREY_STYLE = 2,
+		};
+
 		GuiButton() {}
 		// GuiImageButton C2(Verb*) 0x3F4CDE calls GuiButton::GuiButton(name)
 		// mac: 0x3ADB58 with "ImageButton".  The direct base here is the

@@ -1140,9 +1140,9 @@ void Instance::humanoidChanged()
 	combinedSignal(Instance::HUMANOID_CHANGED, &data);
 }
 
-void Instance::onGuidChanged()
-{
-}
+// No Instance::onGuidChanged override in 2013: the GuidItem<Instance> slot of Instance's vftable
+// (PLAYER 0x00b2a6e0) holds GuidItem<Instance>::onGuidChanged 0x0040b950 (ios name).
+
 
 const void* Instance::getSetParentAddr()
 {

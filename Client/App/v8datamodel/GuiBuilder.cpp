@@ -70,6 +70,8 @@ namespace RBX {
 		this->dataModel = dataModel;
 	}
 
+	// STUB: PLAYER 0x007f29a0
+	// STUB: STUDIO 0x008b5780
 	void GuiBuilder::addCustomStat(const std::string& name, const std::string& text)
 	{
 		// mac: 0x3A436C: no-op when the name is already registered.
@@ -111,8 +113,6 @@ namespace RBX {
 		customStats.erase(it);
 	}
 
-	// Restyle helper (buildFPS/buildCustomStats assert lines 526/1172):
-	// font/size/color/alpha/backdrop per constants below.
 	void GuiBuilder::restyleStatRow(TextDisplay* row, int fontSize, float w, float h)
 	{
 		row->fontSize = fontSize;

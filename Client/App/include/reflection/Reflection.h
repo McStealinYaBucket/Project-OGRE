@@ -125,8 +125,8 @@ namespace RBX
 				GetSetImpl(Get get, Set set):get(get),set(set)
 				{}
 
-				// STUB: PLAYER 0x00927cc0
-				// STUB: STUDIO 0x008db930
+				// FUNCTION: PLAYER 0x00927cc0 FOLDED
+				// FUNCTION: STUDIO 0x008db930 FOLDED
 				/*implement*/ bool isReadOnly() const { return false; }
 				/*implement*/ bool isWriteOnly() const { return false; }
 				/*implement*/ V getValue(const DescribedBase* object) const
@@ -172,8 +172,8 @@ namespace RBX
 				SetImpl(Set set):set(set)
 				{}
 
-				// STUB: PLAYER 0x00927cc0
-				// STUB: STUDIO 0x008db930
+				// FUNCTION: PLAYER 0x00927cc0 FOLDED
+				// FUNCTION: STUDIO 0x008db930 FOLDED
 				/*implement*/ bool isReadOnly() const { return false; }
 				/*implement*/ bool isWriteOnly() const { return true; }
 				/*implement*/ V getValue(const DescribedBase* object) const
@@ -2494,109 +2494,7 @@ namespace RBX
 			}
 		};
 
-		template <class Class, typename Signature, int arity = boost::function_traits<Signature>::arity >
-		class CustomBoundFuncDesc;
-
-		template <class Class, typename Signature>
-		class CustomBoundFuncDesc<Class, Signature, 0> : public BoundFuncDesc<Class, Signature, 0>
-		{
-			typedef int (Class::*CustomFunctionPtr)(lua_State*);
-			CustomFunctionPtr customFunction;
-
-		public:
-			CustomBoundFuncDesc(CustomFunctionPtr function, const char* name, Security::Permissions security, Descriptor::Attributes attributes = Descriptor::Attributes())
-				: BoundFuncDesc<Class, Signature, 0>(NULL, name, security, attributes)
-				, customFunction(function)
-			{
-				this->kind = FunctionDescriptor::Kind_Custom;
-			}
-
-			/*implement*/ int executeCustom(DescribedBase* instance, lua_State* state) const
-			{
-				return (boost::polymorphic_downcast<Class*>(instance)->*customFunction)(state);
-			}
-		};
-
-		template <class Class, typename Signature>
-		class CustomBoundFuncDesc<Class, Signature, 1> : public BoundFuncDesc<Class, Signature, 1>
-		{
-			typedef int (Class::*CustomFunctionPtr)(lua_State*);
-			CustomFunctionPtr customFunction;
-
-		public:
-			CustomBoundFuncDesc(CustomFunctionPtr function, const char* name, const char* arg1Name, Security::Permissions security, Descriptor::Attributes attributes = Descriptor::Attributes())
-				: BoundFuncDesc<Class, Signature, 1>(NULL, name, arg1Name, security, attributes)
-				, customFunction(function)
-			{
-				this->kind = FunctionDescriptor::Kind_Custom;
-			}
-
-			/*implement*/ int executeCustom(DescribedBase* instance, lua_State* state) const
-			{
-				return (boost::polymorphic_downcast<Class*>(instance)->*customFunction)(state);
-			}
-		};
-
-		template <class Class, typename Signature>
-		class CustomBoundFuncDesc<Class, Signature, 2> : public BoundFuncDesc<Class, Signature, 2>
-		{
-			typedef int (Class::*CustomFunctionPtr)(lua_State*);
-			CustomFunctionPtr customFunction;
-
-		public:
-			CustomBoundFuncDesc(CustomFunctionPtr function, const char* name, const char* arg1Name, const char* arg2Name, Security::Permissions security, Descriptor::Attributes attributes = Descriptor::Attributes())
-				: BoundFuncDesc<Class, Signature, 2>(NULL, name, arg1Name, arg2Name, security, attributes)
-				, customFunction(function)
-			{
-				this->kind = FunctionDescriptor::Kind_Custom;
-			}
-
-			/*implement*/ int executeCustom(DescribedBase* instance, lua_State* state) const
-			{
-				return (boost::polymorphic_downcast<Class*>(instance)->*customFunction)(state);
-			}
-		};
-
-		template <class Class, typename Signature>
-		class CustomBoundFuncDesc<Class, Signature, 3> : public BoundFuncDesc<Class, Signature, 3>
-		{
-			typedef int (Class::*CustomFunctionPtr)(lua_State*);
-			CustomFunctionPtr customFunction;
-
-		public:
-			CustomBoundFuncDesc(CustomFunctionPtr function, const char* name, const char* arg1Name, const char* arg2Name, const char* arg3Name, Security::Permissions security, Descriptor::Attributes attributes = Descriptor::Attributes())
-				: BoundFuncDesc<Class, Signature, 3>(NULL, name, arg1Name, arg2Name, arg3Name, security, attributes)
-				, customFunction(function)
-			{
-				this->kind = FunctionDescriptor::Kind_Custom;
-			}
-
-			/*implement*/ int executeCustom(DescribedBase* instance, lua_State* state) const
-			{
-				return (boost::polymorphic_downcast<Class*>(instance)->*customFunction)(state);
-			}
-		};
-
-		template <class Class, typename Signature>
-		class CustomBoundFuncDesc<Class, Signature, 4> : public BoundFuncDesc<Class, Signature, 4>
-		{
-			typedef int (Class::*CustomFunctionPtr)(lua_State*);
-			CustomFunctionPtr customFunction;
-
-		public:
-			CustomBoundFuncDesc(CustomFunctionPtr function, const char* name, const char* arg1Name, const char* arg2Name, const char* arg3Name, const char* arg4Name, Security::Permissions security, Descriptor::Attributes attributes = Descriptor::Attributes())
-				: BoundFuncDesc<Class, Signature, 4>(NULL, name, arg1Name, arg2Name, arg3Name, arg4Name, security, attributes)
-				, customFunction(function)
-			{
-				this->kind = FunctionDescriptor::Kind_Custom;
-			}
-
-			/*implement*/ int executeCustom(DescribedBase* instance, lua_State* state) const
-			{
-				return (boost::polymorphic_downcast<Class*>(instance)->*customFunction)(state);
-			}
-		};
-
+		// (2016 CustomBoundFuncDesc: absent in 2013, no RTTI or name in any 2013 build.)
 	}
 }
 

@@ -1,5 +1,6 @@
 # STUDIO: unresolved externals with no stub (reason, decorated, demangled). Generated.
 claimed	?parse@TextXmlParser@@UAE?AV?$auto_ptr@VXmlElement@@@std@@XZ	public: virtual class std::auto_ptr<class XmlElement> __thiscall TextXmlParser::parse(void)
+data	?GuiTargetLifetime@FLog@@3EA	unsigned char FLog::GuiTargetLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
 data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit

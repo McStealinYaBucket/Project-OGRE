@@ -1,5 +1,5 @@
-/* App/v8datamodel/RunService.cpp -- October 2013 STUB (sName + empty reflection).
-   TODO: full decompile. */
+/* App/v8datamodel/RunService.cpp -- October 2013. stopTasks, onServiceProvider, start and the ctor from
+   the PLAYER bytes (0x0072bb60..0x0072efd0); reflection and the stepping bodies not written yet. */
 
 #include "stdafx.h"
 
@@ -8,6 +8,7 @@
 #include "V8DataModel/HeartbeatTask.h"
 #include "V8DataModel/DataModel.h"
 #include "rbx/TaskScheduler.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sRunService = "RunService";
@@ -25,55 +26,88 @@ RBX_REGISTER_CLASS(RBX::RunService);
 
 namespace RBX {
 
+	// FUNCTION: PLAYER 0x0072bb60
+	// FUNCTION: STUDIO 0x00799670
+	void RunService::stopTasks()
+	{
+		if (physicsJob)
+		{
+			TaskScheduler::singleton().remove(physicsJob);
+			physicsJob.reset();	// remove the reference to avoid risk of memory leak
+		}
+		if (heartbeatTask)
+		{
+			TaskScheduler::singleton().remove(heartbeatTask);
+			heartbeatTask.reset();
+		}
+	}
+
+	// 2013: no Super call survives (Instance::onServiceProvider is empty and inline).
+	// FUNCTION: PLAYER 0x0072bc30
+	// FUNCTION: STUDIO 0x00799740
+	void RunService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		if (oldProvider)
+			stopTasks();
+		Super::onServiceProvider(oldProvider, newProvider);
+	}
+
 	// mac: 0x236688: create PhysicsJob (parent DataModel) + HeartbeatTask (self),
-	// store at +96/+104, scheduler.add both.
+	// scheduler.add both.
 	// STUB: PLAYER 0x0072d300
 	// STUB: STUDIO 0x0079af80
 	void RunService::start()
 	{
 		shared_ptr<DataModel> dataModel = shared_from_dynamic_cast<DataModel>(getParent());
 		physicsJob = shared_ptr<PhysicsJob>(new PhysicsJob(dataModel));
-		heartbeatJob = shared_ptr<HeartbeatTask>(
+		heartbeatTask = shared_ptr<HeartbeatTask>(
 			new HeartbeatTask(shared_from_dynamic_cast<RunService>(this)));
 		TaskScheduler::singleton().add(physicsJob);
-		TaskScheduler::singleton().add(heartbeatJob);
+		TaskScheduler::singleton().add(heartbeatTask);
+	}
+
+	// FUNCTION: PLAYER 0x0072efd0
+	// STUB: STUDIO 0x0079cc10
+	RunService::RunService()
+		: runState(RS_STOPPED)
+		, totalGameTime(0.0)
+		, totalGameTimeAtLastHeartbeat(0.0)
+		, totalWallTime(0.0)
+		, skippedTimeAccumulated(0.0)
+	{
+		setName("Run Service");
 	}
 
 	// mac: 0x236DCE: set runState + fire runTransitionSignal.
-	void RunService::setRunState(int a2)
+	void RunService::setRunState(int state)
 	{
-		int* p = (int*)this;
-		if (a2 != 0)
+		if (state != RS_STOPPED)
 		{
-			if (a2 == 2)
+			if (state == RS_PAUSED)
 			{
-				if (p[28] != 1)
+				if (runState != RS_RUNNING)
 					return;
 			}
-			else if (a2 == 1)
+			else if (state == RS_RUNNING)
 			{
-				if ((p[28] | 2) != 2)
+				if ((runState | RS_PAUSED) != RS_PAUSED)
 					return;
-				if (p[24] == 0)
+				if (!physicsJob)
 					start();
 			}
 		}
 		else
 		{
-			p[30] = 0;
-			p[29] = 0;
-			p[32] = 0;
-			p[31] = 0;
-			p[34] = 0;
-			p[33] = 0;
-			p[36] = 0;
-			p[35] = 0;
+			totalGameTime = 0.0;
+			totalGameTimeAtLastHeartbeat = 0.0;
+			totalWallTime = 0.0;
+			skippedTimeAccumulated = 0.0;
 		}
-		int v2 = p[28];
-		if (v2 != a2)
+		RunState oldState = runState;
+		if (oldState != state)
 		{
-			p[28] = a2;
-			runTransitionSignal(RunTransition((RunState)v2, (RunState)a2));
+			runState = (RunState)state;
+			runTransitionSignal(RunTransition(oldState, (RunState)state));
 		}
 	}
 

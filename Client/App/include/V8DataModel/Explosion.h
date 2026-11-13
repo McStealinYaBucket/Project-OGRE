@@ -16,6 +16,13 @@ namespace RBX {
 		: public DescribedCreatable<Explosion, Instance, sExplosion>
 	{
 	public:
+		enum ExplosionType
+		{
+			NO_EFFECT = 0,
+			NO_DEBRIS = 1,
+			WITH_DEBRIS = 2,
+		};
+
 		Explosion() {}
 	};
 

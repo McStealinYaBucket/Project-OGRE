@@ -243,6 +243,33 @@ void IndexedMesh::setComputedUpper(IndexedMesh* newComputedUpper)
 	}
 }
 
+// FUNCTION: PLAYER 0x008f93f0
+// FUNCTION: STUDIO 0x00a0e4b0
+void IndexedMesh::attachChildren(IndexedMesh* lowerChild)
+{
+	if (lowerChild->getUpper() != NULL)
+	{
+		lowerChild->getUpper()->setIndexedTreeParent(this);
+		return;
+	}
+	for (int i = 0; i < lowerChild->numChildren(); ++i)
+		attachChildren(lowerChild->getTypedChild<IndexedMesh>(i));
+}
+
+
+// FUNCTION: PLAYER 0x008f9440
+// FUNCTION: STUDIO 0x00a0e500
+void IndexedMesh::severeChildren(IndexedMesh* lowerChild)
+{
+	if (lowerChild->getUpper() != NULL)
+	{
+		lowerChild->getUpper()->setIndexedTreeParent(NULL);
+		return;
+	}
+	for (int i = 0; i < lowerChild->numChildren(); ++i)
+		severeChildren(lowerChild->getTypedChild<IndexedMesh>(i));
+}
+
 // FUNCTION: PLAYER 0x008f9590
 // FUNCTION: STUDIO 0x00a0e650
 void IndexedMesh::setUpper(IndexedMesh* newUpper)
@@ -260,33 +287,6 @@ void IndexedMesh::setUpper(IndexedMesh* newUpper)
 		}
 		setComputedUpper(computeUpper(this));
 	}
-}
-
-
-// FUNCTION: PLAYER 0x008f93f0
-// FUNCTION: STUDIO 0x00a0e4b0
-void IndexedMesh::attachChildren(IndexedMesh* lowerChild)
-{
-	if (lowerChild->getUpper() != NULL)
-	{
-		lowerChild->getUpper()->setIndexedTreeParent(this);
-		return;
-	}
-	for (int i = 0; i < lowerChild->numChildren(); ++i)
-		attachChildren(lowerChild->getTypedChild<IndexedMesh>(i));
-}
-
-// FUNCTION: PLAYER 0x008f9440
-// FUNCTION: STUDIO 0x00a0e500
-void IndexedMesh::severeChildren(IndexedMesh* lowerChild)
-{
-	if (lowerChild->getUpper() != NULL)
-	{
-		lowerChild->getUpper()->setIndexedTreeParent(NULL);
-		return;
-	}
-	for (int i = 0; i < lowerChild->numChildren(); ++i)
-		severeChildren(lowerChild->getTypedChild<IndexedMesh>(i));
 }
 
 // STUB: PLAYER 0x008f9600

@@ -14,9 +14,21 @@
 #include "stdafx.h"
 
 #include "Gui/ProfanityFilter.h"
+#include "decomp.h"
 
 namespace RBX
 {
+	// STUB: PLAYER 0x00668e90
+	// STUB: STUDIO 0x008a8420
+	bool ProfanityFilter::ContainsProfanityWorker(const std::string& text)
+	{
+		// DELTA stub -- see the file header.  The 0x5D2104 tail passes a
+		// shared_ptr<ProfanityFilter> + a string copy into the worker;
+		// returning false keeps the caller-side verdict false.
+		STUB(0x00668e90);
+		return false;
+	}
+
 	// mac: 0x5D2104: byte gate on FFlag::LocalTextFiltering first (read again
 	// inside the function -- the ChatOutput::onGameChatMessage caller
 	// checks the same flag before calling, so the double read is in both
@@ -28,13 +40,5 @@ namespace RBX
 		if (!FFlag::LocalTextFiltering)
 			return false;
 		return ContainsProfanityWorker(text);
-	}
-
-	bool ProfanityFilter::ContainsProfanityWorker(const std::string& text)
-	{
-		// DELTA stub -- see the file header.  The 0x5D2104 tail passes a
-		// shared_ptr<ProfanityFilter> + a string copy into the worker;
-		// returning false keeps the caller-side verdict false.
-		return false;
 	}
 } // namespace RBX

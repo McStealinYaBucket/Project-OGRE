@@ -1,49 +1,62 @@
-/* V8DataModel/ScreenGui.h — October 2013 (screen gui shell).
-   Evidence: ScreenGui C2s 0x470D36/0x470EAA (GuiLayerCollector(name) with
-     "ScreenGui" default; DescribedCreatable<ScreenGui, GuiLayerCollector,
-     sScreenGui>); CoreGuiService::createRobloxScreenGui 0x45E19E
-     (create + "RobloxGui" + lock + parent).
-      Member pins (rarc15/rarc16 C2s): the +0xB0..+0xBC four-dword window =
-      our windowRect below (GuiObject::getWindowRect 0x3ABA9A copies it
-      VERBATIM into its Rect2D sret, raw 3ABBA9..3ABBD2; the default ctor
-      0x470D36 writes {0, 0, 800.0f, 600.0f} -- 0x44480000/0x44160000, the
-      legacy default client viewport -- while the name-ctor 0x470EAA
-      zero-fills the whole rect, 470FB2..470FDA); both ctors zero dword 43
-      (+0xAC) after the +0x30 descriptor/registrar work, carry a 7th vptr
-      slot at +0xA8 (dword 42, single-base DELTA = not declared), zero
-      dwords 49..51 (+0xC4..+0xCC) and word +0xC0 = 0, and end with dwords
-      55/56 self-pointing at +0xD4 (an empty list head identity).
-   TODO: full decompile.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/ScreenGui.h */
+/* V8DataModel/ScreenGui.h -- October 2013.
+   Layout from the PLAYER ctors 0x008b2980 (ScreenGui()) and 0x008b2ae0 (ScreenGui(name)), STUDIO
+   0x00960c80 / 0x00960de0: GuiLayerCollector (0xb4), the HeartbeatInstance base at +0xb4 (vftable
+   0x00b86800: onHeartbeat 0x008b1e20 and the deleting dtor), then windowRect +0xbc ({0, 0, 800, 600}
+   by default, zero from the name ctor), two bools +0xcc/+0xcd, a vector +0xd0 and a
+   map<const Name*, InputObject::UserInputState> +0xe0 (its _Buynode 0x0091cc50 names the type).
+   2016 calls windowRect bufferedViewport and the vector modalGuiObjects (vector<GuiButton*>); the
+   2016 renderable flag and the connections map are not 2013's +0xcc and +0xe0. */
 
 #pragma once
 
 #include "V8DataModel/GuiLayerCollector.h"
+#include "V8DataModel/InputObject.h"
+#include "Util/HeartbeatInstance.h"
+
+#include <map>
+#include <vector>
 
 namespace RBX {
 
 	extern const char* const sScreenGui;
 
+	class GuiButton;
+
+	// VTABLE: PLAYER 0x00b8686c RBX::Debugable
+	// VTABLE: STUDIO 0x00c4753c RBX::Debugable
+	// VTABLE: PLAYER 0x00b86840 RBX::GuiTarget
+	// VTABLE: STUDIO 0x00c47510 RBX::GuiTarget
+	// VTABLE: PLAYER 0x00b8680c RBX::IAdornable
+	// VTABLE: STUDIO 0x00c474dc RBX::IAdornable
+	// VTABLE: PLAYER 0x00b86800 RBX::HeartbeatInstance
+	// VTABLE: STUDIO 0x00c474d0 RBX::HeartbeatInstance
+	// SIZE 0xec
 	class ScreenGui
 		: public DescribedCreatable<ScreenGui, GuiLayerCollector, sScreenGui>
-		// Restored TRUE parent (was Instance standing in).
+		, public HeartbeatInstance  // 0xb4
 	{
+		typedef DescribedCreatable<ScreenGui, GuiLayerCollector, sScreenGui> Super;
 	public:
 		ScreenGui();
 		ScreenGui(const char* name);
 
-		// +0xB0..+0xBC (rarc15/16 C2 = verbatim dword evidence): the
-		// ScreenGui window -- GuiObject::getWindowRect 0x3ABA9A copies
-		// these four dwords VERBATIM into its Rect2D sret when the
-		// ancestor walk finds a ScreenGui (raw 3ABBA9..3ABBD2).
-		// Corner-form (x0, y0, x1, y1): the default ctor = {0,0,800,600}
-		// (so the landed GuiBase2d::recalculateAbsoluteSizeAndPosition
-		// reads size (800,600) = the legacy default client viewport),
-		// the name-ctor = all-zero.  DELTA: pos/corner identities exact
-		// as the four verbatim dwords; no reflection prop binds here
-		// (the rarc15 ScreenGui PropDescriptor<ScreenGui, Vector2int16>
-		// pair binds the GuiBase2d abs-props, not this block).
-		G3D::Rect2D windowRect;
+		G3D::Rect2D windowRect;  // 0xbc
+
+	protected:
+		/*override*/ void onHeartbeat(const Heartbeat& event);
+
+	private:
+		bool m_unk0xcc;  // 0xcc  onHeartbeat resizes to windowRect and clears it
+		bool m_unk0xcd;  // 0xcd
+		std::vector<GuiButton*> m_unk0xd0;  // 0xd0  2016: modalGuiObjects
+		std::map<const Name*, InputObject::UserInputState> m_unk0xe0;  // 0xe0
 	};
+
+	// Out-of-line copies the original emitted in this class's .obj (the Described ctor its ctors call).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x008b27e0
+	// TEMPLATE: STUDIO 0x00960ae0
+	// ??$?0PBD@?$Described@VScreenGui@RBX@@$E?sScreenGui@2@3QBDBV?$FactoryProduct@VScreenGui@RBX@@VGuiLayerCollector@2@$E?sScreenGui@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
+	// clang-format on
 
 } // namespace RBX

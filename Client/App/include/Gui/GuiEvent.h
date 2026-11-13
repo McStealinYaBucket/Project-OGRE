@@ -73,4 +73,19 @@ namespace RBX {
 		static GuiResponse sunkAndFinished()					{return GuiResponse(SUNK, FINISHED, NOT_MOUSE_OVER, NULL);}
 		static GuiResponse sunkWithTarget(Instance* newTarget)	{return GuiResponse(SUNK, NOT_FINISHED, NOT_MOUSE_OVER, newTarget);}
 	};
+
+	// 2013 secondary base of GuiItem (+0x60) and GuiBase (+0x60): RTTI .?AVGuiTarget@RBX@@, own vftable
+	// PLAYER 0x00b47d5c (stored first by the GuiItem ctor 0x0076a4f0 and the GuiBase ctor 0x007bc4b0).
+	// Its one slot is process; the default body (PLAYER 0x007bc510, folded) is in Gui/GUI.cpp.
+	// The Mac vtable lists GuiItem::process in the primary table only because Itanium repeats
+	// secondary-base overriders.
+	class GuiTarget
+	{
+	public:
+		virtual GuiResponse process(const GuiEvent& event);	// vtable+0x00
+	};
 }	// namespace
+
+// GuiTarget lifetime log (GuiLayerCollector, BasePlayerGui, Workspace, GuiItem ctors and dtors). Its
+// LOGVARIABLE belongs in FastLogSettings.cpp (2016), at PLAYER 0x00de3f47.
+LOGGROUP(GuiTargetLifetime)

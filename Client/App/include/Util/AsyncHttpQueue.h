@@ -161,3 +161,45 @@ protected:
 	boost::function<bool(const std::string& url, std::string* result)> getLocalFile;
 };
 }
+
+// Template and implicit member bodies the .cpp emits (identical to the 2013 bytes in a private
+// compile; markers pair them so their callers match).
+
+// TEMPLATE: PLAYER 0x0086b9e0
+// TEMPLATE: STUDIO 0x009b8cc0
+// ??$_Construct@UFailedUrl@AsyncHttpQueue@RBX@@U123@@std@@YAXPAUFailedUrl@AsyncHttpQueue@RBX@@ABU123@@Z
+
+// TEMPLATE: PLAYER 0x0086bbd0
+// TEMPLATE: STUDIO 0x009b8ed0
+// ?_Incsize@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086bc70
+// ?_Incsize@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086c5b0
+// TEMPLATE: STUDIO 0x009b97c0
+// ?push_front@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@QAEXABUFailedUrl@AsyncHttpQueue@RBX@@@Z
+
+// TEMPLATE: PLAYER 0x0086c670
+// TEMPLATE: STUDIO 0x009b9880
+// ?_Growmap@?$deque@UAsyncRetryTask@AsyncHttpQueue@RBX@@V?$allocator@UAsyncRetryTask@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086e0d0
+// TEMPLATE: STUDIO 0x009bb290
+// ??0Request@AsyncHttpQueue@RBX@@QAE@ABU012@@Z
+
+// TEMPLATE: PLAYER 0x0086e6e0
+// TEMPLATE: STUDIO 0x009bb8a0
+// ??0Request@AsyncHttpQueue@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0086e730
+// TEMPLATE: STUDIO 0x009bb8f0
+// ??1Request@AsyncHttpQueue@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0086e7e0
+// TEMPLATE: STUDIO 0x009bb9a0
+// ??4?$vector@UCallbackWrapper@AsyncHttpQueue@RBX@@V?$allocator@UCallbackWrapper@AsyncHttpQueue@RBX@@@std@@@std@@QAEAAV01@ABV01@@Z
+
+// TEMPLATE: PLAYER 0x0086f430
+// TEMPLATE: STUDIO 0x009bc5c0
+// ?clear@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@QAEXXZ

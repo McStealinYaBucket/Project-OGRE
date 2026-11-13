@@ -145,3 +145,45 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x0070ed20
+// TEMPLATE: STUDIO 0x0082c0f0
+// ??$getset@P8Workspace@RBX@@BENXZP812@AEXN@Z@?$PropDescriptor@VWorkspace@RBX@@N@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@N@Reflection@RBX@@@std@@P8Workspace@2@BENXZP852@AEXN@Z@Z
+
+// TEMPLATE: PLAYER 0x0070ee50
+// TEMPLATE: STUDIO 0x0082c220
+// ??$getset@P8Workspace@RBX@@BEPAVCamera@2@XZP812@AEXPAV32@@Z@?$PropDescriptor@VWorkspace@RBX@@PAVCamera@2@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@PAVCamera@RBX@@@Reflection@RBX@@@std@@P8Workspace@2@BEPAVCamera@2@XZP852@AEXPAV62@@Z@Z
+
+// TEMPLATE: PLAYER 0x0070f220
+// TEMPLATE: STUDIO 0x0082c580
+// ?singleton@?$RefType@PAVCamera@RBX@@@Reflection@RBX@@SAABVType@23@XZ
+
+// TEMPLATE: PLAYER 0x0070fba0
+// TEMPLATE: STUDIO 0x0082ce60
+// ?invoke@?$function_obj_invoker0@V?$bind_t@HV?$cmf0@HVScriptContext@RBX@@@_mfi@boost@@V?$list1@V?$value@PAVScriptContext@RBX@@@_bi@boost@@@_bi@3@@_bi@boost@@H@function@detail@boost@@SAHAATfunction_buffer@234@@Z
+
+// TEMPLATE: PLAYER 0x0070fbb0
+// TEMPLATE: STUDIO 0x0082ce70
+// ?invoke@?$void_function_obj_invoker0@V?$bind_t@XV?$mf0@XVThread@TaskScheduler@RBX@@@_mfi@boost@@V?$list1@V?$value@V?$shared_ptr@VThread@TaskScheduler@RBX@@@boost@@@_bi@boost@@@_bi@3@@_bi@boost@@X@function@detail@boost@@SAXAATfunction_buffer@234@@Z
+
+// TEMPLATE: PLAYER 0x0070fc20
+// TEMPLATE: STUDIO 0x0082cee0
+// ?_Ufill@?$vector@UItem@TouchDebouncer@RBX@@V?$allocator@UItem@TouchDebouncer@RBX@@@std@@@std@@IAEPAUItem@TouchDebouncer@RBX@@PAU345@IABU345@@Z
+
+// TEMPLATE: PLAYER 0x00711340
+// TEMPLATE: STUDIO 0x00725e50
+// ??$?0PAVFlag@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVFlag@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x007115c0
+// TEMPLATE: STUDIO 0x007260d0
+// ??1Creator@?$FactoryProduct@VFlag@RBX@@VTool@2@$E?sFlag@2@3QBDBVInstance@2@@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00711e40
+// ??_GWorkspace@RBX@@UAEPAXI@Z
+
+// TEMPLATE: PLAYER 0x007162e0
+// ??$create@VRunService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VRunService@RBX@@@boost@@XZ
+

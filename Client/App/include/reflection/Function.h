@@ -21,12 +21,6 @@ namespace RBX
 		class RBXBaseClass FunctionDescriptor : public MemberDescriptor
 		{
 		public:
-			enum Kind
-			{
-				Kind_Default,
-				Kind_Custom
-			};
-
 			class RBXInterface Arguments
 			{
 			public:
@@ -61,16 +55,14 @@ namespace RBX
 
 		protected:
 			SignatureDescriptor signature;
-			Kind kind;
 			FunctionDescriptor(ClassDescriptor& classDescriptor, const char* name, Security::Permissions security, Attributes attributes);
 
 		public:
 			const SignatureDescriptor& getSignature() const { return signature; }
 
-			Kind getKind() const { return kind; }
-			
-			virtual int executeCustom(DescribedBase* instance, lua_State*) const { return 0; }
-
+			// 2013 has no Kind/kind and no executeCustom (2016 additions): the ctor 0x0071a650 stores
+			// no kind, and every FuncDesc/BoundFuncDesc vftable has 2 slots, the deleting
+			// destructor and execute (BoundFuncDesc<Instance, void(), 0> 0x00b2a784).
 			virtual void execute(DescribedBase* instance, Arguments& arguments) const = 0;
 		};
 

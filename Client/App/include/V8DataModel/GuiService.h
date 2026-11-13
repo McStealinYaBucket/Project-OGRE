@@ -19,6 +19,24 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum CenterDialogType
+		{
+			CENTER_DIALOG_UNSOLICITED_DIALOG = 1,
+			CENTER_DIALOG_PLAYER_INITIATED_DIALOG = 2,
+			CENTER_DIALOG_MODAL_DIALOG = 3,
+			CENTER_DIALOG_QUIT_DIALOG = 4,
+		};
+
+		enum SpecialKey
+		{
+			KEY_INSERT = 0,
+			KEY_HOME = 1,
+			KEY_END = 2,
+			KEY_PAGEUP = 3,
+			KEY_PAGEDOWN = 4,
+			KEY_CHATHOTKEY = 5,
+		};
+
 		GuiService() {}
 	};
 

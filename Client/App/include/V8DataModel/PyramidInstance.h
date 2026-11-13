@@ -16,6 +16,17 @@ namespace RBX {
 		: public DescribedNonCreatable<PyramidInstance, PartInstance, sPyramid>
 	{
 	public:
+		enum NumSidesEnum
+		{
+			sides3 = 3,
+			sides4 = 4,
+			sides5 = 5,
+			sides6 = 6,
+			sides8 = 8,
+			sides10 = 10,
+			sides20 = 20,
+		};
+
 		PyramidInstance() {}
 	};
 

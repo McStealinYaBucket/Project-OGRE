@@ -22,34 +22,41 @@
 // setImageFromName 0x5D0CFE; cf. DataModel::startCoreScripts 0x2D617A,
 // GuiBuilder::buildGui 0x39715A).
 #include "Gui/Adorn.h"
+#include "rbx/signal.h"
+#include <boost/shared_ptr.hpp>
 
 namespace RBX {
 
+	class TextureProxyBase;
+
+	// Layout from the PLAYER default ctor 0x006bc570 (inline in this header, emitted out of line;
+	// Frame's ctor 0x006c2b70 runs it on Frame+0x220): two TextureIds, seven zeroed proxy refs at
+	// 0x40..0x78, size 0x78 = (0, 0), a 4-byte connection at 0x80 (Frame's sizeof 0x2a4 - 0x220 = 0x84).
+	// Member names from 2016 GuiDraw.h (same order and sizes).
+	// SIZE 0x84
 	class GuiDrawImage
 	{
 	public:
+		// FUNCTION: PLAYER 0x006bc570
+		// FUNCTION: STUDIO 0x007ab370
 		GuiDrawImage()
-			: name1(Name::getNullName())
-			, name3(Name::getNullName())
-		{
-			memset(reserved, 0, sizeof(reserved));
-		}
-		// mac: 0x3A671A (batch338).
+			: size(0.0f, 0.0f)
+		{}
 		GuiDrawImage(Adorn* adorn, const std::string& name, unsigned int unknown);
-		// mac: 0x5D0CFE (batch339).
 		bool setImageFromName(Adorn* adorn, const std::string& name, unsigned int unknown);
-		// mac: 0x5CFADE STUB (render era: texture-proxy loading via Adorn).
-		// 4th param = G3D::Vector2* per the binary mangle
-		// (PN3G3D7Vector2E, batch791) -- was void* unknown2.
-		// Loud if image binding is ever attempted in-tree.
 		bool setImage(Adorn* adorn, const TextureId& textureId, unsigned int unknown1, G3D::Vector2* unknown2);
-
 	private:
-		std::string str0;   // +0 (C2 empty).
-		Name name1;         // +4 (C2 null).
-		std::string str2;   // +8 (C2 empty).
-		Name name3;         // +12 (C2 null).
-		int reserved[17];   // +16..+83 (C2 zero; roles TODO).
+		TextureId currentTexture;                              // 0x00
+		TextureId loadingTexture;                              // 0x20
+		boost::shared_ptr<TextureProxyBase> disable;           // 0x40
+		boost::shared_ptr<TextureProxyBase> normal;            // 0x48
+		boost::shared_ptr<TextureProxyBase> hover;             // 0x50
+		boost::shared_ptr<TextureProxyBase> down;              // 0x58
+		boost::shared_ptr<TextureProxyBase> selected;          // 0x60
+		boost::shared_ptr<TextureProxyBase> selectedHover;     // 0x68
+		boost::shared_ptr<TextureProxyBase> selectedDown;      // 0x70
+		G3D::Vector2 size;                                     // 0x78
+		rbx::signals::scoped_connection unbindResourceSignalHint;  // 0x80
 	};
 
 } // namespace RBX

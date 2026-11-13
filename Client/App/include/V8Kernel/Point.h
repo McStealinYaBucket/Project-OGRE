@@ -3,7 +3,7 @@
      body (arg or worldBody) + 3 zeroed Vector3s) / step/forceToBody/
      accumulate fns queue with the stepper (section 123+).
    Members (binary offsets; 2016 names first-party):
-     KernelIndex base (+0 vptr / +4 kernelIndex -1)
+     +0 Point's vptr, KernelIndex base at +4 (kernelIndex -1)
      +8 numOwners (C2 1) / +12 body / +16 localPos / +28 worldPos /
      +40 force (all C2 zero except noted)
    Step/accumulate/setters: stepper flow, deferred (Kernel::insertPoint

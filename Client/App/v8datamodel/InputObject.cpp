@@ -18,6 +18,8 @@
 
 namespace RBX { namespace Reflection {
 
+	// FUNCTION: PLAYER 0x008b6130
+	// FUNCTION: STUDIO 0x00938100
 	template<>
 	EnumDesc<InputObject::UserInputType>::EnumDesc()
 		: EnumDescriptor("UserInputType", typeid(InputObject::UserInputType))
@@ -29,18 +31,6 @@ namespace RBX { namespace Reflection {
 		addPair(InputObject::TYPE_MOUSEMOVEMENT, "MouseMovement");
 		addPair(InputObject::TYPE_TOUCH, "Touch");
 		addPair(InputObject::TYPE_KEYBOARD, "Keyboard");
-		addPair(InputObject::TYPE_FOCUS, "Focus");
-		addPair(InputObject::TYPE_ACCELEROMETER, "Accelerometer");
-		addPair(InputObject::TYPE_GYRO, "Gyro");
-		addPair(InputObject::TYPE_GAMEPAD1, "Gamepad1");
-		addPair(InputObject::TYPE_GAMEPAD2, "Gamepad2");
-		addPair(InputObject::TYPE_GAMEPAD3, "Gamepad3");
-		addPair(InputObject::TYPE_GAMEPAD4, "Gamepad4");
-		addPair(InputObject::TYPE_GAMEPAD5, "Gamepad5");
-		addPair(InputObject::TYPE_GAMEPAD6, "Gamepad6");
-		addPair(InputObject::TYPE_GAMEPAD7, "Gamepad7");
-		addPair(InputObject::TYPE_GAMEPAD8, "Gamepad8");
-		addPair(InputObject::TYPE_TEXTINPUT, "TextInput");
 		addPair(InputObject::TYPE_NONE, "None");
 	}
 
@@ -64,6 +54,8 @@ namespace RBX { namespace Reflection {
 		return EnumDesc<InputObject::UserInputState>::singleton();
 	}
 
+	// FUNCTION: PLAYER 0x008b62a0
+	// FUNCTION: STUDIO 0x00938270
 	template<>
 	EnumDesc<InputObject::UserInputState>::EnumDesc()
 		: EnumDescriptor("UserInputState", typeid(InputObject::UserInputState))
@@ -71,7 +63,6 @@ namespace RBX { namespace Reflection {
 		addPair(InputObject::INPUT_STATE_BEGIN, "Begin");
 		addPair(InputObject::INPUT_STATE_CHANGE, "Change");
 		addPair(InputObject::INPUT_STATE_END, "End");
-		addPair(InputObject::INPUT_STATE_CANCEL, "Cancel");
 		addPair(InputObject::INPUT_STATE_NONE, "None");
 	}
 

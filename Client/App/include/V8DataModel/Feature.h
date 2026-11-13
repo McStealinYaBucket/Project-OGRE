@@ -16,6 +16,27 @@ namespace RBX {
 		: public DescribedNonCreatable<Feature, Instance, sFeature>
 	{
 	public:
+		enum TopBottom
+		{
+			TOP = 0,
+			CENTER_TB = 1,
+			BOTTOM = 2,
+		};
+
+		enum InOut
+		{
+			EDGE = 0,
+			INSET = 1,
+			CENTER_IO = 2,
+		};
+
+		enum LeftRight
+		{
+			LEFT = 0,
+			CENTER_LR = 1,
+			RIGHT = 2,
+		};
+
 		Feature() {}
 	};
 

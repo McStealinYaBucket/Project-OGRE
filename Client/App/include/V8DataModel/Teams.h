@@ -16,6 +16,7 @@ namespace RBX {
 namespace Network { class Player; }
 
 class Team;
+class Humanoid;
 
 	extern const char* const sTeams;
 
@@ -33,8 +34,12 @@ class Team;
 		~Teams();
 
 		bool isTeamGame();                                       // 0x4BBB9A
-		Team* getTeamFromTeamColor(BrickColor teamColor);         // 0x4BBE88
-		Team* getTeamFromPlayer(Network::Player* player);        // 0x4BBF28
+		Team* getTeamFromTeamColor(BrickColor c);                 // PLAYER 0x007a4660
+		Team* getTeamFromPlayer(Network::Player* p);              // PLAYER 0x007a4770
+		int getNumPlayersInTeam(BrickColor color);                // PLAYER 0x007a4bf0
+		void assignNewPlayerToTeam(Network::Player* p);           // PLAYER 0x007a4fc0
+		G3D::Color3 getTeamColorForHumanoid(Humanoid* h);         // PLAYER 0x007a5130
+		bool teamExists(BrickColor color);                        // PLAYER 0x007a4d40
 
 	private:
 		copy_on_write_ptr<Instances> teams;	// 0x64
@@ -45,3 +50,18 @@ class Team;
 	};
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x007a44c0
+// TEMPLATE: STUDIO 0x008a2dd0
+// ??_E?$DescribedCreatable@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDB$0L@$0A@@RBX@@WBM@AEPAXI@Z
+
+// TEMPLATE: PLAYER 0x007a44d0
+// TEMPLATE: STUDIO 0x008a2de0
+// ??1?$Described@VTeams@RBX@@$E?sTeams@2@3QBDBV?$FactoryProduct@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDBV32@@2@$0L@$0A@@Reflection@RBX@@UAE@XZ
+
+// TEMPLATE: PLAYER 0x007a45e0
+// ??_GTeams@RBX@@UAEPAXI@Z
+

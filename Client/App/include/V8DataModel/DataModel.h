@@ -546,3 +546,449 @@ public:
 };
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x0062d210
+// TEMPLATE: STUDIO 0x0074d530
+// ?getCreatorID@DataModel@RBX@@QBEHXZ
+
+// TEMPLATE: PLAYER 0x0062d220
+// TEMPLATE: STUDIO 0x0074d540
+// ?getCreatorType@DataModel@RBX@@QBE?AW4CreatorType@12@XZ
+
+// TEMPLATE: PLAYER 0x0062d230
+// TEMPLATE: STUDIO 0x0074d550
+// ?getPlaceVersion@DataModel@RBX@@QBEHXZ
+
+// TEMPLATE: PLAYER 0x0062d260
+// TEMPLATE: STUDIO 0x0074d580
+// ?getIsGameLoaded@DataModel@RBX@@QAE_NXZ
+
+// TEMPLATE: PLAYER 0x0062d470
+// TEMPLATE: STUDIO 0x0074d6e0
+// ?getRemoteBuildMode@DataModel@RBX@@QAE_NXZ
+
+// TEMPLATE: PLAYER 0x0062d480
+// TEMPLATE: STUDIO 0x0074d6f0
+// ?setRemoteBuildMode@DataModel@RBX@@QAEX_N@Z
+
+// TEMPLATE: PLAYER 0x0062d490
+// TEMPLATE: STUDIO 0x0074d700
+// ?setScreenshotSEOInfo@DataModel@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+
+// TEMPLATE: PLAYER 0x0062d4e0
+// TEMPLATE: STUDIO 0x0074d750
+// ?setVideoSEOInfo@DataModel@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+
+// TEMPLATE: PLAYER 0x0062d530
+// TEMPLATE: STUDIO 0x0074d7a0
+// ?getScreenshotSEOInfo@DataModel@RBX@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+
+// TEMPLATE: PLAYER 0x0062d560
+// TEMPLATE: STUDIO 0x0074d7d0
+// ??0Events@Implementation@LegacyLock@DataModel@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0062d5b0
+// TEMPLATE: STUDIO 0x0074d820
+// ?setServerSaveUrl@DataModel@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+
+// TEMPLATE: PLAYER 0x0062d7d0
+// TEMPLATE: STUDIO 0x0074da40
+// ?addCustomStat@DataModel@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z
+
+// TEMPLATE: PLAYER 0x0062d8b0
+// TEMPLATE: STUDIO 0x0074db20
+// ?setCreatorID@DataModel@RBX@@QAEXHW4CreatorType@12@@Z
+
+// TEMPLATE: PLAYER 0x0062d900
+// TEMPLATE: STUDIO 0x0074db70
+// ?activateExperimentalFeatures@DataModel@RBX@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x0062d960
+// TEMPLATE: STUDIO 0x0074dbd0
+// ?isGearTypeAllowed@DataModel@RBX@@QAE_NW4GearType@12@@Z
+
+// TEMPLATE: PLAYER 0x0062d980
+// TEMPLATE: STUDIO 0x0074dbf0
+// ?setGenre@DataModel@RBX@@QAEXW4Genre@12@@Z
+
+// TEMPLATE: PLAYER 0x0062d9b0
+// TEMPLATE: STUDIO 0x0074dc20
+// ?setJobsExtendedStatsWindow@DataModel@RBX@@QAEXN@Z
+
+// TEMPLATE: PLAYER 0x0062d9d0
+// TEMPLATE: STUDIO 0x0074dc40
+// ?setUiMessage@DataModel@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+
+// TEMPLATE: PLAYER 0x0062dad0
+// ?currentThreadHasWriteLock@DataModel@RBX@@QBE_NXZ
+
+// TEMPLATE: PLAYER 0x0062dbf0
+// TEMPLATE: STUDIO 0x008574f0
+// ??1?$auto_ptr@VVerb@RBX@@@std@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0062edf0
+// TEMPLATE: STUDIO 0x0074eae0
+// ??1?$array@V?$shared_ptr@VGenericJob@DataModel@RBX@@@boost@@$0L@@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0062fb60
+// TEMPLATE: STUDIO 0x0074f920
+// ??0?$list1@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@@_bi@boost@@QAE@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@@Z
+
+// TEMPLATE: PLAYER 0x0062fbd0
+// TEMPLATE: STUDIO 0x0074f990
+// ??$iter@UGTCounter@?$WindowAverageDutyCycle@$00@RBX@@@?$WindowAverage@NN@RBX@@QBEXAAUGTCounter@?$WindowAverageDutyCycle@$00@1@@Z
+
+// TEMPLATE: PLAYER 0x0062ff50
+// TEMPLATE: STUDIO 0x0074fd10
+// ??$?0PAVDataModel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVDataModel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630070
+// TEMPLATE: STUDIO 0x0074fe30
+// ??$?0PAVGuiRoot@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVGuiRoot@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630130
+// TEMPLATE: STUDIO 0x0074fee0
+// ??$?0PAVPlayerHUD@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVPlayerHUD@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630270
+// TEMPLATE: STUDIO 0x0074fff0
+// ??$?0PAVContentFilter@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVContentFilter@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630300
+// ??$?0PAVKeyframeSequenceProvider@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVKeyframeSequenceProvider@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630390
+// TEMPLATE: STUDIO 0x00750080
+// ??$?0PAVGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630420
+// TEMPLATE: STUDIO 0x00750110
+// ??$?0PAVLocalBackpack@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVLocalBackpack@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x006304b0
+// TEMPLATE: STUDIO 0x007501a0
+// ??$?0PAVCoreGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVCoreGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630540
+// TEMPLATE: STUDIO 0x007393f0
+// ??$?0PAVCollectionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVCollectionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x006305d0
+// TEMPLATE: STUDIO 0x00750230
+// ??$?0PAVPhysicsService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVPhysicsService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630660
+// TEMPLATE: STUDIO 0x007502c0
+// ??$?0PAVGeometryService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVGeometryService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x006306f0
+// TEMPLATE: STUDIO 0x00750350
+// ??$?0PAVRenderHooksService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVRenderHooksService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630780
+// TEMPLATE: STUDIO 0x007503e0
+// ??$?0PAVGamePassService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVGamePassService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630810
+// TEMPLATE: STUDIO 0x00750470
+// ??$?0PAVDebrisService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVDebrisService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x006308a0
+// TEMPLATE: STUDIO 0x00750500
+// ??$?0PAVCookiesService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVCookiesService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630930
+// TEMPLATE: STUDIO 0x00750590
+// ??$?0PAVTeleportService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVTeleportService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x006309c0
+// TEMPLATE: STUDIO 0x00750620
+// ??$?0PAVPersonalServerService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVPersonalServerService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630a50
+// TEMPLATE: STUDIO 0x007506b0
+// ??$?0PAVFWService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVFWService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630ae0
+// TEMPLATE: STUDIO 0x00750740
+// ??$?0PAVContextActionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVContextActionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630b70
+// TEMPLATE: STUDIO 0x007507d0
+// ??$?0PAVScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00630c00
+// TEMPLATE: STUDIO 0x00750860
+// ??$?0PAVAssetService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVAssetService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
+
+// TEMPLATE: PLAYER 0x00631130
+// TEMPLATE: STUDIO 0x00750c70
+// ??0?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@QAE@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@0@Z
+
+// TEMPLATE: PLAYER 0x00631220
+// TEMPLATE: STUDIO 0x00750d10
+// ??0?$storage4@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@@_bi@boost@@QAE@V?$value@PAVDataModel@RBX@@@12@U?$arg@$00@2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@V?$value@N@12@@Z
+
+// TEMPLATE: PLAYER 0x006312a0
+// ??$getset@P8DataModel@RBX@@BE_NXZP812@AEX_N@Z@?$PropDescriptor@VDataModel@RBX@@_N@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@_N@Reflection@RBX@@@std@@P8DataModel@2@BE_NXZP852@AEX_N@Z@Z
+
+// TEMPLATE: PLAYER 0x00631300
+// TEMPLATE: STUDIO 0x00750df0
+// ??$getset@P8DataModel@RBX@@BE_NXZH@?$PropDescriptor@VDataModel@RBX@@_N@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@_N@Reflection@RBX@@@std@@P8DataModel@2@BE_NXZH@Z
+
+// TEMPLATE: PLAYER 0x006313f0
+// TEMPLATE: STUDIO 0x00750ee0
+// ??$getset@P8DataModel@RBX@@BEHXZH@?$PropDescriptor@VDataModel@RBX@@H@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@H@Reflection@RBX@@@std@@P8DataModel@2@BEHXZH@Z
+
+// TEMPLATE: PLAYER 0x00631440
+// TEMPLATE: STUDIO 0x00750f30
+// ??$getset@P8DataModel@RBX@@BE?AW4CreatorType@12@XZH@?$PropDescriptor@VDataModel@RBX@@W4CreatorType@12@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4CreatorType@DataModel@RBX@@@Reflection@RBX@@@std@@P8DataModel@2@BE?AW4CreatorType@52@XZH@Z
+
+// TEMPLATE: PLAYER 0x00631490
+// TEMPLATE: STUDIO 0x00750f80
+// ??$getset@P8DataModel@RBX@@BE?AW4Genre@12@XZH@?$PropDescriptor@VDataModel@RBX@@W4Genre@12@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4Genre@DataModel@RBX@@@Reflection@RBX@@@std@@P8DataModel@2@BE?AW4Genre@52@XZH@Z
+
+// TEMPLATE: PLAYER 0x006314e0
+// TEMPLATE: STUDIO 0x00750fd0
+// ??$getset@P8DataModel@RBX@@BE?AW4GearGenreSetting@12@XZH@?$PropDescriptor@VDataModel@RBX@@W4GearGenreSetting@12@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4GearGenreSetting@DataModel@RBX@@@Reflection@RBX@@@std@@P8DataModel@2@BE?AW4GearGenreSetting@52@XZH@Z
+
+// TEMPLATE: PLAYER 0x00631770
+// TEMPLATE: STUDIO 0x007512d0
+// ??$?0PAUdelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@boost@@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@boost@@@detail@2@@shared_count@detail@boost@@QAE@PAUdelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@2@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@boost@@@12@@Z
+
+// TEMPLATE: PLAYER 0x00631800
+// TEMPLATE: STUDIO 0x007514d0
+// ??$?RV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV01@ABV01@@ZVlist0@_bi@boost@@@?$list1@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@@_bi@boost@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$type@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@AAP6A?AV34@ABV34@@ZAAVlist0@12@J@Z
+
+// TEMPLATE: PLAYER 0x00631880
+// TEMPLATE: STUDIO 0x00751550
+// ??$?RV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV01@ABV01@0@ZVlist0@_bi@boost@@@?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$type@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@AAP6A?AV34@ABV34@1@ZAAVlist0@12@J@Z
+
+// TEMPLATE: PLAYER 0x006319d0
+// TEMPLATE: STUDIO 0x00751720
+// ??$checked_delete@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@YAXPAUEvents@Implementation@LegacyLock@DataModel@RBX@@@Z
+
+// TEMPLATE: PLAYER 0x00631e30
+// TEMPLATE: STUDIO 0x00751b10
+// ??0?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@QAE@ABV?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@Z
+
+// TEMPLATE: PLAYER 0x00631e90
+// TEMPLATE: STUDIO 0x00751d70
+// ??$bind@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV12@V12@@boost@@YA?AV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@@ZV?$list1@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@@_bi@boost@@@_bi@0@P6A?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV34@@ZV34@@Z
+
+// TEMPLATE: PLAYER 0x00631f30
+// TEMPLATE: STUDIO 0x00751e10
+// ??$bind@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV12@ABV12@V12@V12@@boost@@YA?AV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@0@P6A?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV34@0@ZV34@2@Z
+
+// TEMPLATE: PLAYER 0x006320b0
+// TEMPLATE: STUDIO 0x00752060
+// ??0?$storage5@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@V?$value@PAN@23@@_bi@boost@@QAE@V?$value@PAVDataModel@RBX@@@12@U?$arg@$00@2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@V?$value@N@12@V?$value@PAN@12@@Z
+
+// TEMPLATE: PLAYER 0x00632e50
+// TEMPLATE: STUDIO 0x00752e40
+// ??$assign_functor@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@?$basic_vtable0@X@function@detail@boost@@ABEXV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@3@AATfunction_buffer@123@U?$bool_@$0A@@mpl@3@@Z
+
+// TEMPLATE: PLAYER 0x00632f50
+// ??$?RP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@1@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list2@AAPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAPAVexception@2@@_bi@4@@?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@boost@@QAEXV?$type@X@12@AAP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@5@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@2@3@ZAAV?$list2@AAPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAPAVexception@2@@12@H@Z
+
+// TEMPLATE: PLAYER 0x00633130
+// TEMPLATE: STUDIO 0x00753130
+// ??1_Node@?$_Tree_nod@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@HU?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@std@@@2@$0A@@std@@@std@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00633360
+// TEMPLATE: STUDIO 0x007536e0
+// ??$for_each@V?$_Vector_iterator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@V?$allocator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@@std@@@std@@V?$bind_t@XP6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@PAV?$vector@VVariant@Reflection@RBX@@V?$allocator@VVariant@Reflection@RBX@@@std@@@std@@@ZV?$list3@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@PAV?$vector@VVariant@Reflection@RBX@@V?$allocator@VVariant@Reflection@RBX@@@std@@@std@@@23@@_bi@4@@_bi@boost@@@std@@YA?AV?$bind_t@XP6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@PAV?$vector@VVariant@Reflection@RBX@@V?$allocator@VVariant@Reflection@RBX@@@std@@@std@@@ZV?$list3@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@PAV?$vector@VVariant@Reflection@RBX@@V?$allocator@VVariant@Reflection@RBX@@@std@@@std@@@23@@_bi@4@@_bi@boost@@V?$_Vector_iterator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@V?$allocator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@@std@@@0@0V123@@Z
+
+// TEMPLATE: PLAYER 0x006333d0
+// TEMPLATE: STUDIO 0x00753750
+// ??$_Construct@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@U123@@std@@YAXPAU?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@ABU123@@Z
+
+// TEMPLATE: PLAYER 0x00633430
+// TEMPLATE: STUDIO 0x007537b0
+// ??0?$list5@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@V?$value@PAN@23@@_bi@boost@@QAE@V?$value@PAVDataModel@RBX@@@12@U?$arg@$00@2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@V?$value@N@12@V?$value@PAN@12@@Z
+
+// TEMPLATE: PLAYER 0x00633c30
+// TEMPLATE: STUDIO 0x00753cd0
+// ?manager@?$functor_manager@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z
+
+// TEMPLATE: PLAYER 0x00633df0
+// TEMPLATE: STUDIO 0x00753ec0
+// ??$assign_to@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@?$basic_vtable0@X@function@detail@boost@@ABE_NV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@3@AATfunction_buffer@123@Ufunction_obj_tag@123@@Z
+
+// TEMPLATE: PLAYER 0x00633ef0
+// TEMPLATE: STUDIO 0x00754060
+// ?getStats@?$WindowAverageTimeInterval@$00@RBX@@QBE?AUStats@12@I@Z
+
+// TEMPLATE: PLAYER 0x006341a0
+// TEMPLATE: STUDIO 0x00754420
+// ?_Growmap@?$deque@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@V?$allocator@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x00634360
+// TEMPLATE: STUDIO 0x007545e0
+// ??$bind@XPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NPANPAV12@U?$arg@$00@4@V56@NPAN@boost@@YA?AV?$bind_t@XP6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NPAN@ZV?$list5@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@V?$value@PAN@23@@_bi@4@@_bi@0@P6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@0@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NPAN@Z0U?$arg@$00@0@V67@N3@Z
+
+// TEMPLATE: PLAYER 0x00634460
+// TEMPLATE: STUDIO 0x007546e0
+// ??$for_each@V?$_Vector_iterator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@V?$allocator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@@std@@@std@@V?$bind_t@XP6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NPAN@ZV?$list5@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@V?$value@PAN@23@@_bi@4@@_bi@boost@@@std@@YA?AV?$bind_t@XP6AXPAVDataModel@RBX@@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@AAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NPAN@ZV?$list5@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@V?$value@N@23@V?$value@PAN@23@@_bi@4@@_bi@boost@@V?$_Vector_iterator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@V?$allocator@V?$shared_ptr@$$CBVJob@TaskScheduler@RBX@@@boost@@@std@@@0@0V123@@Z
+
+// TEMPLATE: PLAYER 0x00634fd0
+// TEMPLATE: STUDIO 0x007553a0
+// ??$assign_to@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@?$basic_vtable0@X@function@detail@boost@@QBE_NV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@3@AATfunction_buffer@123@@Z
+
+// TEMPLATE: PLAYER 0x00635600
+// TEMPLATE: STUDIO 0x007559d0
+// ??1PhysicsInstructions@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00635640
+// TEMPLATE: STUDIO 0x00755a10
+// ?getStats@?$WindowAverageDutyCycle@$00@RBX@@QBE?AUStats@12@I@Z
+
+// TEMPLATE: PLAYER 0x00635730
+// ??A?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@HU?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@std@@@2@@std@@QAEAAHABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@@Z
+
+// TEMPLATE: PLAYER 0x006359b0
+// TEMPLATE: STUDIO 0x00755d90
+// ?push_back@?$deque@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@V?$allocator@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@@std@@@std@@QAEXABU?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@@Z
+
+// TEMPLATE: PLAYER 0x00635c20
+// TEMPLATE: STUDIO 0x00756000
+// ??$heap_new@Udelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@boost@@@detail@boost@@YAPAUdelete_data@?$thread_specific_ptr@PAVGenericJob@DataModel@RBX@@@1@XZ
+
+// TEMPLATE: PLAYER 0x006375d0
+// TEMPLATE: STUDIO 0x00756f90
+// ??$assign_to@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@?$function0@X@boost@@AAEXV?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@1@@Z
+
+// TEMPLATE: PLAYER 0x00638790
+// TEMPLATE: STUDIO 0x00757d70
+// ??$?0V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@?$function0@X@boost@@QAE@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@1@H@Z
+
+// TEMPLATE: PLAYER 0x00639ea0
+// ?manager@?$functor_manager@V?$bind_t@XP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@5@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z
+
+// TEMPLATE: PLAYER 0x0063b2c0
+// TEMPLATE: STUDIO 0x00759d90
+// ??$connect@V?$bind_t@XV?$mf1@XVDataModel@RBX@@VRunTransition@2@@_mfi@boost@@V?$list2@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@?$signal@$$A6AXVRunTransition@RBX@@@Z@signals@rbx@@QAE?AVconnection@12@ABV?$bind_t@XV?$mf1@XVDataModel@RBX@@VRunTransition@2@@_mfi@boost@@V?$list2@V?$value@PAVDataModel@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@Z
+
+// TEMPLATE: PLAYER 0x0063c6a0
+// ??$create@VFWService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VFWService@RBX@@@boost@@XZ
+
+// TEMPLATE: PLAYER 0x0063d1e0
+// TEMPLATE: STUDIO 0x0075b100
+// ?lexical_cast_impl@?$lexical_cast_do_cast@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@detail@boost@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABH@Z
+
+// TEMPLATE: PLAYER 0x0063e120
+// TEMPLATE: STUDIO 0x0075bfd0
+// ?setGear@DataModel@RBX@@QAEXW4GearGenreSetting@12@H@Z
+
+// TEMPLATE: PLAYER 0x0063e160
+// TEMPLATE: STUDIO 0x0075c010
+// ?gameLoaded@DataModel@RBX@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x0063e5a0
+// TEMPLATE: STUDIO 0x0075c450
+// ?getLightingDeprecated@DataModel@RBX@@QBEPAVInstance@2@XZ
+
+// TEMPLATE: PLAYER 0x0063e610
+// ?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4CreatorType@DataModel@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
+
+// TEMPLATE: PLAYER 0x0063e680
+// ?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4Genre@DataModel@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
+
+// TEMPLATE: PLAYER 0x0063e6f0
+// ?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4GearGenreSetting@DataModel@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
+
+// TEMPLATE: PLAYER 0x0063e760
+// ?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4GearType@DataModel@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
+
+// TEMPLATE: PLAYER 0x0063f2d0
+// TEMPLATE: STUDIO 0x0075cb60
+// ?pop_front@?$deque@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@V?$allocator@U?$timestamped_safe_queue_item@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@implementation@rbx@@@std@@@std@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x0063f330
+// TEMPLATE: STUDIO 0x0075cbc0
+// ?step@GenericJob@DataModel@RBX@@AAEXAAV?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@Z
+
+// TEMPLATE: PLAYER 0x0063fb80
+// TEMPLATE: STUDIO 0x0075d410
+// ??1?$signal_with_args@$00$$A6AXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@signals@rbx@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0063fb90
+// TEMPLATE: STUDIO 0x0075d420
+// ??1?$signal_with_args@$00$$A6AXABVUIEvent@RBX@@@Z@signals@rbx@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0063fba0
+// TEMPLATE: STUDIO 0x0075d430
+// ??1?$signal@$$A6AXV?$shared_ptr@VInstance@RBX@@@boost@@PBVPropertyDescriptor@Reflection@RBX@@@Z@rbx@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00640120
+// TEMPLATE: STUDIO 0x0075d9b0
+// ?doHttpGet@DataModel@RBX@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV34@@Z
+
+// TEMPLATE: PLAYER 0x006401a0
+// TEMPLATE: STUDIO 0x0075da30
+// ?doHttpPost@DataModel@RBX@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV34@0@Z
+
+// TEMPLATE: PLAYER 0x00641840
+// ??$countDescendantsOfType@VInstance@RBX@@@Instance@RBX@@QBEHXZ
+
+// TEMPLATE: PLAYER 0x00641a20
+// TEMPLATE: STUDIO 0x0075f2d0
+// ??0?$Described@VScriptService@RBX@@$E?sScriptService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sScriptService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00642370
+// ??1?$scoped_ptr@UImplementation@LegacyLock@DataModel@RBX@@@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00642550
+// TEMPLATE: STUDIO 0x0075fdd0
+// ?save@DataModel@RBX@@QAEXVContentId@2@@Z
+
+// TEMPLATE: PLAYER 0x00643290
+// TEMPLATE: STUDIO 0x00760b10
+// ??0?$Described@VPhysicsService@RBX@@$E?sPhysicsService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00643d30
+// TEMPLATE: STUDIO 0x006fd1e0
+// ??$?0PAV?$signal@$$A6AX_N@Z@signals@rbx@@@?$callable@Vslot@?$signal@$$A6AX_N@Z@signals@rbx@@V?$function@$$A6AX_N@Z@boost@@$00$$A6AX_N@Z@rbx@@QAE@ABV?$function@$$A6AX_N@Z@boost@@PAV?$signal@$$A6AX_N@Z@signals@1@@Z
+
+// TEMPLATE: PLAYER 0x00647130
+// TEMPLATE: STUDIO 0x00763f90
+// ?call@?$Call2Helper@VDataModel@RBX@@P812@AE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V34@_N@ZV34@_NV34@@Reflection@RBX@@SAXPAVDataModel@3@P843@AE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V56@_N@ZAAVVariant@23@ABV56@AB_N@Z
+
+// TEMPLATE: PLAYER 0x006474d0
+// TEMPLATE: STUDIO 0x00764310
+// ?call@?$Call3Helper@VDataModel@RBX@@P812@AE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V34@0_N@ZV34@V34@_NV34@@Reflection@RBX@@SAXPAVDataModel@3@P843@AE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V56@1_N@ZAAVVariant@23@ABV56@5AB_N@Z
+
+// TEMPLATE: PLAYER 0x00647580
+// TEMPLATE: STUDIO 0x007643c0
+// ?execute@?$BoundFuncDesc@VDataModel@RBX@@$$A6A?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V34@0_N@Z$02@Reflection@RBX@@UBEXPAVDescribedBase@23@AAVArguments@FunctionDescriptor@23@@Z
+
+// TEMPLATE: PLAYER 0x00647fb0
+// TEMPLATE: STUDIO 0x00764d20
+// ?execute@?$BoundFuncDesc@VDataModel@RBX@@$$A6ANV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@N@Z$01@Reflection@RBX@@UBEXPAVDescribedBase@23@AAVArguments@FunctionDescriptor@23@@Z
+
+// TEMPLATE: PLAYER 0x00648390
+// ??$try_enum@$01W4CreatorType@DataModel@RBX@@@ArgHelper@Reflection@RBX@@CA_NAAVArguments@FunctionDescriptor@12@AAW4CreatorType@DataModel@2@PAX@Z
+
+// TEMPLATE: PLAYER 0x00648470
+// ??$try_enum@$00W4Genre@DataModel@RBX@@@ArgHelper@Reflection@RBX@@CA_NAAVArguments@FunctionDescriptor@12@AAW4Genre@DataModel@2@PAX@Z
+
+// TEMPLATE: PLAYER 0x00648580
+// ??$try_enum@$00W4GearGenreSetting@DataModel@RBX@@@ArgHelper@Reflection@RBX@@CA_NAAVArguments@FunctionDescriptor@12@AAW4GearGenreSetting@DataModel@2@PAX@Z
+
+// TEMPLATE: PLAYER 0x00648660
+// ??$try_enum@$00W4GearType@DataModel@RBX@@@ArgHelper@Reflection@RBX@@CA_NAAVArguments@FunctionDescriptor@12@AAW4GearType@DataModel@2@PAX@Z
+
+// TEMPLATE: PLAYER 0x0064de20
+// ??_EDataModel@RBX@@WKE@AEPAXI@Z
+
+// TEMPLATE: PLAYER 0x0064f1f0
+// TEMPLATE: STUDIO 0x0084e250
+// ??_GDataModel@RBX@@UAEPAXI@Z
+
+// TEMPLATE: PLAYER 0x0064f760
+// TEMPLATE: STUDIO 0x0076c210
+// ??$create@VDataModel@RBX@@PAVVerb@2@PAV12@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VDataModel@RBX@@@boost@@PAVVerb@1@PAVDataModel@1@@Z
+

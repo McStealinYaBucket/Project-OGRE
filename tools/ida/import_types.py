@@ -51,7 +51,21 @@ CLASSES = [
     # (0x0085e360 58.7%), TaskScheduler (ctor 97.2%, dtor 99.5%)
     "RBX::Team", "RBX::Teams", "RBX::ContentProviderJob", "RBX::LegacyContentTable", "RBX::Average<double>",
     "RBX::FWPartInstance", "RBX::FWFinal<RBX::FWInstance>", "RBX::FWFinal<RBX::FWPartInstance>",
+    # wave2 sync (sweep8, P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT or // SIZE = the
+    # PDB's), PLAYER / STUDIO: DebrisService ctor 0x008455c0 / 0x0098af90 (0x94), Frame ctor 0x006c2b70 /
+    # 0x00855690 (0x2a4), GuiBase ctor 0x007bc4b0 / 0x008d8ed0 (0x7c, effective), GuiBase2d ctor 0x007bcc40 /
+    # 0x008d9600 (0x94), GuiBase3d ctor 0x00953230 / 0x00987010 (0x88), GuiImageMixin ctor 0x006bc910 /
+    # 0x00851c10 (0xb8), GuiLabel ctor 0x007cb640 / 0x008e80f0 (0x21c), GuiLayerCollector ctor 0x008b4430 /
+    # 0x00988c30 (0xb4), GuiTextMixin ctor 0x006be930 / 0x00836e40 (0x54), ImageLabel ctor 0x006bdb40 / 0x00851f80
+    # (0x2d4), TextLabel ctor 0x006c1c10 / 0x00854b20 (0x270), ~PhysicsInstructions 0x00635600 / 0x007559d0
+    # (0x60). PLAYER only (STUDIO's ctors/dtor below 100%): ScreenGui ctors 0x008b2980 / 0x008b2ae0 (0xec;
+    # STUDIO 0.982), RunService ctor 0x0072efd0 (0xb0; STUDIO 0.937 / dtor 0.899). Not yet: Lighting (size
+    # assert 0x1f0, no ctor/dtor at 100%)
+    "RBX::DebrisService", "RBX::Frame", "RBX::GuiBase", "RBX::GuiBase2d", "RBX::GuiBase3d", "RBX::GuiImageMixin",
+    "RBX::GuiLabel", "RBX::GuiLayerCollector", "RBX::GuiTextMixin", "RBX::ImageLabel", "RBX::TextLabel",
+    "RBX::PhysicsInstructions", "RBX::ScreenGui", "RBX::RunService",
 ]
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.
@@ -189,6 +203,23 @@ def vtbl_slots(json_path, res):
     return done
 
 
+def tree_sizes():
+    """Class sizes the tree asserts: DECOMP_SIZE_ASSERT(Name, 0x..) and a `// SIZE 0x..` line right above a
+    class/struct line (unqualified name; dump also tries RBX::<name>)."""
+    root = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "Client")
+    out = {}
+    for d, _, fs in os.walk(root):
+        for f in fs:
+            if not f.endswith((".h", ".cpp")):
+                continue
+            t = open(os.path.join(d, f), encoding="latin-1").read()
+            for m in re.finditer(r"// SIZE (0x[0-9a-fA-F]+)\s*\n\s*(?:class|struct)\s+(\w+)\b(?!\s*;)", t):
+                out.setdefault(m.group(2), int(m.group(1), 16))
+            for m in re.finditer(r"DECOMP_SIZE_ASSERT\(\s*([\w:<>, *]+?)\s*,\s*(0x[0-9a-fA-F]+)\s*\)", t):
+                out[m.group(1)] = int(m.group(2), 16)
+    return out
+
+
 def dump(pdb, out, json_path=None):
     """Lean reader (2026-11-12: reccmp's Cvdump types parser held 13-22 GB for this PDB). cvdump -t is
     streamed to a temporary file while only the byte offset of each record and the UDT index of each named
@@ -203,7 +234,7 @@ def dump(pdb, out, json_path=None):
     tmp = tempfile.TemporaryFile(dir=os.path.dirname(os.path.abspath(out)))
     win = "Z:" + os.path.abspath(pdb).replace("/", "\\")
     proc = subprocess.Popen(["wine", CVDUMP, "-t", win], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-    offs, uniq_at, newest, names = {}, {}, {}, {}
+    offs, uniq_at, newest, names, defs = {}, {}, {}, {}, {}
     pos, cur, fwd = 0, None, False
     for raw in proc.stdout:
         tmp.write(raw)
@@ -221,9 +252,23 @@ def dump(pdb, out, json_path=None):
                 names.setdefault(u.group(2), set()).add(u.group(3))
                 if not fwd:
                     newest[u.group(3)] = max(newest.get(u.group(3), 0), cur)
+                    defs.setdefault(u.group(3), []).append((cur, int(u.group(1))))
         pos += len(raw)
     if proc.wait() != 0:
         sys.exit("cvdump failed")
+    # a stale record can be the newest one (2026-11-13: PLAYER's RBX::ImageLabel 0x23c, an old header's layout,
+    # over the asserted 0x2d4): where the tree asserts a size, the newest definition of that size wins
+    for n, size in tree_sizes().items():
+        for q in (n, "RBX::" + n):
+            us = names.get(q, set())
+            if len(us) != 1:
+                continue
+            u = next(iter(us))
+            fit = [k for k, sz in defs.get(u, []) if sz == size]
+            if fit and dict(defs[u]).get(newest[u]) != size:
+                print("import_types dump: %s: newest record 0x%x is %d bytes, the tree asserts 0x%x: record 0x%x"
+                      % (q, newest[u], dict(defs[u])[newest[u]], size, max(fit)))
+                newest[u] = max(fit)
 
     def record(k):
         tmp.seek(offs[k])
@@ -339,7 +384,10 @@ def dump(pdb, out, json_path=None):
         return any(f in ("LF_MEMBER", "LF_VFUNCTAB", "LF_BCLASS") for f, _ in fields(info(k)[1]["fields"]))
 
     res, missing, todo = {}, [], []
+    target = os.path.basename(out).split("-")[0]
     for n in CLASSES:
+        if target == "STUDIO" and n in PLAYER_ONLY:
+            continue
         ks = names.get(n, set())
         if len(ks) != 1:
             missing.append(n if not ks else "%s (%d definitions)" % (n, len(ks)))
@@ -385,7 +433,6 @@ def dump(pdb, out, json_path=None):
         mem.sort(key=lambda m: m["offset"])
         res[n] = {"size": c["size"], "vftable": vf, "virtual_bases": vb, "bases": bases, "members": mem,
                   "base": n not in listed, "unique": uniq_at.get(key, "")}
-    target = os.path.basename(out).split("-")[0]
     fixed = fix_2013(res, target) + vtbl_slots(json_path, res)
     json.dump({"pdb": os.path.basename(pdb), "classes": res, "missing": missing, "fixups_2013": fixed},
               open(out, "w"), indent=1)

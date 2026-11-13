@@ -4079,7 +4079,7 @@ struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX:
   bool isInitialized;
   bool isContentLoaded;
   unsigned __int8 gap_BE7[1];
-  unsigned __int8 physicsInstructions[96]; ///< RBX::PhysicsInstructions
+  RBX::PhysicsInstructions physicsInstructions;
   int numPartInstances;
   int numInstances;
   int shutdownRequestedCount;
@@ -4370,5 +4370,390 @@ struct __cppobj RBX::FWFinal<RBX::FWInstance> : RBX::FWInstance
 /* 521 */
 struct __cppobj RBX::FWFinal<RBX::FWPartInstance> : RBX::FWPartInstance
 {
+};
+
+/* 522 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService> : RBX::Instance
+{
+};
+
+/* 523 */
+struct __cppobj RBX::Reflection::Described<RBX::DebrisService, char const *const RBX::sDebrisService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>
+{
+};
+
+/* 524 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::DebrisService, RBX::Instance, char const *const RBX::sDebrisService, 27, 0> : RBX::Reflection::Described<RBX::DebrisService, char const *const RBX::sDebrisService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sDebrisService>, 27, 0>
+{
+};
+
+/* 525 */
+struct __cppobj RBX::DebrisService : RBX::DescribedNonCreatable<RBX::DebrisService, RBX::Instance, char const *const RBX::sDebrisService, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 queue[32];            ///< std::queue<boost::weak_ptr<RBX::Instance>>
+  int maxItems;
+  bool legacyMaxItems;
+  unsigned __int8 gap_89[3];
+  unsigned __int8 timer[8];             ///< boost::shared_ptr<RBX::TimerService>
+};
+
+/* 526 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase> : RBX::Instance
+{
+};
+
+/* 527 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiBase, char const *const RBX::sGuiBase, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>
+{
+};
+
+/* 528 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiBase, RBX::Instance, char const *const RBX::sGuiBase, 27, 0> : RBX::Reflection::Described<RBX::GuiBase, char const *const RBX::sGuiBase, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiBase>, 27, 0>
+{
+};
+
+/* 529 */
+struct __cppobj RBX::GuiTarget
+{
+  void **__vftable;
+};
+
+/* 530 */
+struct __cppobj RBX::IAdornable
+{
+  void **__vftable;
+  int index2d;
+  int index3d;
+  int index3dSorted;
+  void *bucket;                         ///< RBX::IAdornableCollector *
+};
+
+/* 531 */
+struct __cppobj RBX::GuiBase : RBX::DescribedNonCreatable<RBX::GuiBase, RBX::Instance, char const *const RBX::sGuiBase, 27, 0>, RBX::GuiTarget, RBX::IAdornable
+{
+  float m_unk0x78;
+};
+
+/* 532 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d> : RBX::GuiBase
+{
+};
+
+/* 533 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiBase2d, char const *const RBX::sGuiBase2d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>
+{
+};
+
+/* 534 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiBase2d, RBX::GuiBase, char const *const RBX::sGuiBase2d, 27, 0> : RBX::Reflection::Described<RBX::GuiBase2d, char const *const RBX::sGuiBase2d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase2d>, 27, 0>
+{
+};
+
+/* 535 */
+struct __cppobj RBX::GuiBase2d : RBX::DescribedNonCreatable<RBX::GuiBase2d, RBX::GuiBase, char const *const RBX::sGuiBase2d, 27, 0>
+{
+  unsigned __int8 absolutePosition[8];  ///< G3D::Vector2
+  unsigned __int8 absoluteSize[8];      ///< G3D::Vector2
+  int zIndex;
+  int guiQueue;                         ///< enum RBX::GuiQueue
+};
+
+/* 536 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject> : RBX::GuiBase2d
+{
+};
+
+/* 537 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiObject, char const *const RBX::sGuiObject, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>
+{
+};
+
+/* 538 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char const *const RBX::sGuiObject, 27, 0> : RBX::Reflection::Described<RBX::GuiObject, char const *const RBX::sGuiObject, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sGuiObject>, 27, 0>
+{
+};
+
+/* 539 */
+struct __cppobj RBX::GuiObject : RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char const *const RBX::sGuiObject, 27, 0>
+{
+  unsigned int m_unk0x94;
+  bool m_unk0x98;
+  bool m_unk0x99;
+  bool m_unk0x9a;
+  unsigned __int8 gap_9B[1];
+  unsigned __int8 m_unk0x9c[8];         ///< G3D::Vector2
+  unsigned __int8 mouseEnterSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseLeaveSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseMovedSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseWheelForwardSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseWheelBackwardSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  int varMouseEnterConnectionCount;
+  unsigned __int8 m_unk0xd0[28];        ///< array
+  int varMouseLeaveConnectionCount;
+  unsigned __int8 m_unk0xf0[28];        ///< array
+  int varMouseMovedConnectionCount;
+  unsigned __int8 m_unk0x110[28];       ///< array
+  int varMouseWheelForwardConnectionCount;
+  unsigned __int8 m_unk0x130[28];       ///< array
+  int varMouseWheelBackwardConnectionCount;
+  unsigned __int8 m_unk0x150[28];       ///< array
+  unsigned __int8 dragStoppedSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 dragBeginSignal[8];   ///< rbx::remote_signal<void __cdecl(RBX::UDim2)>
+  int varDragStoppedConnectionCount;
+  unsigned __int8 m_unk0x180[28];       ///< array
+  int varDragBeginConnectionCount;
+  unsigned __int8 m_unk0x1a0[28];       ///< array
+  bool serverGuiObject;
+  bool clipping;
+  unsigned __int8 gap_1BE[2];
+  unsigned int m_unk0x1c0;
+  unsigned __int8 size[16];             ///< RBX::UDim2
+  unsigned __int8 position[16];         ///< RBX::UDim2
+  int sizeConstraint;                   ///< enum RBX::GuiObject::SizeConstraint
+  int borderSizePixel;
+  unsigned __int8 backgroundColor[12];  ///< G3D::Color3
+  unsigned __int8 borderColor[12];      ///< G3D::Color3
+  bool visible;
+  bool active;
+  unsigned __int8 gap_206[2];
+  float backgroundTransparency;
+  unsigned __int8 windowRectCache[16];  ///< G3D::Rect2D
+};
+
+/* 540 */
+struct __cppobj RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance> : RBX::GuiObject
+{
+};
+
+/* 541 */
+struct __cppobj RBX::Reflection::Described<RBX::Frame, char const *const RBX::sFrame, RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>
+{
+};
+
+/* 542 */
+struct __cppobj RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, 27, 0> : RBX::Reflection::Described<RBX::Frame, char const *const RBX::sFrame, RBX::FactoryProduct<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, RBX::Instance>, 27, 0>
+{
+};
+
+/* 543 */
+struct __cppobj RBX::Frame : RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, 27, 0>
+{
+  int style;                            ///< enum RBX::Frame::Style
+  unsigned __int8 image[132];           ///< RBX::GuiDrawImage
+};
+
+/* 544 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d> : RBX::GuiBase
+{
+};
+
+/* 545 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiBase3d, char const *const RBX::sGuiBase3d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>
+{
+};
+
+/* 546 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiBase3d, RBX::GuiBase, char const *const RBX::sGuiBase3d, 27, 0> : RBX::Reflection::Described<RBX::GuiBase3d, char const *const RBX::sGuiBase3d, RBX::NonFactoryProduct<RBX::GuiBase, char const *const RBX::sGuiBase3d>, 27, 0>
+{
+};
+
+/* 547 */
+struct __cppobj RBX::GuiBase3d : RBX::DescribedNonCreatable<RBX::GuiBase3d, RBX::GuiBase, char const *const RBX::sGuiBase3d, 27, 0>
+{
+  unsigned __int8 color[4];             ///< RBX::BrickColor
+  float transparency;
+  bool visible;
+  unsigned __int8 gap_85[3];
+};
+
+/* 548 */
+struct __cppobj RBX::GuiImageMixin
+{
+  void **__vftable;
+  unsigned __int8 image[32];            ///< RBX::ContentId
+  unsigned __int8 imageRectOffset[8];   ///< G3D::Vector2
+  unsigned __int8 imageRectSize[8];     ///< G3D::Vector2
+  unsigned __int8 guiImageDraw[132];    ///< RBX::GuiDrawImage
+};
+
+/* 549 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel> : RBX::GuiObject
+{
+};
+
+/* 550 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiLabel, char const *const RBX::sGuiLabel, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>
+{
+};
+
+/* 551 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiLabel, RBX::GuiObject, char const *const RBX::sGuiLabel, 27, 0> : RBX::Reflection::Described<RBX::GuiLabel, char const *const RBX::sGuiLabel, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiLabel>, 27, 0>
+{
+};
+
+/* 552 */
+struct __cppobj RBX::GuiLabel : RBX::DescribedNonCreatable<RBX::GuiLabel, RBX::GuiObject, char const *const RBX::sGuiLabel, 27, 0>
+{
+};
+
+/* 553 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector> : RBX::GuiBase2d
+{
+};
+
+/* 554 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiLayerCollector, char const *const RBX::sLayerCollector, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>
+{
+};
+
+/* 555 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiLayerCollector, RBX::GuiBase2d, char const *const RBX::sLayerCollector, 27, 0> : RBX::Reflection::Described<RBX::GuiLayerCollector, char const *const RBX::sLayerCollector, RBX::NonFactoryProduct<RBX::GuiBase2d, char const *const RBX::sLayerCollector>, 27, 0>
+{
+};
+
+/* 556 */
+struct __cppobj RBX::GuiLayerCollector : RBX::DescribedNonCreatable<RBX::GuiLayerCollector, RBX::GuiBase2d, char const *const RBX::sLayerCollector, 27, 0>
+{
+  unsigned __int8 guiLayers[32];        ///< array
+};
+
+/* 557 */
+struct __cppobj RBX::GuiTextMixin
+{
+  unsigned int filterState;
+  unsigned __int8 text[28];             ///< std::string
+  int fontSize;                         ///< enum RBX::TextService::FontSize
+  unsigned __int8 textColor[12];        ///< G3D::Color3
+  float textTransparency;
+  unsigned __int8 textStrokeColor[12];  ///< G3D::Color3
+  float textStrokeTransparency;
+  bool textWrap;
+  bool textScale;
+  unsigned __int8 gap_46[2];
+  int xAlignment;                       ///< enum RBX::TextService::XAlignment
+  int yAlignment;                       ///< enum RBX::TextService::YAlignment
+  int font;                             ///< enum RBX::TextService::Font
+};
+
+/* 558 */
+struct __cppobj RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance> : RBX::GuiLabel
+{
+};
+
+/* 559 */
+struct __cppobj RBX::Reflection::Described<RBX::ImageLabel, char const *const RBX::sImageLabel, RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>
+{
+};
+
+/* 560 */
+struct __cppobj RBX::DescribedCreatable<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, 27, 0> : RBX::Reflection::Described<RBX::ImageLabel, char const *const RBX::sImageLabel, RBX::FactoryProduct<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, RBX::Instance>, 27, 0>
+{
+};
+
+/* 561 */
+struct __cppobj RBX::ImageLabel : RBX::DescribedCreatable<RBX::ImageLabel, RBX::GuiLabel, char const *const RBX::sImageLabel, 27, 0>, RBX::GuiImageMixin
+{
+};
+
+/* 562 */
+struct __cppobj RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance> : RBX::GuiLabel
+{
+};
+
+/* 563 */
+struct __cppobj RBX::Reflection::Described<RBX::TextLabel, char const *const RBX::sTextLabel, RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>
+{
+};
+
+/* 564 */
+struct __cppobj RBX::DescribedCreatable<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, 27, 0> : RBX::Reflection::Described<RBX::TextLabel, char const *const RBX::sTextLabel, RBX::FactoryProduct<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, RBX::Instance>, 27, 0>
+{
+};
+
+/* 565 */
+struct __cppobj RBX::TextLabel : RBX::DescribedCreatable<RBX::TextLabel, RBX::GuiLabel, char const *const RBX::sTextLabel, 27, 0>, RBX::GuiTextMixin
+{
+};
+
+/* 566 */
+struct __cppobj RBX::PhysicsInstructions
+{
+  RBX::Average<double> averageDt;
+  RBX::Average<double> averageDutyDt;
+  double timeSinceLastRadiusChange;
+  double throttleTimer;
+  double throttleAdjustTime;
+  double requestedDutyPercent;
+  bool bandwidthExceeded;
+  unsigned __int8 gap_51[7];
+  double networkBufferHealth;
+};
+
+/* 567 */
+struct __cppobj RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance> : RBX::GuiLayerCollector
+{
+};
+
+/* 568 */
+struct __cppobj RBX::Reflection::Described<RBX::ScreenGui, char const *const RBX::sScreenGui, RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>
+{
+};
+
+/* 569 */
+struct __cppobj RBX::DescribedCreatable<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, 27, 0> : RBX::Reflection::Described<RBX::ScreenGui, char const *const RBX::sScreenGui, RBX::FactoryProduct<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, RBX::Instance>, 27, 0>
+{
+};
+
+/* 570 */
+struct __cppobj RBX::HeartbeatInstance
+{
+  void **__vftable;
+  unsigned __int8 heartbeatConnection[4]; ///< rbx::signals::scoped_connection
+};
+
+/* 571 */
+struct __cppobj RBX::ScreenGui : RBX::DescribedCreatable<RBX::ScreenGui, RBX::GuiLayerCollector, char const *const RBX::sScreenGui, 27, 0>, RBX::HeartbeatInstance
+{
+  unsigned __int8 windowRect[16];       ///< G3D::Rect2D
+  bool m_unk0xcc;
+  bool m_unk0xcd;
+  unsigned __int8 gap_CE[2];
+  unsigned __int8 m_unk0xd0[16];        ///< std::vector<RBX::GuiButton *>
+  unsigned __int8 m_unk0xe0[12];        ///< std::map<RBX::Name const *,RBX::InputObject::UserInputState>
+};
+
+/* 572 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService> : RBX::Instance
+{
+};
+
+/* 573 */
+struct __cppobj RBX::Reflection::Described<RBX::RunService, char const *const RBX::sRunService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>, 17, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>
+{
+};
+
+/* 574 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::RunService, RBX::Instance, char const *const RBX::sRunService, 17, 0> : RBX::Reflection::Described<RBX::RunService, char const *const RBX::sRunService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sRunService>, 17, 0>
+{
+};
+
+/* 575 */
+struct __cppobj RBX::RunService : RBX::DescribedNonCreatable<RBX::RunService, RBX::Instance, char const *const RBX::sRunService, 17, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 physicsJob[8];        ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  unsigned __int8 heartbeatTask[8];     ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  int runState;                         ///< enum RBX::RunState
+  double totalGameTime;
+  double totalGameTimeAtLastHeartbeat;
+  double totalWallTime;
+  double skippedTimeAccumulated;
+  unsigned __int8 steppedSignal[4];     ///< rbx::signal<void __cdecl(RBX::Stepped const &)>
+  unsigned __int8 renderSteppedSignal[4]; ///< rbx::signal<void __cdecl(RBX::Stepped const &)>
+  unsigned __int8 heartbeatSignal[4];   ///< rbx::signal<void __cdecl(RBX::Heartbeat const &)>
+  unsigned __int8 runTransitionSignal[4]; ///< rbx::signal<void __cdecl(RBX::RunTransition)>
+  unsigned __int8 scriptSteppedSignal[4]; ///< rbx::signal<void __cdecl(double,double)>
+  unsigned __int8 scriptHeartbeatSignal[4]; ///< rbx::signal<void __cdecl(double)>
 };
 

@@ -19,6 +19,13 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum CurrencyType
+		{
+			CURRENCY_DEFAULT = 0,
+			CURRENCY_ROBUX = 1,
+			CURRENCY_TIX = 2,
+		};
+
 		MarketplaceService() {}
 	};
 

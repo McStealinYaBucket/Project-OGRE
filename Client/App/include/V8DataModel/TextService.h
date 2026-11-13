@@ -54,6 +54,27 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		// Values from GuiTextMixin's ctor (PLAYER 0x006be930): xAlignment = 2 (center), yAlignment = 1
+		// (center), fontSize = 0. Names from the 2016 TextService.h; the other FontSize values are unproven.
+		enum XAlignment
+		{
+			XALIGNMENT_LEFT = 0,
+			XALIGNMENT_RIGHT = 1,
+			XALIGNMENT_CENTER = 2
+		};
+
+		enum YAlignment
+		{
+			YALIGNMENT_TOP = 0,
+			YALIGNMENT_CENTER = 1,
+			YALIGNMENT_BOTTOM = 2
+		};
+
+		enum FontSize
+		{
+			SIZE_8 = 0, SIZE_9, SIZE_10, SIZE_11, SIZE_12, SIZE_14, SIZE_18, SIZE_24, SIZE_36, SIZE_48  // EnumDesc<FontSize> 0x0073aa20
+		};
+
 		// FONT_LAST = 5 pinned by the "font < FONT_LAST" asserts.
 		enum Font
 		{

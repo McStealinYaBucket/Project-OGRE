@@ -120,3 +120,6 @@ Client/Rendering/RbxG3D/include/RbxG3D/RbxCamera.h
 Client/Rendering/RbxG3D/include/RbxG3D/RbxRay.h
 Client/Rendering/RbxG3D/include/RbxG3D/RbxTime.h
 Client/App/lz4/lz4_decoder.h
+
+# archives of IDA databases (never committed, like the .i64s they hold)
+ida/*.zip

@@ -10,7 +10,8 @@ Per row (address,action,name,tag,line):
 Every row writes `line` into the repeatable function comment; lines starting "p4 " are this script's and
 are replaced on a rerun, so a second run changes nothing. A fact row (not a "p4 match: reccmp" line) that
 renames or unnames also drops the apply_lib_names.py lines ("match: ", "lib: ") it contradicts.
-A name already used at another address is not set (logged). Every action goes to
+A name already used at another address is not set (logged), unless that address is planned to take
+another name itself (a swap: its name is freed first). Every action goes to
 ida/logs/<TARGET>-db-updates.tsv; log lines start with `apply_db_updates:`.
 
 Run (saves packed):
@@ -36,7 +37,10 @@ def say(*a):
     print("apply_db_updates: " + " ".join(str(x) for x in a))
 
 
-for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-updates.csv"))):
+ROWS = list(csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-updates.csv"))))
+PLANNED = {int(r["address"], 16): r["name"] for r in ROWS if r["action"].startswith("rename")}
+
+for r in ROWS:
     ea, act, want, line = int(r["address"], 16), r["action"], r["name"], r["line"]
     if act in ("data1", "data4", "data8"):
         # a global: define it as a byte/dword/qword (when it is not data of that size yet), name it, and keep
@@ -92,6 +96,11 @@ for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-update
         STAT["name already set"] += 1
         continue
     other = ida_name.get_name_ea(idaapi.BADADDR, want)
+    if other != idaapi.BADADDR and other != ea and PLANNED.get(other, want) != want:
+        # a swap: the holder is planned to take another name (its own row renames it later), so free it now
+        ida_name.set_name(other, "", ida_name.SN_NOWARN)
+        LOG.append((other, "freed", "for 0x%08x" % ea, want))
+        other = idaapi.BADADDR
     if other != idaapi.BADADDR and other != ea:
         STAT["skipped: name used at another address"] += 1
         LOG.append((ea, "skip", "name in use at 0x%08x: %s" % (other, want), cur))

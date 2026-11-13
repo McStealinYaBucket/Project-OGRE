@@ -196,3 +196,75 @@ G3D::Vector3 Camera::project(const G3D::Vector3& worldPoint,
 	}
 	return out;
 }
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x006b7be0
+// FUNCTION: STUDIO 0x006fb220
+template<>
+EnumDesc<Camera::CameraType>::EnumDesc()
+	: EnumDescriptor("CameraType", typeid(Camera::CameraType))
+{
+	addPair(Camera::FIXED_CAMERA, "Fixed");
+	addPair(Camera::WATCH_CAMERA, "Watch");
+	addPair(Camera::ATTACH_CAMERA, "Attach");
+	addPair(Camera::TRACK_CAMERA, "Track");
+	addPair(Camera::FOLLOW_CAMERA, "Follow");
+	addPair(Camera::CUSTOM_CAMERA, "Custom");
+	addPair(Camera::LOCKED_CAMERA, "Scriptable");
+}
+
+template<>
+const Type& Type::getSingleton<Camera::CameraType>()
+{
+	return EnumDesc<Camera::CameraType>::singleton();
+}
+
+template<> EnumRegistrar<Camera::CameraType> EnumRegistrar<Camera::CameraType>::registrar(0);
+template<> TypeRegistrar<Camera::CameraType> TypeRegistrar<Camera::CameraType>::registrar(0);
+
+// FUNCTION: PLAYER 0x006b7d40
+// FUNCTION: STUDIO 0x006fb380
+template<>
+EnumDesc<Camera::CameraMode>::EnumDesc()
+	: EnumDescriptor("CameraMode", typeid(Camera::CameraMode))
+{
+	addPair(Camera::CAMERAMODE_CLASSIC, "Classic");
+	addPair(Camera::CAMERAMODE_LOCKFIRSTPERSON, "LockFirstPerson");
+}
+
+template<>
+const Type& Type::getSingleton<Camera::CameraMode>()
+{
+	return EnumDesc<Camera::CameraMode>::singleton();
+}
+
+template<> EnumRegistrar<Camera::CameraMode> EnumRegistrar<Camera::CameraMode>::registrar(0);
+template<> TypeRegistrar<Camera::CameraMode> TypeRegistrar<Camera::CameraMode>::registrar(0);
+
+// FUNCTION: PLAYER 0x006b7e50
+// FUNCTION: STUDIO 0x006fb490
+template<>
+EnumDesc<Camera::CameraPanMode>::EnumDesc()
+	: EnumDescriptor("CameraPanMode", typeid(Camera::CameraPanMode))
+{
+	addPair(Camera::CAMERAPANMODE_CLASSIC, "Classic");
+	addPair(Camera::CAMERAPANMODE_EDGEBUMP, "EdgeBump");
+}
+
+template<>
+const Type& Type::getSingleton<Camera::CameraPanMode>()
+{
+	return EnumDesc<Camera::CameraPanMode>::singleton();
+}
+
+template<> EnumRegistrar<Camera::CameraPanMode> EnumRegistrar<Camera::CameraPanMode>::registrar(0);
+template<> TypeRegistrar<Camera::CameraPanMode> TypeRegistrar<Camera::CameraPanMode>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

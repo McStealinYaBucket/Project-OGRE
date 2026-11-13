@@ -374,3 +374,37 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/EnumConverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x00821b30
+// FUNCTION: STUDIO 0x00915200
+template<>
+EnumDesc<Joint::JointType>::EnumDesc()
+	: EnumDescriptor("JointType", typeid(Joint::JointType))
+{
+	addPair(Joint::NO_JOINT, "None");
+	addPair(Joint::ROTATE_JOINT, "Rotate");
+	addPair(Joint::ROTATE_P_JOINT, "RotateP");
+	addPair(Joint::ROTATE_V_JOINT, "RotateV");
+	addPair(Joint::GLUE_JOINT, "Glue");
+	addPair(Joint::WELD_JOINT, "Weld");
+	addPair(Joint::SNAP_JOINT, "Snap");
+}
+
+template<>
+const Type& Type::getSingleton<Joint::JointType>()
+{
+	return EnumDesc<Joint::JointType>::singleton();
+}
+
+template<> EnumRegistrar<Joint::JointType> EnumRegistrar<Joint::JointType>::registrar(0);
+template<> TypeRegistrar<Joint::JointType> TypeRegistrar<Joint::JointType>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

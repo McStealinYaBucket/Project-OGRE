@@ -17,6 +17,20 @@ namespace RBX {
 		: public DescribedCreatable<GameSettings, GlobalAdvancedSettings, sGameSettings>
 	{
 	public:
+		enum UploadSetting
+		{
+			NEVER = 0,
+			ASK = 1,
+			ALWAYS = 2,
+		};
+
+		enum VideoQuality
+		{
+			LOW_RES = 0,
+			MEDIUM_RES = 1,
+			HIGH_RES = 2,
+		};
+
 		GameSettings()
 			: soundEnabled(true),
 			  highQualitySound(false),

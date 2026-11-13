@@ -19,6 +19,24 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum StuffType
+		{
+			HEADS_STUFF = 0,
+			FACES_STUFF = 1,
+			HATS_STUFF = 2,
+			T_SHIRTS_STUFF = 3,
+			SHIRTS_STUFF = 4,
+			PANTS_STUFF = 5,
+			GEARS_STUFF = 6,
+			TORSOS_STUFF = 7,
+			LEFT_ARMS_STUFF = 8,
+			RIGHT_ARMS_STUFF = 9,
+			LEFT_LEGS_STUFF = 10,
+			RIGHT_LEGS_STUFF = 11,
+			BODIES_STUFF = 12,
+			COSTUMES_STUFF = 13,
+		};
+
 		SocialService() {}
 	};
 

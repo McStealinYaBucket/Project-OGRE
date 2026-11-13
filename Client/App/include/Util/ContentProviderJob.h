@@ -61,3 +61,22 @@ namespace RBX
 		}
 	};
 }
+
+// Template and implicit member bodies the .cpp emits (identical to the 2013 bytes in a private
+// compile; markers pair them so their callers match).
+
+// TEMPLATE: PLAYER 0x008ef680
+// TEMPLATE: STUDIO 0x00a0d480
+// ??$_Construct@UContentProviderTask@ContentProviderJob@RBX@@U123@@std@@YAXPAUContentProviderTask@ContentProviderJob@RBX@@ABU123@@Z
+
+// TEMPLATE: PLAYER 0x008ef730
+// TEMPLATE: STUDIO 0x00a0d520
+// ?_Tidy@?$deque@UContentProviderTask@ContentProviderJob@RBX@@V?$allocator@UContentProviderTask@ContentProviderJob@RBX@@@std@@@std@@IAEXXZ
+
+// TEMPLATE: PLAYER 0x008ef7b0
+// TEMPLATE: STUDIO 0x00a0d5a0
+// ?_Growmap@?$deque@UContentProviderTask@ContentProviderJob@RBX@@V?$allocator@UContentProviderTask@ContentProviderJob@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x008f0020
+// TEMPLATE: STUDIO 0x00a0de10
+// ??1ContentProviderJob@RBX@@UAE@XZ

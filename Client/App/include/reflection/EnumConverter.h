@@ -123,8 +123,8 @@ namespace RBX {
 		template<typename T>
 		class Singleton : boost::noncopyable
 		{
-			// STUB: PLAYER 0x007778b0
-			// STUB: STUDIO 0x00720e60
+			// FUNCTION: PLAYER 0x007778b0
+			// FUNCTION: STUDIO 0x00720e60
 			static T& doGetSingleton()
 			{
 				static T s;
@@ -158,8 +158,8 @@ template<typename Enum> class EnumRegistrar;
 		private:
 			// You must implement the following constructor for each EnumDesc that you define
 			EnumDesc();
-			// STUB: PLAYER 0x00776670
-			// STUB: STUDIO 0x0071e780
+			// FUNCTION: PLAYER 0x00776670
+			// FUNCTION: STUDIO 0x0071e780
 			~EnumDesc()
 			{
 				// Force linking of EnumRegistrar<Enum>, which will force clients

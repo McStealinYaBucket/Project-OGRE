@@ -57,7 +57,7 @@ namespace RBX
 			virtual void postStep(TaskScheduler::Job* job) { activityMeter.decrement(); }
 			double getAverageActivity() { return activityMeter.averageValue(); }
 			virtual Arbiter* getSyncronizationArbiter() { return this; };
-            virtual int getNumPlayers() const {return 1;}
+            // No getNumPlayers() here in 2013: Arbiter has 6 slots (ExclusiveArbiter 0x00bb8af0); it is DataModelArbiter's, after its dtor.
 		};
 
 		typedef enum 

@@ -19,6 +19,23 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum FriendEventType
+		{
+			ISSUE_REQUEST = 0,
+			REVOKE_REQUEST = 1,
+			ACCEPT_REQUEST = 2,
+			DENY_REQUEST = 3,
+		};
+
+		enum FriendStatus
+		{
+			FRIEND_STATUS_UNKNOWN = 0,
+			FRIEND_STATUS_NOT_FRIEND = 1,
+			FRIEND_STATUS_FRIEND = 2,
+			FRIEND_STATUS_FRIEND_REQUEST_SENT = 3,
+			FRIEND_STATUS_FRIEND_REQUEST_RECEIVED = 4,
+		};
+
 		FriendService() {}
 	};
 

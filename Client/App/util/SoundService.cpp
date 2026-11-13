@@ -30,3 +30,54 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::Soundscape::SoundService);
 }
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x006f0d20
+// FUNCTION: STUDIO 0x00805e70
+template<>
+EnumDesc<Soundscape::ReverbType>::EnumDesc()
+	: EnumDescriptor("ReverbType", typeid(Soundscape::ReverbType))
+{
+	addPair(Soundscape::NoReverb, "NoReverb");
+	addPair(Soundscape::GenericReverb, "GenericReverb");
+	addPair(Soundscape::PaddedCell, "PaddedCell");
+	addPair(Soundscape::Room, "Room");
+	addPair(Soundscape::Bathroom, "Bathroom");
+	addPair(Soundscape::LivingRoom, "LivingRoom");
+	addPair(Soundscape::StoneRoom, "StoneRoom");
+	addPair(Soundscape::Auditorium, "Auditorium");
+	addPair(Soundscape::ConcertHall, "ConcertHall");
+	addPair(Soundscape::Cave, "Cave");
+	addPair(Soundscape::Arena, "Arena");
+	addPair(Soundscape::Hangar, "Hangar");
+	addPair(Soundscape::CarpettedHallway, "CarpettedHallway");
+	addPair(Soundscape::Hallway, "Hallway");
+	addPair(Soundscape::StoneCorridor, "StoneCorridor");
+	addPair(Soundscape::Alley, "Alley");
+	addPair(Soundscape::Forest, "Forest");
+	addPair(Soundscape::City, "City");
+	addPair(Soundscape::Mountains, "Mountains");
+	addPair(Soundscape::Quarry, "Quarry");
+	addPair(Soundscape::Plain, "Plain");
+	addPair(Soundscape::ParkingLot, "ParkingLot");
+	addPair(Soundscape::SewerPipe, "SewerPipe");
+	addPair(Soundscape::UnderWater, "UnderWater");
+}
+
+template<>
+const Type& Type::getSingleton<Soundscape::ReverbType>()
+{
+	return EnumDesc<Soundscape::ReverbType>::singleton();
+}
+
+template<> EnumRegistrar<Soundscape::ReverbType> EnumRegistrar<Soundscape::ReverbType>::registrar(0);
+template<> TypeRegistrar<Soundscape::ReverbType> TypeRegistrar<Soundscape::ReverbType>::registrar(0);
+
+} // namespace Reflection
+} // namespace RBX

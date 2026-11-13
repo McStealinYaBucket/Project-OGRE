@@ -1,46 +1,76 @@
-/* V8DataModel/GuiObject.h — October 2013 (layout surface ported; full C2 TODO).
-   Evidence: GuiObject C2 0x3A8E82 (1656B: GuiBase2d(name) + mouse-event
-     remote_signals at +160..+196/+360..+372 with *ConnectionCount props,
-     UDim2 signal +368, two Color3s at +488/+500, +512 = 1, +513 = bool arg,
-     +120 = 0, +121 = 1; Described<GuiObject, sGuiObject, GuiBase2d, 27>).
-     sGuiObject 122 hits in the 0.125 PE string table.
-     setZIndex evidenced by Workspace::start/stop 0x515636/0x515896.
-   Layout members (batch173): size UDim2 @+0x1C0, position @+0x1D0,
-     backgroundTransparency float @+0x204, visible bool @+0x200, visible
-     cache int @+0x1BC (zeroed when hidden).
-   DELTAS: the C2 signal/prop/replicator block, the raisePropertyChanged
-     calls in the setters (descriptor globals unk_FB2BB4/FB2BE0/FB2D48/FB2DCC
-     -- EAs unknown, nothing in-tree listens), and the tail-jump virtuals
-     after setSize/setPosition (absolute-layout recalc -- nothing in-tree
-     reads absolute layout) are unported.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/GuiObject.h */
+/* V8DataModel/GuiObject.h -- October 2013.
+   Layout from the PLAYER ctor 0x007c77c0 (1101 bytes; GuiObject(name, active)) and the derived ctors
+   (Frame 0x006c2b70 and GuiLabel 0x007cb640 start their members at 0x21c, so sizeof is 0x21c):
+     0x94 0, 0x98/0x99/0x9a false, 0x9c/0xa0 0.0f,
+     0xa4..0xcc five remote_signal<void(int,int)> (MouseEnter, MouseLeave, MouseMoved,
+       MouseWheelForward, MouseWheelBackward; each pairs with the replicator below whose
+       connectionSignal points at its +4),
+     0xcc..0x16c five {int <event>ConnectionCount; EventReplicator<GuiObject, void(int,int)>} (0x20 each;
+       2016's DECLARE_EVENT_REPLICATOR_SIG order: the count, then the 0x1c-byte replicator, vftable
+       0x00b66ad0, whose instance the ctor sets to this last),
+     0x16c dragStoppedSignal (int,int), 0x174 dragBeginSignal (UDim2), then the DragStopped and
+       DragBegin count/replicator pairs (0x17c, 0x19c; the UDim2 replicator's vftable 0x00b66ad8),
+     0x1bc serverGuiObject (set by setServerGuiObject 0x007c34e0), 0x1bd false (read by 0x007bcf60),
+     0x1c0 0, 0x1c4 size, 0x1d4 position (UDim2 zeroed), 0x1e4 sizeConstraint 0 (read by 0x007bcf30),
+     0x1e8 borderSizePixel 1 (read by 0x007bcf40), 0x1ec backgroundColor BrickColor(194).color3(),
+     0x1f8 borderColor BrickColor(26).color3(), 0x204 visible true (canProcessMeAndDescendants
+     0x006bd990 returns it), 0x205 active (the ctor's bool), 0x208 backgroundTransparency 0.0f
+     (read by 0x007bd050), 0x20c..0x21c 0.0f x4 (handleResize 0x007c88f0 stores the window rect).
+   Names follow the 2016 member order where the 2013 init values agree (colors, sizeConstraint,
+   borderSizePixel, visible/active); the rest are placeholders.
+   Primary vftable 0x00b6729c, 41 slots: GuiBase2d's 35, then setTransparencyLegacy,
+   renderSelectionBox, setServerGuiObject, processMouseEvent, processKeyEvent, checkForResize. */
 
 #pragma once
 
 #include "V8DataModel/GuiBase2d.h"
 #include "Util/UDim.h"
+#include "Util/G3DCore.h"
 #include "rbx/signal.h"
+#include "decomp.h"
 
 namespace RBX {
 
 	extern const char* const sGuiObject;
 
+	// VTABLE: PLAYER 0x00b6729c RBX::Debugable
+	// VTABLE: STUDIO 0x00c34d54 RBX::Debugable
+	// VTABLE: PLAYER 0x00b6726c RBX::GuiTarget
+	// VTABLE: STUDIO 0x00c34d24 RBX::GuiTarget
+	// VTABLE: PLAYER 0x00b67238 RBX::IAdornable
+	// VTABLE: STUDIO 0x00c34cf0 RBX::IAdornable
+	// SIZE 0x21c
 	class GuiObject
 		: public DescribedNonCreatable<GuiObject, GuiBase2d, sGuiObject, Reflection::ClassDescriptor::PERSISTENT>
 	{
-		int zIndex;
-		bool unknown513;  // +513: the C2 bool arg (TODO identity)
+		typedef DescribedNonCreatable<GuiObject, GuiBase2d, sGuiObject, Reflection::ClassDescriptor::PERSISTENT> Super;
 	public:
-		GuiObject(const char* name = NULL, bool unknownFlag = false);
-		void setZIndex(int value);  // 0x515636/0x515896 callee
-		int getZIndex() const { return zIndex; }
+		enum TweenStatus
+		{
+			TWEEN_CANCELED = 0,
+			TWEEN_COMPLETED = 1,
+		};
 
-		// GuiObject::SizeConstraint (mangle
-		// __ZN3RBX9GuiObject17setSizeConstraintENS0_14SizeConstraintE
-		// @0x3A8358 -- an enum BY VALUE).  Enumerator order unpinned in
-		// the binary; the 2013 order = RelativeXY/RelativeXX/RelativeYY
-		// and the bubble factories (fac3 0x5C14AF) pass 1 = RelativeXX
-		// (DELTA if the order is ever contradicted).
+		enum TweenEasingStyle
+		{
+			EASING_STYLE_LINEAR = 0,
+			EASING_STYLE_SINE = 1,
+			EASING_STYLE_BACK = 2,
+			EASING_STYLE_QUAD = 3,
+			EASING_STYLE_QUART = 4,
+			EASING_STYLE_QUINT = 5,
+			EASING_STYLE_BOUNCE = 6,
+			EASING_STYLE_ELASTIC = 7,
+		};
+
+		enum TweenEasingDirection
+		{
+			EASING_DIRECTION_IN = 0,
+			EASING_DIRECTION_OUT = 1,
+			EASING_DIRECTION_IN_OUT = 2,
+		};
+
+		// GuiObject::SizeConstraint (mangle __ZN3RBX9GuiObject17setSizeConstraintENS0_14SizeConstraintE).
 		enum SizeConstraint
 		{
 			RelativeXY,
@@ -48,169 +78,113 @@ namespace RBX {
 			RelativeYY
 		};
 
-		// Layout surface (batch173; UDim2 layout matches the binary exactly:
-		// float@0, int16@4, float@8, int16@12 -- see Util/UDim.h).
-		// mac: 0x3A811A (185B): NaN-aware change-detect (NaN always stores),
-		// then store; raise + tail virtual are DELTAs (see header).
+		GuiObject(const char* name = NULL, bool active = false);  // defaults: the unported subclasses default-construct
+
+		void setZIndex(int value) { zIndex = value; }
+
 		void setSize(const UDim2& value)
 		{
 			if (size != value)
 				size = value;
 		}
-		// mac: 0x3AEF2A (38B; mangled getSize though requested as getPosition):
-		// 16-byte copy of +0x1C0.
 		UDim2 getSize() const { return size; }
-		// mac: 0x3A81D4 (185B): same shape at +0x1D0.
 		void setPosition(const UDim2& value)
 		{
 			if (position != value)
 				position = value;
 		}
-		// mac: 0x3AEF7E (38B; mangled getPosition): 16-byte copy of +0x1D0.
 		UDim2 getPosition() const { return position; }
-		// mac: 0x3A854E (66B): change-detect + store at +0x204.
-		// STUB: PLAYER 0x007bd610
-		// STUB: STUDIO 0x008d9fd0
-		void setBackgroundTransparency(float value)
-		{
-			if (backgroundTransparency != value)
-				backgroundTransparency = value;
-		}
-		float getBackgroundTransparency() const { return backgroundTransparency; }  // 0x3AF160 (14B).
-		// mac: 0x3A828E (setBorderSizePixel, int by value): change-detect +
-		// store + raisePropertyChanged tail (unported DELTA, same idiom
-		// as the setters above).
-		void setBorderSizePixel(int value)
-		{
-			if (borderSizePixel != value)
-				borderSizePixel = value;
-		}
+		void setBackgroundTransparency(float value);
+		float getBackgroundTransparency() const { return backgroundTransparency; }
+		void setBorderSizePixel(int value);
 		int getBorderSizePixel() const { return borderSizePixel; }
-		// mac: 0x3A8358 (setSizeConstraint, SizeConstraint by value): same shape.
 		void setSizeConstraint(SizeConstraint value)
 		{
 			if (sizeConstraint != value)
 				sizeConstraint = value;
 		}
-		// mac: 0x3A8614 (84B): store at +0x200; when hidden, zero the +0x1BC
-		// visible cache.
-		void setVisible(bool value)
-		{
-			if (visible != value)
-			{
-				visible = value;
-				if (!visible)
-					visibleCache = 0;
-			}
-		}
-		bool getVisible() const { return visible; }  // 0x3AF1EA (15B).
-		// mac: 0x3A85D2 (65B): change-detect at +0x1B9, store; raise
-		// unk_FB2DA0 is a DELTA (descriptor EA unknown, nothing listens).
-		void setClipping(bool value)
-		{
-			if (clipping != value)
-				clipping = value;
-		}
-		bool getClipping() const { return clipping; }  // 0x3AF1DA (15B).
-		// mac: 0x3A8590 (65B): change-detect at +0x95, store; raise
-		// unk_FB2D74 is a DELTA (same reason).
-		void setDraggable(bool value)
-		{
-			if (draggable != value)
-				draggable = value;
-		}
-		bool getDraggable() const { return draggable; }  // 0x3AF19C (15B).
-		// mac: 0x3AC01A (87B): nearest ancestor (parent chain from +0x34) that
-		// isA GuiObject with +0x1B9 (clipping) set; NULL when none.  isA
-		// plays as fastDynamicCast (established equivalent), clipping as
-		// getClipping (just landed).  Non-const per the mangling.
+		void setVisible(bool value);
+		bool getVisible() const { return visible; }
+		void setClipping(bool value);
+		bool getClipping() const { return clipping; }
+
+		static Reflection::PropDescriptor<GuiObject, bool> prop_ClipsDescendants;
+		static Reflection::PropDescriptor<GuiObject, int> prop_BorderSizePixel;
+		static Reflection::PropDescriptor<GuiObject, bool> prop_Visible;
+		static Reflection::PropDescriptor<GuiObject, float> prop_BackgroundTransparency;
+
 		GuiObject* firstAncestorClipping();
-		// mac: 0x3AC072 (147B): own getRect2D intersected with every clipping
-		// ancestor's getRect2D up the chain (vendor intersect is header-only
-		// inline -- no link debt).  Non-const per the mangling (sret form).
 		G3D::Rect2D getClippedRect();
-		// mac: 0x3AD14A (282B): point-in-rect over getRect2D, or over the
-		// clipped intersection when the flag is on and a clipping ancestor
-		// exists.  The int16 truncation is spelled (int16)(int) directly:
-		// the vendor Vector2int16(Vector2) ctor lives in a G3D .cpp outside
-		// the link (same link-debt rule as Color3 statics); identical for
-		// all on-screen coordinates.  Non-const per the mangling.
 		bool mouseIsOver(const G3D::Vector2& point);
-		// mac: 0x3AC1EA (98B): NULL -> false; non-GuiBase2d -> false; else the
-		// NEGATION of a vtbl+144 virtual taking (Instance*)->bool.
-		// Identification: of Instance's bool(Instance*) virtuals, only
-		// askForbidChild fits semantically ("may I parent under you" =
-		// "don't you forbid me").  VTABLE-PROVEN (rarc11
-		// __ZTVN3RBX9GuiObjectE dump): our landed 0x3AC1EA sits at the
-		// primary object vptr slot 21 (+0x54), the slot the body's
-		// [vptr+144] vcall reaches from the same table.
+
 		virtual bool askSetParent(const Instance* parent) const;
 
-		// mac: 0x3ABA9A (327B; mangle
-		// __ZN3RBX9GuiObject13getWindowRectEPNS_9GuiBase2dE = one
-		// explicit GuiBase2d* start; the binary's retn 4 = sret and
-		// the receiver slot is never read -- the single call site
-		// passes this twice): climb to the first ScreenGui copying
-		// its windowRect verbatim; climb steps gated on the parent
-		// isA(GuiBase2d); stop node isA(BillboardGui) copies ITS
-		// windowRect; else the zero rect.  Body + walk details in
-		// GuiObject.cpp (rarc15 raws).
+		// Climbs to the first ScreenGui (or a BillboardGui) and copies its window rect.
 		G3D::Rect2D getWindowRect(GuiBase2d* start);
-		// mac: 0x3ABBE2 (113B, the slot-38 override): getWindowRect(this)
-		// copied verbatim into windowRectCache, then the DIRECT
-		// (non-virtual, mangle-proven) base call
-		// GuiBase2d::handleResize(rect, flag).  Body in GuiObject.cpp.
-		virtual void handleResize(const G3D::Rect2D& rect, bool flag);
 
-		// mac: 0x3AC2AC (55B): NON-VIRTUAL parentless render entry called by
-		// ChatOutput::renderBubbleImposters / renderBubbles (rarc13
-		// census).  Binary ORDER (rarc10): the [this+0x34] parent == 0
-		// guard (3AC2B2..3AC2B9 -- the render-when-parentless reading
-		// stays CAVEATED, the raw shape is exact), then the slot-38
-		// VCALL [vptr+0x98] staged (this, rect, 1) at 3AC2C0..3AC2D4 =
-		// handleResize(rect, true) through the dynamic dispatch, then
-		// the TAIL-JMP recursiveRender2d(this, adorn) (3AC2DE -- the
-		// epilogue first; the jmp carries (this, adorn) in the arg
-		// slots = the clean compile of `return recursiveRender2d(adorn);`).
-		// Mangle never observed: name = the decomp's, signature = the
-		// call shapes (rect = const G3D::Rect2D& per the 4-byte arg
-		// staging into the handleResize call).  Body in GuiObject.cpp.
-		// Spell RBX::Adorn explicitly -- the binary mangle = PNS_5AdornE
-		// (the rarc18 5C4E3A call), the same class tree Gui/Adorn.h
-		// defines and AdornBillboarder derives; include-order immune.
+		// The inset rect of a scale-9 frame style (Frame::getChildRect2D).
+		static G3D::Rect2D Scale9Rect2D(const G3D::Rect2D& rect, float border, float minSize);
+		/*override*/ void handleResize(const G3D::Rect2D& rect, bool flag);
+
+		// The parentless render entry the bubble chat calls (ChatOutput).
 		void legacyRender2d(RBX::Adorn* adorn, const G3D::Rect2D& rect);
 
-		// Mouse/drag input signals (0x3A8E82: +160..+196, +360, +368;
-		// 2016 member names carried). The *ConnectionCount props bound to
-		// these in 2013 (prop_ symbols in the C2) need their PropDescriptor
-		// EAs for Lua names/getters — TODO.
-		rbx::remote_signal<void(int, int)> mouseEnterSignal;
-		rbx::remote_signal<void(int, int)> mouseLeaveSignal;
-		rbx::remote_signal<void(int, int)> mouseMovedSignal;
-		rbx::remote_signal<void(int, int)> mouseWheelForwardSignal;
-		rbx::remote_signal<void(int, int)> mouseWheelBackwardSignal;
-		rbx::remote_signal<void(int, int)> dragStoppedSignal;
-		rbx::remote_signal<void(UDim2)> dragBeginSignal;
+	private:
+		undefined4 m_unk0x94;           // 0x94
+		bool m_unk0x98;                 // 0x98
+		bool m_unk0x99;                 // 0x99
+		bool m_unk0x9a;                 // 0x9a
+		G3D::Vector2 m_unk0x9c;         // 0x9c
+
+	public:
+		rbx::remote_signal<void(int, int)> mouseEnterSignal;          // 0xa4
+		rbx::remote_signal<void(int, int)> mouseLeaveSignal;          // 0xac
+		rbx::remote_signal<void(int, int)> mouseMovedSignal;          // 0xb4
+		rbx::remote_signal<void(int, int)> mouseWheelForwardSignal;   // 0xbc
+		rbx::remote_signal<void(int, int)> mouseWheelBackwardSignal;  // 0xc4
 
 	private:
-		// Binary layout slots (model-relative class; offsets documented).
-		UDim2 size;  // +0x1C0.
-		UDim2 position;  // +0x1D0.
-		int visibleCache;  // +0x1BC (zeroed when hidden).
-		bool visible;  // +0x200.
-		float backgroundTransparency;  // +0x204.
-		// +0x208..+0x214 (C2 zero-inits 3A9325..3A934D byte-exact):
-		// handleResize 0x3ABBE2 copies the getWindowRect result in
-		// verbatim before forwarding to GuiBase2d::handleResize.  No
-		// reader landed yet (identity beyond the resize snapshot
-		// pending) -- name behavioral.
-		G3D::Rect2D windowRectCache;  // +0x208..+0x214.
-		bool clipping;  // +0x1B9 (getClipping 0x3AF1DA).
-		bool draggable;  // +0x95 (getDraggable 0x3AF19C).
-		// Prop stores landed for the factory surface (0x3A828E/0x3A8358);
-		// binary prop offsets unverified -- MSVC layout DELTA.
-		int borderSizePixel;
-		SizeConstraint sizeConstraint;
+		int varMouseEnterConnectionCount;                       // 0xcc
+		undefined m_unk0xd0[0xec - 0xd0];                       // 0xd0 eventReplicatorMouseEnter
+		int varMouseLeaveConnectionCount;                       // 0xec
+		undefined m_unk0xf0[0x10c - 0xf0];                      // 0xf0 eventReplicatorMouseLeave
+		int varMouseMovedConnectionCount;                       // 0x10c
+		undefined m_unk0x110[0x12c - 0x110];                    // 0x110 eventReplicatorMouseMoved
+		int varMouseWheelForwardConnectionCount;                // 0x12c
+		undefined m_unk0x130[0x14c - 0x130];                    // 0x130 eventReplicatorMouseWheelForward
+		int varMouseWheelBackwardConnectionCount;               // 0x14c
+		undefined m_unk0x150[0x16c - 0x150];                    // 0x150 eventReplicatorMouseWheelBackward
+
+	public:
+		rbx::remote_signal<void(int, int)> dragStoppedSignal;   // 0x16c
+		rbx::remote_signal<void(UDim2)> dragBeginSignal;        // 0x174
+
+	private:
+		int varDragStoppedConnectionCount;                      // 0x17c
+		undefined m_unk0x180[0x19c - 0x180];                    // 0x180 eventReplicatorDragStopped
+		int varDragBeginConnectionCount;                        // 0x19c
+		undefined m_unk0x1a0[0x1bc - 0x1a0];                    // 0x1a0 eventReplicatorDragBegin
+
+		bool serverGuiObject;           // 0x1bc
+		bool clipping;                  // 0x1bd
+		undefined4 m_unk0x1c0;          // 0x1c0
+		UDim2 size;                     // 0x1c4
+		UDim2 position;                 // 0x1d4
+		SizeConstraint sizeConstraint;  // 0x1e4
+		int borderSizePixel;            // 0x1e8
+		G3D::Color3 backgroundColor;    // 0x1ec
+		G3D::Color3 borderColor;        // 0x1f8
+		bool visible;                   // 0x204
+		bool active;                    // 0x205
+		float backgroundTransparency;   // 0x208
+		G3D::Rect2D windowRectCache;    // 0x20c
 	};
+
+	// Out-of-line copies the original emitted in this class's .obj (the Described ctor its ctor calls).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x007c4940
+	// TEMPLATE: STUDIO 0x008e14e0
+	// ??$?0PBD@?$Described@VGuiObject@RBX@@$E?sGuiObject@2@3QBDBV?$NonFactoryProduct@VGuiBase2d@RBX@@$E?sGuiObject@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
+	// clang-format on
 
 } // namespace RBX

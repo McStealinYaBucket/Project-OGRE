@@ -279,7 +279,7 @@ namespace RBX
 
 	protected:
 		// mac: 0x4798F0 -- virtual no-op in the 2013 binary (GuidItem<T> carries a vtable)
-		// STUB: PLAYER 0x0040b950
+		// FUNCTION: PLAYER 0x0040b950
 		virtual void onGuidChanged()
 		{
 		}

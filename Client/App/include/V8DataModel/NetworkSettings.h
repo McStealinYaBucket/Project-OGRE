@@ -16,6 +16,20 @@ namespace RBX {
 		: public DescribedCreatable<NetworkSettings, GlobalAdvancedSettings, sNetworkSettings>
 	{
 	public:
+		enum PhysicsReceiveMethod
+		{
+			Direct = 0,
+			Interpolation = 1,
+		};
+
+		enum PhysicsSendMethod
+		{
+			ErrorComputation = 0,
+			ErrorComputation2 = 1,
+			RoundRobin = 2,
+			TopNErrors = 3,
+		};
+
 		NetworkSettings() {}
 	};
 

@@ -20,7 +20,24 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum CoreGuiType
+		{
+			COREGUI_PLAYERLISTGUI = 0,
+			COREGUI_HEALTHGUI = 1,
+			COREGUI_BACKPACKGUI = 2,
+			COREGUI_CHATGUI = 3,
+			COREGUI_ALL = 4,
+		};
+
 		StarterGuiService() {}
 	};
 
 } // namespace RBX
+
+// Template, inline and implicit bodies this .obj emits whose 2013 copy has no oracle name: paired
+// by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
+
+// TEMPLATE: PLAYER 0x0070a2c0
+// TEMPLATE: STUDIO 0x007969e0
+// ??0?$Described@VBasePlayerGui@RBX@@$E?sBasePlayerGui@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sBasePlayerGui@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
+

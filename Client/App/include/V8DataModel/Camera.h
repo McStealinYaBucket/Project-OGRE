@@ -68,6 +68,29 @@ namespace RBX {
 		: public DescribedCreatable<Camera, Instance, sCamera>
 	{
 	public:
+		enum CameraType
+		{
+			FIXED_CAMERA = 0,
+			ATTACH_CAMERA = 1,
+			WATCH_CAMERA = 2,
+			TRACK_CAMERA = 3,
+			FOLLOW_CAMERA = 4,
+			CUSTOM_CAMERA = 5,
+			LOCKED_CAMERA = 6,
+		};
+
+		enum CameraPanMode
+		{
+			CAMERAPANMODE_CLASSIC = 0,
+			CAMERAPANMODE_EDGEBUMP = 1,
+		};
+
+		enum CameraMode
+		{
+			CAMERAMODE_CLASSIC = 0,
+			CAMERAMODE_LOCKFIRSTPERSON = 1,
+		};
+
 		// C2 0x289114 (647B) -- member map above; the explicit writes live
 		// in Camera.cpp (the DescribedCreatable chain runs first; the
 		// front signal/cf slots default-construct from the base path).

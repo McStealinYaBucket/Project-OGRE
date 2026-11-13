@@ -110,7 +110,7 @@ namespace Network {
 	// __ZNK3RBX7Network11ChatMessage17isVisibleToPlayerEN5boost10shared_ptrINS0_6PlayerEEE).
 	// Switch on chatType (full 0..3 jmp table at 0x89BE79): 0/3 ->
 	// true; 1 -> viewer px non-null && sender px non-null && both
-	// neutral bytes (+104) clear && teamNum (+100) equal; 2 -> viewer
+	// neutral bytes (+104) clear && teamColor (+100) equal; 2 -> viewer
 	// px non-null && (sender px == viewer || receiver px == viewer);
 	// anything else -> false.
 	bool ChatMessage::isVisibleToPlayer(const shared_ptr<Player>& viewer) const
@@ -125,7 +125,7 @@ namespace Network {
 				Player* look = viewer.get();
 				if (look != NULL && player.get() != NULL
 					&& this->player->neutral == 0 && look->neutral == 0
-					&& this->player->teamNum == look->teamNum)
+					&& this->player->teamColor == look->teamColor)
 					return true;
 				return false;
 			}
@@ -198,4 +198,54 @@ namespace Network {
 	}
 
 } // namespace Network
+} // namespace RBX
+
+// EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
+// at the end of the file so no 2013 assert line above them moves.
+#include "reflection/enumconverter.h"
+
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x005668c0
+// FUNCTION: STUDIO 0x005ca0e0
+template<>
+EnumDesc<Network::Players::ChatOption>::EnumDesc()
+	: EnumDescriptor("ChatStyle", typeid(Network::Players::ChatOption))
+{
+	addPair(Network::Players::CLASSIC_CHAT, "Classic");
+	addPair(Network::Players::BUBBLE_CHAT, "Bubble");
+	addPair(Network::Players::CLASSIC_AND_BUBBLE_CHAT, "ClassicAndBubble");
+}
+
+template<>
+const Type& Type::getSingleton<Network::Players::ChatOption>()
+{
+	return EnumDesc<Network::Players::ChatOption>::singleton();
+}
+
+template<> EnumRegistrar<Network::Players::ChatOption> EnumRegistrar<Network::Players::ChatOption>::registrar(0);
+template<> TypeRegistrar<Network::Players::ChatOption> TypeRegistrar<Network::Players::ChatOption>::registrar(0);
+
+// FUNCTION: PLAYER 0x005669e0
+// FUNCTION: STUDIO 0x005ca200
+template<>
+EnumDesc<Network::Players::PlayerChatType>::EnumDesc()
+	: EnumDescriptor("PlayerChatType", typeid(Network::Players::PlayerChatType))
+{
+	addPair(Network::Players::PLAYER_CHAT_TYPE_ALL, "All");
+	addPair(Network::Players::PLAYER_CHAT_TYPE_TEAM, "Team");
+	addPair(Network::Players::PLAYER_CHAT_TYPE_WHISPER, "Whisper");
+}
+
+template<>
+const Type& Type::getSingleton<Network::Players::PlayerChatType>()
+{
+	return EnumDesc<Network::Players::PlayerChatType>::singleton();
+}
+
+template<> EnumRegistrar<Network::Players::PlayerChatType> EnumRegistrar<Network::Players::PlayerChatType>::registrar(0);
+template<> TypeRegistrar<Network::Players::PlayerChatType> TypeRegistrar<Network::Players::PlayerChatType>::registrar(0);
+
+} // namespace Reflection
 } // namespace RBX

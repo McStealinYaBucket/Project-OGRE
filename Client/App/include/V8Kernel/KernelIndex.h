@@ -1,5 +1,7 @@
-/* V8Kernel/KernelIndex.h -- October 2013 (kernel list index base). 2016 shape + one 2013 delta: polymorphic (Point C2
-   0x532AB8 writes a vptr at +0), so the dtor is virtual here. kernelIndex at +4 (C2 -1). Path from Point.cpp asserts. */
+/* V8Kernel/KernelIndex.h -- October 2013 (kernel list index base). 2016 shape: not polymorphic. Point's RTTI places
+   KernelIndex at +4 (Base Class Descriptor ??_R13?0A@EA@KernelIndex PLAYER 0x00c68138, "at (4,-1,0,64)") behind
+   Point's own vptr, and Point's deleting destructor (PLAYER 0x00978890) stores only Point's vftable before the
+   inlined ~KernelIndex assert. kernelIndex at +0 here (+4 in Point). Path from Point.cpp asserts. */
 #pragma once
 #include "rbx/Debug.h"
 namespace RBX {
@@ -16,9 +18,7 @@ namespace RBX {
 		}
 		KernelIndex() : kernelIndex(-1)
 		{}
-		virtual ~KernelIndex() {
-
-
+		~KernelIndex() {
 			RBXASSERT(!indexInKernel());
 		}
 	};

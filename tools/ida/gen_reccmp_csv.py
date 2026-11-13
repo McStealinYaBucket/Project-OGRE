@@ -70,19 +70,28 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
     that differs (the table), and its own table is never a nameless code row.
   - Pool only --json runs of the build being regenerated against: a run from an earlier link pairs
     stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
-  - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor).
+  - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor);
+    MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0).
   - A library row whose instantiation left our link falls back to the symbol the current <t>-<lib>.csv row
     carries (the body our link kept last time); if nothing resolves, position votes may name its address.
   - A position row never takes a library row's symbol to another original (twins: the library row wins).
   - A non-STUB marker reccmp could not pair (its log <json>.txt says 'Debug data out of sync') does not
     keep data_rows off its address.
+  - Oracle names also pair through the map's folded names (ICF keeps one PUBLICS name per address); the
+    row then carries the kept PUBLICS name (2026-11-13: 0x004027c0 verifyAddChild, ours onChildAdded).
+  - A signature pair survives a contradicting position row when that row is a twin collision: its body of
+    ours is what the --json run (or another position row) gives a different original, and the signature
+    pair's body is claimed by nobody (the shell's LTCG copy beside the engine's: VC9 links /LTCG /DEBUG
+    keep LTCG and native COMDATs apart under /OPT:ICF).
   - Typing: an oracle-named original is library only in a third-party namespace (third_party); otherwise
     library unless the name mentions rbx/RBX.
 A generated file that reccmp-project.yml does not list is reported, so it can be added there.
 """
 import bisect
+import collections
 import csv
 import glob
+import json
 import os
 import re
 import struct
@@ -121,6 +130,15 @@ _RLOCK = ("??0?$unique_lock@Vrecursive_mutex@boost@@@boost@@QAE@AAVrecursive_mut
           "public: __thiscall boost::unique_lock<class boost::recursive_mutex>::unique_lock<class "
           "boost::recursive_mutex>(class boost::recursive_mutex &)")
 LIB_FIX = {("PLAYER", 0x004365f0): _RLOCK, ("STUDIO", 0x0041b220): _RLOCK}
+
+# match: names a later link proved wrong: an adjustor thunk (`sub ecx,N; jmp`) matches every thunk of the
+# same adjustment once its jump target pairs, so an early run gave the twin's name. PLAYER 0x008b2ea0
+# (STUDIO 0x00961180) jumps to the next function and fills slot 0 of both GuiMain vftables (0x00b8670c,
+# 0x00b86944): it is GuiMain's {28} thunk, not DescribedCreatable<ScreenGui>'s (gui-5h).
+_GUIMAIN_E28 = ("??_EGuiMain@RBX@@WBM@AEPAXI@Z",
+                "[thunk]:public: virtual void * __thiscall RBX::GuiMain::`vector deleting destructor'`adjustor{28}' "
+                "(unsigned int)")
+MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIMAIN_E28}
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")
@@ -311,7 +329,7 @@ def qual(sig):
     return sig
 
 
-def oracle_pairs(oracle, view, cand_orig, used):
+def oracle_pairs(oracle, view, cand_orig, used, alias=None):
     """Pair oracle-named original functions with our build's functions by signature.
     oracle: {orig address: (demangled, mangled)} for every ios:/mac:/prior: name in names.csv.
     Our side: every FUNCTION in the PDB view, its PUBLICS name read with llvm-undname, or (a static with
@@ -320,7 +338,6 @@ def oracle_pairs(oracle, view, cand_orig, used):
     be in cand_orig and ours not to be in used. Statics pair on the qualified name, unique on both sides
     among all qualified names. Returns ({orig: (symbol, name)}, stats); symbol is our PUBLICS name, or
     empty for a static, whose row carries our proc name."""
-    import collections
     osig = {a: norm_sig(d) for a, (d, m) in oracle.items()}
     ocount = collections.Counter(v for v in osig.values() if v)
     oqual = collections.Counter(qual(v) for v in osig.values() if v)
@@ -335,7 +352,7 @@ def oracle_pairs(oracle, view, cand_orig, used):
             rbyqual[qual(rsig[d])].append(a)
         elif not d and nm:
             rbyqual[norm_sig(nm) if re.fullmatch(r"[A-Za-z_]\w*", nm) else qual(norm_sig(nm + "()") or nm)].append(a)
-    out, stats = {}, collections.Counter()
+    out, stats, miss = {}, collections.Counter(), []
     for a, sig in osig.items():
         if a not in cand_orig:
             continue
@@ -363,7 +380,34 @@ def oracle_pairs(oracle, view, cand_orig, used):
                 out[a] = ("", view[st[0]][2])
                 stats["paired by static name"] += 1
             continue
-        stats["name present, signature differs" if q in rbyqual else "not defined in our build"] += 1
+        miss.append((a, sig))
+    # Folded names (2026-11-13): ICF keeps one PUBLICS name per address, so an oracle name whose body our
+    # link folded under another name (the shell's LTCG `ret 4` 0x00401bd0 is onChildAdded in the PDB,
+    # verifyAddChild in the map) only matches through the map. The pair takes the kept PUBLICS name;
+    # it needs the signature unique among the map's folded names and one original per address of ours.
+    asig = undname([d for d, ra in (alias or {}).items() if ra in funcs and d.startswith("?") and d != funcs[ra][1]])
+    abysig = collections.defaultdict(set)
+    for d, s in asig.items():
+        if s:
+            abysig[s].add(alias[d])
+    taken = {v[0] for v in out.values()}
+    want = collections.defaultdict(list)
+    for a, sig in miss:
+        hits = abysig.get(sig, set())
+        if len(hits) == 1 and ocount[sig] == 1:
+            want[next(iter(hits))].append(a)
+            continue
+        q = qual(sig)
+        stats["ambiguous signature" if hits else
+              "name present, signature differs" if q in rbyqual else "not defined in our build"] += 1
+    for ra, origs in sorted(want.items()):
+        sym = funcs[ra][1]
+        if len(origs) > 1 or ra in used or not sym or sym in taken:
+            stats["folded name: address claimed twice"] += len(origs)
+            continue
+        out[origs[0]] = (sym, oracle[origs[0]][0])
+        taken.add(sym)
+        stats["paired by a folded name"] += 1
     return out, stats
 
 
@@ -929,7 +973,6 @@ def gen(target, build=BUILD, json_path=None):
     # runs name more often; data_rows then pairs that one through the slot votes.
     yielded = {}
     if json_path and have_build:
-        import collections
         slotrefs = {}
         for jp in json_path.split(","):
             for node, oas in vt_slot_refs(im, recomp, jp, view, code).items():
@@ -952,6 +995,8 @@ def gen(target, build=BUILD, json_path=None):
     with open(os.path.join(exports, f"{target}-names.csv")) as f:
         for r in csv.DictReader(f):
             a = int(r["address"], 16)
+            if (target, a) in MATCH_FIX and r["source"] == "match:":
+                r = dict(r, name=MATCH_FIX[target, a][0], demangled=MATCH_FIX[target, a][1])
             if r["kind"] != "func":
                 labels.add(a)
                 if r["source"] == "rtti:" and r["name"].startswith("??_7"):
@@ -984,7 +1029,7 @@ def gen(target, build=BUILD, json_path=None):
                     failed |= markers_above(m.group(1), int(m.group(2)), target)
     named, nstats = {}, {}
     if have_build and not os.environ.get("OGRE_NO_SIGPAIR"):
-        named, nstats = oracle_pairs(oracle, view, kept - claimed - mk, used)
+        named, nstats = oracle_pairs(oracle, view, kept - claimed - mk, used, addr)
     # our PUBLICS name for each MSVC-named original; with the signature pairs, the tie-break for twins
     dres = {}
     for a, (nm, _, _) in sorted(decorated.items()):
@@ -1064,6 +1109,26 @@ def gen(target, build=BUILD, json_path=None):
             bysym.setdefault(sym, set()).add(a)
         bad = {a for a, (sym, _) in named.items() if sym and (a in pos and pos[a] != sym or
                                                                bysym.get(sym, {a}) != {a})}
+        # ... unless the position pair is itself a twin collision: its symbol's body of ours is also what
+        # the position rows give another original, while the signature pair names a body of ours no
+        # position row claims. The original kept the bodies apart (the shell's LTCG copy 0x004027c0 beside
+        # the engine's 0x00575d00, both `ret 4`); only the signature pair can reach the second one.
+        rpos = collections.Counter(resolve_symbol([s], addr, anon) for s in pos.values())
+        rpos.pop(None, None)
+        owner = {}  # our address -> the original a reccmp run paired with it
+        for jp in json_path.split(",") if json_path else []:
+            with open(jp) as f:
+                for e in json.load(f)["data"]:
+                    if e.get("recomp"):
+                        owner.setdefault(int(e["recomp"], 16), int(e["address"], 16))
+        rp = lambda s: resolve_symbol([s], addr, anon)
+        twin = {a for a in bad if a in pos and pos[a] != named[a][0] and rp(named[a][0]) not in rpos
+                and (rpos[rp(pos[a])] > 1 or owner.get(rp(pos[a]), a) != a)
+                and owner.get(rp(named[a][0]), a) == a}
+        bad -= twin
+        for a in twin:
+            datarows = [r for r in datarows if int(r[0], 16) != a]
+        nstats["kept over a twin-colliding position pair"] = len(twin)
         nstats["dropped: a position pair contradicts it"] = len(bad)
         for a in sorted(bad):
             print(f"  {target} {a:08x}: signature pairs {named[a][0]}, position says "

@@ -4,7 +4,8 @@ Run from the repo root after a build (needs llvm-undname on PATH):
     python3 -P tools/gen_link_stubs.py              # build/, both targets
     python3 -P tools/gen_link_stubs.py --build B    # another build directory
     python3 -P tools/gen_link_stubs.py --selftest
-then rebuild (cmake --build build) and regenerate the CSVs.
+then rebuild (cmake --build build) and regenerate the CSVs. The script deletes each exe first so
+ninja relinks it and keeps the response file.
 
 How it works. The script reruns each exe's bare link.exe command (vs_link_exe hides its output) and reads the
 LNK2001/LNK2019 lines /FORCE:UNRESOLVED leaves. For every unresolved *function* it looks up the
@@ -298,6 +299,12 @@ def main():
     if a.selftest:
         return selftest()
     build = os.path.abspath(a.build)
+    # Force the relink: an up-to-date exe makes ninja skip the link, so no .rsp is kept and link.exe
+    # then fails with LNK1104 (CLAUDE.md Gotchas).
+    for t in a.targets:
+        exe = os.path.join(build, EXES[t])
+        if os.path.exists(exe):
+            os.remove(exe)
     subprocess.run(["ninja", "-C", build, "-d", "keeprsp"] + [EXES[t] for t in a.targets],
                    capture_output=True, check=True)
     for t in a.targets:

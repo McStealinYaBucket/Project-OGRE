@@ -5,9 +5,8 @@
      NO vtable slot is ever touched (arg_0 IS the payload start), so 2013's
      InputObject is NOT an Instance subclass -- the 2016 DescribedCreatable
      shape (position/delta/weakWorkspace/reflection props) is a later
-     redesign and is NOT carried. Enum values carried from March 2016
-     v8datamodel/InputObject.h (loud DELTA: no 2013 EA verification yet;
-     values surface only through the enum-descriptor era).
+     redesign and is NOT carried. Enum values: the 2013 EnumDesc ctors
+     (PLAYER 0x008b6130, 0x008b62a0), not the 2016 header.
    Original file: Client/App/v8datamodel/InputObject.h (2013 path TBD). */
 
 #pragma once
@@ -20,6 +19,8 @@ namespace RBX {
 	class InputObject
 	{
 	public:
+		// 2013 values: EnumDesc ctors PLAYER 0x008b6130 / 0x008b62a0 register exactly these
+		// (the 2016 MouseIdle/MouseDelta/Focus/Gamepad/TextInput/Cancel values came later).
 		enum UserInputType
 		{
 			TYPE_MOUSEBUTTON1 = 0,
@@ -27,23 +28,9 @@ namespace RBX {
 			TYPE_MOUSEBUTTON3 = 2,
 			TYPE_MOUSEWHEEL = 3,
 			TYPE_MOUSEMOVEMENT = 4,
-			TYPE_MOUSEIDLE = 5,
-			TYPE_MOUSEDELTA = 6,
-			TYPE_TOUCH = 7,
-			TYPE_KEYBOARD = 8,
-			TYPE_FOCUS = 9,
-			TYPE_ACCELEROMETER = 10,
-			TYPE_GYRO = 11,
-			TYPE_GAMEPAD1 = 12,
-			TYPE_GAMEPAD2 = 13,
-			TYPE_GAMEPAD3 = 14,
-			TYPE_GAMEPAD4 = 15,
-			TYPE_GAMEPAD5 = 16,
-			TYPE_GAMEPAD6 = 17,
-			TYPE_GAMEPAD7 = 18,
-			TYPE_GAMEPAD8 = 19,
-			TYPE_TEXTINPUT = 20,
-			TYPE_NONE = 21
+			TYPE_TOUCH = 5,
+			TYPE_KEYBOARD = 6,
+			TYPE_NONE = 7
 		};
 
 		enum UserInputState
@@ -51,9 +38,9 @@ namespace RBX {
 			INPUT_STATE_BEGIN = 0,
 			INPUT_STATE_CHANGE = 1,
 			INPUT_STATE_END = 2,
-			INPUT_STATE_CANCEL = 3,
-			INPUT_STATE_NONE = 4
+			INPUT_STATE_NONE = 3
 		};
+
 
 		UserInputType inputType;
 		UserInputState inputState;

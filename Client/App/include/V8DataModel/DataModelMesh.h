@@ -16,6 +16,13 @@ namespace RBX {
 		: public DescribedNonCreatable<DataModelMesh, Instance, sDataModelMesh>
 	{
 	public:
+		enum LODType
+		{
+			LOW_LOD = 0,
+			MEDIUM_LOD = 1,
+			HIGH_LOD = 2,
+		};
+
 		DataModelMesh() {}
 	};
 

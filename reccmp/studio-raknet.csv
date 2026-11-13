@@ -1,10 +1,10 @@
 # Generated from ida/exports/STUDIO-lib-resolved.csv (status identical). Do not edit.
 # Library rows skipped for all libraries: not identical 202, not a kept function 33.
-# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1303, static name 332, not in our link 23, folded in our link 2.
+# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1305, static name 332, not in our link 23, folded in our link 0.
 address,type,size,symbol,name
 0056e7a0,library,50,??_H@YGXPAXIHP6EPAX0@Z@Z,"void __stdcall `vector ctor iterator'(void *, unsigned int, int, void * (__thiscall *)(void *))"
 005b7b00,library,65,??0AddressOrGUID@RakNet@@QAE@ABUSystemAddress@1@@Z,public: __thiscall RakNet::AddressOrGUID::AddressOrGUID(struct RakNet::SystemAddress const &)
-00606c90,library,1,??1CCRakNetSlidingWindow@RakNet@@QAE@XZ,public: __thiscall RakNet::CCRakNetSlidingWindow::~CCRakNetSlidingWindow(void)
+00606c90,library,1,??1?$_Vector_val@W4InOut@Feature@RBX@@V?$allocator@W4InOut@Feature@RBX@@@std@@@std@@QAE@XZ,??1?$_Vector_val@W4InOut@Feature@RBX@@V?$allocator@W4InOut@Feature@RBX@@@std@@@std@@QAE@XZ
 0060a100,library,77,??0SocketDescriptor@RakNet@@QAE@GPBD@Z,"public: __thiscall RakNet::SocketDescriptor::SocketDescriptor(unsigned short, char const *)"
 0060a150,library,47,??4SystemAddress@RakNet@@QAEAAU01@ABU01@@Z,public: struct RakNet::SystemAddress & __thiscall RakNet::SystemAddress::operator=(struct RakNet::SystemAddress const &)
 0060a180,library,31,?EqualsExcludingPort@SystemAddress@RakNet@@QBE_NABU12@@Z,public: bool __thiscall RakNet::SystemAddress::EqualsExcludingPort(struct RakNet::SystemAddress const &) const
@@ -459,5 +459,5 @@ address,type,size,symbol,name
 008a8950,library,9,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z
 00917010,library,18,??0ChildFilter@SerializerBinary@RBX@@QAE@AAV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@W4SaveFilter@Instance@2@@Z,??0ChildFilter@SerializerBinary@RBX@@QAE@AAV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@W4SaveFilter@Instance@2@@Z
 00917030,library,19,??4MapNode@?$Map@HPAVHuffmanEncodingTree@RakNet@@$1??$defaultMapKeyComparison@H@DataStructures@@YAHABH0@Z@DataStructures@@QAEAAU012@ABU012@@Z,??4MapNode@?$Map@HPAVHuffmanEncodingTree@RakNet@@$1??$defaultMapKeyComparison@H@DataStructures@@YAHABH0@Z@DataStructures@@QAEAAU012@ABU012@@Z
-00a150d0,library,3,?GetIPPROTO@SystemAddress@RakNet@@QBEIXZ,public: unsigned int __thiscall RakNet::SystemAddress::GetIPPROTO(void) const
+00a150d0,library,3,?get_untyped_deleter@?$sp_counted_impl_p@Vthread@boost@@@detail@boost@@UAEPAXXZ,?get_untyped_deleter@?$sp_counted_impl_p@Vthread@boost@@@detail@boost@@UAEPAXXZ
 00b3fbe0,library,22,,??__F?freeList@RakString@RakNet@@2V?$List@PAUSharedString@RakString@RakNet@@@DataStructures@@A@@YAXXZ

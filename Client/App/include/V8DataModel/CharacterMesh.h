@@ -16,6 +16,16 @@ namespace RBX {
 		: public DescribedCreatable<CharacterMesh, CharacterAppearance, sCharacterMesh>
 	{
 	public:
+		enum BodyPart
+		{
+			HEAD = 0,
+			TORSO = 1,
+			LEFTARM = 2,
+			RIGHTARM = 3,
+			LEFTLEG = 4,
+			RIGHTLEG = 5,
+		};
+
 		CharacterMesh() {}
 	};
 

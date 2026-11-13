@@ -19,6 +19,13 @@ namespace RBX {
 		, public Service
 	{
 	public:
+		enum RuntimeUndoBehavior
+		{
+			Aggregate = 0,
+			Snapshot = 1,
+			Hybrid = 2,
+		};
+
 		ChangeHistoryService() {}
 
 		void clearWaypoints();  // 0x2CF1D0 calls this (waypoint list at +29/+116). TODO: body.

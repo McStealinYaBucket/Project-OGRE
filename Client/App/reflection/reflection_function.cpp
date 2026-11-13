@@ -14,10 +14,11 @@
 using namespace RBX;
 using namespace RBX::Reflection;
 
+// FUNCTION: PLAYER 0x0071a650
+// FUNCTION: STUDIO 0x007c3700
 FunctionDescriptor::FunctionDescriptor(ClassDescriptor& classDescriptor, const char* name, Security::Permissions security, Attributes attributes)
 	:MemberDescriptor(classDescriptor, name, "Function", attributes, security)
 	,signature()
-	,kind(Kind_Default)	/* field is 2016-only; 2013 layout has no kind (ctor 0x1569B4) */
 {
 	// TODO: This could be moved up into MemberDescriptor if it were templated...
 	classDescriptor.MemberDescriptorContainer<FunctionDescriptor>::declare(this);
