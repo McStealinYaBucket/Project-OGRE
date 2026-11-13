@@ -11,7 +11,8 @@ import sys
 from collections import defaultdict
 
 REF = "ref/src2016/extracted"
-ALLOWED = {"LICENSE_1_0.txt"}  # upstream licence texts that the 2016 tree also vendors
+ALLOWED = {"LICENSE_1_0.txt",  # upstream licence texts that the 2016 tree also vendors
+           "lz4_decoder.h"}  # upstream LZ4 r94 (BSD 2-clause), vendored unchanged by 2016 too
 
 
 def sha1(path):
