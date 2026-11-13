@@ -127,17 +127,6 @@ namespace RBX {
 		deleteAllConnectorsOrig();
 	}
 
-	// mac: 0x562AA8 (127B, batch596: Contact.h:57 staged-assert, virtual
-	// deleteAllConnectors, then the IPipelined chain removal).
-	// STUB: PLAYER 0x007b8ec0
-	// STUB: STUDIO 0x008d5860
-	void Contact::removeFromKernel()
-	{
-		RBXASSERT(getKernel() != NULL);  // Contact.h:57 "getKernel()"
-		deleteAllConnectors();
-		IPipelined::removeFromKernel();
-	}
-
 	// mac: 0x55E1E0 (batch275).
 	void Contact::generateDataForMovingAssemblyStage()
 	{

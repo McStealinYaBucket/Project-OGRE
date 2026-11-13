@@ -13,15 +13,6 @@
 
 namespace RBX {
 
-	// mac: 0x55D050 (123B, batch218; body here: needs complete IWorldStage).
-	// STUB: PLAYER 0x008e4710
-	// STUB: STUDIO 0x009cf8c0
-	Kernel* IStage::getKernel()
-	{
-		RBXASSERT(downstream != NULL);  // IStage.h:69 "downstream"
-		return downstream->getKernel();
-	}
-
 	// mac: 0x577450 (142B): assert a downstream exists, stage the edge, forward.
 	// STUB: PLAYER 0x00997450
 	// STUB: STUDIO 0x00a4a1e0

@@ -74,11 +74,17 @@ namespace RBX {
 		// mac: 0x55D050 (123B, batch218): assert downstream (IStage.h:69) +
 		// forward. VIRTUAL slot +3 (World::getKernel dispatches vtbl+12) --
 		// non-pure with body (no stage overrides it -- every vtable in
-		// batch225 holds this body at [5]). Body lives in IWorldStage.cpp
-		// (needs the complete derived type; header keeps the fwd only).
+		// batch225 holds this body at [5]). Defined here as in 2013 (the
+		// assert cites IStage.h:69; the prior tree had it in IWorldStage.cpp).
 		// (C4717 "recursive" warning here is benign: dispatch is virtual and
 		// terminates at Kernel::getKernel / the CleanStage stub.)
-		virtual Kernel* getKernel();
+		// STUB: PLAYER 0x008e4710
+		// STUB: STUDIO 0x009cf8c0
+		virtual Kernel* getKernel()
+		{
+			RBXASSERT(downstream != NULL);  // IStage.h:69 "downstream"
+			return downstream->getKernel();
+		}
 
 		// Inline accessors (binary reads the members directly).
 		IStage* getUpstream() const { return upstream; }

@@ -280,8 +280,8 @@ namespace RBX {
 		}
 
 		// mac: 0x545822: base eq + bytes + name compare.
-		// STUB: PLAYER 0x00619140
-		// STUB: STUDIO 0x006ede60
+		// FUNCTION: PLAYER 0x00619140
+		// FUNCTION: STUDIO 0x006ede60
 		bool operator==(const FWInstance& other) const
 		{
 			return FWBase::operator==(other)

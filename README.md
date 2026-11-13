@@ -12,9 +12,9 @@ Keep in mind that this code reproduces the original release as it was, bugs incl
 
 <p align="center"><a href="https://mcstealinyabucket.github.io/Project-OGRE/PLAYERPROGRESS.HTML"><img src="docs/PLAYERPROGRESS.SVG" width="45%"></a> <a href="https://mcstealinyabucket.github.io/Project-OGRE/STUDIOPROGRESS.HTML"><img src="docs/STUDIOPROGRESS.SVG" width="45%"></a></p>
 
-About 9% of the Player's 40,468 functions compile to the same instructions as the original, and about the same share of Studio's 42,329. Most of that is third-party code, which is matched in full or nearly: Lua 5.1.4 with Roblox's changes, G3D 8.00 with its zlib and libzip, boost 1.53 and RakNet 4.036. Outside the libraries, about 1,750 functions match in each binary.
+About 9% of the Player's 40,468 functions compile to the same instructions as the original, and about the same share of Studio's 42,329. Most of that is third-party code, which is matched in full or nearly: Lua 5.1.4 with Roblox's changes, G3D 8.00 with its zlib and libzip, boost 1.53 and RakNet 4.036. Outside the libraries, about 1,800 functions match in each binary.
 
-The engine core starts from an earlier partial decompilation of the `App` library. It is being re-measured and its class layouts corrected against the 2013 binaries, beginning with `Instance` and the reflection system.
+The engine core starts from an earlier partial decompilation of the `App` library. It is being re-measured and its class layouts corrected against the 2013 binaries, beginning with `Instance`, the reflection system, `DataModel` and `ScriptContext`.
 
 ## Building
 

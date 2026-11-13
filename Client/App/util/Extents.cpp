@@ -112,8 +112,8 @@ void Extents::getFaceCorners(
 
 // mac: 0x2001E0 - the 2013 binary loops the 8 corners, transforming each
 // myFrame.pointToWorldSpace(corner) then expressInFrame.pointToObjectSpace(world)
-// STUB: PLAYER 0x00796920
-// STUB: STUDIO 0x0089fae0
+// FUNCTION: PLAYER 0x00796920
+// FUNCTION: STUDIO 0x0089fae0
 Extents Extents::express(const CoordinateFrame& myFrame,
 						 const CoordinateFrame& expressInFrame) const
 {
@@ -132,8 +132,8 @@ Extents Extents::express(const CoordinateFrame& myFrame,
 
 // mac: 0x20050E - the 2013 binary loops the 8 corners of *this through
 // localCoord.pointToWorldSpace and takes min/max (no early-out on isNull)
-// STUB: PLAYER 0x00796d00
-// STUB: STUDIO 0x0089fec0
+// FUNCTION: PLAYER 0x00796d00
+// FUNCTION: STUDIO 0x0089fec0
 Extents Extents::toWorldSpace(const CoordinateFrame& localCoord) const
 {
 	Vector3 minC(Math::inf(), Math::inf(), Math::inf());

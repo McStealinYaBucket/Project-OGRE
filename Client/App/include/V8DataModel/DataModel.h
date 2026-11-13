@@ -458,8 +458,8 @@ public:
 	// ---- 2013 members (PLAYER ctor 0x0064ec50 and dtor 0x0064d850 read store by store) ----
 	// Names: the existing tree's where a 2013 function proves the slot, else the 2016 member in
 	// the same position whose ctor value matches (src2016), else m_unk. STUDIO (Oct 17) lacks
-	// networkStatsWindowsOn (0xc60), so its members 0xc64..0xcac sit 4 bytes lower (ctor
-	// 0x0076b720: mutex 0xc60, hackFlagSet 0xc68, jobId 0xc80, write_requested 0xc9c,
+	// networkStatsWindowsOn (0xc60), so its members 0xc64..0xcac sit 4 bytes lower
+	// (STUDIO ctor 0x0076b720: mutex 0xc60, hackFlagSet 0xc68, jobId 0xc80, write_requested 0xc9c,
 	// itemChangedSignal 0xca8) and the 8-aligned boost::function at 0xcb0 absorbs the
 	// difference; its GuiBuilder is 4 bytes smaller (parentDataModel at 0xe08). This header
 	// follows PLAYER.

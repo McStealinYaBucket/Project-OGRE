@@ -875,8 +875,8 @@ void ScriptContext::onHeartbeat(const Heartbeat& heartbeat)
 
 // mac: 0x18E976: store + CoreScripts log 'srp: %u' (@B2C201, from 0x18E9A1,
 // batch721:27-28 -- the doorlog prints the bool as %u).
-// STUB: PLAYER 0x0066fd10
-// STUB: STUDIO 0x007d80d0
+// FUNCTION: PLAYER 0x0066fd10
+// FUNCTION: STUDIO 0x007d80d0
 void ScriptContext::setRobloxPlace(bool robloxPlace)
 {
 	this->robloxPlace = robloxPlace;
@@ -1343,8 +1343,8 @@ void ScriptContext::addScript(BaseScript* script, ScriptStartOptions options)
 // drain gate's '== 0' (batch742); the landed prop-descriptor
 // signature is the binding contract and the binary decompiles the
 // body as parameterless (batch742), so the parameter closes unused.
-// STUB: PLAYER 0x006880c0
-// STUB: STUDIO 0x007ed820
+// FUNCTION: PLAYER 0x006880c0
+// FUNCTION: STUDIO 0x007ed820
 void ScriptContext::onChangedScriptEnabled(const Reflection::PropertyDescriptor& descriptor)
 {
 	(void)descriptor;
@@ -1997,14 +1997,13 @@ int ScriptContext::pluginmanager(lua_State* L)
 // libraryService, and the header can only fwd-declare LibraryService --
 // including script/LuaLibrary.h there cycles back through lua/luaconf.h,
 // which itself includes ScriptContext.h.
-// STUB: PLAYER 0x0068ad20
-// STUB: STUDIO 0x007f0480
 bool ScriptContext::disabled = false;
 double ScriptContext::gcStepThreshold = 0.0;
 
+// STUB: PLAYER 0x0068ad20
+// STUB: STUDIO 0x007f0480
 ScriptContext::ScriptContext()
-	: m_unk0x64(true)
-	, m_unk0xf0(false), robloxPlace(false), scriptsDisabled(false), contentClearing(false)
+	: m_unk0xf0(false), robloxPlace(false), scriptsDisabled(false), contentClearing(false)
 	, lastGcKb(0)
 	, collectStats(false)
 	, reentrancy(0)

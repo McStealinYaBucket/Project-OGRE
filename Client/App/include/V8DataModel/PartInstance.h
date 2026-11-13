@@ -162,6 +162,8 @@ public:
 		// ModelInstance (the +36 compare renders as pointer-truth: true iff
 		// the parent is non-null after the isA gate).
 		virtual bool askSetParent(const Instance* parent) const;
+		// vtable+0x4c (2013 vftable 0x00b4c784; iOS 10-29). Body not written yet.
+		/*override*/ virtual void onAncestorChanged(const AncestorChanged& event);
 		// [slot 27]
 		// [27] +0x6C onChildRemoved 0x442D7C (61B): if on-demand exists and
 		// its +40 touchTransmitter is the removed child, clear it.
@@ -230,9 +232,6 @@ public:
 		void setPartSizeUi(const G3D::Vector3& value);
 		// mac: 0x4489CC (66B, batch307: uiToXmlSize + setPartSizeXml + safeMove). Not virtual in 2013.
 		void setPartSizeUnjoined(const G3D::Vector3& value);
-		// [slot 50] +0xC8 resize 0x44917A (67B, batch304): destroyJoints
-		// (slot 61) + resizeImpl + join (slot 60), by name.
-		virtual bool resize(NormalId normal, int increment);
 		// mac: 0x4491BE (1011B, batch305): face-sign grow + form-factor Y
 		// adjust + CF shift + setCoordinateFrame/setPartSizeXml, with
 		// the ContactManager/Dragger revert arm (Dragger era DELTA).
@@ -248,6 +247,10 @@ public:
 		// FUNCTION: PLAYER 0x007234e0
 		// FUNCTION: STUDIO 0x0079f390
 		virtual float getMinimumResizeIncrement() const { return 0.01f; }
+		// [slot 50] +0xC8 resize 0x44917A (67B, batch304): destroyJoints
+		// (slot 61) + resizeImpl + join (slot 60), by name. vtable+0xb8, after
+		// getMinimumResizeIncrement (2013 vftable 0x00b4c784).
+		virtual bool resize(NormalId normal, int increment);
 		// [slot 51]
 		// Trivial queries (EAs above; subclasses override).
 		virtual FormFactor getFormFactor() const;

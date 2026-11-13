@@ -12,6 +12,11 @@ targets:
       # points automatically, which compares our WinMainCRTStartup against it: not a real pair.
       ignore-functions:
         - WinMainCRTStartup
+      # ClassDescriptor-typed statics: reccmp-datacmp dies on their type (KeyError in cvdump/types.py).
+      # Paired all the same (tools/ida/gen_reccmp_csv.py), so the functions that use them can match.
+      ignore-variables:
+        - describedClassDescriptor
+        - root
     data-sources:
       - reccmp/player-function-size.csv
       - reccmp/player-imports.csv
@@ -32,6 +37,10 @@ targets:
       - Client
     hash:
       sha256: 68ba1c5fd39ccc535b6ed77a171e3c94fd6d258fd8a5777af428dbbf9b623ba6
+    report:
+      ignore-variables:
+        - describedClassDescriptor
+        - root
     data-sources:
       - reccmp/studio-function-size.csv
       - reccmp/studio-crt.csv

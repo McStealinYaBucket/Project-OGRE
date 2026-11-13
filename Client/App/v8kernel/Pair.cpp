@@ -162,30 +162,4 @@ namespace RBX {
 		}
 	}
 
-	// mac: 0x562E24 (289B, batch308: +28/+32 bodies with +44/+48 ids,
-	// except POINT_PLANE which keys +52/+48; other types assert
-	// EDGE_EDGE (Pair.h:133) then match either orientation, with the
-	// swapped arm cross-comparing +48==id0 && +44==id1, verbatim).
-	// STUB: PLAYER 0x00850480
-	// STUB: STUDIO 0x009a8170
-	bool GeoPair::match(Body* b0, Body* b1, GeoPairType pairType, int id0, int id1)
-	{
-		if (pairType == EDGE_EDGE_PLANE_PAIR)
-		{
-			return body0 == b0 && body1 == b1
-				&& pairData.normalID0 == id0 && pairData.normalID1 == id1;
-		}
-		if (pairType == POINT_PLANE_PAIR)
-		{
-			return body0 == b0 && body1 == b1
-				&& pairData.planeID == id0 && pairData.normalID1 == id1;
-		}
-		RBXASSERT(pairType == EDGE_EDGE_PAIR);  // Pair.h:133
-		if (body0 == b0 && body1 == b1
-			&& pairData.normalID0 == id0 && pairData.normalID1 == id1)
-			return true;
-		return body1 == b0 && body0 == b1
-			&& pairData.normalID1 == id0 && pairData.normalID0 == id1;
-	}
-
 } // namespace RBX

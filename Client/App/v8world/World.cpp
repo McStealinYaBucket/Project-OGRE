@@ -514,16 +514,6 @@ namespace RBX {
 		assemble();
 	}
 
-	// STUB: PLAYER 0x0070d390
-	// STUB: STUDIO 0x0082a960
-	void World::reset()
-	{
-		// mac: 0x518A3E: refuse while stepping.  The +14 dword the old shell zeroed
-		// is inside the leading signal object per the ctor map, so the field
-		// identity is unresolved -- nothing is zeroed here.
-		RBXASSERT(!inStepCode);
-	}
-
 	void World::assemble()
 	{
 		// mac: 0x5A9B04 (46B, batch209): walk the World+192 stage chain via

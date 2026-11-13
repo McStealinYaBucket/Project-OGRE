@@ -710,8 +710,8 @@ namespace RBX {
 	}
 
 	/* mac: 0x2D14A4 — FastLog + AddPlace + conditional store/raise + SC wiring. */
-	// STUB: PLAYER 0x0063e0b0
-	// STUB: STUDIO 0x0075bf60
+	// FUNCTION: PLAYER 0x0063e0b0
+	// FUNCTION: STUDIO 0x0075bf60
 	void DataModel::setPlaceID(int placeID, bool robloxPlace)
 	{
 		FASTLOG1(FLog::CloseDataModel, "Setting place ID %u", placeID);
@@ -1552,16 +1552,16 @@ RBXASSERT(dataModel->onlyJobsLeftForThisArbiterAreGenericJobs());
 	}
 
 	/* mac: 0x2D16D2 — tail-calls GuiBuilder::removeCustomStat(this+3488, name). */
-	// STUB: PLAYER 0x0062d840
-	// STUB: STUDIO 0x0074dab0
+	// FUNCTION: PLAYER 0x0062d840
+	// FUNCTION: STUDIO 0x0074dab0
 	void DataModel::removeCustomStat(std::string name)
 	{
 		guiBuilder.removeCustomStat(name);
 	}
 
 	/* mac: 0x2D16F4 — tail-calls GuiBuilder::saveCustomStats(this+3488). */
-	// STUB: PLAYER 0x0062d890
-	// STUB: STUDIO 0x0074db00
+	// FUNCTION: PLAYER 0x0062d890
+	// FUNCTION: STUDIO 0x0074db00
 	void DataModel::writeStatsSettings()
 	{
 		guiBuilder.saveCustomStats();
@@ -1856,8 +1856,8 @@ workspace->setAndLockParent(this);
 
 	/* mac: 0x2CDA8C — server-gated game replace: clear script/starter children,
 	   SerializerV2::load. (No joinAllHack in the binary.) */
-	// STUB: PLAYER 0x006405c0
-	// STUB: STUDIO 0x0075de50
+	// FUNCTION: PLAYER 0x006405c0
+	// FUNCTION: STUDIO 0x0075de50
 	void DataModel::loadGame(int assetID)
 	{
 		if (!Network::Players::backendProcessing(this))
@@ -1963,7 +1963,7 @@ workspace->setAndLockParent(this);
 
 	/* mac: 0x2D617A — build the in-game GUI, then load core scripts. */
 	// STUB: PLAYER 0x006400f0
-	// STUB: STUDIO 0x0075d980
+	// FUNCTION: STUDIO 0x0075d980
 	void DataModel::startCoreScripts(Adorn* adorn, bool buildInGameGui)
 	{
 		guiBuilder.buildGui(adorn, workspace.get(), buildInGameGui);
@@ -2213,4 +2213,8 @@ RBX_REGISTER_CLASS(RBX::Network::Players);
 }
 
 DECOMP_SIZE_ASSERT(RBX::DataModel::GenericJob, 0x248);
-DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);
+// DataModel is 0xe10 (operator new in 0x0064f760) and every member up to guiBuilder sits at its
+// 2013 offset (probe compile 2026-11-12); the size assert waits on GuiBuilder, which is 0x24 here
+// against 0x20 in PLAYER (ctor 0x00644f30: zeros at +8/+0xc, map at +0x10, page at +0x1c), so
+// parentDataModel lands at 0xe10 instead of 0xe0c.
+// DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);

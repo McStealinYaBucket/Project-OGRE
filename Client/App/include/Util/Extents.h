@@ -57,8 +57,8 @@ namespace RBX {
 		}
 
 		// mac: 0x6BCA28 (also 0x96A8AC)
-		// STUB: PLAYER 0x009dab20
-		// STUB: STUDIO 0x006aea20
+		// Not PLAYER 0x009dab20 / STUDIO 0x006aea20 as the prior tree said: both are
+		// G3D::Vector3::maxFinite (match:). vv's Windows address is not known yet.
 		static Extents vv(const Vector3& v0, const Vector3& v1) {
 			Extents e;
 			e.low = v0.min(v1);

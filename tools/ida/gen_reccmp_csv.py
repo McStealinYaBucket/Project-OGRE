@@ -23,7 +23,7 @@ takes, as 8 hex digits without 0x):
   <t>-imports.csv        address,type,size,name   PLAYER only: the linker's IAT in .rdata (0x00aa1000-) that
                          .text calls through, typed 'import'. reccmp reads VMProtect's table in .vmp1
                          instead; the 'import' type needs tools/reccmp-patches/ (see that README).
-  <t>-symbols.csv        address,name        demangled ios:/mac:/prior: names, no type (stay in the denominator).
+  <t>-symbols.csv        address,name,symbol,type   demangled ios:/mac:/prior: names, no type (stay in the denominator).
   <t>-crt.csv, -stl.csv, -atl.csv
                          address,type,size,symbol   flirt: names, type library.
   <t>-<lib>.csv          address,type,size,symbol,name   one per library (lua, raknet, g3d, zlib, libzip,
@@ -51,6 +51,16 @@ takes, as 8 hex digits without 0x):
                          function that run paired is also a position source for data_rows, when its whole
                          instruction stream (length and mnemonic per instruction) equals ours and our body ends
                          where the original's does: data is never paired from a misaligned instruction.
+Rules that keep a regeneration from undoing the last one (2026-11-12):
+  - Twins: a reccmp --json body pair at 100% counts as 1000 votes; ties go to a signature or match: name,
+    then to the lowest address. A match: name (a pairing a reccmp run proved at 100%) beats a position or
+    signature pair that contradicts it, unless that pair names an identical twin of the proven body.
+  - match:/lib:/rtti:/str: names (our own MSVC names) pair through <t>-symbols.csv (symbol column, or the
+    name alone for a C function or static); <t>-symbols.csv has a type column for them.
+  - <t>-libdata.csv keeps every row of the previous file that still resolves and nothing contradicts.
+  - Vtable rows carry the original's slot count (vt_slots), also for `// VTABLE:` markers.
+  - Typing: an oracle-named original is library only in a third-party namespace (third_party); otherwise
+    library unless the name mentions rbx/RBX.
 A generated file that reccmp-project.yml does not list is reported, so it can be added there.
 """
 import bisect
@@ -78,9 +88,54 @@ ADJUSTOR = [(re.compile(rb"\x83\xe9.\xe9", re.S), 8), (re.compile(rb"\x81\xe9.{4
             (re.compile(rb"\x83\x6c\x24\x04.\xe9", re.S), 10), (re.compile(rb"\x81\x6c\x24\x04.{4}\xe9", re.S), 13)]
 
 
-# Data our PDB names but reccmp-datacmp cannot lay out: its type record refers to a type key cvdump's
-# output lacks (KeyError in reccmp/cvdump/types.py, which ends the whole datacmp run). Not paired.
-DATACMP_CRASH = {"root___RBX::Reflection::ClassDescriptor::rootDescriptor"}
+# ClassDescriptor-typed statics (ClassDescriptor::rootDescriptor's `root`, the `describedClassDescriptor`
+# static of each Described<...>::classDescriptor()) make reccmp-datacmp die (KeyError in
+# reccmp/cvdump/types.py). They stay paired, since the classDescriptor() functions and their atexit
+# destructors need them at 100%, and reccmp-project.yml lists their names under report:
+# ignore-variables, which datacmp skips.
+
+
+THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")
+
+
+def third_party(demangled):
+    """An oracle-named function is library code when its qualified name is in a third-party namespace
+    (std::, boost::, G3D::, RakNet::, ...) and no Roblox type is involved."""
+    return not roblox(demangled) and qual(norm_sig(demangled) or demangled).startswith(THIRD_PARTY)
+
+
+def roblox(name):
+    """Roblox code (RBX:: and the lowercase rbx:: namespace) is never typed library."""
+    return "rbx" in (name or "").lower()
+
+
+def code_imm(text, value):
+    """Whether .text holds `value` as the imm32 of push / mov reg / mov r/m32 (opcode 68, B8-BF, C7 with
+    a modrm and no, 1 or 4 displacement bytes): a byte search alone also hits instruction tails."""
+    pat, k = struct.pack("<I", value), -1
+    while (k := text.find(pat, k + 1)) >= 0:
+        if k and (text[k - 1] == 0x68 or 0xB8 <= text[k - 1] <= 0xBF) or \
+                any(k >= d and text[k - d] == 0xC7 for d in (2, 3, 6)):
+            return True
+    return False
+
+
+def vt_slots(orig, oa, labels):
+    """The original vftable's slot count: its run of .text pointers, ending before the next labelled
+    original object (labels: sorted addresses of the IDA data labels and of every data row; the next
+    vftable's Complete Object Locator is one) or the first one code addresses, at most 0x400."""
+    j = bisect.bisect_right(labels, oa)
+    lim = labels[j] if j < len(labels) else oa + 0x1000
+    if not hasattr(orig, "text_bytes"):
+        orig.text_bytes = bytes(orig.img[orig.text[0] - orig.base:orig.text[1] - orig.base])
+    n = 0
+    while n < 0x400 and oa + 4 * n < lim and orig.in_text(orig.u32(oa + 4 * n)):
+        # a slot is never addressed by code; an object after the vftable that has no label may be
+        # (boost::function's stored_vtable {manager, invoker}, stored as `address | 1`)
+        if n and any(code_imm(orig.text_bytes, oa + 4 * n + t) for t in (0, 1)):
+            break
+        n += 1
+    return n
 
 
 def LIBFILE(library):
@@ -299,7 +354,7 @@ def obj_sizes(target):
 
 
 
-def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
+def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), prefer=None, oracle_lib=None):
     """What the paired library functions reference, paired by position. For each (orig, recomp, length)
     whose instruction streams agree (same length and mnemonic per instruction), every base relocation of
     our image inside the recompiled function names a PDB entity, and the 4 bytes at the same offset of
@@ -328,13 +383,16 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
 
     votes = {}
 
-    def note(node, oa):
+    def note(node, oa, weight=1):
         seen.setdefault(node, set()).add(oa)
-        votes[node] = votes.get(node, 0) + 1
-        votes[node, oa] = votes.get((node, oa), 0) + 1
+        votes[node] = votes.get(node, 0) + weight
+        votes[node, oa] = votes.get((node, oa), 0) + weight
 
     for p in pairs:
         o, r, n = p[:3]
+        if len(p) > 3 and p[3] == "100" and r in view and isfunc(r):
+            # the reccmp run paired these two whole bodies at 100%: stronger than any number of call sites
+            note(r, o, 1000)
         if len(p) > 3 and p[3] != "100":  # (o, r, n, our next function): ours must end where the original's does
             if p[3] is None or p[3] < r + n or any(b not in (0xCC, 0x90) for b in rimg[r + n - rbase:p[3] - rbase]):
                 continue
@@ -388,8 +446,11 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
         if len(origs) > 1:
             # one of ours named by several originals: a code difference at the minority's call sites
             # (e.g. ours calls logic_error(string) where the original copy-constructs). Most votes win.
-            top = sorted(origs, key=lambda oa: -votes[node, oa])
-            origs = top[:1] if votes[node, top[0]] > votes[node, top[1]] else origs
+            # Ties go to the lowest original address, so a regeneration from the same evidence always
+            # makes the same choice (twin bodies the original kept apart).
+            # A signature or match: name for one of them (prefer: {our symbol: original}) breaks a tie first.
+            pref = (prefer or {}).get(view[node][1])
+            origs = sorted(origs, key=lambda oa: (-votes[node, oa], oa != pref, oa))[:1]
         if len(origs) == 1:
             claimed.setdefault(next(iter(origs)), []).append(node)
     kinds = {"DATA": "global", "VTABLE": "vtable", "STRING": "string", "WIDECHAR": "widechar", "FLOAT": "float",
@@ -399,8 +460,8 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
         if len(nodes) > 1:
             # Several of our bodies for one original: the original's linker folded identical bodies (ICF)
             # that ours keeps apart. reccmp pairs one; take the one most references name, if any.
-            nodes = sorted(nodes, key=lambda x: -votes[x])
-            nodes = nodes[:1] if votes[nodes[0]] > votes[nodes[1]] else nodes
+            # A tie goes to our lowest address: deterministic for one build.
+            nodes = sorted(nodes, key=lambda x: (-votes[x], (prefer or {}).get(view[x][1]) != oa, x))[:1]
         if len(nodes) != 1 or not orig.base <= oa < orig.base + len(orig.img):
             continue
         t, d, nm = view[nodes[0]]
@@ -409,30 +470,18 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
                 continue
             # A library function's callees are library code (third party, STL, CRT helpers such as
             # __ftol2_sse or atexit destructors of library statics) unless Roblox code is named.
-            roblox_callee = "RBX" in (d or "") + (nm or "")
-            rows.append((f"{oa:08x}", "" if roblox_callee else "library", "", d or "", "" if d else nm))
+            # An original with an ios:/mac:/prior: name is typed by that name (oracle_lib: {orig: third party})
+            lib = oracle_lib[oa] if oa in (oracle_lib or {}) else not roblox((d or "") + (nm or ""))
+            rows.append((f"{oa:08x}", "library" if lib else "", "", d or "", "" if d else nm))
             continue
         typ = kinds[t]
-        if d in DATACMP_CRASH:
-            continue
         # Strings and floats are paired by value (match_strings, float analysis): address and type only;
         # reccmp reads a float only with size 4 or 8, which the __real@<hex> name gives.
         sym = d if typ in ("global", "vtable") else ""
         name = nm if typ in ("global", "vtable") and not d else ""
         size = len(d) // 2 - 3 if typ == "float" and d and d.startswith("__real@") else ""
         if typ == "vtable":
-            # reccmp sizes our vftable by the gap to our next symbol and reads the original with that size
-            # unless the row gives one, so a padding null of ours reads the original's next object (the
-            # next vftable's Complete Object Locator) as a slot (G3D::Plane: 1 slot, 50%). The size is the
-            # original's run of code pointers, capped at our gap: past our gap the original may hold other
-            # code pointers (boost::function's static manager/invoker pairs follow sp_counted_impl_pd's
-            # vftable directly). ponytail: the cap hides a trailing virtual ours lacks, as before.
-            gap = (starts[bisect.bisect_right(starts, nodes[0])] - nodes[0]) // 4 \
-                if bisect.bisect_right(starts, nodes[0]) < len(starts) else 0x400
-            n = 0
-            while n < min(gap, 0x400) and orig.in_text(orig.u32(oa + 4 * n)):
-                n += 1
-            size = 4 * n if n < gap else ""
+            size = "vt"  # the original's slot count, set below once every data row is known
         rows.append((f"{oa:08x}", typ, size, sym, name))
     # Code our image references through a relocation but the PDB does not name (the __ehhandler$ stub a
     # /GS function pushes in its prologue: reccmp's find_eh_handlers labels only the `mov eax, FuncInfo`
@@ -441,6 +490,11 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None):
     # placeholder. Typed global so it never enters the function denominator.
     taken = {int(r[0], 16) for r in rows}
     rows += [(f"{a:08x}", "global", 1, "", "") for a in sorted(anon_code - taken)]
+    # reccmp sizes our vftable by the gap to our next symbol and reads the original with the row's size
+    # (else with ours): the original's own slot count shows a slot ours lacks or adds at the end.
+    bounds = sorted(set(labels) | {int(r[0], 16) for r in rows})
+    rows = [r[:2] + (4 * vt_slots(orig, int(r[0], 16), bounds) or "",) + r[3:] if r[2] == "vt" else r
+            for r in rows]
     return sorted(rows)
 
 
@@ -540,6 +594,24 @@ def adjustor_thunk(body):
     return any(len(body) == n and rx.match(body) for rx, n in ADJUSTOR)
 
 
+def same_body(orig, a, b, size_of):
+    """Two original functions with the same instructions (call/jmp rel32 compared by target)."""
+    import capstone
+    n = size_of.get(a)
+    if not n or n != size_of.get(b):
+        return False
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    # a branch inside the body (a recursive call included) compares by its offset from the start
+
+    def key(x):
+        out = []
+        for i in md.disasm(orig.b(x, n), x):
+            t = int(i.op_str, 16) if re.fullmatch(r"0x[0-9a-f]+", i.op_str) else None
+            out.append((i.mnemonic, "+%x" % (t - x) if t is not None and x <= t < x + n else i.op_str))
+        return out
+    return key(a) == key(b)
+
+
 def vmp_functions(starts, sizes, path):
     """Functions containing a VMProtect region (notes/vmprotect-player.csv addresses)."""
     hit = set()
@@ -552,10 +624,10 @@ def vmp_functions(starts, sizes, path):
     return hit
 
 
-def marked(target):
+def marked(target, kinds=("FUNCTION", "STUB", "TEMPLATE", "SYNTHETIC", "LIBRARY")):
     """Original addresses a source marker owns (Client/, including the generated link stubs): those
     pair through the marker, so data_rows must not add a library row for them."""
-    mk = re.compile(r"//\s*(?:FUNCTION|STUB|TEMPLATE|SYNTHETIC|LIBRARY):\s*" + target + r"\s+0x([0-9a-fA-F]+)")
+    mk = re.compile(r"//\s*(?:" + "|".join(kinds) + r"):\s*" + target + r"\s+0x([0-9a-fA-F]+)")
     out = set()
     for dirpath, _, files in os.walk(os.path.join(ROOT, "Client")):
         for fn in files:
@@ -563,6 +635,35 @@ def marked(target):
                 with open(os.path.join(dirpath, fn), errors="replace") as f:
                     out.update(int(m.group(1), 16) for m in mk.finditer(f.read()))
     return out
+
+
+def sticky(path, new, view, kept, held, used_sym, orig, labels):
+    """new + the rows of the previous <t>-libdata.csv that still hold: its symbol (or a static's proc
+    name) is still in our PDB, no new row or other source takes its address or its symbol, and a
+    function row still starts a kept original function. Pairings then only change when evidence
+    contradicts them, not when one reccmp run happens not to vote for them. Vtable sizes are redone."""
+    if not os.path.exists(path):
+        return list(new), 0
+    syms = {d for _, d, _ in view.values() if d}
+    procs = {n for t, d, n in view.values() if n and not d}
+    have = {int(r[0], 16) for r in new} | held
+    taken = {r[3] for r in new if r[3]} | {r[4] for r in new if r[4]} | used_sym
+    with open(path) as f:
+        lines = [x for x in f if not x.startswith("#")]
+    out, n = list(new), 0
+    for r in list(csv.reader(lines, escapechar="\\", doublequote=False))[1:]:
+        a, typ, size, sym, name = (r + [""] * 5)[:5]
+        oa = int(a, 16)
+        if oa in have or (sym or name) in taken or typ in ("library", "") and oa not in kept or \
+                sym and sym not in syms or not sym and name and name not in procs:
+            continue
+        have.add(oa)
+        taken.add(sym or name)
+        if typ == "vtable":
+            size = 4 * vt_slots(orig, oa, sorted(set(labels) | have)) or ""
+        out.append((a, typ, size, sym, name))
+        n += 1
+    return sorted(out), n
 
 
 def writer(path, header, comments=()):
@@ -680,10 +781,16 @@ def gen(target, build=BUILD, json_path=None):
             libs.setdefault(LIBFILE(r["library"]), []).append((f"{a:08x}", "library", size, sym, name))
     claimed = {int(row[0], 16) for rows in libs.values() for row in rows}
     names = {"symbols": [], "crt": [], "stl": [], "atl": []}
-    oracle = {}
+    oracle, labels, decorated = {}, set(), {}
     with open(os.path.join(exports, f"{target}-names.csv")) as f:
         for r in csv.DictReader(f):
             a = int(r["address"], 16)
+            if r["kind"] != "func":
+                labels.add(a)
+            # MSVC names: our own PUBLICS names (match: = reccmp proved the body at 100%; lib:, rtti:, str:)
+            if r["kind"] == "func" and r["source"] in ("match:", "lib:", "rtti:", "str:") and \
+                    a in kept and a not in claimed:
+                decorated[a] = (r["name"], r["demangled"] or r["name"], r["source"])
             if r["kind"] == "func" and r["source"] in ("ios:", "mac:", "prior:"):
                 oracle[a] = (r["demangled"] or r["name"], r["name"])
             if r["kind"] != "func" or a not in kept or a in claimed:
@@ -694,10 +801,25 @@ def gen(target, build=BUILD, json_path=None):
                 n = r["name"]
                 lib = "atl" if "ATL@@" in n else "stl" if "@std@@" in n else "crt"
                 names[lib].append((f"{a:08x}", "library", size_of[a], n))
+    labels = sorted(labels)
     mk = marked(target)
     named, nstats = {}, {}
     if have_build and not os.environ.get("OGRE_NO_SIGPAIR"):
         named, nstats = oracle_pairs(oracle, view, kept - claimed - mk, used)
+    # our PUBLICS name for each MSVC-named original; with the signature pairs, the tie-break for twins
+    dres = {}
+    for a, (nm, _, _) in sorted(decorated.items()):
+        ra = resolve_symbol([nm], addr, anon) if have_build and nm.startswith(("?", "_")) else None
+        vt, d, _ = view.get(ra, (None, None, None)) if ra else (None, None, None)
+        dres[a] = d if d and vt in ("FUNCTION", "-") else None
+    oracle_lib = {a: third_party(dem) for a, (dem, _) in oracle.items()}
+    prefer = {}
+    for a, v in sorted(named.items()):
+        if v[0]:
+            prefer.setdefault(v[0], a)
+    for a, d in sorted(dres.items()):
+        if d:
+            prefer.setdefault(d, a)
     datarows = []
     if pairs or json_path:
         # Pairs for the position method: the library rows, plus (with --json) every function the last
@@ -722,12 +844,13 @@ def gen(target, build=BUILD, json_path=None):
         skip = mk | {int(row[0], 16) for rows in libs.values() for row in rows}
         if os.environ.get("OGRE_NO_SIGPAIR"):  # the method before signature pairing, for A/B scoring
             skip |= {a for a, (d, _) in oracle.items() if "RBX" in d}
-        datarows = data_rows(im, recomp, [p for p in pairs if p[2]], view, code, kept, skip)
+        datarows = data_rows(im, recomp, [p for p in pairs if p[2]], view, code, kept, skip, labels=labels, prefer=prefer, oracle_lib=oracle_lib)
         if jpairs:
             # The library pairs (byte-identical bodies) decide first; the --json pairs only add addresses
             # and symbols the library pass left open. An original the linker folded (ICF) is claimed by
             # several of our bodies once more callers vote, and would otherwise lose its library row.
-            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip)
+            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip,
+                             labels=labels, prefer=prefer, oracle_lib=oracle_lib)
             have = {r[0] for r in datarows} | {r[3] for r in datarows if r[3]}
             datarows = sorted(datarows + [r for r in more if r[0] not in have and not (r[3] and r[3] in have)])
             # last, the aligned reference lines of the functions that pass did not take whole
@@ -735,7 +858,8 @@ def gen(target, build=BUILD, json_path=None):
             for jp in json_path.split(","):
                 for node, oas in aligned_refs(im, recomp, jp, view).items():
                     refs.setdefault(node, []).extend(oas)
-            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip, refs)
+            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip, refs,
+                             labels, prefer, oracle_lib)
             have = {r[0] for r in datarows} | {r[3] for r in datarows if r[3]}
             datarows = sorted(datarows + [r for r in more if r[0] not in have and not (r[3] and r[3] in have)])
         # A signature pair that a position pair contradicts (same original, other symbol, or the same
@@ -753,18 +877,59 @@ def gen(target, build=BUILD, json_path=None):
             print(f"  {target} {a:08x}: signature pairs {named[a][0]}, position says "
                   f"{pos.get(a) or sorted(f'{x:08x}' for x in bysym.get(named[a][0], ()))}")
         named = {a: v for a, v in named.items() if a not in bad}
+    # A match: name is a pairing a reccmp run proved at 100%; it beats a position or signature pair that
+    # contradicts it (twin bodies: a position vote from an aligned reference line in a function that does
+    # not match is weaker than a whole body that does).
+    proven = {}
+    for a, d in sorted(dres.items()):
+        if d and decorated[a][2] == "match:" and a not in mk:
+            proven.setdefault(d, a)
+    proven_at = {a: d for d, a in proven.items()}
+    # ... unless the position pair names an identical twin of the proven body: then the callers' votes decide.
+    beaten = lambda oa, sym: sym in proven and proven[sym] != oa and not same_body(im, oa, proven[sym], size_of) \
+        or oa in proven_at and sym != proven_at[oa]
+    datarows = [r for r in datarows if r[1] not in ("library", "") or not beaten(int(r[0], 16), r[3])]
+    named = {a: v for a, v in named.items() if not beaten(a, v[0])}
     names["symbols"] = [(a, n, named[int(a, 16)][0] if int(a, 16) in named else "") for a, n in names["symbols"]]
     # a static pairs by our proc name (match_functions): the row's name is ours
-    names["symbols"] = [(a, named[int(a, 16)][1] if int(a, 16) in named and not sym else n, sym)
+    names["symbols"] = [(a, named[int(a, 16)][1] if int(a, 16) in named and not sym else n, sym, "")
                         for a, n, sym in names["symbols"]]
+    # MSVC-named originals (match:/lib:/rtti:/str:) pair by the PUBLICS name our link keeps at that body,
+    # unless a marker, a library row, a position row or a signature pair already holds the address or
+    # the symbol. This keeps a pairing a reccmp run proved (match:) from depending on the next run.
+    held = {int(r[0], 16) for r in datarows if r[1] in ("library", "")} | mk
+    used_sym = {r[3] for r in datarows if r[3]} | {v[0] for v in named.values() if v[0]} | \
+        {row[3] for rows in libs.values() for row in rows if row[3]}
+    dstats = {}
+    used_name = {r[1] for r in names["symbols"]}
+    for a, (nm, dem, src) in sorted(decorated.items()):
+        d = dres[a]
+        c_name = not nm.startswith(("?", "_"))  # a C function or a static: pairs by our PDB proc name
+        why = "held by another row" if a in held else \
+            ("name paired elsewhere" if nm in used_name else None) if c_name else \
+            "not in our link" if not d else "symbol paired elsewhere" if d in used_sym else None
+        if why:
+            dstats[why] = dstats.get(why, 0) + 1
+            continue
+        if c_name:
+            used_name.add(nm)
+        else:
+            used_sym.add(d)
+        dstats["paired"] = dstats.get("paired", 0) + 1
+        typ = "library" if src == "lib:" or not roblox(nm) else ""
+        names["symbols"].append((f"{a:08x}", nm if c_name else dem, "" if c_name else d, typ))
+    names["symbols"].sort()
     for lib, rows in names.items():
         path = os.path.join(ROOT, "reccmp", f"{t}-{lib}.csv")
-        hdr = ["address", "name", "symbol"] if lib == "symbols" else ["address", "type", "size", "symbol"]
+        hdr = ["address", "name", "symbol", "type"] if lib == "symbols" else ["address", "type", "size", "symbol"]
         notes2 = [f"Generated from ida/exports/{target}-names.csv. Do not edit."]
         if lib == "symbols" and nstats:
             notes2.append("symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on "
                           "both sides; a static carries our proc name instead.")
             notes2.append("Signature pairing: " + ", ".join(f"{k} {v}" for k, v in sorted(nstats.items())) + ".")
+        if lib == "symbols" and dstats:
+            notes2.append("MSVC-named rows (match:/lib:/rtti:/str:): " + ", ".join(
+                f"{k} {v}" for k, v in sorted(dstats.items())) + ".")
         f, w = writer(path, hdr, notes2)
         with f:
             w.writerows(rows)
@@ -773,13 +938,21 @@ def gen(target, build=BUILD, json_path=None):
         notes.append("Signature pairing: " + ", ".join(f"{k} {v}" for k, v in sorted(nstats.items())) + ".")
 
     if datarows:
-        rows = datarows
         path = os.path.join(ROOT, "reccmp", f"{t}-libdata.csv")
+        rows, nsticky = sticky(path, datarows, view, kept, mk | claimed | {int(r[0], 16) for r in names["symbols"]},
+                               {r[2] for r in names["symbols"] if r[2]} | used_sym, im, labels)
+        # a VTABLE marker gets the original's slot count the same way
+        have = {int(r[0], 16) for r in rows}
+        bounds = sorted(set(labels) | have)
+        rows += [(f"{a:08x}", "vtable", 4 * vt_slots(im, a, bounds) or "", "", "")
+                 for a in sorted(marked(target, ("VTABLE",)) - have)]
+        rows.sort()
         f, w = writer(path, ["address", "type", "size", "symbol", "name"],
                       ["Generated by tools/ida/gen_reccmp_csv.py: data the paired functions reference,",
                        f"paired by relocation position against {os.path.relpath(recomp, ROOT)}. Do not edit.",
                        "Position sources: library rows" + (" + --json " + ",".join(
-                           os.path.relpath(j, ROOT) for j in json_path.split(",")) if json_path else "") + "."])
+                           os.path.relpath(j, ROOT) for j in json_path.split(",")) if json_path else "") + ".",
+                       f"Kept from the previous file (still resolvable, not contradicted): {nsticky} rows."])
         with f:
             w.writerows(r for r in rows if r[1] in ("library", "") or int(r[0], 16) not in kept)
         out[path] = len(rows)
@@ -804,6 +977,7 @@ def listed_sources():
 
 def selftest():
     assert adjustor_thunk(b"\x83\xe9\x04\xe9\x00\x00\x00\x00")
+    assert code_imm(b"\x90\x68\x75\x05\xb8\x00", 0xb80575) and not code_imm(b"\x00\x75\x05\xb8\x00", 0xb80575)
     assert adjustor_thunk(b"\x83\x6c\x24\x04\x08\xe9\x00\x00\x00\x00")
     assert not adjustor_thunk(b"\x83\xe9\x04\xe9\x00\x00\x00\x00\xcc")
     assert not adjustor_thunk(b"\x8b\xff\x55\x8b\xec\x00\x00\x00")
@@ -823,6 +997,8 @@ def selftest():
     assert norm_sig("gpc_polygon_clip") == "C:gpc_polygon_clip"
     assert norm_sig("RBX::X::~X() [D0, deleting: the MSVC scalar deleting destructor]") == "RBX::X::{sdd}()"
     assert qual("RBX::A<RBX::B>::f(int)const") == "RBX::A<RBX::B>::f"
+    assert third_party("boost::bad_weak_ptr::what() const") and third_party("gpc_polygon_clip")
+    assert not third_party("XmlNameValuePair::clearValue()") and not third_party("std::vector<RBX::Instance*>::size() const")
     assert norm_sig("void * RBX::FWBase::`scalar deleting dtor'(unsigned int)") == \
         norm_sig("RBX::FWBase::~FWBase()[D0, deleting: the MSVC scalar deleting destructor]")
     assert norm_sig("void RBX::Instance::writeXml(class boost::function<bool (class RBX::Instance *)> const &)") \

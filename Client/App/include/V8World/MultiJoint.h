@@ -41,14 +41,16 @@ namespace RBX {
 			for (int i = 0; i < 4; ++i)
 				connectors[i] = NULL;
 		}
-		// STUB: PLAYER 0x009741c0
-		// STUB: STUDIO 0x009bf3a0
-		virtual ~MultiJoint()
-		{
-			// D2 0x587A2A MutilJoint.cpp:41-42 (+ Joint D2 via base).
-			RBXASSERT(connectors[0] == NULL);
-			RBXASSERT(numConnector == 0);
-		}
+		// D2 0x587A2A: defined out of line in v8world/MutilJoint.cpp,
+		// which its asserts cite (MutilJoint.cpp:41-42); the markers
+		// are on the definition there.
+		virtual ~MultiJoint();
+
+		// 2013 vftable 0x00bae10c (18 slots): MultiJoint overrides putInKernel (+0x04),
+		// removeFromKernel (+0x08) and isBroken (+0x20). Bodies in MutilJoint.cpp.
+		/*override*/ virtual void putInKernel(Kernel* kernel);
+		/*override*/ virtual void removeFromKernel();
+		/*override*/ virtual bool isBroken() const;
 
 	protected:
 		int numConnector;      // +152

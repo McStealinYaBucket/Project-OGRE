@@ -35,6 +35,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <list>
 #include "rbx/signal.h"
 #include "rbx/atomic.h"
@@ -68,9 +69,26 @@ namespace RBX {
 		// mac: 0x59A1D6: next job cyclically; after the last comes the
 		// first (binary: when a2->next == &anchor it reads the
 		// anchor's first). Assert "!simJobs.empty()" is the 2013
-		// INCLUDE-file citation (SendPhysics.h:41 -- inline header
-		// body there; landed out-of-line here, DELTA noted in cpp).
-		SimJob* nextSimJob(SimJob* after);
+		// INCLUDE-file citation (SendPhysics.h:41): defined here as in 2013
+		// (the prior tree had it out of line in SendPhysics.cpp).
+		// STUB: PLAYER 0x005e3bd0
+		// STUB: STUDIO 0x0067b6e0
+		SimJob* nextSimJob(SimJob* after)
+		{
+			RBXASSERT(!simJobs.empty());   // :41
+
+			std::list<SimJob*>::const_iterator it = std::find(
+				simJobs.begin(), simJobs.end(), after);
+			RBXASSERT(it != simJobs.end());   // port belt: membership is the
+			                                  // destroy/build invariant; the
+			                                  // binary keeps no belt for it
+			                                  // (it reads the raw node link).
+
+			++it;
+			if (it == simJobs.end())
+				it = simJobs.begin();   // after the last comes the first
+			return *it;
+		}
 
 		// mac: 0x8D6FCC (const member): charge the +0x18 CAS spin -- the
 		// binary backoffs via tbb::internal::AtomicBackoff::pause,

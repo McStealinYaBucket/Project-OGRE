@@ -23,8 +23,8 @@ address,type,size,symbol
 006b03b0,library,101,??1filebuf@@UAE@XZ
 006b0480,library,30,??_Gfilebuf@@UAEPAXI@Z
 006c3e40,library,18,?ResetOverflow@TaskStack@details@Concurrency@@QAEXXZ_0
-0074ef20,library,16,??0_ReaderWriterLock@details@Concurrency@@QAE@XZ_0
 0078a170,library,7,?GetLocation@VirtualProcessor@details@Concurrency@@QBEABVlocation@3@XZ
+00799640,library,33,??$shared_dynamic_cast@VDataModel@RBX@@VDescribedBase@Reflection@2@@RBX@@YA?AV?$shared_ptr@VDataModel@RBX@@@boost@@ABV?$shared_ptr@VDescribedBase@Reflection@RBX@@@2@@Z
 007b0ea0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_1
 007b6090,library,7,?GetMaskId@VirtualProcessor@details@Concurrency@@QBEIXZ_0
 007b60a0,library,7,?_GetResult@?$_Task_impl@_N@details@Concurrency@@QAE_NXZ_0

@@ -234,8 +234,8 @@ namespace RBX {
 	// mac: 0x1AA0EA (batch575: "LuaGc" / Write / false / arbiter from the
 	// parent DataModel / 0.003 budget; weak copy at +0x1E0; frequency =
 	// (int)(30.0 / ((double)(float)base + 1.0)) at +0x1E8, by name).
-	// STUB: PLAYER 0x00679c00
-	// STUB: STUDIO 0x007e1b20
+	// FUNCTION: PLAYER 0x00679c00
+	// FUNCTION: STUDIO 0x007e1b20
 	GcJob::GcJob(shared_ptr<ScriptContext> scriptContext)
 		: DataModelJob(
 			"LuaGc",

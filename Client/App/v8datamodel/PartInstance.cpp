@@ -609,6 +609,23 @@ namespace RBX {
 		primitive->setCoordinateFrame(value);
 	}
 
+	// vtable+0x78 (PVInstance virtual). Body not written yet.
+	// STUB: PLAYER 0x00720370
+	// STUB: STUDIO 0x007bbdc0
+	bool PartInstance::hitTestImpl(const RbxRay& worldRay, G3D::Vector3& worldHitPoint)
+	{
+		STUB(0x00720370);
+		return false;
+	}
+
+	// vtable+0x4c (Instance virtual). Body not written yet.
+	// STUB: PLAYER 0x007239f0
+	// STUB: STUDIO 0x007bef80
+	void PartInstance::onAncestorChanged(const AncestorChanged& event)
+	{
+		STUB(0x007239f0);
+	}
+
 	/* mac: 0x447A86: compare, sanitize (NaN -> sink far below), orthonormalize,
 	   store via Primitive (setPhysics equivalent), raise CFrame.
 	   TODO-skipped: InterpolatedCFrame history (+184), onPVChangedFromReflection,
@@ -655,15 +672,6 @@ namespace RBX {
 	void PartInstance::setRotationalVelocity(const G3D::Vector3& value)
 	{
 		STUB(0x007256b0);
-	}
-
-	// vtable+0x78 (PVInstance virtual). Body not written yet.
-	// STUB: PLAYER 0x00720370
-	// STUB: STUDIO 0x007bbdc0
-	bool PartInstance::hitTestImpl(const RbxRay& worldRay, G3D::Vector3& worldHitPoint)
-	{
-		STUB(0x00720370);
-		return false;
 	}
 
 	/* Script-facing Ui views (see header EAs). getTranslationUi is a direct
@@ -1110,8 +1118,8 @@ namespace RBX {
 
 	// mac: 0x44917A (67B, batch304: slot-61 destroyJoints + resizeImpl +
 	// slot-60 join, by name per the IMoving-call precedent).
-	// STUB: PLAYER 0x00720810
-	// STUB: STUDIO 0x007bc260
+	// FUNCTION: PLAYER 0x00720810
+	// FUNCTION: STUDIO 0x007bc260
 	bool PartInstance::resize(NormalId normal, int increment)
 	{
 		destroyJoints();

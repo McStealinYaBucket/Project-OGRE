@@ -6,6 +6,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/PVInstance.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sPVInstance = "PVInstance";
@@ -43,6 +44,15 @@ namespace RBX {
 	PVInstance::PVInstance(const char* name, FWPVInstance* fw)
 		: PVSuper(name, fw != NULL ? fw : FWBase::init<FWPVInstance>((FWPVInstance*)NULL))
 	{
+	}
+
+
+	// vtable+0x6c (2013 vftables 0x00b3f6bc, 0x00b4c784). Body not written yet.
+	// STUB: PLAYER 0x0076a8e0
+	// STUB: STUDIO 0x0086adc0
+	void PVInstance::readProperty(const XmlElement* propertyElement, IReferenceBinder& binder)
+	{
+		STUB(0x0076a8e0);
 	}
 
 } // namespace RBX

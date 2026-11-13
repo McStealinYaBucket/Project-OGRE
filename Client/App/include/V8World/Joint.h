@@ -73,53 +73,10 @@ namespace RBX {
 		// poor-man's Joint check behind Primitive::insertEdge's routing.
 		static bool isJoint(const Edge* e) { return e->getEdgeType() == Edge::JOINT; }
 
-		// ---- Joint's own virtuals, in 2013 vftable order (PLAYER 0x00b7252c,
-		// STUDIO the same 18 slots; iOS 10-29 names; 2016 declaration order).
-		// vtable+0x18. mac: 0x588038: base asserts "0" (Joint.h:106); concrete types override.
-		virtual int getJointType() const;
-		// vtable+0x1c. mac: 0x507080: false (Glue overrides true with its type).
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
-		virtual bool isBreakable() const { return false; }
-		// vtable+0x20. Joint itself never breaks; World::doBreakJoints
-		// (mac: 0x5AA06F) dispatches this slot.
-		virtual bool isBroken() const { return false; }
-		// vtable+0x24. PLAYER 0x00927840 (`xor al,al; ret 8`, folded).
-		virtual bool joinsFace(Primitive* p, NormalId faceId) const { return false; }
-		// vtable+0x28. PLAYER 0x006be550 (`mov al,1; ret`, folded).
-		virtual bool isAligned() { return true; }
-		// vtable+0x2c. Asserts "0" (Joint.h:111 in 2013) and returns an
-		// identity frame through the hidden result pointer (ret 0xc).
-		// STUB: PLAYER 0x006d5230
-		virtual G3D::CoordinateFrame align(Primitive* pMove, Primitive* pStay)
-		{
-			RBXASSERT(0);
-			return G3D::CoordinateFrame();
-		}
-		// vtable+0x30. PLAYER 0x00528720 (empty, folded).
-		virtual void setPhysics() {}
-		// vtable+0x34/+0x38. mac: 0x57A260 / 0x575C40 (7B each, batch231):
-		// base answers false (stepper families override).
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
-		virtual bool canStepWorld() const { return false; }
-		// STUB: PLAYER 0x00927cc0
-		// STUB: STUDIO 0x008db930
-		virtual bool canStepUi() const { return false; }
-		// vtable+0x3c. PLAYER 0x00528720 (empty, folded).
-		virtual void stepWorld() {}
-		// vtable+0x40. PLAYER 0x00927840 (`xor al,al; ret 8`, folded).
-		virtual bool stepUi(double distributedGameTime) { return false; }
-		// vtable+0x44. mac: 0x3D73A8 (batch271: base asserts !"Not Implemented"
-		// (Joint.h:183) and returns NULL; motor joints override).
-		// STUB: PLAYER 0x006d5280
-		// STUB: STUDIO 0x007a0570
-		virtual Link* resetLink() { RBXASSERT(!"Not Implemented"); return NULL; }
+		// clang-format off
 		// Predicate family (2016 header-inline shapes; binary names confirmed
 		// via EdgeBuffer assert strings :149/:150/:81. DELTA: type ranges from
 		// 2016 (order verified) -- Asserts-gated uses only in Release builds.
-		// STUB: PLAYER 0x008210d0
-		// STUB: STUDIO 0x009147a0
 		static int getJointType(const Edge* e) {
 			return isJoint(e) ? rbx_static_cast<const Joint*>(e)->getJointType() : (int)NO_JOINT;
 		}
@@ -135,6 +92,38 @@ namespace RBX {
 			int jt = getJointType(e);
 			return jt >= WELD_JOINT && jt <= MOTOR_6D_JOINT;
 		}
+		// ---- Joint's own virtuals, in 2013 vftable order (PLAYER 0x00b7252c,
+		// STUDIO the same 18 slots; iOS 10-29 names; 2016 declaration order).
+		// +0x18 getJointType: base asserts "0" at Joint.h:106 (PLAYER 0x008210d0); concrete types override.
+		// +0x1c isBreakable: false (Glue overrides true); PLAYER 0x00927cc0 `xor al,al; ret`, folded.
+		// +0x20 isBroken: Joint itself never breaks; World::doBreakJoints dispatches this slot.
+		// +0x24 joinsFace: PLAYER 0x00927840 (`xor al,al; ret 8`, folded). +0x28 isAligned: 0x006be550, folded.
+		// +0x2c align: asserts "0" at Joint.h:111 and returns an identity frame (ret 0xc).
+		// The 2013 assert strings (both targets) pin getJointType to line 106 and align to
+		// line 111, so these six are packed onto lines 106-111.
+		// FUNCTION: PLAYER 0x008210d0
+		// FUNCTION: STUDIO 0x009147a0
+		virtual int getJointType() const { RBXASSERT(0); return NO_JOINT; }
+		virtual bool isBreakable() const { return false; }  virtual bool isBroken() const { return false; }
+		virtual bool joinsFace(Primitive* p, NormalId faceId) const { return false; }  virtual bool isAligned() { return true; }
+		// FUNCTION: PLAYER 0x006d5230
+		// FUNCTION: STUDIO 0x007a0650
+		virtual G3D::CoordinateFrame align(Primitive* pMove, Primitive* pStay) { RBXASSERT(0); return G3D::CoordinateFrame(); }
+		// clang-format on
+		// vtable+0x30. PLAYER 0x00528720 (empty, folded).
+		virtual void setPhysics() {}
+		// vtable+0x34/+0x38. mac: 0x57A260 / 0x575C40 (7B each, batch231):
+		// base answers false (stepper families override).
+		// STUB: PLAYER 0x00927cc0
+		// STUB: STUDIO 0x008db930
+		virtual bool canStepWorld() const { return false; }
+		// STUB: PLAYER 0x00927cc0
+		// STUB: STUDIO 0x008db930
+		virtual bool canStepUi() const { return false; }
+		// vtable+0x3c. PLAYER 0x00528720 (empty, folded).
+		virtual void stepWorld() {}
+		// vtable+0x40. PLAYER 0x00927840 (`xor al,al; ret 8`, folded).
+		virtual bool stepUi(double distributedGameTime) { return false; }
 		static bool isSpringJoint(const Edge* e) {
 			int jt = getJointType(e);
 			return (jt >= ROTATE_JOINT && jt <= GLUE_JOINT) || jt == MANUAL_GLUE_JOINT;
@@ -177,7 +166,6 @@ namespace RBX {
 		// differs by ABI; dispatch is by name here). The SpanningEdge*
 		// back-adjusts -32 to the sibling joint (binary MI layout).
 		virtual bool isHeavierThan(const SpanningEdge* other) const;
-
 		// Header-inline in binary (0 links-hits; body from Primitive::getJoint
 		// use sites + "links(p0, p1)"/"!links(p0, p1)" asserts :454/:463).
 		bool links(const Primitive* p0, const Primitive* p1) const
@@ -188,6 +176,12 @@ namespace RBX {
 		}
 		const G3D::CoordinateFrame& getJointCoord0() const { return jointCoord0; }
 		const G3D::CoordinateFrame& getJointCoord1() const { return jointCoord1; }
+		// vtable+0x44. mac: 0x3D73A8 (batch271: base asserts !"Not Implemented"
+		// (Joint.h:183) and returns NULL; motor joints override).
+		// FUNCTION: PLAYER 0x006d5280
+		// FUNCTION: STUDIO 0x007a0570
+		virtual Link* resetLink() { RBXASSERT(!"Not Implemented"); return NULL; }
+
 
 		// ---- The shared auto-joint overlap test (all three T/J sections) ----
 		// mac: 0x57878E FacesOverlapped(const Primitive*, unsigned long, const

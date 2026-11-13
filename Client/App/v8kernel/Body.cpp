@@ -92,16 +92,6 @@ namespace RBX {
 		}
 	}
 
-	// 2016 shape (getParent assert + link check).
-	const G3D::CoordinateFrame& Body::getMeInParent()
-	{
-		RBXASSERT(getTypedParent<Body>() != NULL);
-		// Link arm queues with the Link class (unported shell): link is
-		// C2-NULL and only joint code sets it -- loud if ever reached.
-		RBXASSERT(link == NULL);
-		return meInParent;
-	}
-
 	// mac: 0x524B7E (batch268).
 	// STUB: PLAYER 0x008ed320
 	// STUB: STUDIO 0x00a0b510
@@ -119,72 +109,6 @@ namespace RBX {
 		if (simBody != NULL)
 			simBody->makeDirty();
 		advanceStateIndex();
-	}
-
-	// mac: 0x455320 (batch258: :119 parent/root invariant; stale-serial
-	// rebuild of worldFrame/linVel/angVel from the parent (:128
-	// stale-call guard); serial sync to the root).
-	// Return-value DELTA: binary returns char; the only in-tree caller
-	// ignores it -> void here.
-	// STUB: PLAYER 0x0071eab0
-	// STUB: STUDIO 0x007ba500
-	void Body::updatePV()
-	{
-		Body* parent = getTypedParent<Body>();
-		RBXASSERT((parent != NULL) != (getRoot<Body>() == this));  // :119
-		if (parent != NULL)
-		{
-			Body* root = getRoot<Body>();
-			unsigned int rootSerial = root->stateIndex;
-			root->updatePV();
-			if (stateIndex != rootSerial)
-			{
-				parent->updatePV();
-				const G3D::CoordinateFrame& me = getMeInParent();
-				// ROBLOX fastMul == binary _mul flop-for-flop (_mul is
-				// private; fastMul forwards to it directly).
-				G3D::Matrix3::fastMul(parent->worldFrame.rotation, me.rotation, worldFrame.rotation);
-				float tx = me.translation.x;
-				float ty = me.translation.y;
-				float tz = me.translation.z;
-				const float* pr = (const float*)&parent->worldFrame.rotation;
-				const float* pt = (const float*)&parent->worldFrame.translation;
-				float lx = (tz * pr[2]) + ((tx * pr[0]) + (ty * pr[1])) + pt[0];
-				float ly = (tz * pr[5]) + ((tx * pr[3]) + (ty * pr[4])) + pt[1];
-				float lz = (tz * pr[8]) + ((tx * pr[6]) + (ty * pr[7])) + pt[2];
-				worldFrame.translation.x = lx;
-				worldFrame.translation.y = ly;
-				worldFrame.translation.z = lz;
-				float ox = lx - pt[0];
-				float oy = ly - pt[1];
-				float oz = lz - pt[2];
-				float wx = parent->angVel.x;
-				float wy = parent->angVel.y;
-				float wz = parent->angVel.z;
-				float vx = (oy * wx - ox * wy) + parent->linVel.z;
-				float vy = (ox * wz - oz * wx) + parent->linVel.y;
-				linVel.x = (wy * oz - oy * wz) + parent->linVel.x;
-				linVel.y = vy;
-				linVel.z = vx;
-				angVel = parent->angVel;
-				Body* rootCheck = getRoot<Body>();
-				rootCheck->updatePV();
-				RBXASSERT(stateIndex != rootCheck->stateIndex);  // :128
-			}
-			root->updatePV();
-			stateIndex = root->stateIndex;
-		}
-	}
-
-	// mac: 0x5F7460 (batch298: :334 root assert + rootSim updateIfDirty +
-	// force add; 2016 spells the tail as accumulateForceCofm).
-	// STUB: PLAYER 0x00920bc0
-	// STUB: STUDIO 0x00948dc0
-	void Body::accumulateForceAtBranchCofm(const G3D::Vector3& force)
-	{
-		RBXASSERT(getRoot<Body>() == this);  // Body.h:334
-		if (SimBody* s = getRootSimBody())
-			s->accumulateForceCofm(force);
 	}
 
 	// mac: 0x5927EA (batch258).

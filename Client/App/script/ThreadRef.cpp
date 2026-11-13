@@ -391,8 +391,8 @@ void WeakFunctionRef::removeRef()
 // (No out-of-line dtor in the binary; the implicit member teardown
 // stands. The manual count has no matching decrement evidenced --
 // ThreadRef's count is cumulative, not live; noted, not invented.)
-// STUB: PLAYER 0x00673910
-// STUB: STUDIO 0x007db670
+// FUNCTION: PLAYER 0x00673910
+// FUNCTION: STUDIO 0x007db670
 ThreadRef::ThreadRef(lua_State* thread)
 	: liveThreadRef(new Lua::detail::LiveThreadRef(thread))
 {

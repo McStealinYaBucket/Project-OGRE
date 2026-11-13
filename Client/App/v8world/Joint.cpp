@@ -68,10 +68,25 @@ namespace RBX {
 		jointOwner = owner;
 	}
 
-	int Joint::getJointType() const
+	// mac: 0x578C5C (batch238): prim+8 node or NULL (Primitive secondary is
+	// SpanningNode at +8; static_cast spells the MSVC MI equivalent).
+	// STUB: PLAYER 0x0081fd10
+	// STUB: STUDIO 0x009133c0
+	SpanningNode* Joint::getNode(int i)
 	{
-		RBXASSERT(false);  // "0" (Joint.h:106) — concrete types override.
-		return NO_JOINT;
+		Primitive* prim = getPrimitive(i);
+		if (prim == NULL)
+			return NULL;
+		return static_cast<SpanningNode*>(prim);
+	}
+
+	// mac: 0x578C8C (batch238: const mirror).
+	const SpanningNode* Joint::getConstNode(int i) const
+	{
+		const Primitive* prim = const_cast<Joint*>(this)->getPrimitive(i);
+		if (prim == NULL)
+			return NULL;
+		return static_cast<const SpanningNode*>(prim);
 	}
 
 	bool Joint::isAutoJoint() const
@@ -265,34 +280,6 @@ namespace RBX {
 		return size;
 	}
 
-	// mac: 0x578BBC (40B, batch226): the far-end node. Binary spells the
-	// prim-lattice conversion as raw +8/-8 MI arithmetic; static_cast is
-	// the MSVC-correct equivalent (never raw offsets across the MI).
-	// STUB: PLAYER 0x00820f80
-	// STUB: STUDIO 0x00914630
-	SpanningNode* Joint::otherNode(SpanningNode* node)
-	{
-		Primitive* base = NULL;
-		if (node != NULL)
-			base = static_cast<Primitive*>(node);
-		Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
-		if (other == NULL)
-			return NULL;
-		return static_cast<SpanningNode*>(other);
-	}
-
-	// mac: 0x578C0C (batch226): const mirror with a parallel body. The 2013 linker
-	// folded it with otherNode: both SpanningEdge slots +0x08/+0x0c hold 0x00820f80.
-	const SpanningNode* Joint::otherConstNode(const SpanningNode* node) const
-	{
-		const Primitive* base = NULL;
-		if (node != NULL)
-			base = static_cast<const Primitive*>(node);
-		const Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
-		if (other == NULL)
-			return NULL;
-		return static_cast<const SpanningNode*>(other);
-	}
 	// mac: 0x5788AA (749B, batch226): weight order (type, size, guid,
 	// address). The SpanningEdge*-to-Joint back-adjust is binary -32 MI
 	// arithmetic; static_cast is the MSVC-correct equivalent.
@@ -333,6 +320,35 @@ namespace RBX {
 		return (this < o) && (answer >= 0);
 	}
 
+	// mac: 0x578BBC (40B, batch226): the far-end node. Binary spells the
+	// prim-lattice conversion as raw +8/-8 MI arithmetic; static_cast is
+	// the MSVC-correct equivalent (never raw offsets across the MI).
+	// STUB: PLAYER 0x00820f80
+	// STUB: STUDIO 0x00914630
+	SpanningNode* Joint::otherNode(SpanningNode* node)
+	{
+		Primitive* base = NULL;
+		if (node != NULL)
+			base = static_cast<Primitive*>(node);
+		Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
+		if (other == NULL)
+			return NULL;
+		return static_cast<SpanningNode*>(other);
+	}
+
+	// mac: 0x578C0C (batch226): const mirror with a parallel body. The 2013 linker
+	// folded it with otherNode: both SpanningEdge slots +0x08/+0x0c hold 0x00820f80.
+	const SpanningNode* Joint::otherConstNode(const SpanningNode* node) const
+	{
+		const Primitive* base = NULL;
+		if (node != NULL)
+			base = static_cast<const Primitive*>(node);
+		const Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
+		if (other == NULL)
+			return NULL;
+		return static_cast<const SpanningNode*>(other);
+	}
+
 	// mac: 0x57823A (176B, batch219a): FastLog-gated world-notify relink.
 	// DELTA (return): binary returns a byte no in-tree caller uses; void
 	// here (overrides Edge::setPrimitive -- see its DELTA).
@@ -355,27 +371,6 @@ namespace RBX {
 		Edge::setPrimitive(i, p);
 		if (p != NULL)
 			world->onJointPrimitiveSet(this, p);
-	}
-
-	// mac: 0x578C5C (batch238): prim+8 node or NULL (Primitive secondary is
-	// SpanningNode at +8; static_cast spells the MSVC MI equivalent).
-	// STUB: PLAYER 0x0081fd10
-	// STUB: STUDIO 0x009133c0
-	SpanningNode* Joint::getNode(int i)
-	{
-		Primitive* prim = getPrimitive(i);
-		if (prim == NULL)
-			return NULL;
-		return static_cast<SpanningNode*>(prim);
-	}
-
-	// mac: 0x578C8C (batch238: const mirror).
-	const SpanningNode* Joint::getConstNode(int i) const
-	{
-		const Primitive* prim = const_cast<Joint*>(this)->getPrimitive(i);
-		if (prim == NULL)
-			return NULL;
-		return static_cast<const SpanningNode*>(prim);
 	}
 
 } // namespace RBX

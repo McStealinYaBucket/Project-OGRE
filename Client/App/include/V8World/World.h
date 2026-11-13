@@ -113,7 +113,16 @@ namespace RBX {
 		const Kernel* getKernel() const { return stage->getKernel(); }
 
 		void joinAll();       // 0x5AB34C (TODO: primitive scan -- see World.cpp)
-		void reset();         // 0x518A3E: assert !inStepCode
+		// 0x518A3E: defined here as in 2013 (assert World.h:166; the prior tree had it in World.cpp).
+		// mac: 0x518A3E: refuse while stepping.  The +14 dword the old shell zeroed
+		// is inside the leading signal object per the ctor map, so the field
+		// identity is unresolved -- nothing is zeroed here.
+		// STUB: PLAYER 0x0070d390
+		// STUB: STUDIO 0x0082a960
+		void reset()
+		{
+			RBXASSERT(!inStepCode);
+		}
 		void assemble();      // 0x5A9B04 (TODO: stage walk -- see World.cpp)
 		bool isAssembled();   // 0x5A9B32 (TODO: stage walk -- see World.cpp)
 

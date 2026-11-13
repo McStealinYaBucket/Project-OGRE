@@ -40,11 +40,13 @@ RBX::Reflection::RemoteEventCommon::Attributes RBX::Reflection::RemoteEventCommo
 	return result;
 }
 
-/* 2013: both EventSource methods are empty stubs in the binary (0x1565B2 / 0x1565D6) */
-// STUB: PLAYER 0x0066edf0
-// STUB: STUDIO 0x007412c0
+/* Mac 0x1565B2 / 0x1565D6 are empty, but the Windows processRemoteEvent (PLAYER 0x0066edf0, 24 bytes)
+   fires the event: descriptor's vtable+0x10 (fireEvent) with this and args. */
+// FUNCTION: PLAYER 0x0066edf0
+// FUNCTION: STUDIO 0x007412c0
 void EventSource::processRemoteEvent(const EventDescriptor& descriptor, const EventArguments& args, const SystemAddress& source)
 {
+	descriptor.fireEvent(static_cast<DescribedBase*>(this), args);
 }
 
 void EventSource::raiseEventInvocation(const EventDescriptor& descriptor, const EventArguments& args, const SystemAddress* target)

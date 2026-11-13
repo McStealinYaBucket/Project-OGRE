@@ -1,5 +1,6 @@
 # Generated from ida/exports/STUDIO-names.csv. Do not edit.
 address,type,size,symbol
+00403c30,library,14,?what@runtime_error@std@@UBEPBDXZ
 00535380,library,114,??1ios_base@std@@UAE@XZ
 0053b290,library,154,??1strstreambuf@std@@UAE@XZ
 00569ea0,library,194,??1ios_base@std@@UAE@XZ_0

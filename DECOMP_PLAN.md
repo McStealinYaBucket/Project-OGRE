@@ -129,7 +129,7 @@ The biggest risk is the one 2007 did not have: **no PDB means nothing records th
 
 ## Phase 4: Core object model
 
-**Status:** started 2026-11-12 (`notes/runs/2026-11-12-phase4-pairing/`, scout data `notes/class-layouts-2013.csv`, `tools/class_layout.py`). 2013 layouts written and size-asserted: Debugable (4), Object/AbstractFactoryProduct (4), EventSource (4, 3 slots), DescribedBase (0x10), GuidItem<Instance> (0x14), Limits::Countable (8, non-virtual), **Instance (0x60; primary vftable 0x00b2a6ec lines up slot for slot)**, ServiceProvider (0x8c, ctor 100%), MemberDescriptorContainer (0x60, `rbx::trie`), ClassDescriptor (0x20c, ctor 100%), VerbContainer (0x14), DataModelArbiter (0xa20), DataModelJob (0x218), GenericJob (0x248), GcJob (0x228), LibraryService (0x68), MovingAssemblyStage (0x28), Name (0x20, ctor 100%). DataModel's bases are fixed (IMetric added) but its members (0xac8–0xe10, size 0xe10) are not; ScriptContext (0x288) only partly mapped. Open: Instance ctor 56%/dtor 83% (2013 `Diagnostics::Countable` ctor increments; FW creation helper 0x0061fe70), FWBase bytes one off (FWInstance ctor 0x0061d7e0), PartInstance vftable (`PartInstance::resize` lost 100% when Instance was fixed), Edge/Joint vftables (22 functions), AssemblyStage missing a 6th virtual, TaskScheduler, Security::Context, EnumDesc<T>.
+**Status:** started 2026-11-12 (`notes/runs/2026-11-12-phase4-pairing/`, scout data `notes/class-layouts-2013.csv`, `tools/class_layout.py`). 2013 layouts written and size-asserted: Debugable (4), Object/AbstractFactoryProduct (4), EventSource (4, 3 slots), DescribedBase (0x10), GuidItem<Instance> (0x14), Limits::Countable (8, non-virtual), **Instance (0x60; primary vftable 0x00b2a6ec lines up slot for slot)**, ServiceProvider (0x8c, ctor 100%), MemberDescriptorContainer (0x60, `rbx::trie`), ClassDescriptor (0x20c, ctor 100%), VerbContainer (0x14), DataModelArbiter (0xa20), DataModelJob (0x218), GenericJob (0x248), GcJob (0x228), LibraryService (0x68), MovingAssemblyStage (0x28), Name (0x20, ctor 100%). **Second pass, same day** (`notes/runs/2026-11-12-phase4-core2/`): DataModel members 0xac8–0xe0c mapped from ctor 0x0064ec50 and dtor 0x0064d850 (STUDIO 4 bytes lower from 0xc64, a source difference); ScriptContext 0x288 fully laid out and size-asserted; `Diagnostics::Countable` calls the out-of-line interlocked helpers; FWBase 0x18 / FWInstance 0x38 / IFWHolder 5 slots. Vftables: PartInstance 0.27 → 0.73, BaseThreadPool::PoolData and EventSource's secondaries to 100%, MultiJoint 0.08 → 0.47, `PartInstance::resize` back at 100%. 32 functions moved to the files their 2013 asserts name. Proven layouts imported into both `.i64`s (48 types each). Open: DataModel size assert (waits on GuiBuilder: ours 0x24, PLAYER 0x20, STUDIO 0x1c); DataModel ctor 48.8% / dtor 78.6% and ScriptContext ctor 59.3% bodies not written; 38 PLAYER / 16 STUDIO vftables structurally wrong (PartInstance's secondary bases unmodelled); unpaired `RbxInterlockedIncrement` 0x009b8f10 (Base `atomic.cpp`) and `propRobloxLocked`/`propArchivable` globals hold three functions at 94–97%; STUDIO 0x00415400 (a second `getTarget`-shaped body) unidentified; TaskScheduler, Security::Context, EnumDesc<T>.
 
 **Goal:** the classes everything else inherits from, matched constructor, destructor and scalar deleting destructor first, so every later class can be wired onto a proven base.
 
@@ -218,8 +218,9 @@ Do not pick one without the user's decision.
 | Area | PLAYER impl/total | STUDIO impl/total | Notes |
 |---|---|---|---|
 | Phase 0 facts | done | done | 2026-11-11. VS2008 SP1, LTCG minority, PLAYER is VMProtect-wrapped: decision pending |
-| App (existing decomp) | claimed ~55% / measured 90 FUNCTION of 1,036 markers at first sweep; **184 FUNCTION + 23 FOLDED** after pairing and Phase 4 fixes | 175 + 23 of 1,016 | markers cover 4.7% of App |
-| **Whole binary (reccmp)** | **3,828 / 40,468 (9.46%) with libraries; `--nolib` 1,751 / 38,331** | **3,691 / 42,329 (8.72%); `--nolib` 1,723 / 40,191** | 2026-11-12 16:00. `--nolib` counts CSV-paired functions too (oracle signatures, position data) |
+| App (existing decomp) | claimed ~55% / measured 90 FUNCTION of 1,036 markers at first sweep; **205 FUNCTION + 23 FOLDED, 840 STUB** after Phase 4's second pass | 197 + 23, 822 STUB | markers cover 4.7% of App |
+| **Whole binary (reccmp)** | **3,923 / 40,468 (9.69%) with libraries; `--nolib` 1,834 / 38,322**; 3,145 functions at effective 100% (1,280 non-library) | **3,791 / 42,329 (8.96%); `--nolib` 1,812 / 40,182**; 3,032 (1,229) | 2026-11-12 19:59. `--nolib` counts CSV-paired functions too (oracle signatures, position data); "Implemented" skips STUB markers |
+| Vftables (reccmp-vtable) | 174 / 339 at 100%; 38 structural, 127 pairing-only mismatches | 163 / 283; 16 structural, 104 pairing-only | `tools/vtable_structural.py` |
 | Third party (library) | 1,848 library entries at 100% (G3D CSV rows 205 identical after patches 0006–0010) | 1,780 | `__FILE__` paths fixed; misses now per-TU statics, link-order inline copies |
 | Core object model | | | |
 | … | | | |
@@ -228,9 +229,9 @@ Do not pick one without the user's decision.
 
 | DB | Last snapshot | Named % | Notes |
 |---|---|---|---|
-| `ida/PLAYER.i64` (Oct 23) | `PLAYER-05-prior-app` | 19% (9,468 / 49,091: 6,402 ios/mac, 1,933 library, 32 prior, 1,101 other) | 2026-11-12; 221 adjustor-thunk targets split |
+| `ida/PLAYER.i64` (Oct 23) | `PLAYER-07-pre-types` | 21% (10,205 / 49,091; 2,473 `match:`) | 2026-11-12; 221 adjustor-thunk targets split; 48 proven types, `this` typed on 34 functions |
 | `ida/PLAYER_1015.i64` | `PLAYER_1015-00-autoanalysis` | 3% (1,391 / 44,866) | |
-| `ida/STUDIO.i64` | `STUDIO-05-prior-app` | 23% (10,305 / 44,814: 6,510 ios/mac, 1,912 library, 11 prior, 1,872 other) | Different source line from PLAYER; 33 false FLIRT names removed |
+| `ida/STUDIO.i64` | `STUDIO-07-pre-types` | 25% (11,017 / 44,814; 2,360 `match:`) | Different source line from PLAYER; 33 false FLIRT names removed; 48 proven types |
 | `ida/MACSTUDIO.i64` | `MACSTUDIO-00-autoanalysis` | 90% (64,643 / 71,887) | |
 | `ida/IOS_1014.i64` | `IOS_1014-00-autoanalysis` | 99% | |
 | `ida/IOS_1021.i64` | `IOS_1021-00-autoanalysis` | 99% | Closest to STUDIO |

@@ -351,14 +351,11 @@ if(OGRE_PRIOR_APP)
         target_link_options(Log PRIVATE /FORCE:UNRESOLVED)
     endif()
     # Kept out of the build (files stay in the tree):
-    # - v8xml/XmlSerializer.cpp: the dormant 2016 copy. Its 2013 bodies already live in
-    #   v8xml/TextXmlParser.cpp and TextXmlWriter.cpp (asserts cite XmlSerializer.cpp lines), so
-    #   compiling both would define TextXmlWriter::serialize, XmlWriter::XmlWriter etc. twice.
     # - util/StreamRegion.cpp: 2013 code (iOS 1029 has both BitStream operators), but its headers are
     #   2016 copies or stubs: Util/StreamRegion.h needs 2016 SpatialHashStatic/ContactManagerSpatialHash
     #   APIs, Voxel/Cell.h is a 0-byte stub, Util/StreamingUtil.h does not exist.
     ogre_prior_sources(App GLOBS App/*.cpp App/*.c EXCLUDE "/App/Lua-5\\.1\\.4/"
-        "/App/v8xml/XmlSerializer\\.cpp$" "/App/util/StreamRegion\\.cpp$")
+        "/App/util/StreamRegion\\.cpp$")
     # These three use RobloxExtraSpace's members (context(), getThreadCount(), script, continuations),
     # which the 2013 Lua's luaconf.h keeps opaque (only the 44-byte layout PLAYER proves). They see the
     # prior tree's full class (2016-fork Lua headers) instead: a source-level include directory comes

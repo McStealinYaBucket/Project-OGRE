@@ -77,7 +77,7 @@ namespace RBX {
 		SimBody* getRootSimBody() { return getRoot<Body>()->getSimBody(); }
 		const SimBody* getConstRootSimBody() const { return getRoot<Body>()->getConstSimBody(); }
 		// 2016 shapes (parallel-accumulate forwarding; binary EAs queued
-		// except accumulateForceAtBranchCofm 0x5F7460, defined in Body.cpp).
+		// except accumulateForceAtBranchCofm 0x5F7460, defined below).
 		void accumulateImpulseAtBranchCofm(const G3D::Vector3& impulse) {
 			if (SimBody* s = getRootSimBody())
 				s->accumulateImpulseAtBranchCofm(impulse);
@@ -90,7 +90,17 @@ namespace RBX {
 			if (SimBody* s = getRootSimBody())
 				s->accumulateRotationalImpulse(impulse);
 		}
-		void accumulateForceAtBranchCofm(const G3D::Vector3& force);
+		// mac: 0x5F7460 (batch298: :334 root assert + rootSim updateIfDirty +
+		// force add; 2016 spells the tail as accumulateForceCofm).
+		// Defined here as in 2013 (assert Body.h:334; the prior tree had it in Body.cpp).
+		// STUB: PLAYER 0x00920bc0
+		// STUB: STUDIO 0x00948dc0
+		void accumulateForceAtBranchCofm(const G3D::Vector3& force)
+		{
+			RBXASSERT(getRoot<Body>() == this);  // Body.h:334
+			if (SimBody* s = getRootSimBody())
+				s->accumulateForceCofm(force);
+		}
 		void accumulateForce(const G3D::Vector3& force, const G3D::Vector3& worldPos) {
 			if (SimBody* s = getRootSimBody())
 				s->accumulateForce(force, worldPos);
@@ -137,7 +147,18 @@ namespace RBX {
 		void setPv(const PV& pv, const BodyPvSetter& setter = BodyPvSetter());
 		// 2016 shape (asserts parent; Link arm queues with the Link class
 		// -- link is always NULL in-tree, guarded loudly below).
-		const G3D::CoordinateFrame& getMeInParent();
+		// 2016 shape (getParent assert + link check).
+		// Defined here as in 2013 (assert Body.h:109; the prior tree had it in Body.cpp).
+		// STUB: PLAYER 0x0071ea50
+		// STUB: STUDIO 0x007ba4a0
+		const G3D::CoordinateFrame& getMeInParent()
+		{
+			RBXASSERT(getTypedParent<Body>() != NULL);
+			// Link arm queues with the Link class (unported shell): link is
+			// C2-NULL and only joint code sets it -- loud if ever reached.
+			RBXASSERT(link == NULL);
+			return meInParent;
+		}
 		// 2016 shape (plain store; the Link* overload queues with Link).
 		void setMeInParent(const G3D::CoordinateFrame& value) { meInParent = value; }
 		// 2016 shape (Link* store for motor-joint bodies).
@@ -146,7 +167,61 @@ namespace RBX {
 		// linVel/angVel rebuild + serial sync; :119/:128 asserts).
 		// Return-value DELTA: binary returns char (recomputed flag) --
 		// the only in-tree caller ignores it -> void here.
-		void updatePV();
+		// mac: 0x455320 (batch258: :119 parent/root invariant; stale-serial
+		// rebuild of worldFrame/linVel/angVel from the parent (:128
+		// stale-call guard); serial sync to the root).
+		// Return-value DELTA: binary returns char; the only in-tree caller
+		// ignores it -> void here.
+		// Defined here as in 2013 (asserts Body.h:119/:128; the prior tree had it in Body.cpp).
+		// STUB: PLAYER 0x0071eab0
+		// STUB: STUDIO 0x007ba500
+		void updatePV()
+		{
+			Body* parent = getTypedParent<Body>();
+			RBXASSERT((parent != NULL) != (getRoot<Body>() == this));  // :119
+			if (parent != NULL)
+			{
+				Body* root = getRoot<Body>();
+				unsigned int rootSerial = root->stateIndex;
+				root->updatePV();
+				if (stateIndex != rootSerial)
+				{
+					parent->updatePV();
+					const G3D::CoordinateFrame& me = getMeInParent();
+					// ROBLOX fastMul == binary _mul flop-for-flop (_mul is
+					// private; fastMul forwards to it directly).
+					G3D::Matrix3::fastMul(parent->worldFrame.rotation, me.rotation, worldFrame.rotation);
+					float tx = me.translation.x;
+					float ty = me.translation.y;
+					float tz = me.translation.z;
+					const float* pr = (const float*)&parent->worldFrame.rotation;
+					const float* pt = (const float*)&parent->worldFrame.translation;
+					float lx = (tz * pr[2]) + ((tx * pr[0]) + (ty * pr[1])) + pt[0];
+					float ly = (tz * pr[5]) + ((tx * pr[3]) + (ty * pr[4])) + pt[1];
+					float lz = (tz * pr[8]) + ((tx * pr[6]) + (ty * pr[7])) + pt[2];
+					worldFrame.translation.x = lx;
+					worldFrame.translation.y = ly;
+					worldFrame.translation.z = lz;
+					float ox = lx - pt[0];
+					float oy = ly - pt[1];
+					float oz = lz - pt[2];
+					float wx = parent->angVel.x;
+					float wy = parent->angVel.y;
+					float wz = parent->angVel.z;
+					float vx = (oy * wx - ox * wy) + parent->linVel.z;
+					float vy = (ox * wz - oz * wx) + parent->linVel.y;
+					linVel.x = (wy * oz - oy * wz) + parent->linVel.x;
+					linVel.y = vy;
+					linVel.z = vx;
+					angVel = parent->angVel;
+					Body* rootCheck = getRoot<Body>();
+					rootCheck->updatePV();
+					RBXASSERT(stateIndex != rootCheck->stateIndex);  // :128
+				}
+				root->updatePV();
+				stateIndex = root->stateIndex;
+			}
+		}
 		// mac: 0x5927EA (batch258: +28 spinlock, updatePV refresh, unlock,
 		// return worldFrame). The worldFrame/linVel/angVel trio IS the
 		// PV (position + velocity), so callers read PV through it.

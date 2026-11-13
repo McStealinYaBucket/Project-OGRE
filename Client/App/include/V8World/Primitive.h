@@ -25,11 +25,68 @@
 #include "Util/IndexedMesh.h"
 #include "Util/SpanningNode.h"
 #include "Util/PV.h"
-#include "V8World/EdgeList.h"
+#include "G3D/Array.h"
+#include "V8World/Edge.h"
+#include "rbx/Debug.h"
 #include "V8World/IPipelined.h"
 #include "V8World/SpatialHashPrimitive.h"
 
 namespace RBX {
+
+	class Primitive;
+
+	/* EdgeList -- October 2013 (parallel-array edge adjacency). 2013 has no EdgeList.h: the class
+	   is in V8World/Primitive.h (its inline asserts cite Primitive.h:46-60) and getNext/insertEdge/
+	   removeEdge are out of line in v8world/Primitive.cpp (:226-251).
+	   Evidence: NO node struct (2016 merged to vector<Entry>; 2013 keeps two
+	     parallel G3D::Array<T,10,32>): owner +0, edges +4{data,num}, others +20,
+	     36 B total; ctor 0x592CB4 / dtor 0x592BAC (both-sizes==0 asserts) /
+	     getEdge 0x5924CC / getOther 0x56BC50 / getNext 0x590190 /
+	     insertEdge 0x59027E / removeEdge 0x590356 (swap-hole + index fixups).
+	     Primitive embeds two: contacts +128, joints +164. */
+	class EdgeList
+	{
+	public:
+		explicit EdgeList(Primitive* owner)
+			: owner(owner)
+		{}
+		// STUB: PLAYER 0x00755400
+		// STUB: STUDIO 0x00894720
+		~EdgeList()
+		{
+			RBXASSERT(edges.size() == 0 && others.size() == 0);
+		}
+
+		// mac: 0x5924CC (+ cross-connection assert).
+		// STUB: PLAYER 0x00754560
+		// STUB: STUDIO 0x00893910
+		Edge* getEdge(int i) const
+		{
+			RBXASSERT(i >= 0 && i < edges.size());
+			RBXASSERT(edges[i]->otherPrimitive(owner) == others[i]);
+			return edges[i];
+		}
+		// mac: 0x56BC50.
+		// STUB: PLAYER 0x0071b6f0
+		// STUB: STUDIO 0x007b7170
+		Primitive* getOther(int i) const
+		{
+			RBXASSERT(i >= 0 && i < edges.size());
+			RBXASSERT(edges[i]->otherPrimitive(owner) == others[i]);
+			return others[i];
+		}
+		Edge* getNext(Edge* e, Primitive* p) const;  // Primitive.cpp
+		void insertEdge(Edge* e);  // Primitive.cpp
+		void removeEdge(Edge* e);  // Primitive.cpp
+		// Bring-up size query (binary reads sizes directly; not a method there).
+		int size() const { return edges.size(); }
+
+	private:
+		Primitive* owner;                     // +0
+		G3D::Array<Edge*,10,32> edges;        // +4
+		G3D::Array<Primitive*,10,32> others;  // +20
+	};
+
 	class Joint;
 	class RigidJoint;
 	class Geometry;

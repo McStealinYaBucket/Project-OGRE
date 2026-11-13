@@ -123,28 +123,6 @@ namespace RBX {
 		}
 	}
 
-	// mac: 0x59A1D6 (batch778).
-	// STUB: PLAYER 0x005e3bd0
-	// STUB: STUDIO 0x0067b6e0
-	SimJob* SendPhysics::nextSimJob(SimJob* after)
-	{
-		RBXASSERT(!simJobs.empty());   // :41 -- the 2013 INCLUDE-file cite
-		                               // (inline in V8World/SendPhysics.h:41;
-		                               // landed out-of-line, DELTA noted).
-
-		std::list<SimJob*>::const_iterator it = std::find(
-			simJobs.begin(), simJobs.end(), after);
-		RBXASSERT(it != simJobs.end());   // port belt: membership is the
-		                                  // destroy/build invariant; the
-		                                  // binary keeps no belt for it
-		                                  // (it reads the raw node link).
-
-		++it;
-		if (it == simJobs.end())
-			it = simJobs.begin();   // after the last comes the first
-		return *it;
-	}
-
 	// mac: 0x8D6FCC (batch779). The binary spins on `lock cmpxchg [this+0x18],
 	// 1` with tbb::internal::AtomicBackoff::pause on the failed arm,
 	// then SimJobTracker::setSimJob, then the plain unlock store.

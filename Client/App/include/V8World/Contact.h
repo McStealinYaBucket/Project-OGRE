@@ -94,8 +94,16 @@ namespace RBX {
 		// mac: 0x562AA8 (127B, batch596: staged-assert :57 + virtual
 		// deleteAllConnectors + IPipelined::removeFromKernel).
 		// Binary vtbl slot 5 (our position differs -- stepper slots
-		// missing; by-name dispatch unaffected).
-		virtual void removeFromKernel();
+		// missing; by-name dispatch unaffected). Defined here as in 2013
+		// (assert Contact.h:57; the prior tree had it in Contact.cpp).
+		// STUB: PLAYER 0x007b8ec0
+		// STUB: STUDIO 0x008d5860
+		virtual void removeFromKernel()
+		{
+			RBXASSERT(getKernel() != NULL);  // Contact.h:57 "getKernel()"
+			deleteAllConnectors();
+			IPipelined::removeFromKernel();
+		}
 		// mac: 0x55E1E0 (batch275: heap triple alloc + onParam; all
 		// per-type overrides except BlockBlock forward here).
 		virtual void generateDataForMovingAssemblyStage();

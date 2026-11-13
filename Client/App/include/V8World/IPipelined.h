@@ -5,7 +5,9 @@
      inOrDownstreamOfStage (batch211 -- need IStage::getStageType vtbl+8,
      deferred to its firewall section). 2016 shape carried for the member
      (currentStage +4, C2 NULL) and the query inlines; method bodies in
-     App/v8world/IPipelined.cpp (new TU; anchors the vtable in the lib).
+     App/v8world/IPipelined.cpp (new TU; anchors the vtable in the lib), except the stage
+     queries inStage/inOrDownstreamOfStage/downstreamOfStage, which 2013 defines here (their
+     asserts cite IPipelined.h:44-67 and the bodies are emitted as COMDATs in several TUs).
      Primitive/Edge derive it (binary +4 stage link; 2016 derives too);
      Assembly/Mechanism already did. inPipeline() == (currentStage != NULL)
      retires Primitive's bool flag (same observable; World :858/:876/:892
@@ -56,18 +58,51 @@ namespace RBX {
 		// mac: 0x57A224 (53B, batch219a): nearest World up-chain (kernel hops
 		// one upstream first). NULL when stageless.
 		World* findWorld();
-		// mac: 0x5869C0 (140B, batch218): assert currentStage (IPipelined.h:44).
-		bool inStage(IStage::StageType type) const;
-		// mac: 0x5A07F0 (205B, batch218): asserts :49/:50.
-		bool inStage(const IStage* stage) const;
+		// mac: 0x5869C0 (140B, batch218).
+		// STUB: PLAYER 0x006d51c0
+		// STUB: STUDIO 0x007a0470
+		bool inStage(IStage::StageType type) const
+		{
+			RBXASSERT(currentStage != NULL);  // IPipelined.h:44 "currentStage"
+			if (currentStage != NULL)
+				return currentStage->getStageType() == type;
+			return false;
+		}
+		// mac: 0x5A07F0 (205B, batch218).
+		// STUB: PLAYER 0x008e6230
+		// STUB: STUDIO 0x00a04530
+		bool inStage(const IStage* stage) const
+		{
+			RBXASSERT(stage != NULL);  // IPipelined.h:49 "iStage"
+			RBXASSERT(currentStage != NULL);  // IPipelined.h:50 "currentStage"
+			return currentStage == stage;
+		}
 		// 2016 shape (stage walk by type ordering; getKernel asserts
 		// inKernel first -- used by BlockBlockContactData::find).
 		IStage* getStage(IStage::StageType stageType) const;
 		Kernel* getKernel() const;
-		// mac: 0x5A069C (235B, batch211): asserts IPipelined.h:66/67.
-		bool downstreamOfStage(IStage* stage) const;
-		// mac: 0x5A6150 (235B, batch211): asserts IPipelined.h:60/61.
-		bool inOrDownstreamOfStage(IStage* stage) const;
+		// mac: 0x5A6150 (235B, batch211).
+		// STUB: PLAYER 0x008e6670
+		// STUB: STUDIO 0x00a04970
+		bool inOrDownstreamOfStage(IStage* stage) const
+		{
+			RBXASSERT(stage != NULL);  // IPipelined.h:60 "iStage"
+			RBXASSERT(currentStage != NULL);  // IPipelined.h:61 "currentStage"
+			if (currentStage != NULL && stage != NULL)
+				return currentStage->getStageType() >= stage->getStageType();
+			return false;
+		}
+		// mac: 0x5A069C (235B, batch211).
+		// STUB: PLAYER 0x008e3880
+		// STUB: STUDIO 0x009cef50
+		bool downstreamOfStage(IStage* stage) const
+		{
+			RBXASSERT(stage != NULL);  // IPipelined.h:66 "iStage"
+			RBXASSERT(currentStage != NULL);  // IPipelined.h:67 "currentStage"
+			if (currentStage != NULL && stage != NULL)
+				return currentStage->getStageType() > stage->getStageType();
+			return false;
+		}
 
 	private:
 		IStage* currentStage;  // +4.

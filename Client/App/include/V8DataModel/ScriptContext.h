@@ -560,11 +560,11 @@ namespace RBX {
 
 		// ---- 2013 members (PLAYER ctor 0x0068ad20 and dtor 0x0068b1a0 read store by store;
 		// STUDIO ctor 0x007f0480 is the same). Bases end at 0x64: Instance (0x60), Service (empty),
-		// IScriptFilter vfptr at 0x60. Size 0x288 (operator new in 0x00421700). 2013 disagrees
+		// IScriptFilter vfptr at 0x60. Service's isPublic is the byte at 0x64 (ctor stores true).
+		// Size 0x288 (operator new in 0x00421700). 2013 disagrees
 		// with 2016: no GlobalStates struct or securityAnchor, no preventNewConnection,
 		// loadedModules, loadedAssetModules or statesClosed; a third GC average. ----
 	public:
-		bool m_unk0x64;													// 0x64 ctor sets true
 		lua_State* globalStates[2];										// 0x68 getGlobalState 0x00670d71 (ctor leaves them)
 		Lua::WeakThreadRef commandLineSandbox;							// 0x70 (vftable 0x00b348b0)
 		std::set<BaseScript*> scripts;									// 0x8c

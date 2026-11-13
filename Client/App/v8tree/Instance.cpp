@@ -966,8 +966,8 @@ void Instance::setName(const std::string& value)
 	}
 }
 
-// STUB: PLAYER 0x0061d780
-// STUB: STUDIO 0x006f21b0
+// FUNCTION: PLAYER 0x0061d780
+// FUNCTION: STUDIO 0x006f21b0
 void Instance::setRobloxLocked(bool value)
 {
 	// 2013 0x0061d780: FWValue<bool>::set on fw+0x19, then raise; no caller check.
@@ -978,8 +978,8 @@ void Instance::setRobloxLocked(bool value)
 	}
 }
 
-// STUB: PLAYER 0x0061d7b0
-// STUB: STUDIO 0x006f21e0
+// FUNCTION: PLAYER 0x0061d7b0
+// FUNCTION: STUDIO 0x006f21e0
 void Instance::setIsArchivable(bool value)
 {
 	// 2013 0x0061d7b0: FWValue<bool>::set on fw+0x1a, then raise.

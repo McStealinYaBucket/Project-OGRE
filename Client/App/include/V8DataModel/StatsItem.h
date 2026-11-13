@@ -81,8 +81,8 @@ namespace RBX {
 
 	protected:
 		// vtable+0x3c: only Stats::Items may be children.
-		// STUB: PLAYER 0x0048e4e0
-		// STUB: STUDIO 0x00443f80
+		// FUNCTION: PLAYER 0x0048e4e0
+		// FUNCTION: STUDIO 0x00443f80
 		/*override*/ virtual bool askAddChild(const Instance* instance) const
 		{
 			return fastDynamicCast<StatsItem>(instance) != NULL;

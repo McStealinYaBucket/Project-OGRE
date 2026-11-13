@@ -39,6 +39,7 @@ namespace RBX {
 		// put the same three after childHashCode). Pure in 2016's PVInstance.h (hitTestImpl,
 		// computeExtentsWorld); legacyTraverseState is gone by 2016.
 	protected:
+		/*override*/ virtual void readProperty(const XmlElement* propertyElement, IReferenceBinder& binder);  // vtable+0x6c
 		virtual bool hitTestImpl(const RbxRay& worldRay, G3D::Vector3& worldHitPoint) = 0;
 	public:
 		virtual Extents computeExtentsWorld() const = 0;

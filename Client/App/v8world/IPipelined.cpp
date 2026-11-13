@@ -81,49 +81,6 @@ namespace RBX {
 		currentStage = currentStage->getUpstream();
 	}
 
-	// mac: 0x5869C0 (140B, batch218).
-	bool IPipelined::inStage(IStage::StageType type) const
-	{
-		RBXASSERT(currentStage != NULL);  // IPipelined.h:44 "currentStage"
-		if (currentStage != NULL)
-			return currentStage->getStageType() == type;
-		return false;
-	}
-
-	// mac: 0x5A07F0 (205B, batch218).
-	// STUB: PLAYER 0x008e6230
-	// STUB: STUDIO 0x00a04530
-	bool IPipelined::inStage(const IStage* stage) const
-	{
-		RBXASSERT(stage != NULL);  // IPipelined.h:49 "iStage"
-		RBXASSERT(currentStage != NULL);  // IPipelined.h:50 "currentStage"
-		return currentStage == stage;
-	}
-
-	// mac: 0x5A069C (235B, batch211).
-	// STUB: PLAYER 0x008e3880
-	// STUB: STUDIO 0x009cef50
-	bool IPipelined::downstreamOfStage(IStage* stage) const
-	{
-		RBXASSERT(stage != NULL);  // IPipelined.h:66 "iStage"
-		RBXASSERT(currentStage != NULL);  // IPipelined.h:67 "currentStage"
-		if (currentStage != NULL && stage != NULL)
-			return currentStage->getStageType() > stage->getStageType();
-		return false;
-	}
-
-	// mac: 0x5A6150 (235B, batch211).
-	// STUB: PLAYER 0x008e6670
-	// STUB: STUDIO 0x00a04970
-	bool IPipelined::inOrDownstreamOfStage(IStage* stage) const
-	{
-		RBXASSERT(stage != NULL);  // IPipelined.h:60 "iStage"
-		RBXASSERT(currentStage != NULL);  // IPipelined.h:61 "currentStage"
-		if (currentStage != NULL && stage != NULL)
-			return currentStage->getStageType() >= stage->getStageType();
-		return false;
-	}
-
 	// mac: 0x57A224 (53B, batch219a).
 	World* IPipelined::findWorld()
 	{

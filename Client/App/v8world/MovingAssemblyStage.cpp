@@ -82,8 +82,8 @@ namespace RBX {
 	}
 
 	// mac: 0x587086 (88B, batch221b).
-	// STUB: PLAYER 0x008eb4d0
-	// STUB: STUDIO 0x00a096d0
+	// FUNCTION: PLAYER 0x008eb4d0
+	// FUNCTION: STUDIO 0x00a096d0
 	void MovingAssemblyStage::onEdgeRemoving(Edge* edge)
 	{
 		if (edge->downstreamOfStage(this))

@@ -37,9 +37,9 @@ namespace RBX {
 		// +0x0c / +0x10
 		virtual void onEdgeAdded(Edge* edge) = 0;
 		virtual void onEdgeRemoving(Edge* edge) = 0;
-		// +0x14 (AssemblyStage vftable 0x00b94b28 slot 5): the assert is
-		// IWorldStage.h line 44 in 2013 (string at PLAYER 0x00b90b78).
-		// STUB: PLAYER 0x008e4760
+		// +0x14 (AssemblyStage vftable 0x00b94b28): assert at IWorldStage.h:44 (PLAYER 0x00b90b78).
+		// FUNCTION: PLAYER 0x008e4760
+		// FUNCTION: STUDIO 0x009cf910
 		virtual int getMetric(MetricType metricType) {
 			RBXASSERT(getDownstreamWS());
 			return getDownstreamWS()->getMetric(metricType);
