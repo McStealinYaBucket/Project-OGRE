@@ -19,7 +19,7 @@ Edit only your own directories. When a change you need belongs to the other side
 
 **Generated files belong to the owner's side.** `reccmp/*.csv`, `ida/exports/` and `docs/` are regenerated from a whole-binary scoring run and change wholesale, so only the owner's side commits them. The second contributor commits source and markers only, and quotes scores from local runs. Other shared files (`CMakeLists.txt`, `tools/`, this file, `DECOMP_PLAN.md`) take small, separate commits.
 
-**Both sides are scored on the same linked exe**, so one side's changes can move the other's numbers (cross-library `/OPT:ICF` folding, such as RakNet's `LocklessUint32_t::Decrement` with G3D's `AtomicInt32::decrement`, and no-`.reloc` coincidences). Pull before scoring, and read every lost 100% with `--verbose` before blaming the other side. Pull with `git pull --rebase` before every push and never force-push.
+**Both sides are scored on the same linked exe**, so one side's changes can move the other's numbers (cross-library `/OPT:ICF` folding, such as RakNet's `LocklessUint32_t::Decrement` with G3D's `AtomicInt32::decrement`, and no-`.reloc` coincidences). Pull before scoring, and read every lost 100% with `--verbose` before blaming the other side. Pull with `git pull --rebase --autostash` before every push (agents usually have uncommitted work in the tree) and never force-push.
 
 ## Inputs
 

@@ -122,3 +122,6 @@ Client/Rendering/RbxG3D/include/RbxG3D/RbxTime.h
 
 # archives of IDA databases (never committed, like the .i64s they hold)
 ida/*.zip
+
+# private share archive (tools/make_share_zip.sh): leaked and licence-restricted files, never committed
+/share/
