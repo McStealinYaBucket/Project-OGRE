@@ -1,17 +1,6 @@
-/* App/v8world/JointStage.cpp -- October 2013 (joint stage node bodies).
-   Bodies: C2 0x57B4CC / D2 0x57B614 / onPrimitiveAdded 0x57BACE /
-     onPrimitiveRemoving 0x57BD4A / onEdgeAdded 0x57C0DC / onEdgeRemoving
-     0x57C1F8 / visitAddedPrimitive 0x57BA16 / removeJointFromHere 0x57BC84 /
-     moveEdgeToDownstream 0x57B802 / edgeHasPrimitiveHere 0x57B960 /
-     edgeHasPrimitivesHere 0x57B88E / putJointHere 0x57C022 /
-     removeEdgeFromDownstream 0x57B8D4 (batches 210/211/214/216/218/219a).
-   getKernel: inherited IStage::getKernel (no override -- binary slot +3
-     holds the base body for every stage).
-   The onPrimitiveAdded boost-bind range walk is spelled as the equivalent
-   BiMultiMap::visitEachLeft (same equal_range order, no boost dependency). */
-
+/* App/v8world/JointStage.cpp -- October 2013 (joint stage node; mac bodies C2 0x57B4CC / D2 0x57B614,
+   batches 210-219a). onPrimitiveAdded's boost-bind range walk is BiMultiMap::visitEachLeft. */
 #include "stdafx.h"
-
 #include "V8World/JointStage.h"
 #include "V8World/GroundStage.h"
 #include "V8World/Primitive.h"
@@ -34,13 +23,28 @@ namespace RBX {
 	// STUB: STUDIO 0x00a58150
 	JointStage::~JointStage()
 	{
-		// D2 0x57B614 (494B, batch211): empty-asserts first. Member dtors
-		// clear the maps themselves (same net state as the explicit
-		// _M_erase calls) and run the validator dtor.
-		RBXASSERT(jointMap.empty());  // JointStage.cpp:26
-		RBXASSERT(incompleteJoints.empty());  // :27
-		RBXASSERT(primitivesHere.empty());  // :28
+		RBXASSERT(jointMap.empty());
+		RBXASSERT(incompleteJoints.empty());
+		RBXASSERT(primitivesHere.empty());
 		delete static_cast<GroundStage*>(downstream);
+	}
+
+
+
+	// mac: 0x57B802 (140B, batch216).
+	// FUNCTION: PLAYER 0x009979b0
+	// FUNCTION: STUDIO 0x00a57d10
+	void JointStage::moveEdgeToDownstream(Edge* e)
+	{
+		RBXASSERT(edgeHasPrimitivesHere(e));
+		getDownstreamWS()->onEdgeAdded(e);
+	}
+	// FUNCTION: PLAYER 0x00997a30
+	// FUNCTION: STUDIO 0x00a57d90
+	void JointStage::removeEdgeFromDownstream(Edge* e)
+	{
+		RBXASSERT(edgeHasPrimitivesHere(e));
+		getDownstreamWS()->onEdgeRemoving(e);
 	}
 
 	// mac: 0x57BACE (437B, batch214).
@@ -72,8 +76,8 @@ namespace RBX {
 		for (Joint* joint = prim->getFirstJoint(); joint != NULL;
 			joint = prim->getNextJoint(joint))
 		{
-			if (joint->getJointType() != ANCHOR_JOINT
-				&& joint->getJointType() != FREE_JOINT
+			if (joint->getJointType() != Joint::ANCHOR_JOINT
+				&& joint->getJointType() != Joint::FREE_JOINT
 				&& joint->downstreamOfStage(this))
 			{
 				RBXASSERT(edgeHasPrimitivesHere(joint));  // :124
@@ -154,15 +158,6 @@ namespace RBX {
 		incompleteJoints.removePair(joint->getPrim1(), joint);
 	}
 
-	// mac: 0x57B802 (140B, batch216).
-	// STUB: PLAYER 0x009979b0
-	// STUB: STUDIO 0x00a57d10
-	void JointStage::moveEdgeToDownstream(Edge* edge)
-	{
-		RBXASSERT(edgeHasPrimitivesHere(edge));  // :39
-		getDownstreamWS()->onEdgeAdded(edge);
-	}
-
 	// mac: 0x57B960 (181B, batch218/219a).
 	// STUB: PLAYER 0x00997730
 	// STUB: STUDIO 0x00a57a90
@@ -189,15 +184,6 @@ namespace RBX {
 		RBXASSERT(jointMap.insert(joint).second);  // :153 "ok"
 		incompleteJoints.internalMap.insert(std::make_pair(joint->getPrim0(), joint));
 		incompleteJoints.internalMap.insert(std::make_pair(joint->getPrim1(), joint));
-	}
-
-	// mac: 0x57B8D4 (140B, batch217).
-	// STUB: PLAYER 0x00997a30
-	// STUB: STUDIO 0x00a57d90
-	void JointStage::removeEdgeFromDownstream(Edge* edge)
-	{
-		RBXASSERT(edgeHasPrimitivesHere(edge));  // :46
-		getDownstreamWS()->onEdgeRemoving(edge);
 	}
 
 } // namespace RBX

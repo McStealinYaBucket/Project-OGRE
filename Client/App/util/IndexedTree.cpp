@@ -10,8 +10,8 @@ IndexedTree::IndexedTree()
 {
 }
 // mac: 0x20691A (complete object dtor); deleting dtor 0x206910 wraps this + operator delete
-// STUB: PLAYER 0x00999690
-// STUB: STUDIO 0x00a43f50
+// FUNCTION: PLAYER 0x00999690
+// FUNCTION: STUDIO 0x00a43f50
 IndexedTree::~IndexedTree()
 {
 	RBXASSERT(children.size() == 0);

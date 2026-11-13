@@ -35,17 +35,6 @@ namespace RBX {
 			}
 		}
 
-		Context& Context::current()
-		{
-			Context* t = ptr().get();
-			if (!t)
-			{
-				static Context anonymous(Anonymous);
-				t = &anonymous;
-				ptr().reset(t);
-			}
-			return *t;
-		}
 
 
 

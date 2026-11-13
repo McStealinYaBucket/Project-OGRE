@@ -36,6 +36,47 @@ namespace RBX { namespace Lua {
 	// Bridge<rbx::signals::connection,1>::className
 	const char* Bridge<rbx::signals::connection, true>::className = "RBXScriptConnection";
 
+	// mac: 0x1980D0 (96B-pattern): luaL_checklstring wrapper verbatim.
+	// FUNCTION: PLAYER 0x00671640
+	// FUNCTION: STUDIO 0x007d95a0
+	template<>
+	int Bridge<rbx::signals::connection, true>::on_index(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
+	}
+
+	// Standard luaL_checklstring wrappers (0x19800E/0x19806E banked).
+	// FUNCTION: PLAYER 0x006717c0
+	// FUNCTION: STUDIO 0x007d9720
+	template<>
+	int Bridge<EventInstance, true>::on_index(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
+	}
+
+	// mac: 0x17F1E6 (204B, batch441): "Signal " + the descriptor's name.
+	// FUNCTION: PLAYER 0x0087d470
+	// FUNCTION: STUDIO 0x009e1af0
+	template<>
+	int Bridge<EventInstance, true>::on_tostring(const EventInstance& object,
+		lua_State* L)
+	{
+		std::string s = "Signal ";
+		s += object.event->name->str;
+		lua_pushlstring(L, s.c_str(), s.size());
+		return 1;
+	}
+
+	// mac: 0x17F180 (102B, batch442): always throws, with the name.
+	template<>
+	void Bridge<rbx::signals::connection, true>::on_newindex(rbx::signals::connection& object,
+		const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("%s cannot be assigned to", name);
+	}
+
 	// mac: 0x17F148 (56B, batch444): method-call form of disconnect.
 	// FUNCTION: PLAYER 0x0087d550
 	// FUNCTION: STUDIO 0x009e1bd0
@@ -43,6 +84,24 @@ namespace RBX { namespace Lua {
 	{
 		Bridge<rbx::signals::connection>::getObject(L, 1).disconnect();
 		return 0;
+	}
+
+
+	// mac: 0x171C26 (64B, batch442): releases the slot weak ref (the member
+	// destructor takes the identical path).
+	template<>
+	int Bridge<rbx::signals::connection, true>::on_gc(lua_State* L)
+	{
+		getObject(L, 1).~connection();
+		return 0;
+	}
+
+	// mac: 0x171C66 (110B, batch442): connection::operator==.
+	template<>
+	int Bridge<rbx::signals::connection, true>::on_eq(lua_State* L)
+	{
+		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
+		return 1;
 	}
 
 	// mac: 0x17F06E (217B, batch442): disconnect closure / connected bool.
@@ -64,88 +123,44 @@ namespace RBX { namespace Lua {
 		}
 		throw RBX::runtime_error("%s is not a valid member", name);
 	}
-
-	// mac: 0x171A9C (394B, batch442): index/newindex/gc/eq/tostring + readonly.
-	// FUNCTION: PLAYER 0x00881190
-	// FUNCTION: STUDIO 0x009e5810
-	template<>
-	void Bridge<rbx::signals::connection, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	static bool g_allowSignalConnect = false; // see the note at its old place below
+	// mac: 0x17EA64 (788B, batch437): wrap the Lua fn at index 2, connect it
+	// through the descriptor, push the connection. Shared-ownership is
+	// RAII here; the binary's manual addref/release dance is observably
+	// identical. The +12 descriptor virtual is read as isScriptable()
+	// (the only true-defaulted gate that admits connections); the flag
+	// is g_allowSignalConnect (BSS-false proceeds; audit queued).
+	// STUB: PLAYER 0x0087e930
+	// STUB: STUDIO 0x009e2fb0
+	int EventBridge::connect(lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x17F180 (102B, batch442): always throws, with the name.
-	template<>
-	void Bridge<rbx::signals::connection, true>::on_newindex(rbx::signals::connection& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
-	// mac: 0x1980D0 (96B-pattern): luaL_checklstring wrapper verbatim.
-	// FUNCTION: PLAYER 0x00671640
-	// FUNCTION: STUDIO 0x007d95a0
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-
-	// mac: 0x171C26 (64B, batch442): releases the slot weak ref (the member
-	// destructor takes the identical path).
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_gc(lua_State* L)
-	{
-		getObject(L, 1).~connection();
-		return 0;
-	}
-
-	// mac: 0x171C66 (110B, batch442): connection::operator==.
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_eq(lua_State* L)
-	{
-		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
-		return 1;
-	}
-
-	// mac: 0x171CD4 (62B, batch442): checkudata + forward.
-	// STUB: PLAYER 0x0087f9d0
-	// STUB: STUDIO 0x009e4050
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_tostring(lua_State* L)
-	{
-		return on_tostring(getObject(L, 1), L);
-	}
-
-	// mac: 0x1AB686 (51B, batch442): fixed "Connection" literal.
-	// FUNCTION: PLAYER 0x008a8f40
-	// FUNCTION: STUDIO 0x009ecb60
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_tostring(const rbx::signals::connection& object,
-		lua_State* L)
-	{
-		lua_pushlstring(L, "Connection", 10);
+		const EventInstance& instance =
+			Bridge<EventInstance>::getObject(L, 1);
+		boost::shared_ptr<Instance> object = instance.instance.lock();
+		if (object.get() != NULL
+			&& instance.event->isScriptable()
+			&& !g_allowSignalConnect)
+		{
+			if (instance.event->security != 0)
+			{
+				RBX::Security::Context::current().requirePermission(
+					instance.event->security, NULL);
+			}
+			FunctionScriptSlot slot(L, 2);
+			shared_ptr<Reflection::GenericSlotWrapper> wrapper =
+				Reflection::GenericSlotWrapper::create(slot);
+			rbx::signals::connection result =
+				instance.event->connectGeneric(object.get(), wrapper);
+			// The live slot is the WRAPPER's copy (vptr + slot at +4):
+			// it owns its connection for self-disconnect. (The stack
+			// slot dies at scope end.)
+			static_cast<Reflection::TGenericSlotWrapper<FunctionScriptSlot>*>(
+				wrapper.get())->slot.connection = result;
+			Bridge<rbx::signals::connection>::pushNewObject(L, result);
+			return 1;
+		}
+		rbx::signals::connection empty;
+		Bridge<rbx::signals::connection>::pushNewObject(L, empty);
 		return 1;
 	}
 
@@ -187,172 +202,6 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x17F1E6 (204B, batch441): "Signal " + the descriptor's name.
-	// FUNCTION: PLAYER 0x0087d470
-	// FUNCTION: STUDIO 0x009e1af0
-	template<>
-	int Bridge<EventInstance, true>::on_tostring(const EventInstance& object,
-		lua_State* L)
-	{
-		std::string s = "Signal ";
-		s += object.event->name->str;
-		lua_pushlstring(L, s.c_str(), s.size());
-		return 1;
-	}
-
-	// mac: 0x1721D6 (62B, batch441): checkudata + forward.
-	// FUNCTION: PLAYER 0x0087fae0
-	// FUNCTION: STUDIO 0x009e4160
-	template<>
-	int Bridge<EventInstance, true>::on_tostring(lua_State* L)
-	{
-		return on_tostring(getObject(L, 1), L);
-	}
-
-	// mac: 0x17F008 (102B, batch441): always throws, with the name.
-	template<>
-	void Bridge<EventInstance, true>::on_newindex(EventInstance& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
-	// Connect-gate flag (connect 0x17EB01-0x17EB0D, batch512): the binary
-	// reads a BYTE from a thread-indexed table (index = [[[L-0x28]+12]+4],
-	// base unresolvable statically) -- NOT a plain bool. Modeled as a
-	// BSS-false bool (any index reads 0 in an all-zero table, so false
-	// proceeds identically); the table's identity stays queued with the
-	// flag-ident audit. No setter is banked DB-wide.
-	static bool g_allowSignalConnect = false;
-
-	// Standard luaL_checklstring wrappers (0x19800E/0x19806E banked).
-	// FUNCTION: PLAYER 0x006717c0
-	// FUNCTION: STUDIO 0x007d9720
-	template<>
-	int Bridge<EventInstance, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-	// mac: 0x17E872 (498B, batch437): connect/connectFirst/connectLast/wait
-	// closures (+ deprecation paths); disconnect + others throw.
-	// STUB: PLAYER 0x0087ee40
-	// STUB: STUDIO 0x009e34c0
-	template<>
-	int Bridge<EventInstance, true>::on_index(const EventInstance& object,
-		const char* name, lua_State* L)
-	{
-		if (strcmp(name, "connect") == 0)
-		{
-			lua_pushcfunction(L, EventBridge::connect);
-			return 1;
-		}
-		if (strcmp(name, "connectFirst") == 0)
-		{
-			RBX::Security::Context::current().requirePermission(
-				RBX::Security::RobloxPlace, NULL);
-			StandardOut::singleton()->print(MESSAGE_WARNING,
-				"connectFirst is deprecated");
-			lua_pushcfunction(L, EventBridge::connect);
-			return 1;
-		}
-		if (strcmp(name, "connectLast") == 0)
-		{
-			RBX::Security::Context::current().requirePermission(
-				RBX::Security::RobloxPlace, NULL);
-			StandardOut::singleton()->print(MESSAGE_WARNING,
-				"connectLast is deprecated");
-			lua_pushcfunction(L, EventBridge::connect);
-			return 1;
-		}
-		if (strcmp(name, "wait") == 0)
-		{
-			lua_pushcfunction(L, EventBridge::wait);
-			return 1;
-		}
-		if (strcmp(name, "disconnect") == 0)
-			throw RBX::runtime_error(
-				"Event:disconnect() has been deprecated. Use connection object returned by connect()");
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
-	// mac: 0x171F8E (394B, batch444): index/newindex/gc/eq/tostring + readonly.
-	// FUNCTION: PLAYER 0x00881510
-	// FUNCTION: STUDIO 0x009e5b90
-	template<>
-	void Bridge<EventInstance, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
-	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	template<>
-	int Bridge<EventInstance, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
-
-	// mac: 0x17EA64 (788B, batch437): wrap the Lua fn at index 2, connect it
-	// through the descriptor, push the connection. Shared-ownership is
-	// RAII here; the binary's manual addref/release dance is observably
-	// identical. The +12 descriptor virtual is read as isScriptable()
-	// (the only true-defaulted gate that admits connections); the flag
-	// is g_allowSignalConnect (BSS-false proceeds; audit queued).
-	// STUB: PLAYER 0x0087e930
-	// STUB: STUDIO 0x009e2fb0
-	int EventBridge::connect(lua_State* L)
-	{
-		const EventInstance& instance =
-			Bridge<EventInstance>::getObject(L, 1);
-		boost::shared_ptr<Instance> object = instance.instance.lock();
-		if (object.get() != NULL
-			&& instance.event->isScriptable()
-			&& !g_allowSignalConnect)
-		{
-			if (instance.event->security != 0)
-			{
-				RBX::Security::Context::current().requirePermission(
-					instance.event->security, NULL);
-			}
-			FunctionScriptSlot slot(L, 2);
-			shared_ptr<Reflection::GenericSlotWrapper> wrapper =
-				Reflection::GenericSlotWrapper::create(slot);
-			rbx::signals::connection result =
-				instance.event->connectGeneric(object.get(), wrapper);
-			// The live slot is the WRAPPER's copy (vptr + slot at +4):
-			// it owns its connection for self-disconnect. (The stack
-			// slot dies at scope end.)
-			static_cast<Reflection::TGenericSlotWrapper<FunctionScriptSlot>*>(
-				wrapper.get())->slot.connection = result;
-			Bridge<rbx::signals::connection>::pushNewObject(L, result);
-			return 1;
-		}
-		rbx::signals::connection empty;
-		Bridge<rbx::signals::connection>::pushNewObject(L, empty);
-		return 1;
-	}
-
 	// mac: 0x17ED78 (655B, batch437): one-shot wait slot + yield. The
 	// yieldCaptured tripwire mirrors queueWaiter (path LuaSignalBridge.cpp
 	// line 276, inferred-carry from the :29 precedent).
@@ -391,6 +240,157 @@ namespace RBX { namespace Lua {
 		}
 		RobloxExtraSpace::get(L)->yieldCaptured = true;
 		return lua_yield(L, 0);
+	}
+
+	// mac: 0x17E872 (498B, batch437): connect/connectFirst/connectLast/wait
+	// closures (+ deprecation paths); disconnect + others throw.
+	// FUNCTION: PLAYER 0x0087ee40
+	// FUNCTION: STUDIO 0x009e34c0
+	template<>
+	int Bridge<EventInstance, true>::on_index(const EventInstance& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "connect") == 0)
+		{
+			lua_pushcfunction(L, EventBridge::connect);
+			return 1;
+		}
+		if (strcmp(name, "connectFirst") == 0)
+		{
+			RBX::Security::Context::current().requirePermission(
+				RBX::Security::RobloxPlace, NULL);
+			StandardOut::singleton()->print(MESSAGE_WARNING,
+				"connectFirst is deprecated");
+			lua_pushcfunction(L, EventBridge::connect);
+			return 1;
+		}
+		if (strcmp(name, "connectLast") == 0)
+		{
+			RBX::Security::Context::current().requirePermission(
+				RBX::Security::RobloxPlace, "connectLast");
+			StandardOut::singleton()->print(MESSAGE_WARNING,
+				"connectLast is deprecated");
+			lua_pushcfunction(L, EventBridge::connect);
+			return 1;
+		}
+		if (strcmp(name, "wait") == 0)
+		{
+			lua_pushcfunction(L, EventBridge::wait);
+			return 1;
+		}
+		if (strcmp(name, "disconnect") == 0)
+			throw RBX::runtime_error(
+				"Event:disconnect() has been deprecated. Use connection object returned by connect()");
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x17F008 (102B, batch441): always throws, with the name.
+	template<>
+	void Bridge<EventInstance, true>::on_newindex(EventInstance& object,
+		const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("%s cannot be assigned to", name);
+	}
+
+	// Connect-gate flag (connect 0x17EB01-0x17EB0D, batch512): the binary
+	// reads a BYTE from a thread-indexed table (index = [[[L-0x28]+12]+4],
+	// base unresolvable statically) -- NOT a plain bool. Modeled as a
+	// BSS-false bool (any index reads 0 in an all-zero table, so false
+	// proceeds identically); the table's identity stays queued with the
+	// flag-ident audit. No setter is banked DB-wide.
+	// (g_allowSignalConnect is defined above EventBridge::connect, its first user.)
+
+	// mac: 0x171CD4 (62B, batch442): checkudata + forward.
+	// STUB: PLAYER 0x0087f9d0
+	// STUB: STUDIO 0x009e4050
+	template<>
+	int Bridge<rbx::signals::connection, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
+	}
+
+	// mac: 0x1721D6 (62B, batch441): checkudata + forward.
+	// FUNCTION: PLAYER 0x0087fae0
+	// FUNCTION: STUDIO 0x009e4160
+	template<>
+	int Bridge<EventInstance, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
+	}
+
+	// mac: 0x171A9C (394B, batch442): index/newindex/gc/eq/tostring + readonly.
+	// FUNCTION: PLAYER 0x00881190
+	// FUNCTION: STUDIO 0x009e5810
+	template<>
+	void Bridge<rbx::signals::connection, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
+	template<>
+	int Bridge<EventInstance, true>::on_newindex(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		on_newindex(getObject(L, 1), name, L);
+		return 0;
+	}
+
+	// mac: 0x171F8E (394B, batch444): index/newindex/gc/eq/tostring + readonly.
+	// FUNCTION: PLAYER 0x00881510
+	// FUNCTION: STUDIO 0x009e5b90
+	template<>
+	void Bridge<EventInstance, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
+	// mac: 0x1AB686 (51B, batch442): fixed "Connection" literal.
+	// FUNCTION: PLAYER 0x008a8f40
+	// FUNCTION: STUDIO 0x009ecb60
+	template<>
+	int Bridge<rbx::signals::connection, true>::on_tostring(const rbx::signals::connection& object,
+		lua_State* L)
+	{
+		lua_pushlstring(L, "Connection", 10);
+		return 1;
 	}
 
 	// VS2012 odr-use holders (openState names connection's at 0x18B897;

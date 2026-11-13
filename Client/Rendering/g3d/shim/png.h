@@ -1,6 +1,6 @@
-/* Build shim, not 2013 code. PLAYER and STUDIO link no libpng (no png_* strings, no libpng version
-** string; /OPT:REF dropped GImage_png and everything it used), so the libpng that G3D 8.00 bundled is
-** unknown. GImage.cpp only needs this declaration (the same one tools/lib/g3d_match.py compiles with). */
+/* Build shim. Of libpng, PLAYER and STUDIO link only png_sig_cmp (PLAYER 0x009e96c0, STUDIO 0x006bdbf0,
+** called by GImage::resolveFormat; no other png_* code or strings, no version string: /OPT:REF dropped
+** GImage_png and everything it used). These are the declarations GImage.cpp needs. */
 #pragma once
 typedef unsigned char *png_bytep;
 typedef unsigned int png_size_t;

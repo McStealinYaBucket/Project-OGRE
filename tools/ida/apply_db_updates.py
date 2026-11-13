@@ -6,6 +6,7 @@ Per row (address,action,name,tag,line):
               clears FUNC_LIB (a FLIRT false positive)
   unname      give the function back its dummy name
   comment     name untouched
+  data1/data4 a global: define a byte/dword at the address, set `name`, `line` as its repeatable comment
 Every row writes `line` into the repeatable function comment; lines starting "p4 " are this script's and
 are replaced on a rerun, so a second run changes nothing. A fact row (not a "p4 match: reccmp" line) that
 renames or unnames also drops the apply_lib_names.py lines ("match: ", "lib: ") it contradicts.
@@ -21,7 +22,7 @@ import csv
 import os
 from collections import Counter
 
-import ida_auto, ida_funcs, ida_loader, ida_name, idaapi, idc
+import ida_auto, ida_bytes, ida_funcs, ida_loader, ida_name, idaapi, idc
 
 ida_auto.auto_wait()
 SAVE = "nosave" not in idc.ARGV[1:]
@@ -37,6 +38,27 @@ def say(*a):
 
 for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-updates.csv"))):
     ea, act, want, line = int(r["address"], 16), r["action"], r["name"], r["line"]
+    if act in ("data1", "data4"):
+        # a global: define it as a byte/dword (when it is not data of that size yet), name it, and keep the
+        # evidence as its repeatable comment (non-"p4 " lines kept)
+        n = 1 if act == "data1" else 4
+        if not ida_bytes.is_data(ida_bytes.get_flags(ea)) or ida_bytes.get_item_size(ea) != n:
+            ida_bytes.del_items(ea, ida_bytes.DELIT_SIMPLE, n)
+            (ida_bytes.create_byte if n == 1 else ida_bytes.create_dword)(ea, n)
+        old = idc.get_cmt(ea, 1) or ""
+        new = "\n".join([line[:900]] + [l for l in old.split("\n") if l and not l.startswith("p4 ")])
+        if new != old:
+            idc.set_cmt(ea, new, 1)
+        cur = ida_name.get_name(ea)
+        if cur == want:
+            STAT["data name already set"] += 1
+        elif ida_name.set_name(ea, want, ida_name.SN_NOWARN | ida_name.SN_NOCHECK):
+            STAT["data renamed (%s)" % r["tag"]] += 1
+            LOG.append((ea, act, want, cur))
+        else:
+            STAT["data set_name failed"] += 1
+            LOG.append((ea, "fail", want, cur))
+        continue
     f = ida_funcs.get_func(ea)
     if f is None or f.start_ea != ea:
         STAT["skipped: not a function start"] += 1

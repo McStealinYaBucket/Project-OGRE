@@ -13,7 +13,7 @@
 #include "V8DataModel/CoreGuiService.h"
 #include "V8DataModel/ImageLabel.h"
 #include "V8DataModel/RunService.h"
-#include "Util/FeatherweightDict.h"
+#include "util/FeatherweightDict.h"
 
 namespace RBX {
 	const char* const sWorkspace = "Workspace";
@@ -236,6 +236,18 @@ void Workspace::setDistributedGameTime(double value)
 void registerNetworkStreamingProp()
 {
 	STUB(0x007154c0);
+}
+
+// The 2013 class has virtual bases (the ctor tests the most-derived flag first) and keeps
+// dataState; this stand-in only gives the DataModel ctor its call.
+// STUB: PLAYER 0x00718e10
+// STUB: STUDIO 0x008357b0
+Workspace::Workspace(IDataState* dataState)
+	: VerbContainer(NULL)
+	, distributedGameTime(0.0)
+	, world(new World())
+	, fallbackCamera(NULL)
+{
 }
 
 // mac: 0x515636: assemble, assert the mouse command is free, raise the CoreGui

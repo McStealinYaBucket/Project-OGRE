@@ -1,10 +1,5 @@
-/* App/v8world/SpatialFilter.cpp -- October 2013 (spatial filter node).
-   Bodies here: C2 0x5A1F06 / D2 (batch223: assemblies-empty asserts +
-     erases + link walk + delete +8). getStageType is header-inline.
-   onEdge pair: inherited IWorldStage base bodies (no override in vtable).
-   onAssemblyRoot* family: different dispatch (assemblies); lands with the
-   assembly flow, not here. getKernel: inherited IStage::getKernel. */
-
+/* App/v8world/SpatialFilter.cpp -- October 2013 (spatial filter node; mac C2 0x5A1F06, D2 batch223).
+   onEdge pair and getKernel are inherited. */
 #include "stdafx.h"
 
 #include "V8World/SpatialFilter.h"
@@ -22,75 +17,27 @@ namespace RBX {
 		: mode(1)
 		, phase(-1)
 		, flags(-1)
-		, center(G3D::Vector2::zero())
 	{
 		downstream = new MechToAssemblyStage(this, worldArg);
 		upstream = upstreamArg;
 		world = worldArg;
 	}
 
+
 	SpatialFilter::~SpatialFilter()
 	{
-		// D2 (batch223): per-phase empty asserts; member dtors clear the
-		// arrays/sets themselves (same net state as the explicit erases).
 		for (int i = 0; i < 4; ++i)
-			RBXASSERT(assemblies[i].empty());  // :30
+			RBXASSERT(assemblies[i].empty());
 		delete static_cast<MechToAssemblyStage*>(downstream);
 	}
 
-	// changePhase/moveInto era STUB (2016 body needs the SendPhysics +
-	// Simulate dispatch, unported). Reached only when a PIPELINED
-	// assembly root is removed (inPipeline-true); in-tree mechanisms
-	// are never pipelined, so this is link-only today. Loud if the
-	// pipeline era ever reaches it.
-	void SpatialFilter::onAssemblyRootRemoving(Assembly* assembly)
-	{
-		(void)assembly;
-		RBXASSERT(false && "onAssemblyRootRemoving: pipeline era (changePhase)");
-	}
 
-	// mac: 0x5A2FF8 (batch297: :295/:296 asserts + putInPipeline +
-	// changePhase(NOT_ASSIGNED -> Fixed)).
-	// STUB: PLAYER 0x008e4c80
-	// STUB: STUDIO 0x009cfe30
-	void SpatialFilter::onFixedAssemblyRootAdded(Assembly* assembly)
-	{
-		RBXASSERT(!Mechanism::isMovingAssemblyRoot(assembly));  // :295
-		RBXASSERT(assembly->computeIsGrounded());  // :296
-		assembly->putInPipeline(this);
-		MoveInstructions mi(assembly, Assembly::NOT_ASSIGNED, Assembly::Fixed);
-		changePhase(mi);
-	}
 
-	// mac: 0x5A2EEE (batch297: :279/:280 asserts + putInPipeline +
-	// changePhase(NOT_ASSIGNED -> filterAssembly)). The filter
-	// half queues behind SendPhysics (see filterAssembly stub).
-	// STUB: PLAYER 0x008e4ba0
-	// STUB: STUDIO 0x009cfd50
-	void SpatialFilter::onMovingAssemblyRootAdded(Assembly* assembly)
-	{
-		RBXASSERT(Mechanism::isMovingAssemblyRoot(assembly));  // :279
-		RBXASSERT(!assembly->computeIsGrounded());  // :280
-		assembly->putInPipeline(this);
-		MoveInstructions mi(assembly, Assembly::NOT_ASSIGNED,
-			filterAssembly(assembly, false));
-		changePhase(mi);
-	}
 
-	// filterAssembly STUB (needs SimSendFilter + network + Humanoid;
-	// SendPhysics era). Reached only for moving assemblies (none
-	// in-tree: nothing assembles a moving root yet). Loud if reached.
-	Assembly::FilterPhase SpatialFilter::filterAssembly(Assembly* assembly, bool simulating)
-	{
-		(void)assembly;
-		(void)simulating;
-		RBXASSERT(false && "filterAssembly: SendPhysics era");
-		return Assembly::NOT_ASSIGNED;
-	}
 
 	// mac: 0x5A2212 (batch297).
-	// STUB: PLAYER 0x008e47b0
-	// STUB: STUDIO 0x009cf960
+	// FUNCTION: PLAYER 0x008e47b0
+	// FUNCTION: STUDIO 0x009cf960
 	void SpatialFilter::changePhase(MoveInstructions& mi)
 	{
 		RBXASSERT(mi.to != mi.from);  // :43
@@ -175,6 +122,203 @@ namespace RBX {
 	MechToAssemblyStage* SpatialFilter::getMechToAssemblyStage()
 	{
 		return static_cast<MechToAssemblyStage*>(downstream);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x5A2EEE (batch297: :279/:280 asserts + putInPipeline +
+	// changePhase(NOT_ASSIGNED -> filterAssembly)). The filter
+	// half queues behind SendPhysics (see filterAssembly stub).
+	// STUB: PLAYER 0x008e4ba0
+	// STUB: STUDIO 0x009cfd50
+	void SpatialFilter::onMovingAssemblyRootAdded(Assembly* a)
+	{
+		RBXASSERT(Mechanism::isMovingAssemblyRoot(a));
+		RBXASSERT(!a->computeIsGrounded());
+		a->putInPipeline(this);
+		MoveInstructions mi(a, Assembly::NOT_ASSIGNED,
+			filterAssembly(a, false));
+		changePhase(mi);
+	}
+
+
+
+	// mac: 0x5A2FF8 (batch297: :295/:296 asserts + putInPipeline +
+	// changePhase(NOT_ASSIGNED -> Fixed)).
+	// FUNCTION: PLAYER 0x008e4c80
+	// FUNCTION: STUDIO 0x009cfe30
+	void SpatialFilter::onFixedAssemblyRootAdded(Assembly* a)
+	{
+		RBXASSERT(!Mechanism::isMovingAssemblyRoot(a));
+		RBXASSERT(a->computeIsGrounded());
+		a->putInPipeline(this);
+		MoveInstructions mi(a, Assembly::NOT_ASSIGNED, Assembly::Fixed);
+		changePhase(mi);
+	}
+
+	// changePhase/moveInto era STUB (2016 body needs the SendPhysics +
+	// Simulate dispatch, unported). Reached only when a PIPELINED
+	// assembly root is removed (inPipeline-true); in-tree mechanisms
+	// are never pipelined, so this is link-only today. Loud if the
+	// pipeline era ever reaches it.
+	void SpatialFilter::onAssemblyRootRemoving(Assembly* assembly)
+	{
+		(void)assembly;
+		RBXASSERT(false && "onAssemblyRootRemoving: pipeline era (changePhase)");
+	}
+
+	// filterAssembly STUB (needs SimSendFilter + network + Humanoid;
+	// SendPhysics era). Reached only for moving assemblies (none
+	// in-tree: nothing assembles a moving root yet). Loud if reached.
+	Assembly::FilterPhase SpatialFilter::filterAssembly(Assembly* assembly, bool simulating)
+	{
+		(void)assembly;
+		(void)simulating;
+		RBXASSERT(false && "filterAssembly: SendPhysics era");
+		return Assembly::NOT_ASSIGNED;
 	}
 
 } // namespace RBX

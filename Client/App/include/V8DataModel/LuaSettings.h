@@ -61,17 +61,23 @@ namespace RBX {
 	// +0x78 byte: registerLibrary's printf gate (0x630C9C reads it via
 	// the GlobalAdvancedSettingsItem<LuaSettings> singleton).
 	bool getUnknown120() const { return unknown120; }
+	int getUnknown112() const { return unknown112; }	// +0x78: ScriptContext ctor 0x0068b0f2
+	int getUnknown116() const { return unknown116; }	// +0x7c: ScriptContext ctor 0x0068b100
 
 	private:
-		int gcPause;        // +96 (C2 200).
-		int gcStepMul;      // +100 (C2 200).
+		// 0x60: a byte the base ctor 0x0085e220 (GlobalAdvancedSettingsItem<LuaSettings,
+		// sLuaSettings>, not modelled yet) sets to 1; the 2013 ctor 0x0085e360 stores gcPause at
+		// +0x64, so everything below sits 4 bytes higher than in the Mach-O notes (size 0x88).
+		unsigned char m_unk0x60[4];
+		int gcPause;        // +0x64 (C2 200).
+		int gcStepMul;      // +0x68 (C2 200).
 		// +104/+108 double (C2 bytes EB851EB8/3F9EB851 = ~0.03; role TODO).
 		// Initialized bitwise-exact via the helper below.
 		double unknown104;
-		int unknown112;     // +112 (C2 2; TODO).
-		int unknown116;     // +116 (C2 0; TODO).
-		bool unknown120;    // +120 (C2 false; TODO).
-		float waitingThreadsBudget;   // +124 (C2 0.1f; 2016 name/role:
+		int unknown112;     // +0x78 (C2 2; the ScriptContext ctor 0x0068b0ed reads it as gcFullStepThreshold).
+		int unknown116;     // +0x7c (C2 0; read as gcFrequencyBase).
+		bool unknown120;    // +0x80 (C2 false; TODO).
+		float waitingThreadsBudget;   // +0x84 (C2 0.1f; 2016 name/role:
 		// "0..1 A percentage", "10% duty cycle" budget for
 		// WaitingScriptsJob::C2, which reads this float and divides by
 		// 60.0 (0x1A9D40).

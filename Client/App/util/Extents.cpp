@@ -7,7 +7,8 @@
 
 namespace RBX {
 
-// mac: 0x1FFB64
+// FUNCTION: PLAYER 0x007966a0
+// FUNCTION: STUDIO 0x0089f860
 Extents Extents::clampInsideOf(const Extents& other) const { //		Extents& operator&= (const Extents& other) {
 	Extents answer;
 	answer.low = low.clamp(other.low, other.high);
@@ -15,7 +16,8 @@ Extents Extents::clampInsideOf(const Extents& other) const { //		Extents& operat
 	return answer;
 }
 
-// mac: 0x1FFCA2
+// FUNCTION: PLAYER 0x00795fb0
+// FUNCTION: STUDIO 0x0089f170
 NormalId Extents::closestFace(const Vector3& point)
 {
 	float x = std::abs(point.x - high.x);
@@ -24,7 +26,6 @@ NormalId Extents::closestFace(const Vector3& point)
 	float nx = std::abs(point.x - low.x);
 	float ny = std::abs(point.y - low.y);
 	float nz = std::abs(point.z - low.z);
-
 	NormalId best = NORM_X;
 	float bestV = x;
 	if (y < bestV)	{best = NORM_Y; bestV = y;}
@@ -34,7 +35,6 @@ NormalId Extents::closestFace(const Vector3& point)
 	if (nz < bestV)	{best = NORM_Z_NEG;}
 	return best;
 }
-
 // Looking along -Z axis
 // +x to the right
 //	Front (Z)			Back (-Z)
@@ -58,7 +58,8 @@ Vector3int16 Extents::getCornerIndex(int i) const
 	return Vector3int16(x_id, y_id, z_id);
 }
 
-// mac: 0x1FFE42
+// FUNCTION: PLAYER 0x00796140
+// FUNCTION: STUDIO 0x0089f300
 Vector3 Extents::getCorner(int i) const
 {
 	const Vector3int16 index = getCornerIndex(i);
@@ -69,8 +70,8 @@ Vector3 Extents::getCorner(int i) const
 }
 
 // mac: 0x1FFE9E - default case asserts at Extents.cpp:104
-// STUB: PLAYER 0x00796190
-// STUB: STUDIO 0x0089f350
+// FUNCTION: PLAYER 0x00796190
+// FUNCTION: STUDIO 0x0089f350
 void Extents::getFaceCorners(
 	NormalId			faceId,
 	Vector3&            v0,
@@ -90,7 +91,6 @@ void Extents::getFaceCorners(
     case 2:
         v0 = getCorner(1); v1 = getCorner(5); v2 = getCorner(7); v3 = getCorner(3);
         break;
-
     case 3:
         v0 = getCorner(0); v1 = getCorner(1); v2 = getCorner(3); v3 = getCorner(2);
         break;
@@ -105,8 +105,7 @@ void Extents::getFaceCorners(
 		break;
     }
 }
-// mac: 0x2001E0 - the 2013 binary loops the 8 corners, transforming each
-// myFrame.pointToWorldSpace(corner) then expressInFrame.pointToObjectSpace(world)
+// mac: 0x2001E0 - the 2013 binary loops the 8 corners, transforming each myFrame.pointToWorldSpace(corner) then expressInFrame.pointToObjectSpace(world)
 // FUNCTION: PLAYER 0x00796920
 // FUNCTION: STUDIO 0x0089fae0
 Extents Extents::express(const CoordinateFrame& myFrame,
@@ -123,8 +122,7 @@ Extents Extents::express(const CoordinateFrame& myFrame,
 	}
 	return Extents::vv(minC, maxC);
 }
-// mac: 0x20050E - the 2013 binary loops the 8 corners of *this through
-// localCoord.pointToWorldSpace and takes min/max (no early-out on isNull)
+// mac: 0x20050E - the 2013 binary loops the 8 corners of *this through localCoord.pointToWorldSpace and takes min/max (no early-out on isNull)
 // FUNCTION: PLAYER 0x00796d00
 // FUNCTION: STUDIO 0x0089fec0
 Extents Extents::toWorldSpace(const CoordinateFrame& localCoord) const
@@ -145,7 +143,8 @@ Plane Extents::getPlane(NormalId normalId) const
 	Vector3 normal = normalIdToVector3(normalId);
 	return Plane(normal, point);
 }
-// mac: 0x2007D8
+// FUNCTION: PLAYER 0x007967f0
+// FUNCTION: STUDIO 0x0089f9b0
 Vector3 Extents::faceCenter(NormalId faceId) const
 {
 	Vector3 answer = center();
@@ -175,7 +174,8 @@ Vector3 Extents::clamp(const Extents& innerExtents) const
 	}
 	return answer;
 }
-// mac: 0x200860 - per-axis squared overshoot of point beyond the box
+// FUNCTION: PLAYER 0x00796870
+// FUNCTION: STUDIO 0x0089fa30
 float Extents::computeClosestSqDistanceToPoint(const Vector3& point) const
 {
 	Vector3 center = (high + low) / 2;
@@ -183,8 +183,8 @@ float Extents::computeClosestSqDistanceToPoint(const Vector3& point) const
 	return ClosestSqDistanceToAABB(point, center, extents);
 }
 // mac: 0x200970 - asserts at Extents.cpp:190 ("distance > 0.0") VERIFIED 2026-09-27: the binary builds a fresh 24-byte Extents with low  = this->low  - (d,d,d)     (ssub on all three lanes) high = this->high + (d,d,d)     (sadd on all three lanes) and returns `overlapsOrTouches(grown, other) ^ 1`.  expand() is exactly that growth, so this body is semantically identical.
-// STUB: PLAYER 0x00796580
-// STUB: STUDIO 0x0089f740
+// FUNCTION: PLAYER 0x00796580
+// FUNCTION: STUDIO 0x0089f740
 bool Extents::separatedByMoreThan(const Extents& other, float distance) const
 {
 	RBXASSERT(distance > 0.0);

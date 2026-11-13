@@ -39,7 +39,6 @@ address,type,size,symbol
 00a4c048,library,6,__RTC_NumErrors_5
 00a55420,library,6,__RTC_NumErrors_6
 00a559c0,library,93,??1filebuf@@UAE@XZ_0
-00a70830,library,17,__beep
 00a7d0f4,library,11,??_U@YAPAXI@Z
 00a7d104,library,27,?_AtModuleExit@@YAXP6AXXZ@Z
 00a7d156,library,55,__Fac_tidy

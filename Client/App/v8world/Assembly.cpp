@@ -140,7 +140,7 @@ namespace RBX {
 	// (batch242: grounded iff an anchor joint touches the root prim).
 	bool Assembly::computeIsGrounded() const
 	{
-		return Joint::findConstJoint(getConstAssemblyPrimitive(), ANCHOR_JOINT) != NULL;
+		return Joint::findConstJoint(getConstAssemblyPrimitive(), Joint::ANCHOR_JOINT) != NULL;
 	}
 
 	// Batch260 (0x554A04).

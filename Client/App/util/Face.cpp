@@ -42,12 +42,11 @@ namespace RBX {
 		}
 		return true;
 	}
-	// STUB: PLAYER 0x008fc120
-	// STUB: STUDIO 0x009be270
+	// FUNCTION: PLAYER 0x008fc120
+	// FUNCTION: STUDIO 0x009be270
 	bool Face::fuzzyContainsInExtrusion(const Vector3& point, float tolerance) const
 	{
 		RBXASSERT(tolerance >= 0.0);
-
 		for (int i = 0; i < 4; ++i) {
 			const Vector3& from = (*this)[i];
 			const Vector3& to = (*this)[(i+1) % 4];
@@ -59,14 +58,14 @@ namespace RBX {
 		}
 		return true;
 	}
+	// FUNCTION: PLAYER 0x008fc9f0
+	// FUNCTION: STUDIO 0x009beb40
 	void Face::minMax(const Vector3& point, const Vector3& normal, float& min, float& max) const
 	{
-		min = FLT_MAX;
-		max = -FLT_MAX;
+		min = FLT_MAX;	max = -FLT_MAX;
 		for (int i = 0; i < 4; ++i) {
 			float thisDistance = ((*this)[i] - point).dot(normal);
-			min = std::min(min, thisDistance);
-			max = std::max(max, thisDistance);
+			min = std::min(min, thisDistance);	max = std::max(max, thisDistance);
 		}
 	}
 	// FUNCTION: PLAYER 0x008fcbb0
@@ -87,8 +86,9 @@ namespace RBX {
 		}
 		return true;
 	}
-	// STUB: PLAYER 0x008fc240
-	// STUB: STUDIO 0x009be390
+
+	// FUNCTION: PLAYER 0x008fc240
+	// FUNCTION: STUDIO 0x009be390
 	bool Face::cornersAligned(const Face& f0, const Face& f1, float tolerance)
 	{
 		RBXASSERT(tolerance > 0.0);
@@ -158,6 +158,8 @@ namespace RBX {
 		return answer;
 	}
 
+	// FUNCTION: PLAYER 0x008fc5f0
+	// FUNCTION: STUDIO 0x009be740
 	Face Face::toObjectSpace(const CoordinateFrame& objectCoord) const
 	{
 		Face answer;

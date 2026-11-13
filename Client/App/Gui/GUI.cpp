@@ -720,8 +720,8 @@ namespace RBX {
 	}
 
 	// mac: 0x5CE7CA (15B): +112 = 0.
-	// STUB: PLAYER 0x006c8a10
-	// STUB: STUDIO 0x007aa320
+	// FUNCTION: PLAYER 0x006c8a10
+	// FUNCTION: STUDIO 0x007aa320
 	void UnifiedWidget::onLoseFocus()
 	{
 		menuState = NOTHING;
@@ -750,8 +750,8 @@ namespace RBX {
 
 	// mac: 0x5CD2A0 (36B, batch785): drop the focus when the removed child IS
 	// the focus, then the base teardown (the binary tail-jumps it).
-	// STUB: PLAYER 0x00768d00
-	// STUB: STUDIO 0x007b47a0
+	// FUNCTION: PLAYER 0x00768d00
+	// FUNCTION: STUDIO 0x007b47a0
 	void GuiItem::onDescendantRemoving(const shared_ptr<Instance>& instance)
 	{
 		if (instance.get() == focus.get())
@@ -763,8 +763,8 @@ namespace RBX {
 
 	// mac: 0x4DB1F0 (32B, batch783): {sizeX, sizeY} (+104/+108); the canvas is
 	// ignored (the binary's sret copy is the same 2-float shuffle).
-	// STUB: PLAYER 0x006c8c40
-	// STUB: STUDIO 0x007aa5f0
+	// FUNCTION: PLAYER 0x006c8c40
+	// FUNCTION: STUDIO 0x007aa5f0
 	Vector2 GuiItem::getSize(Canvas canvas) const
 	{
 		(void)canvas;
@@ -925,8 +925,8 @@ namespace RBX {
 	// (+152)).  DELTA: the binary reads the 16-byte fg Color4 straight out
 	// of the textColor/textAlpha pair; the reinterpret keeps the same
 	// memory in our layout.
-	// STUB: PLAYER 0x00768cc0
-	// STUB: STUDIO 0x007b4760
+	// FUNCTION: PLAYER 0x00768cc0
+	// FUNCTION: STUDIO 0x007b4760
 	void TextDisplay::render2d(Adorn* adorn)
 	{
 		if (isVisible())
@@ -946,6 +946,13 @@ namespace RBX {
 	{
 		static G3D::Color4 backdrop(0.6f, 0.6f, 0.6f, 0.6f);  // 0x3F19999A x4
 		return backdrop;
+	}
+
+	// GuiTarget's default handler: an unsunk, unfinished response (PLAYER 0x007bc510, folded with
+	// GuiObject::processKeyEvent).
+	GuiResponse GuiTarget::process(const GuiEvent& event)
+	{
+		return GuiResponse();
 	}
 
 }  // namespace RBX

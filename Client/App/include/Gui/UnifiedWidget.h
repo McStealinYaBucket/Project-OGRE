@@ -82,8 +82,8 @@ namespace RBX {
 		// mac: 0x5CE7DA (32B): write +112 only on change, then the virtual slot
 		// +168 (onMenuStateChanged) via tail-jump -- dispatched the same way
 		// here (virtual call, so overrides run like the binary).
-		// STUB: PLAYER 0x00768400
-		// STUB: STUDIO 0x007b3ea0
+		// FUNCTION: PLAYER 0x00768400
+		// FUNCTION: STUDIO 0x007b3ea0
 		void setMenuState(MenuState state)
 		{
 			if (menuState != (int)state)

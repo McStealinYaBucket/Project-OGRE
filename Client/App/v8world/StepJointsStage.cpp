@@ -72,15 +72,15 @@ namespace RBX {
 	}
 
 	// mac: 0x5A4486 (98B, batch228).
-	// STUB: PLAYER 0x008ef210
-	// STUB: STUDIO 0x00a0cf90
+	// FUNCTION: PLAYER 0x008ef210
+	// FUNCTION: STUDIO 0x00a0cf90
 	void StepJointsStage::onEdgeRemoving(Edge* edge)
 	{
-		if (edge->getEdgeType() != Edge::JOINT
-			|| (unsigned int)(rbx_static_cast<Joint*>(edge)->getJointType() - 1) >= 5)
+		if (!Joint::isKinematicJoint(edge))
 		{
 			getDownstreamWS()->onEdgeRemoving(edge);
 		}
+
 		if (edge->getEdgeType() == Edge::JOINT)
 			removeJoint(rbx_static_cast<Joint*>(edge));
 		edge->removeFromStage(this);

@@ -39,12 +39,10 @@ namespace RBX {
 		, public VerbContainer
 	{
 	public:
-		Workspace()
-			: VerbContainer(NULL)
-			, distributedGameTime(0.0)
-			, world(new World())
-			, fallbackCamera(NULL)
-		{}
+		// 2013: Workspace(IDataState*) PLAYER 0x00718e10 / STUDIO 0x008357b0 (iOS
+		// _ZN3RBX9WorkspaceC1EPNS_10IDataStateE), created by the DataModel ctor through
+		// Creatable<Instance>::create<Workspace>(this).
+		Workspace(IDataState* dataState);
 
 		// Binary World slot: Workspace+312 (0x138), read by
 		// getWorldIfInWorkspace 0x512512 (creation site TODO-verify).

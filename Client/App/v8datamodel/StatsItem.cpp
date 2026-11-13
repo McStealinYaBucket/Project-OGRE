@@ -92,17 +92,17 @@ namespace RBX {
 	}
 
 	// formatValueId 0x4A305A ("%.3g").
-	// STUB: PLAYER 0x0073b3f0
-	// STUB: STUDIO 0x007c3a90
-	void StatsItem::formatValueId(double value)
+	// FUNCTION: PLAYER 0x0073b3f0
+	// FUNCTION: STUDIO 0x007c3a90
+	void StatsItem::formatValueId(const double& value)
 	{
 		formatValue(value, "%.3g", value);
 	}
 
 	// formatValueIf 0x4A3094 ("%.3g" of the widened float).
-	// STUB: PLAYER 0x0073b420
-	// STUB: STUDIO 0x007c3ac0
-	void StatsItem::formatValueIf(float value)
+	// FUNCTION: PLAYER 0x0073b420
+	// FUNCTION: STUDIO 0x007c3ac0
+	void StatsItem::formatValueIf(const float& value)
 	{
 		double wide = value;
 		formatValue(wide, "%.3g", wide);
@@ -115,9 +115,9 @@ namespace RBX {
 	}
 
 	// formatValueIi 0x4A30CE ("%d").
-	// STUB: PLAYER 0x0073b450
-	// STUB: STUDIO 0x007c3af0
-	void StatsItem::formatValueIi(int value)
+	// FUNCTION: PLAYER 0x0073b450
+	// FUNCTION: STUDIO 0x007c3af0
+	void StatsItem::formatValueIi(const int& value)
 	{
 		formatValue((double)value, "%d", value);
 	}
@@ -134,7 +134,7 @@ namespace RBX {
 	// exact-decimal at any width either way.
 	// STUB: PLAYER 0x0073b480
 	// STUB: STUDIO 0x007c3b20
-	void StatsItem::formatValueIy(unsigned long long value)
+	void StatsItem::formatValueIy(const unsigned long long& value)
 	{
 		formatValue((double)value, "%I64u", value);
 	}
@@ -143,7 +143,7 @@ namespace RBX {
 	// (does NOT route through the core).
 	// STUB: PLAYER 0x0073b510
 	// STUB: STUDIO 0x007c3bb0
-	void StatsItem::formatValueIb(bool value)
+	void StatsItem::formatValueIb(const bool& value)
 	{
 		displayString.assign(value ? "true" : "false");
 		statValue = value ? 1.0 : 0.0;

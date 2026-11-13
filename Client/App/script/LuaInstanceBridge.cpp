@@ -6,9 +6,7 @@
    0x17587C/0x175B4A + on_index method arms.
    Queued: Parent +476-guard audit.
    Original file: Client/App/script/LuaInstanceBridge.cpp. */
-
 #include "stdafx.h"
-
 #include "script/LuaInstanceBridge.h"
 #include "script/LuaSignal.h"
 #include "script/LuaEnum.h"
@@ -30,19 +28,15 @@
 #include "Util/StandardOut.h"
 #include "Util/Object.h"
 #include "boost/bind.hpp"
-
 #include <cctype>
 #include <stdexcept>
 #include <vector>
-
 namespace RBX { namespace Lua {
-
 	template<>
 	// GLOBAL: PLAYER 0x00d8e914
 	// GLOBAL: STUDIO 0x00f2b108
 	// Bridge<boost::shared_ptr<RBX::Instance>,0>::className
 	const char* Bridge<boost::shared_ptr<Instance>, false>::className = "Object";
-
 	// mac: 0x1736EA (137B, batch520): fresh table, self-metatable, __mode set.
 	// (Sits immediately before newInstance in the binary; generic bridge
 	// infra used by every SharedPtrBridge::registerClassLibrary.)
@@ -57,7 +51,6 @@ namespace RBX { namespace Lua {
 		lua_pushstring(L, mode);
 		lua_settable(L, -3);
 	}
-
 	// mac: 0x1718CE (334B, batch515): index/newindex/gc/tostring + readonly.
 	// NO __eq (the false param shows: no __eq entry, unlike the true
 	// bridges). Queued use: openState 0x18B85F passes the L-form
@@ -85,7 +78,6 @@ namespace RBX { namespace Lua {
 		lua_setreadonly(L, -1, 1);
 		lua_pop(L, 1);
 	}
-
 	// mac: 0x171A1C (65B, batch515): releases the userdata's shared copy
 	// (spelled .reset() per the GenericFunction-bridge precedent; the
 	// bare release is unobservable once the userdata is garbage).
@@ -95,14 +87,12 @@ namespace RBX { namespace Lua {
 		getObject(L, 1).reset();
 		return 0;
 	}
-
 	// mac: 0x171A5E (62B-pattern, batch515): checkudata + forward.
 	template<>
 	int Bridge<boost::shared_ptr<Instance>, false>::on_tostring(lua_State* L)
 	{
 		return on_tostring(getObject(L, 1), L);
 	}
-
 	// mac: 0x178706 (204B, batch515): pushes the instance name. The binary
 	// reads it raw (fw()+0x18 length-prefixed chars); getName() is the
 	// same string (Instance.h: FWInstance +24), so the pushed characters
@@ -115,21 +105,18 @@ namespace RBX { namespace Lua {
 		lua_pushlstring(L, name.c_str(), name.size());
 		return 1;
 	}
-
 	// mac: 0x173982 (35B, batch516): pushes true unconditionally, verbatim.
 	int ObjectBridge::lockInstance(lua_State* L)
 	{
 		lua_pushboolean(L, 1);
 		return 1;
 	}
-
 	// mac: 0x1739A6 (7B, batch516): no-op returning 0, verbatim.
 	int ObjectBridge::unlockInstance(lua_State* L)
 	{
 		(void)L;
 		return 0;
 	}
-
 	// mac: 0x173774 (526B, batch516): Instance.new(className[, parent]).
 	// STUB: PLAYER 0x0087af00
 	// STUB: STUDIO 0x009df580
@@ -165,7 +152,6 @@ namespace RBX { namespace Lua {
 		SharedPtrBridge<Instance>::push(L, created);
 		return 1;
 	}
-
 	// mac: 0x199134 (90B, batch518): {"new","Lock","Unlock"} + readonly + pop.
 	void ObjectBridge::registerInstanceClassLibrary(lua_State* L)
 	{
@@ -180,7 +166,6 @@ namespace RBX { namespace Lua {
 		lua_setreadonly(L, -1, 1);
 		lua_pop(L, 1);
 	}
-
 	// mac: 0x1756D3 (425B, batch522-523/Hexrays): legacy "size" -> "Size"
 	// alias. Fires the legacy-read signal (binary Context+724) with
 	// (instance, "size", L-12 script) on the alias path only.
@@ -210,7 +195,6 @@ namespace RBX { namespace Lua {
 		}
 		return name;
 	}
-
 	// isValueType<V> recheck (include/reflection/property.h:289, batch524).
 	// Spelled manually: the binary's FLog-gated ReleaseAssert is
 	// log-continue, while the in-tree RBXASSERT behind getValue<V>()
@@ -230,7 +214,6 @@ namespace RBX { namespace Lua {
 			}
 		}
 	}
-
 	template<class V>
 	static V readValue(const Reflection::PropertyDescriptor* prop,
 		const Reflection::DescribedBase* described)
@@ -239,7 +222,6 @@ namespace RBX { namespace Lua {
 		return static_cast<const Reflection::TypedPropertyDescriptor<V>*>(
 			prop)->getValue(described);
 	}
-
 	// mac: 0x1739AE (7461B, batches 514/521-536 + Hexrays): member-read
 	// dispatch. Order is binary-verbatim: properties (type-switched
 	// getters) -> [callback arms DELTA'd below] -> events -> children ->
@@ -559,7 +541,6 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s is not a valid member of %s",
 			memberName, instance->getClassNameStr().c_str());
 	}
-
 	// Standard luaL_checklstring wrapper (0x1A282C banked).
 	template<>
 	int Bridge<boost::shared_ptr<Instance>, false>::on_index(lua_State* L)
@@ -567,7 +548,6 @@ namespace RBX { namespace Lua {
 		const char* name = luaL_checklstring(L, 2, NULL);
 		return on_index(getObject(L, 1), name, L);
 	}
-
 	// isValueType<V> recheck for setters (property.h:341; same cond as
 	// the :289 getter check, line bumped. Spelled manually for the same
 	// log-continue reason as checkValueType above).
@@ -586,7 +566,6 @@ namespace RBX { namespace Lua {
 			}
 		}
 	}
-
 	template<class V>
 	static void writeValue(const Reflection::PropertyDescriptor* prop,
 		Reflection::DescribedBase* described, const V& value)
@@ -595,7 +574,6 @@ namespace RBX { namespace Lua {
 		static_cast<const Reflection::TypedPropertyDescriptor<V>*>(
 			prop)->set(described, value);
 	}
-
 	// mac: 0x1768A4 (7782B, batches 514/521/537 + Hexrays): member-write
 	// dispatch. Order is binary-verbatim: null/security/name/prop-trie,
 	// [callback set/clear DELTA'd], Parent special-case DELTA'd (falls
@@ -850,7 +828,6 @@ namespace RBX { namespace Lua {
 				name, prop->type.tag->str.c_str());
 		}
 	}
-
 	// Standard luaL_checklstring wrapper (0x1A288C banked).
 	template<>
 	int Bridge<boost::shared_ptr<Instance>, false>::on_newindex(lua_State* L)
@@ -859,19 +836,15 @@ namespace RBX { namespace Lua {
 		on_newindex(getObject(L, 1), name, L);
 		return 0;
 	}
-
 } }
-
 // VS2012 odr-use holder (the L-form newindex wrapper is named cross-TU
 // by tests; the obj-form above keeps it emitted in-TU).
 int (*volatile g_bridgeInstanceNewIndex)(lua_State*) =
 	(int (*)(lua_State*))&RBX::Lua::Bridge<boost::shared_ptr<RBX::Instance>, false>::on_newindex;
-
 // VS2012 odr-use holder (the L-form wrapper is named cross-TU by the
 // 258b test; the obj-form above keeps it emitted in-TU).
 int (*volatile g_bridgeInstanceIndex)(lua_State*) =
 	(int (*)(lua_State*))&RBX::Lua::Bridge<boost::shared_ptr<RBX::Instance>, false>::on_index;
-
 // ---------------------------------------------------------------------------
 // YieldFunctionStateObject (YFSO era, 2026-10-16).
 // mac: Binary: execute 0x178C06, dtor 0x179276, onReturnResult 0x179768,
@@ -880,10 +853,8 @@ int (*volatile g_bridgeInstanceIndex)(lua_State*) =
 // 2016 keeps it in this same file between the callMember pair; landed at
 // file end (callMemberYieldFunction/callMemberFunction 0x17587C/0x175B4A
 // follow below). Batches 717/725/726.
-
 using namespace RBX;
 using namespace RBX::Lua;
-
 class YieldFunctionStateObject
 	: public boost::enable_shared_from_this<YieldFunctionStateObject>
 	, boost::noncopyable
@@ -909,7 +880,6 @@ protected:
 					return;
 				}
 			}
-
 			int savedTop = lua_gettop(thread);
 			StandardOut::singleton()->printf(MESSAGE_ERROR, "%s", message.c_str());
 			ScriptContext::printCallStack(thread, NULL);
@@ -918,25 +888,17 @@ protected:
 			lua_settop(thread, savedTop);
 		}
 	}
-
 public:
 	boost::intrusive_ptr<WeakThreadRef> thread;
 	boost::weak_ptr<DataModel> dm;
-
 	shared_ptr<Instance> instance;
 	const Reflection::YieldFunctionDescriptor* const desc;
-
 	lua_State* const L;
-
 	long callingThreadId;
 	bool isExecuting;	// set to true while the execute function is running. Used only in the executing thread. Otherwise ignored
-
 	volatile int immediateResults;
-
 	bool reentrancyCheck;	// for debugging
-
 	static const int YIELD = -1;
-
 	// mac: 0x17B758 (batch725 + batch726 disasm: the WeakThreadRef(lua_State*)
 	// arg is real -- `mov [esp+4], esi` with esi = L before the ctor call).
 	// Binary stores: base 0-7, thread +8, dm +12/0 (then assigned in body),
@@ -953,7 +915,6 @@ public:
 	{
 		dm = shared_from(DataModel::get(ScriptContext::getContext(L)));
 	}
-
 	// mac: 0x178C06 (batch725): mark executing, remember the native thread, run
 	// the descriptor with our two continuations, then either return the
 	// immediate result or capture the yield.
@@ -963,56 +924,31 @@ public:
 	{
 		isExecuting = true;
 		// Binary calls pthread_self() (GCC-flavored build); the 2016 Windows
-		// source uses GetCurrentThreadId() -- 32-bit current-thread value,
-		// same comparison semantics.
+		// source uses GetCurrentThreadId() -- 32-bit current-thread value, same comparison semantics.
 		this->callingThreadId = GetCurrentThreadId();
-
 		LuaArguments args(L, 1);	// skip the first argument, since it is "self"
 		desc->execute(
 			instance.get(), args,
 			boost::bind(&YieldFunctionStateObject::onReturnResult, shared_from(this), _1),
 			boost::bind(&YieldFunctionStateObject::onRaiseException, shared_from(this), _1)
 			);
-
 		isExecuting = false;
 		instance.reset();		// we're done with this pointer
-
 		if (immediateResults != YIELD)
 			return immediateResults;	// the return already happened
-
 		//Capture the yield. The callbacks will handle it
 		RobloxExtraSpace::get(L)->yieldCaptured = true;
-
 		return lua_yield(L, 0);
 	}
-
 private:
-	// mac: 0x179768 (batch725): one-shot guard, then either stash the result
-	// for the executing thread (immediate mode) or schedule a 1-value
-	// Tuple resume on the parked thread.
+	// mac: 0x179768 (batch725): one-shot guard, then either stash the result for the executing thread (immediate mode) or schedule a 1-value Tuple resume on the parked thread.
 	void onReturnResult(Reflection::Variant value)
 	{
-		// !reentrancyCheck (LuaInstanceBridge.cpp:948) -- FLog-gated
-		// ReleaseAssert spelled verbatim-literal (the binary becomes
-		// log-continue).
-		if (FLog::Asserts != 0 && reentrancyCheck)
-		{
-			if (RBX::_internal::_debugHook == 0
-				|| RBX::_internal::_debugHook("!reentrancyCheck",
-					"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp", 948) == 0)
-			{
-				ReleaseAssert(FLog::Asserts,
-					"!reentrancyCheck file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp line: 948");
-			}
-		}
+		// !reentrancyCheck (LuaInstanceBridge.cpp:948) -- FLog-gated ReleaseAssert spelled verbatim-literal (the binary becomes log-continue).
+		RBXASSERT(!reentrancyCheck);
 		reentrancyCheck = true;
-
-		if (FFlag::ImmediateYieldResultsEnabled
-			&& isExecuting
-			&& callingThreadId == GetCurrentThreadId())
-		{
+		if (FFlag::ImmediateYieldResultsEnabled && isExecuting && callingThreadId == GetCurrentThreadId())
 			immediateResults = LuaArguments::push(value, L);
-		}
 		else
 		{
 			if (Lua::ThreadRef thread = this->thread->lock())
@@ -1023,25 +959,12 @@ private:
 			}
 		}
 	}
-
-	// mac: 0x179B06 (batch725): same guard; in immediate mode on the executing
-	// thread the exception unwinds back into execute(), otherwise the
-	// write task carries the message to resumeThreadWithException.
-	// STUB: PLAYER 0x0087b2f0
-	// STUB: STUDIO 0x009df970
+	// mac: 0x179B06 (batch725): same guard; in immediate mode on the executing thread the exception unwinds back into execute(), otherwise the write task carries the message to resumeThreadWithException.
+	// FUNCTION: PLAYER 0x0087b2f0
+	// FUNCTION: STUDIO 0x009df970
 	void onRaiseException(std::string message)
 	{
-		// !reentrancyCheck (LuaInstanceBridge.cpp:967).
-		if (FLog::Asserts != 0 && reentrancyCheck)
-		{
-			if (RBX::_internal::_debugHook == 0
-				|| RBX::_internal::_debugHook("!reentrancyCheck",
-					"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp", 967) == 0)
-			{
-				ReleaseAssert(FLog::Asserts,
-					"!reentrancyCheck file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp line: 967");
-			}
-		}
+		RBXASSERT(!reentrancyCheck);
 		reentrancyCheck = true;
 
 		if (FFlag::ImmediateYieldResultsEnabled && isExecuting)

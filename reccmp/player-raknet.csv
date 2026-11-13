@@ -449,7 +449,7 @@ address,type,size,symbol,name
 006080e0,library,28,??0RakNetSocket@RakNet@@QAE@XZ,public: __thiscall RakNet::RakNetSocket::RakNetSocket(void)
 00608100,library,56,??1RakNetSocket@RakNet@@QAE@XZ,public: __thiscall RakNet::RakNetSocket::~RakNetSocket(void)
 00608140,library,8,?Increment@LocklessUint32_t@RakNet@@QAEIXZ,public: unsigned int __thiscall RakNet::LocklessUint32_t::Increment(void)
-00608150,library,8,?Decrement@LocklessUint32_t@RakNet@@QAEIXZ,public: unsigned int __thiscall RakNet::LocklessUint32_t::Decrement(void)
+00608150,library,8,?decrement@AtomicInt32@G3D@@QAEHXZ,?decrement@AtomicInt32@G3D@@QAEHXZ
 00608160,library,44,?AddRef@WSAStartupSingleton@@SAXXZ,public: static void __cdecl WSAStartupSingleton::AddRef(void)
 00608190,library,38,?Deref@WSAStartupSingleton@@SAXXZ,public: static void __cdecl WSAStartupSingleton::Deref(void)
 006081c0,library,79,?Create@RakThread@RakNet@@SAHP6GIPAX@Z0H@Z,"public: static int __cdecl RakNet::RakThread::Create(unsigned int (__stdcall *)(void *), void *, int)"

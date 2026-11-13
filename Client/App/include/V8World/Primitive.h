@@ -34,48 +34,33 @@
 namespace RBX {
 
 	class Primitive;
-
-	/* EdgeList -- October 2013 (parallel-array edge adjacency). 2013 has no EdgeList.h: the class
-	   is in V8World/Primitive.h (its inline asserts cite Primitive.h:46-60) and getNext/insertEdge/
-	   removeEdge are out of line in v8world/Primitive.cpp (:226-251).
-	   Evidence: NO node struct (2016 merged to vector<Entry>; 2013 keeps two
-	     parallel G3D::Array<T,10,32>): owner +0, edges +4{data,num}, others +20,
-	     36 B total; ctor 0x592CB4 / dtor 0x592BAC (both-sizes==0 asserts) /
-	     getEdge 0x5924CC / getOther 0x56BC50 / getNext 0x590190 /
-	     insertEdge 0x59027E / removeEdge 0x590356 (swap-hole + index fixups).
-	     Primitive embeds two: contacts +128, joints +164. */
+	// EdgeList, October 2013: parallel G3D::Array<T,10,32> edges +4 / others +20 (36 B); out-of-line members in v8world/Primitive.cpp.
 	class EdgeList
 	{
 	public:
-		explicit EdgeList(Primitive* owner)
-			: owner(owner)
-		{}
-		// STUB: PLAYER 0x00755400
-		// STUB: STUDIO 0x00894720
+		explicit EdgeList(Primitive* owner) : owner(owner) {}
+		// FUNCTION: PLAYER 0x00755400
+		// FUNCTION: STUDIO 0x00894720
 		~EdgeList()
 		{
-			RBXASSERT(edges.size() == 0 && others.size() == 0);
+			RBXASSERT(edges.size() == 0);
+			RBXASSERT(others.size() == 0);
 		}
-
-		// mac: 0x5924CC (+ cross-connection assert).
-		// STUB: PLAYER 0x00754560
-		// STUB: STUDIO 0x00893910
+		// FUNCTION: PLAYER 0x00754560
+		// FUNCTION: STUDIO 0x00893910
 		Edge* getEdge(int i) const
 		{
-			RBXASSERT(i >= 0 && i < edges.size());
+			RBXASSERT(i < size());
 			RBXASSERT(edges[i]->otherPrimitive(owner) == others[i]);
-			return edges[i];
-		}
-		// mac: 0x56BC50.
-		// STUB: PLAYER 0x0071b6f0
-		// STUB: STUDIO 0x007b7170
-		Primitive* getOther(int i) const
-		{
-			RBXASSERT(i >= 0 && i < edges.size());
+			return edges[i]; }
+		// FUNCTION: PLAYER 0x0071b6f0
+		// FUNCTION: STUDIO 0x007b7170
+		Primitive* getOther(int i) const {
+			RBXASSERT(i < size());
 			RBXASSERT(edges[i]->otherPrimitive(owner) == others[i]);
 			return others[i];
 		}
-		Edge* getNext(Edge* e, Primitive* p) const;  // Primitive.cpp
+		Edge* getNext(const Primitive* p, Edge* e) const;  // Primitive.cpp (iOS 10-29 parameter order)
 		void insertEdge(Edge* e);  // Primitive.cpp
 		void removeEdge(Edge* e);  // Primitive.cpp
 		// Bring-up size query (binary reads sizes directly; not a method there).

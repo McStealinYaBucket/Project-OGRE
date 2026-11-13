@@ -81,6 +81,49 @@ namespace RBX {
 			// Update indices
 			indexOf(item) = -1;
 		}
+		inline bool fastContains(Item* item) const
+		{
+			bool answer = (indexOf(item) >= 0);
+			RBXASSERT_IF_VALIDATING(answer == underlyingArray().contains(item));
+			return answer;
+		}
+		G3D::Array<Item*>& underlyingArray() {
+			return array;
+		}
+		const G3D::Array<Item*>& underlyingArray() const {
+			return array;
+		}
+
+
+
+
+
+
+		inline Item* operator[](int n) {
+			RBXASSERT(indexOf(array[n]) == n);
+			return array[n];
+		}
+
+
+
+
+
+
+		inline Item* operator[](unsigned int n) {
+			RBXASSERT(indexOf(array[n]) == n);
+			return array[n];
+		}
+
+		inline Item* const operator[](int n) const {		// the pointer is const?
+			RBXASSERT(indexOf(array[n]) == n);
+			return array[n];
+		}
+
+		inline Item* const operator[](unsigned int n) const {	// the pointer is const?...
+			RBXASSERT(indexOf(array[n]) == n);
+			return array[n];
+		}
+
 		inline void remove(Item* item)
 		{
 			RBXASSERT_IF_VALIDATING(array.find(item) != array.end());
@@ -98,38 +141,6 @@ namespace RBX {
 			// Update indices
 			indexOf(item) = -1;
 		}
-		inline bool fastContains(Item* item) const
-		{
-			bool answer = (indexOf(item) >= 0);
-			RBXASSERT_IF_VALIDATING(answer == underlyingArray().contains(item));
-			return answer;
-		}
-		G3D::Array<Item*>& underlyingArray() {
-			return array;
-		}
-		const G3D::Array<Item*>& underlyingArray() const {
-			return array;
-		}
-		inline Item* operator[](int n) {
-			RBXASSERT(indexOf(array[n]) == n);
-			return array[n];
-		}
-
-		inline Item* operator[](unsigned int n) {
-			RBXASSERT(indexOf(array[n]) == n);
-			return array[n];
-		}
-
-		inline Item* const operator[](int n) const {		// the pointer is const?
-			RBXASSERT(indexOf(array[n]) == n);
-			return array[n];
-		}
-
-		inline Item* const operator[](unsigned int n) const {	// the pointer is const?...
-			RBXASSERT(indexOf(array[n]) == n);
-			return array[n];
-		}
-
 		inline int size() const {
 		   return array.size();
 		}

@@ -1,17 +1,17 @@
 /* App/util/IndexedMesh.cpp -- October 2013. Mac bodies (batch202): C2 0x206020, D2 0x206098, setComputedUpper 0x20627E, setUpper 0x2062CC, setLower 0x20633E,
    attachChildren 0x206492, onParentChanged 0x2064E4, severeChildren 0x206560, getConstIndexedMeshParent 0x2065B6, getComputedUpper 0x20647C, getConstComputedUpper
-   0x206642, getIndexedMeshParent 0x206488. 2013 asserts: :19-:23 (D2), :78 (setLower), :173 (getConstIndexedMeshParent), :219 (isUpperRoot, unported). */
+   0x206642, getIndexedMeshParent 0x206488. 2013 asserts: :19-:23 (D2), :78 (setLower), :173 (getConstIndexedMeshParent), :219 (isUpperRoot). */
 #include "stdafx.h"
 #include "Util/IndexedMesh.h"
 namespace RBX {
-// mac: 0x206020 (61B).
+// FUNCTION: PLAYER 0x008f9050
+// FUNCTION: STUDIO 0x00a0e110
 IndexedMesh::IndexedMesh()
 	: upper(NULL)
 	, lower(NULL)
 	, computedUpper(NULL)
 {
 }
-// mac: 0x206098 (486B).  Destruction requires a fully unlinked mesh -- the binary asserts rather than severing, so tests must unlink first.
 // FUNCTION: PLAYER 0x008f9160
 // FUNCTION: STUDIO 0x00a0e220
 IndexedMesh::~IndexedMesh()
@@ -28,12 +28,12 @@ IndexedMesh::~IndexedMesh()
 // lower with an upper set, answer is that upper (NULL if none).
 const IndexedMesh* IndexedMesh::computeParentFromLower() const
 {
-	if (lower == NULL)
-		return NULL;
+	// 2013 (inlined in getConstIndexedMeshParent 0x008f9300): no NULL check on lower.
 	const IndexedMesh* node = lower->getConstTypedParent<IndexedMesh>();
 	while (node != NULL && node->getConstUpper() == NULL)
 		node = node->getConstTypedParent<IndexedMesh>();
 	return (node != NULL) ? node->getConstUpper() : NULL;
+
 }
 
 
@@ -63,33 +63,33 @@ const IndexedMesh* IndexedMesh::computeParentFromLower() const
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// FUNCTION: PLAYER 0x008f9490
+// FUNCTION: STUDIO 0x00a0e550
+void IndexedMesh::setLower(IndexedMesh* newLower)
+{
+	if (newLower != lower)
+	{
+		if (lower) {
+			IndexedMesh* oldParent = getIndexedMeshParent();
+			setIndexedTreeParent(NULL);
+			while (numChildren() > 0)
+			{
+				IndexedMesh* backChild = getTypedChild<IndexedMesh>(numChildren() - 1);
+				RBXASSERT(backChild->getTypedParent<IndexedMesh>() == this);
+				backChild->setIndexedTreeParent(oldParent);
+			}
+		}
+		lower = newLower;
+		if (newLower) {
+			if (IndexedMesh* lowerParent = newLower->getTypedParent<IndexedMesh>()) {
+				setIndexedTreeParent(computeUpper(lowerParent));
+			}
+			for (int i = 0; i < newLower->numChildren(); ++i) {
+				attachChildren(newLower->getTypedChild<IndexedMesh>(i));
+			}
+		}
+	}
+}
 
 
 
@@ -165,8 +165,8 @@ const IndexedMesh* IndexedMesh::computeParentFromLower() const
 
 
 // mac: 0x2065B6 (139B): typed parent + the :173 cross-check.
-// STUB: PLAYER 0x008f9300
-// STUB: STUDIO 0x00a0e3c0
+// FUNCTION: PLAYER 0x008f9300
+// FUNCTION: STUDIO 0x00a0e3c0
 const IndexedMesh* IndexedMesh::getConstIndexedMeshParent() const
 {
 	const IndexedMesh* answer = getConstTypedParent<IndexedMesh>();
@@ -194,6 +194,41 @@ const IndexedMesh* IndexedMesh::getConstComputedUpper() const
 	return computedUpper;
 }
 
+
+
+
+
+
+
+// STUB: PLAYER 0x008f9080
+// STUB: STUDIO 0x00a0e140
+const IndexedMesh* IndexedMesh::computeConstUpper(const IndexedMesh* lower)
+{
+	if (lower->getConstUpper()) {
+		return lower->getConstUpper();
+	}
+	const IndexedMesh* parent = lower->getConstTypedParent<IndexedMesh>();
+	return parent ? computeConstUpper(parent) : NULL;
+}
+
+// STUB: PLAYER 0x008f90b0
+// STUB: STUDIO 0x00a0e170
+bool IndexedMesh::isUpperRoot(const IndexedMesh* lower)
+{
+	bool answer = (lower && lower->getConstUpper());
+	RBXASSERT(answer == (lower && (computeConstUpper(lower)->lower == lower)));
+	return answer;
+}
+
+// 2013: setUpper/setLower/onParentChanged inline one level of the recursion and call the out-of-line
+// copy at 0x008f9080, which is a loop there (here: a tail jump; isUpperRoot calls it without inlining).
+IndexedMesh* IndexedMesh::computeUpper(IndexedMesh* lower)
+{
+	return const_cast<IndexedMesh*>(computeConstUpper(lower));
+}
+
+// FUNCTION: PLAYER 0x008f93a0
+// FUNCTION: STUDIO 0x00a0e460
 void IndexedMesh::setComputedUpper(IndexedMesh* newComputedUpper)
 {
 	if (computedUpper != newComputedUpper)
@@ -208,70 +243,28 @@ void IndexedMesh::setComputedUpper(IndexedMesh* newComputedUpper)
 	}
 }
 
-// STUB: PLAYER 0x008f9590
-// STUB: STUDIO 0x00a0e650
+// FUNCTION: PLAYER 0x008f9590
+// FUNCTION: STUDIO 0x00a0e650
 void IndexedMesh::setUpper(IndexedMesh* newUpper)
 {
-	if (upper != newUpper)
+	if (newUpper != upper)
 	{
 		IndexedMesh* oldUpper = upper;
 		upper = NULL;
-		if (oldUpper != NULL)
+		if (oldUpper) {
 			oldUpper->setLower(NULL);
+		}
 		upper = newUpper;
-		IndexedMesh* computed = NULL;
-		if (newUpper != NULL)
-		{
-			newUpper->setLower(this);
-			computed = upper;
+		if (upper) {
+			upper->setLower(this);
 		}
-		if (computed == NULL)
-		{
-			IndexedMesh* node = getTypedParent<IndexedMesh>();
-			while (node != NULL && node->getUpper() == NULL)
-				node = node->getTypedParent<IndexedMesh>();
-			computed = (node != NULL) ? node->getUpper() : NULL;
-		}
-		setComputedUpper(computed);
+		setComputedUpper(computeUpper(this));
 	}
 }
 
-// STUB: PLAYER 0x008f9490
-// STUB: STUDIO 0x00a0e550
-void IndexedMesh::setLower(IndexedMesh* newLower)
-{
-	if (lower != newLower)
-	{
-		if (lower != NULL)
-		{
-			const IndexedMesh* savedParent = getConstIndexedMeshParent();
-			setIndexedTreeParent(NULL);
-			// Severe back-children onto the saved parent (last to first --
-			// removal shrinks the list under the walk).
-			for (int i = numChildren() - 1; i >= 0; --i)
-			{
-				IndexedMesh* backChild = getTypedChild<IndexedMesh>(i);
-				RBXASSERT(backChild->getTypedParent<IndexedMesh>() == this);  // :78 (IndexedMesh.cpp:78)
-				backChild->setIndexedTreeParent(
-					const_cast<IndexedMesh*>(savedParent));
-			}
-		}
-		lower = newLower;
-		if (newLower != NULL)
-		{
-			// Adopt newLower's upper-chain anchor (first ancestor ABOVE
-			// newLower with an upper, else NULL) as the tree parent.
-			IndexedMesh* anchor = newLower->getTypedParent<IndexedMesh>();
-			while (anchor != NULL && anchor->getUpper() == NULL)
-				anchor = anchor->getTypedParent<IndexedMesh>();
-			IndexedMesh* anchorUpper = (anchor != NULL) ? anchor->getUpper() : NULL;
-			setIndexedTreeParent(anchorUpper);
-			for (int i = 0; i < newLower->numChildren(); ++i)
-				attachChildren(newLower->getTypedChild<IndexedMesh>(i));
-		}
-	}
-}
 
+// FUNCTION: PLAYER 0x008f93f0
+// FUNCTION: STUDIO 0x00a0e4b0
 void IndexedMesh::attachChildren(IndexedMesh* lowerChild)
 {
 	if (lowerChild->getUpper() != NULL)
@@ -283,6 +276,8 @@ void IndexedMesh::attachChildren(IndexedMesh* lowerChild)
 		attachChildren(lowerChild->getTypedChild<IndexedMesh>(i));
 }
 
+// FUNCTION: PLAYER 0x008f9440
+// FUNCTION: STUDIO 0x00a0e500
 void IndexedMesh::severeChildren(IndexedMesh* lowerChild)
 {
 	if (lowerChild->getUpper() != NULL)
@@ -298,38 +293,21 @@ void IndexedMesh::severeChildren(IndexedMesh* lowerChild)
 // STUB: STUDIO 0x00a0e6c0
 void IndexedMesh::onParentChanged(IndexedTree* oldParent)
 {
-	// NOTE: oldParent is intentionally unused beyond the null check below
-	// (binary reads its computedUpper first).  Kept verbatim.
-	(void)oldParent;
-	if (oldParent != NULL)
-	{
-		IndexedMesh* oldParentMesh = static_cast<IndexedMesh*>(oldParent);
-		IndexedMesh* oldComputed = oldParentMesh->getComputedUpper();
-		if (oldComputed != NULL)
-		{
+	if (oldParent) {
+		IndexedMesh* oldComputed = static_cast<IndexedMesh*>(oldParent)->getComputedUpper();
+		if (oldComputed) {
 			oldComputed->severeChildren(this);
 			oldComputed->lowersChanged();
 		}
 	}
-	IndexedMesh* parent = getTypedParent<IndexedMesh>();
-	if (parent != NULL)
-	{
+	if (IndexedMesh* parent = getTypedParent<IndexedMesh>()) {
 		IndexedMesh* newComputed = parent->getComputedUpper();
-		if (newComputed != NULL)
-		{
+		if (newComputed) {
 			newComputed->attachChildren(this);
 			newComputed->lowersChanged();
 		}
 	}
-	IndexedMesh* computed = upper;
-	if (computed == NULL)
-	{
-		IndexedMesh* node = getTypedParent<IndexedMesh>();
-		while (node != NULL && node->getUpper() == NULL)
-			node = node->getTypedParent<IndexedMesh>();
-		computed = (node != NULL) ? node->getUpper() : NULL;
-	}
-	setComputedUpper(computed);
+	setComputedUpper(computeUpper(this));
 }
 
 } // namespace RBX

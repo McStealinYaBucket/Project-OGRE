@@ -140,13 +140,13 @@ namespace RBX {
 	// real Joint, so in practice only a foreign edge satisfies them.
 	bool World::isKernelOrForeignEdge(const Joint* joint)
 	{
-		return joint->getEdgeType() != 0 || joint->getJointType() == KERNEL_JOINT;   // 12
+		return joint->getEdgeType() != 0 || joint->getJointType() == Joint::KERNEL_JOINT;   // 12
 	}
 
 	bool World::isAutoFamilyOrForeignEdge(const Joint* joint)
 	{
 		return joint->getEdgeType() != 0 ||
-			(unsigned int)(joint->getJointType() - ROTATE_JOINT) <= (MANUAL_GLUE_JOINT - ROTATE_JOINT);
+			(unsigned int)(joint->getJointType() - Joint::ROTATE_JOINT) <= (Joint::MANUAL_GLUE_JOINT - Joint::ROTATE_JOINT);
 	}
 
 	// mac: 0x5AACA8.
@@ -187,7 +187,7 @@ namespace RBX {
 
 		// getEdgeType() == 0 and type in [1,5] => a user joint.
 		if (joint->getEdgeType() == 0 &&
-			(unsigned int)(joint->getJointType() - WELD_JOINT) <= (MOTOR_6D_JOINT - WELD_JOINT))
+			(unsigned int)(joint->getJointType() - Joint::WELD_JOINT) <= (Joint::MOTOR_6D_JOINT - Joint::WELD_JOINT))
 		{
 			joint->notifyMoved();
 		}

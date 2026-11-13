@@ -79,106 +79,13 @@ namespace RBX {
 	{
 		int jt = (edge->getEdgeType() == Edge::JOINT)
 			? static_cast<Joint*>(edge)->getJointType()
-			: NO_JOINT;
+			: Joint::NO_JOINT;
 		if (((jt & ~2) == 1) || (jt == 2))
 			return false;
 		if (edge->getEdgeType() != Edge::JOINT)
 			return true;
 		jt = static_cast<Joint*>(edge)->getJointType();
-		return jt != ANCHOR_JOINT && jt != FREE_JOINT;
-	}
-
-	// mac: 0x5A5D1E (370B, batch214).
-	// STUB: PLAYER 0x008eb7a0
-	// STUB: STUDIO 0x00a099a0
-	void TreeStage::onEdgeAdded(Edge* edge)
-	{
-		RBXASSERT(edge->getPrim0()->inOrDownstreamOfStage(this));  // :422
-		if (edge->getPrim1() != NULL)
-			RBXASSERT(edge->getPrim1()->inOrDownstreamOfStage(this));  // :423
-		edge->putInStage(this);
-		if (!Joint::isSpanningTreeJoint(edge))
-		{
-			getDownstreamWS()->onEdgeAdded(edge);
-			return;
-		}
-		Joint* joint = static_cast<Joint*>(edge);
-		insertSpanningTreeEdge(static_cast<SpanningEdge*>(joint));
-		if (treeForwardsEdge(edge))
-			getDownstreamWS()->onEdgeAdded(edge);
-	}
-
-	// mac: 0x5A5E90 (394B, batch214).
-	// STUB: PLAYER 0x008eb8d0
-	// STUB: STUDIO 0x00a09ad0
-	void TreeStage::onEdgeRemoving(Edge* edge)
-	{
-		RBXASSERT(edge->getPrim0()->inOrDownstreamOfStage(this));  // :442
-		if (edge->getPrim1() != NULL)
-			RBXASSERT(edge->getPrim1()->inOrDownstreamOfStage(this));  // :443
-		if (Joint::isSpanningTreeJoint(edge))
-		{
-			if (treeForwardsEdge(edge))
-				getDownstreamWS()->onEdgeRemoving(edge);
-			SpanningEdge* se = static_cast<SpanningEdge*>(
-				static_cast<Joint*>(edge));
-			if (se->inSpanningTree())
-				removeSpanningTreeEdge(se);
-		}
-		else
-		{
-			getDownstreamWS()->onEdgeRemoving(edge);
-		}
-		edge->removeFromStage(this);
-	}
-
-	// mac: 0x5A5CB8 (101B, batch214).
-	void TreeStage::assemble()
-	{
-		if (!isAssembled())
-		{
-			// 1. Assemblies
-			std::set<Mechanism*>::iterator it;
-			for (it = dirtyMechanisms.begin(); it != dirtyMechanisms.end(); ++it) {
-				cleanMechanism(*it);				// clean upstream dirtyAssemblies
-			}
-			dirtyMechanisms.clear();
-		}
-	}
-
-	// mac: 0x5A5B50 (batch297: :385 mesh-parent assert + putInPipeline +
-	// :391 inStage + onMechanismAdded + downstream insert (:394) --
-	// matches the 2016 text exactly).
-	// STUB: PLAYER 0x008ebc40
-	// STUB: STUDIO 0x00a09ed0
-	void TreeStage::cleanMechanism(Mechanism* mechanism)
-	{
-		RBXASSERT(mechanism->getIndexedMeshParent() == NULL);
-		if (!mechanism->inPipeline()) {
-			mechanism->putInPipeline(this);
-		}
-		RBXASSERT(mechanism->inStage(this));
-		static_cast<MovingStage*>(getDownstreamWS())->onMechanismAdded(mechanism);
-		bool ok = downstreamMechanisms.insert(mechanism).second;
-		RBXASSERT(ok);
-	}
-
-	// mac: 0x5A601A (135B, batch214).
-	// STUB: PLAYER 0x008eba20
-	// STUB: STUDIO 0x00a09c20
-	void TreeStage::onPrimitiveAdded(Primitive* prim)
-	{
-		RBXASSERT(prim->getNumEdges() == 0);  // :464
-		prim->putInStage(this);
-	}
-
-	// mac: 0x5A60A2 (135B, batch214).
-	// STUB: PLAYER 0x008eba90
-	// STUB: STUDIO 0x00a09c90
-	void TreeStage::onPrimitiveRemoving(Primitive* prim)
-	{
-		prim->removeFromStage(this);
-		RBXASSERT(prim->getNumEdges() == 0);  // :472
+		return jt != Joint::ANCHOR_JOINT && jt != Joint::FREE_JOINT;
 	}
 
 	// mac: 0x5A4CAE (batch271).
@@ -191,15 +98,62 @@ namespace RBX {
 		Primitive* parent = static_cast<Primitive*>(edge->getParentSpanningNode());
 		Primitive* child = static_cast<Primitive*>(edge->getChildSpanningNode());
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		RBXASSERT(chainToGround(child));  // :152
 		RBXASSERT(child->getBody()->getParent() == NULL);  // :153
 		RBXASSERT(child->getTypedUpper<Clump>() == NULL);  // :154
 		RBXASSERT(isGroundJoint == (parent == NULL));  // :155
-		// :156 DELTA: the binary folds the MI-adjusted null test into
-		// `cmp parent+8-reg, 8` (rbx_static_cast<Primitive*> from the
-		// +8 SpanningNode socket leaves NULL-derived pointers at +8,
-		// which the compare folds). Same truth value on every reachable
-		// input (NULL iff ground) -- spelled in source form here.
+		// :156 DELTA: the binary folds the MI-adjusted null test into `cmp parent+8-reg, 8` (rbx_static_cast<Primitive*> from the +8 SpanningNode socket leaves NULL-derived pointers at +8, which the compare folds). Same truth value on every reachable input (NULL iff ground) -- spelled in source form here.
 		RBXASSERT(isGroundJoint == (child->getTypedParent<Primitive>() == NULL));  // :156
 
 		if (parent)
@@ -347,30 +301,41 @@ namespace RBX {
 		delete c;
 		delete m;
 	}
-	// mac: 0x5A4BF4 (batch271).
-	// STUB: PLAYER 0x008ec0f0
-	// STUB: STUDIO 0x00a0a320
-	void TreeStage::dirtyMechanism(Mechanism* mechanism)
-	{
-		RBXASSERT(mechanism != NULL);  // :336
-		removeFromPipeline(mechanism);
-		dirtyMechanisms.insert(mechanism);
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// mac: 0x5A5A52 (batch295).
-	// STUB: PLAYER 0x008ec030
-	// STUB: STUDIO 0x00a0a260
+	// FUNCTION: PLAYER 0x008ec030
+	// FUNCTION: STUDIO 0x00a0a260
 	void TreeStage::removeFromPipeline(Mechanism* m)
 	{
 		if (m->inPipeline()) {
 			if (m->downstreamOfStage(this)) {
 				static_cast<MovingStage*>(getDownstreamWS())->onMechanismRemoving(m);
 				int num = (int)downstreamMechanisms.erase(m);
-				RBXASSERT(num == 1);  // :327
+				RBXASSERT(num == 1);
 			}
 			m->removeFromPipeline(this);
 		}
 		RBXASSERT(noAssembliesInPipeline(m));
+	}
+	// FUNCTION: PLAYER 0x008ec0f0
+	// FUNCTION: STUDIO 0x00a0a320
+	void TreeStage::dirtyMechanism(Mechanism* m) {
+		RBXASSERT(m);
+		removeFromPipeline(m);
+		dirtyMechanisms.insert(m);
 	}
 
 	// Binary shape (batch271: prim+244 owner slot-2 call + joints-list
@@ -393,5 +358,119 @@ namespace RBX {
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x5A5B50 (batch297: :385 mesh-parent assert + putInPipeline +
+	// :391 inStage + onMechanismAdded + downstream insert (:394) --
+	// matches the 2016 text exactly).
+	// FUNCTION: PLAYER 0x008ebc40
+	// FUNCTION: STUDIO 0x00a09ed0
+	void TreeStage::cleanMechanism(Mechanism* m)
+	{
+		RBXASSERT(!m->getIndexedMeshParent());
+		if (!m->inPipeline())
+		{
+			m->putInPipeline(this);
+		}
+
+		RBXASSERT(m->inStage(this));
+		static_cast<MovingStage*>(getDownstreamWS())->onMechanismAdded(m);
+		bool ok = downstreamMechanisms.insert(m).second;
+		RBXASSERT(ok);
+	}
+
+	// mac: 0x5A5CB8 (101B, batch214).
+	void TreeStage::assemble()
+	{
+		if (!isAssembled())
+		{
+			// 1. Assemblies
+			std::set<Mechanism*>::iterator it;
+			for (it = dirtyMechanisms.begin(); it != dirtyMechanisms.end(); ++it) {
+				cleanMechanism(*it);				// clean upstream dirtyAssemblies
+			}
+			dirtyMechanisms.clear();
+		}
+	}
+
+
+
+
+
+
+
+	// mac: 0x5A5D1E (370B, batch214).
+	// STUB: PLAYER 0x008eb7a0
+	// STUB: STUDIO 0x00a099a0
+	void TreeStage::onEdgeAdded(Edge* e)
+	{
+		RBXASSERT(e->getPrimitive(0)->inOrDownstreamOfStage(this));
+		RBXASSERT(!e->getPrimitive(1) || e->getPrimitive(1)->inOrDownstreamOfStage(this));
+		e->putInStage(this);
+		if (!Joint::isSpanningTreeJoint(e))
+		{
+			getDownstreamWS()->onEdgeAdded(e);
+			return;
+		}
+		Joint* joint = static_cast<Joint*>(e);
+		insertSpanningTreeEdge(static_cast<SpanningEdge*>(joint));
+		if (treeForwardsEdge(e))
+			getDownstreamWS()->onEdgeAdded(e);
+	}
+
+
+	// mac: 0x5A5E90 (394B, batch214).
+	// STUB: PLAYER 0x008eb8d0
+	// STUB: STUDIO 0x00a09ad0
+	void TreeStage::onEdgeRemoving(Edge* e)
+	{
+		RBXASSERT(e->getPrimitive(0)->inOrDownstreamOfStage(this));
+		RBXASSERT(!e->getPrimitive(1) || e->getPrimitive(1)->inOrDownstreamOfStage(this));
+		if (Joint::isSpanningTreeJoint(e))
+		{
+			if (treeForwardsEdge(e))
+				getDownstreamWS()->onEdgeRemoving(e);
+			SpanningEdge* se = static_cast<SpanningEdge*>(static_cast<Joint*>(e));
+			if (se->inSpanningTree())
+				removeSpanningTreeEdge(se);
+		}
+		else
+		{
+			getDownstreamWS()->onEdgeRemoving(e);
+		}
+		e->removeFromStage(this);
+	}
+
+	// mac: 0x5A601A (135B, batch214).
+	// STUB: PLAYER 0x008eba20
+	// STUB: STUDIO 0x00a09c20
+	void TreeStage::onPrimitiveAdded(Primitive* p)
+	{
+		RBXASSERT(p->getNumEdges() == 0);
+		p->putInStage(this);
+	}
+
+	// STUB: PLAYER 0x008eba90
+	// STUB: STUDIO 0x00a09c90
+	void TreeStage::onPrimitiveRemoving(Primitive* p) {
+		p->removeFromStage(this);
+		RBXASSERT(p->getNumEdges() == 0);
+	}
+
 
 } // namespace RBX

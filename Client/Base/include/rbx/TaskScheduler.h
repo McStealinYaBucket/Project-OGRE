@@ -107,8 +107,6 @@ namespace RBX
 		size_t threadPoolSize() const { return threads.size(); }
 		double schedulerRate() const { return schedulerDutyCycle.rate(); }
 		double getSchedulerDutyCyclePerThread() const;
-        double getErrorCalculationRate() const { return errorCalculationPerSec.rate(); }
-        double getSortFrequency() const { return sortFrequency.rate(); }
 		rbx::atomic<int> taskCount;
 		// NOTE (2013): printDiagnostics/printJobs (2016 diagnostics with printf format
 		// strings like "Arbiter:TaskName") are absent from the Oct 2013 binaries.
@@ -162,14 +160,13 @@ namespace RBX
 		RunningAverage<int> averageRunningJobCount;
 		RunningAverageDutyCycle<Time::Precise> schedulerDutyCycle; // time spent scheduling jobs
 		RunningAverage<double> averageThreadAffinity;
-        RunningAverageTimeInterval<> errorCalculationPerSec;
-        RunningAverageTimeInterval<> sortFrequency;
+		// 2013 has no errorCalculationPerSec/sortFrequency (RunningAverageTimeInterval) and no
+		// lastSortTime: the ctor 0x009b55e0 stores runningJobCount at +0x180 right after
+		// averageThreadAffinity, then nextWakeTime at +0x188 and the threads vector at +0x190.
 
         rbx::atomic<int> runningJobCount;
 
 		Time nextWakeTime;
-
-        Time lastSortTime;
 
 		Threads threads;
 		size_t desiredThreadCount;

@@ -139,18 +139,6 @@ namespace RBX {
 		return total;
 	}
 
-	// EdgeList::getNext: out of line here as in 2013 (Primitive.cpp:226-227).
-	// mac: 0x590190.
-	// STUB: PLAYER 0x007546b0
-	// STUB: STUDIO 0x008939e0
-	Edge* EdgeList::getNext(Edge* e, Primitive* p) const
-	{
-		RBXASSERT(e != NULL);
-		RBXASSERT(e->links(p));
-		int idx = e->getIndex(p) + 1;
-		return idx < edges.size() ? edges[idx] : NULL;
-	}
-
 	// mac: 0x590916. p0 is `this`; p1 arrives as the argument.
 	// STUB: PLAYER 0x00754960
 	// STUB: STUDIO 0x00893c90
@@ -190,7 +178,7 @@ namespace RBX {
 				type = rbx_static_cast<Joint*>(edge)->getJointType();
 			if ((type & ~4) == 1 || type == 2)
 				break;
-			edge = joints.getNext(edge, this);
+			edge = joints.getNext(this, edge);
 			if (edge == NULL)
 				return NULL;
 		}
@@ -226,39 +214,66 @@ namespace RBX {
 	// mac: 0x5907E2 (38B, batch218): EdgeList::getNext over the joints list.
 	Joint* Primitive::getNextJoint(Joint* prev)
 	{
-		return static_cast<Joint*>(joints.getNext(prev, this));
+		return static_cast<Joint*>(joints.getNext(this, prev));
 	}
 
-	// EdgeList's out-of-line insert/remove (2013 Primitive.cpp:236-251; getNext is above, for
-	// PLAYER address order).
-	// mac: 0x590356 (Primitive.cpp:250 "removeIndex >= 0" / :251
-	// "edges[removeIndex] == e"; unconditional swap-hole on both arrays).
+
+	// mac: 0x590190: out of line here as in 2013 (Primitive.cpp:226-227).
+	// FUNCTION: PLAYER 0x007546b0
+	// FUNCTION: STUDIO 0x008939e0
+	Edge* EdgeList::getNext(const Primitive* p, Edge* e) const
+	{
+		RBXASSERT(e);
+		RBXASSERT(e->links(p));
+		int idx = e->getIndex(p) + 1;
+		return idx < edges.size() ? edges[idx] : NULL;
+	}
+	// mac: 0x59027E.
+	// FUNCTION: PLAYER 0x007563f0
+	// FUNCTION: STUDIO 0x00895710
+	void EdgeList::insertEdge(Edge* e)
+	{
+		RBXASSERT(e->getIndex(owner) == -1);
+		e->setIndex(owner, edges.size());
+		edges.append(e);
+		others.append(e->otherPrimitive(owner));
+	}
+
+
+
+	// mac: 0x590356: unconditional swap-hole on both arrays.
 	// STUB: PLAYER 0x00756040
 	// STUB: STUDIO 0x00895360
 	void EdgeList::removeEdge(Edge* e)
 	{
-		int idx = e->getIndex(owner);
-		RBXASSERT(idx >= 0);  // Primitive.cpp:250 "removeIndex >= 0"
-		RBXASSERT(edges[idx] == e);  // Primitive.cpp:251 "edges[removeIndex] == e"
+		int removeIndex = e->getIndex(owner);
+		RBXASSERT(removeIndex >= 0);
+		RBXASSERT(edges[removeIndex] == e);
 		int last = edges.size() - 1;
-		edges[idx] = edges[last];
-		others[idx] = others[last];
-		edges[idx]->setIndex(owner, idx);
+		edges[removeIndex] = edges[last];
+		others[removeIndex] = others[last];
+		edges[removeIndex]->setIndex(owner, removeIndex);
 		edges.resize(last);
 		others.resize(last);
 		e->setIndex(owner, -1);
 	}
 
-	// mac: 0x59027E (Primitive.cpp:236 "e->getIndex(owner) == -1").
-	// STUB: PLAYER 0x007563f0
-	// STUB: STUDIO 0x00895710
-	void EdgeList::insertEdge(Edge* e)
-	{
-		RBXASSERT(e->getIndex(owner) == -1);  // Primitive.cpp:236
-		e->setIndex(owner, edges.size());
-		edges.append(e);
-		others.append(e->otherPrimitive(owner));
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// mac: 0x590516 (259B). Static-style: p0 = e+16, p1 = e+20 (getPrim0/1
 	// inlines); getEdgeType (vtbl+20) routes foreign edges to both prims'
@@ -286,6 +301,7 @@ namespace RBX {
 					|| FreeJoint::isFreeJoint(rbx_static_cast<Joint*>(e)));  // :301
 		}
 	}
+
 
 	// mac: 0x59061A (259B). Mirror of insertEdge (:326 assert arm).
 	// STUB: PLAYER 0x00756160
@@ -470,7 +486,7 @@ namespace RBX {
 	// mac: 0x590826.
 	Contact* Primitive::getNextContact(Contact* c)
 	{
-		return static_cast<Contact*>(contacts.getNext(c, this));
+		return static_cast<Contact*>(contacts.getNext(this, c));
 	}
 	Geometry* Primitive::newGeometry(int type)
 	{
@@ -627,7 +643,7 @@ namespace RBX {
 		Joint* joint = (edge == NULL) ? NULL : static_cast<Joint*>(edge);
 		Edge* next = (joint == NULL)
 			? NULL
-			: joints.getNext(joint, this);
+			: joints.getNext(this, joint);
 		return nextSpanningEdgeFromJoint(static_cast<Joint*>(next));
 	}
 
@@ -635,7 +651,7 @@ namespace RBX {
 	// SpanningEdge secondary (binary +32; static_cast here) or NULL.
 	SpanningEdge* Primitive::nextSpanningEdgeFromJoint(Joint* start)
 	{
-		for (Edge* edge = start; edge != NULL; edge = joints.getNext(edge, this))
+		for (Edge* edge = start; edge != NULL; edge = joints.getNext(this, edge))
 		{
 			if (Joint::isSpanningTreeJoint(edge))
 				return static_cast<SpanningEdge*>(static_cast<Joint*>(edge));

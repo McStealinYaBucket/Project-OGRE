@@ -115,20 +115,20 @@ namespace RBX {
 
 	private:
 		// mac: 0x7074F2.
-		// STUB: STUDIO 0x007416c0
-		void grow(size_t needed)
+		// FUNCTION: STUDIO 0x007416c0
+		void grow(size_t size)
 		{
-			// Binary asserts here iff grow was called unnecessarily
-			// ("size > capacity", SerializerBinary.cpp:122).
-			RBXASSERT(capacity < needed);
+			// The parameter shadows the member, as the 2013 assert text shows.
+			RBXASSERT(size > capacity);
 			size_t next = 16;
-			while (next < needed)
+			while (next < size)
 				next *= 2;
 			char* grown = new char[next];
-			memcpy(grown, data, size);
-			delete[] data;
+			memcpy(grown, data, this->size);
+			char* old = data;
 			data = grown;
 			capacity = next;
+			delete[] old;
 		}
 
 		char* data;			// +0

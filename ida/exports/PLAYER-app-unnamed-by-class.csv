@@ -1,0 +1,1347 @@
+class,functions,bytes,vtable,callers,prop,none
+(no caller with a class),4472,631474,0,0,0,4472
+Ogre::RbxSceneManager,306,1836,306,0,0,0
+RBX::FactoryProduct<>::Creator,288,34853,0,45,243,0
+RBX::DataModel,255,41818,7,132,116,0
+RBX::ScriptContext,224,35721,3,114,107,0
+RBX::(free),168,20616,0,105,63,0
+RBX::Reflection::EnumDesc<>,143,16251,0,139,4,0
+RBX::Lua::Bridge<>,135,15225,0,101,34,0
+RBX::GuiService,109,20765,2,40,67,0
+RBX::ContentProvider,108,21391,3,34,71,0
+Ogre::RbxSceneNode,104,624,104,0,0,0
+RBX::Creatable<>,97,10972,0,48,49,0
+RBX::InsertService,95,23729,2,16,77,0
+Ogre::ManualObject,95,570,95,0,0,0
+RBX::Humanoid,94,12691,26,32,36,0
+RBX::Scripting::ScriptDebugger,92,14980,2,39,51,0
+RBX::PartInstance,92,9593,14,51,27,0
+RBX::Workspace,89,12536,11,36,42,0
+RBX::RemoteFunction,83,16302,2,30,51,0
+RBX::ChatOutput,82,16130,2,27,53,0
+RBX::SceneUpdater,82,14505,0,36,46,0
+RBX::OverlayDataModel,75,12435,5,28,42,0
+RBX::TestService,67,11739,2,30,35,0
+RBX::ContactManager,67,9513,0,35,32,0
+RBX::BadgeService,64,13971,2,14,48,0
+RBX::World,60,10228,0,37,23,0
+RBX::FriendService,58,9545,2,11,45,0
+RBX::Animator,58,9662,3,17,38,0
+RBX::Reflection::Variant,55,7787,0,45,10,0
+RBX::Network::Player,54,13193,0,15,39,0
+RBX::Instance,53,6790,0,31,22,0
+RBX::MarketplaceService,52,10090,2,10,40,0
+RBX::Script,52,9974,2,11,39,0
+RBX::Tool,52,9324,5,23,24,0
+RBX::GuiObject,51,8226,2,29,20,0
+RBX::LibraryService,51,8179,0,16,35,0
+RBX::Http,49,14876,0,3,46,0
+RBX::ChangeHistoryService,47,8309,3,23,21,0
+RBX::Reflection::TypedPropertyDescriptor<>,45,8890,0,32,13,0
+RBX::Stats::StatsService,44,8639,0,12,32,0
+RBX::POLY::Mesh,43,7791,0,10,33,0
+RBX::OnScreenProfiler,42,9059,0,20,22,0
+RBX::HUMAN::HumanoidState,39,4617,1,34,4,0
+RBX::SpatialHash<>,39,4597,0,15,24,0
+RBX::GeometryPool<>,38,5760,0,15,23,0
+RBX::SkateboardPlatform,38,8123,10,8,20,0
+RBX::Handles,38,7265,3,12,23,0
+RBX::GuiBuilder,37,5633,0,14,23,0
+RBX::RootInstance,37,8388,0,25,12,0
+rbx::signals::signal_with_args<>,36,9772,0,27,9,0
+RBX::Kernel,36,4120,0,29,7,0
+RBX::CellFaceFacePair,36,4229,0,19,17,0
+RBX::AnimationTrackState,34,6134,2,17,15,0
+RBX::ModelInstance,34,4247,10,15,9,0
+RBX::BallCellContact,33,3829,0,17,16,0
+RBX::VehicleSeat,32,5280,13,6,13,0
+RBX::TextBox,31,4057,4,17,10,0
+RBX::CommonVerbs,30,3174,0,30,0,0
+RBX::ChangeHistoryService::Item,30,4991,0,18,12,0
+RBX::Block,29,4726,0,4,25,0
+RBX::LRUCache<>,29,3514,0,23,6,0
+RBX::Soundscape::SoundChannel,28,3821,2,15,11,0
+RBX::Dragger,28,6518,0,17,11,0
+RBX::GeometryPool<>::ValueCount,27,2063,0,14,13,0
+RBX::GuiLayerCollector,27,3426,2,8,17,0
+RBX::UserInputService,26,4852,4,2,20,0
+RBX::WorkspaceStatsItem,26,5107,0,16,10,0
+RBX::Controller,26,3491,4,10,12,0
+RBX::KernelData,25,4379,0,22,3,0
+RBX::Soundscape::SoundService,25,10968,2,15,8,0
+RBX::Selection,25,5210,2,11,12,0
+RBX::Explosion,25,5889,6,7,12,0
+RBX::ServiceProvider,25,2865,1,22,2,0
+RBX::TerrainPartition,25,3744,0,7,18,0
+RBX::LuaDragger,24,3557,2,15,7,0
+RBX::AdvMoveToolBase,24,7639,3,15,6,0
+RBX::Primitive,24,2020,2,16,6,0
+RBX::Game,24,3534,0,11,13,0
+RBX::SleepStage,23,4164,0,16,7,0
+RBX::SpatialFilter,23,1317,0,13,10,0
+RBX::MegaClusterPoly,23,22063,0,14,9,0
+RBX::Assembly,23,3362,1,7,15,0
+RBX::TextureContentProvider,23,2720,3,7,13,0
+RBX::NewNullTool,23,4196,1,6,16,0
+MemoryBinder,23,3771,0,6,17,0
+RBX::Camera,22,4326,4,12,6,0
+"boost::iostreams::stream_buffer<class WiniInetRequest_source,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::input>",22,1869,14,0,8,0
+RBX::ChangeHistoryService::Waypoint,22,4922,0,3,19,0
+RBX::SocialService,22,7541,2,3,17,0
+RBX::DataModel::LegacyLock::Implementation,21,2678,0,8,13,0
+RBX::Accoutrement,21,1921,9,7,5,0
+RBX::KeyframeSequenceProvider,21,3557,2,9,10,0
+RBX::RemoteEvent,21,4133,2,3,16,0
+RBX::NotificationBox,21,4352,6,2,13,0
+RBX::SeatImpl<>,20,2992,0,13,7,0
+RBX::BrickColor::BrickMap,20,4194,0,4,16,0
+RBX::BoxSelectCommand,20,4195,2,4,14,0
+RBX::GlobalAdvancedSettingsItem<>,20,1594,0,15,5,0
+RBX::VelocityMotor,19,2195,2,5,12,0
+RBX::ManualJointHelper,19,2149,0,19,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiObject,bool __cdecl (class RBX::UDim2,class RBX::UDim2,enum RBX::GuiObject::TweenEasingDirection,enum RBX::GuiObject::TweenEasingStyle,float,bool,class RBX::Lua::WeakFunctionRef),7>",19,3672,2,0,17,0
+RBX::Reflection::Type,19,3694,0,19,0,0
+RBX::CacheableContentProvider,19,3497,0,10,9,0
+RBX::KeyframeSequence,19,1744,2,6,11,0
+RBX::AdornRbxGfx,18,3924,0,4,14,0
+RBX::TextLabel,18,2222,4,4,10,0
+std::vector<>,18,3814,0,11,7,0
+SerializerV2,18,5908,0,4,14,0
+RBX::Network::Replicator,17,1776,1,13,3,0
+RBX::AssetService,17,2820,2,6,9,0
+RBX::RunDragger,17,4039,0,14,3,0
+RBX::BuoyancyContact,17,3033,1,14,2,0
+RBX::AsyncHttpQueue,17,3211,0,5,12,0
+RBX::CustomEvent,17,2794,2,5,10,0
+RBX::ArcHandles,17,4433,3,3,11,0
+"RBX::Reflection::EventDesc<class RBX::TestService,void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int),class rbx::remote_signal<void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>,class rbx::remote_signal<void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)> RBX::TestService::*>",16,3543,3,0,13,0
+"RBX::Reflection::EventDesc<class RBX::UserInputService,void __cdecl (class RBX::InputObject),class rbx::signal<void __cdecl (class RBX::InputObject)>,class rbx::signal<void __cdecl (class RBX::InputObject)> RBX::UserInputService::*>",16,3529,3,0,13,0
+"RBX::Reflection::EventDesc<class RBX::UserInputService,void __cdecl (class G3D::Vector2),class rbx::signal<void __cdecl (class G3D::Vector2)>,class rbx::signal<void __cdecl (class G3D::Vector2)> RBX::UserInputService::*>",16,3499,3,0,13,0
+"RBX::Reflection::EventDesc<class RBX::Value<class RBX::RbxRay,char const * const RBX::sRayValue>,void __cdecl (class RBX::RbxRay),class rbx::signal<void __cdecl (class RBX::RbxRay)>,class rbx::signal<void __cdecl (class RBX::RbxRay)> RBX::Value<class RBX::RbxRay,char const * const RBX::sRayValue>::*>",16,3552,3,0,13,0
+RBX::Lua::EventBridge,16,1874,0,4,12,0
+RBX::ArrowToolBase,16,2088,2,8,6,0
+"RBX::Reflection::EventDesc<class RBX::Value<class G3D::Color3,char const * const RBX::sColor3Value>,void __cdecl (class G3D::Color3),class rbx::signal<void __cdecl (class G3D::Color3)>,class rbx::signal<void __cdecl (class G3D::Color3)> RBX::Value<class G3D::Color3,char const * const RBX::sColor3Value>::*>",16,3529,3,0,13,0
+SoundServiceStatsItem,16,2200,0,5,11,0
+RBX::Flag,16,1968,3,4,9,0
+"RBX::Reflection::EventDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType)> RBX::MarketplaceService::*>",16,3429,3,0,13,0
+RBX::HumanoidController,16,2009,0,13,3,0
+RBX::ClientAppSettings,16,699,0,16,0,0
+RBX::Soundscape::CollisionSoundManager,16,2149,0,5,11,0
+RBX::Network::Replicator::StatsItem,16,2422,0,4,12,0
+RBX::Reflection::EnumDesc<enum _D3DDEVTYPE>,16,2855,5,0,11,0
+RBX::TToolVerb<>,16,1916,0,6,10,0
+RBX::Reflection::ClassDescriptor,15,2707,0,7,8,0
+RBX::RuntimeScriptService,15,2742,2,7,6,0
+RBX::BillboardGui,15,3643,8,0,7,0
+"RBX::Reflection::EventDesc<class RBX::UserInputService,void __cdecl (enum RBX::UserInputService::SwipeDirection),class rbx::signal<void __cdecl (enum RBX::UserInputService::SwipeDirection)>,class rbx::signal<void __cdecl (enum RBX::UserInputService::SwipeDirection)> RBX::UserInputService::*>",15,3418,3,0,12,0
+"RBX::Reflection::EventDesc<class RBX::InsertService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)> RBX::InsertService::*>",15,3288,3,0,12,0
+RBX::FlagStand,15,1737,4,3,8,0
+"RBX::Reflection::EventDesc<class RBX::TestService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)> RBX::TestService::*>",15,3495,3,0,12,0
+"RBX::Reflection::EventDesc<class RBX::ChatService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)> RBX::ChatService::*>",15,3446,3,0,12,0
+"RBX::Reflection::EventDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>)> RBX::MarketplaceService::*>",15,3207,3,0,12,0
+"RBX::Reflection::EventDesc<class RBX::InsertService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)> RBX::InsertService::*>",15,3072,3,0,12,0
+RBX::ScriptStats,15,2331,0,2,13,0
+"RBX::Reflection::EventDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool)> RBX::MarketplaceService::*>",15,3355,3,0,12,0
+"RBX::Reflection::EventDesc<class RBX::MarketplaceService,void __cdecl (int,int,bool),class rbx::remote_signal<void __cdecl (int,int,bool)>,class rbx::remote_signal<void __cdecl (int,int,bool)> RBX::MarketplaceService::*>",15,2981,3,0,12,0
+"RBX::FactoryProduct<class RBX::GuiMain,class RBX::ScreenGui,char const * const RBX::sGuiMain,class RBX::Instance>",14,948,9,0,5,0
+"RBX::Reflection::EventDesc<class RBX::Value<class G3D::CoordinateFrame,char const * const RBX::sCFrameValue>,void __cdecl (class G3D::CoordinateFrame),class rbx::signal<void __cdecl (class G3D::CoordinateFrame)>,class rbx::signal<void __cdecl (class G3D::CoordinateFrame)> RBX::Value<class G3D::CoordinateFrame,char const * const RBX::sCFrameValue>::*>",14,2649,3,0,11,0
+"RBX::Reflection::EventDesc<class RBX::FriendService,void __cdecl (int,int,enum RBX::FriendService::FriendEventType),class rbx::remote_signal<void __cdecl (int,int,enum RBX::FriendService::FriendEventType)>,class rbx::remote_signal<void __cdecl (int,int,enum RBX::FriendService::FriendEventType)> RBX::FriendService::*>",14,3059,3,0,11,0
+RBX::TreeStage,14,1337,2,8,4,0
+RBX::EdgeEdgePair,14,1206,0,13,1,0
+"RBX::Reflection::EventDesc<class RBX::FriendService,void __cdecl (int,int,enum RBX::FriendService::FriendStatus),class rbx::remote_signal<void __cdecl (int,int,enum RBX::FriendService::FriendStatus)>,class rbx::remote_signal<void __cdecl (int,int,enum RBX::FriendService::FriendStatus)> RBX::FriendService::*>",14,3059,3,0,11,0
+RBX::HopperBin,14,1366,2,4,8,0
+RBX::GuiTextButton,14,2703,3,2,9,0
+RBX::GlueJoint,14,1816,0,11,3,0
+RBX::Lua::Continuations,14,2648,0,5,9,0
+"RBX::Reflection::EventDesc<class RBX::BindableEvent,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class rbx::signal<void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)> RBX::BindableEvent::*>",14,3395,3,0,11,0
+Ogre::RbxSubEntity,14,84,14,0,0,0
+Ogre::RbxEntity,14,84,14,0,0,0
+RBX::SpawnerService,14,2185,2,4,8,0
+RBX::RunService,14,1500,2,2,10,0
+RBX::ImageLabel,14,1502,7,0,7,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,void __cdecl (int,int,int,enum RBX::Voxel::CellMaterial,enum RBX::Voxel::CellBlock,enum RBX::Voxel::CellOrientation),6>",14,2473,2,0,12,0
+RBX::UngroupSelectionVerb,13,2165,0,5,8,0
+"RBX::Reflection::EventDesc<class RBX::UserInputService,void __cdecl (float,float),class rbx::signal<void __cdecl (float,float)>,class rbx::signal<void __cdecl (float,float)> RBX::UserInputService::*>",13,2248,3,0,10,0
+RBX::ToolMouseCommand,13,1609,1,7,5,0
+RBX::ViewRbxGfx,13,2154,0,6,7,0
+"RBX::Reflection::EventDesc<class RBX::RemoteFunction,void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class rbx::remote_signal<void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,class rbx::remote_signal<void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)> RBX::RemoteFunction::*>",13,2335,3,0,10,0
+RBX::Body,13,1753,0,6,7,0
+"RBX::Reflection::EventDesc<class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis,float,float),class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis,float,float)>,class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis,float,float)> RBX::ArcHandles::*>",13,2468,3,0,10,0
+RBX::ScreenGui,13,1424,3,7,3,0
+RBX::StarterGuiService,13,1752,3,4,6,0
+"RBX::Reflection::EventDesc<class RBX::AnimationTrackState,void __cdecl (float,float,float,float),class rbx::remote_signal<void __cdecl (float,float,float,float)>,class rbx::remote_signal<void __cdecl (float,float,float,float)> RBX::AnimationTrackState::*>",13,2362,3,0,10,0
+RBX::Joint,13,1996,1,9,3,0
+Ogre::FileStreamDataStream,13,78,13,0,0,0
+RBX::Rocket,13,2169,8,4,1,0
+"RBX::Reflection::EventDesc<class RBX::RemoteFunction,void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class rbx::remote_signal<void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,class rbx::remote_signal<void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)> RBX::RemoteFunction::*>",13,2721,3,0,10,0
+"RBX::Reflection::EventDesc<class RBX::AnimationTrackState,void __cdecl (float,float,float),class rbx::remote_signal<void __cdecl (float,float,float)>,class rbx::remote_signal<void __cdecl (float,float,float)> RBX::AnimationTrackState::*>",13,2277,3,0,10,0
+RBX::Lua::LuaArguments,13,1443,0,8,5,0
+"RBX::Reflection::EventDesc<class RBX::RunService,void __cdecl (double,double),class rbx::signal<void __cdecl (double,double)>,class rbx::signal<void __cdecl (double,double)> RBX::RunService::*>",13,2873,3,0,10,0
+RBX::AdvRunDragger,12,4355,0,10,2,0
+RBX::MegaClusterInstance,12,1084,4,6,2,0
+"RBX::Reflection::EventDesc<class RBX::RemoteFunction,void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::remote_signal<void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::remote_signal<void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::RemoteFunction::*>",12,2228,3,0,9,0
+RBX::TeleportService,12,977,2,8,2,0
+RBX::MoveResizeJoinTool,12,8534,3,3,6,0
+RBX::AdvLuaDragger,12,1828,2,7,3,0
+RBX::FaceFacePair,12,1788,0,9,3,0
+RBX::BaseScript,12,1999,1,6,5,0
+"RBX::Reflection::EventDesc<class RBX::SkateboardPlatform,void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState),class rbx::signal<void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState)>,class rbx::signal<void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState)> RBX::SkateboardPlatform::*>",12,2054,3,0,9,0
+RBX::PluginManager,12,1310,3,4,5,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),void,2>",12,2259,2,0,10,0
+"RBX::Reflection::EventDesc<class RBX::RemoteEvent,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class RBX::LatchedSignal<class rbx::remote_signal,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,class RBX::LatchedSignal<class rbx::remote_signal,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)> RBX::RemoteEvent::*>",12,2375,3,0,9,0
+"RBX::Reflection::EventDesc<class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis),class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis)>,class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis)> RBX::ArcHandles::*>",12,2314,3,0,9,0
+"RBX::Reflection::EventDesc<class RBX::Controller,void __cdecl (enum RBX::Controller::Button),class rbx::signal<void __cdecl (enum RBX::Controller::Button)>,class rbx::signal<void __cdecl (enum RBX::Controller::Button)> RBX::Controller::*>",11,1953,3,0,8,0
+RBX::Scripting::DebuggerManager,11,1415,2,5,4,0
+RBX::Seat,11,1004,3,3,5,0
+RBX::WedgePoly,11,1647,0,1,10,0
+RBX::BasePlayerGui,11,1086,3,4,4,0
+RBX::BallBlockContact,11,1034,0,7,4,0
+RBX::VehicleController,11,1227,3,2,6,0
+RBX::ContextActionService,11,1764,2,3,6,0
+"RBX::Reflection::EventDesc<class RBX::ScriptContext,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)> RBX::ScriptContext::*>",11,2133,3,0,8,0
+RBX::ParallelRampPoly,11,1770,0,1,10,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiObject,bool __cdecl (class RBX::UDim2,enum RBX::GuiObject::TweenEasingDirection,enum RBX::GuiObject::TweenEasingStyle,float,bool,class RBX::Lua::WeakFunctionRef),6>",11,2198,2,0,9,0
+RBX::RightAngleRampPoly,11,1774,0,1,10,0
+"RBX::Reflection::EventDesc<class RBX::GuiObject,void __cdecl (int,int),class rbx::remote_signal<void __cdecl (int,int)>,class rbx::remote_signal<void __cdecl (int,int)> RBX::GuiObject::*>",11,2235,3,0,8,0
+RBX::Network::PhysicsReceiver,11,1718,0,5,6,0
+"RBX::Reflection::EventDesc<class RBX::Handles,void __cdecl (enum RBX::NormalId),class rbx::remote_signal<void __cdecl (enum RBX::NormalId)>,class rbx::remote_signal<void __cdecl (enum RBX::NormalId)> RBX::Handles::*>",11,1607,3,0,8,0
+RBX::CornerWedgePoly,11,1692,0,1,10,0
+"RBX::Reflection::EventDesc<class RBX::Explosion,void __cdecl (class boost::shared_ptr<class RBX::Instance>,float),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,float)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,float)> RBX::Explosion::*>",11,2008,3,0,8,0
+RBX::TweenService,11,1792,4,2,5,0
+RBX::ICharacterSubject,11,2617,0,10,1,0
+"RBX::Reflection::EventDesc<class RBX::GuiService,void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::GuiService::*>",11,2063,3,0,8,0
+RBX::Stats,11,1429,0,3,8,0
+"RBX::Reflection::EventDesc<class RBX::Value<class RBX::BrickColor,char const * const RBX::sBrickColorValue>,void __cdecl (class RBX::BrickColor),class rbx::signal<void __cdecl (class RBX::BrickColor)>,class rbx::signal<void __cdecl (class RBX::BrickColor)> RBX::Value<class RBX::BrickColor,char const * const RBX::sBrickColorValue>::*>",11,2519,2,0,9,0
+"RBX::Reflection::EventDesc<class RBX::ScriptContext,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)> RBX::ScriptContext::*>",10,1699,3,0,7,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,enum RBX::GuiService::CenterDialogType,class RBX::Lua::WeakFunctionRef,class RBX::Lua::WeakFunctionRef),4>",10,2135,2,0,8,0
+RBX::PART::Wedge,10,842,3,2,5,0
+"RBX::Reflection::EventDesc<class RBX::Instance,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)> RBX::Instance::*>",10,1629,3,0,7,0
+RBX::LegacyContentTable,10,1292,0,4,6,0
+"RBX::Reflection::EventDesc<class RBX::DataModel,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::DataModel::*>",10,1527,3,0,7,0
+RBX::BlockBlockContactData,10,1548,0,7,3,0
+RBX::WordList,10,1263,0,4,6,0
+RBX::ChatService,10,1187,2,1,7,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (enum RBX::Humanoid::Status),class rbx::signal<void __cdecl (enum RBX::Humanoid::Status)>,class rbx::signal<void __cdecl (enum RBX::Humanoid::Status)> RBX::Humanoid::*>",10,1828,2,0,8,0
+RBX::ContentFilter,10,1441,2,3,5,0
+"RBX::Reflection::EventDesc<class RBX::Value<int,char const * const RBX::sIntValue>,void __cdecl (int),class rbx::signal<void __cdecl (int)>,class rbx::signal<void __cdecl (int)> RBX::Value<int,char const * const RBX::sIntValue>::*>",10,1519,3,0,7,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::DataModel,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (enum RBX::Instance::SaveFilter),class boost::shared_ptr<struct RBX::Reflection::Tuple const>,1>",10,2088,1,0,9,0
+RBX::Network::Players,10,1774,0,6,4,0
+RBX::CloneTool,10,1682,1,2,7,0
+"RBX::Reflection::EventDesc<class RBX::Instance,void __cdecl (class RBX::Reflection::PropertyDescriptor const *),class rbx::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>,class rbx::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)> RBX::Instance::*>",10,1508,2,0,8,0
+"RBX::Reflection::EventDesc<class RBX::DataModel,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)> RBX::DataModel::*>",10,1575,3,0,7,0
+"RBX::Reflection::EventDesc<class RBX::GuiService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::GuiService::*>",10,1629,3,0,7,0
+RBX::FastClusterShadowRenderable,10,60,10,0,0,0
+RBX::AdvMoveTool,10,2515,2,3,5,0
+"RBX::FactoryProduct<class RBX::Handles,class RBX::HandlesBase,char const * const RBX::sHandles,class RBX::Instance>",10,952,7,0,3,0
+"RBX::Reflection::EventDesc<class RBX::StarterGuiService,void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool),class rbx::signal<void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool)>,class rbx::signal<void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool)> RBX::StarterGuiService::*>",10,1842,2,0,8,0
+RBX::ControlledLRUCache<>,10,744,0,4,6,0
+RBX::ExtrudedPartInstance,10,655,4,3,3,0
+RBX::NotificationObject,10,949,3,4,3,0
+RBX::SimBody,10,1627,0,9,1,0
+"RBX::Reflection::EventDesc<class RBX::Handles,void __cdecl (enum RBX::NormalId,float),class rbx::remote_signal<void __cdecl (enum RBX::NormalId,float)>,class rbx::remote_signal<void __cdecl (enum RBX::NormalId,float)> RBX::Handles::*>",10,1529,3,0,7,0
+"boost::iostreams::stream_buffer<struct String_sink,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::output>",10,954,7,0,3,0
+"boost::iostreams::stream_buffer<class boost::iostreams::detail::mode_adapter<struct boost::iostreams::input,class std::basic_istream<char,struct std::char_traits<char>>>,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::input>",10,606,6,0,4,0
+"boost::iostreams::stream_buffer<class boost::iostreams::basic_null_device<char,struct boost::iostreams::output>,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::output>",10,1080,7,0,3,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (float),class rbx::signal<void __cdecl (float)>,class rbx::signal<void __cdecl (float)> RBX::Humanoid::*>",10,1559,3,0,7,0
+"RBX::Reflection::EventDesc<class RBX::GuiObject,void __cdecl (class RBX::UDim2),class rbx::remote_signal<void __cdecl (class RBX::UDim2)>,class rbx::remote_signal<void __cdecl (class RBX::UDim2)> RBX::GuiObject::*>",10,2031,2,0,8,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,void __cdecl (int,int,int,enum RBX::Voxel::WaterCellForce,enum RBX::Voxel::WaterCellDirection),5>",10,1701,2,0,8,0
+"RBX::FactoryProduct<class RBX::SelectionPartLasso,class RBX::SelectionLasso,char const * const RBX::sSelectionPartLasso,class RBX::Instance>",9,1142,5,0,4,0
+RBX::ContentProviderJob,9,1558,0,5,4,0
+RBX::Settings,9,894,2,3,4,0
+RBX::JointsService,9,1866,2,4,3,0
+RBX::HUMAN::RunningBase,9,1096,0,9,0,0
+RBX::Lua::ObjectBridge,9,1113,0,5,4,0
+RBX::BallPolyContact,9,1388,0,6,3,0
+"RBX::FactoryProduct<class RBX::Rocket,class RBX::BodyMover,char const * const RBX::sRocket,class RBX::Instance>",9,337,6,0,3,0
+RBX::ButtonBindingWidget,9,1102,2,3,4,0
+RBX::CustomEventReceiver,9,1020,2,4,3,0
+RBX::CoreGuiService,9,1100,2,5,2,0
+RBX::CornerWedgeInstance,9,758,3,3,3,0
+RBX::Reflection::RefPropDescriptor<>,9,780,0,8,1,0
+"RBX::FactoryProduct<class RBX::BodyGyro,class RBX::BodyMover,char const * const RBX::sBodyGyro,class RBX::Instance>",9,337,6,0,3,0
+RBX::Named<>,9,891,0,9,0,0
+"RBX::FactoryProduct<class RBX::BodyForce,class RBX::BodyMover,char const * const RBX::sBodyForce,class RBX::Instance>",9,329,6,0,3,0
+"RBX::FactoryProduct<class RBX::BodyThrust,class RBX::BodyMover,char const * const RBX::sBodyThrust,class RBX::Instance>",9,329,6,0,3,0
+"RBX::FactoryProduct<class RBX::BodyPosition,class RBX::BodyMover,char const * const RBX::sBodyPosition,class RBX::Instance>",9,329,6,0,3,0
+"RBX::FactoryProduct<class RBX::BodyVelocity,class RBX::BodyMover,char const * const RBX::sBodyVelocity,class RBX::Instance>",9,329,6,0,3,0
+"RBX::FactoryProduct<class RBX::BodyAngularVelocity,class RBX::BodyMover,char const * const RBX::sBodyAngularVelocity,class RBX::Instance>",9,337,6,0,3,0
+RBX::Network::ServerReplicator,9,1865,0,6,3,0
+RBX::FastClusterEntity,9,54,9,0,0,0
+RBX::PhysicsService,9,1393,2,5,2,0
+RBX::BindableEvent,9,639,2,3,4,0
+RBX::BallBallContact,9,693,1,4,4,0
+RBX::CellEdgeEdgePair,9,2257,1,3,5,0
+"RBX::Reflection::EventDesc<class RBX::Value<class G3D::Vector3,char const * const RBX::sVector3Value>,void __cdecl (class G3D::Vector3),class rbx::signal<void __cdecl (class G3D::Vector3)>,class rbx::signal<void __cdecl (class G3D::Vector3)> RBX::Value<class G3D::Vector3,char const * const RBX::sVector3Value>::*>",9,1370,2,0,7,0
+"RBX::Reflection::EnumPropDescriptor<class RBX::Network::Player,enum RBX::Network::Player::ChatMode>",9,551,8,0,1,0
+RBX::GuiButton,9,1098,2,4,3,0
+RBX::FloorWire,9,3652,3,0,6,0
+RBX::SpawnLocation,9,1026,4,1,4,0
+RBX::Reflection::EnumDesc<enum _D3DFORMAT>,9,1898,3,0,6,0
+RBX::TouchTransmitter,9,534,2,4,3,0
+RBX::CustomStatsGuiJSON,9,1546,0,3,6,0
+RBX::BodyPosition,9,625,7,0,2,0
+RBX::Network::ClientReplicator::GCJob,9,1780,1,6,2,0
+RBX::ScriptMouseCommand,9,1034,1,3,5,0
+RBX::Smoke,9,348,3,4,2,0
+RBX::PhysicsInstructions,9,948,0,5,4,0
+RBX::SkateboardController,9,1379,4,0,5,0
+"RBX::NonFactoryProduct<class RBX::CacheableContentProvider,char const * const RBX::sTextureContentProvider>",8,344,5,0,3,0
+RBX::MoveDownSelectionVerb,8,1483,0,2,6,0
+RBX::GlobalBasicSettingsItem<>,8,852,0,3,5,0
+"RBX::FactoryProduct<class RBX::SkateboardPlatform,class RBX::PlatformImpl<class RBX::BasicPartInstance>,char const * const RBX::sSkateboardPlatform,class RBX::Instance>",8,273,5,0,3,0
+RBX::ScriptInformationProvider,8,438,4,0,4,0
+RBX::RotateJoint,8,1039,0,7,1,0
+RBX::CellContact,8,1257,2,4,2,0
+RBX::FlagStandService,8,766,4,1,3,0
+RBX::Soundscape::CollisionSound,8,1558,0,5,3,0
+RBX::AnchorTool,8,963,2,2,4,0
+"RBX::AsyncHttpCache<struct RBX::LuaWebService::CachedRawLuaWebServiceInfo,1>",8,1175,2,0,6,0
+RBX::BlockBlockContact,8,1078,0,6,2,0
+RBX::HUMAN::MovingNoPhysicsBase,8,1281,0,4,4,0
+"RBX::FactoryProduct<class RBX::ImageLabel,class RBX::GuiLabel,char const * const RBX::sImageLabel,class RBX::Instance>",8,523,6,0,2,0
+"RBX::Reflection::CallbackDescImpl<bool __cdecl (void),0>",8,1757,2,0,6,0
+RBX::MegaDragger,8,1721,0,6,2,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::AssetService,bool __cdecl (int,enum RBX::AssetService::AccessType,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const>),bool,3>",8,1503,2,0,6,0
+RBX::ShirtGraphic,8,418,3,2,3,0
+RBX::CookiesService,8,685,2,4,2,0
+"RBX::FactoryProduct<class RBX::Hat,class RBX::Accoutrement,char const * const RBX::sHat,class RBX::Instance>",8,271,5,0,3,0
+RBX::AnimationTrack,8,693,2,3,3,0
+RBX::PVInstance,8,628,0,4,4,0
+RBX::PriorityThreadPool,8,1883,0,2,6,0
+RBX::FWDictionnary<>,8,1470,0,5,3,0
+RBX::TextureCompositor,8,1213,0,3,5,0
+RBX::PlatformImpl<>,8,741,0,6,2,0
+"RBX::AsyncHttpCache<struct RBX::ContentProvider::CachedContent,0>",8,1152,2,0,6,0
+RBX::Frame,8,1596,2,2,4,0
+RBX::VirtualUser,8,942,2,2,4,0
+RBX::DialogRoot,8,1552,2,2,4,0
+"boost::iostreams::stream_buffer<class WinHttpRequest_source,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::input>",8,788,3,0,5,0
+RBX::DebrisService,8,902,2,2,4,0
+RBX::Reflection::PropertyDescriptor,8,1991,0,1,7,0
+RBX::GuiImageButton,8,963,6,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,void __cdecl (class RBX::Region3int16,enum RBX::Voxel::CellMaterial,enum RBX::Voxel::CellBlock,enum RBX::Voxel::CellOrientation),4>",8,1296,2,0,6,0
+RBX::TimerService,8,616,4,0,4,0
+"RBX::FactoryProduct<class RBX::PART::Wedge,class RBX::PART::ParametricPartInstance,char const * const RBX::PART::sWedge,class RBX::Instance>",7,262,4,0,3,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::Instance,class boost::shared_ptr<class RBX::Instance> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class boost::shared_ptr<class RBX::Instance>,1>",7,1370,2,0,5,0
+"RBX::EventReplicator<class RBX::GuiObject,void __cdecl (int,int)>",7,1098,1,0,6,0
+"RBX::FactoryProduct<class RBX::SkateboardController,class RBX::Controller,char const * const RBX::sSkateboardController,class RBX::Instance>",7,293,4,0,3,0
+RBX::Texture,7,798,0,2,5,0
+RBX::SelectChildrenVerb,7,1264,0,2,5,0
+RBX::MeshContentProvider,7,402,3,2,2,0
+std::map<>,7,1553,0,2,5,0
+"RBX::FactoryProduct<class RBX::FloorWire,class RBX::GuiBase3d,char const * const RBX::sFloorWire,class RBX::Instance>",7,367,3,0,4,0
+RBX::MacroSubstituter,7,1686,0,5,2,0
+"RBX::FactoryProduct<class RBX::Seat,class RBX::SeatImpl<class RBX::BasicPartInstance>,char const * const RBX::sSeat,class RBX::Instance>",7,262,4,0,3,0
+RBX::FilteredSelection<class RBX::PartInstance>,7,530,4,0,3,0
+RBX::Cloner,7,979,0,4,3,0
+RBX::WebSerializer,7,1048,0,4,3,0
+RBX::PartInstance::TouchedSignal,7,1026,0,5,2,0
+"RBX::FactoryProduct<class RBX::CornerWedgeInstance,class RBX::PartInstance,char const * const RBX::sCornerWedge,class RBX::Instance>",7,267,4,0,3,0
+RBX::Lua::YieldingThreads,7,1399,0,3,4,0
+RBX::TextureTrail,7,1685,3,0,4,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ChatService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor),3>",7,1242,2,0,5,0
+RobloxExtraSpace,7,955,0,7,0,0
+RBX::Lua,7,1104,0,6,1,0
+"RBX::FactoryProduct<class RBX::Flag,class RBX::Tool,char const * const RBX::sFlag,class RBX::Instance>",7,270,4,0,3,0
+RBX::InterpolatedCFrame,7,952,0,3,4,0
+RBX::POLY::Face,7,1599,0,5,2,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::InsertService,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int),class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const>,2>",7,1401,2,0,5,0
+RBX::Voxel::Grid,7,1193,0,6,1,0
+"RBX::FactoryProduct<class RBX::SpawnLocation,class RBX::BasicPartInstance,char const * const RBX::sSpawnLocation,class RBX::Instance>",7,258,4,0,3,0
+boost::unordered::detail::table_impl<>,7,773,0,4,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType),4>",7,1184,2,0,5,0
+"RBX::Reflection::CallbackDescImpl<class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),1>",7,1784,1,0,6,0
+"RBX::FactoryProduct<class RBX::VehicleSeat,class RBX::SeatImpl<class RBX::PartInstance>,char const * const RBX::sVehicleSeat,class RBX::Instance>",7,267,4,0,3,0
+RBX::HingeTool,7,455,0,5,2,0
+RBX::BasicPartInstance,7,281,4,1,2,0
+"RBX::FactoryProduct<class RBX::Shirt,class RBX::Clothing,char const * const RBX::sShirt,class RBX::Instance>",7,283,4,0,3,0
+boost::iostreams::detail::chain_base<>::chain_impl,7,1183,0,2,5,0
+XmlNameValuePair,7,1671,0,2,5,0
+RBX::ActionStation<>,7,943,0,2,5,0
+RBX::Fire,7,332,3,2,2,0
+RBX::PluginMouse,7,560,2,3,2,0
+"RBX::FactoryProduct<class RBX::FlagStand,class RBX::BasicPartInstance,char const * const RBX::sFlagStand,class RBX::Instance>",7,270,4,0,3,0
+RBX::ForceField,7,1145,3,1,3,0
+RBX::Mouse,7,985,0,6,1,0
+"RBX::SurfaceEnumPropDescriptor<1,enum RBX::SurfaceType>",7,898,7,0,0,0
+"RBX::SurfaceEnumPropDescriptor<1,enum RBX::LegacyController::InputType>",7,898,7,0,0,0
+"RBX::NonFactoryProduct<class RBX::RootInstance,char const * const RBX::sWorkspace>",7,102,6,0,1,0
+"RBX::FactoryProduct<class RBX::SpotLight,class RBX::Light,char const * const RBX::sSpotLight,class RBX::Instance>",7,298,4,0,3,0
+RBX::ActionStation<class RBX::BasicPartInstance>,6,179,4,0,2,0
+"RBX::FactoryProduct<class RBX::Decal,class RBX::FaceInstance,char const * const RBX::sDecal,class RBX::Instance>",6,286,4,0,2,0
+"RBX::FactoryProduct<class RBX::SurfaceSelection,class RBX::PartAdornment,char const * const RBX::sSurfaceSelection,class RBX::Instance>",6,300,3,0,3,0
+"RBX::FactoryProduct<class RBX::SelectionPointLasso,class RBX::SelectionLasso,char const * const RBX::sSelectionPointLasso,class RBX::Instance>",6,300,3,0,3,0
+"RBX::FactoryProduct<class RBX::TextureTrail,class RBX::GuiBase3d,char const * const RBX::sTextureTrail,class RBX::Instance>",6,251,3,0,3,0
+"RBX::FactoryProduct<class RBX::BindableFunction,class RBX::Instance,char const * const RBX::sBindableFunction,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::SelectionBox,class RBX::PVAdornment,char const * const RBX::sSelectionBox,class RBX::Instance>",6,292,3,0,3,0
+RBX::MotorFeature,6,863,1,3,2,0
+"RBX::FactoryProduct<class RBX::BindableEvent,class RBX::Instance,char const * const RBX::sBindableEvent,class RBX::Instance>",6,286,3,0,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::LuaDragger,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class G3D::Vector3,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>),3>",6,1368,2,0,4,0
+RBX::Scripting::DebuggerBreakpoint,6,312,2,2,2,0
+"RBX::FactoryProduct<class RBX::RemoteFunction,class RBX::Instance,char const * const RBX::sRemoteFunction,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::RemoteEvent,class RBX::Instance,char const * const RBX::sRemoteEvent,class RBX::Instance>",6,286,3,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::InsertService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId>,class boost::_bi::list3<class boost::_bi::value<class RBX::InsertService *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>",6,688,2,0,4,0
+"RBX::FactoryProduct<class RBX::LuaDragger,class RBX::Instance,char const * const RBX::sLuaDragger,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::CustomEventReceiver,class RBX::Instance,char const * const RBX::sCustomEventReceiver,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::AdvLuaDragger,class RBX::Instance,char const * const RBX::sAdvLuaDragger,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Value<int,char const * const RBX::sIntValue>,class RBX::Instance,char const * const RBX::sIntValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Scripting::DebuggerBreakpoint,class RBX::Instance,char const * const RBX::Scripting::sDebuggerBreakpoint,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::MotorFeature,class RBX::Feature,char const * const RBX::sMotorFeature,class RBX::Instance>",6,293,3,0,3,0
+"RBX::FactoryProduct<class RBX::Value<double,char const * const RBX::sDoubleValue>,class RBX::Instance,char const * const RBX::sDoubleValue,class RBX::Instance>",6,286,3,0,3,0
+RBX::LuaWebService,6,519,2,1,3,0
+"RBX::FactoryProduct<class RBX::Value<class G3D::Vector3,char const * const RBX::sVector3Value>,class RBX::Instance,char const * const RBX::sVector3Value,class RBX::Instance>",6,286,3,0,3,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::HttpService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::HttpService::HttpContentType),class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,3>",6,1336,1,0,5,0
+"RBX::FactoryProduct<class RBX::Value<class RBX::RbxRay,char const * const RBX::sRayValue>,class RBX::Instance,char const * const RBX::sRayValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Value<class G3D::CoordinateFrame,char const * const RBX::sCFrameValue>,class RBX::Instance,char const * const RBX::sCFrameValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Value<class G3D::Color3,char const * const RBX::sColor3Value>,class RBX::Instance,char const * const RBX::sColor3Value,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Value<class RBX::BrickColor,char const * const RBX::sBrickColorValue>,class RBX::Instance,char const * const RBX::sBrickColorValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::ConstrainedValue<int,char const * const RBX::sIntConstrainedValue>,class RBX::Instance,char const * const RBX::sIntConstrainedValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::ConstrainedValue<double,char const * const RBX::sDoubleConstrainedValue>,class RBX::Instance,char const * const RBX::sDoubleConstrainedValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::CustomEvent,class RBX::Instance,char const * const RBX::sCustomEvent,class RBX::Instance>",6,286,3,0,3,0
+"RBX::Reflection::CallbackDescImpl<bool __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),3>",6,1653,1,0,5,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::ScriptContext,class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list4<class boost::_bi::value<class RBX::ScriptContext *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>",6,985,2,0,4,0
+"RBX::EventReplicator<class RBX::Handles,void __cdecl (enum RBX::NormalId)>",6,974,1,0,5,0
+"RBX::EventReplicator<class RBX::Handles,void __cdecl (enum RBX::NormalId,float)>",6,994,1,0,5,0
+"RBX::Reflection::BoundFuncDesc<class RBX::TestService,void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int),4>",6,1321,2,0,4,0
+RBX::ManualGlueJoint,6,696,0,1,5,0
+RBX::GameBasicSettings,6,353,2,2,2,0
+"RBX::FactoryProduct<class RBX::ArcHandles,class RBX::HandlesBase,char const * const RBX::sArcHandles,class RBX::Instance>",6,292,3,0,3,0
+RBX::LuaStatsItem,6,623,0,3,3,0
+"RBX::FactoryProduct<class RBX::ClickDetector,class RBX::Instance,char const * const RBX::sClickDetector,class RBX::Instance>",6,286,3,0,3,0
+RBX::Plugin,6,755,2,0,4,0
+"RBX::AsyncHttpCache<struct RBX::LuaWebService::CachedLuaWebServiceInfo,1>",6,536,1,0,5,0
+"RBX::Reflection::CallbackDescImpl<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",6,1467,1,0,5,0
+RBX::PolyContact,6,1076,1,4,1,0
+RBX::ScriptService,6,326,2,1,3,0
+"RBX::FactoryProduct<class RBX::Explosion,class RBX::Instance,char const * const RBX::sExplosion,class RBX::Instance>",6,286,3,0,3,0
+RBX::BodyMover,6,73,5,0,1,0
+"RBX::FactoryProduct<class RBX::BillboardGui,class RBX::GuiLayerCollector,char const * const RBX::sAdornmentGui,class RBX::Instance>",6,300,3,0,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (class RBX::Region3,class boost::shared_ptr<class RBX::Instance>,int),3>",6,1066,2,0,4,0
+"RBX::EventReplicator<class RBX::GuiObject,void __cdecl (class RBX::UDim2)>",6,988,1,0,5,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::TestService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int>,class boost::_bi::list4<class boost::_bi::value<class RBX::TestService *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>",6,804,2,0,4,0
+RBX::BindableFunction,6,416,2,0,4,0
+RBX::Feature,6,365,3,1,2,0
+rbx::(free),6,796,0,2,4,0
+"RBX::FactoryProduct<class RBX::MegaClusterInstance,class RBX::PartInstance,char const * const RBX::sMegaCluster,class RBX::Instance>",6,150,4,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf4<void,class RBX::TestService,bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int>,class boost::_bi::list5<class boost::_bi::value<class RBX::TestService *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>,struct boost::arg<4>>>,4,void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>",6,824,2,0,4,0
+"RBX::FactoryProduct<class RBX::ScreenGui,class RBX::GuiLayerCollector,char const * const RBX::sScreenGui,class RBX::Instance>",6,300,3,0,3,0
+RBX::BodyGyro,6,2946,0,4,2,0
+"RBX::FactoryProduct<class RBX::HumanoidController,class RBX::Controller,char const * const RBX::sHumanoidController,class RBX::Instance>",6,181,4,0,2,0
+RBX::AdvRotateTool,6,2478,2,2,2,0
+RBX::PlayerChatLine,6,837,0,5,1,0
+RBX::Teams,6,255,2,1,3,0
+RBX::Visit,6,651,2,1,3,0
+"RBX::FactoryProduct<class RBX::VirtualUser,class RBX::Instance,char const * const RBX::sVirtualUser,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Pose,class RBX::Instance,char const * const RBX::sPose,class RBX::Instance>",6,286,3,0,3,0
+RBX::TextService,6,293,2,2,2,0
+RBX::MD5HasherImpl,6,3136,3,2,1,0
+RBX::Value<>,6,1198,0,4,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Camera,void __cdecl (class G3D::CoordinateFrame,class G3D::CoordinateFrame,float),3>",6,1333,2,0,4,0
+"RBX::FactoryProduct<class RBX::Keyframe,class RBX::Instance,char const * const RBX::sKeyframe,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::ExtrudedPartInstance,class RBX::PartInstance,char const * const RBX::sExtrudedPart,class RBX::Instance>",6,158,4,0,2,0
+"RBX::FactoryProduct<class RBX::ShirtGraphic,class RBX::LegacyCharacterAppearance,char const * const RBX::sShirtGraphic,class RBX::Instance>",6,181,4,0,2,0
+"RBX::FactoryProduct<class RBX::BodyColors,class RBX::LegacyCharacterAppearance,char const * const RBX::sBodyColors,class RBX::Instance>",6,181,4,0,2,0
+"RBX::FactoryProduct<class RBX::Skin,class RBX::LegacyCharacterAppearance,char const * const RBX::sSkin,class RBX::Instance>",6,189,4,0,2,0
+"RBX::FactoryProduct<class RBX::PhysicsSettings,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sPhysicsSettings,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::LuaSettings,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sLuaSettings,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Pants,class RBX::Clothing,char const * const RBX::sPants,class RBX::Instance>",6,189,4,0,2,0
+RBX::SurfaceEnumPropDescriptor<>,6,880,0,4,2,0
+RBX::FillTool,6,446,2,1,3,0
+"RBX::FactoryProduct<class RBX::KeyframeSequence,class RBX::Instance,char const * const RBX::sKeyframeSequence,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Scripting::ScriptDebugger,class RBX::Instance,char const * const RBX::Scripting::sScriptDebugger,class RBX::Instance>",6,286,3,0,3,0
+RBX::Animation,6,223,2,1,3,0
+"RBX::FactoryProduct<class RBX::Scripting::DebuggerWatch,class RBX::Instance,char const * const RBX::Scripting::sDebuggerWatch,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Button,class RBX::Instance,char const * const RBX::sButton,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Toolbar,class RBX::Instance,char const * const RBX::sToolbar,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::Plugin,class RBX::Instance,char const * const RBX::sPlugin,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::BasicPartInstance,class RBX::FormFactorPart,char const * const RBX::sBasicPart,class RBX::Instance>",6,158,4,0,2,0
+RBX::Contact,6,752,0,2,4,0
+"RBX::FactoryProduct<class RBX::DialogRoot,class RBX::Instance,char const * const RBX::sDialogRoot,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::VelocityMotor,class RBX::JointInstance,char const * const RBX::sVelocityMotor,class RBX::Instance>",6,293,3,0,3,0
+"RBX::FactoryProduct<class RBX::Hole,class RBX::Feature,char const * const RBX::sHole,class RBX::Instance>",6,293,3,0,3,0
+"RBX::EventReplicator<class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis)>",6,974,1,0,5,0
+"RBX::FactoryProduct<class RBX::StatusInstance,class RBX::ModelInstance,char const * const RBX::sStatusInstance,class RBX::Instance>",6,150,4,0,2,0
+"RBX::EventReplicator<class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis,float,float)>",6,1034,1,0,5,0
+"RBX::FactoryProduct<class RBX::CharacterMesh,class RBX::CharacterAppearance,char const * const RBX::sCharacterMesh,class RBX::Instance>",6,189,4,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),5>",6,1565,2,0,4,0
+RBX::Sparkles,6,222,3,0,3,0
+RBX::FWService,6,453,3,0,3,0
+RBX::Lighting,6,367,2,1,3,0
+"RBX::FactoryProduct<class RBX::Value<bool,char const * const RBX::sBoolValue>,class RBX::Instance,char const * const RBX::sBoolValue,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::PointLight,class RBX::Light,char const * const RBX::sPointLight,class RBX::Instance>",6,189,4,0,2,0
+"RBX::FactoryProduct<class RBX::DialogChoice,class RBX::Instance,char const * const RBX::sDialogChoice,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::HttpService,class RBX::Instance,char const * const RBX::sHttpService,class RBX::Instance>",6,286,3,0,3,0
+"RBX::FactoryProduct<class RBX::VehicleController,class RBX::Controller,char const * const RBX::sVehicleController,class RBX::Instance>",6,181,4,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::PartInstance,bool __cdecl (enum RBX::NormalId,int),2>",5,826,2,0,3,0
+"RBX::FactoryProduct<class RBX::ServerStorage,class RBX::Instance,char const * const RBX::sServerStorage,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType)>,4,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType)>",5,655,2,0,3,0
+"RBX::FactoryProduct<class RBX::Texture,class RBX::Decal,char const * const RBX::sTexture,class RBX::Instance>",5,173,3,0,2,0
+RBX::GroupSelectionVerb,5,585,0,1,4,0
+RBX::AxisRotateTool,5,1059,3,0,2,0
+"RBX::FactoryProduct<class RBX::FunctionalTest,class RBX::Instance,char const * const RBX::sFunctionalTest,class RBX::Instance>",5,174,3,0,2,0
+RBX::SelectionPartLasso,5,287,3,0,2,0
+RBX::FilteredSelection<class RBX::Instance>,5,404,3,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (int,enum RBX::DataModel::CreatorType),2>",5,825,1,0,4,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (enum RBX::DataModel::Genre),1>",5,803,1,0,4,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::InsertService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int>,class boost::_bi::list4<class boost::_bi::value<class RBX::InsertService *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>",5,495,2,0,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (enum RBX::DataModel::GearGenreSetting,int),2>",5,825,1,0,4,0
+RBX::FilteredSelection<class RBX::PVInstance>,5,428,3,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,bool __cdecl (enum RBX::DataModel::GearType),1>",5,817,1,0,4,0
+RBX::FilteredSelection<class RBX::ModelInstance>,5,428,3,0,2,0
+RBX::BuoyancyBallContact,5,665,0,5,0,0
+"RBX::FactoryProduct<class RBX::PlayerGui,class RBX::BasePlayerGui,char const * const RBX::sPlayerGui,class RBX::Instance>",5,188,3,0,2,0
+"RBX::FactoryProduct<class RBX::Accoutrement,class RBX::Instance,char const * const RBX::sAccoutrement,class RBX::Instance>",5,166,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::RemoteFunction,int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>>,class boost::_bi::list3<class boost::_bi::value<class RBX::RemoteFunction *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>",5,609,2,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::RemoteFunction,int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class boost::_bi::list3<class boost::_bi::value<class RBX::RemoteFunction *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>",5,487,2,0,3,0
+"RBX::FactoryProduct<class RBX::Sky,class RBX::Instance,char const * const RBX::sSky,class RBX::Instance>",5,174,3,0,2,0
+RBX::TopMenuBar,5,344,3,0,2,0
+RBX::DragUtilities,5,477,0,4,1,0
+"RBX::FactoryProduct<class RBX::StarterGear,class RBX::Instance,char const * const RBX::sStarterGear,class RBX::Instance>",5,166,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::slot,class boost::function<void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,2,void __cdecl (enum RBX::GuiService::SpecialKey,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>",5,516,2,0,3,0
+"RBX::NonFactoryProduct<class RBX::PVInstance,char const * const RBX::sPart>",5,168,3,0,2,0
+RBX::Sky,5,267,2,0,3,0
+RBX::DecalTool,5,246,2,1,2,0
+RBX::GeoPairConnector,5,3790,0,2,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::function<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>,3,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>",5,828,2,0,3,0
+"RBX::FactoryProduct<class RBX::Tool,class RBX::BackpackItem,char const * const RBX::sTool,class RBX::Instance>",5,181,3,0,2,0
+RBX::KernelJoint,5,213,5,0,0,0
+"RBX::FactoryProduct<class RBX::Visit,class RBX::Instance,char const * const RBX::sVisit,class RBX::Instance>",5,174,3,0,2,0
+RBX::AdvLuaDragTool,5,537,1,2,2,0
+"RBX::Reflection::EventDesc<class RBX::Instance,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> & (__thiscall RBX::Instance::*)(void)>",5,699,3,0,2,0
+boost::detail::sp_counted_impl_pd<>,5,497,0,5,0,0
+RBX::IndexedMesh,5,280,0,5,0,0
+RBX::JoinCommand,5,819,0,5,0,0
+RBX::ThreadPool,5,1084,0,1,4,0
+RBX::JointBuilder,5,749,0,2,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool)>,3,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool)>",5,645,2,0,3,0
+"RBX::FactoryProduct<class RBX::HopperBin,class RBX::BackpackItem,char const * const RBX::sHopperBin,class RBX::Instance>",5,173,3,0,2,0
+RBX::FastCluster,5,549,1,3,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>,3,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>",5,715,2,0,3,0
+RBX::ActionStation<class RBX::PartInstance>,5,165,3,0,2,0
+RBX::GameTool,5,344,1,3,1,0
+"RBX::FactoryProduct<class RBX::TextLabel,class RBX::GuiLabel,char const * const RBX::sTextLabel,class RBX::Instance>",5,180,3,0,2,0
+RBX::DataModelArbiter,5,408,0,3,2,0
+RBX::PriorityThreadPool::PriorityThreadPoolData,5,766,1,1,3,0
+"RBX::Reflection::EventDesc<class RBX::RemoteEvent,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class RBX::LatchedSignal<class rbx::remote_signal,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,class RBX::LatchedSignal<class rbx::remote_signal,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)> RBX::RemoteEvent::*>",5,647,2,0,3,0
+"RBX::FactoryProduct<class RBX::DebugSettings,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sDebugSettings,class RBX::Instance>",5,166,3,0,2,0
+"RBX::FactoryProduct<class RBX::TaskSchedulerSettings,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sTaskSchedulerSettings,class RBX::Instance>",5,174,3,0,2,0
+Ogre::RbxArchive,5,145,3,2,0,0
+RBX::FunctionalTest,5,238,2,0,3,0
+"RBX::FactoryProduct<class RBX::GuiTextButton,class RBX::GuiButton,char const * const RBX::sGuiTextButton,class RBX::Instance>",5,180,3,0,2,0
+"RBX::FactoryProduct<class RBX::Team,class RBX::Instance,char const * const RBX::sTeam,class RBX::Instance>",5,174,3,0,2,0
+"RBX::Reflection::CallbackDescImpl<class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),2>",5,1404,1,0,4,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Soundscape::SoundService,void __cdecl (enum RBX::SoundType),1>",5,803,1,0,4,0
+"RBX::FactoryProduct<class RBX::Backpack,class RBX::Hopper,char const * const RBX::sBackpack,class RBX::Instance>",5,173,3,0,2,0
+RBX::BallBlockConnector,5,1280,0,4,1,0
+RBX::FlatTool,5,419,1,1,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Scripting::ScriptDebugger,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,int),3>",5,964,2,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::RbxRay)>::slot,class boost::function<void __cdecl (class RBX::RbxRay)>,1,void __cdecl (class RBX::RbxRay)>",5,536,2,0,3,0
+RBX::GlueTool,5,489,0,3,2,0
+"RBX::FactoryProduct<class RBX::Frame,class RBX::GuiObject,char const * const RBX::sFrame,class RBX::Instance>",5,180,3,0,2,0
+RBX::PartDragTool,5,511,2,1,2,0
+RBX::ContactConnector,5,973,0,5,0,0
+RBX::Clothing,5,162,3,1,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::StarterGuiService,void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool),2>",5,832,1,0,4,0
+RBX::PolyCellContact,5,527,0,4,1,0
+RBX::CollectionService,5,302,2,1,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class G3D::CoordinateFrame)>::slot,class boost::function<void __cdecl (class G3D::CoordinateFrame)>,1,void __cdecl (class G3D::CoordinateFrame)>",5,480,2,0,3,0
+RBX::Name,5,640,0,3,2,0
+"RBX::FactoryProduct<class FLog::FastLogSettingsItem,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sFastLogSettings,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,float)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,float)>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,float)>",5,641,2,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::slot,class boost::function<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,2,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>",5,598,2,0,3,0
+RBX::JointInstance,5,227,2,2,1,0
+"RBX::FactoryProduct<class RBX::Snap,class RBX::JointInstance,char const * const RBX::sSnap,class RBX::Instance>",5,173,3,0,2,0
+"RBX::FactoryProduct<class RBX::Weld,class RBX::JointInstance,char const * const RBX::sWeld,class RBX::Instance>",5,173,3,0,2,0
+"RBX::FactoryProduct<class RBX::Rotate,class RBX::JointInstance,char const * const RBX::sRotate,class RBX::Instance>",5,181,3,0,2,0
+"RBX::FactoryProduct<class RBX::Motor,class RBX::JointInstance,char const * const RBX::sMotor,class RBX::Instance>",5,181,3,0,2,0
+"RBX::FactoryProduct<class RBX::NotificationObject,class RBX::Frame,char const * const RBX::sNotificationObject,class RBX::Instance>",5,180,3,0,2,0
+"RBX::FactoryProduct<class RBX::RotateP,class RBX::DynamicRotate,char const * const RBX::sRotateP,class RBX::Instance>",5,181,3,0,2,0
+"RBX::FactoryProduct<class RBX::ManualSurfaceJointInstance,class RBX::JointInstance,char const * const RBX::sManualSurfaceJointInstance,class RBX::Instance>",5,173,3,0,2,0
+"RBX::FactoryProduct<class RBX::Glue,class RBX::JointInstance,char const * const RBX::sGlue,class RBX::Instance>",5,181,3,0,2,0
+"RBX::FactoryProduct<class RBX::TouchTransmitter,class RBX::Instance,char const * const RBX::sTouchTransmitter,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class G3D::Color3)>::slot,class boost::function<void __cdecl (class G3D::Color3)>,1,void __cdecl (class G3D::Color3)>",5,451,2,0,3,0
+RBX::MaterialTool,5,529,0,2,3,0
+"RBX::FactoryProduct<class RBX::FileMesh,class RBX::DataModelMesh,char const * const RBX::sFileMesh,class RBX::Instance>",5,166,3,0,2,0
+RBX::FileMesh,5,202,2,0,3,0
+"RBX::FactoryProduct<class RBX::RotateV,class RBX::DynamicRotate,char const * const RBX::sRotateV,class RBX::Instance>",5,181,3,0,2,0
+"RBX::FactoryProduct<class RBX::NotificationBox,class RBX::GuiObject,char const * const RBX::sNotificationBox,class RBX::Instance>",5,180,3,0,2,0
+RBX::Scripting::DebuggerWatch,5,160,2,1,2,0
+"RBX::FactoryProduct<class RBX::SpecialShape,class RBX::FileMesh,char const * const RBX::sSpecialShape,class RBX::Instance>",5,174,3,0,2,0
+"RBX::FactoryProduct<class RBX::GameSettings,class RBX::GlobalAdvancedSettings::Item,char const * const RBX::sGameSettings,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float)>::slot,class boost::function<void __cdecl (float)>,1,void __cdecl (float)>",5,387,2,0,3,0
+RBX::RbxParticleFactory,5,261,0,5,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiService,void __cdecl (enum RBX::GuiService::SpecialKey),1>",5,803,1,0,4,0
+RBX::GameSettings,5,204,2,1,2,0
+"RBX::FactoryProduct<class RBX::Smoke,class RBX::Instance,char const * const RBX::sSmoke,class RBX::Instance>",5,174,3,0,2,0
+"RBX::FactoryProduct<class RBX::Script,class RBX::BaseScript,char const * const RBX::sScript,class RBX::Instance>",5,166,3,0,2,0
+"RBX::FactoryProduct<class RBX::Camera,class RBX::Instance,char const * const RBX::sCamera,class RBX::Instance>",5,174,3,0,2,0
+"boost::iostreams::stream_buffer<class boost::iostreams::basic_gzip_compressor<class std::allocator<char>>,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::input>",5,308,4,0,1,0
+RBX::Cofm,5,833,0,4,1,0
+RBX::GuiDrawImage,5,1673,0,4,1,0
+"RBX::FactoryProduct<class RBX::Fire,class RBX::Instance,char const * const RBX::sFire,class RBX::Instance>",5,174,3,0,2,0
+"RBX::FactoryProduct<class RBX::ForceField,class RBX::Instance,char const * const RBX::sForceField,class RBX::Instance>",5,174,3,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,class RBX::Lua::WeakFunctionRef),5>",5,1091,2,0,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,bool),3>",5,825,2,0,3,0
+"RBX::FactoryProduct<class RBX::LocalScript,class RBX::Script,char const * const RBX::sLocalScript,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class G3D::Vector2)>::slot,class boost::function<void __cdecl (class G3D::Vector2)>,1,void __cdecl (class G3D::Vector2)>",5,429,2,0,3,0
+"RBX::FactoryProduct<class RBX::Sparkles,class RBX::Instance,char const * const RBX::sSparkles,class RBX::Instance>",5,166,3,0,2,0
+RBX::PersonalServerService,5,622,2,1,2,0
+RBX::Reflection::YieldFunctionDescriptor,5,1764,0,1,4,0
+RBX::Reflection::MemberDescriptorContainer<>,5,1764,0,1,4,0
+"RBX::FactoryProduct<class RBX::StockSound,class RBX::Soundscape::SoundChannel,char const * const RBX::sStockSound,class RBX::Instance>",5,166,3,0,2,0
+"RBX::Reflection::EventDesc<class RBX::PartInstance,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> & (__thiscall RBX::PartInstance::*)(void)>",5,745,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (double,double)>::slot,class boost::function<void __cdecl (double,double)>,2,void __cdecl (double,double)>",5,407,2,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float)>::slot,class boost::function<void __cdecl (float,float)>,2,void __cdecl (float,float)>",5,407,2,0,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>::slot,class boost::function<void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,3,void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>",5,830,2,0,3,0
+"RBX::FactoryProduct<class RBX::GameBasicSettings,class RBX::GlobalBasicSettings::Item,char const * const RBX::sGameBasicSettings,class RBX::Instance>",5,174,3,0,2,0
+"RBX::FactoryProduct<class RBX::GuiImageButton,class RBX::GuiButton,char const * const RBX::sGuiImageButton,class RBX::Instance>",5,180,3,0,2,0
+"RBX::FactoryProduct<class RBX::Animation,class RBX::Instance,char const * const RBX::sAnimation,class RBX::Instance>",5,174,3,0,2,0
+"RBX::FactoryProduct<class RBX::Motor6D,class RBX::Motor,char const * const RBX::sMotor6D,class RBX::Instance>",5,183,3,0,2,0
+"RBX::FactoryProduct<class RBX::Humanoid,class RBX::Instance,char const * const RBX::sHumanoid,class RBX::Instance>",5,174,3,0,2,0
+RBX::Scale9Frame,5,349,3,0,2,0
+"RBX::FactoryProduct<class RBX::TextBox,class RBX::GuiObject,char const * const RBX::sTextBox,class RBX::Instance>",5,180,3,0,2,0
+"RBX::FactoryProduct<class RBX::Configuration,class RBX::Instance,char const * const RBX::sConfiguration,class RBX::Instance>",5,174,3,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::InputObject)>::slot,class boost::function<void __cdecl (class RBX::InputObject)>,1,void __cdecl (class RBX::InputObject)>",5,471,2,0,3,0
+RBX::BoolPropertyVerb,5,735,0,4,1,0
+RBX::PART::ParametricPartInstance,4,57,3,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::NormalId,float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::EventReplicatorImpl<2,class RBX::Handles,void __cdecl (enum RBX::NormalId,float)>,enum RBX::NormalId,float>,class boost::_bi::list3<class boost::_bi::value<class RBX::EventReplicatorImpl<2,class RBX::Handles,void __cdecl (enum RBX::NormalId,float)> *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (enum RBX::NormalId,float)>",4,302,2,0,2,0
+"RBX::FactoryProduct<class RBX::InsertService,class RBX::Instance,char const * const RBX::sInsertService,class RBX::Instance>",4,93,3,0,1,0
+"RBX::FactoryProduct<class RBX::ReplicatedStorage,class RBX::Instance,char const * const RBX::sReplicatedStorage,class RBX::Instance>",4,93,3,0,1,0
+"RBX::Reflection::EventDesc<class RBX::PartInstance,void __cdecl (void),class rbx::signal<void __cdecl (void)>,class rbx::signal<void __cdecl (void)> & (__thiscall RBX::PartInstance::*)(void)>",4,620,3,0,1,0
+RBX::POLY::PrismMesh,4,366,0,2,2,0
+RBX::Network::ClientReplicator::ClientStatsItem,4,542,0,1,3,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::UDim2)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::EventReplicatorImpl<1,class RBX::GuiObject,void __cdecl (class RBX::UDim2)>,class RBX::UDim2>,class boost::_bi::list2<class boost::_bi::value<class RBX::EventReplicatorImpl<1,class RBX::GuiObject,void __cdecl (class RBX::UDim2)> *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::UDim2)>",4,321,2,0,2,0
+rbx::signals::signal<>,4,2860,0,4,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,bool __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",4,357,2,0,2,0
+"RBX::FactoryProduct<class RBX::TestService,class RBX::Instance,char const * const RBX::sTestService,class RBX::Instance>",4,93,3,0,1,0
+"RBX::AsyncHttpCache<struct RBX::ScriptInformationProvider::CachedScriptInfo,0>",4,367,1,0,3,0
+RBX::LocalBackpack,4,460,0,1,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,bool __cdecl (class RBX::Region3,class boost::shared_ptr<class RBX::Instance>),2>",4,612,2,0,2,0
+RBX::SeatImpl<class RBX::BasicPartInstance>,4,57,3,0,1,0
+"RBX::FactoryProduct<class RBX::UserInputService,class RBX::Instance,char const * const RBX::sUserInputService,class RBX::Instance>",4,93,3,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class RBX::RbxRay,class boost::shared_ptr<class RBX::Instance>,bool),3>",4,717,2,0,2,0
+"RBX::FactoryProduct<class RBX::ChatService,class RBX::Instance,char const * const RBX::sChatService,class RBX::Instance>",4,93,3,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::TestService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int),3>",4,578,2,0,2,0
+RBX::PolyPolyContact,4,448,0,3,1,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::Humanoid::*>",4,579,3,0,1,0
+.?AV?$callable@Vslot@?$signal@$$A6AXV?$shared_ptr@$$CBV?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@@boost@@@Z@signals@rbx@@V?$function@$$A6AXV?$shared_ptr@$$CBV?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@@boost@@@Z@boost@@$00$$A6AXV?$shared_ptr@$$CBV?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@@6@@Z@rbx@@,4,433,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::RunTransition)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::DataModel,class RBX::RunTransition>,class boost::_bi::list2<class boost::_bi::value<class RBX::DataModel *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::RunTransition)>",4,302,2,0,2,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::Humanoid::*>",4,579,3,0,1,0
+"RBX::FactoryProduct<class RBX::ScriptContext,class RBX::Instance,char const * const RBX::sScriptContext,class RBX::Instance>",4,93,3,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float,float,float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf4<void,class RBX::AnimationTrackState,float,float,float,float>,class boost::_bi::list5<class boost::_bi::value<class RBX::AnimationTrackState *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>,struct boost::arg<4>>>,4,void __cdecl (float,float,float,float)>",4,326,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float,float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::AnimationTrackState,float,float,float>,class boost::_bi::list4<class boost::_bi::value<class RBX::AnimationTrackState *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (float,float,float)>",4,318,2,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::LuaDragger,void __cdecl (enum G3D::Vector3::Axis),1>",4,727,1,0,3,0
+"RBX::Reflection::EventDesc<class RBX::CustomEventReceiver,void __cdecl (float),class rbx::signal<void __cdecl (float)>,class rbx::signal<void __cdecl (float)> RBX::CustomEventReceiver::*>",4,537,3,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Toolbar,class boost::shared_ptr<class RBX::Instance> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),3>",4,640,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Heartbeat const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::ScriptContext,class RBX::Heartbeat const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::ScriptContext *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Heartbeat const &)>",4,614,1,0,3,0
+RBX::Lua::WeakThreadRef,4,263,0,3,1,0
+"RBX::Value<bool,char const * const RBX::sBoolValue>",4,149,2,0,2,0
+Ogre::ShaderScriptListener,4,24,4,0,0,0
+"RBX::EventReplicator<class RBX::GuiButton,void __cdecl (void)>",4,347,1,0,3,0
+"RBX::Reflection::EventDesc<class RBX::InsertService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::InsertService::*>",4,674,1,0,3,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::RemoteFunction,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class boost::shared_ptr<struct RBX::Reflection::Tuple const>,2>",4,1101,2,0,2,0
+RBX::FWInstance,4,386,0,2,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::VirtualUser,void __cdecl (class G3D::Vector2,class G3D::CoordinateFrame),2>",4,520,2,0,2,0
+RBX::Lua::FunctionScriptSlot,4,217,0,4,0,0
+RBX::FaceVertexConnector,4,351,0,1,3,0
+"RBX::Reflection::RemoteEventDesc<class RBX::Network::Player,void __cdecl (void),class rbx::remote_signal<void __cdecl (void)>>",4,567,3,0,1,0
+RBX::TaskSchedulerSettings,4,361,0,2,2,0
+"RBX::FactoryProduct<class RBX::ModelInstance,class RBX::PVInstance,char const * const RBX::sModel,class RBX::Instance>",4,116,3,0,1,0
+RBX::RotateConnector,4,228,0,4,0,0
+RBX::EdgeEdgeConnector,4,351,0,1,3,0
+RBX::RbxParticleEmitter,4,288,1,2,1,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::DataModel,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,2>",4,951,2,0,2,0
+RBX::FileSystem,4,412,0,3,1,0
+"boost::detail::thread_data<class boost::_bi::bind_t<void,void (__cdecl *)(class boost::shared_ptr<struct RBX::BaseThreadPool::PoolData>,class boost::shared_ptr<class tbb::spin_mutex>),class boost::_bi::list2<class boost::_bi::value<class boost::shared_ptr<struct RBX::BaseThreadPool::PoolData>>,class boost::_bi::value<class boost::shared_ptr<class tbb::spin_mutex>>>>>",4,196,2,0,2,0
+RBX::MergeBinder,4,464,0,4,0,0
+RBX::DynamicRotateJoint,4,455,1,3,0,0
+RBX::Pose,4,284,0,4,0,0
+"RBX::FactoryProduct<class RBX::ChangeHistoryService,class RBX::Instance,char const * const RBX::sChangeHistoryService,class RBX::Instance>",4,93,3,0,1,0
+ArchiveBinder,4,450,0,4,0,0
+RBX::TextDisplay,4,123,2,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Scripting::ScriptDebugger,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant),2>",4,510,2,0,2,0
+RBX::StudsTool,4,626,0,2,2,0
+RBX::SeatImpl<class RBX::PartInstance>,4,65,3,0,1,0
+RBX::Button,4,149,2,0,2,0
+RBX::FWFinal<>,4,341,0,4,0,0
+RBX::Toolbar,4,193,2,0,2,0
+"RBX::FactoryProduct<class RBX::FriendService,class RBX::Instance,char const * const RBX::sFriendService,class RBX::Instance>",4,93,3,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",4,387,2,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,void __cdecl (class G3D::Vector3,class boost::shared_ptr<class RBX::Instance>),2>",4,494,2,0,2,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::BindableFunction,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class boost::shared_ptr<struct RBX::Reflection::Tuple const>,1>",4,1012,2,0,2,0
+RBX::SnapSelectionVerb,4,650,0,3,1,0
+RBX::VertexDeclarationManager,4,753,0,1,3,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DialogRoot,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>),2>",4,591,2,0,2,0
+"RBX::NonFactoryProduct<class RBX::Mouse,char const * const RBX::sPlayerMouse>",4,69,3,0,1,0
+RBX::PlayerMouse,4,371,2,0,2,0
+"RBX::FactoryProduct<class RBX::MarketplaceService,class RBX::Instance,char const * const RBX::sMarketplaceService,class RBX::Instance>",4,93,3,0,1,0
+RBX::BodyColors,4,309,0,3,1,0
+RBX::ChatWidget,4,131,2,0,2,0
+RBX::EquationDisplay,4,134,2,0,2,0
+"RBX::FactoryProduct<class RBX::BadgeService,class RBX::Instance,char const * const RBX::sBadgeService,class RBX::Instance>",4,93,3,0,1,0
+RBX::Network::DescriptorReceiver<>,4,393,0,4,0,0
+RBX::Motor,4,149,3,0,1,0
+"boost::iostreams::detail::filtering_stream_base<class boost::iostreams::chain<struct boost::iostreams::output,char,struct std::char_traits<char>,class std::allocator<char>>,struct boost::iostreams::public_>",4,200,2,0,2,0
+RBX::Weld,4,352,1,3,0,0
+"boost::iostreams::stream_buffer<class boost::iostreams::basic_null_device<char,struct boost::iostreams::input>,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::input>",4,206,4,0,0,0
+RBX::FormFactorPart,4,57,3,0,1,0
+RBX::HttpService,4,311,0,4,0,0
+"RBX::Value<int,char const * const RBX::sIntValue>",4,149,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum G3D::Vector3::Axis,float,float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::EventReplicatorImpl<3,class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis,float,float)>,enum G3D::Vector3::Axis,float,float>,class boost::_bi::list4<class boost::_bi::value<class RBX::EventReplicatorImpl<3,class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis,float,float)> *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (enum G3D::Vector3::Axis,float,float)>",4,312,2,0,2,0
+RBX::SafeChat,4,354,0,4,0,0
+"RBX::Value<double,char const * const RBX::sDoubleValue>",4,149,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::BrickColor)>::slot,class boost::function<void __cdecl (class RBX::BrickColor)>,1,void __cdecl (class RBX::BrickColor)>",4,292,2,0,2,0
+"RBX::FactoryProduct<class RBX::Teams,class RBX::Instance,char const * const RBX::sTeams,class RBX::Instance>",4,93,3,0,1,0
+"RBX::FactoryProduct<class RBX::ServerScriptService,class RBX::Instance,char const * const RBX::sServerScriptService,class RBX::Instance>",4,93,3,0,1,0
+"boost::iostreams::filtering_stream<struct boost::iostreams::output,char,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::public_>",4,237,3,0,1,0
+RBX::HeartbeatTask,4,915,0,2,2,0
+"RBX::Value<class G3D::Vector3,char const * const RBX::sVector3Value>",4,149,2,0,2,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (void),class rbx::signal<void __cdecl (void)>,class rbx::signal<void __cdecl (void)> RBX::Humanoid::*>",4,596,3,0,1,0
+"RBX::Value<class RBX::RbxRay,char const * const RBX::sRayValue>",4,156,2,0,2,0
+"RBX::Value<class G3D::CoordinateFrame,char const * const RBX::sCFrameValue>",4,152,2,0,2,0
+"RBX::Value<class G3D::Color3,char const * const RBX::sColor3Value>",4,149,2,0,2,0
+"RBX::Value<class RBX::BrickColor,char const * const RBX::sBrickColorValue>",4,149,2,0,2,0
+"RBX::ConstrainedValue<int,char const * const RBX::sIntConstrainedValue>",4,149,2,0,2,0
+"RBX::ConstrainedValue<double,char const * const RBX::sDoubleConstrainedValue>",4,149,2,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Soundscape::CollisionSoundManager,struct std::pair<class RBX::Primitive *,class RBX::Primitive *>>,class boost::_bi::list2<class boost::_bi::value<class RBX::Soundscape::CollisionSoundManager *>,struct boost::arg<1>>>,1,void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>",4,299,2,0,2,0
+ProfilingItem,4,380,0,4,0,0
+RBX::ClickDetector,4,358,2,0,2,0
+"RBX::Reflection::EventDesc<class RBX::Humanoid,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::Humanoid::*>",4,587,3,0,1,0
+RBX::LocalScript,4,481,0,2,2,0
+RBX::Reflection::TGenericSlotWrapper<>,4,251,0,4,0,0
+"RBX::Reflection::EventDesc<class RBX::SkateboardPlatform,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)> RBX::SkateboardPlatform::*>",4,641,3,0,1,0
+RBX::HUMAN::Freefall,4,116,1,2,1,0
+RBX::UnifiedImageWidget,4,147,2,0,2,0
+"RBX::FactoryProduct<class RBX::Lighting,class RBX::Instance,char const * const RBX::sLighting,class RBX::Instance>",4,93,3,0,1,0
+RBX::AdvArrowToolBase,4,357,1,2,1,0
+RBX::Reflection::EventDescriptor,4,1675,0,1,3,0
+RBX::Light,4,54,3,0,1,0
+"RBX::Reflection::EventDesc<class RBX::PartInstance,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class RBX::PartInstance::TouchedSignal,class RBX::PartInstance::TouchedSignal & (__thiscall RBX::PartInstance::*)(void)>",4,881,2,0,2,0
+RBX::DialogChoice,4,180,2,0,2,0
+"RBX::FactoryProduct<class RBX::TimerService,class RBX::Instance,char const * const RBX::sTimerService,class RBX::Instance>",4,93,3,0,1,0
+RBX::DeleteBase,4,721,0,1,3,0
+RBX::GeometryService,4,311,2,1,1,0
+RBX::RenderHooksService,4,157,2,0,2,0
+"RBX::Reflection::EventDesc<class RBX::FlagStand,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::FlagStand::*>",4,561,3,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (bool)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::ViewRbxGfx,bool>,class boost::_bi::list2<class boost::_bi::value<class RBX::ViewRbxGfx *>,struct boost::arg<1>>>,1,void __cdecl (bool)>",3,185,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (class RBX::Region3,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>,int),3>",3,874,1,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::AnimationTrack,void __cdecl (float,float,float),3>",3,723,1,0,2,0
+RBX::Reflection::ArgHelper,3,192,0,3,0,0
+RBX::GlobalAdvancedSettings,3,96,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,void __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",3,382,2,0,1,0
+boost::shared_ptr<>,3,361,0,2,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::SelectionChanged const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Selection,class RBX::SelectionChanged const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::Selection *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::SelectionChanged const &)>",3,276,1,0,2,0
+"RBX::GlobalBasicSettingsItem<class RBX::GameBasicSettings,char const * const RBX::sGameBasicSettings>",3,91,2,0,1,0
+RBX::GlobalBasicSettings,3,77,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,bool),2>",3,290,2,0,1,0
+RBX::PrismPoly,3,1567,0,2,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::InsertService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list3<class boost::_bi::value<class RBX::InsertService *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>",3,511,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>",3,276,1,0,2,0
+RBX::Decal,3,54,2,0,1,0
+RBX::Backpack,3,213,0,2,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::InsertService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class boost::_bi::list3<class boost::_bi::value<class RBX::InsertService *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>",3,388,1,0,2,0
+RBX::HammerTool,3,65,2,0,1,0
+RBX::Reflection::EventDescImpl<>,3,426,0,3,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::LuaDragger,void __cdecl (class RBX::RbxRay),1>",3,269,2,0,1,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::Stats::sStatsItem>",3,46,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Network::ChatMessage const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::ChatOutput,class RBX::Network::ChatMessage const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::ChatOutput *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Network::ChatMessage const &)>",3,276,1,0,2,0
+RBX::CameraZoomExtentsCommand,3,228,0,1,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::NormalId)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::EventReplicatorImpl<1,class RBX::Handles,void __cdecl (enum RBX::NormalId)>,enum RBX::NormalId>,class boost::_bi::list2<class boost::_bi::value<class RBX::EventReplicatorImpl<1,class RBX::Handles,void __cdecl (enum RBX::NormalId)> *>,struct boost::arg<1>>>,1,void __cdecl (enum RBX::NormalId)>",3,276,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (struct lua_State *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Scripting::ScriptDebugger,struct lua_State *>,class boost::_bi::list2<class boost::_bi::value<class RBX::Scripting::ScriptDebugger *>,struct boost::arg<1>>>,1,void __cdecl (struct lua_State *)>",3,276,1,0,2,0
+RBX::FilteredSelection<>,3,238,0,3,0,0
+RBX::RotateP,3,269,0,2,1,0
+RBX::GuiItem,3,652,0,3,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,int)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::EventReplicatorImpl<2,class RBX::GuiObject,void __cdecl (int,int)>,int,int>,class boost::_bi::list3<class boost::_bi::value<class RBX::EventReplicatorImpl<2,class RBX::GuiObject,void __cdecl (int,int)> *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (int,int)>",3,276,1,0,2,0
+"RBX::Reflection::EventDesc<class RBX::InsertService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)> RBX::InsertService::*>",3,404,1,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Controller,void __cdecl (enum RBX::Controller::Button,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),2>",3,286,2,0,1,0
+boost::condition_variable,3,327,0,1,2,0
+RBX::BallEdgeConnector,3,315,0,1,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState)>::slot,class boost::function<void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState)>,2,void __cdecl (enum RBX::SkateboardPlatform::MoveState,enum RBX::SkateboardPlatform::MoveState)>",3,276,1,0,2,0
+RBX::CompactCFrame,3,195,0,2,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),2>",3,329,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ScriptContext,void __cdecl (int,class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),3>",3,495,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,int,bool)>::slot,class boost::function<void __cdecl (int,int,bool)>,3,void __cdecl (int,int,bool)>",3,276,1,0,2,0
+RBX::Reflection::EnumDescriptor,3,494,0,3,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::BadgeService,bool __cdecl (int),bool,1>",3,1030,1,0,2,0
+std::_Tree<>,3,401,0,3,0,0
+RBX::Stats::Item,3,46,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool)>::slot,class boost::function<void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool)>,2,void __cdecl (enum RBX::StarterGuiService::CoreGuiType,bool)>",3,276,1,0,2,0
+"RBX::Reflection::EventDesc<class RBX::HopperBin,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::HopperBin::*>",3,396,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::UIEvent const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::VirtualUser,class RBX::UIEvent const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::VirtualUser *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::UIEvent const &)>",3,276,1,0,2,0
+RBX::BackpackItem,3,54,2,0,1,0
+"RBX::EventReplicator<class RBX::GuiButton,void __cdecl (int,int)>",3,315,1,0,2,0
+RBX::WeldTool,3,373,0,1,2,0
+RBX::RigidJoint,3,141,2,1,0,0
+RBX::InletTool,3,373,0,1,2,0
+RBX::BodyThrust,3,733,1,2,0,0
+"RBX::Reflection::EventDesc<class RBX::AnimationTrackState,void __cdecl (float,float),class rbx::remote_signal<void __cdecl (float,float)>,class rbx::remote_signal<void __cdecl (float,float)> RBX::AnimationTrackState::*>",3,404,1,0,2,0
+RBX::UniversalTool,3,373,0,1,2,0
+RBX::Network::NetworkOwnerJob,3,295,0,3,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,int __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int),int,3>",3,740,2,0,1,0
+RBX::Keyframe,3,140,0,3,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,int,enum RBX::FriendService::FriendEventType)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::FriendService,int,int,enum RBX::FriendService::FriendEventType>,class boost::_bi::list4<class boost::_bi::value<class RBX::FriendService *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (int,int,enum RBX::FriendService::FriendEventType)>",3,276,1,0,2,0
+RBX::Network::ClientReplicator,3,445,0,3,0,0
+RBX::RightMotorTool,3,373,0,1,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,int,enum RBX::FriendService::FriendStatus)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::FriendService,int,int,enum RBX::FriendService::FriendStatus>,class boost::_bi::list4<class boost::_bi::value<class RBX::FriendService *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (int,int,enum RBX::FriendService::FriendStatus)>",3,276,1,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool),3>",3,426,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>",3,276,1,0,2,0
+RBX::GuiBase,3,112,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MarketplaceService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int),3>",3,325,2,0,1,0
+RBX::SmoothNoOutlinesTool,3,373,0,1,2,0
+RBX::Geometry,3,78,3,0,0,0
+RBX::PhysicsJob,3,145,0,3,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::MarketplaceService,bool __cdecl (class boost::shared_ptr<class RBX::Instance>,int),bool,2>",3,715,2,0,1,0
+RBX::Message,3,54,2,0,1,0
+RBX::HUMAN::Dead,3,297,0,2,1,0
+RBX::FaceInstance,3,120,2,0,1,0
+RBX::PartAdornment,3,54,2,0,1,0
+"RBX::Reflection::RemoteEventDesc<class RBX::Network::Player,void __cdecl (bool,int),class rbx::remote_signal<void __cdecl (bool,int)>>",3,40,3,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",3,369,2,0,1,0
+"RBX::GlobalAdvancedSettingsItem<class FLog::FastLogSettingsItem,char const * const RBX::sFastLogSettings>",3,91,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,1,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>",3,276,1,0,2,0
+"RBX::Reflection::EventDesc<class RBX::DialogRoot,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)> RBX::DialogRoot::*>",3,404,1,0,2,0
+"boost::iostreams::detail::filtering_stream_base<class boost::iostreams::chain<struct boost::iostreams::input,char,struct std::char_traits<char>,class std::allocator<char>>,struct boost::iostreams::public_>",3,193,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum G3D::Vector3::Axis)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::EventReplicatorImpl<1,class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis)>,enum G3D::Vector3::Axis>,class boost::_bi::list2<class boost::_bi::value<class RBX::EventReplicatorImpl<1,class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis)> *>,struct boost::arg<1>>>,1,void __cdecl (enum G3D::Vector3::Axis)>",3,276,1,0,2,0
+"boost::iostreams::filtering_stream<struct boost::iostreams::input,char,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::public_>",3,122,3,0,0,0
+RBX::GuiBase2d,3,544,0,3,0,0
+RBX::BallVertexConnector,3,315,0,1,2,0
+RBX::GroundStage,3,151,0,2,1,0
+RBX::FaceEdgeConnector,3,654,0,2,1,0
+RBX::StopCommand,3,726,0,1,2,0
+RBX::Hole,3,286,1,2,0,0
+RBX::HUMAN::Seated,3,153,1,0,2,0
+"RBX::FactoryProduct<class RBX::Soundscape::SoundService,class RBX::Instance,char const * const RBX::Soundscape::sSoundService,class RBX::Instance>",3,81,2,0,1,0
+RBX::HUMAN::PlatformStanding,3,153,1,0,2,0
+RBX::HandlesBase,3,54,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DebrisService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,double),2>",3,405,2,0,1,0
+RBX::HUMAN::Ragdoll,3,131,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::Humanoid::Status)>::slot,class boost::function<void __cdecl (enum RBX::Humanoid::Status)>,1,void __cdecl (enum RBX::Humanoid::Status)>",3,276,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (char const *,bool)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::TextBox,char const *,bool>,class boost::_bi::list3<class boost::_bi::value<class RBX::TextBox *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (char const *,bool)>",3,276,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class RBX::PartInstance::TouchedSignal::TouchedSlot,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",3,407,2,0,1,0
+Ogre::RbxManualTextureLoader,3,730,0,1,2,0
+"RBX::GlobalAdvancedSettingsItem<class RBX::PhysicsSettings,char const * const RBX::sPhysicsSettings>",3,91,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Primitive *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::PhysicsService,class RBX::Primitive *>,class boost::_bi::list2<class boost::_bi::value<class RBX::PhysicsService *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Primitive *)>",3,276,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Stepped const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::IStepped,class RBX::Stepped const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::IStepped *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Stepped const &)>",3,276,1,0,2,0
+"RBX::GlobalAdvancedSettingsItem<class RBX::GameSettings,char const * const RBX::sGameSettings>",3,91,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (int,int,int),3>",3,382,2,0,1,0
+"boost::iostreams::stream_buffer<class boost::iostreams::basic_gzip_compressor<class std::allocator<char>>,struct std::char_traits<char>,class std::allocator<char>,struct boost::iostreams::output>",3,280,2,0,1,0
+"RBX::GlobalAdvancedSettingsItem<class RBX::LuaSettings,char const * const RBX::sLuaSettings>",3,91,2,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,void __cdecl (class RBX::Region3int16),1>",3,501,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::UserInputService::SwipeDirection)>::slot,class boost::function<void __cdecl (enum RBX::UserInputService::SwipeDirection)>,1,void __cdecl (enum RBX::UserInputService::SwipeDirection)>",3,276,1,0,2,0
+RBX::AdvDragTool,3,535,0,1,2,0
+"RBX::GlobalAdvancedSettingsItem<class RBX::DebugSettings,char const * const RBX::sDebugSettings>",3,91,2,0,1,0
+"RBX::GlobalAdvancedSettingsItem<class RBX::TaskSchedulerSettings,char const * const RBX::sTaskSchedulerSettings>",3,91,2,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::ManualJointHelper,class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list3<class boost::_bi::value<class RBX::ManualJointHelper *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>",3,563,1,0,2,0
+RBX::DataModel::GenericJob,3,420,0,2,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Joint *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::JointsService,class RBX::Joint *>,class boost::_bi::list2<class boost::_bi::value<class RBX::JointsService *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Joint *)>",3,276,1,0,2,0
+"RBX::Reflection::EventDesc<class RBX::Tool,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class RBX::Tool::special_equipped_signal,class RBX::Tool::special_equipped_signal RBX::Tool::*>",3,477,1,0,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::HttpService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>),1>",3,674,1,0,2,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::Controller::Button)>::slot,class boost::function<void __cdecl (enum RBX::Controller::Button)>,1,void __cdecl (enum RBX::Controller::Button)>",3,276,1,0,2,0
+RBX::POLY::PyramidMesh,3,303,0,1,2,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Stats::StatsService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>),2>",3,695,1,0,2,0
+RBX::Reflection::EnumDesc<enum RBX::TextService::XAlignment>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>,3,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>)>",2,642,1,0,1,0
+RBX::ReplicatedStorage,2,135,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ModelInstance,void __cdecl (class G3D::Vector3),1>",2,143,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::GuiService::SpecialKey>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>::slot,class boost::function<void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>,2,void __cdecl (int,class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>",2,360,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::GuiService::CenterDialogType>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,bool __cdecl (class RBX::Region3,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>),2>",2,429,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Humanoid::NameOcclusion>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MarketplaceService,void __cdecl (int,int,bool),3>",2,154,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::TextService::YAlignment>,2,183,1,0,1,0
+RBX::Stats::TypedStatsItem<int>,2,38,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>::slot,class boost::function<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>,2,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::ContentId)>",2,356,1,0,1,0
+RBX::Network::Client,2,10,0,2,0,0
+boost::_bi::storage2<>,2,123,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::TextService::FontSize>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::TextService::Font>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::KeyframeSequenceProvider,class RBX::ContentId __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",2,323,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const> __cdecl (void),0>",2,230,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::KeyframeSequenceProvider,class boost::shared_ptr<class RBX::Instance> __cdecl (class RBX::ContentId),1>",2,315,1,0,1,0
+RBX::PlayerGui,2,161,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::GuiObject::TweenEasingDirection>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::GuiObject::TweenEasingStyle>,2,183,1,0,1,0
+RBX::StarterGear,2,135,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::AssetService::AccessType>,2,183,1,0,1,0
+"boost::detail::thread_data<class boost::_bi::bind_t<void,void (__cdecl *)(unsigned __int64,bool *),class boost::_bi::list2<class boost::_bi::value<int>,class boost::_bi::value<bool *>>>>",2,50,2,0,0,0
+RBX::NonFactoryProduct<>,2,198,0,2,0,0
+RBX::WebParser,2,572,0,2,0,0
+RBX::Network::PhysicsSender,2,375,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::ChangeHistoryService::RuntimeUndoBehavior>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,class boost::shared_ptr<class RBX::Instance> __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",2,399,1,0,1,0
+RBX::GcJob,2,691,0,2,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>::slot,class boost::function<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>,3,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>",2,252,1,0,1,0
+boost::detail::function::basic_vtable0<>,2,468,0,2,0,0
+RBX::Hopper,2,226,0,2,0,0
+RBX::GrabTool,2,38,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::FunctionalTest::Result>,2,183,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::Network::Player,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::Network::Player::*>",2,188,2,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Accoutrement,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list2<class boost::_bi::value<class RBX::Accoutrement *>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",2,342,1,0,1,0
+RBX::UnifiedWidget,2,293,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::Action::ActionType>,2,183,1,0,1,0
+RBX::AssemblyStage,2,146,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::GuiObject::SizeConstraint>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>",2,544,1,0,1,0
+RBX::LuaWebService::CachedLuaWebServiceInfo,2,875,0,1,1,0
+Ogre::MaterialPtr,2,12,2,0,0,0
+RBX::LuaDragTool,2,38,1,0,1,0
+RBX::FWPartInstance,2,107,0,2,0,0
+RBX::PartInstance::OnDemandPartInstance,2,273,0,2,0,0
+boost::detail::function::basic_vtable1<>,2,418,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::HopperBin::BinType>,2,183,1,0,1,0
+YieldFunctionStateObject,2,1014,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::GuiObject::TweenStatus>,2,183,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::ObjectValue,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::ObjectValue::*>",2,350,1,0,1,0
+RBX::Network::ClusterUpdateBuffer,2,523,0,2,0,0
+Ogre::TexturePtr,2,12,2,0,0,0
+Ogre::Viewport,2,12,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::LegacyController::InputType>,2,183,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::Network::Marker,void __cdecl (void),class rbx::signal<void __cdecl (void)>,class rbx::signal<void __cdecl (void)> RBX::Network::Marker::*>",2,392,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Scripting::ScriptDebugger,class RBX::Reflection::Variant __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",2,320,1,0,1,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (int,int),class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>,2>",2,577,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::Feature::InOut>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class G3D::Vector3)>::slot,class boost::function<void __cdecl (class G3D::Vector3)>,1,void __cdecl (class G3D::Vector3)>",2,148,1,0,1,0
+RBX::Team,2,135,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,class boost::shared_ptr<class RBX::Instance> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",2,305,1,0,1,0
+RBX::Network::RoundRobinPhysicsSender,2,34,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Scripting::ScriptDebugger,class boost::shared_ptr<class std::map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct std::less<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (int),1>",2,230,1,0,1,0
+rbx::placement_any<>,2,27,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::Feature::LeftRight>,2,183,1,0,1,0
+RBX::BallBallConnector,2,157,0,1,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Scripting::ScriptDebugger,class boost::shared_ptr<class std::map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct std::less<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (void),0>",2,193,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::PartInstance::FormFactor>,2,183,1,0,1,0
+ChangeHistoryStatsItem,2,94,0,2,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::AssetService,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (int),class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>,1>",2,790,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Frame::Style>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Feature::TopBottom>,2,183,1,0,1,0
+RBX::BallPlaneConnector,2,205,0,1,1,0
+RBX::JointStage,2,291,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (bool),1>",2,121,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::Joint::JointType>,2,183,1,0,1,0
+RBX::ManualJointSurfacePair,2,230,0,2,0,0
+RBX::OnDemandPVInstance,2,186,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::KeywordFilterType>,2,183,1,0,1,0
+RBX::NullTool,2,38,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Voxel::CellOrientation>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Voxel::WaterCellForce>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Voxel::WaterCellDirection>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float,float,float)>::slot,class boost::function<void __cdecl (float,float,float,float)>,4,void __cdecl (float,float,float,float)>",2,163,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>),2>",2,344,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum RBX::NormalId,float)>::slot,class boost::function<void __cdecl (enum RBX::NormalId,float)>,2,void __cdecl (enum RBX::NormalId,float)>",2,121,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Legacy::SurfaceConstraint>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Voxel::CellMaterial>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::TaskScheduler::ThreadPoolConfig>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::SeatImpl<class RBX::BasicPartInstance>,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list2<class boost::_bi::value<class RBX::SeatImpl<class RBX::BasicPartInstance> *>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",2,336,1,0,1,0
+Ogre::VisualEngine,2,50,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::Voxel::CellBlock>,2,183,1,0,1,0
+RBX::Motor6D,2,177,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::TaskScheduler::PriorityMethod>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ScriptContext,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (bool),1>",2,231,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::BasicPartInstance::LegacyPartType>,2,183,1,0,1,0
+RBX::SimulateStage,2,70,0,1,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float,float)>::slot,class boost::function<void __cdecl (float,float,float)>,3,void __cdecl (float,float,float)>",2,147,1,0,1,0
+RBX::CameraCenterCommand,2,195,0,2,0,0
+RBX::Snap,2,154,0,2,0,0
+RBX::Glue,2,154,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::TaskScheduler::Job::SleepAdjustMethod>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::ExtrudedPartInstance::VisualTrussStyle>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::KeyframeSequence::Priority>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::CollectionService,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",2,305,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::DebugSettings::ErrorReporting>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::SocialService::StuffType>,2,183,1,0,1,0
+RBX::Voxel::Serializer,2,39,0,2,0,0
+RBX::ThreadPool::ThreadPoolData,2,195,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Time::SampleMethod>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::PersonalServerService::PrivilegeType>,2,183,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::AnimationTrackState,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::AnimationTrackState::*>",2,350,1,0,1,0
+RBX::Rotate,2,154,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::PrismInstance::NumSidesEnum>,2,183,1,0,1,0
+RBX::RotateV,2,154,0,2,0,0
+RBX::HUMAN::Swimming,2,172,0,2,0,0
+"RBX::NonFactoryProduct<class RBX::DataModel,char const * const RBX::sOverlayDataModel>",2,122,1,0,1,0
+"RBX::Reflection::CallbackDescImpl<enum RBX::Network::FilterResult __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>),2>",2,148,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::PyramidInstance::NumSidesEnum>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::DataModelMesh::LODType>,2,183,1,0,1,0
+RBX::MotorJoint,2,157,0,1,1,0
+RBX::Reflection::EnumDesc<enum RBX::Handles::VisualStyle>,2,183,1,0,1,0
+"RBX::Reflection::RemoteEventDesc<class RBX::Humanoid,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>>",2,14,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::DataModelArbiter::ConcurrencyModel>,2,183,1,0,1,0
+"RBX::NonFactoryProduct<class RBX::CharacterAppearance,char const * const RBX::sClothing>",2,31,2,0,0,0
+RBX::ServerScriptService,2,135,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::SkateboardPlatform::MoveState>,2,183,1,0,1,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sFeature>",2,122,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::UserInputService::SwipeDirection>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::SurfaceType>,2,183,1,0,1,0
+RBX::Lua::AxesBridge,2,59,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::SpecialShape::MeshType>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf3<void,class RBX::ChatOutput,class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const &,enum RBX::ChatService::ChatColor>,class boost::_bi::list4<class boost::_bi::value<class RBX::ChatOutput *>,struct boost::arg<1>,struct boost::arg<2>,struct boost::arg<3>>>,3,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,enum RBX::ChatService::ChatColor)>",2,356,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::Network::Player,void __cdecl (double),class rbx::signal<void __cdecl (double)>,class rbx::signal<void __cdecl (double)> RBX::Network::Player::*>",2,188,2,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::GameSettings::VideoQuality>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::EThrottle::EThrottleType>,2,183,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::RunService,void __cdecl (double),class rbx::signal<void __cdecl (double)>,class rbx::signal<void __cdecl (double)> RBX::RunService::*>",2,350,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::MarketplaceService::CurrencyType>,2,183,1,0,1,0
+RBX::StatusInstance,2,289,0,2,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Tool,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list2<class boost::_bi::value<class boost::shared_ptr<class RBX::Tool>>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",2,327,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Players,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (void),0>",2,193,1,0,1,0
+RBX::Reflection::EnumDesc<enum G3D::Vector3::Axis>,2,183,1,0,1,0
+RBX::Motor6DJoint,2,157,0,1,1,0
+RBX::Reflection::EnumDesc<enum RBX::GameSettings::UploadSetting>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::GuiButton::Style>,2,183,1,0,1,0
+RBX::HUMAN::StrafingNoPhysics,2,46,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::DialogRoot::DialogPurpose>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::CharacterMesh::BodyPart>,2,183,1,0,1,0
+RBX::IndexArray<>,2,198,0,2,0,0
+RBX::Reflection::EnumDesc<enum RBX::DialogRoot::DialogTone>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Instance,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (void),0>",2,151,1,0,1,0
+RBX::PartByLocalCharacter,2,231,0,2,0,0
+RBX::MouseCommand,2,38,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Explosion::ExplosionType>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Server,void __cdecl (int,int),2>",2,140,2,0,0,0
+RBX::Network::ClientReplicator::MemoryCheckerJob,2,91,0,1,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::HttpService,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",2,305,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Instance,class boost::shared_ptr<class RBX::Instance> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,bool),2>",2,333,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,class boost::shared_ptr<class RBX::Instance> __cdecl (void),0>",2,193,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Instance,bool __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",2,261,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GuiService,void __cdecl (int,int,int,int),4>",2,180,2,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (class RBX::ContentId),1>",2,315,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::HttpService::HttpContentType>,2,183,1,0,1,0
+boost::detail::sp_counted_impl_p<>,2,241,0,1,1,0
+"RBX::FactoryProduct<class RBX::ManualWeld,class RBX::ManualSurfaceJointInstance,char const * const RBX::sManualWeld,class RBX::Instance>",2,93,1,0,1,0
+"RBX::FactoryProduct<class RBX::ManualGlue,class RBX::ManualSurfaceJointInstance,char const * const RBX::sManualGlue,class RBX::Instance>",2,93,1,0,1,0
+RBX::CanNotSelectCommand,2,201,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Players,class boost::shared_ptr<class RBX::Instance> __cdecl (class boost::shared_ptr<class RBX::Instance>),1>",2,365,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::UDim2)>::slot,class boost::function<void __cdecl (class RBX::UDim2)>,1,void __cdecl (class RBX::UDim2)>",2,162,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (class RBX::ContentId),1>",2,342,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class ProfilingItem,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (double),1>",2,242,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Humanoid,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list2<class boost::_bi::value<class RBX::Humanoid *>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",2,342,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (enum G3D::Vector3::Axis,float,float)>::slot,class boost::function<void __cdecl (enum G3D::Vector3::Axis,float,float)>,3,void __cdecl (enum G3D::Vector3::Axis,float,float)>",2,141,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,class G3D::Vector3 __cdecl (class G3D::Vector3),1>",2,182,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::Network::Player,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::Network::Player::*>",2,188,2,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,void __cdecl (class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>),1>",2,560,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DebugSettings,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (void),0>",2,193,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class ProfilingItem,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (int),1>",2,230,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::PartInstance,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const> __cdecl (bool),1>",2,259,1,0,1,0
+RBX::Configuration,2,135,0,2,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,bool),2>",2,291,1,0,1,0
+"RBX::Reflection::EventDesc<class RBX::Mouse,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::Mouse::*>",2,350,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Instance::SaveFilter>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Camera::CameraType>,2,183,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const> __cdecl (void),0>",2,193,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::GameBasicSettings::ControlMode>,2,183,1,0,1,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::AnimationTrack,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class boost::_bi::list2<class boost::_bi::value<class RBX::AnimationTrack *>,struct boost::arg<1>>>,1,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>",2,201,1,0,1,0
+"RBX::Reflection::BoundFuncDesc<class RBX::GlobalAdvancedSettings,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (void),0>",2,193,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::GameBasicSettings::RenderQualitySetting>,2,183,1,0,1,0
+RBX::Reflection::EnumDesc<enum RBX::Soundscape::ReverbType>,2,183,1,0,1,0
+TextXmlParser,2,206,0,2,0,0
+RBX::ServerStorage,2,135,0,2,0,0
+"RBX::NonFactoryProduct<class RBX::Stats::Item,char const * const sTotalCountTimeIntervalItem>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::CacheableContentProvider,char const * const RBX::sMeshContentProvider>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Stats::Item,char const * const sProfilingItem>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Replicator,void __cdecl (double),1>",1,75,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::Camera::CameraPanMode>,1,41,1,0,0,0
+boost::filesystem::path,1,146,0,1,0,0
+RBX::Widget,1,73,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Settings,char const * const RBX::sGlobalAdvancedSettings>",1,23,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::TextBox,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::TextBox::*>",1,289,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (int,bool),2>",1,94,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::PersonalServerService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (int),class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,1>",1,508,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sAssetService>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Settings,char const * const RBX::sGlobalBasicSettings>",1,23,1,0,0,0
+RBX::SelectionBox,1,364,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::Humanoid::Status>,1,41,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase3d,char const * const RBX::sSelectionLasso>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::AnimationTrack,void __cdecl (float,float),2>",1,83,1,0,0,0
+std::(free),1,8,0,1,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::HttpService,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,1>",1,523,1,0,0,0
+RBX::AsyncHttpCache<>,1,18,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,void __cdecl (void),0>",1,51,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sSelection>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class RBX::RbxRay,class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>,bool),3>",1,248,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Selection,class RBX::Instance *>,class boost::_bi::list2<class boost::_bi::value<class RBX::Selection *>,class boost::_bi::value<class RBX::Instance *>>>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>",1,182,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sTeleportService>",1,23,1,0,0,0
+"RBX::Reflection::BoundCallbackDesc<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>::Setter<class RBX::TeleportService>",1,53,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::CustomEventReceiver,float>,class boost::_bi::list2<class boost::_bi::value<class RBX::CustomEventReceiver *>,struct boost::arg<1>>>,1,void __cdecl (float)>",1,24,1,0,0,0
+TextXmlWriter,1,89,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,void __cdecl (bool),1>",1,75,1,0,0,0
+RBX::Reflection::DescribedBase,1,7,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,bool __cdecl (void),0>",1,59,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ModelInstance,void __cdecl (void),0>",1,45,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,double __cdecl (void),0>",1,86,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::ServiceProvider,char const * const RBX::sDataModel>",1,23,1,0,0,0
+RBX::ProfanityFilter,1,158,0,1,0,0
+RBX::Network::AbuseReporter,1,59,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::GameBasicSettings,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::GameBasicSettings::*>",1,289,1,0,0,0
+RBX::BodyForce,1,33,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sBasePlayerGui>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sContextActionService>",1,23,1,0,0,0
+RBX::Network::SenderDictionary<>,1,149,0,1,0,0
+"std::basic_stringstream<char,struct std::char_traits<char>,class std::allocator<char>>",1,34,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sDebrisService>",1,23,1,0,0,0
+RBX::Reflection::EnumPropDescriptor<>,1,80,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase2d,char const * const RBX::sGuiObject>",1,23,1,0,0,0
+boost::function1<>,1,8,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sAnimationTrackState>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sLuaWebService>",1,23,1,0,0,0
+RBX::VerbContainer,1,82,0,1,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (float,float)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::AnimationTrackState,float,float>,class boost::_bi::list3<class boost::_bi::value<class RBX::AnimationTrackState *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (float,float)>",1,34,1,0,0,0
+RBX::Lua::WeakFunctionRef,1,90,0,1,0,0
+RBX::Reflection::EnumDesc<enum RBX::StarterGuiService::CoreGuiType>,1,41,1,0,0,0
+RBX::TranslucentVerb,1,111,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sGuiItem>",1,23,1,0,0,0
+stdext::(free),1,126,0,1,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::RemoteFunction,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),class boost::shared_ptr<struct RBX::Reflection::Tuple const>,1>",1,520,1,0,0,0
+RBX::StatsCommand,1,64,0,1,0,0
+"RBX::Reflection::RefPropDescriptor<class RBX::Network::Player,class RBX::ModelInstance>",1,164,1,0,0,0
+RBX::Lua::detail::LiveThreadRef,1,12,0,1,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::HopperBin,class boost::shared_ptr<class RBX::Instance> &>,class boost::_bi::list2<class boost::_bi::value<class RBX::HopperBin *>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",1,126,1,0,0,0
+RBX::Lua::LibraryBridge,1,81,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Widget,char const * const RBX::sBackpackItem>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Hopper,char const * const RBX::sStarterPackService>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,bool __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",1,161,1,0,0,0
+RBX::Mechanism,1,34,0,1,0,0
+Ogre::RbxSceneManagerFactory,1,6,1,0,0,0
+RBX::HUMAN::Balancing,1,59,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::CustomEventReceiver,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::CustomEventReceiver::*>",1,289,1,0,0,0
+RBX::Lua::Vector2int16Bridge,1,138,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Controller,void __cdecl (enum RBX::Controller::Button),1>",1,65,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Controller,bool __cdecl (enum RBX::Controller::Button),1>",1,79,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::Scripting::DebuggerManager,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::Scripting::DebuggerManager::*>",1,289,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::ContextActionService,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::ContextActionService::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RunningAverageItem<int>,char const * const sRunningAverageItemInt>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RunningAverageItem<double>,char const * const sRunningAverageItemDouble>",1,23,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::ServiceProvider,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::ServiceProvider::*>",1,289,1,0,0,0
+RBX::Network::Replicator::JoinDataItem,1,26,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Players,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),1>",1,134,1,0,0,0
+RBX::RotatePJoint,1,72,0,1,0,0
+RBX::Reflection::EnumDesc<enum RBX::Material>,1,41,1,0,0,0
+Ogre::RbxSubEntity::RbxSubEntityShadowRenderable,1,6,1,0,0,0
+RBX::DoubleEndedVector<>,1,106,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::TeleportService,void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),2>",1,150,1,0,0,0
+RBX::HumanoidIdentifier,1,40,0,1,0,0
+boost::detail::function::basic_vtable2<>,1,176,0,1,0,0
+Ogre::RbxManualResourceLoaderChain,1,6,1,0,0,0
+Ogre::RbxCullableSceneNode,1,6,1,0,0,0
+Ogre::istreamDataStream,1,6,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::CustomEvent,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::CustomEvent::*>",1,289,1,0,0,0
+boost::detail::sp_counted_impl_p<class boost::function<class boost::shared_ptr<struct RBX::Reflection::Tuple> __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>)>>,1,56,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::ScreenGui,class RBX::Reflection::PropertyDescriptor const *,class RBX::GuiButton *>,class boost::_bi::list3<class boost::_bi::value<class RBX::ScreenGui *>,struct boost::arg<1>,class boost::_bi::value<class RBX::GuiButton *>>>,1,void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>",1,25,1,0,0,0
+RBX::Lua::WeakThreadRef::Node,1,137,0,1,0,0
+RBX::StarterPackService,1,128,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::BaseScript,char const * const RBX::sCoreScript>",1,23,1,0,0,0
+boost::detail::basic_condition_variable,1,105,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sBaseScript>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sContentProvider>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Network::Player,void __cdecl (void),0>",1,39,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sRuntimeScriptService>",1,37,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::RelativePanel,char const * const RBX::sLocalBackpack>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::CoreScript,char const * const RBX::sStarterScript>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,void __cdecl (int),void,1>",1,545,1,0,0,0
+std::auto_ptr<>,1,311,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::GuiObject,char const * const RBX::sGuiButton>",1,23,1,0,0,0
+RBX::DebugSettings,1,42,0,1,0,0
+RBX::Network::ClientReplicator::RequestCharacterItem,1,17,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::GuiObject,char const * const RBX::sGuiLabel>",1,23,1,0,0,0
+RBX::MegaCluster,1,10,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::Scripting::sDebuggerManager>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sTextService>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,void __cdecl (void),void,0>",1,517,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Camera,bool __cdecl (float),1>",1,82,1,0,0,0
+RBX::UserInput,1,668,1,0,0,0
+boost::iostreams::zlib_error,1,27,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Visit,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int),2>",1,150,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::Scripting::ScriptDebugger,void __cdecl (int),class rbx::signal<void __cdecl (int)>,class rbx::signal<void __cdecl (int)> RBX::Scripting::ScriptDebugger::*>",1,289,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Camera,bool __cdecl (int),1>",1,79,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase,char const * const RBX::sGuiBase3d>",1,23,1,0,0,0
+RBX::AxisToolBase,1,250,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sCollectionService>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::InsertService,void __cdecl (bool,bool),2>",1,85,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Selection,void __cdecl (class boost::shared_ptr<class std::vector<class boost::shared_ptr<class RBX::Instance>,class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const>),1>",1,202,1,0,0,0
+Ogre::RbxSubMesh,1,98,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sSpawnerService>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::Network::Player,bool __cdecl (int),bool,1>",1,44,1,0,0,0
+RBX::Reflection::EnumDesc<enum PacketPriority>,1,58,1,0,0,0
+RBX::LuaAllocator,1,37,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sServiceProvider>",1,37,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sPhysicsService>",1,37,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sScriptService>",1,37,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase2d,char const * const RBX::sLayerCollector>",1,23,1,0,0,0
+FLog::FastLogSettingsItem,1,42,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::Camera,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::Camera::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sContentFilter>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase3d,char const * const RBX::sPartAdornment>",1,23,1,0,0,0
+RBX::Reflection::BoundCallbackDesc<bool __cdecl (void)>::Setter<class RBX::DataModel>,1,53,1,0,0,0
+RBX::Stats::TypedStatsItem<>,1,48,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sCharacterAppearance>",1,23,1,0,0,0
+RBX::Hint,1,455,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase3d,char const * const RBX::sPVAdornment>",1,23,1,0,0,0
+boost::detail::function::basic_vtable3<>,1,287,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::PartAdornment,char const * const RBX::sHandlesBase>",1,23,1,0,0,0
+RBX::CameraVerb,1,119,0,1,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::AssetService,bool __cdecl (int,int),bool,2>",1,524,1,0,0,0
+RBX::HumanoidStage,1,16,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sCacheableContentProvider>",1,23,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::CollectionService,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::CollectionService::*>",1,289,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::SceneUpdater,class boost::shared_ptr<class RBX::Instance>>,class boost::_bi::list2<class boost::_bi::value<class RBX::SceneUpdater *>,struct boost::arg<1>>>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",1,161,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sCookiesService>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::AssetService,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (int,int),class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>,2>",1,524,1,0,0,0
+RBX::SpatialHashStatic,1,139,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sRunService>",1,23,1,0,0,0
+RBX::Network::Replicator::StreamJob,1,11,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sBodyMover>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::BasePlayerGui,char const * const RBX::sStarterGuiService>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::BasePlayerGui,char const * const RBX::sCoreGuiService>",1,23,1,0,0,0
+RBX::Network::ErrorCompPhysicsSender2::Nugget,1,15,0,1,0,0
+RBX::GeometryGenerator,1,11,0,1,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::AssetService,int __cdecl (int),int,1>",1,508,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sJointInstance>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (bool)>::slot,class boost::function<void __cdecl (bool)>,1,void __cdecl (bool)>",1,8,1,0,0,0
+"RBX::Reflection::BoundCallbackDesc<enum RBX::Network::FilterResult __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>::Setter<class RBX::Network::ServerReplicator>",1,53,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sDataModelMesh>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::StarterGuiService,bool __cdecl (enum RBX::StarterGuiService::CoreGuiType),1>",1,79,1,0,0,0
+RBX::Network::InterpolatingPhysicsReceiver::Nugget,1,13,0,1,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf2<void,class RBX::ChangeHistoryService,class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *>,class boost::_bi::list3<class boost::_bi::value<class RBX::ChangeHistoryService *>,struct boost::arg<1>,struct boost::arg<2>>>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class RBX::Reflection::PropertyDescriptor const *)>",1,165,1,0,0,0
+RBX::FilterInvisibleNonColliding,1,20,0,1,0,0
+RBX::LightGrid,1,32,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::PartInstance,char const * const RBX::sFormFactorPart>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sGuiBase>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::InsertService,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const> __cdecl (void),class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const>,0>",1,474,1,0,0,0
+RBX::MultiJoint,1,8,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sAnimator>",1,23,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::NormalId>,1,41,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::InsertService,class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const> __cdecl (int),class boost::shared_ptr<class std::vector<class RBX::Reflection::Variant,class std::allocator<class RBX::Reflection::Variant>> const>,1>",1,508,1,0,0,0
+RBX::Lua::ArgumentPusher,1,171,0,1,0,0
+RBX::Network::ErrorCompPhysicsSender2,1,112,0,1,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::DataModel,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,1>",1,523,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::GuiBase,char const * const RBX::sGuiBase2d>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::InsertService,class boost::shared_ptr<class RBX::Instance> __cdecl (int),class boost::shared_ptr<class RBX::Instance>,1>",1,508,1,0,0,0
+RBX::Lua::Vector3Bridge,1,40,0,1,0,0
+"std::basic_istringstream<char,struct std::char_traits<char>,class std::allocator<char>>",1,34,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::RelativePanel,char const * const RBX::sPlayerHUD>",1,23,1,0,0,0
+RBX::Reflection::Described<>,1,194,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::AnimationTrack,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::AnimationTrack::*>",1,289,1,0,0,0
+"RBX::Reflection::PropDescriptor<class RBX::PartInstance,class G3D::Vector3>::GetSetImpl<class G3D::Vector3 const & (__thiscall RBX::PartInstance::*)(void)const,void (__thiscall RBX::PartInstance::*)(class G3D::Vector3 const &)>",1,65,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ModelInstance,class G3D::Vector3 __cdecl (void),0>",1,81,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Camera,void __cdecl (float),1>",1,71,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::_bi::bind_t<bool,class boost::_mfi::mf0<bool,class RBX::Stats::StatsService>,class boost::_bi::list1<class boost::_bi::value<class RBX::Stats::StatsService *>>>,1,void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>",1,16,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::ModelInstance,class G3D::CoordinateFrame __cdecl (void),0>",1,81,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::DataModel,bool __cdecl (void),bool,0>",1,474,1,0,0,0
+"rbx::trie<class RBX::Reflection::PropertyDescriptor *,50>::bad_key",1,6,1,0,0,0
+"RBX::FactoryProduct<class RBX::Soundscape::SoundChannel,class RBX::Instance,char const * const RBX::Soundscape::sSoundChannel,class RBX::Instance>",1,8,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::ClickDetector,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::remote_signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::ClickDetector::*>",1,289,1,0,0,0
+RBX::PhysicsStatsCommand,1,79,0,1,0,0
+RBX::Reflection::YieldFuncDesc<class RBX::Network::Player>,1,30,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf0<void,class RBX::MegaCluster>,class boost::_bi::list1<class boost::_bi::value<class RBX::MegaCluster *>>>,2,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<class RBX::Instance>)>",1,176,1,0,0,0
+RBX::FilterCharacterOcclusion,1,148,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::JointInstance,char const * const RBX::sDynamicRotate>",1,23,1,0,0,0
+RBX::PyramidPoly,1,110,0,1,0,0
+RBX::Hash,1,79,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sControllerService>",1,23,1,0,0,0
+RBX::GfxBinding,1,76,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::LoginService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::LoginService::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Widget,char const * const RBX::sButtonBindingWidget>",1,23,1,0,0,0
+XmlElement,1,92,0,1,0,0
+RBX::FastClusterShadowGenerator,1,63,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::MarketplaceService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,int,int)> RBX::MarketplaceService::*>",1,305,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::FriendService::FriendStatus>,1,41,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::StringValue,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::StringValue::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sSocialService>",1,23,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::FriendService::FriendEventType>,1,41,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::MarketplaceService,class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const> __cdecl (int),class boost::shared_ptr<class boost::unordered::unordered_map<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class RBX::Reflection::Variant,struct boost::hash<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,struct std::equal_to<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class RBX::Reflection::Variant>>> const>,1>",1,508,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>::slot,class boost::function<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,1,void __cdecl (class boost::shared_ptr<class RBX::Instance>)>",1,157,1,0,0,0
+boost::detail::sp_counted_base,1,7,0,1,0,0
+RBX::PhysicsSettings,1,42,0,1,0,0
+RBX::ManualWeld,1,908,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Mouse,char const * const RBX::sPluginMouse>",1,23,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::SkateboardPlatform,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::SkateboardPlatform::*>",1,289,1,0,0,0
+RBX::ManualGlue,1,908,1,0,0,0
+boost::posix_time,1,316,0,1,0,0
+"RBX::SizeEnforcedLRUCache<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::CacheableContentProvider::CachedItem>>",1,79,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::Value<bool,char const * const RBX::sBoolValue>,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::Value<bool,char const * const RBX::sBoolValue>::*>",1,289,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::GameSettings,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::GameSettings::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sFWService>",1,23,1,0,0,0
+RBX::Network::Replicator::PingJob,1,122,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::Value<double,char const * const RBX::sDoubleValue>,void __cdecl (double),class rbx::signal<void __cdecl (double)>,class rbx::signal<void __cdecl (double)> RBX::Value<double,char const * const RBX::sDoubleValue>::*>",1,289,1,0,0,0
+RBX::SurfaceTool,1,142,0,1,0,0
+RBX::LuaSettings,1,42,0,1,0,0
+RBX::Reflection::EnumDesc<enum RBX::Controller::Button>,1,41,1,0,0,0
+RBX::UnlockAllVerb,1,247,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sGuiService>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Network::InstancePacketCache::CachedBitStream,class RBX::Reflection::PropertyDescriptor const *>,class boost::_bi::list2<class boost::_bi::value<class boost::shared_ptr<class RBX::Network::InstancePacketCache::CachedBitStream>>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>",1,10,1,0,0,0
+RBX::TaskScheduler::Arbiter,1,280,0,1,0,0
+RBX::Network::ItemQueue,1,52,0,1,0,0
+RBX::SimpleThrottlingArbiter,1,35,0,1,0,0
+RBX::NormalBreakConnector,1,77,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::StudioTool,void __cdecl (class boost::shared_ptr<class RBX::Instance>),class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)>,class rbx::signal<void __cdecl (class boost::shared_ptr<class RBX::Instance>)> RBX::StudioTool::*>",1,289,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sKeyframeSequenceProvider>",1,23,1,0,0,0
+RBX::Reflection::FuncDesc<class RBX::Network::Player>,1,30,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sMouse>",1,23,1,0,0,0
+"RBX::Reflection::PropDescriptor<class RBX::Humanoid,float>::GetSetImpl<float (__thiscall RBX::Humanoid::*)(void)const,void (__thiscall RBX::Humanoid::*)(float)>",1,59,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sGamePassService>",1,23,1,0,0,0
+RBX::GamePassService,1,103,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sTweenService>",1,23,1,0,0,0
+boost::function2<>,1,8,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sLight>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>::slot,class boost::function<void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>,1,void __cdecl (class RBX::Reflection::PropertyDescriptor const *)>",1,8,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::BindableEvent,void __cdecl (class boost::shared_ptr<struct RBX::Reflection::Tuple const>),1>",1,202,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::RemoteEvent,void __cdecl (class boost::shared_ptr<class RBX::Instance>,class boost::shared_ptr<struct RBX::Reflection::Tuple const>),2>",1,258,1,0,0,0
+boost::singleton_pool<>,1,80,0,1,0,0
+"RBX::Reflection::EventDesc<class RBX::SkateboardController,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::SkateboardController::*>",1,289,1,0,0,0
+RBX::SelectAllCommand,1,388,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,bool __cdecl (int,int,int),3>",1,132,1,0,0,0
+RBX::HUMAN::Jumping,1,78,0,1,0,0
+RBX::Lua::BrickColorBridge,1,63,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,void __cdecl (class RBX::ContentId),1>",1,159,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (void)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf0<void,class RBX::EventReplicatorBase<class RBX::GuiObject,void __cdecl (int,int)>>,class boost::_bi::list1<class boost::_bi::value<class RBX::EventReplicatorBase<class RBX::GuiObject,void __cdecl (int,int)> *>>>,0,void __cdecl (void)>",1,10,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::GamePassService,bool __cdecl (class boost::shared_ptr<class RBX::Instance>,int),bool,2>",1,536,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::ChatService::ChatColor>,1,41,1,0,0,0
+RBX::StringConverter<>,1,55,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::DataModelMesh,char const * const RBX::sBevelMesh>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::MegaClusterInstance,class G3D::Vector3 __cdecl (int,int,int),3>",1,137,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::InputObject::UserInputType>,1,41,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sScriptInformationProvider>",1,23,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::InputObject::UserInputState>,1,41,1,0,0,0
+"RBX::LRUCache<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::CacheableContentProvider::CachedItem>>",1,211,1,0,0,0
+RBX::ViewBase,1,3,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sGeometryService>",1,23,1,0,0,0
+RBX::Network::TopNErrorsPhysicsSender::Nugget,1,259,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::PartInstance,float __cdecl (void),0>",1,86,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::PartInstance,bool __cdecl (void),0>",1,76,1,0,0,0
+RBX::RotateAxisCommand,1,130,0,1,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Workspace,int __cdecl (void),0>",1,76,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::TaskSchedulerSettings,void __cdecl (bool,double),2>",1,94,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Lighting,double __cdecl (void),0>",1,71,1,0,0,0
+RBX::IndexBox,1,48,0,1,0,0
+Ogre::TextureLoaderOp,1,48,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::GuiObject,char const * const RBX::sScale9Frame>",1,23,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sPersonalServerService>",1,23,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::TaskSchedulerSettings,void __cdecl (double,int),2>",1,76,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class RBX::Heartbeat const &)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf1<void,class RBX::Workspace,class RBX::Heartbeat const &>,class boost::_bi::list2<class boost::_bi::value<class RBX::Workspace *>,struct boost::arg<1>>>,1,void __cdecl (class RBX::Heartbeat const &)>",1,36,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sRenderHooksService>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>::slot,class boost::function<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>,3,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>",1,209,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sFlagStandService>",1,23,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::BadgeService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)>,class rbx::remote_signal<void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>)> RBX::BadgeService::*>",1,289,1,0,0,0
+RBX::GameChatLine,1,102,0,1,0,0
+RBX::UserInputServiceJob,1,139,0,1,0,0
+RBX::RevoluteLink,1,141,0,1,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sJointsService>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (void)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf0<void,class RBX::Humanoid>,class boost::_bi::list1<class boost::_bi::value<class RBX::Humanoid *>>>,0,void __cdecl (void)>",1,34,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::DataModel::CreatorType>,1,41,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::DataModel::Genre>,1,41,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::DataModel::GearGenreSetting>,1,41,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::DataModel::GearType>,1,41,1,0,0,0
+"RBX::Reflection::EventDesc<class RBX::Lighting,void __cdecl (bool),class rbx::signal<void __cdecl (bool)>,class rbx::signal<void __cdecl (bool)> RBX::Lighting::*>",1,289,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,void __cdecl (float),1>",1,76,1,0,0,0
+RBX::SurfaceSelection,1,244,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (void)>::slot,class boost::_bi::bind_t<void,class boost::_mfi::mf0<void,class RBX::Workspace>,class boost::_bi::list1<class boost::_bi::value<class RBX::Workspace *>>>,0,void __cdecl (void)>",1,28,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Humanoid,void __cdecl (bool),1>",1,81,1,0,0,0
+RBX::SpanningEdge,1,31,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Lighting,class G3D::Vector3 __cdecl (void),0>",1,66,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sAnimationTrack>",1,23,1,0,0,0
+"rbx::callable<class rbx::signals::signal<void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>::slot,class boost::function<void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>,4,void __cdecl (bool,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int)>",1,214,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::ServiceProvider,char const * const RBX::sSettings>",1,23,1,0,0,0
+"RBX::Reflection::BoundYieldFuncDesc<class RBX::BadgeService,bool __cdecl (int,int),bool,2>",1,524,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::Camera,float __cdecl (void),0>",1,71,1,0,0,0
+"RBX::NonFactoryProduct<class RBX::Instance,char const * const RBX::sPluginManager>",1,23,1,0,0,0
+RBX::Reflection::EnumDesc<enum RBX::SoundType>,1,41,1,0,0,0
+"RBX::Reflection::BoundFuncDesc<class RBX::DataModel,double __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,double),2>",1,188,1,0,0,0

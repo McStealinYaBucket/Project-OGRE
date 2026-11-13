@@ -38,11 +38,10 @@
      FWDictionnary<T>: unordered_set<DumbPtr<T>> at +4 (value hash + value
        equality — interning only works that way; DumbPtr::operator== is
        value-based), update counter at +28 (++ per valueUpdate).
-   Ownership: dict sets hold RAW non-owning pointers; refs own via shared_ptr
-     with FWDeleter, which erases the entry from the holder dict on last
-     release, then deletes. (Binary pools via Allocator<T>/singleton_pool +
-     FWFinal wrappers + operator delete routing; plain new + FWDeleter here —
-     same observable lifetime, no pool mismatch. See FWBase::init comment.)
+   Ownership: dict sets hold RAW non-owning pointers; refs own through plain
+     shared_ptr<FWBase>. Every flyweight is an FWFinal<T> pool object
+     (Allocator<T>): its virtual destructor erases the dict entry, and the
+     deleting destructor returns the chunk to the pool (2013, see init).
    DIVERGENCE from 2016: none — system absent there. */
 
 #pragma once
@@ -95,10 +94,9 @@ namespace RBX {
 	{
 		size_t operator()(const DumbPtr<T>& d) const
 		{
-			// Virtual dispatch (MSVC parses free-function overloads on
-			// dependent T eagerly — C2665; the free hash_value overloads
-			// below stay for direct binary-faithful use).
-			return d.ptr != NULL ? d.ptr->fwHash() : 0;
+			// 2013 FW classes have no hash virtual (FWInstance's vftable 0x00b2a234 holds only
+			// the deleting destructor): the free hash_value overloads, found at instantiation.
+			return d.ptr != NULL ? hash_value(*d.ptr) : 0;
 		}
 	};
 
@@ -147,8 +145,7 @@ namespace RBX {
 	// TEMPLATE: PLAYER 0x0052c000
 	// ?set@?$FWValue@_N@RBX@@QAEXAB_NPAVFWRef@2@@Z
 
-	// A flyweight field: the value plus its copy-on-write setter (2013 mangles
-	// FWValue<bool>::set(bool const&, FWRef*), a member; bodies below FWBase).
+	// A flyweight field: the value plus its copy-on-write setter (2013 mangles FWValue<bool>::set(bool const&, FWRef*), a member; bodies below FWBase).
 	template<class T>
 	class FWValue
 	{
@@ -161,23 +158,31 @@ namespace RBX {
 		static void set(T& holder, const T& value, FWRef* ref);
 	};
 
+	template<class T> class FWFinal;
+	// VTABLE: PLAYER 0x00b2a214
+	// VTABLE: STUDIO 0x00becfd4
 	class FWBase : public boost::enable_shared_from_this<FWBase>
 	{
 	public:
-		// Binary has a vtable at +0 (ctor stores off_F4E8E4; FWInstance ctor
-		// then overwrites with off_F7ED9C) — so this class is polymorphic.
-		// TODO(decompile): recover the true virtuals (dtor at minimum).
-		virtual ~FWBase() {}
-		// STUB: PLAYER 0x00619740
-		// STUB: STUDIO 0x006ee410
+		// 2013 vftable 0x00b2a214: the deleting destructor only (0x006197b0; dtor 0x00619690).
+		// FUNCTION: PLAYER 0x00619690
+		// FUNCTION: STUDIO 0x006ee360
+		virtual ~FWBase()
+		{
+			FASTLOG1(FLog::FWLifetime, "FW instance destroyed: %p", this);
+		}
+
+		// SYNTHETIC: PLAYER 0x006197b0
+		// SYNTHETIC: STUDIO 0x006ee480
+		// RBX::FWBase::`scalar deleting destructor'
+
+		// FUNCTION: PLAYER 0x00619740
+		// FUNCTION: STUDIO 0x006ee410
 		FWBase()
 			: holder()
 			, flag(false)
 		{
-			// mac: 0x546BE4: zeros + FastLog "FW instance created %p"-style (FWLifetime).
-			// Exact format string TODO (aFwInstanceCrea).
-			if (FLog::FWLifetime)
-				FLog::FastLog(FLog::FWLifetime, "FWBase::FWBase %p", this);
+			FASTLOG1(FLog::FWLifetime, "FW instance created: %p", this);
 		}
 
 		// STUB: PLAYER 0x00618cf0
@@ -201,21 +206,18 @@ namespace RBX {
 			return shared_from_this();
 		}
 
-		// mac: 0x5466DC (init<FWInstance>), 0x44B86E (init<FWPartInstance>):
-		// null -> Allocator pool-new + T(). (The extra vtable store after T()
-		// in the decompile is TODO.)
-		// BRING-UP DEVIATION: the binary pool-allocates (Allocator<T>::operator
-		// new) and the shared_ptr<FWBase> deleter routes back to the pool via
-		// FWFinal wrappers (exact deleter/operator-delete plumbing TODO).
-		// Until that is reconstructed, allocate with plain new; refs own via
-		// FWDeleter below (erase-from-dict + plain delete) — same observable
-		// lifetime, no pool mismatch (which corrupted the heap: pool chunk
-		// freed via global delete).
+		// init<FWInstance> 0x0061fe70: Allocator<FWInstance>::operator new(0x38) 0x0061bbd0,
+		// FWInstance() 0x0061d7e0, then the FWFinal<FWInstance> vptr 0x00b2a8b4. The pool goes
+		// back through FWFinal's virtual destructor (0x0061f220 frees with Allocator's delete),
+		// so the refs hold plain shared_ptr<FWBase> (sp_counted_impl_p<FWBase> RTTI).
+		// TEMPLATE: PLAYER 0x0061fe70
+		// TEMPLATE: STUDIO 0x006f4730
+		// ??$init@VFWInstance@RBX@@@FWBase@RBX@@SAPAVFWInstance@1@PAV21@@Z
 		template<class T>
 		static T* init(T* t)
 		{
 			if (!t)
-				t = new T();
+				t = new FWFinal<T>();
 			return t;
 		}
 
@@ -224,21 +226,6 @@ namespace RBX {
 		// FWBase ends at 0x18 (ctor 0x00619740 stores 0x4..0x14).
 	};
 
-	// Last-release hook: erase the entry from the holder dict, then delete.
-	// (Binary equivalent: FWFinal<T> wrappers + operator delete pool routing.)
-	struct FWDeleter
-	{
-		void operator()(FWBase* p) const
-		{
-			if (p != NULL)
-			{
-				FWDictionnaryBase* dict = p->holder.get();
-				if (dict != NULL)
-					dict->destroyFlyweight(p);
-				delete p;
-			}
-		}
-	};
 
 	// Plain string holder (FWStringValue(ptr, "Instance") in FWInstance ctor).
 	class FWStringValue
@@ -246,7 +233,7 @@ namespace RBX {
 	public:
 		std::string value;
 		FWStringValue() {}
-		FWStringValue(const char* s) : value(s ? s : "") {}
+		FWStringValue(const char* s) { value = s; }	// default ctor + operator=(const char*): Instance ctor 0x00620fce
 	};
 
 	class FWInstance;
@@ -259,17 +246,29 @@ namespace RBX {
 	inline size_t hash_value(const FWPartInstance& fw);
 	inline size_t hash_value(int v);
 
-	class FWInstance : public FWBase
+	// VTABLE: PLAYER 0x00b2a234
+	// VTABLE: STUDIO 0x00becff4
+	class FWInstance : public FWBase, public Allocator<FWInstance>
 	{
 	public:
 		// mac: 0x5457B8: base + bytes(+21/+22 = 0, +23 = 1) + name "Instance".
-		// STUB: PLAYER 0x0061d7e0
-		// STUB: STUDIO 0x006f2210
+		// name("Instance"): FWStringValue's own ctor keeps its this (+0x1c) in a frame slot for
+		// the unwind of value (0x0061d82d).
+		// FUNCTION: PLAYER 0x0061d7e0
+		// FUNCTION: STUDIO 0x006f2210
 		FWInstance()
-			: b21(false), b22(false), b23(true)
+			: b21(false), b22(false), b23(true), name("Instance")
 		{
-			name.value = "Instance";
 		}
+
+		// The implicit destructor is out of line (string at +0x1c, then ~FWBase).
+		// SYNTHETIC: PLAYER 0x006197d0
+		// SYNTHETIC: STUDIO 0x006ee4a0
+		// RBX::FWInstance::~FWInstance
+
+		// SYNTHETIC: PLAYER 0x0061c320
+		// SYNTHETIC: STUDIO 0x007be5f0
+		// RBX::FWInstance::`scalar deleting destructor'
 
 		// mac: 0x545822: base eq + bytes + name compare.
 		// FUNCTION: PLAYER 0x00619140
@@ -281,13 +280,7 @@ namespace RBX {
 				&& name.value == other.name.value;
 		}
 
-		// Virtual hash convenience for the dict hasher (MSVC port; the free
-		// hash_value overloads below are the binary-faithful entry points).
-		virtual size_t fwHash() const { return hash_value(*this); }
-
-		// The ctor 0x0061d7e0 stores 0x18 = 0, 0x19 = 0, 0x1a = 1; FWBase's ctor does not. Before
-		// them it calls 0x0061c800 on this+0x18 (an empty base or member whose ctor registers pool
-		// stats once, flag 0x00de31dc, vectors at 0x00e1b9f4: likely Allocator<FWInstance>; not here).
+		// The ctor 0x0061d7e0 stores 0x18 = 0, 0x19 = 0, 0x1a = 1 after Allocator<FWInstance>().
 		FWValue<bool> b21;						// 0x18 parent lock (setAndLockParent, DataModel ctor)
 		FWValue<bool> b22;						// 0x19 RobloxLocked (setRobloxLocked 0x0061d780)
 		FWValue<bool> b23;						// 0x1a Archivable (setIsArchivable 0x0061d7b0)
@@ -302,9 +295,14 @@ namespace RBX {
 		FWPVInstance() {}
 	};
 
-	class FWPartInstance : public FWPVInstance
+	// 2013 RTTI (vftable 0x00b4c968): Allocator<FWPartInstance> @0x38, pool size 0x54 (D0
+	// 0x00724030 gives 0x54 back to 0x00df44a0).
+	class FWPartInstance : public FWPVInstance, public Allocator<FWPartInstance>
 	{
 	public:
+		using Allocator<FWPartInstance>::operator new;
+		using Allocator<FWPartInstance>::operator delete;
+
 		// mac: 0x44AABA: FWInstance::FWInstance() + payload defaults.
 		// (Allocator() call + vtable stores are MSVC-automatic.)
 		FWPartInstance()
@@ -354,8 +352,29 @@ namespace RBX {
 		bool locked;				// +48
 		unsigned char _pad49[3];
 		int fw52;					// +52
+	};
 
-		virtual size_t fwHash() const { return hash_value(*this); }
+	// Leaf class every flyweight is created as (init<T>, valueUpdate's copy): its destructor
+	// takes the entry out of the holder dict. FWFinal<FWInstance> dtor 0x0061f1c0 (holder at
+	// +0xc, IFWHolder slot 0), FWFinal<FWPartInstance>(const FWPartInstance&) 0x00845c00.
+	template<class T>
+	class FWFinal : public T
+	{
+	public:
+		FWFinal() {}
+		FWFinal(const T& other) : T(other) {}
+		// TEMPLATE: PLAYER 0x0061f1c0
+		// TEMPLATE: STUDIO 0x006f3a80
+		// ??1?$FWFinal@VFWInstance@RBX@@@RBX@@UAE@XZ
+		virtual ~FWFinal()
+		{
+			if (this->holder)
+				this->holder->destroyFlyweight(this);
+		}
+
+		// SYNTHETIC: PLAYER 0x0061f220
+		// SYNTHETIC: STUDIO 0x006f3ae0
+		// RBX::FWFinal<RBX::FWInstance>::`scalar deleting destructor'
 	};
 
 	// boost::hash_combine-style hash over (b23, b21, b22, name chars) — 0x54587B.
@@ -495,11 +514,11 @@ namespace RBX {
 		{
 		}
 
-		// STUB: PLAYER 0x00845b60
-		// STUB: STUDIO 0x0098b530
+		// FUNCTION: PLAYER 0x00845b60
+		// FUNCTION: STUDIO 0x0098b530
 		virtual unsigned int checkHash(FWBase* base)  // 0x6D33DE
 		{
-			return (unsigned int)static_cast<T*>(base)->fwHash();
+			return (unsigned int)hash_value(*static_cast<T*>(base));
 		}
 
 		// STUB: PLAYER 0x00845da0
@@ -510,7 +529,7 @@ namespace RBX {
 			return dictSet.find(key) != dictSet.end();
 		}
 
-		// mac: 0x6D328E: intern the copy valueUpdate made and point the ref at it (FWDeleter
+		// mac: 0x6D328E: intern the copy valueUpdate made and point the ref at it (plain
 		// ownership), holder = this. Asserts the entry is new (FeatherweightDict.h:302).
 		// STUB: PLAYER 0x00846130
 		// STUB: STUDIO 0x0098bb00
@@ -519,7 +538,7 @@ namespace RBX {
 			T* adopted = static_cast<T*>(base);
 			std::pair<typename Set::iterator, bool> result = dictSet.insert(DumbPtr<T>(adopted));
 			RBXASSERT(result.second == true);  // "result.second == true" (:302)
-			ref->fwPtr.reset(adopted, FWDeleter());
+			ref->fwPtr.reset(adopted);
 			adopted->holder = selfShared();
 			if (FLog::FWLifetime)
 				FLog::FastLog(FLog::FWLifetime, "insertCopy %p", adopted);
@@ -582,7 +601,7 @@ namespace RBX {
 				ref->fwPtr = it->ptr->sharedSelf();
 				return NULL;
 			}
-			T* copy = new T(*static_cast<const T*>(base));
+			T* copy = new FWFinal<T>(*static_cast<const T*>(base));
 			copy->flag = false;
 			if (FLog::FWLifetime)
 				FLog::FastLog(FLog::FWLifetime, "valueUpdate copy %p", copy);

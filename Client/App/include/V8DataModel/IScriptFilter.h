@@ -35,7 +35,9 @@ namespace RBX {
 
 	// Consulted when a BaseScript joins the tree: computeNewWorkspace walks ancestors
 	// and asks the first IScriptFilter found whether the script may run.
-	class IScriptFilter
+	// novtable in 2013: PLAYER has no IScriptFilter vftable, and the ScriptContext ctor never
+	// stores one at its subobject (+0x60).
+	class RBXInterface IScriptFilter
 	{
 		friend class BaseScript;
 	protected:

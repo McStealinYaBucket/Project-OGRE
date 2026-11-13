@@ -89,13 +89,15 @@ namespace RBX {
 		void setComputedUpper(IndexedMesh* newComputedUpper);
 		// Cycles up to the parent, calling onLowersChanged(). Public
 		// (binary has no access control; group construction invokes it).
+		// FUNCTION: PLAYER 0x008f9130
+		// FUNCTION: STUDIO 0x00a0e1f0
 		void lowersChanged() {		// cycles up to the parent, calling onLowersChanged();
 			onLowersChanged();
-			if (getTypedParent<IndexedMesh>()) {
-				getTypedParent<IndexedMesh>()->lowersChanged();
+			if (IndexedMesh* parent = getTypedParent<IndexedMesh>()) {
+				parent->lowersChanged();
 			}
-			if (getUpper()) {
-				getUpper()->lowersChanged();
+			if (upper) {
+				upper->lowersChanged();
 			}
 		}
 

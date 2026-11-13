@@ -12,7 +12,7 @@
 #pragma once
 
 #include "lua/luabridge.h"
-#include "Reflection/EnumConverter.h"
+#include "reflection/enumconverter.h"
 #include "RbxFormat.h"
 
 namespace RBX { namespace Lua {

@@ -52,6 +52,8 @@ namespace RBX { namespace Lua {
 	public:
 		static void registerClassLibrary(lua_State* L);
 
+		// FUNCTION: PLAYER 0x00877190
+		// FUNCTION: STUDIO 0x0092cf30
 		static void pushVector3(lua_State* L, const G3D::Vector3& v)
 		{
 			pushNewObject(L, v);
@@ -151,6 +153,8 @@ namespace RBX { namespace Lua {
 	public:
 		static void registerClassLibrary(lua_State* L);
 
+		// FUNCTION: PLAYER 0x00883080
+		// FUNCTION: STUDIO 0x0092d080
 		static void pushUDim(lua_State* L, const RBX::UDim& v)
 		{
 			pushNewObject(L, v);

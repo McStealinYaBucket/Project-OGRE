@@ -61,15 +61,111 @@ rbx::thread_specific_reference<TaskScheduler::Job> TaskScheduler::currentJob;
 
 RBX::ExclusiveArbiter RBX::ExclusiveArbiter::singleton;
 
-// STUB: PLAYER 0x009b37c0
-// STUB: STUDIO 0x00a6b920
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTION: PLAYER 0x009b37c0
+// FUNCTION: STUDIO 0x00a6b920
 bool RBX::ExclusiveArbiter::areExclusive(TaskScheduler::Job* task1, TaskScheduler::Job* task2)
 {
 	RBXASSERT(task1->hasArbiter(this));
 	RBXASSERT(task2->hasArbiter(this));
 	return true;
 }
-
 static TaskScheduler* sing;
 // FUNCTION: PLAYER 0x009b58a0
 // FUNCTION: STUDIO 0x00a6d690
@@ -85,9 +181,8 @@ TaskScheduler& TaskScheduler::singleton()
 	boost::call_once(static_init, flag);
 	return *sing;
 }
-
-const static double lerpTaskScheduler = 0.05;
-
+// 2013 loads the lerp from the constant pool (fld [0.05] at 0x009b569b), not from a variable.
+#define lerpTaskScheduler 0.05
 // STUB: PLAYER 0x009b55e0
 // STUB: STUDIO 0x00a6d3d0
 TaskScheduler::TaskScheduler()
@@ -104,12 +199,10 @@ TaskScheduler::TaskScheduler()
 ,schedulerDutyCycle(lerpTaskScheduler)
 ,averageThreadAffinity(lerpTaskScheduler, 1)
 ,nextWakeTime(Time::max())
-,lastSortTime(Time())
 ,desiredThreadCount(0)
 {
 	runningJobCounterThread.reset(new boost::thread(RBX::thread_wrapper(boost::bind(&TaskScheduler::sampleRunningJobCount, this), "Roblox sampleRunningJobCount")));
 }
-
 // STUB: PLAYER 0x009b4e00
 // STUB: STUDIO 0x00a6cbf0
 TaskScheduler::~TaskScheduler()
@@ -117,25 +210,18 @@ TaskScheduler::~TaskScheduler()
 	FASTLOG(FLog::TaskSchedulerInit, "Destroying TaskScheduler");
 	sampleRunningJobCountEvent.Set();
 	runningJobCounterThread->join();
-
 	endAllThreads();
 }
-
 // STUB: PLAYER 0x009b52b0
 // STUB: STUDIO 0x00a6d0a0
 void TaskScheduler::remove(boost::shared_ptr<TaskScheduler::Job> task, bool joinTask, boost::function<void()> callbackPing)
 {
 	if (!task)
 		return;
-
-	// You can't join to yourself, but logically
-	// there should be no concurrency risk to not join
+	// You can't join to yourself, but logically there should be no concurrency risk to not join
 	joinTask &= task.get() != currentJob.get();
-
 	shared_ptr<CEvent> joinEvent(joinTask ? new CEvent(true) : NULL);
-
 	remove(task, joinEvent);
-
 	if (joinTask)
 	{
 		if (callbackPing)
@@ -163,9 +249,6 @@ void TaskScheduler::remove(boost::shared_ptr<TaskScheduler::Job> task, bool join
 		}
 	}
 }
-
-
-
 void TaskScheduler::reschedule(boost::shared_ptr<Job> job)
 {
 	{
@@ -178,9 +261,8 @@ void TaskScheduler::reschedule(boost::shared_ptr<Job> job)
 		}
 	}
 }
-
-// STUB: PLAYER 0x009b4560
-// STUB: STUDIO 0x00a6c350
+// FUNCTION: PLAYER 0x009b4560
+// FUNCTION: STUDIO 0x00a6c350
 void TaskScheduler::add(boost::shared_ptr<Job> job)
 {
 	RBX::mutex::scoped_lock lock(mutex);
@@ -208,7 +290,6 @@ void TaskScheduler::scheduleJob(Job& job)
 	// NOTE (2013): no cyclicExecutiveEnabled early-out.
 	job.updateWakeTime();
 	const Time now = Time::now<Time::Fast>();
-
 	if (job.wakeTime <= now)
 	{
 		job.updateError(now);
@@ -216,19 +297,15 @@ void TaskScheduler::scheduleJob(Job& job)
 		{
 			job.sleepRate.sample(0);
 			job.startWaiting();
-
 			job.updatePriority();
 			enqueueWaitingJob(job);
 			return;
 		}
 	}
-
 	job.sleepRate.sample(1);
 	job.startSleeping();
 	insert_from_back(sleepingJobs, job, Job::isLowerWakeTime);
 }
-
-
 void TaskScheduler::remove(const boost::shared_ptr<TaskScheduler::Job>& job, boost::shared_ptr<CEvent> joinEvent)
 {
 	RBX::mutex::scoped_lock lock(mutex);
@@ -236,7 +313,6 @@ void TaskScheduler::remove(const boost::shared_ptr<TaskScheduler::Job>& job, boo
 	FASTLOG1(FLog::TaskSchedulerRun,
 		"Removing job %p from allJobs (::remove)", job.get());
 	allJobs.erase(job);
-
 	if (job->SleepingHook::is_linked())
 	{
 		// NOTE (2013): no cyclic assert.
@@ -252,7 +328,6 @@ void TaskScheduler::remove(const boost::shared_ptr<TaskScheduler::Job>& job, boo
 		FASTLOG1(FLog::TaskSchedulerRun,
 			"Removing job %p from waitingJobs (::remove)", job.get());
 		waitingJobs.erase(waitingJobs.iterator_to(*job));
-
 		if (joinEvent)
 			joinEvent->Set();
 	}

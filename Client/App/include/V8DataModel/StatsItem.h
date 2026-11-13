@@ -68,13 +68,13 @@ namespace RBX {
 		double getValue();  // not virtual in 2013 (no slot after update)
 		std::string getStringValue2();
 		void formatValue(double value, const char* fmt, ...);
-		void formatValueId(double value);
-		void formatValueIf(float value);
-		void formatValueIi(int value);
+		void formatValueId(const double& value);
+		void formatValueIf(const float& value);
+		void formatValueIi(const int& value);
 		void formatValueIm(unsigned long value);
-		void formatValueIy(unsigned long long value);
+		void formatValueIy(const unsigned long long& value);
 		void formatValueIj(unsigned int value);
-		void formatValueIb(bool value);
+		void formatValueIb(const bool& value);
 		// formatMem 0x4A2D80: Log::formatMem into +0x64 (no +0x5C store).
 		void formatMem(unsigned int bytes);
 		void formatRate(const RunningAverageTimeInterval<>& average);

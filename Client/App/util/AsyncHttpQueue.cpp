@@ -109,8 +109,8 @@ public:
 		return result;
 	}
 
-	// STUB: PLAYER 0x0086f330
-	// STUB: STUDIO 0x009bc4e0
+	// FUNCTION: PLAYER 0x0086f330
+	// FUNCTION: STUDIO 0x009bc4e0
 	virtual void update()
 	{
 		avgTimeInQueue->formatValue(httpQueue->getAvgTimeInQueue(), "%.4f msec", httpQueue->getAvgTimeInQueue());

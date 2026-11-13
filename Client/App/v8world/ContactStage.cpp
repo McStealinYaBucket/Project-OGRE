@@ -61,7 +61,7 @@ namespace RBX {
 		if (edge->getEdgeType() == Edge::JOINT)
 			jointType = rbx_static_cast<Joint*>(edge)->getJointType();
 		if (edge->getEdgeType() != Edge::JOINT
-			|| (jointType != ANCHOR_JOINT && jointType != FREE_JOINT))
+			|| (jointType != Joint::ANCHOR_JOINT && jointType != Joint::FREE_JOINT))
 		{
 			Contact* contact = Primitive::getContact(edge->getPrim0(), edge->getPrim1());
 			if (contact != NULL && contact->downstreamOfStage(this))
@@ -85,7 +85,7 @@ namespace RBX {
 			if (edge->getEdgeType() == Edge::JOINT)
 				jointType = rbx_static_cast<Joint*>(edge)->getJointType();
 			if (edge->getEdgeType() != Edge::JOINT
-				|| (jointType != ANCHOR_JOINT && jointType != FREE_JOINT))
+				|| (jointType != Joint::ANCHOR_JOINT && jointType != Joint::FREE_JOINT))
 			{
 				Contact* contact = Primitive::getContact(edge->getPrim0(), edge->getPrim1());
 				if (contact != NULL && contact->inStage(this))

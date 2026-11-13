@@ -32,8 +32,19 @@ namespace RBX {
 	class GuiEvent;    // 12B const& arg (GuiEvent.h; batch781)
 	class GuiResponse; // 16B by-value return (GuiEvent.h)
 
+	// 2013 secondary base: RTTI .?AVGuiTarget@RBX@@ at GuiItem+0x60 (GuiItem C2 0x0076a4f0 stores its
+	// vftable 0x00b47d5c, then GuiItem's 0x00b5aa88), so focus sits at +0x64. Its one slot is process;
+	// the default body (PLAYER 0x007bc510, folded) returns GuiResponse(). The Mac vtable lists
+	// GuiItem::process in the primary table only because Itanium repeats secondary-base overriders.
+	class GuiTarget
+	{
+	public:
+		virtual GuiResponse process(const GuiEvent& event);
+	};
+
 	class GuiItem
 		: public DescribedNonCreatable<GuiItem, Instance, sGuiItem>
+		, public GuiTarget
 	{
 	public:
 		// STUB: PLAYER 0x0076a4f0
@@ -93,7 +104,7 @@ namespace RBX {
 		const G3D::Color4& translucentBackdrop();  // __ZN3RBX7GuiItem19translucentBackdropEv
 
 	protected:
-		shared_ptr<GuiItem> focus;  // +96/+100 (the old reserved96/100; loseFocus releases the +0x64 block)
+		shared_ptr<GuiItem> focus;  // +0x64 (after GuiTarget at +0x60; onDescendantRemoving 0x00768d00)
 		float sizeX;  // +104 (getSize reads; derived inits overwrite)
 		float sizeY;  // +108
 	};

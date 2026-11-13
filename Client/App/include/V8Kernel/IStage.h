@@ -1,33 +1,11 @@
-/* V8Kernel/IStage.h -- October 2013 (pipeline stage node shell).
-   Evidence: uniform 16B stage nodes ([vptr][+4 upstream-arg][+8 child]
-     [+12 world]) from CleanStage C2 0x55CBAE / JointStage C2 0x57B4CC /
-     EdgeStage C2 0x573442 / GroundStage C2 0x574E3C / ContactStage C2
-     0x56F48C / TreeStage C2 0x5A46E4 (batches 210/213/214); IPipelined
-     methods read a2+4 (upstream) and currentStage+8 (downstream) DIRECTLY
-     (0x576F19/0x576F76); downstream forwards hit vtbl+16/+20
-     (IWorldStage::onEdgeAdded 0x5774D3 / onEdgeRemoving 0x577555,
-     CleanStage::onEdgeAdded 0x55CEAE, JointStage::moveEdgeToDownstream
-     0x57B883, TreeStage::onEdgeAdded 0x5A5E85).
-     Slot map, batch225 vtable proof (Itanium [0]=offset, [1]=typeinfo):
-     IStage: [2]D1, [3]D0, [4]getStageType(pure), [5]getKernel(body 0x55D050).
-     IWorldStage adds [6]onEdgeAdded / [7]onEdgeRemoving (pure + base bodies
-     0x577450/0x5774DE) and [8]getMetric (base body 0x5A6240 -- NOT modeled:
-     no in-tree callers; TreeStage/SleepStage override it). Every stage
-     vtable holds IStage::getKernel at [5] (no stage overrides it).
-     Our MSVC layout differs by ABI (as everywhere); dispatch is by name
-     and compiler-consistent.
-     StageType enum carried from 2016 v8kernel/IStage.h -- all 16 values
-     binary-verified (batch213: Clean 0 / Joint 1 / Ground 2 / Edge 3 /
-     Contact 4 / Tree 5 / Moving 6 / SpatialFilter 7 / MechToAssembly 8 /
-     AssemblyStage 9 / MovingAssembly 10 / StepJoints 11 / Humanoid 12 /
-     Sleep 13 / Simulate 14 / Kernel 15).
-     DELTA vs 2016 (private members, C2 takes links, D2 deletes downstream,
-     no edge virtuals): members are public here (every stage C2 writes +4/+8
-     directly and IPipelined methods read them directly, matching the binary;
-     same no-access-control precedent as Primitive members); D2 does NOT
-     delete (each binary D1/D2 deletes its +8 child explicitly).
-   Original file: Client/App/v8world/IStage.h (path inferred from
-     IPipelined.cpp assert strings) */
+/* V8Kernel/IStage.h -- October 2013 (pipeline stage node shell; getKernel's assert is IStage.h:69).
+   Uniform 16B stage nodes [vptr][+4 upstream][+8 downstream][+12 world] (CleanStage C2 0x55CBAE,
+     JointStage 0x57B4CC, EdgeStage 0x573442, GroundStage 0x574E3C, ContactStage 0x56F48C, TreeStage
+     0x5A46E4); IPipelined reads +4/+8 directly, downstream forwards hit vtbl+16/+20.
+   Slots (batch225): IStage [2]D1 [3]D0 [4]getStageType (pure) [5]getKernel (body 0x55D050, never
+     overridden); IWorldStage adds [6]onEdgeAdded [7]onEdgeRemoving [8]getMetric (0x5A6240, not modeled).
+   StageType: the 16 2016 values, binary-verified (batch213). DELTA vs 2016: members public (every stage
+     C2 writes +4/+8 directly); D2 does not delete (each stage D1/D2 deletes its +8 child). */
 
 #pragma once
 
@@ -71,6 +49,12 @@ namespace RBX {
 
 		// +2 (vtbl+8). Pure: every banked stage returns its const above.
 		virtual StageType getStageType() const = 0;
+
+
+
+
+
+
 		// mac: 0x55D050 (123B, batch218): assert downstream (IStage.h:69) +
 		// forward. VIRTUAL slot +3 (World::getKernel dispatches vtbl+12) --
 		// non-pure with body (no stage overrides it -- every vtable in
@@ -78,11 +62,11 @@ namespace RBX {
 		// assert cites IStage.h:69; the prior tree had it in IWorldStage.cpp).
 		// (C4717 "recursive" warning here is benign: dispatch is virtual and
 		// terminates at Kernel::getKernel / the CleanStage stub.)
-		// STUB: PLAYER 0x008e4710
-		// STUB: STUDIO 0x009cf8c0
+		// FUNCTION: PLAYER 0x008e4710
+		// FUNCTION: STUDIO 0x009cf8c0
 		virtual Kernel* getKernel()
 		{
-			RBXASSERT(downstream != NULL);  // IStage.h:69 "downstream"
+			RBXASSERT(downstream);
 			return downstream->getKernel();
 		}
 

@@ -96,12 +96,12 @@ void WeakThreadRef::addToNode()
 }
 
 // mac: 0x1AE68A (126B, batch448): unlink + release live + count--.
-// STUB: PLAYER 0x00871c40
-// STUB: STUDIO 0x008280c0
+// FUNCTION: PLAYER 0x00871c40
+// FUNCTION: STUDIO 0x008280c0
 WeakThreadRef::~WeakThreadRef()
 {
 	reset();
-	liveThreadRef.reset();
+
 }
 
 // mac: 0x1AE4A6 (224B, batch450): asserts no live ref yet, then news a LiveThreadRef.
@@ -122,14 +122,14 @@ void WeakThreadRef::addRef(lua_State* L)
 	}
 }
 
-// mac: 0x1AE708 (92B, batch450): unlink + virtual removeRef under the lock.
+// STUB: PLAYER 0x00871920
+// STUB: STUDIO 0x00827da0
 void WeakThreadRef::reset()
 {
 	Mutex::scoped_lock lock(sync);
 	removeFromNode();
 	removeRef();
 }
-
 // mac: 0x1AE764 (127B, batch450): doubly-linked unlink + head fixup.
 // STUB: PLAYER 0x00871260
 // STUB: STUDIO 0x008276d0

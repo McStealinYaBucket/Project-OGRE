@@ -368,13 +368,13 @@ namespace RBX {
 
 	// GLOBAL: PLAYER 0x00de4768
 	// GLOBAL: STUDIO 0x00f83b38
-	static boost::once_flag newImageAPIFlag = BOOST_ONCE_INIT;
+	boost::once_flag newImageAPIFlag = BOOST_ONCE_INIT;
 	// GLOBAL: PLAYER 0x00de4770
 	// GLOBAL: STUDIO 0x00f83b40
-	static boost::once_flag newLightAPIFlag = BOOST_ONCE_INIT;
+	boost::once_flag newLightAPIFlag = BOOST_ONCE_INIT;
 	// GLOBAL: PLAYER 0x00de4778
 	// GLOBAL: STUDIO 0x00f83b48
-	static boost::once_flag networkStreamingPropFlag = BOOST_ONCE_INIT;
+	boost::once_flag networkStreamingPropFlag = BOOST_ONCE_INIT;
 
 	// GLOBAL: PLAYER 0x00de4c0c
 	// GLOBAL: STUDIO 0x00f83fd8
@@ -405,7 +405,7 @@ namespace RBX {
 		,VerbContainer(NULL)
 		,DataModelArbiter()
 		,lockVerb(lockVerb)
-		,workspace(Creatable<Instance>::create<Workspace>())
+		,workspace(Creatable<Instance>::create<Workspace>(this))
 		,guiRoot(Creatable<Instance>::create<GuiRoot>())
 		,guiRoot2(Creatable<Instance>::create<GuiRoot>())
 		,forceArrowCursor(true)

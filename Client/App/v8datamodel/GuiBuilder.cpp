@@ -63,8 +63,8 @@
 
 namespace RBX {
 
-	// FUNCTION: PLAYER 0x005c30c0 FOLDED
-	// FUNCTION: STUDIO 0x008a8950 FOLDED
+	// FUNCTION: PLAYER 0x005c30c0
+	// FUNCTION: STUDIO 0x008a8950
 	void GuiBuilder::Initialize(DataModel* dataModel)
 	{
 		this->dataModel = dataModel;

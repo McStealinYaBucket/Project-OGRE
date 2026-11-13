@@ -28,7 +28,6 @@ address,type,size,symbol
 00730ff0,library,84,??1strstreambuf@std@@UAE@XZ_17
 00731890,library,84,??1strstreambuf@std@@UAE@XZ_18
 00732130,library,84,??1strstreambuf@std@@UAE@XZ_19
-00751980,library,84,??1strstreambuf@std@@UAE@XZ_20
 00778d80,library,164,??1strstreambuf@std@@UAE@XZ_21
 00781a70,library,125,??1_Locimp@locale@std@@UAE@XZ_4
 0078b8f0,library,322,??1strstreambuf@std@@UAE@XZ_22

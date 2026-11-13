@@ -14,7 +14,7 @@
 #pragma once
 
 #include "Reflection/Type.h"
-#include "Reflection/EnumConverter.h"
+#include "reflection/enumconverter.h"
 #include "reflection/Function.h"
 #include "Util/ProtectedString.h"
 #include "script/ThreadRef.h"

@@ -691,7 +691,7 @@ namespace Lua {
 	// STUB: PLAYER 0x0088edf0
 	// STUB: STUDIO 0x009eb910
 	void LibraryService::ContentReadyHelper(boost::weak_ptr<ScriptContext> context,
-		const std::string& library, const std::string& url,
+		std::string library, std::string url,
 		AsyncHttpQueue::RequestResult result, std::istream* stream,
 		boost::shared_ptr<const std::string> response)
 	{

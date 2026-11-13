@@ -2034,10 +2034,10 @@ ScriptContext::ScriptContext()
 	setName("Script Context");
 	// mac: 0x18F8EA: ctor-tail libraryService.reset(new LibraryService(this)).
 	libraryService.reset(new LibraryService(this));
-	// 2013 0x0068b0ed: gcFullStepThreshold = LuaSettings +0x78 and gcFrequencyBase = +0x7c, each
-	// through GlobalAdvancedSettingsItem<LuaSettings, sLuaSettings>::singleton() 0x00654600. Not
-	// written: our LuaSettings.h is 8 bytes short (2013 ctor 0x0085e360 stores gcPause/gcStepMul
-	// at +0x64/+0x68, the double at +0x70, 2 at +0x78, 0 at +0x7c) and has no accessors for them.
+	// 2013 0x0068b0ed: each read goes through GlobalAdvancedSettingsItem<LuaSettings,
+	// sLuaSettings>::singleton() 0x00654600.
+	gcFullStepThreshold = LuaSettings::singleton().getUnknown112();
+	gcFrequencyBase = LuaSettings::singleton().getUnknown116();
 	camelCaseViolationConnection = camelCaseViolation.connect(boost::bind(&ScriptContext::onCamelCaseViolation, this, _1, _2, _3));
 }
 

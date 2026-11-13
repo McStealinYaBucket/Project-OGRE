@@ -60,44 +60,37 @@ Reflection::EventDesc<
 	rbx::signal<void(shared_ptr<Instance>)>, 
 	rbx::signal<void(shared_ptr<Instance>)>* (Instance::*)(bool)>
 	event_childAdded(&Instance::getOrCreateChildAddedSignal, "ChildAdded", "child");
-
 Reflection::EventDesc<
 	Instance, 
 	void(shared_ptr<Instance>), 
 	rbx::signal<void(shared_ptr<Instance>)>, 
 	rbx::signal<void(shared_ptr<Instance>)>* (Instance::*)(bool)>
 	dep_childAdded(&Instance::getOrCreateChildAddedSignal, "childAdded", "child", Reflection::Descriptor::Attributes::deprecated(event_childAdded));
-
 Reflection::EventDesc<
 Instance, 
 void(shared_ptr<Instance>), 
 rbx::signal<void(shared_ptr<Instance>)>, 
 rbx::signal<void(shared_ptr<Instance>)>* (Instance::*)(bool)>
 event_childRemoved(&Instance::getOrCreateChildRemovedSignal, "ChildRemoved", "child");
-
 Reflection::EventDesc<
 Instance, 
 void(shared_ptr<Instance>), 
 rbx::signal<void(shared_ptr<Instance>)>, 
 rbx::signal<void(shared_ptr<Instance>)>* (Instance::*)(bool)>
 event_descendantAdded(&Instance::getOrCreateDescendantAddedSignal, "DescendantAdded", "descendant");
-
 Reflection::EventDesc<
 Instance, 
 void(shared_ptr<Instance>), 
 rbx::signal<void(shared_ptr<Instance>)>, 
 rbx::signal<void(shared_ptr<Instance>)>* (Instance::*)(bool)>
 event_descendantRemoving(&Instance::getOrCreateDescendantRemovingSignal, "DescendantRemoving", "descendant");
-
 Reflection::EventDesc<Instance, void(shared_ptr<Instance>, shared_ptr<Instance>)> event_ancestryChanged(&Instance::ancestryChangedSignal, "AncestryChanged", "child", "parent");
 Reflection::EventDesc<Instance, void(const Reflection::PropertyDescriptor*)> event_propertyChanged(&Instance::propertyChangedSignal, "Changed", "property");
 REFLECTION_END();
-
 shared_ptr<Instance> Instance::createChild(const RBX::Name& className, RBX::CreatorRole creatorRole)
 {
 	return Creatable<Instance>::createByName(className, creatorRole);
 }
-
 void Instance::readChild(const XmlElement* childElement, IReferenceBinder& binder, CreatorRole creatorRole)
 // mac: 0x541FAA: class attr -> createChild (vtable+44) -> read -> setParentInternal(false);
 // else announceID(referent, NULL). Matches.
@@ -105,9 +98,7 @@ void Instance::readChild(const XmlElement* childElement, IReferenceBinder& binde
 	const RBX::Name* className = NULL;
 	if (!childElement->findAttributeValue(*tag_class, className))
 		return;
-
 	shared_ptr<Instance> childInstance = createChild(*className, creatorRole);
-
 	if (childInstance!=NULL) {
 		// First read the data before setting parent. This is more efficient and makes programming easier,
 		// because an Instance's data is set *before* being added
@@ -130,9 +121,7 @@ void Instance::readChild(const XmlElement* childElement, IReferenceBinder& binde
 		if (referentAttribute!=NULL)
 			binder.announceID(referentAttribute, NULL);
 	}
-
 }
-
 void Instance::readChildren(const XmlElement* element, IReferenceBinder& binder, RBX::CreatorRole creatorRole)
 // mac: 0x542168: findFirstChildByTag(Item) + findNextChildWithSameTag loop. Matches.
 {
@@ -145,7 +134,6 @@ void Instance::readChildren(const XmlElement* element, IReferenceBinder& binder,
 		childElement = element->findNextChildWithSameTag(childElement);
 	}
 }
-
 // FUNCTION: PLAYER 0x00619f10
 // FUNCTION: STUDIO 0x006eeba0
 void Instance::readProperty(const XmlElement* propertyElement, IReferenceBinder& binder)
@@ -159,8 +147,6 @@ void Instance::readProperty(const XmlElement* propertyElement, IReferenceBinder&
 				Reflection::Property(*desc, this).read(propertyElement, binder);
 	}
 }
-
-
 void Instance::readProperties(const XmlElement* container, IReferenceBinder& binder)
 // mac: 0x542398: firstChild/nextChild loop over readProperty. Matches.
 {
@@ -170,7 +156,6 @@ void Instance::readProperties(const XmlElement* container, IReferenceBinder& bin
 		propertyElement = container->nextChild(propertyElement);
 	}
 }
-
 void Instance::read(const XmlElement* element, IReferenceBinder& binder, RBX::CreatorRole creatorRole)
 // mac: 0x5420C6: referent announceID; Item tag -> Properties + readChildren; else readProperty.
 // Matches.
@@ -181,14 +166,12 @@ void Instance::read(const XmlElement* element, IReferenceBinder& binder, RBX::Cr
 	{
 		binder.announceID(referentAttribute, this);
 	}
-
 	if (element->getTag()==*tag_Item)
 	{
 		// Read the Properties and Attributes
 		const XmlElement* propertiesElement = element->findFirstChildByTag(*tag_Properties);
 		if (propertiesElement!=NULL)
 			readProperties(propertiesElement, binder);
-
 		// Read the child Instances
 		readChildren(element, binder, creatorRole);
 	}
@@ -198,17 +181,14 @@ void Instance::read(const XmlElement* element, IReferenceBinder& binder, RBX::Cr
 		this->readProperty(element, binder);
 	}
 }
-
 static bool itIsInScope(Instance*)
 {
 	return true;
 }
-
 void Instance::writeChildren(XmlElement* container, RBX::CreatorRole creatorRole, const SaveFilter saveFilter)
 {
 	writeChildren(container, itIsInScope, creatorRole, saveFilter);
 }
-
 void Instance::writeChildren(XmlElement* container, const boost::function<bool(Instance*)>& isInScope, RBX::CreatorRole creatorRole, const SaveFilter saveFilter)
 {
 	if (children)
@@ -224,7 +204,6 @@ void Instance::writeChildren(XmlElement* container, const boost::function<bool(I
 		}
 	}
 }
-
 void Instance::writeProperties(XmlElement* container) const
 {
 	// Write each Property, provided it wants to be streamed
@@ -232,15 +211,12 @@ void Instance::writeProperties(XmlElement* container) const
 	while (iter!=properties_end())
 	{
 		const Reflection::PropertyDescriptor& descriptor = (*iter).getDescriptor();
-		
 		XmlElement* element = descriptor.write(this);
 		if (element!=NULL)
 			container->addChild(element);
-
 		++iter;
 	}
 }
-
 // STUB: PLAYER 0x00622270
 // STUB: STUDIO 0x006f6a30
 XmlElement* Instance::writeXml(const boost::function<bool(Instance*)>& isInScope, RBX::CreatorRole creatorRole)
@@ -252,7 +228,6 @@ XmlElement* Instance::writeXml(const boost::function<bool(Instance*)>& isInScope
 		return NULL;
 	if (!getIsArchivable() || (getClassName()==RBX::Name::getNullName()))
 		return NULL;
-
 	switch(creatorRole)
 	{
 	// mac: 0x542612-verified: ReplicationCreator=0 hits ReleaseAssert
@@ -308,7 +283,6 @@ void Instance::onChildChanged(Instance* instance, const PropertyChanged& event)
 	if (getParent()!=NULL)
 		getParent()->onChildChanged(instance, event);
 }
-
 
 int Instance::findChildIndex(const Instance* instance) const
 {
@@ -627,8 +601,6 @@ oldParent->onChildRemoved(this);
 	
 	return true;
 }
-
-
 void Instance::onAncestorChanged(const AncestorChanged& event)
 {
 	// Notify all children
@@ -638,16 +610,13 @@ void Instance::onAncestorChanged(const AncestorChanged& event)
 		for (Instances::const_iterator iter = c->begin(); iter!=c->end(); ++iter)
 			(*iter)->onAncestorChanged(event);
 	}
-
 	if (!combinedSignal.empty()){
 		AncestryChangedSignalData data(shared_from(event.child), shared_from(event.newParent));
 		combinedSignal(ANCESTRY_CHANGED, &data);
 	}
-
 	if (!ancestryChangedSignal.empty())
 		ancestryChangedSignal(shared_from(event.child), shared_from(event.newParent));
 }
-
 void Instance::signalDescendantAdded(Instance* instance, Instance* beginParent, Instance* oldParent)
 {
 	//Notify parents
@@ -657,20 +626,17 @@ void Instance::signalDescendantAdded(Instance* instance, Instance* beginParent, 
 		parent->onDescendantAdded(instance);
 		parent = parent->getParent();
 	}
-
 	// recurse through children
 	shared_ptr<const Instances> c(instance->getChildren().read());
 	if (c)
 		for (Instances::const_iterator iter = c->begin(); iter!=c->end(); ++iter)
 			signalDescendantAdded(iter->get(), beginParent, oldParent);
 }
-
 void Instance::onDescendantAdded(Instance* instance)
 {
     if(onDemandRead())
         onDemandWrite()->descendantAddedSignal(shared_from(instance));
 }
-
 void Instance::signalDescendantRemoving(const shared_ptr<Instance>& instance, Instance* beginParent, Instance* newParent)
 {
 	//Notify parents
@@ -680,26 +646,22 @@ void Instance::signalDescendantRemoving(const shared_ptr<Instance>& instance, In
 		parent->onDescendantRemoving(instance);
 		parent = parent->getParent();
 	}
-
 	// recurse through children
 	shared_ptr<const Instances> c(instance->getChildren().read());
 	if (c)
 		for (Instances::const_iterator iter = c->begin(); iter!=c->end(); ++iter)
 			signalDescendantRemoving(*iter, beginParent, newParent);
 }
-
 void Instance::onDescendantRemoving(const shared_ptr<Instance>& instance)
 {
 	descendantRemovingSignal(instance);
 }
-
 static bool isInScope(Instance* parent, Instance* child)
 {
 	if (parent == child)
 		return true;
 	return parent->isAncestorOf(child);
 }
-
 // DB 12/5/05 - added here to centralize the spawner behavior - to, from XML
 XmlElement* Instance::toNewXmlRoot(Instance* instance, RBX::CreatorRole creatorRole)
 {
@@ -709,7 +671,6 @@ XmlElement* Instance::toNewXmlRoot(Instance* instance, RBX::CreatorRole creatorR
 		answer->addChild(child);
 	return answer;
 }
-
 // Clones an instance and all its children using Reflection. Ref properties
 // are also managed to reference items within the cloned tree.
 class Cloner : boost::noncopyable
@@ -724,25 +685,19 @@ public:
 	Cloner(const Instance* instance, CreatorRole creatorRole):creatorRole(creatorRole)
 	{
 		shared_ptr<const Instance> source = shared_from(instance);
-
 		// First just duplicate all the objects
 		clone = createClones(source);
-
 		// Copy all the property values (except for Parent)
 		std::for_each(map.begin(), map.end(), boost::bind(&Cloner::copyProperties, this, _1));
-
 		// Now that all properties are copied, re-create the Instance tree
 		setParent(source);
-
 		// Notify cloning
 		std::for_each(map.begin(), map.end(), boost::bind(&Cloner::notifyCloning, this, _1));
 	}
-
 	shared_ptr<Instance> getClone() const
 	{
 		return clone;
 	}
-
 private:
 	// This function simply duplicates all the instances, but doesn't create the tree nor copy properties
 	shared_ptr<Instance> createClones(shared_ptr<const Instance> instance)
@@ -751,21 +706,16 @@ private:
 
 		if (!instance->getDescriptor().isSerializable())
 			return shared_ptr<Instance>();
-
 		if (!instance->getIsArchivable())
 			return shared_ptr<Instance>();
-
 		shared_ptr<Instance> copy = Creatable<Instance>::createByName(*instance->getDescriptor().name, creatorRole);
 		if (!copy)
 			throw std::runtime_error(RBX::format("%s cannot be cloned", instance->getFullName().c_str()));
-
 		RBXASSERT(map.find(instance.get()) == map.end());
 		map[instance.get()] = copy;
-
 		instance->visitChildren(boost::bind(&Cloner::createClones, this, _1));
 		return copy;
 	}
-
 	// Copy all non-Parent serializable properties of an Instance
 	void copyProperties(const Map::value_type& value)
 	{
@@ -775,7 +725,6 @@ private:
 			boost::bind(&Cloner::copyProperty, this, _1, source, value.second.get())
 			);
 	}
-
 	// Copy non-Parent serializable property
 	void copyProperty(const RBX::Reflection::ConstProperty& prop, const Instance* source, Instance* destination)
 	{
@@ -853,89 +802,78 @@ shared_ptr<Instance> Instance::luaClone()
 static const RBX::Name* const nameName = RBX::Name::declare("Name");
 static const RBX::Name* const nameParent = RBX::Name::declare("Parent");
 
-Instance::Instance()
-	:parent(NULL)
-	,isSettingParent(false)
-	,fwBase(shared_ptr<FWBase>(FWBase::init<FWInstance>((FWInstance*)NULL), FWDeleter()))
-{
-	// FWInstance name defaults to "Instance" (0x5457B8).
-}
-
+// 2013: Limits::Countable() 0x009b94d0 and the Diagnostics::Countable<Instance> increment
+// (RbxInterlockedIncrement 0x009b8f10 on 0x00de31b0) come first, as the bases declared first.
 // STUB: PLAYER 0x00620da0
 // STUB: STUDIO 0x006f55e0
-Instance::Instance(const char* name)
+Instance::Instance(FWInstance* fw)
 	:parent(NULL)
 	,isSettingParent(false)
-	,fwBase(shared_ptr<FWBase>(FWBase::init<FWInstance>((FWInstance*)NULL), FWDeleter()))
+	,fwBase(FWBase::init<FWInstance>(fw))
 {
-	// mac: 0x5446CA: FWStringValue(name) assigned over fw+24.
-	static_cast<FWInstance*>(fwBase.get())->name.value.assign(name ? name : "");
+	FASTLOG2(FLog::FWLifetime, "New Instance %p, fw ref: %p", this, &fwBase);
 }
 
+// No NULL check on name in 2013: a default-constructed string assigned from it, then copied
+// over fw+0x1c.
 // STUB: PLAYER 0x00620ed0
 // STUB: STUDIO 0x006f5710
 Instance::Instance(const char* name, FWInstance* fw)
 	:parent(NULL)
 	,isSettingParent(false)
-	,fwBase(shared_ptr<FWBase>(
-		fw != NULL ? fw : FWBase::init<FWInstance>((FWInstance*)NULL), FWDeleter()))
+	,fwBase(FWBase::init<FWInstance>(fw))
 {
-	// mac: 0x5446CA: NULL name keeps the FW default ("Instance" via 0x5457B8).
-	if (name != NULL)
-		static_cast<FWInstance*>(fwBase.get())->name.value.assign(name);
+	static_cast<FWInstance*>(fwBase.get())->name = FWStringValue(name);
+	FASTLOG2(FLog::FWLifetime, "New Instance %p, fw ref: %p", this, &fwBase);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // STUB: PLAYER 0x0061d510
 // STUB: STUDIO 0x006f1f40
 Instance::~Instance() 
 {
 	RBXASSERT(parent==NULL);
+	FASTLOG1(FLog::FWLifetime, "Instance %p destroyed", this);
 }
-
 void Instance::remove()
 {
-
 		boost::shared_ptr<const Instances> c(children.read());
 		setParent(NULL);
 		if (c)
 			// To expedite garbage collection, we recursively call remove on the children
 			std::for_each(c->begin(), c->end(), boost::bind(&Instance::remove, _1));
 }
-
 void Instance::destroy()
 {
 	if (getIsParentLocked() && getParent())
 		throw RBX::runtime_error("The Parent property of %s is locked", getFullName().c_str());
-
 	// This method will remove this object from the DataModel, possibly
 	// removing the last shared_ptr reference to this. Make a local
 	// self shared_ptr to make sure that 'this' remains valid inside this method.
 	boost::shared_ptr<const Instances> c(children.read());
 	boost::shared_ptr<Instance> self = shared_from(this);
-
 	// Set the parent
 	setAndLockParent(NULL);
-
 	if (c)
 		// To expedite garbage collection, we recursively call remove on the children
 		std::for_each(c->begin(), c->end(), boost::bind(&Instance::destroy, _1));
-
-	// Clear all events to help prevent memory leaks.
-	// Without this code, the following Lua will leak:
-	// while true do
-	//    local i = Instance.new("Part")
-	//    local c = i.Changed:connect(function ()
-	//       print(i) -- this closure prevents i from being collected
-	//    end)
-	//    wait(0.1)
-	//    i:Remove()
-	// end
+	// Clear all events to help prevent memory leaks. Without this code, the following Lua will leak: while true do local i = Instance.new("Part") local c = i.Changed:connect(function () print(i) -- this closure prevents i from being collected end) wait(0.1) i:Remove() end
 	std::for_each(
 		getDescriptor().begin<Reflection::EventDescriptor>(), getDescriptor().end<Reflection::EventDescriptor>(), 
 		boost::bind(&Reflection::EventDescriptor::disconnectAll, _1, this)
 		);
 }
-
 /* mac: 0x5451F8 — evidence: setname_asm.txt (disasm) + Instance_name.txt.
    compare(fw+24, value); equal -> return (no raise). Else: len < 101 ->
    FWValue<string>::set(fw+24, value, this+68); else substr(0, 100) temp +
@@ -965,7 +903,6 @@ void Instance::setName(const std::string& value)
 		this->raisePropertyChanged(desc_Name);
 	}
 }
-
 // FUNCTION: PLAYER 0x0061d780
 // FUNCTION: STUDIO 0x006f21b0
 void Instance::setRobloxLocked(bool value)
@@ -977,7 +914,6 @@ void Instance::setRobloxLocked(bool value)
 		raisePropertyChanged(propRobloxLocked);
 	}
 }
-
 // FUNCTION: PLAYER 0x0061d7b0
 // FUNCTION: STUDIO 0x006f21e0
 void Instance::setIsArchivable(bool value)
@@ -989,18 +925,14 @@ void Instance::setIsArchivable(bool value)
 		raisePropertyChanged(propArchivable);
 	}
 }
-
-
 void Instance::removeAllChildren()
 {
 	while (children) {
-		// Note: this is using "->" which implies a read, but the reference
-		// returned from back() is used to perform updates (removal).
+		// Note: this is using "->" which implies a read, but the reference returned from back() is used to perform updates (removal).
 		shared_ptr<Instance> child(children->back());
 		child->remove();
 	}
 }
-
 void Instance::destroyAllChildrenLua()
 {
     /* 2013: no checkRbxCaller security (absent from Oct 2013 binaries) */
@@ -1010,12 +942,10 @@ void Instance::destroyAllChildrenLua()
 		child->destroy();
 	}
 }
-
 void Instance::predelete(Instance* instance)
 {
 	instance->predelete();
 }
-
 void Instance::predelete()
 {	
 	RBXASSERT(parent==NULL);
@@ -1145,8 +1075,11 @@ const OnDemandInstance* Instance::onDemandRead() const
 	return onDemandPtr.get();
 }
 
-// STUB: PLAYER 0x00619a00
-// STUB: STUDIO 0x006ee6d0
+
+
+
+// FUNCTION: PLAYER 0x00619a00
+// FUNCTION: STUDIO 0x006ee6d0
 OnDemandInstance* Instance::onDemandWrite()
 {
 	OnDemandInstance* onDemand = onDemandPtr.get();

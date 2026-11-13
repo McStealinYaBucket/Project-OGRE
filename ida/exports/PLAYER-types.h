@@ -4121,7 +4121,7 @@ struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX:
   int genre;                            ///< enum RBX::DataModel::Genre
   int gearGenreSetting;                 ///< enum RBX::DataModel::GearGenreSetting
   unsigned int allowedGearTypes;
-  unsigned __int8 guiBuilder[32];       ///< RBX::GuiBuilder (2013 size; ours is 0x24)
+  RBX::GuiBuilder guiBuilder;
   RBX::DataModel *parentDataModel;
 };
 
@@ -4152,5 +4152,109 @@ struct RBX::IFWHolder_vtbl
   void (__thiscall *insertCopy)(RBX::IFWHolder *this, RBX::FWBase *base, void *ref);
   bool (__thiscall *checkIfInDict)(RBX::IFWHolder *this, RBX::FWBase *base);
   unsigned int (__thiscall *checkHash)(RBX::IFWHolder *this, RBX::FWBase *base);
+};
+
+/* 496 */
+struct __cppobj RBX::GuiBuilder
+{
+  RBX::DataModel *dataModel;
+  void *workspace;                      ///< RBX::Workspace *
+  unsigned __int8 safeChatMenu[8];      ///< boost::shared_ptr<RBX::TopMenuBar>
+  unsigned __int8 customStats[12];      ///< std::map<std::string,RBX::GuiBuilder::Data>
+  int networkStatsPage;
+};
+
+/* 497 */
+struct __cppobj RBX::IPipelined
+{
+  void **__vftable;
+  RBX::IStage *currentStage;
+};
+
+/* 498 */
+struct __cppobj RBX::Edge : RBX::IPipelined
+{
+  unsigned __int8 edgeState;            ///< enum RBX::Sim::EdgeState
+  unsigned __int8 throttleType;         ///< enum RBX::Sim::ThrottleType
+  unsigned __int8 gap_A[2];
+  void *prim0;                          ///< RBX::Primitive *
+  void *prim1;                          ///< RBX::Primitive *
+  int index0;
+  int index1;
+};
+
+/* 499 */
+struct __cppobj RBX::IHasPrimaryPart
+{
+  void **__vftable;
+  unsigned __int8 gap_4[8];
+};
+
+/* 500 */
+struct __cppobj RBX::IHasLocation
+{
+  void **__vftable;
+};
+
+/* 501 */
+struct __cppobj RBX::CameraSubject
+{
+  void **__vftable;
+  unsigned __int8 gap_4[4];
+  unsigned __int8 m_unk0x08[12];        ///< array
+  unsigned __int8 gap_14[4];
+};
+
+/* 502 */
+struct __cppobj RBX::Selectable
+{
+  void **__vftable;
+};
+
+/* 503 */
+struct __cppobj RBX::IMoving
+{
+  void **__vftable;
+  void *iMovingManager;                 ///< RBX::IMovingManager *
+  int stepsToSleep;
+};
+
+/* 504 */
+struct RBX::DataModel_vtbl
+{
+  void *dump;
+  void *initOnDemand;
+  void *setIsArchivable;
+  void *destroy;
+  void *luaClone;
+  void *setName;
+  void *getPersistentDataCost;
+  void *canClientCreate;
+  void *onServiceProvider;
+  void *createChild;
+  void *writeXml;
+  void *verifySetParent;
+  void *verifySetAncestor;
+  void *verifyAddChild;
+  void *verifyAddDescendant;
+  void *askAddChild;
+  void *askForbidChild;
+  void *askForbidParent;
+  void *askSetParent;
+  void *onAncestorChanged;
+  void *onDescendantAdded;
+  void *onDescendantRemoving;
+  void *onChildAdded;
+  void *onChildRemoving;
+  void *onChildRemoved;
+  void *onChildChanged;
+  void *onPropertyChanged;
+  void *readProperty;
+  void *processAccelerators;
+  void *processCameraCommands;
+  void *savePlaceAsync;
+  void *renderPass2d;
+  void *renderMouse;
+  void *processEvent;
 };
 

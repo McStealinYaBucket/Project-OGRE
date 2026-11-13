@@ -1796,8 +1796,8 @@
      "name": "guiBuilder",
      "offset": 3564,
      "size": 28,
-     "kind": "array",
-     "type": "RBX::GuiBuilder (2013 size; ours is 0x24)",
+     "kind": "class",
+     "type": "RBX::GuiBuilder",
      "scalar": null
     },
     {
@@ -1810,7 +1810,43 @@
     }
    ],
    "base": false,
-   "unique": "VDataModel@RBX@@"
+   "unique": "VDataModel@RBX@@",
+   "slots": [
+    "void *dump",
+    "void *initOnDemand",
+    "void *setIsArchivable",
+    "void *destroy",
+    "void *luaClone",
+    "void *setName",
+    "void *getPersistentDataCost",
+    "void *canClientCreate",
+    "void *onServiceProvider",
+    "void *createChild",
+    "void *writeXml",
+    "void *verifySetParent",
+    "void *verifySetAncestor",
+    "void *verifyAddChild",
+    "void *verifyAddDescendant",
+    "void *askAddChild",
+    "void *askForbidChild",
+    "void *askForbidParent",
+    "void *askSetParent",
+    "void *onAncestorChanged",
+    "void *onDescendantAdded",
+    "void *onDescendantRemoving",
+    "void *onChildAdded",
+    "void *onChildRemoving",
+    "void *onChildRemoved",
+    "void *onChildChanged",
+    "void *onPropertyChanged",
+    "void *readProperty",
+    "void *processAccelerators",
+    "void *processCameraCommands",
+    "void *savePlaceAsync",
+    "void *renderPass2d",
+    "void *renderMouse",
+    "void *processEvent"
+   ]
   },
   "RBX::DataModel::MouseStats": {
    "size": 128,
@@ -1895,6 +1931,184 @@
    ],
    "base": false,
    "unique": "V?$RunningAverage@NN@RBX@@"
+  },
+  "RBX::GuiBuilder": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    },
+    {
+     "name": "workspace",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Workspace",
+     "scalar": null
+    },
+    {
+     "name": "safeChatMenu",
+     "offset": 8,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TopMenuBar>",
+     "scalar": null
+    },
+    {
+     "name": "customStats",
+     "offset": 16,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::GuiBuilder::Data,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,RBX::GuiBuilder::Data> > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGuiBuilder@RBX@@"
+  },
+  "RBX::Edge": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IPipelined",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "edgeState",
+     "offset": 8,
+     "size": 1,
+     "kind": "enum",
+     "type": "RBX::Sim::EdgeState",
+     "scalar": "T_UCHAR"
+    },
+    {
+     "name": "throttleType",
+     "offset": 9,
+     "size": 1,
+     "kind": "enum",
+     "type": "RBX::Sim::ThrottleType",
+     "scalar": "T_UCHAR"
+    },
+    {
+     "name": "prim0",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Primitive",
+     "scalar": null
+    },
+    {
+     "name": "prim1",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Primitive",
+     "scalar": null
+    },
+    {
+     "name": "index0",
+     "offset": 20,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "index1",
+     "offset": 24,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VEdge@RBX@@"
+  },
+  "RBX::IHasPrimaryPart": {
+   "size": 12,
+   "vftable": true,
+   "virtual_bases": true,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VIHasPrimaryPart@RBX@@"
+  },
+  "RBX::IHasLocation": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VIHasLocation@RBX@@"
+  },
+  "RBX::CameraSubject": {
+   "size": 24,
+   "vftable": true,
+   "virtual_bases": true,
+   "bases": [],
+   "members": [
+    {
+     "name": "m_unk0x08",
+     "offset": 8,
+     "size": 12,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VCameraSubject@RBX@@"
+  },
+  "RBX::Selectable": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VSelectable@RBX@@"
+  },
+  "RBX::IMoving": {
+   "size": 12,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "iMovingManager",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IMovingManager",
+     "scalar": null
+    },
+    {
+     "name": "stepsToSleep",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VIMoving@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -2575,6 +2789,24 @@
    "base": true,
    "unique": "V?$Countable@VDataModel@RBX@@@Diagnostics@RBX@@"
   },
+  "RBX::IPipelined": {
+   "size": 8,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "currentStage",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IStage",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIPipelined@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -2912,8 +3144,9 @@
  },
  "missing": [],
  "fixups_2013": [
-  "FWBase 0x1c -> 0x18; b21/b22/b23 (0x18..0x1a) moved to FWInstance",
-  "IFWHolder: 5 vftable slots (0x00b79100)",
-  "DataModel 0xe18 -> 0xe10: guiBuilder 0x1c, parentDataModel 0xe08; no networkStatsWindowsOn, 0xc64..0xcac -4"
+  "IFWHolder: 5 vftable slots (PLAYER 0x00b79100)",
+  "GuiBuilder 0x20 -> 0x1c (STUDIO: no networkStatsPage)",
+  "DataModel (STUDIO): no networkStatsWindowsOn, 0xc64..0xcac -4, guiBuilder 0x1c, parentDataModel 0xe08",
+  "RBX::DataModel_vtbl: 34 slots from P-final.json 0xb2ffec"
  ]
 }

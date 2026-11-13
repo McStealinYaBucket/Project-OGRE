@@ -15,6 +15,9 @@ STUDIO addresses of the hand facts). Outputs (read by tools/ida/apply_db_updates
       name disagrees with our recompiled name, with the verdict and the evidence that decided it.
 STUDIO also takes PLAYER's reccmp-proven renames (run PLAYER first) on bodies STUDIO-PLAYER-bodymatch.csv
 pairs uniquely, where STUDIO still has a dummy name and its own --json run did not decide the address.
+Vftable slots (phase4-core3 sync): a dummy original function that a type-5 entry's "both" rows pair with one
+of our slot functions in every vftable listing it (no disagreeing "orig" row, body over 8 bytes, not folded in
+our build) is renamed after it, tag rtti:. Entries of type 10 (vtordisp thunks) count like functions.
 Rules (step 3 of the Phase 4 sync): an entry of the --json run of type function at effective 100% pairs
 original address A with our function R. Our name at R is its PUBLICS (decorated) name, or the PDB proc name
 for a static; every map symbol at R counts (our linker folds identical bodies). Addresses the library
@@ -149,6 +152,52 @@ FACTS = [
      "RBX::RbxDbgInfo::RemovePlace(long) | iOS symbol; body = --PlaceCounter (0x00e1b9d4), find the ID in the 4 "
      "PlaceIDs (0x00e1b9c4), shift the rest down; next to AddPlace 0x009bc7d0 (reccmp 100%); ~DataModel calls it "
      "on placeID (0x0064d8d4), the 'unregister a watched value' of core-datamodel.md"),
+    # phase4-core3 (notes/runs/2026-11-12-phase4-core3/core-bodies.md "For the next IDA sync", vtables-3.md);
+    # STUDIO addresses from STUDIO-PLAYER-bodymatch.csv pairs or the STUDIO DataModel ctor 0x0076b720 operands,
+    # each checked with capstone 2026-11-13. RbxInterlockedExchange/CompareExchange, getPrimaryPart and the
+    # getLocation vtordisp thunks are reccmp 100% and come through the bulk rule.
+    (0x009bb680, 0x00a724b0, "rename", "_ZN3RBX4Time3nowILNS0_12SampleMethodE0EEES0_v", "ios:",
+     "RBX::Time::now<(SampleMethod)0>() = now<Fast> | iOS 1029 symbol; `cmp preciseOverride(0x00db4b44),0; jg` "
+     "(fast clock, one-time init through RbxInterlockedExchange) else the precise clock 0x009bb400; nowFast "
+     "0x009bb4b0 (reccmp 100%) calls it. Our tree's CSV row calls it now<2> (wrong 2013 shape, core-bodies.md)"),
+    (0x009bb6e0, 0x00a72510, "rename", "_ZN3RBX4Time3nowILNS0_12SampleMethodE1EEES0_v", "ios:",
+     "RBX::Time::now<(SampleMethod)1>() = now<Benchmark> | iOS 1029 symbol; `cmp preciseOverride,1; jg` -> "
+     "now<0> 0x009bb680, else the precise clock 0x009bb400"),
+    (0x009bb400, 0x00a72250, "rename", "_ZN3RBX4Time3nowILNS0_12SampleMethodE2EEES0_v", "ios:",
+     "RBX::Time::now<(SampleMethod)2>() = now<Precise> | iOS 1029 symbol; QueryPerformanceCounter (IAT "
+     "0x00aa1150) minus a once-initialised start, / QueryPerformanceFrequency (0x00aa1154); the precise "
+     "branch of now<0> and now<1>"),
+    (0x005ba6f0, None, "comment", "", "guess:",
+     "a second rbx::atomic-style default ctor: stores 0, then the rbx/atomic.h alignment assert "
+     "'(((long)(&(this->v))) & 0x3) == 0' at line 182 (0xb6; rbx::atomic<int>::atomic() 0x004022d0 asserts at "
+     "line 224); used only for TaskScheduler +8 (core-bodies.md); which atomic.h class is not known"),
+    (0x0061c800, None, "comment", "", "guess:",
+     "FWInstance's +0x18 base or member ctor (pool registration: Allocator<FWInstance>-like, counter 0x00de31d4); "
+     "the FWInstance ctor 0x0061d7e0 calls it on this+0x18 (core-bodies.md); not modelled in our tree"),
+    (0x009b1a20, 0x00917010, "comment", "", "match:",
+     "ICF-folded with RBX::Surface::Surface(RBX::PartInstance*, RBX::NormalId) (iOS "
+     "_ZN3RBX7SurfaceC1EPNS_12PartInstanceENS_8NormalIdE): the body `mov [ecx],arg1; mov [ecx+4],arg2; ret 8` is "
+     "both; PartInstance::getSurface constructs Surfaces through it (vtables-3.md); the RakNet/boost library "
+     "name stays, Surface's ctor is FOLDED"),
+    # data (action data1/data4 = name a global of that size)
+    (0x00de4760, 0x00f83b31, "data1", "_ZN5FFlag11NewLightAPIE", "ios:",
+     "FFlag::NewLightAPI (bool) | iOS 1029 symbol; the DataModel ctor tests it (PLAYER 0x0064f05b, STUDIO "
+     "0x0076bb25) before call_once(registerNewLightAPI)"),
+    (0x00de4761, 0x00f83b32, "data1", "_ZN5FFlag16ImageRectEnabledE", "ios:",
+     "FFlag::ImageRectEnabled (bool) | iOS 1029 symbol (next to NewLightAPI there too); the DataModel ctor tests "
+     "it (PLAYER 0x0064f090, STUDIO 0x0076bb5a) before call_once(registerNewImageAPI)"),
+    (0x00de4770, 0x00f83b40, "data4", "RBX::DataModel::DataModel::newLightAPIFlag", "guess:",
+     "boost::once_flag for call_once(registerNewLightAPI) in the DataModel ctor (push at PLAYER 0x0064f083, "
+     "STUDIO 0x0076bb4d); a function-local static, no oracle symbol, name from our DataModel.cpp"),
+    (0x00de4768, 0x00f83b38, "data4", "RBX::DataModel::DataModel::newImageAPIFlag", "guess:",
+     "boost::once_flag for call_once(registerNewImageAPI) in the DataModel ctor (push at PLAYER 0x0064f0b8, "
+     "STUDIO 0x0076bb82); a function-local static, no oracle symbol, name from our DataModel.cpp"),
+    (0x00de4778, 0x00f83b48, "data4", "RBX::DataModel::DataModel::networkStreamingPropFlag", "guess:",
+     "boost::once_flag for call_once(registerNetworkStreamingProp) in the DataModel ctor (push at PLAYER "
+     "0x0064f0e5, STUDIO 0x0076bbaf); a function-local static, no oracle symbol, name from our DataModel.cpp"),
+    (0x00de4c0c, 0x00f83fd8, "data4", "_ZN3RBX9DataModel5countE", "ios:",
+     "RBX::DataModel::count (rbx::atomic<int>) | iOS 1029 symbol; incremented by the DataModel ctor (`mov ecx, "
+     "0x00de4c0c` at PLAYER 0x0064f16f, STUDIO 0x0076bc39), decremented by ~DataModel"),
 ]
 
 
@@ -236,8 +285,8 @@ def classify(cur, src, sig_cur, ours, our_sigs, elsewhere):
         return "agree-sig"
     if sig_cur and G.qual(sig_cur) in {G.qual(x) for x in our_sigs}:
         return "agree-qual"     # same function, parameters or cv spelled differently (our source, not 2013)
-    if src in ("prior:", "ida:"):
-        return "rename"
+    if src in ("prior:", "ida:", "match:"):
+        return "rename"     # match: here is an earlier reccmp promotion (library-owned addresses never get here)
     if src in ("ios:", "mac:", "flirt:"):
         return "conflict-folded" if elsewhere else "conflict"
     return "conflict"   # match:/lib: names the library pass owns; reported, not touched
@@ -258,7 +307,7 @@ def plan(target, json_path, exe):
     for d, a in addr.items():
         at[a].add(d)
     entries = [e for e in json.load(open(json_path))["data"]
-               if e.get("type", 1) == 1 and e.get("recomp") and (e["matching"] >= 1.0 or e.get("effective"))]
+               if e.get("type", 1) in (1, 10) and e.get("recomp") and (e["matching"] >= 1.0 or e.get("effective"))]
     # every decorated name we need a signature for: ours at each R, and the current MSVC names
     dec = set()
     for e in entries:
@@ -288,6 +337,11 @@ def plan(target, json_path, exe):
         if not want:
             stat["no recompiled name"] += 1
             continue
+        flat = lambda x: re.sub(r"\b(?:class|struct|enum|union) |\s", "", x or "")
+        named = [x for x in sorted(at[r]) if x.startswith("?") and
+                 flat(sig.get(x)).replace("operator#36", "operator=").startswith(flat(e["name"]) + "(")]
+        if d and len(at[r]) > 1 and named and d not in named:
+            want = d = named[0]     # our linker folded several names at R: take the one reccmp reports
         ours = ({d} if d else set()) | at[r] | ({nm} if nm else set())
         our_sigs = {canon(sig[x]) for x in ours if sig.get(x)} | ({canon(G.norm_sig(nm + "()"))} if nm and not d else set())
         cur = funcs[a]
@@ -299,7 +353,10 @@ def plan(target, json_path, exe):
         v = classify(cur, src, sig_cur, ours, our_sigs, elsewhere)
         stat[f"{v} ({src})"] += 1
         pct = "effective 100%" if e["matching"] < 1.0 else "100%"
-        line = f"p4 match: reccmp {pct} vs our {want} @0x{r:08x} ({jname})"
+        # an agreeing name is one of our folded names at R: the line records that one (export_names.py reads it)
+        line = f"p4 match: reccmp {pct} vs our {cur if v == 'agree' else want} @0x{r:08x} ({jname})"
+        if v in ("agree-sig", "agree-qual") and src in ("prior:", "ida:"):
+            v = "rename"    # the 100% body outranks a prior or auto name, also when the signature agrees
         if v == "rename":
             updates[a] = ("rename", want, "match:", line)
         elif v.startswith("agree"):
@@ -314,11 +371,53 @@ def plan(target, json_path, exe):
                 updates[a] = ("comment", "", "match:", line + "; " + note)
             conflicts.append((f"0x{a:08x}", cur, src, dem, want, f"0x{r:08x}", e["name"], v, note))
 
+    # vftable slots: a slot both vftables agree on ("both" row of a type-5 entry: the original slot target is the
+    # function reccmp pairs with our slot target) names a dummy original function after our slot function, tag
+    # rtti:, when that original address pairs with one recompiled function in every vftable that lists it.
+    slot = defaultdict(set)
+    slotwhere = {}
+    for e in json.load(open(json_path))["data"]:
+        if e.get("type") != 5:
+            continue
+        for _, blocks in e.get("diff") or []:
+            for b in blocks:
+                for row in b.get("both", []):
+                    m = re.match(r"\((0x[0-9a-f]+) / (0x[0-9a-f]+)\)", row[1])
+                    if m:
+                        oa, ra = int(m.group(1), 16), int(m.group(2), 16)
+                        slot[oa].add(ra)
+                        slotwhere.setdefault(oa, f"slot {row[0][6:]} of {e['name']} {e['address']}")
+                for row in b.get("orig", []):      # an original slot target our vftable disagrees on
+                    m = re.match(r"\((0x[0-9a-f]+) /", row[1])
+                    if m:
+                        slot[int(m.group(1), 16)].add(None)
+    for a, rs in sorted(slot.items()):
+        if a in updates or a in libown or a not in funcs or not DUMMY.match(funcs[a]):
+            continue
+        if len(rs) != 1 or None in rs:
+            stat["slot: several recompiled functions or a disagreeing slot"] += 1
+            continue
+        r = next(iter(rs))
+        if size.get(a, 0) <= 8 or len(at[r]) > 1:
+            # a tiny body the original linker shares between classes, or one our linker folded: which of the
+            # folded names the slot means is not decided by the slot
+            stat["slot: folded or tiny body"] += 1
+            continue
+        t, d, nm = view.get(r, ("-", None, None))
+        if not (d or nm):
+            continue
+        updates[a] = ("rename", d or nm, "rtti:",
+                      f"p4 rtti: {slotwhere[a]}: reccmp pairs this slot with our {d or nm} @0x{r:08x} ({jname})")
+        stat["slot rename (rtti:)"] += 1
+
     for pa, sa, act, name, tag, ev in FACTS:
         a = pa if target == "PLAYER" else (sa or studio_of(pa))
         if a is None:
             stat["fact: no STUDIO address"] += 1
             print(f"{target}: no STUDIO address for fact 0x{pa:08x} {name or ev[:40]}")
+            continue
+        if tag == "prior:" and a in updates and updates[a][3].startswith("p4 match: reccmp"):
+            stat["fact prior: left to reccmp 100%"] += 1
             continue
         where = "" if target == "PLAYER" else f" [STUDIO: body-identical to PLAYER 0x{pa:08x}]"
         if a in updates and updates[a][0] == "rename" and act == "rename" and updates[a][1] != name:

@@ -7,7 +7,7 @@
 #include "V8Tree/Property.h"
 #include "V8Xml/Reference.h"
 #include "V8Tree/Verb.h"
-#include "Util/FeatherweightDict.h"
+#include "util/FeatherweightDict.h"
 
 #include "rbx/Countable.h"
 #include "Util/Limits.h"
@@ -194,11 +194,11 @@ private:
 	// stand-in is gone).
 
 protected:
-	Instance();
-	Instance(const char* name);
-	// mac: 0x5446CA: pre-built FW path (PVInstance 0x4687C8 forwards here).
-	// NULL fw -> fresh FWInstance; NULL name -> keep the FW default name.
-	Instance(const char* name, FWInstance* fw);
+	// 2013 has exactly these two (iOS 10-29 _ZN3RBX8InstanceC2EPNS_10FWInstanceE and
+	// _ZN3RBX8InstanceC2EPKcPNS_10FWInstanceE): a NULL fw gets a fresh FWFinal<FWInstance>
+	// through FWBase::init<FWInstance> 0x0061fe70.
+	Instance(FWInstance* fw = NULL);
+	Instance(const char* name, FWInstance* fw = NULL);
 
 	// Destructor is protected. Call "destroy(instance)" instead of "delete instance".
 	virtual ~Instance();

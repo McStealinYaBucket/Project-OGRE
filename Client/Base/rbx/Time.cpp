@@ -1,123 +1,150 @@
-/* Base/rbx/Time.cpp -- October 2013 RBX::Time (the one clock in the client).
-   The HEADER (Client/Base/include/rbx/rbxtime.h) is the authentic first-party
-   2013 class and is unchanged apart from the addition of the free getStart()
-   declaration that the database proves (see the end of that header).
+/* Base/rbx/Time.cpp -- October 2013, Windows.
+   The 2013 Windows bodies, from PLAYER 0x009bb050-0x009bb707 (STUDIO 0x00a71ea0-0x00a72536; STUDIO drops isSpeedCheater/isDebugged), in
+   their .obj order: checkSpeedHack 0x009bb050, getStart 0x009bb130, directCallback 0x009bb180,
+   interpolatedCallback 0x009bb230, now<Precise> 0x009bb400, isSpeedCheater 0x009bb490,
+   isDebugged 0x009bb4a0, nowFast 0x009bb4b0, nowFastSec 0x009bb4d0, operator- 0x009bb4f0,
+   startMMTimer 0x009bb510, now<Fast> 0x009bb680, now<Benchmark> 0x009bb6e0.
+   Where 2013 disagrees with 2016: no tick_resolution() static (every read divides by
+   QueryPerformanceFrequency), the speed-hack constants are literals (1000/300/5, no FInt),
+   recguard and inited go through RbxInterlockedExchange 0x009b8f20 (no rbx::atomic), and there
+   is no now<Multimedia>, now(SampleMethod) or Interval::sleep in this object. The file-scope
+   variables have external linkage here only so their GLOBAL markers pair (reccmp matches a
+   namespace-scope static by its bare name).
+   The multimedia-timer callbacks and startMMTimer are written from the bytes but not measured yet.
+   Original file: Client/Base/rbx/Time.cpp */
 
-   This file was a link-debt subset that used QueryPerformanceCounter as a
-   stand-in.  The exact bodies are now decoded, and they use POSIX
-   gettimeofday, so the QPC substitute is gone.
-
-   EVIDENCE (symbolled 0.126.0.39503 Studio, idalib; Mach-O so the clock is
-   the POSIX one -- this is the same client that ships as a Windows binary,
-   and its Time::now<2> body is the one that runs on both):
-
-     0x15310E  RBX::getStart()                                        134 bytes
-     0x153194  RBX::Time RBX::Time::now<(RBX::Time::SampleMethod)2>() 125 bytes
-     0x153212  RBX::Time RBX::Time::now<(RBX::Time::SampleMethod)0>()   9 bytes
-     0x153240  RBX::Time RBX::Time::now<(RBX::Time::SampleMethod)1>()   9 bytes
-     0x15321C  RBX::Time::nowFast()                                     9 bytes
-     0x153226  RBX::Time::nowFastSec()                                 25 bytes
-     0x15324B  RBX::Time::Interval RBX::operator-(Time const&, Time const&)
-
-   0x15310E, verbatim:
-       if (!ready) { __cxa_guard_acquire(&ready);
-                     gettimeofday(&tv, NULL);
-                     start = tv.tv_usec + 1000000LL * tv.tv_sec;
-                     __cxa_guard_release(&ready); }
-       return &start;
-   A __cxa_guard-protected function-local static holding the microsecond
-   count, with the function returning its ADDRESS.  Both callers of
-   getStart() drop the returned pointer and re-read the PIC-relative global
-   instead -- which is why hexrays types the return `__int64 *` and why the
-   call at 0x1531D1 is followed by a read of qword_FAD660 rather than a use
-   of eax.
-
-   0x153194, verbatim -- the ONLY clock in the client:
-       timeval tv;  gettimeofday(&tv, NULL);
-       long long us = tv.tv_usec + 1000000LL * tv.tv_sec;
-       getStart();
-       return (double)(us - *getStart()) * 1.0e-6;      // rodata 0xC30150
-   The result is returned in the EDX:EAX pair, i.e. a Time is one bare
-   double (the header's `private: double sec;`), and the scaling is a
-   MULTIPLY by the rodata double 1e-6, not a divide.
-
-   0x153212, 0x15321C and 0x153240 are all nine bytes:
-       push ebp; mov ebp,esp; pop ebp; jmp now<2>
-   So now<0>, now<1> and nowFast are the SAME clock as now<2> in this build
-   -- there is no mm-timer fast path and no separate QPC source, whatever
-   the header's commentary about preciseOverride suggests.  (Which enumerator
-   is 2 is not recoverable from a mangled template argument and does not
-   matter: every one of them is a tail jump to the same body.)
-
-   0x153226 nowFastSec(): calls now<2> and reloads the returned 8-byte value
-   through the x87 stack before returning it.  The header declares
-   `static double nowFastSec();`, and a `double` return on x86-32 comes back
-   in st0 -- so that reload IS the body, and it is the same number.
-
-   DELTA: the microsecond source on Win32.  The binary imports _gettimeofday
-   out of libSystem.  The Win32 CRT this tree builds with has no
-   <sys/time.h> and no gettimeofday -- probe-verified against the VS12
-   toolchain at D:\BuildAgent\VS12 -- so clockMicroseconds() below reads the
-   same quantity out of GetSystemTimeAsFileTime, which is the kernel call
-   gettimeofday is itself layered over: FILETIME counts 100ns ticks since
-   1601-01-01, so /10 lands in microseconds.  Same unit, same magnitude, and
-   the only thing any caller does with the result is subtract it from
-   another read of the same clock.
-
-   NOT PORTED (declared in the header, no body in the database, nothing in
-   the tree calls them): Time::isSpeedCheater, Time::isDebugged.  They are
-   left undefined on purpose -- inventing them would be fabrication.  Neither
-   is virtual, so no vtable is emitted and their absence cannot produce a
-   link error unless a caller appears.
-
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/Base/rbx/Time.cpp */
+// This prevent inclusion of winsock.h in windows.h, which prevents windows redifinition errors
+#ifdef _WIN32
+#define _WINSOCKAPI_
+#endif
 
 #include "rbx/rbxtime.h"
+#include "rbx/debug.h"
+#include "rbx/atomic.h"
+#include <stdexcept>
+#include "FastLog.h"
 
-#include <windows.h>
+#include "Mmsystem.h"
+#pragma comment (lib, "Winmm.lib")
 
-namespace RBX {
+namespace RBX
+{
+	// GLOBAL: PLAYER 0x00e1b620
+	// GLOBAL: STUDIO 0x00f9e808
+	volatile double currentSeconds = 0;
+	// GLOBAL: PLAYER 0x00e1b628
+	// GLOBAL: STUDIO 0x00f9e810
+	volatile bool cheater = false;
+	// GLOBAL: PLAYER 0x00e1b629
+	// GLOBAL: STUDIO 0x00f9e811
+	volatile bool isDebuggedValue = false;
 
-	// Declared in the header; absent from the 2013 database, so nothing in
-	// the tree can be calling it.  It is defined here only because the
-	// 2016 header declares it and a definition costs nothing.
-	Time::SampleMethod Time::preciseOverride = Time::Precise;
+	static const int correctionsPerSecond = 10;	// used for interpolation
+	static const double secondsPerCorrection = 1.0 / correctionsPerSecond;
 
-	// The microsecond clock.  This IS the `tv.tv_usec + 1000000LL * tv.tv_sec`
-	// fold that both 0x15310E and 0x153194 do inline.
-	//
-	// DELTA: see the file header.  The Win32 CRT has neither <sys/time.h> nor
-	// gettimeofday, so the same microsecond count is read from
-	// GetSystemTimeAsFileTime, the kernel call gettimeofday is layered over.
-	static long long clockMicroseconds()
+	// GLOBAL: PLAYER 0x00e1b610
+	// GLOBAL: STUDIO 0x00f9e7f8
+	double millisecondsPerTick;
+	// GLOBAL: PLAYER 0x00e1b608
+	// GLOBAL: STUDIO 0x00f9e7f0
+	long ticksPerCorrection;
+
+	// stuff to prevent GameCheat Speed hack
+	// GLOBAL: PLAYER 0x00e1b62c
+	// GLOBAL: STUDIO 0x00f9e814
+	long lastSpeedCheckCounter = 0;
+	// GLOBAL: PLAYER 0x00e1b630
+	// GLOBAL: STUDIO 0x00f9e818
+	long violationsCount = 0;
+	// GLOBAL: PLAYER 0x00e1b618
+	// GLOBAL: STUDIO 0x00f9e800
+	LARGE_INTEGER prevSpeedHackCheckpointTime;
+	// GLOBAL: PLAYER 0x00e1b634
+	// GLOBAL: STUDIO 0x00f9e81c
+	long prevTickTime = 0;
+
+	// GLOBAL: PLAYER 0x00e1b638
+	// GLOBAL: STUDIO 0x00f9e820
+	volatile long recguard;
+
+	template<> Time Time::now<Time::Precise>();
+	template<> Time Time::now<Time::Fast>();
+
+	static LARGE_INTEGER getSysTime()
 	{
-		FILETIME ft;
-		GetSystemTimeAsFileTime(&ft);
-
-		ULARGE_INTEGER ticks;
-		ticks.LowPart  = ft.dwLowDateTime;
-		ticks.HighPart = ft.dwHighDateTime;
-		return (long long)(ticks.QuadPart / 10ULL);
+		SYSTEMTIME stime;
+		GetSystemTime(&stime);
+		FILETIME ftime;
+		SystemTimeToFileTime(&stime, &ftime);
+		LARGE_INTEGER r;
+		r.HighPart = ftime.dwHighDateTime;
+		r.LowPart = ftime.dwLowDateTime;
+		return r;
 	}
 
-	// mac: 0x15310E (134 bytes).  Returns the ADDRESS of the lazily captured start
-	// timestamp, exactly as the binary does.
-	long long* getStart()
+	// FUNCTION: PLAYER 0x009bb050
+	// FUNCTION: STUDIO 0x00a71ea0
+	static void checkSpeedHack()
 	{
-		static long long start = clockMicroseconds();
-		return &start;
+		lastSpeedCheckCounter ++;
+		if (lastSpeedCheckCounter == 1000)
+		{
+			LARGE_INTEGER curTime = getSysTime();
+			LARGE_INTEGER delta;
+			delta.QuadPart = curTime.QuadPart - prevSpeedHackCheckpointTime.QuadPart;
+			FILETIME ftime;
+			ftime.dwHighDateTime = delta.HighPart;
+			ftime.dwLowDateTime = delta.LowPart;
+			SYSTEMTIME stime;
+			FileTimeToSystemTime(&ftime, &stime);
+
+			long curTickTime = timeGetTime();
+			long td = curTickTime - prevTickTime;
+			long sd = 1000*stime.wSecond + stime.wMilliseconds;
+
+			if (abs(td - sd) > 300)
+			{
+				violationsCount ++;
+			}
+			else
+			{
+				violationsCount = 0;
+			}
+
+			if (violationsCount >= 5)
+			{
+				cheater = true;
+			}
+
+			prevSpeedHackCheckpointTime.QuadPart = curTime.QuadPart;
+			prevTickTime = curTickTime;
+			lastSpeedCheckCounter = 0;
+		}
 	}
 
-	// The header's by-value spelling of the same thing.  Delegates so there is
-	// exactly one start timestamp in the client.
-	long long Time::getStart()
+	static inline void checkDbg()
 	{
-		return *::RBX::getStart();
+		DWORD dw = 0;
+		__asm
+		{
+			push eax    // Preserve the registers
+			push ecx
+			mov eax, fs:[0x18]  // Get the TIB's linear address
+			mov eax, dword ptr [eax + 0x30]
+			mov ecx, dword ptr [eax]    // Get the whole DWORD
+			mov dw, ecx // Save it
+			pop ecx // Restore the registers
+			pop eax
+		}
+
+		// The 3rd byte is the byte we really need to check for the
+		// presence of a debugger.
+		if (dw & 0x00010000)
+		{
+			isDebuggedValue = true;
+		}
 	}
 
-	// Declared in the header, no body in the database, no caller in the tree.
-	// Kept at the QPC tick rate because that is what a "tick count" means;
-	// nothing reaches it, and the one real clock never uses it.
 	long long Time::getTickCount()
 	{
 		LARGE_INTEGER ticks;
@@ -125,56 +152,191 @@ namespace RBX {
 		return ticks.QuadPart;
 	}
 
-	// mac: 0x153194 (125 bytes).  The SampleMethod enumerators are
-	// { Fast, Benchmark, Precise, Multimedia } (rbxtime.h:91), so 2 is
-	// Precise -- and Precise is the ONE body the database has.
+	static inline double tickFrequency()
+	{
+		LARGE_INTEGER tickFreq;
+		QueryPerformanceFrequency(&tickFreq);
+		return (double)tickFreq.QuadPart;
+	}
+
+	// Returns the address of the start tick count (0x00e1b640, guard 0x00e1b648).
+	// STUB: PLAYER 0x009bb130
+	// STUB: STUDIO 0x00a71f80
+	long long* getStart()
+	{
+		static const long long start = Time::getTickCount();
+		return const_cast<long long*>(&start);
+	}
+
+	// STUB: PLAYER 0x009bb180
+	// STUB: STUDIO 0x00a71fd0
+	void CALLBACK directCallback(UINT, UINT, DWORD, DWORD, DWORD)
+	{
+		if (RbxInterlockedExchange(&recguard, 1) == 1)
+			return; // we are re-entering, ignore this call.
+
+		double t = (Time::getTickCount() - *getStart()) / tickFrequency();
+		if (t>currentSeconds)
+			currentSeconds = t;
+
+		checkSpeedHack();
+		checkDbg();
+
+		RbxInterlockedExchange(&recguard, 0);
+	}
+
+	// STUB: PLAYER 0x009bb230
+	// STUB: STUDIO 0x00a72080
+	void CALLBACK interpolatedCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2)
+	{
+		if (RbxInterlockedExchange(&recguard, 1) == 1)
+			return; // we are re-entering, ignore this call.
+
+		static long long last = *getStart();
+		static long mmticks = 0;
+		static double secsPerTick = millisecondsPerTick / 1000.0;
+
+		int ticksSinceLastCorrection = mmticks % ticksPerCorrection;
+
+		double t;
+		if (ticksSinceLastCorrection == 0)
+		{
+			long long current = Time::getTickCount();
+			double elapsedTime = (current - last) / tickFrequency();
+
+			// Make sure that elapsedTime is reasonable.
+			// If it isn't then we may have a bad sample.
+			if (elapsedTime > 1.05 * secondsPerCorrection)
+				{}
+			else if (elapsedTime < 0.95 * secondsPerCorrection)
+				{}
+			else
+				secsPerTick = elapsedTime / (double) ticksPerCorrection;
+
+			last = current;
+			t = (current - *getStart()) / tickFrequency();
+		}
+		else
+		{
+			t = (last - *getStart()) / tickFrequency() + secsPerTick * (double) ticksSinceLastCorrection;
+		}
+
+		if (t>currentSeconds)
+			currentSeconds = t;
+
+		mmticks++;
+
+		checkSpeedHack();
+		checkDbg();
+
+		RbxInterlockedExchange(&recguard, 0);
+	}
+
+	// STUB: PLAYER 0x009bb400
+	// STUB: STUDIO 0x00a72250
 	template<>
 	Time Time::now<Time::Precise>()
 	{
-		long long microseconds = clockMicroseconds();
-		// The header's Time(double) ctor is PROTECTED (rbxtime.h:159),
-		// which is reachable here only because this is a static member of
-		// Time -- the same reason the 2013 source can build a Time from a
-		// raw double at all.
-		return Time((double)(microseconds - *::RBX::getStart()) * 1.0e-6);
+		Time result;
+		result.sec = (getTickCount() - *RBX::getStart()) / tickFrequency();
+		return result;
 	}
 
-	// mac: 0x153212 (9 bytes): `jmp now<2>`.  There is no separate fast clock.
+	// FUNCTION: PLAYER 0x009bb490
+	bool Time::isSpeedCheater()
+	{
+		return cheater;
+	}
+
+	// FUNCTION: PLAYER 0x009bb4a0
+	bool Time::isDebugged()
+	{
+		return isDebuggedValue;
+	}
+
+	// FUNCTION: PLAYER 0x009bb4b0
+	// FUNCTION: STUDIO 0x00a722e0
+	Time Time::nowFast()
+	{
+		return now<Time::Fast>();
+	}
+
+	// FUNCTION: PLAYER 0x009bb4d0
+	// FUNCTION: STUDIO 0x00a72300
+	double Time::nowFastSec()
+	{
+		return Time::nowFast().timestampSeconds();
+	}
+
+	// FUNCTION: PLAYER 0x009bb4f0
+	// FUNCTION: STUDIO 0x00a72320
+	Time::Interval operator-( const Time& t1, const Time& t0 )
+	{
+		const double seconds = t1.sec - t0.sec;
+		return Time::Interval(seconds);
+	}
+
+	// FUNCTION: PLAYER 0x009bb510
+	// FUNCTION: STUDIO 0x00a72340
+	void startMMTimer()
+	{
+		const int targetResolution = 1;         // 1-millisecond target resolution
+
+		TIMECAPS tc;
+		if (timeGetDevCaps(&tc, sizeof(TIMECAPS)) != TIMERR_NOERROR)
+			throw std::runtime_error("Failed timeGetDevCaps");
+
+		UINT timerRes = std::min<UINT>(std::max<UINT>(tc.wPeriodMin, targetResolution), tc.wPeriodMax);
+		millisecondsPerTick = timerRes;
+		ticksPerCorrection = 1000 / (correctionsPerSecond * timerRes);
+
+		prevSpeedHackCheckpointTime = getSysTime();
+		prevTickTime = timeGetTime();
+
+		timeBeginPeriod(timerRes);
+
+		MMRESULT result = timeSetEvent(
+			timerRes, // delay
+			timerRes, // resolution (global variable)
+			ticksPerCorrection>=2 ? interpolatedCallback : directCallback,               // callback function
+			NULL, // user data
+			TIME_PERIODIC );  // single timer event
+		if (!result)
+			throw std::runtime_error("Failed timeSetEvent");
+	}
+
+	// GLOBAL: PLAYER 0x00db4b44
+	// GLOBAL: STUDIO 0x00f3048c
+	Time::SampleMethod Time::preciseOverride = Time::Precise;
+
+	// FUNCTION: PLAYER 0x009bb680
+	// FUNCTION: STUDIO 0x00a724b0
 	template<>
 	Time Time::now<Time::Fast>()
 	{
-		return now<Time::Precise>();
+		if (preciseOverride <= Fast)
+			return now<Precise>();
+
+		static long inited;	// 0x00e1b664
+		if (inited==0)
+			if (RbxInterlockedExchange(&inited, 1) == 0)
+			{
+				startMMTimer();
+				FLog::Init(nowFastSec);
+			}
+
+		return Time(currentSeconds);
 	}
 
-	// mac: 0x153240 (9 bytes): `jmp now<2>`.
+	// FUNCTION: PLAYER 0x009bb6e0
+	// FUNCTION: STUDIO 0x00a72510
 	template<>
 	Time Time::now<Time::Benchmark>()
 	{
-		return now<Time::Precise>();
-	}
-
-	// mac: 0x15321C (9 bytes): `jmp now<2>`.
-	Time Time::nowFast()
-	{
-		return now<Time::Precise>();
-	}
-
-	// mac: 0x153226 (25 bytes): call now<2>, then reload the 8-byte result through
-	// the x87 stack.  A `double` return comes back in st0, so the reload is
-	// the conversion -- the same number nowFast() gives.
-	// STUB: PLAYER 0x009bb4d0
-	// STUB: STUDIO 0x00a72300
-	double Time::nowFastSec()
-	{
-		return now<Time::Precise>().sec;
-	}
-
-	// mac: 0x15324B: the free `operator-(Time, Time)` the header declares as a
-	// friend (rbxtime.h:148) -- "subtract two timestamps to get the time
-	// Interval between" them.
-	Time::Interval operator-(const Time& t1, const Time& t0)
-	{
-		return Time::Interval(t1.sec - t0.sec);
+		if (preciseOverride <= Benchmark)
+			return now<Precise>();
+		else
+			return now<Fast>();
 	}
 
 } // namespace RBX

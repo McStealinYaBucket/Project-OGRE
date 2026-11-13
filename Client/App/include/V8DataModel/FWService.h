@@ -16,7 +16,7 @@
 
 #include "V8Tree/Instance.h"
 #include "V8Tree/Service.h"
-#include "Util/FeatherweightDict.h"
+#include "util/FeatherweightDict.h"
 #include "Util/ConcurrencyValidator.h"
 
 namespace RBX {

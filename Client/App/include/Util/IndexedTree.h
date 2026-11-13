@@ -40,8 +40,8 @@ namespace RBX {
 		IndexedTree();											// 0x2068AA
 		virtual ~IndexedTree();									// 0x20691A (complete) / 0x206910 (deleting)
 		int numChildren() const						{return children.size();}
-		// STUB: PLAYER 0x0082e750
-		// STUB: STUDIO 0x009a0d10
+		// FUNCTION: PLAYER 0x0082e750
+		// FUNCTION: STUDIO 0x009a0d10
 		template<class Type>
 		Type* getTypedChild(int i) {
 			return rbx_static_cast<Type*>(children[i]);

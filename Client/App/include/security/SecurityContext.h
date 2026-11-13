@@ -3,11 +3,7 @@
 #include "rbxformat.h"
 #include "rbx/boost.hpp"
 #include "g3d/format.h"
-
-namespace boost
-{
-	template<typename T> class thread_specific_ptr;
-}
+#include <boost/thread/tss.hpp>	// Context::current() is inline (see there)
 
 namespace RBX
 {
@@ -64,7 +60,21 @@ namespace RBX
 					
 		public:
 			const Identities identity;
-			static Context& current();
+
+			// Inline in 2013: the kept copy is Network's (PLAYER 0x0053ac40, between the Player.cpp
+			// functions). A thread without a context gets a heap Context(Anonymous).
+			// STUB: PLAYER 0x0053ac40
+			// STUB: STUDIO 0x005e9cb0
+			static Context& current()
+			{
+				Context* t = ptr().get();
+				if (!t)
+				{
+					t = new Context(Anonymous);
+					ptr().reset(t);
+				}
+				return *t;
+			}
 
 			// Throws an exception if the current thread's Context doesn't have the requested Role.
 			// mac: 0x546150 (126B, batch439); always throws an EMPTY runtime_error. Inline here: Windows

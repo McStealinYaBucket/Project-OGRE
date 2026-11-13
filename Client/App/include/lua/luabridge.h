@@ -266,45 +266,45 @@ public:
 // Bridge<T>::on_newindex(lua_State*) instantiations. 2013 instantiates the generic wrapper where openState takes
 // its address (ScriptContext.cpp), so a 3-arg on_newindex that only throws is not known there to never return
 // (0x00670170-0x00672190 end in add esp,0x24 / pop / ret); the wrappers call luaL_checkstring.
-// STUB: PLAYER 0x00670170
-// STUB: STUDIO 0x007d8440
+// FUNCTION: PLAYER 0x00670170
+// FUNCTION: STUDIO 0x007d8440
 // ?on_newindex@?$Bridge@PBVItem@EnumDescriptor@Reflection@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671610
-// STUB: STUDIO 0x007d9570
+// FUNCTION: PLAYER 0x00671610
+// FUNCTION: STUDIO 0x007d9570
 // ?on_newindex@?$Bridge@Vconnection@signals@rbx@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x006717f0
-// STUB: STUDIO 0x007d9750
+// FUNCTION: PLAYER 0x006717f0
+// FUNCTION: STUDIO 0x007d9750
 // ?on_newindex@?$Bridge@VCoordinateFrame@G3D@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671850
-// STUB: STUDIO 0x007d97b0
+// FUNCTION: PLAYER 0x00671850
+// FUNCTION: STUDIO 0x007d97b0
 // ?on_newindex@?$Bridge@VRegion3@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671910
-// STUB: STUDIO 0x007d9870
+// FUNCTION: PLAYER 0x00671910
+// FUNCTION: STUDIO 0x007d9870
 // ?on_newindex@?$Bridge@VVector3@G3D@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671b50
-// STUB: STUDIO 0x007d9ab0
+// FUNCTION: PLAYER 0x00671b50
+// FUNCTION: STUDIO 0x007d9ab0
 // ?on_newindex@?$Bridge@VUDim@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671bb0
-// STUB: STUDIO 0x007d9b10
+// FUNCTION: PLAYER 0x00671bb0
+// FUNCTION: STUDIO 0x007d9b10
 // ?on_newindex@?$Bridge@VUDim2@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671c10
-// STUB: STUDIO 0x007d9b70
+// FUNCTION: PLAYER 0x00671c10
+// FUNCTION: STUDIO 0x007d9b70
 // ?on_newindex@?$Bridge@VFaces@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671c70
-// STUB: STUDIO 0x007d9bd0
+// FUNCTION: PLAYER 0x00671c70
+// FUNCTION: STUDIO 0x007d9bd0
 // ?on_newindex@?$Bridge@VAxes@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671d30
-// STUB: STUDIO 0x007d9c90
+// FUNCTION: PLAYER 0x00671d30
+// FUNCTION: STUDIO 0x007d9c90
 // ?on_newindex@?$Bridge@VCellID@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671d90
-// STUB: STUDIO 0x007d9cf0
+// FUNCTION: PLAYER 0x00671d90
+// FUNCTION: STUDIO 0x007d9cf0
 // ?on_newindex@?$Bridge@VInputObject@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00671df0
-// STUB: STUDIO 0x007d9d50
+// FUNCTION: PLAYER 0x00671df0
+// FUNCTION: STUDIO 0x007d9d50
 // ?on_newindex@?$Bridge@VLibrary@Lua@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00672040
-// STUB: STUDIO 0x007d9fa0
+// FUNCTION: PLAYER 0x00672040
+// FUNCTION: STUDIO 0x007d9fa0
 // ?on_newindex@?$Bridge@PBVAllEnumDescriptors@Lua@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
-// STUB: PLAYER 0x00672190
-// STUB: STUDIO 0x007da0f0
+// FUNCTION: PLAYER 0x00672190
+// FUNCTION: STUDIO 0x007da0f0
 // ?on_newindex@?$Bridge@PBVEnumDescriptor@Reflection@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z

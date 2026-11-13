@@ -450,7 +450,7 @@ address,type,size,symbol,name
 0069ef60,library,56,??1RakNetSocket@RakNet@@QAE@XZ,public: __thiscall RakNet::RakNetSocket::~RakNetSocket(void)
 0069efa0,library,9,??0const_iterator@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@W4SoundType@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@W4SoundType@2@@std@@@5@$0A@@std@@@std@@QAE@XZ,??0const_iterator@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@W4SoundType@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@W4SoundType@2@@std@@@5@$0A@@std@@@std@@QAE@XZ
 0069efb0,library,8,?Increment@LocklessUint32_t@RakNet@@QAEIXZ,public: unsigned int __thiscall RakNet::LocklessUint32_t::Increment(void)
-0069efc0,library,8,?Decrement@LocklessUint32_t@RakNet@@QAEIXZ,public: unsigned int __thiscall RakNet::LocklessUint32_t::Decrement(void)
+0069efc0,library,8,?decrement@AtomicInt32@G3D@@QAEHXZ,?decrement@AtomicInt32@G3D@@QAEHXZ
 0069efd0,library,44,?AddRef@WSAStartupSingleton@@SAXXZ,public: static void __cdecl WSAStartupSingleton::AddRef(void)
 0069f000,library,38,?Deref@WSAStartupSingleton@@SAXXZ,public: static void __cdecl WSAStartupSingleton::Deref(void)
 0069f030,library,79,?Create@RakThread@RakNet@@SAHP6GIPAX@Z0H@Z,"public: static int __cdecl RakNet::RakThread::Create(unsigned int (__stdcall *)(void *), void *, int)"

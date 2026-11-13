@@ -78,6 +78,8 @@ def source(ea, n, func):
                 return "lib:"       # third-party library, located, not identical
         return "ida:"
     c = (idc.get_cmt(ea, 1) or idc.get_cmt(ea, 0) or "")
+    if c.startswith("p4 "):
+        return c.split(" ")[1]  # a global named by tools/ida/apply_db_updates.py (data1/data4 row)
     return "rtti:" if c.startswith("rtti: ") else "ida:"
 
 

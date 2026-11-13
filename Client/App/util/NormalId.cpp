@@ -7,8 +7,9 @@
 #include "util/utilities.h"
 #include "rbx/Debug.h"
 
-
 namespace RBX {
+// FUNCTION: PLAYER 0x008c6c50
+// FUNCTION: STUDIO 0x009c9a30
 	NormalIdMask normalIdToMask(NormalId normal)	// 0x232C3C (table dword_C37A90)
 	{
 		switch(normal){
@@ -22,25 +23,24 @@ namespace RBX {
 		}
 		return NORM_NONE_MASK;
 	}
-
+// FUNCTION: PLAYER 0x008c6ca0
+// FUNCTION: STUDIO 0x009c9a80
 	bool validNormalId(NormalId normalId)	// 0x232C5A
 	{
 		return ((normalId >= 0) && (normalId < 6));
 	}
-
 	NormalId intToNormalId(int i)
 	{
 		return static_cast<NormalId>(i);
 	}
-
+// FUNCTION: PLAYER 0x008c6cb0
+// FUNCTION: STUDIO 0x009c9a90
 	NormalId normalIdOpposite(NormalId normalId)	// 0x232C70
 	{
 		return (NormalId)((normalId + 3) % 6);
 	}
-
-
-	// STUB: PLAYER 0x008c6cd0
-	// STUB: STUDIO 0x009c9ab0
+	// FUNCTION: PLAYER 0x008c6cd0
+	// FUNCTION: STUDIO 0x009c9ab0
 	NormalId normalIdToU(NormalId normalId)	// 0x232C92 (assert at NormalId.cpp line 55)
 	{
 		switch ( normalId )
@@ -176,8 +176,8 @@ namespace RBX {
 
 
 
-
-
+// FUNCTION: PLAYER 0x008c6d60
+// FUNCTION: STUDIO 0x009c9b40
 	Vector3 uvwToObject(const Vector3& uvwPt, NormalId faceId)
 	{
 		switch (faceId)
@@ -198,8 +198,8 @@ namespace RBX {
 
 
 
-
-
+// FUNCTION: PLAYER 0x008c6ec0
+// FUNCTION: STUDIO 0x009c9ca0
 	Vector3 objectToUvw(const Vector3& objectPt, NormalId faceId)
 	{
 		switch (faceId)
@@ -225,8 +225,8 @@ namespace RBX {
 		answer[xyz] = (normalId < NORM_X_NEG) ? 1.0f : -1.0f;
 		return answer;
 	}
-	// STUB: PLAYER 0x008c7760
-	// STUB: STUDIO 0x009ca540
+	// FUNCTION: PLAYER 0x008c7760
+	// FUNCTION: STUDIO 0x009ca540
 	const Vector3& normalIdToVector3(NormalId normalId)	// 0x233054 (assert at NormalId.cpp line 268)
 	{
 		switch (normalId)
@@ -284,8 +284,8 @@ namespace RBX {
 						uInObject.y,	vInObject.y,	wInObject.y,
 						uInObject.z,	vInObject.z,	wInObject.z);
 	}
-	// STUB: PLAYER 0x008c7290
-	// STUB: STUDIO 0x009ca070
+	// FUNCTION: PLAYER 0x008c7290
+	// FUNCTION: STUDIO 0x009ca070
 	const Matrix3& normalIdToMatrix3(NormalId normalId)	// 0x2335CD (assert at NormalId.cpp line 319)
 	{
 		switch (normalId)
@@ -321,11 +321,11 @@ namespace RBX {
 			}
 		}
 	}
-
+// FUNCTION: PLAYER 0x008c74a0
+// FUNCTION: STUDIO 0x009ca280
 	NormalId Vector3ToNormalId(const Vector3& v)
 	{
-		RBXASSERT(		(v == Vector3::unitX())
-				||	(v == Vector3::unitY())
+		RBXASSERT(		(v == Vector3::unitX())	||	(v == Vector3::unitY())
 				||	(v == Vector3::unitZ())
 				||	(v == -Vector3::unitX())
 				||	(v == -Vector3::unitY())
@@ -356,6 +356,8 @@ namespace RBX {
 	}
 
 	// just use the Z axis of the matrix as the normal vector
+// FUNCTION: PLAYER 0x008c7740
+// FUNCTION: STUDIO 0x009ca520
 	NormalId Matrix3ToNormalId(const Matrix3& m)
 	{
 		return Vector3ToNormalId( m.column(2) );

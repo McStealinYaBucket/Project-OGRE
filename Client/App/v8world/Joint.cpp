@@ -216,7 +216,7 @@ namespace RBX {
 				int type = 13;
 				if (e->getEdgeType() == Edge::JOINT)
 					type = rbx_static_cast<const Joint*>(e)->getJointType();
-				return type == ANCHOR_JOINT || type == FREE_JOINT;
+				return type == Joint::ANCHOR_JOINT || type == Joint::FREE_JOINT;
 			}
 		}
 		return true;

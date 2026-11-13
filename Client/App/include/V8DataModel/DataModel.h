@@ -51,6 +51,7 @@
 #include "V8Tree/Service.h"
 #include "Util/IMetric.h"
 #include "rbx/RunningAverage.h"
+#include "V8DataModel/PhysicsInstructions.h"
 
 #include <boost/array.hpp>
 #include <boost/function.hpp>
@@ -495,8 +496,7 @@ public:
 	volatile bool		dirtyFlag;								// 0xbe4 IDataState
 	bool				isInitialized;							// 0xbe5 asserts in httpGet & co.
 	bool				isContentLoaded;						// 0xbe6 src2016 (Replicator jobs 0x00598ff7 read it)
-	double				m_unk0xbe8[(0xc48 - 0xbe8) / 8];		// 0xbe8 PhysicsInstructions (ctor 0x0084d2f0; vectors at
-																//       +0xc/+0x24, double at +0x58); not in the tree yet
+	PhysicsInstructions	physicsInstructions;					// 0xbe8 ctor 0x0084d2f0 (DataModel ctor 0x0064ee60)
 	int					numPartInstances;						// 0xc48 onDescendantAdded 0x00645dcf
 	int					numInstances;							// 0xc4c onDescendantAdded 0x00645da2
 	int					shutdownRequestedCount;					// 0xc50

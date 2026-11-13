@@ -164,7 +164,7 @@ namespace RBX { namespace Lua {
 	private:
 		// mac: 0x62F89C: weak-locks the context and forwards the fetch result.
 		static void ContentReadyHelper(boost::weak_ptr<ScriptContext> context,
-			const std::string& library, const std::string& url,
+			std::string library, std::string url,
 			AsyncHttpQueue::RequestResult result, std::istream* stream,
 			boost::shared_ptr<const std::string> response);
 		// Heartbeat pump for one delayed request.

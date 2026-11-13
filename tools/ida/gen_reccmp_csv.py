@@ -15,7 +15,8 @@ Inputs: ida/exports/<T>-functions.csv, ida/exports/<T>-names.csv, ida/exports/<T
 
 Outputs (regenerated, never hand-edited; addresses are absolute VAs, which is what reccmp's CSV loader
 takes, as 8 hex digits without 0x):
-  <t>-function-size.csv  address,type,size   every function extent IDA found in .text, minus:
+  <t>-function-size.csv  address,type,size   every function extent IDA found in .text (true_size extends it over
+                         an in-function jump table or a tail IDA cut at a call it took for noreturn), minus:
                          unwind funclets and catch handlers (from every __CxxFrameHandler3 FuncInfo,
                          magic 0x19930520-22), adjustor thunks and import thunks (by their bytes),
                          functions VMProtect touched (notes/vmprotect-player.csv) and anything outside
@@ -60,6 +61,11 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
   - <t>-libdata.csv keeps every row of the previous file that still resolves and nothing contradicts.
   - Vtable rows carry the original's slot count (vt_slots), also for `// VTABLE:` markers.
   - Every vftable a --json run paired votes its slot functions (vt_slot_refs, one vote per slot).
+  - A float our linker ICF-folded with a named constant takes its size from the map's __real@ alias.
+  - A library row whose size runs over an in-function jump table is read up to the first instruction
+    that differs (the table), and its own table is never a nameless code row.
+  - Pool only --json runs of the build being regenerated against: a run from an earlier link pairs
+    stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
   - A non-STUB marker reccmp could not pair (its log <json>.txt says 'Debug data out of sync') does not
     keep data_rows off its address.
   - Typing: an oracle-named original is library only in a third-party namespace (third_party); otherwise
@@ -385,6 +391,10 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
                  if x.Name.rstrip(b"\0") == b".text")
 
     votes = {}
+    reals = {}
+    for n, ra in read_map(exe[:-4] + ".map")[0].items():
+        if n.startswith("__real@"):
+            reals[ra] = len(n) // 2 - 3
 
     def note(node, oa, weight=1):
         seen.setdefault(node, set()).add(oa)
@@ -401,8 +411,15 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
                 continue
         ob, rb = orig.b(o, n), rimg[r - rbase:r - rbase + n]
         oins, rins = list(md.disasm(ob, 0)), list(md.disasm(rb, 0))
-        if [(i.address, i.size, i.mnemonic) for i in oins] != [(i.address, i.size, i.mnemonic) for i in rins] \
-                or sum(i.size for i in oins) != n:
+        ok, ek = [(i.address, i.size, i.mnemonic) for i in oins], [(i.address, i.size, i.mnemonic) for i in rins]
+        if len(p) == 3 and ok != ek:
+            # a byte-identical library body (matcher row) whose size runs over an in-function jump table:
+            # the tables' dwords differ, so read only the code before the first disagreeing instruction
+            # (inflate 0x009e22e0 and its static `order` table)
+            k = next(k for k, (x, y) in enumerate(zip(ok + [None], ek + [None])) if x != y)
+            n = ok[k - 1][0] + ok[k - 1][1] if k else 0
+            oins, rins, ok, ek = oins[:k], rins[:k], ok[:k], ek[:k]
+        if ok != ek or sum(i.size for i in oins) != n or not n:
             continue
         for i in rins:
             if i.size == 5 and rb[i.address] in (0xE8, 0xE9):
@@ -414,7 +431,8 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
             vr = struct.unpack_from("<I", rimg, k - rbase)[0]
             vo = struct.unpack_from("<I", ob, k - r)[0]
             if vr not in view and rtext[0] <= vr < rtext[1] and orig.in_text(vo) and vo not in kept:
-                anon_code.add(vo)  # e.g. a /GS __ehhandler$ stub: code with no PDB symbol (see below)
+                if len(p) > 3 or not o <= vo < o + p[2]:  # not a library function's own jump table (`jmp [table+eax*4]`)
+                    anon_code.add(vo)  # e.g. a /GS __ehhandler$ stub: code with no PDB symbol (see below)
                 continue
             j = bisect.bisect_right(starts, vr) - 1
             if j < 0:
@@ -483,6 +501,8 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
         sym = d if typ in ("global", "vtable") else ""
         name = nm if typ in ("global", "vtable") and not d else ""
         size = len(d) // 2 - 3 if typ == "float" and d and d.startswith("__real@") else ""
+        if typ == "float" and not size:  # ICF folded __real@ with a named constant: the map keeps the alias
+            size = reals.get(nodes[0], "")
         if typ == "vtable":
             size = "vt"  # the original's slot count, set below once every data row is known
         rows.append((f"{oa:08x}", typ, size, sym, name))
@@ -593,6 +613,33 @@ def funcinfo_targets(im):
     return out, count
 
 
+def true_size(im, a, size, nxt):
+    """IDA's extent of the function at a, extended to what the original's .obj holds (bounded by nxt, the
+    next IDA function start): (1) over the in-function jump table right after it (4-aligned dwords that
+    point into the function; IDA stops before the table, e.g. Math::matrixTiltQuadrant 0x00758320 245 ->
+    264); (2) over the fall-through tail IDA cut off after a call it took for noreturn (the bytes up to
+    nxt, minus int3 padding, decode to code ending in ret; e.g. Bridge<T>::on_newindex 0x00670170, cut
+    at its call to the thrower, really 0x30)."""
+    import capstone
+    end = a + size
+    p = (end + 3) & ~3
+    q = p
+    while q + 4 <= nxt and a <= im.u32(q) < end:
+        q += 4
+    if q > p:
+        return q - a
+    tail = im.b(end, max(nxt - end, 0)).rstrip(b"\xcc")
+    if a & 15 or not tail or len(tail) > 64 or b"\xcc" in tail:  # int3 inside: padding before code IDA did not define
+        return size
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    body = list(md.disasm(im.b(a, size), a))
+    ins = list(md.disasm(tail, end))
+    if not body or body[-1].mnemonic != "call" or sum(i.size for i in body) != size \
+            or sum(i.size for i in ins) != len(tail) or ins[-1].mnemonic != "ret":
+        return size
+    return end + len(tail) - a
+
+
 def adjustor_thunk(body):
     return any(len(body) == n and rx.match(body) for rx, n in ADJUSTOR)
 
@@ -670,7 +717,9 @@ def vt_slot_refs(orig, exe, json_path, view, code):
 
 
 def markers_above(path, line, target):
-    """Original addresses of the non-STUB markers in the comment block right above `line` (1-based)."""
+    """Original addresses of the markers in the comment block right above `line` (1-based). STUB ones too:
+    a STUB on a template line reccmp cannot pair (Type.h:82, Type::Type<void> 0x0079fc70) would otherwise
+    take its address away from the position row that paired it."""
     try:
         with open(path, errors="replace") as f:
             lines = f.read().split("\n")
@@ -678,7 +727,7 @@ def markers_above(path, line, target):
         return set()
     out, i = set(), line - 2
     while i >= 0 and lines[i].strip().startswith("//"):
-        m = re.match(r"\s*//\s*(FUNCTION|TEMPLATE|SYNTHETIC|LIBRARY):\s*" + target + r"\s+0x([0-9a-fA-F]+)", lines[i])
+        m = re.match(r"\s*//\s*(FUNCTION|STUB|TEMPLATE|SYNTHETIC|LIBRARY):\s*" + target + r"\s+0x([0-9a-fA-F]+)", lines[i])
         if m:
             out.add(int(m.group(2), 16))
         i -= 1
@@ -743,7 +792,12 @@ def gen(target, build=BUILD, json_path=None):
     drop = {"outside .text": 0, "VMProtect-touched": 0, "unwind/catch funclet": 0, "import thunk": 0,
             "adjustor thunk": 0}
     keep = []
-    for a, size, _ in funcs:
+    extended = 0
+    for k, (a, size, _) in enumerate(funcs):
+        if im.in_text(a) and k + 1 < len(funcs):
+            n = true_size(im, a, size, funcs[k + 1][0])
+            extended += n != size
+            size = n
         body = im.b(a, min(size, 16))
         if not im.in_text(a):
             drop["outside .text"] += 1
@@ -762,7 +816,8 @@ def gen(target, build=BUILD, json_path=None):
     notes = [f"Generated by tools/ida/gen_reccmp_csv.py from ida/exports/{target}-functions.csv. Do not edit.",
              f"{len(funcs)} IDA functions, {len(keep)} kept. Dropped: "
              + ", ".join(f"{k} {v}" for k, v in drop.items()) + ".",
-             f"FuncInfo records parsed: {nfuncinfo} ({len(eh)} unwind/catch targets)."]
+             f"FuncInfo records parsed: {nfuncinfo} ({len(eh)} unwind/catch targets).",
+             f"{extended} sizes extended past IDA's end (true_size: in-function jump table or noreturn tail)."]
     f, w = writer(path, ["address", "type", "size"], notes)
     with f:
         w.writerows((f"{a:08x}", "function", size) for a, size in keep)
@@ -853,7 +908,7 @@ def gen(target, build=BUILD, json_path=None):
     mk = marked(target)
     # A marker reccmp could not pair ('Debug data out of sync with function near: <file>:<line>' in the
     # run's log, <json minus .json>.txt: one template line whose instantiations carry two __FILE__
-    # spellings) leaves its address to a position or vftable-slot row. STUB markers stay skipped.
+    # spellings) leaves its address to a position or vftable-slot row.
     failed = set()
     for jp in (json_path or "").split(",") if json_path else []:
         log = jp[:-5] + ".txt"
@@ -1068,6 +1123,17 @@ def selftest():
         norm_sig("RBX::FWBase::~FWBase()[D0, deleting: the MSVC scalar deleting destructor]")
     assert norm_sig("void RBX::Instance::writeXml(class boost::function<bool (class RBX::Instance *)> const &)") \
         == norm_sig("RBX::Instance::writeXml(boost::function<bool (RBX::Instance*)> const&)")
+    class FakeImg:  # true_size over a byte string mapped at 0x1000
+        def __init__(self, data): self.d = data
+        def b(self, a, n): return self.d[a - 0x1000:a - 0x1000 + n]
+        def u32(self, a): return struct.unpack_from("<I", self.d, a - 0x1000)[0]
+    # 6 bytes of code (jmp [eax*4+table]), 2 bytes padding, a 2-entry table pointing into the function
+    jt = FakeImg(b"\xff\x24\x85\x08\x10\x00\x8d\x49" + struct.pack("<II", 0x1000, 0x1004) + b"\xcc" * 4)
+    assert true_size(jt, 0x1000, 6, 0x1020) == 16
+    # call cut off by IDA's noreturn guess, then `add esp,4; ret`, then int3 padding
+    nr = FakeImg(b"\xe8\x00\x00\x00\x00\x83\xc4\x04\xc3" + b"\xcc" * 7)
+    assert true_size(nr, 0x1000, 5, 0x1010) == 9
+    assert true_size(nr, 0x1001, 4, 0x1010) == 4  # an unaligned start is never extended over a tail
     print("selftest ok")
 
 

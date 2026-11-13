@@ -32,26 +32,26 @@ namespace RBX {
 	// Carried from March 2016 v8world/Joint.h (first-party; order verified
 	// against all 13 binary getJointType bodies). Named (no object) so the
 	// header stays definition-free across TUs.
-	enum JointType {
-		ANCHOR_JOINT,
-		WELD_JOINT,
-		MANUAL_WELD_JOINT,
-		SNAP_JOINT,
-		MOTOR_1D_JOINT,
-		MOTOR_6D_JOINT,
-		ROTATE_JOINT,
-		ROTATE_P_JOINT,
-		ROTATE_V_JOINT,
-		GLUE_JOINT,
-		MANUAL_GLUE_JOINT,
-		FREE_JOINT,
-		KERNEL_JOINT,
-		NO_JOINT
-	};
 
 	class Joint : public Edge, public SpanningEdge
 	{
 	public:
+		enum JointType {
+			ANCHOR_JOINT,
+			WELD_JOINT,
+			MANUAL_WELD_JOINT,
+			SNAP_JOINT,
+			MOTOR_1D_JOINT,
+			MOTOR_6D_JOINT,
+			ROTATE_JOINT,
+			ROTATE_P_JOINT,
+			ROTATE_V_JOINT,
+			GLUE_JOINT,
+			MANUAL_GLUE_JOINT,
+			FREE_JOINT,
+			KERNEL_JOINT,
+			NO_JOINT
+		};
 		Joint();
 		Joint(Primitive* p0, Primitive* p1,
 			const G3D::CoordinateFrame& c0, const G3D::CoordinateFrame& c1);

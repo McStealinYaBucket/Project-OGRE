@@ -4,7 +4,8 @@ into a Windows database as local types, and type the `this` of their constructor
 Two steps:
   1. dump (no IDA; reccmp's cvdump.exe under wine, streamed, about 0.1 GB): read the class layouts from our
      recompiled PDB's type records and write them, with every base class they need, as JSON:
-         tools/capped.sh python3 -P tools/ida/import_types.py dump build/RobloxPlayerBeta.pdb ida/exports/PLAYER-proven-types.json
+         tools/capped.sh python3 -P tools/ida/import_types.py dump build/RobloxPlayerBeta.pdb ida/exports/PLAYER-proven-types.json [P.json]
+     (the optional reccmp --json run of that build names the <Class>_vtbl slots of VTBL_FROM_JSON)
   2. apply (IDA, saves packed): create one local type per class (C++ name, e.g. RBX::Instance), members at
      the PDB's offsets, gaps as gap_XX byte arrays, base classes as base-class members, vfptr as
      `void **__vftable`; members whose type is another imported class get that type, pointers to an imported
@@ -35,7 +36,28 @@ CLASSES = [
     # DataModel ctor 0x0064ec50 / dtor 0x0064d850 / operator new 0xe10 at 0x0064f760, MouseStats ctor 0x00641bd0
     "RBX::FWBase", "RBX::FWInstance", "RBX::IFWHolder", "RBX::ScriptContext", "RBX::DataModel",
     "RBX::DataModel::MouseStats", "RBX::RunningAverage<double,double>",
+    # phase4-core3 (core-bodies.md, vtables-3.md): GuiBuilder ctor 0x00644f30 / dtor 0x0056b810 (100%, size
+    # assert 0x20; STUDIO 0x1c, fix_2013), Edge (0x1c, byte enums: SleepStage 0x008e7e00, ~Edge 0x0081f840,
+    # the Joint SpanningEdge thunk `sub ecx,0x1c` 0x008eaa40), PartInstance's secondary bases from the RTTI base
+    # list and the ctor 0x007268d0 vptr stores (vftables {for IHasPrimaryPart, IHasLocation, Selectable,
+    # IMoving} at 100%, {for CameraSubject} 0.7 on twins only)
+    "RBX::GuiBuilder", "RBX::Edge", "RBX::IHasPrimaryPart", "RBX::IHasLocation", "RBX::CameraSubject",
+    "RBX::Selectable", "RBX::IMoving",
 ]
+
+# vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
+# vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.
+VTBL_FROM_JSON = {
+    # DataModel's 34 slots (core-bodies.md step 3): vftable PLAYER 0x00b2ffec, STUDIO 0x00bf607c
+    "RBX::DataModel": "RBX::DataModel::`vftable'{for `RBX::Debugable'}",
+}
+# slots whose original target is an ICF-folded body shared by several slots (its one name is wrong for the
+# others): named from our header's declaration order (Instance.h), which every other slot's pairing confirms
+VTBL_FOLDED = {
+    "RBX::DataModel": {0x2c: "verifySetParent", 0x34: "verifyAddChild", 0x40: "askForbidChild",
+                       0x44: "askForbidParent", 0x48: "askSetParent", 0x60: "onChildRemoved",
+                       0x68: "onPropertyChanged"},
+}
 
 
 CVDUMP = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -80,6 +102,26 @@ def fix_2013(res, target):
             "unsigned int (__thiscall *checkHash)(RBX::IFWHolder *this, RBX::FWBase *base)"]
         done.append("IFWHolder: 5 vftable slots (PLAYER 0x00b79100)")
     dm = res.get("RBX::DataModel")
+    gb = res.get("RBX::GuiBuilder")
+    if target == "STUDIO" and gb and gb["size"] == 0x20:
+        # STUDIO (Oct 17) GuiBuilder has no networkStatsPage (PLAYER +0x1c): size 0x1c, the STUDIO DataModel
+        # ctor 0x0076b720 stores parentDataModel at 0xe08 right after guiBuilder (0xdec)
+        gb["members"] = [m for m in gb["members"] if m["offset"] < 0x1c]
+        gb["size"] = 0x1c
+        done.append("GuiBuilder 0x20 -> 0x1c (STUDIO: no networkStatsPage)")
+    if (dm and target == "STUDIO" and dm["size"] == 0xe10
+            and any(m["name"] == "networkStatsWindowsOn" for m in dm["members"])):
+        # our header follows PLAYER (0xe10, GuiBuilder 0x20); the Oct 17 STUDIO build has no
+        # networkStatsWindowsOn and a 0x1c GuiBuilder (same STUDIO ctor evidence as below)
+        dm["members"] = [m for m in dm["members"] if m["name"] != "networkStatsWindowsOn"]
+        for m in dm["members"]:
+            if 0xc64 <= m["offset"] < 0xcb0:
+                m["offset"] -= 4
+        g = mem("RBX::DataModel", "guiBuilder")
+        g["size"] = 0x1c
+        mem("RBX::DataModel", "parentDataModel")["offset"] = 0xe08
+        done.append("DataModel (STUDIO): no networkStatsWindowsOn, 0xc64..0xcac -4, guiBuilder 0x1c, "
+                    "parentDataModel 0xe08")
     if dm and mem("RBX::DataModel", "guiBuilder")["offset"] == 0xdec and dm["size"] == 0xe18:
         # operator new(0xe10) at PLAYER 0x0064f760 / STUDIO 0x0076c210. GuiBuilder is 0x20 in PLAYER and 0x1c
         # in STUDIO (ctor 0x00644f30; ours is 0x24, DataModel.cpp's size assert is off for that reason).
@@ -103,7 +145,41 @@ def fix_2013(res, target):
     return done
 
 
-def dump(pdb, out):
+def vtbl_slots(json_path, res):
+    """<Class>_vtbl slot declarations from a reccmp --json vtable entry (VTBL_FROM_JSON): one `void *` per
+    slot, named after the original slot's function (the "both"/"orig" row; reccmp's name for it)."""
+    if not json_path:
+        return []
+    done = []
+    want = {v: k for k, v in VTBL_FROM_JSON.items() if k in res}
+    for e in json.load(open(json_path))["data"]:
+        if e.get("type") != 5 or e["name"] not in want:
+            continue
+        slots, rows = {}, []
+        for _, blocks in e["diff"]:
+            for b in blocks:
+                for k in ("both", "orig"):
+                    rows += [(k, row) for row in b.get(k, [])]
+        targets = [row[1].split(" /")[0] for _, row in rows]
+        for k, row in rows:
+            off = int(row[0][6:], 16)
+            q = row[1].split(":  ", 1)[1].split("(")[0].strip()
+            if k == "orig" and targets.count(row[1].split(" /")[0]) > 1:
+                continue    # an ICF-folded body in several slots: its one name is wrong for the others
+            slots.setdefault(off, re.sub(r"\W", "_", q.split("::")[-1]) or "slot")
+        names, seen = [], set()
+        for off in range(0, max(slots) + 4, 4):
+            n = slots.get(off) or VTBL_FOLDED.get(want[e["name"]], {}).get(off, "slot_%02x" % off)
+            n = n if n not in seen else "%s_%02x" % (n, off)
+            seen.add(n)
+            names.append("void *%s" % n)
+        res[want[e["name"]]]["slots"] = names
+        done.append("%s_vtbl: %d slots from %s %s" % (want[e["name"]], len(names), os.path.basename(json_path),
+                                                       e["address"]))
+    return done
+
+
+def dump(pdb, out, json_path=None):
     """Lean reader (2026-11-12: reccmp's Cvdump types parser held 13-22 GB for this PDB). cvdump -t is
     streamed to a temporary file while only the byte offset of each record and the UDT index of each named
     class are kept; then only the records reachable from CLASSES through base classes and member types are
@@ -300,7 +376,7 @@ def dump(pdb, out):
         res[n] = {"size": c["size"], "vftable": vf, "virtual_bases": vb, "bases": bases, "members": mem,
                   "base": n not in listed, "unique": uniq_at.get(key, "")}
     target = os.path.basename(out).split("-")[0]
-    fixed = fix_2013(res, target)
+    fixed = fix_2013(res, target) + vtbl_slots(json_path, res)
     json.dump({"pdb": os.path.basename(pdb), "classes": res, "missing": missing, "fixups_2013": fixed},
               open(out, "w"), indent=1)
     print("import_types dump: %d classes (%d listed, %d bases), records read %d of %d, missing %s" % (
@@ -461,7 +537,7 @@ def apply():
             if ida_typeinf.parse_decl(t, None, decl + ";", ida_typeinf.PT_SIL) is None:
                 say("vtbl slot not parsed, void *:", decl)
                 ida_typeinf.parse_decl(t, None, "void *x;", ida_typeinf.PT_SIL)
-            nm = re.search(r"\*(\w+)\)", decl).group(1)     # parse_decl's name carries a C '_' prefix
+            nm = re.search(r"\*\s*(\w+)\)?", decl).group(1)     # parse_decl's name carries a C '_' prefix
             u = ida_typeinf.udm_t()
             u.name, u.offset, u.size, u.type = nm, k * 32, 32, t
             udt.push_back(u)
@@ -561,6 +637,6 @@ if __name__ == "__main__":
         import idc  # noqa: F401
         apply()
     except ImportError:
-        if sys.argv[1:2] != ["dump"] or len(sys.argv) != 4:
+        if sys.argv[1:2] != ["dump"] or len(sys.argv) not in (4, 5):
             sys.exit(__doc__)
-        dump(sys.argv[2], sys.argv[3])
+        dump(*sys.argv[2:])

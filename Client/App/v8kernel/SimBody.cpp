@@ -47,8 +47,8 @@ namespace RBX {
 
 
 	// mac: 0x534A60 (batch243).
-	// STUB: PLAYER 0x00976a00
-	// STUB: STUDIO 0x009c4330
+	// FUNCTION: PLAYER 0x00976a00
+	// FUNCTION: STUDIO 0x009c4330
 	SimBody::~SimBody()
 	{
 		RBXASSERT(dt == 0.0f);  // :54

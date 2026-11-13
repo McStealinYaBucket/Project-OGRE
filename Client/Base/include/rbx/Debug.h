@@ -78,8 +78,10 @@ namespace RBX {
 	// 2013 layout (RTTI of Instance vftable 0x00b2a6ec, Debugable @0): a vfptr whose only
 	// slot is dump(std::ostream&) (0x009b1a70); no virtual destructor, size 4. The 2016
 	// source has no virtuals here.
+	// novtable: PLAYER has no Debugable vftable, and the Instance ctor 0x00620da0 never stores one
+	// before Instance's own (0x00620e28).
 	// SIZE 0x4
-	class Debugable
+	class RBXBaseClass Debugable
     {
 	public:
 		virtual void dump(std::ostream& stream);	// vtable+0x00
