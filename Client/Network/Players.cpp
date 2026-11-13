@@ -44,33 +44,13 @@ namespace Network {
 		return (int)numChildren();
 	}
 
-	// STUB: PLAYER 0x005689c0
-	// STUB: STUDIO 0x005ccbc0
-	bool Players::backendProcessing(const Instance* context, bool testInDatamodel)
-	{
-		const ServiceProvider* provider = ServiceProvider::findServiceProvider(context);
-		RBXASSERT(!testInDatamodel || provider != NULL);
-		if (provider != NULL)
-			return !Client::clientIsPresent(context, testInDatamodel);
-		return false;
-	}
-
+	// 2013 has Players::clientIsPresent in Client.cpp (0x005adc70, between Client::findClient
+	// and Client::onServiceProvider).
 	// STUB: PLAYER 0x005adc70
 	// STUB: STUDIO 0x0060c6b0
 	bool Players::clientIsPresent(const Instance* context, bool testInDatamodel)
 	{
 		return Client::clientIsPresent(context, testInDatamodel);
-	}
-
-	// STUB: PLAYER 0x00568900
-	// STUB: STUDIO 0x005ccb00
-	bool Players::frontendProcessing(const Instance* context, bool testInDatamodel)
-	{
-		const ServiceProvider* provider = ServiceProvider::findServiceProvider(context);
-		RBXASSERT(!testInDatamodel || provider != NULL);
-		if (provider != NULL)
-			return !Server::serverIsPresent(context, testInDatamodel);
-		return false;
 	}
 
 	bool Players::serverIsPresent(const Instance* context, bool testInDatamodel)
@@ -163,16 +143,9 @@ namespace Network {
 		}
 	}
 
-	// mac: 0x89BE50 (340B; mangle __ZNK3RBX7Network11ChatMessage21getReportAbuseMessageEv).
-	// The sret slot is the first stack arg (`this` in the raw disasm)
-	// and the const method object is the second.  Jump table at
-	// mac: 0x89BE79 (0..3): TEAM -> "[[team]]" (0xB9A0B6) + message via
-	// operator+(char const*, std::string const&); WHISPER ->
-	// ostringstream "[[to " + receiver name or "???" + "]]" + message,
-	// .str(); GAME -> "[[game]]" (0xB9A0AD) + message; case 0/default
-	// -> plain string copy ctor from message.  The receiver name walks
-	// fw(receiver.px)+24 (0x544AF8 + 0x18) -- the landed Instance::
-	// getName() reads the same FWInstance+24 string (see Instance.h).
+	// mac: 0x89BE50 (340B): switch on chatType (TEAM "[[team]]", WHISPER ostringstream "[[to " +
+	// receiver name or "???" + "]]", GAME "[[game]]", default copy) + message.
+	// The receiver name walks fw(receiver.px)+24, as Instance::getName() does.
 	// STUB: PLAYER 0x0055b350
 	// STUB: STUDIO 0x005ba800
 	std::string ChatMessage::getReportAbuseMessage() const
@@ -198,6 +171,30 @@ namespace Network {
 			default:
 				return message;
 		}
+	}
+
+
+	// FUNCTION: PLAYER 0x00568900
+	// FUNCTION: STUDIO 0x005ccb00
+	bool Players::frontendProcessing(const Instance* context, bool testInDatamodel)
+	{
+		const ServiceProvider* serviceProvider = ServiceProvider::findServiceProvider(context);
+		RBXASSERT(!testInDatamodel || serviceProvider!=NULL);
+		return serviceProvider && !Server::serverIsPresent(context, testInDatamodel); }
+	// STUB: PLAYER 0x005689c0
+	// STUB: STUDIO 0x005ccbc0
+	bool Players::backendProcessing(const Instance* context, bool testInDatamodel)
+	{
+		const ServiceProvider* serviceProvider = ServiceProvider::findServiceProvider(context);
+		RBXASSERT(!testInDatamodel || serviceProvider!=NULL);
+		return serviceProvider && !Players::clientIsPresent(context, testInDatamodel);
+	}
+
+	// FUNCTION: PLAYER 0x0056b8c0
+	// FUNCTION: STUDIO 0x005d0d70
+	bool Players::isNetworkClient(const Instance* instance)
+	{
+		return Instance::fastDynamicCast<Client>(instance) != NULL;
 	}
 
 } // namespace Network

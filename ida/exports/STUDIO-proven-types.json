@@ -809,6 +809,12 @@
      "offset": 0,
      "size": 24,
      "empty": false
+    },
+    {
+     "name": "RBX::Allocator<RBX::FWInstance>",
+     "offset": 24,
+     "size": 1,
+     "empty": true
     }
    ],
    "members": [
@@ -1505,11 +1511,11 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0xbe8",
+     "name": "physicsInstructions",
      "offset": 3048,
      "size": 96,
-     "kind": "array",
-     "type": null,
+     "kind": "class",
+     "type": "RBX::PhysicsInstructions",
      "scalar": null
     },
     {
@@ -2110,6 +2116,322 @@
    "base": false,
    "unique": "VIMoving@RBX@@"
   },
+  "RBX::Team": {
+   "size": 108,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Team, RBX::Instance, char const *const RBX::sTeam, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "score",
+     "offset": 96,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "color",
+     "offset": 100,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::BrickColor",
+     "scalar": null
+    },
+    {
+     "name": "autoAssignable",
+     "offset": 104,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "autoColorCharacters",
+     "offset": 105,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VTeam@RBX@@"
+  },
+  "RBX::Teams": {
+   "size": 108,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, 11, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "teams",
+     "offset": 100,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VTeams@RBX@@"
+  },
+  "RBX::ContentProviderJob": {
+   "size": 648,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "processFunc",
+     "offset": 536,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<RBX::TaskScheduler::StepResult __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const>)>",
+     "scalar": null
+    },
+    {
+     "name": "errorFunc",
+     "offset": 568,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >)>",
+     "scalar": null
+    },
+    {
+     "name": "aborted",
+     "offset": 600,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "tasks",
+     "offset": 604,
+     "size": 36,
+     "kind": "class",
+     "type": "rbx::safe_queue<RBX::ContentProviderJob::ContentProviderTask>",
+     "scalar": null
+    },
+    {
+     "name": "execMode",
+     "offset": 640,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::ContentProviderJob::ExecutionMode",
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VContentProviderJob@RBX@@"
+  },
+  "RBX::LegacyContentTable": {
+   "size": 52,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "mMap",
+     "offset": 0,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::hash<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::equal_to<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >",
+     "scalar": null
+    },
+    {
+     "name": "mEmpty",
+     "offset": 24,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLegacyContentTable@RBX@@"
+  },
+  "RBX::Average<double>": {
+   "size": 24,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "samples",
+     "offset": 0,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "tag",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "history",
+     "offset": 8,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<double,std::allocator<double> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "V?$Average@N@RBX@@"
+  },
+  "RBX::FWPartInstance": {
+   "size": 84,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FWPVInstance",
+     "offset": 0,
+     "size": 56,
+     "empty": false
+    },
+    {
+     "name": "RBX::Allocator<RBX::FWPartInstance>",
+     "offset": 56,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "material",
+     "offset": 56,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::Material",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "brickColor",
+     "offset": 60,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::BrickColor",
+     "scalar": null
+    },
+    {
+     "name": "transparency",
+     "offset": 64,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "reflectance",
+     "offset": 68,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "alphaModifier",
+     "offset": 72,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "locked",
+     "offset": 76,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "_pad49",
+     "offset": 77,
+     "size": 3,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "fw52",
+     "offset": 80,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VFWPartInstance@RBX@@"
+  },
+  "RBX::FWFinal<RBX::FWInstance>": {
+   "size": 56,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FWInstance",
+     "offset": 0,
+     "size": 56,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "V?$FWFinal@VFWInstance@RBX@@@RBX@@"
+  },
+  "RBX::FWFinal<RBX::FWPartInstance>": {
+   "size": 84,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FWPartInstance",
+     "offset": 0,
+     "size": 84,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "V?$FWFinal@VFWPartInstance@RBX@@@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -2703,6 +3025,15 @@
    "base": true,
    "unique": "V?$enable_shared_from_this@VFWBase@RBX@@@boost@@"
   },
+  "RBX::Allocator<RBX::FWInstance>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Allocator@VFWInstance@RBX@@@RBX@@"
+  },
   "RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>": {
    "size": 96,
    "vftable": false,
@@ -2806,6 +3137,63 @@
    ],
    "base": true,
    "unique": "VIPipelined@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::Team, RBX::Instance, char const *const RBX::sTeam, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Team, char const *const RBX::sTeam, RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VTeam@RBX@@VInstance@2@$E?sTeam@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, 11, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Teams, char const *const RBX::sTeams, RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>, 11, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDB$0L@$0A@@RBX@@"
+  },
+  "RBX::FWPVInstance": {
+   "size": 56,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FWInstance",
+     "offset": 0,
+     "size": 56,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "VFWPVInstance@RBX@@"
+  },
+  "RBX::Allocator<RBX::FWPartInstance>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Allocator@VFWPartInstance@RBX@@@RBX@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
@@ -2982,6 +3370,38 @@
    "base": true,
    "unique": "V?$Described@VDataModel@RBX@@$E?sDataModel@2@3QBDBV?$NonFactoryProduct@VServiceProvider@RBX@@$E?sDataModel@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::Team, char const *const RBX::sTeam, RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VTeam@RBX@@$E?sTeam@2@3QBDBV?$FactoryProduct@VTeam@RBX@@VInstance@2@$E?sTeam@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Teams, char const *const RBX::sTeams, RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>, 11, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VTeams@RBX@@$E?sTeams@2@3QBDBV?$FactoryProduct@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDBV32@@2@$0L@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -3074,6 +3494,38 @@
    "base": true,
    "unique": "V?$NonFactoryProduct@VServiceProvider@RBX@@$E?sDataModel@2@3QBDB@RBX@@"
   },
+  "RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VTeam@RBX@@VInstance@2@$E?sTeam@2@3QBDBV32@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VTeams@RBX@@VInstance@2@$E?sTeams@2@3QBDBV32@@RBX@@"
+  },
   "boost::intrusive::detail::no_default_definer": {
    "size": 1,
    "vftable": false,
@@ -3147,6 +3599,6 @@
   "IFWHolder: 5 vftable slots (PLAYER 0x00b79100)",
   "GuiBuilder 0x20 -> 0x1c (STUDIO: no networkStatsPage)",
   "DataModel (STUDIO): no networkStatsWindowsOn, 0xc64..0xcac -4, guiBuilder 0x1c, parentDataModel 0xe08",
-  "RBX::DataModel_vtbl: 34 slots from P-final.json 0xb2ffec"
+  "RBX::DataModel_vtbl: 34 slots from S-final.json 0xbf607c"
  ]
 }

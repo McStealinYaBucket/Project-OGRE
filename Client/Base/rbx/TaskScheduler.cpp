@@ -313,18 +313,16 @@ void TaskScheduler::remove(const boost::shared_ptr<TaskScheduler::Job>& job, boo
 	FASTLOG1(FLog::TaskSchedulerRun,
 		"Removing job %p from allJobs (::remove)", job.get());
 	allJobs.erase(job);
-	if (job->SleepingHook::is_linked())
+	if (job->SleepingHook::is_linked())  // NOTE (2013): no cyclic assert.
 	{
-		// NOTE (2013): no cyclic assert.
 		FASTLOG1(FLog::TaskSchedulerRun,
 			"Removing job %p from sleepingJobs (::remove)", job.get());
 		sleepingJobs.erase(sleepingJobs.iterator_to(*job));
 		if (joinEvent)
 			joinEvent->Set();
 	}
-	else if (job->WaitingHook::is_linked())
+	else if (job->WaitingHook::is_linked())  // NOTE (2013): no cyclic assert.
 	{
-		// NOTE (2013): no cyclic assert.
 		FASTLOG1(FLog::TaskSchedulerRun,
 			"Removing job %p from waitingJobs (::remove)", job.get());
 		waitingJobs.erase(waitingJobs.iterator_to(*job));
@@ -378,7 +376,6 @@ void TaskScheduler::sampleRunningJobCount()
 	}
 }
 
-
 void TaskScheduler::enqueueWaitingJob(Job& job)
 {
 	FASTLOG1(FLog::TaskSchedulerFindJob,
@@ -388,12 +385,10 @@ void TaskScheduler::enqueueWaitingJob(Job& job)
 	waitingJobs.push_back(job);
 }
 
-
 Time::Interval TaskScheduler::getShortestSleepTime() const
 {
 	return nextWakeTime - Time::now<Time::Fast>();
 }
-
 
 // STUB: PLAYER 0x009b41c0
 // STUB: STUDIO 0x00a6bfb0
@@ -459,42 +454,31 @@ boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thr
 	Time now = Time::now<Time::Fast>();
 
 	WaitingJobs::iterator bestJob = waitingJobs.end();
-
 	// Note: These definitions don't strictly need to be initialized, but it eliminates pesky compiler warnings
 	bool bestHasAffinity = false;
 	bool bestIsThrottled = false;
-
 	FASTLOG1(FLog::TaskSchedulerFindJob, "Starting to iterate through waitingJobs. Size = %d", waitingJobs.size());
-
 	for (WaitingJobs::iterator iter = waitingJobs.begin(); iter != waitingJobs.end(); ++iter)
 	{
 		Job& job(*iter);
-
 		if (job.isDisabled())
 			continue;
-
 		if (priorityMethod != FIFO)
 		{
 			job.updateError(now);
-
 			if (job.currentError.error<=0)
 			{
 				continue;
 			}
 		}
-
 		if (conflictsWithScheduledJob(&job))
 		{
 			continue;
 		}
-
 		job.updatePriority();
-
 		const bool hasAffinity = job.lastThreadUsed.lock() == requestingThread;
 		bool match = false;
-
 		shared_ptr<Arbiter> const arbiter(job.getArbiter());
-
 		if (bestJob == waitingJobs.end())
 		{
 			match = true;
@@ -523,7 +507,6 @@ boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thr
 			if (job.priority > bestJob->priority * threadAffinityPreference)
 				match = true;
 		}
-
 		if (match)
 		{
 			// Cache off old best job
@@ -538,19 +521,14 @@ boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thr
 					nextScheduledJob.reset();
 				}
 			}
-
 			bestJob = iter;
 			bestHasAffinity = hasAffinity;
-
 			if (priorityMethod == FIFO)
 				break;
-
 			bestIsThrottled = arbiter && arbiter->isThrottled();
 		}
 	}
-
 	FASTLOG(FLog::TaskSchedulerFindJob, "Finished iterating through waitingJobs");
-
 	if (bestJob != waitingJobs.end())
 	{
 		result = bestJob->shared_from_this();

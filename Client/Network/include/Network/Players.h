@@ -88,6 +88,9 @@ class Players
 		// mac: 0x89B130: delegates to Server::serverIsPresent.
 		static bool serverIsPresent(const Instance* context, bool testInDatamodel = true);
 
+		// 2016 name; PLAYER 0x0056b8c0: fastDynamicCast<Client>(instance) != NULL.
+		static bool isNetworkClient(const Instance* instance);
+
 		// Chat era (0x898962): send a chat message.  Stubbed (network
 		// unported) -- body is empty; the real body uses RakNet::BitStream,
 		// getGuidRegistry, ConcurrentRakPeer::Send, ChatMessage.

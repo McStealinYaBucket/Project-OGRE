@@ -134,8 +134,8 @@ namespace RBX
 					const Class* c = boost::polymorphic_downcast<const Class*>(object);
 					return (c->*get)();
 				}
-				// STUB: PLAYER 0x005b5d20
-				// STUB: STUDIO 0x007aae20
+				// FUNCTION: PLAYER 0x005b5d20
+				// FUNCTION: STUDIO 0x007aae20
 				/*implement*/ void setValue(DescribedBase* object, const V& value) const
 				{
 					Class* c = boost::polymorphic_downcast<Class*>(object);

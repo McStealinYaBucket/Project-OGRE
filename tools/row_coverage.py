@@ -1,9 +1,9 @@
 """Coverage of a DECOMP_PLAN Phase 5 row: every PLAYER function of a set of source files, with its score.
 
-    python3 -P tools/row_coverage.py P.json [--files Client/App/util/Math.cpp ...] [--csv out.csv]
+    python3 -P tools/row_coverage.py P.json [--row 5a|5b] [--files Client/App/util/Math.cpp ...] [--csv out.csv]
 
-With no --files it measures row 5a (math and G3D helpers in Client/App/util + include/Util). Math.cpp's
-range is one 2013 .obj; an address counts once.
+With no --files it measures --row (default 5a: math and G3D helpers in Client/App/util + include/Util;
+5b: DataModel and the core services). Math.cpp's range is one 2013 .obj; an address counts once.
 Per file, the original .obj range is [lowest PLAYER marker, highest marker + its size] widened over
 neighbouring functions whose oracle name (ida/exports/PLAYER-names.csv) carries one of the file's
 class qualifiers (`RBX::Math::`). Every IDA function in that range is listed with its oracle name and
@@ -41,6 +41,28 @@ ROW_5A = {
     "Client/Rendering/RbxG3D/RbxCamera.cpp": ["RBX::RbxCamera::"],
 }
 
+ROW_5B = {
+    "Client/App/v8datamodel/DataModel.cpp": ["RBX::DataModel::"],
+    "Client/App/v8datamodel/DataModelJob.cpp": ["RBX::DataModelJob::", "RBX::DataModelArbiter::"],
+    "Client/App/v8datamodel/GuiBuilder.cpp": ["RBX::GuiBuilder::"],
+    "Client/App/v8tree/Service.cpp": ["RBX::ServiceProvider::"],
+    "Client/App/v8datamodel/Workspace.cpp": ["RBX::Workspace::"],
+    "Client/App/v8datamodel/Lighting.cpp": ["RBX::Lighting::"],
+    "Client/App/v8datamodel/Teams.cpp": ["RBX::Teams::"],
+    "Client/App/v8datamodel/Team.cpp": ["RBX::Team::"],
+    "Client/Network/Players.cpp": ["RBX::Network::Players::"],
+    "Client/Network/Player.cpp": ["RBX::Network::Player::"],
+    "Client/App/v8datamodel/RunService.cpp": ["RBX::RunService::"],
+    "Client/App/v8datamodel/StarterGuiService.cpp": ["RBX::StarterGuiService::"],
+    "Client/App/v8datamodel/StarterPackService.cpp": ["RBX::StarterPackService::"],
+    "Client/App/v8datamodel/DebrisService.cpp": ["RBX::DebrisService::"],
+    "Client/App/v8datamodel/PhysicsInstructions.cpp": ["RBX::PhysicsInstructions::"],
+}
+ROWS = {"5a": ROW_5A, "5b": ROW_5B}
+# Largest gap between two markers of one .obj. DataModel.obj spans 0x0062d1e0-0x00652800 with
+# 0x9000-byte runs of template code between its own functions.
+SPAN = {"5a": 0x2000, "5b": 0xa000}
+
 
 GAP = 8
 
@@ -58,6 +80,7 @@ def densest(addrs, span=0x2000):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("json")
+    ap.add_argument("--row", default="5a", choices=sorted(ROWS))
     ap.add_argument("--files", nargs="*")
     ap.add_argument("--csv")
     a = ap.parse_args()
@@ -69,14 +92,15 @@ def main():
         if r["kind"] == "func":
             names[int(r["address"], 16)] = r["demangled"] or r["name"]
     score = {int(e["address"], 16): e for e in json.load(open(a.json))["data"]}
-    files = {f: ROW_5A.get(f, []) for f in a.files} if a.files else ROW_5A
+    row = ROWS[a.row]
+    files = {f: row.get(f, []) for f in a.files} if a.files else row
     rows, tot, ok, seen = [], 0, 0, set()
     for f, quals in files.items():
         p = os.path.join(ROOT, f)
         marks = sorted({int(m, 16) for m in MARK.findall(open(p, encoding="utf-8", errors="replace").read())}) \
             if os.path.exists(p) else []
         own = lambda ad: any(q in names.get(ad, "") for q in quals)
-        seeds = densest(marks) or densest(sorted(ad for ad in names if own(ad)))
+        seeds = densest(marks, SPAN[a.row]) or densest(sorted(ad for ad in names if own(ad)))
         if not seeds:
             print(f"{f}: no marker and no oracle name")
             continue

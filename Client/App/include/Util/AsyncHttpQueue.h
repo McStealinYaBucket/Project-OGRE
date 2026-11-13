@@ -51,6 +51,8 @@ namespace RBX {
 	class DataModel;
 	class HttpQueueStatsItem;
 
+// VTABLE: PLAYER 0x00b7fbac
+// VTABLE: STUDIO 0x00c57e84
 class AsyncHttpQueue
 	 : public boost::enable_shared_from_this<AsyncHttpQueue>
 	 , public boost::noncopyable
@@ -88,6 +90,10 @@ public:
 
 	AsyncHttpQueue(Instance* owner,boost::function<bool(const std::string& url, std::string* result)> getLocalFile, int threadCount);
 	virtual ~AsyncHttpQueue();
+
+	// SYNTHETIC: PLAYER 0x00871000
+	// SYNTHETIC: STUDIO 0x009be190
+	// RBX::AsyncHttpQueue::`scalar deleting destructor'
 	void onHeartbeat(const Heartbeat& heartbeatEvent);
 
 	int getRequestQueueSize() const;

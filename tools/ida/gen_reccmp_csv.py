@@ -61,11 +61,19 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
   - <t>-libdata.csv keeps every row of the previous file that still resolves and nothing contradicts.
   - Vtable rows carry the original's slot count (vt_slots), also for `// VTABLE:` markers.
   - Every vftable a --json run paired votes its slot functions (vt_slot_refs, one vote per slot).
+  - A library row on a body the original also keeps as an identical twin yields it to the twin that more
+    vftable slots name (2026-11-13: 0x00475080 -> 0x0070c430, Instance::askForbidParent's 4 slots).
+  - Adjustor thunks (left out of <t>-function-size.csv) may pair as slot functions (0x007bc400, 0x00958d00).
+  - Vftables pair by the original's RTTI name (rtti: ??_7 rows of names.csv) when our PDB has the same symbol.
   - A float our linker ICF-folded with a named constant takes its size from the map's __real@ alias.
   - A library row whose size runs over an in-function jump table is read up to the first instruction
     that differs (the table), and its own table is never a nameless code row.
   - Pool only --json runs of the build being regenerated against: a run from an earlier link pairs
     stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
+  - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor).
+  - A library row whose instantiation left our link falls back to the symbol the current <t>-<lib>.csv row
+    carries (the body our link kept last time); if nothing resolves, position votes may name its address.
+  - A position row never takes a library row's symbol to another original (twins: the library row wins).
   - A non-STUB marker reccmp could not pair (its log <json>.txt says 'Debug data out of sync') does not
     keep data_rows off its address.
   - Typing: an oracle-named original is library only in a third-party namespace (third_party); otherwise
@@ -102,6 +110,17 @@ ADJUSTOR = [(re.compile(rb"\x83\xe9.\xe9", re.S), 8), (re.compile(rb"\x81\xe9.{4
 # reccmp/cvdump/types.py). They stay paired, since the classDescriptor() functions and their atexit
 # destructors need them at 100%, and reccmp-project.yml lists their names under report:
 # ignore-variables, which datacmp skips.
+
+
+# Library rows whose matcher name is a masked-callee twin of the real one (the body matcher masks call
+# targets). unique_lock<mutex> and unique_lock<recursive_mutex>'s ctors differ only in the lock they call;
+# the 2013 ctor calls 0x004366c0 (STUDIO 0x0041b2f0), the ios: unique_lock<recursive_mutex>::lock
+# (GetCurrentThreadId + recursion count). With the mutex name, its position row named that lock
+# unique_lock<mutex>::lock and AsyncHttpQueue::isUrlBad 0x0086e540 & co. stayed below 100% (content-5g).
+_RLOCK = ("??0?$unique_lock@Vrecursive_mutex@boost@@@boost@@QAE@AAVrecursive_mutex@1@@Z",
+          "public: __thiscall boost::unique_lock<class boost::recursive_mutex>::unique_lock<class "
+          "boost::recursive_mutex>(class boost::recursive_mutex &)")
+LIB_FIX = {("PLAYER", 0x004365f0): _RLOCK, ("STUDIO", 0x0041b220): _RLOCK}
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")
@@ -363,7 +382,7 @@ def obj_sizes(target):
 
 
 
-def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), prefer=None, oracle_lib=None):
+def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), prefer=None, oracle_lib=None, drop=()):
     """What the paired library functions reference, paired by position. For each (orig, recomp, length)
     whose instruction streams agree (same length and mnemonic per instruction), every base relocation of
     our image inside the recompiled function names a PDB entity, and the 4 bytes at the same offset of
@@ -464,6 +483,7 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
             note(sr, orig.u32(o + 4 * i))
     claimed = {}
     for node, origs in seen.items():
+        origs = origs - set(drop)  # twins a library row yielded (gen): never a candidate, whatever their votes
         if len(origs) > 1:
             # one of ours named by several originals: a code difference at the minority's call sites
             # (e.g. ours calls logic_error(string) where the original copy-constructs). Most votes win.
@@ -791,7 +811,7 @@ def gen(target, build=BUILD, json_path=None):
 
     drop = {"outside .text": 0, "VMProtect-touched": 0, "unwind/catch funclet": 0, "import thunk": 0,
             "adjustor thunk": 0}
-    keep = []
+    keep, thunks = [], set()
     extended = 0
     for k, (a, size, _) in enumerate(funcs):
         if im.in_text(a) and k + 1 < len(funcs):
@@ -809,6 +829,7 @@ def gen(target, build=BUILD, json_path=None):
             drop["import thunk"] += 1
         elif adjustor_thunk(body[:size]):
             drop["adjustor thunk"] += 1
+            thunks.add(a)
         else:
             keep.append((a, size))
     out = {}
@@ -835,6 +856,10 @@ def gen(target, build=BUILD, json_path=None):
         out[path] = len(slots)
 
     kept = {a for a, _ in keep}
+    # Adjustor thunks stay out of the function list but may pair (a libdata row with our thunk's PUBLICS
+    # name): Instance's vftables for Described and AbstractFactoryProduct start with 0x007bc400 and
+    # 0x00958d00 (sub ecx,0x1c / sub ecx,0x18; jmp the deleting destructor 0x007bc3e0).
+    pairable = kept | thunks
     size_of = dict((a, s) for a, s, _ in funcs)
     # Third-party library matches, one row per address (tools/lib/lib_consistency.py resolved the
     # library CSVs: status identical = byte-identical compiled body, no conflict). They win over an
@@ -847,13 +872,27 @@ def gen(target, build=BUILD, json_path=None):
     view = pdb_view(recomp) if have_build else {}
     objlen = obj_sizes(target)
     pairing = {"public symbol": 0, "static name": 0, "not in our link": 0, "folded in our link": 0}
-    pairs, used = [], set()
+    pairs, used, unres = [], set(), set()
     resolved = os.path.join(exports, f"{target}-lib-resolved.csv")
+    # The symbol each library row resolved to last time (reccmp/<t>-<lib>.csv as it is now): a fallback when
+    # the matcher's own instantiation left our link (2026-11-13: BOOST_THREAD_DYN_LINK dropped
+    # _Allocate<pair<condition_variable*,mutex*>>, and its row 0x004f3010 lost the identical body our link
+    # keeps as _Allocate<unsigned __int64> to the client-shell twin 0x004222d0, with 7 callers).
+    prev_sym = {}
+    for p in glob.glob(os.path.join(ROOT, "reccmp", f"{target.lower()}-*.csv")):
+        if os.path.basename(p)[len(target) + 1:-4] in ("symbols", "libdata", "function-size", "imports"):
+            continue
+        with open(p) as f:
+            for row in csv.reader(l for l in f if not l.startswith("#")):
+                if len(row) >= 4 and row[1] == "library" and row[3]:
+                    prev_sym.setdefault(int(row[0], 16), row[3])
     if os.path.exists(resolved):
         with open(resolved) as f:
             rs = list(csv.DictReader(f))
         for r in rs:
             a = int(r["address"], 16)
+            if (target, a) in LIB_FIX:
+                r = dict(r, name=LIB_FIX[target, a][0], demangled=LIB_FIX[target, a][1], names="")
             if r["status"] != "identical":
                 nolib["not identical"] += 1
                 continue
@@ -863,12 +902,14 @@ def gen(target, build=BUILD, json_path=None):
             sym, name = r["name"], r["demangled"] or r["name"]
             size = max(size_of[a], objlen.get(a, 0))
             if have_build:
-                ra = resolve_symbol([sym] + [c for c in r["names"].split("|") if c and c != sym], addr, anon)
+                ra = resolve_symbol([sym] + [c for c in r["names"].split("|") if c and c != sym] +
+                                    [prev_sym.get(a)] * (a in prev_sym and (target, a) not in LIB_FIX), addr, anon)
                 vt, d, nm = view.get(ra, (None, None, None)) if ra else (None, None, None)
                 # vtordisp/adjustor thunks ($4PPPPPPPM@, $0PPPPPPPM@) have a PUBLICS name but no proc
                 # record, so reccmp gives them no type; match_symbols pairs them all the same.
                 if ra is None or not (vt == "FUNCTION" or vt == "-" and d):
                     pairing["not in our link"] += 1
+                    unres.add(a)
                 elif ra in used:
                     pairing["folded in our link"] += 1  # another row already pairs this recompiled address
                 else:
@@ -882,14 +923,39 @@ def gen(target, build=BUILD, json_path=None):
                         sym, name = "", nm  # a static: no PUBLICS entry, paired by its PDB proc name
                         pairing["static name"] += 1
             libs.setdefault(LIBFILE(r["library"]), []).append((f"{a:08x}", "library", size, sym, name))
+    # Twins (2026-11-13): the original kept identical trivial bodies apart where our link folds them into
+    # one (`xor al,al; ret 4`: 0x0070c430 in 2,120 vftable slots, 0x00475080 boost program_options in 1).
+    # A library row on such a body yields to the identical original that the vftable slots of the --json
+    # runs name more often; data_rows then pairs that one through the slot votes.
+    yielded = {}
+    if json_path and have_build:
+        import collections
+        slotrefs = {}
+        for jp in json_path.split(","):
+            for node, oas in vt_slot_refs(im, recomp, jp, view, code).items():
+                slotrefs.setdefault(node, []).extend(oas)
+        for p in pairs:
+            c = collections.Counter(slotrefs.get(p[1], ()))
+            best = max((oa for oa in c if oa != p[0] and oa in kept and same_body(im, oa, p[0], size_of)),
+                       key=lambda oa: (c[oa], -oa), default=None)
+            if best is not None and c[best] > c[p[0]]:
+                yielded[p[0]] = best
+                print(f"  {target} {p[0]:08x}: library row yields our {p[1]:08x} to its twin {best:08x} "
+                      f"({c[best]} vftable slots against {c[p[0]]})")
+        pairs = [p for p in pairs if p[0] not in yielded]
+        used = {p[1] for p in pairs}
+        for lib in libs:
+            libs[lib] = [r for r in libs[lib] if int(r[0], 16) not in yielded]
     claimed = {int(row[0], 16) for rows in libs.values() for row in rows}
     names = {"symbols": [], "crt": [], "stl": [], "atl": []}
-    oracle, labels, decorated = {}, set(), {}
+    oracle, labels, decorated, rtti_vt = {}, set(), {}, {}
     with open(os.path.join(exports, f"{target}-names.csv")) as f:
         for r in csv.DictReader(f):
             a = int(r["address"], 16)
             if r["kind"] != "func":
                 labels.add(a)
+                if r["source"] == "rtti:" and r["name"].startswith("??_7"):
+                    rtti_vt[a] = r["name"]
             # MSVC names: our own PUBLICS names (match: = reccmp proved the body at 100%; lib:, rtti:, str:)
             if r["kind"] == "func" and r["source"] in ("match:", "lib:", "rtti:", "str:") and \
                     a in kept and a not in claimed:
@@ -954,17 +1020,19 @@ def gen(target, build=BUILD, json_path=None):
                                 j = bisect.bisect_right(nxt, r)
                                 got[o, r] = "100" if full else nxt[j] if j < len(nxt) else None
             jpairs = [(o, r, size_of[o], end) for (o, r), end in sorted(got.items())]
-        skip = mk | {int(row[0], 16) for rows in libs.values() for row in rows}
+        # a library row our link cannot resolve (its instantiation is gone) leaves its address to position
+        # votes (2026-11-13: the tss_data_node map rows after BOOST_THREAD_DYN_LINK)
+        skip = mk | {int(row[0], 16) for rows in libs.values() for row in rows} - unres | set(yielded)
         skip -= failed
         if os.environ.get("OGRE_NO_SIGPAIR"):  # the method before signature pairing, for A/B scoring
             skip |= {a for a, (d, _) in oracle.items() if "RBX" in d}
-        datarows = data_rows(im, recomp, [p for p in pairs if p[2]], view, code, kept, skip, labels=labels, prefer=prefer, oracle_lib=oracle_lib)
+        datarows = data_rows(im, recomp, [p for p in pairs if p[2]], view, code, pairable, skip, labels=labels, prefer=prefer, oracle_lib=oracle_lib, drop=yielded)
         if jpairs:
             # The library pairs (byte-identical bodies) decide first; the --json pairs only add addresses
             # and symbols the library pass left open. An original the linker folded (ICF) is claimed by
             # several of our bodies once more callers vote, and would otherwise lose its library row.
-            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip,
-                             labels=labels, prefer=prefer, oracle_lib=oracle_lib)
+            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, pairable, skip,
+                             labels=labels, prefer=prefer, oracle_lib=oracle_lib, drop=yielded)
             have = {r[0] for r in datarows} | {r[3] for r in datarows if r[3]}
             datarows = sorted(datarows + [r for r in more if r[0] not in have and not (r[3] and r[3] in have)])
             # last, the aligned reference lines of the functions that pass did not take whole
@@ -974,10 +1042,18 @@ def gen(target, build=BUILD, json_path=None):
                     refs.setdefault(node, []).extend(oas)
                 for node, oas in vt_slot_refs(im, recomp, jp, view, code).items():
                     refs.setdefault(node, []).extend(oas)
-            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip, refs,
-                             labels, prefer, oracle_lib)
+            more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, pairable, skip, refs,
+                             labels, prefer, oracle_lib, yielded)
             have = {r[0] for r in datarows} | {r[3] for r in datarows if r[3]}
             datarows = sorted(datarows + [r for r in more if r[0] not in have and not (r[3] and r[3] in have)])
+        posd = {int(r[0], 16) for r in datarows if r[3] or r[4]} & unres
+        for lib in libs:
+            libs[lib] = [r for r in libs[lib] if int(r[0], 16) not in posd]
+        # A library row's symbol stays with it: a position row giving that symbol to another original (an
+        # identical twin whose few callers voted in the last run) would pair our body there instead
+        # (2026-11-13: 0x004222d0, 3 call sites, took _Allocate<unsigned __int64> from 0x004f3010, 17).
+        libsym = {row[3]: int(row[0], 16) for rows in libs.values() for row in rows if row[3]}
+        datarows = [r for r in datarows if libsym.get(r[3], int(r[0], 16)) == int(r[0], 16)]
         # A signature pair that a position pair contradicts (same original, other symbol, or the same
         # symbol on another original) is dropped and the position pair kept: the original's linker folded
         # identical bodies (ICF) and the oracle names one of them, while the position pair names the body
@@ -1057,9 +1133,22 @@ def gen(target, build=BUILD, json_path=None):
     if nstats:
         notes.append("Signature pairing: " + ", ".join(f"{k} {v}" for k, v in sorted(nstats.items())) + ".")
 
+    # Vftables by their RTTI name (2026-11-13): an rtti: ??_7 name (from the original's Complete Object
+    # Locator) that our PDB has as a vftable symbol, spelled the same, pairs that vftable; it beats a
+    # position row that says otherwise. VTABLE markers keep their addresses.
+    if have_build and rtti_vt:
+        ours = {d: ra for ra, (vt, d, _) in view.items() if vt == "VTABLE" and d}
+        vtmk = marked(target, ("VTABLE",))
+        rv = {a: n for a, n in rtti_vt.items() if n in ours and a not in vtmk}
+        rsyms = set(rv.values())
+        datarows = [r for r in datarows if int(r[0], 16) not in rv and r[3] not in rsyms]
+        bounds = sorted(set(labels) | {int(r[0], 16) for r in datarows} | set(rv))
+        datarows = sorted(datarows + [(f"{a:08x}", "vtable", 4 * vt_slots(im, a, bounds) or "", n, "")
+                                      for a, n in rv.items()])
+        notes.append(f"Vftables paired by RTTI name: {len(rv)} of {len(rtti_vt)}.")
     if datarows:
         path = os.path.join(ROOT, "reccmp", f"{t}-libdata.csv")
-        rows, nsticky = sticky(path, datarows, view, kept, (mk - failed) | claimed | {int(r[0], 16) for r in names["symbols"]},
+        rows, nsticky = sticky(path, datarows, view, pairable, (mk - failed) | claimed | {int(r[0], 16) for r in names["symbols"]},
                                {r[2] for r in names["symbols"] if r[2]} | used_sym, im, labels)
         # a VTABLE marker gets the original's slot count the same way
         have = {int(r[0], 16) for r in rows}

@@ -16,7 +16,7 @@
 #include "RbxAssert.h"
 #include "rbx/atomic.h"
 #include "lua.h"
-
+#include "script/LuaSignal.h"	// Bridge<connection/GenericFunction/...> (on_tostring specializations)
 LOGGROUP(ScriptContext);
 
 namespace RBX { namespace Lua {
@@ -58,6 +58,48 @@ void YieldingThreads::queueWaiter(lua_State* thread)
 size_t YieldingThreads::waiterCount() const
 {
 	return waiters.size();
+}
+
+// 2016 keeps these four specializations in ScriptEvent.cpp too; 2013 links them right after
+// ldebug.c (0x008a8f40..0x008a8fa0), ahead of this TU's other functions, and the
+// on_tostring(lua_State*) wrappers in LuaSignal.cpp/ThreadRef.cpp call them out of line.
+// FUNCTION: PLAYER 0x008a8f40
+// FUNCTION: STUDIO 0x009ecb60
+template<>
+int Bridge<rbx::signals::connection, true>::on_tostring(const rbx::signals::connection& object, lua_State* L)
+{
+	lua_pushlstring(L, "Connection", 10);
+	return 1;
+}
+
+// FUNCTION: PLAYER 0x008a8f60
+// FUNCTION: STUDIO 0x009ecb80
+template<>
+int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_tostring(
+	const boost::intrusive_ptr<WeakThreadRef::Node>& object, lua_State* L)
+{
+	lua_pushlstring(L, "WeakThreadRef", 13);
+	return 1;
+}
+
+// FUNCTION: PLAYER 0x008a8f80
+// FUNCTION: STUDIO 0x009ecba0
+template<>
+int Bridge<boost::shared_ptr<GenericFunction>, true>::on_tostring(
+	const boost::shared_ptr<GenericFunction>& object, lua_State* L)
+{
+	lua_pushlstring(L, "GenericFunction", 15);
+	return 1;
+}
+
+// FUNCTION: PLAYER 0x008a8fa0
+// FUNCTION: STUDIO 0x009ecbc0
+template<>
+int Bridge<boost::shared_ptr<GenericAsyncFunction>, true>::on_tostring(
+	const boost::shared_ptr<GenericAsyncFunction>& object, lua_State* L)
+{
+	lua_pushlstring(L, "GenericAsyncFunction", 20);
+	return 1;
 }
 
 // mac: 0x1AB3FA (652B, batch473): pop every due waiter, push (elapsed, now),

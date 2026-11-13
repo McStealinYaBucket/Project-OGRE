@@ -87,9 +87,9 @@ namespace RBX
 	// (RTTI of Instance vftable 0x00b2a6ec). Its vftable 0x00b29f08 is {destructor,
 	// pure getClassName() const}; FactoryProduct and NonFactoryProduct override
 	// getClassName (iOS 10-29: __ZThn32_NK3RBX17NonFactoryProduct...12getClassNameEv in
-	// the AbstractFactoryProduct group of ServiceProvider's vtable).
+	// the AbstractFactoryProduct group of ServiceProvider's vtable). Not novtable: ~Instance stores it (0x0061d684).
 	// SIZE 0x4
-	class RBXBaseClass Object
+	class Object
 	{
 	public:
 		virtual ~Object() {}								// vtable+0x00
@@ -108,8 +108,8 @@ namespace RBX
 				delete instance;
 			}
 		};
-		// STUB: PLAYER 0x00597980
-		// STUB: STUDIO 0x0063ac30
+		// FUNCTION: PLAYER 0x00597980
+		// FUNCTION: STUDIO 0x0063ac30
 		template<class T>
 		static shared_ptr<T> create()
 		{
@@ -205,11 +205,11 @@ namespace RBX
 	protected:
 		Creatable() {}
 	};
-	// 2013: AbstractFactoryProduct<Instance>::create(const Name&, CreatorRole) is PLAYER
-	// 0x0059a5e0 (our Creatable<Class>::createByName); vftable 0x00b2a2f0.
+	// 2013: AbstractFactoryProduct<Instance>::create(const Name&, CreatorRole) is PLAYER 0x0059a5e0
+	// (our createByName); vftable 0x00b2a2f0, not novtable: Instance(FWInstance*) stores it (0x00620df9).
 	// SIZE 0x4
 	template<class Class>
-	class RBXBaseClass AbstractFactoryProduct : public Creatable<Class>
+	class AbstractFactoryProduct : public Creatable<Class>
 	{
 	protected:
 		AbstractFactoryProduct() {}

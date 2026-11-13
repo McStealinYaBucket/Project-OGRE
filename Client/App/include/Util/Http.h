@@ -80,15 +80,18 @@ private:
 	//   +8  std::string url
 	//   +12 std::map<std::string, std::string> additionalHeaders
 	//   +36 std::string (scratch/response buffer used by httpGetPostImpl)
-	API instanceApi;
-	void init(); // instance part of 0x1FA134
+	// Windows 2013 layout (inline ctor PLAYER 0x00402b50 / dtor 0x00403cd0, both COMDAT copies
+	// from the client shell): alternateUrl @0x00 (default-constructed), instanceApi @0x1c
+	// (= defaultApi), url @0x20, additionalHeaders @0x3c; 0x48 bytes. The Mac order differs.
+	std::string alternateUrl;	// 0x00
+	API instanceApi;			// 0x1c
 
 public:
-	std::string url;
-	std::map<std::string, std::string> additionalHeaders;	// +12 in the binary layout
+	std::string url;			// 0x20
+	std::map<std::string, std::string> additionalHeaders;	// 0x3c
 
-	Http(const char* url);        // 0x71335C
-	Http(const std::string& url); // 0x253430
+	Http(const char* url):instanceApi(defaultApi),url(url) {}
+	Http(const std::string& url):instanceApi(defaultApi),url(url) {}
 
 	// Async
 	// mac: 0x1FA3AA - schedules a bind of Http::get(std::string&, bool) on the
@@ -118,7 +121,7 @@ public:
 	static bool isMoneySite(const char* url); // implemented via rbx_isMoneySite (0x5FE861) elsewhere
 
 	// Utility
-	static std::string urlEncode(const std::string& s); // 0x250BF2
+	static std::string urlEncode(std::string s); // 0x250BF2
 
 private:
 	// mac: 0x1FA2CA - Mac/Cocoa entry point; forwards to

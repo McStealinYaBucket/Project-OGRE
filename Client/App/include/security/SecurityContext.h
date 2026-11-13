@@ -63,8 +63,8 @@ namespace RBX
 
 			// Inline in 2013: the kept copy is Network's (PLAYER 0x0053ac40, between the Player.cpp
 			// functions). A thread without a context gets a heap Context(Anonymous).
-			// STUB: PLAYER 0x0053ac40
-			// STUB: STUDIO 0x005e9cb0
+			// FUNCTION: PLAYER 0x0053ac40
+			// FUNCTION: STUDIO 0x005e9cb0
 			static Context& current()
 			{
 				Context* t = ptr().get();

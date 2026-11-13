@@ -216,8 +216,8 @@ namespace RBX { namespace Lua {
 	// mac: 0x17300C (202B, batch409): "GetEnumItems" -> sub_1730D6 closure;
 	// else virtual lookup(name) -> SingletonBridge<Item>::push; NULL ->
 	// "%s is not a valid EnumItem".
-	// STUB: PLAYER 0x0087d310
-	// STUB: STUDIO 0x009e1990
+	// FUNCTION: PLAYER 0x0087d310
+	// FUNCTION: STUDIO 0x009e1990
 	template<>
 	int Bridge<EnumDescriptorPtr, true>::on_index(
 		const EnumDescriptorPtr& object, const char* name, lua_State* L)
@@ -228,10 +228,10 @@ namespace RBX { namespace Lua {
 			return 1;
 		}
 		const Reflection::EnumDescriptor::Item* item = object->lookup(name);
-		if (item == NULL)
-			throw RBX::runtime_error("%s is not a valid EnumItem", name);
-		EnumItem::push(L, item);
-		return 1;
+		if (item != NULL) {	// push first, throw on the fall-through (0x0087d366)
+			EnumItem::push(L, item); return 1; }
+		throw RBX::runtime_error("%s is not a valid EnumItem", name);
+
 	}
 
 	// mac: 0x172F0E (158B, batch409): Name::lookup + lookupDescriptor(Name),
@@ -245,10 +245,10 @@ namespace RBX { namespace Lua {
 	{
 		const Reflection::EnumDescriptor* desc =
 			Reflection::EnumDescriptor::lookupDescriptor(*RBX::Name::lookup(name));
-		if (desc == NULL)
-			throw RBX::runtime_error("%s is not a valid EnumItem", name);
-		Enum::push(L, desc);
-		return 1;
+		if (desc != NULL) {	// push first, throw on the fall-through (0x0087d42c)
+			Enum::push(L, desc); return 1; }
+		throw RBX::runtime_error("%s is not a valid EnumItem", name);
+
 	}
 
 	// mac: 0x1728FC (62B, batch410): checkudata + forward.

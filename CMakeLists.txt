@@ -333,8 +333,11 @@ function(ogre_prior_sources LIB)
     target_include_directories(${LIB} PRIVATE ${incs})
     # Warning and auto-link switches only, no codegen effect (the prior harness defined them too).
     # ROBLOX_BOOST_CONFIGS: Roblox's boost/config/user.hpp defines only this (rbx/boost.hpp checks it).
+    # BOOST_THREAD/SYSTEM_DYN_LINK: PLAYER calls all 18 boost.dll imports (IAT 0x00aa2d00-0x00aa2d44) as
+    # `call [imp]` from client, Network, App and Base (146 sites, no jmp thunk). Security::Context::current
+    # 0x0053ac40 matches only with it.
     target_compile_definitions(${LIB} PRIVATE BOOST_ALL_NO_LIB _CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS
-        ROBLOX_BOOST_CONFIGS)
+        ROBLOX_BOOST_CONFIGS BOOST_THREAD_DYN_LINK BOOST_SYSTEM_DYN_LINK)
 endfunction()
 
 if(OGRE_PRIOR_APP)

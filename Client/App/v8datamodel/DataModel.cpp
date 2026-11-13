@@ -200,8 +200,8 @@ namespace RBX {
 	{
 		/* EnumDesc decompiles (Mach-O EAs): CreatorType 0x2D171A, Genre 0x2D1934,
 		   GearGenreSetting 0x2D1C86, GearType 0x2D1EA0. Pair order verbatim. */
-		// STUB: PLAYER 0x0063d6a0
-		// STUB: STUDIO 0x0075b550
+		// FUNCTION: PLAYER 0x0063d6a0
+		// FUNCTION: STUDIO 0x0075b550
 		template<>
 		EnumDesc<DataModel::CreatorType>::EnumDesc()
 			:EnumDescriptor("CreatorType", typeid(DataModel::CreatorType))
@@ -523,59 +523,16 @@ namespace RBX {
 	//   vtable+0x8C=140); getNumPlayers 0x2E32CC (find Players, else 0).
 	// s521 CORRECTION (retires the s414 DELTA): the binary takes Instance*,
 	//   a true virtual override -- the shared_ptr shape was 2016-carry.
-	// LOUD DELTA (residual): the binary asserts write_requested==1 twice,
-	//   gated on [this+0xC78]==1 (identity unmapped), before the increments;
-	//   NOT ported (no unconditional-assert precedent fits the gate) --
-	//   queued with the +0xC78 audit.
+	// 2013 (0x00645d50): RBXASSERT(write_requested==1) first, like onDescendantRemoving.
+	//   The three bodies are at the end of the file (2013 lines 3145-3162).
 	//////////////////////////////////////////////////////////////////////////////////
-	// STUB: PLAYER 0x00645d50
-	// STUB: STUDIO 0x00762d10
-	void DataModel::onDescendantAdded(Instance* descendant)
-	{
-		numInstances++;
-		if (Instance::fastDynamicCast<PartInstance>(descendant))
-			numPartInstances++;
-		ServiceProvider::onDescendantAdded(descendant);
-		this->setDirty(true);
-	}
-
-	// STUB: PLAYER 0x00645e00
-	// STUB: STUDIO 0x00762dc0
-	void DataModel::onDescendantRemoving(const shared_ptr<Instance>& descendant)
-	{
-		RBXASSERT(write_requested==1);
-		numInstances--;
-		if (Instance::fastDynamicCast<PartInstance>(descendant.get()))
-			numPartInstances--;
-		ServiceProvider::onDescendantRemoving(descendant);
-		this->setDirty(true);
-	}
-
-	// Bodies not written yet (2013 vftable slots +0x58 / +0x64).
-	// STUB: PLAYER 0x0062ee00
-	// STUB: STUDIO 0x0074eb20
+	// FUNCTION: PLAYER 0x0062ee00
+	// FUNCTION: STUDIO 0x0074eb20
 	void DataModel::onChildAdded(Instance* child)
 	{
-		STUB(0x0062ee00);
 		ServiceProvider::onChildAdded(child);
-	}
-
-	// STUB: PLAYER 0x0063e180
-	// STUB: STUDIO 0x0075c030
-	void DataModel::onChildChanged(Instance* instance, const PropertyChanged& event)
-	{
-		RBXASSERT(write_requested==1);
-		ServiceProvider::onChildChanged(instance, event);
-		this->setDirty(true);
-		itemChangedSignal(shared_from(instance), &event.getDescriptor());
-	}
-
-	// STUB: PLAYER 0x0064fce0
-	// STUB: STUDIO 0x0076c790
-	GuiResponse DataModel::processAccelerators(const GuiEvent& event)
-	{
-		STUB(0x0064fce0);
-		return GuiResponse();
+		if (Network::Players::isNetworkClient(child))
+			workspace->setNullMouseCommand();
 	}
 
 	// STUB: PLAYER 0x0062f010
@@ -586,18 +543,18 @@ namespace RBX {
 		return GuiResponse();
 	}
 
-	// STUB: PLAYER 0x00645770
-	// STUB: STUDIO 0x00762730
-	void DataModel::renderPass2d(Adorn* adorn, IMetric* graphicsMetric)
-	{
-		STUB(0x00645770);
-	}
-
 	// STUB: PLAYER 0x00640970
 	// STUB: STUDIO 0x0075e200
 	void DataModel::renderMouse(Adorn* adorn)
 	{
 		STUB(0x00640970);
+	}
+
+	// STUB: PLAYER 0x00645770
+	// STUB: STUDIO 0x00762730
+	void DataModel::renderPass2d(Adorn* adorn, IMetric* graphicsMetric)
+	{
+		STUB(0x00645770);
 	}
 
 	// STUB: PLAYER 0x0064ae00
@@ -606,6 +563,14 @@ namespace RBX {
 	{
 		STUB(0x0064ae00);
 		return false;
+	}
+
+	// STUB: PLAYER 0x0064fce0
+	// STUB: STUDIO 0x0076c790
+	GuiResponse DataModel::processAccelerators(const GuiEvent& event)
+	{
+		STUB(0x0064fce0);
+		return GuiResponse();
 	}
 
 	int DataModel::getNumPlayers() const
@@ -809,10 +774,11 @@ namespace RBX {
 	}
 
 	/* mac: 0x2D1442 — binary FastLogs "Setting place version %u" then stores + raisePropertyChanged */
-	// STUB: PLAYER 0x0062d910
-	// STUB: STUDIO 0x0074db80
+	// FUNCTION: PLAYER 0x0062d910
+	// FUNCTION: STUDIO 0x0074db80
 	void DataModel::setPlaceVersion(int placeVersion)
 	{
+		FASTLOG1(FLog::CloseDataModel, "Setting place version %u", placeVersion);
 		if (this->placeVersion != placeVersion)
 		{
 			this->placeVersion = placeVersion;
@@ -915,8 +881,8 @@ namespace RBX {
 	/* 2016 setUiMessageBrickCount sets uiMessage = "[[[progress]]]"; batch617
 	   (getUpdatedMessageBoxText 0x2D85E2 compares uiMessage against the
 	   same literal) verifies the 2013 string is identical. */
-	// STUB: PLAYER 0x0062ee30
-	// STUB: STUDIO 0x0074ebc0
+	// FUNCTION: PLAYER 0x0062d270
+	// FUNCTION: STUDIO 0x0074d590
 	void DataModel::setUiMessageBrickCount()
 	{
 		uiMessage = "[[[progress]]]";
@@ -1130,6 +1096,169 @@ namespace RBX {
 			boost::bind(&DataModel::HttpHelper, _1, _2, resumeFunction, errorFunction), false);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// 2013 (0x00630d70): the lookup runs under genericJobsLock (no tryGetGenericJob call) and
+	// asserts before throwing; DataModel.cpp:1150.
+	// FUNCTION: PLAYER 0x00630d70
+	// FUNCTION: STUDIO 0x00750a00
+	shared_ptr<DataModel::GenericJob> DataModel::getGenericJob(DataModelJob::TaskType taskType)
+	{
+		RBX::mutex::scoped_lock lock(genericJobsLock);
+		shared_ptr<GenericJob> job = genericJobs[taskType];
+		if (!job)
+		{
+			// This can also happen if the job is requested after the data model is closed.
+			RBXASSERT(false);
+			throw std::runtime_error("Can't submit requested task type");
+		}
+		return job;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/* mac: 0x2CE20E — asserts "isInitialized" (DataModel.cpp:1270).
 	   DIVERGENCE from 2016: async path binds sync doHttpGet into a DETACHED
 	   boost::thread via RBX::thread_wrapper (fire-and-forget, "" returned);
@@ -1151,9 +1280,13 @@ namespace RBX {
 		return "";
 	}
 
+
+
+
+
 	/* mac: 0x2CDF06 — asserts "isInitialized" (DataModel.cpp:1292); "Empty URL" path */
-	// STUB: PLAYER 0x0064a350
-	// STUB: STUDIO 0x00766f40
+	// FUNCTION: PLAYER 0x0064a350
+	// FUNCTION: STUDIO 0x00766f40
 	void DataModel::httpGetAsync(std::string url, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
 	{
 		RBXASSERT(isInitialized);
@@ -1164,6 +1297,8 @@ namespace RBX {
 		}
 		doHttpGet(url, resumeFunction, errorFunction);
 	}
+
+
 
 	/* mac: 0x2CE4F2 — asserts "isInitialized" (DataModel.cpp:1309); detached-thread async.
 	   TODO(decompile): verify async tail past the bind (symmetric with httpGet). */
@@ -1181,10 +1316,15 @@ namespace RBX {
 		return "";
 	}
 
+
+
+
+
+
 	/* mac: 0x2CE086 — shape from mangled name; body follows httpGetAsync pattern.
 	   TODO(decompile): verify empty-URL/assert behavior from the 0x2CE086 body. */
-	// STUB: PLAYER 0x0064a870
-	// STUB: STUDIO 0x00767460
+	// FUNCTION: PLAYER 0x0064a870
+	// FUNCTION: STUDIO 0x00767460
 	void DataModel::httpPostAsync(std::string url, std::string data, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
 	{
 		RBXASSERT(isInitialized);
@@ -1304,6 +1444,8 @@ namespace RBX {
 		FASTLOG(FLog::DataModelJobs, "Process tasks finish");
 	}
 
+	// GLOBAL: PLAYER 0x00d314c8
+	// GLOBAL: STUDIO 0x00ebd70c
 	int DataModel::LegacyLock::mainThreadId = ~0;
 
 	struct DataModel::LegacyLock::Implementation : boost::noncopyable
@@ -1412,6 +1554,8 @@ namespace RBX {
 		}
 	};
 
+	// STUB: PLAYER 0x006421c0
+	// STUB: STUDIO 0x0075fa40
 	DataModel::LegacyLock::LegacyLock(boost::shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType)
 		// TODO: What if an invalid DataModelJob::Function is passed in???
 		:implementation(dataModel ? new Implementation(dataModel.get(), dataModel->getGenericJob(taskType)) : 0)
@@ -1433,20 +1577,6 @@ namespace RBX {
 	{
 		RBX::mutex::scoped_lock lock(genericJobsLock);
 		return genericJobs[taskType];
-	}
-
-	/* mac: 0x2D6E2C — TODO(decompile): verify body */
-	// STUB: PLAYER 0x00630d70
-	// STUB: STUDIO 0x00750a00
-	shared_ptr<DataModel::GenericJob> DataModel::getGenericJob(DataModelJob::TaskType taskType)
-	{
-		shared_ptr<DataModel::GenericJob> job = tryGetGenericJob(taskType);
-		if (!job)
-		{
-			// This can also happen if the job is requested after the data model is closed.
-			throw std::runtime_error("Can't submit requested task type");
-		}
-		return job;
 	}
 
 	void DataModel::submitTask(Task task, DataModelJob::TaskType taskType)
@@ -1495,28 +1625,28 @@ bool DataModel::BlockingDataModelShutdown = false;
 /* mac: 0x2D4060 — evidence: Refl_DataModel.cpp.txt (aClosedatamodel/aFinishedWaitin).
    (shared_ptr<DataModel>, bool): bool path takes LegacyLock(Write), logs
    "Finished waitin...", runs doCloseDataModel, unlocks; else direct. */
-// STUB: PLAYER 0x00649af0
-// STUB: STUDIO 0x007666e0
+// FUNCTION: PLAYER 0x00649af0
+// FUNCTION: STUDIO 0x007666e0
 void DataModel::closeDataModel(shared_ptr<DataModel> dataModel, bool useLegacyLock)
 {
-	if (FLog::CloseDataModel)
-		FLog::FastLog(FLog::CloseDataModel, "closeDataModel", 0);
-	if (dataModel)
+	FASTLOG1(FLog::CloseDataModel, "closeDataModel - %p", dataModel.get());
+	if (!dataModel)
+		return;
+	if (useLegacyLock)
 	{
-		if (useLegacyLock)
-		{
-
-LegacyLock lock(dataModel, DataModelJob::Write);  // binary: TaskType 1
-			if (FLog::CloseDataModel)
-				FLog::FastLog(FLog::CloseDataModel, "Finished waiting", 0);
-			doCloseDataModel(dataModel);
-		}
-		else
-		{
-			doCloseDataModel(dataModel);
-		}
+		LegacyLock lock(dataModel, DataModelJob::Write);
+		FASTLOG(FLog::CloseDataModel, "Finished waiting on lock");
+		doCloseDataModel(dataModel);
+	}
+	else
+	{
+		doCloseDataModel(dataModel);
 	}
 }
+
+
+
+
 
 // mac: 0x2D3952 FW loop helper: FWValue<bool>::set(fw+21, false, child+68) per direct
 // child (dict write-through; null-dict => plain b21 = 0 store).
@@ -1678,45 +1808,156 @@ RBXASSERT(dataModel->onlyJobsLeftForThisArbiterAreGenericJobs());
 		guiBuilder.saveCustomStats();
 	}
 
-	/* onRunTransition handler (bound in initializeContents 0x2D3336).
-	   2016 shape carried (exact 2013 body TODO — needs its EA):
-	   STOPPED-after-RUNNING resets the world; RUNNING starts; PAUSED stops. */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/* onRunTransition handler (bound in initializeContents 0x2D3336). 2013 body 0x0062ef20:
+	   no RunService mirror store and no workspace NULL checks. */
+	// FUNCTION: PLAYER 0x0062ef20
+	// STUB: STUDIO 0x0074ecb0
 	void DataModel::onRunTransition(RunTransition event)
 	{
 		RBXASSERT(isInitialized);
 		if (!isInitialized)
 			return;
 
-		/* RUN-STATE MIRROR (loud DELTA): the 2013 DataModel.cpp onRunTransition
-		   body is unported (EA queues behind the DM-era), but the binary keeps a
-		   writer-side RunState slot at RunService+112. Maintain it here so
-		   RSS-era readers see the same value the transition signal carries. */
-		if (runService)
-			runService->runState = event.newState;
-
 		switch (event.newState)
 		{
 		case RS_STOPPED:
-			if (event.oldState == RS_RUNNING && workspace)
+			if (event.oldState == RS_RUNNING)
 				workspace->reset();
 			break;
 		case RS_RUNNING:
-			if (workspace)
-				workspace->start();
+			workspace->start();
 			break;
 		case RS_PAUSED:
-			if (workspace)
-				workspace->stop();
+			workspace->stop();
 			break;
 		}
+
+
+
+
+
+
 		RBXASSERT(isInitialized);
 	}
 
 /* mac: 0x2D2EB2 — creates Write/Read/None GenericJobs + singleton().add, LegacyLock(Write),
 	   initializeContents(bool), isInitialized=true (+3005), clears +3237, FastLogs
-	   "DataModel created: %p". NO mainThreadId line, NO loading-screen block (2016-only). */
-	// STUB: PLAYER 0x0064f7f0
-	// STUB: STUDIO 0x0076c2a0
+	   "DataModel created: %p". The Mac build has no mainThreadId store; PLAYER does. No loading screen. */
+	// FUNCTION: PLAYER 0x0064f7f0
+	// FUNCTION: STUDIO 0x0076c2a0
 	void DataModel::doDataModelSetup(shared_ptr<DataModel> dataModel, bool startHeartbeat)
 	{
 		shared_ptr<DataModel::GenericJob> j;
@@ -1730,9 +1971,8 @@ TaskScheduler::singleton().add(j);
 		dataModel->genericJobs[DataModelJob::None] = j;
 TaskScheduler::singleton().add(j);
 
-		// TODO: Do we need this lock here? If initializing has no side effects
-		//       like starting a task, then it shouldn't be necessary.
 		LegacyLock lock(dataModel, DataModelJob::Write);
+		LegacyLock::mainThreadId = GetCurrentThreadId();	// PLAYER 0x0064fb39 (the Mac build has no such store)
 
 dataModel->initializeContents(startHeartbeat);
 		dataModel->isInitialized = true;
@@ -2050,6 +2290,8 @@ workspace->setAndLockParent(this);
 	   char-by-char with hash telemetry into a static (anti-scan obfuscation;
 	   plain concatenation here) and brackets execution with "Load
 	   CoreScripts" / "Finished Loading CoreScripts" log entries. */
+	// STUB: PLAYER 0x0063fbb0
+	// STUB: STUDIO 0x0075d440
 	void DataModel::loadCoreScripts()
 	{
 		std::string baseUrl;
@@ -2073,7 +2315,7 @@ workspace->setAndLockParent(this);
 	}
 
 	/* mac: 0x2D617A — build the in-game GUI, then load core scripts. */
-	// STUB: PLAYER 0x006400f0
+	// FUNCTION: PLAYER 0x006400f0
 	// FUNCTION: STUDIO 0x0075d980
 	void DataModel::startCoreScripts(Adorn* adorn, bool buildInGameGui)
 	{
@@ -2309,6 +2551,621 @@ workspace->setAndLockParent(this);
 		return stream;
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// 2013 order: onChildChanged, onDescendantAdded, onDescendantRemoving end DataModel.cpp
+	// (asserts at lines 3145, 3151 and 3162; the statements are packed to land on them).
+	// FUNCTION: PLAYER 0x0063e180
+	// STUB: STUDIO 0x0075c030
+	void DataModel::onChildChanged(Instance* instance, const PropertyChanged& event)
+	{
+		RBXASSERT(write_requested==1);
+		ServiceProvider::onChildChanged(instance, event); this->setDirty(true);
+		itemChangedSignal(shared_from(instance), &event.getDescriptor()); }
+	// FUNCTION: PLAYER 0x00645d50
+	// STUB: STUDIO 0x00762d10
+	void DataModel::onDescendantAdded(Instance* descendant) {
+		RBXASSERT(write_requested==1);
+		numInstances++;
+		if (Instance::fastDynamicCast<PartInstance>(descendant))
+			numPartInstances++;
+		ServiceProvider::onDescendantAdded(descendant);
+		this->setDirty(true);
+	}
+	// FUNCTION: PLAYER 0x00645e00
+	// STUB: STUDIO 0x00762dc0
+	void DataModel::onDescendantRemoving(const shared_ptr<Instance>& descendant)
+	{
+		RBXASSERT(write_requested==1);
+		numInstances--;
+		if (Instance::fastDynamicCast<PartInstance>(descendant.get()))
+			numPartInstances--;
+		ServiceProvider::onDescendantRemoving(descendant);
+		this->setDirty(true);
+	}
 } // namespace RBX
 
 // Class registrar (see Instance.cpp/Service.cpp note).

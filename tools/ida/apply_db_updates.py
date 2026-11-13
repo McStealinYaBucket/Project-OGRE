@@ -3,10 +3,10 @@ snapshot first).
 
 Per row (address,action,name,tag,line):
   rename      set `name` (an existing different name is replaced: the planner decided); rename-lib also
-              clears FUNC_LIB (a FLIRT false positive)
+              clears FUNC_LIB (a FLIRT false positive); so does any match: rename (a dummy FLIRT flagged)
   unname      give the function back its dummy name
   comment     name untouched
-  data1/data4 a global: define a byte/dword at the address, set `name`, `line` as its repeatable comment
+  data1/data4/data8 a global: define a byte/dword/qword at the address, set `name`, `line` as its repeatable comment
 Every row writes `line` into the repeatable function comment; lines starting "p4 " are this script's and
 are replaced on a rerun, so a second run changes nothing. A fact row (not a "p4 match: reccmp" line) that
 renames or unnames also drops the apply_lib_names.py lines ("match: ", "lib: ") it contradicts.
@@ -38,13 +38,13 @@ def say(*a):
 
 for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-updates.csv"))):
     ea, act, want, line = int(r["address"], 16), r["action"], r["name"], r["line"]
-    if act in ("data1", "data4"):
-        # a global: define it as a byte/dword (when it is not data of that size yet), name it, and keep the
-        # evidence as its repeatable comment (non-"p4 " lines kept)
-        n = 1 if act == "data1" else 4
+    if act in ("data1", "data4", "data8"):
+        # a global: define it as a byte/dword/qword (when it is not data of that size yet), name it, and keep
+        # the evidence as its repeatable comment (non-"p4 " lines kept)
+        n = int(act[4:])
         if not ida_bytes.is_data(ida_bytes.get_flags(ea)) or ida_bytes.get_item_size(ea) != n:
             ida_bytes.del_items(ea, ida_bytes.DELIT_SIMPLE, n)
-            (ida_bytes.create_byte if n == 1 else ida_bytes.create_dword)(ea, n)
+            {1: ida_bytes.create_byte, 4: ida_bytes.create_dword, 8: ida_bytes.create_qword}[n](ea, n)
         old = idc.get_cmt(ea, 1) or ""
         new = "\n".join([line[:900]] + [l for l in old.split("\n") if l and not l.startswith("p4 ")])
         if new != old:
@@ -82,6 +82,12 @@ for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-update
             STAT["unnamed"] += 1
             LOG.append((ea, "unname", ida_name.get_name(ea), cur))
         continue
+    # rename-lib, or a reccmp-proven name on a dummy that FLIRT flagged as library code (no FLIRT name; the
+    # planner never plans library-owned addresses): the flag would make export_names.py call it flirt:
+    if (act == "rename-lib" or r["tag"] == "match:") and f.flags & ida_funcs.FUNC_LIB:
+        f.flags &= ~ida_funcs.FUNC_LIB
+        ida_funcs.update_func(f)
+        STAT["FUNC_LIB cleared"] += 1
     if cur == want:
         STAT["name already set"] += 1
         continue
@@ -90,10 +96,6 @@ for r in csv.DictReader(open(os.path.join(DBDIR, "exports", TARGET + "-db-update
         STAT["skipped: name used at another address"] += 1
         LOG.append((ea, "skip", "name in use at 0x%08x: %s" % (other, want), cur))
         continue
-    if act == "rename-lib" and f.flags & ida_funcs.FUNC_LIB:
-        f.flags &= ~ida_funcs.FUNC_LIB
-        ida_funcs.update_func(f)
-        STAT["FUNC_LIB cleared"] += 1
     if ida_name.set_name(ea, want, ida_name.SN_NOWARN | ida_name.SN_NOCHECK):
         STAT["renamed (%s)" % r["tag"]] += 1
         LOG.append((ea, act, want, cur))

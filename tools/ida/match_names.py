@@ -198,6 +198,90 @@ FACTS = [
     (0x00de4c0c, 0x00f83fd8, "data4", "_ZN3RBX9DataModel5countE", "ios:",
      "RBX::DataModel::count (rbx::atomic<int>) | iOS 1029 symbol; incremented by the DataModel ctor (`mov ecx, "
      "0x00de4c0c` at PLAYER 0x0064f16f, STUDIO 0x0076bc39), decremented by ~DataModel"),
+    # wave1 sync (notes/runs/2026-11-13-phase4-core4/core-close.md "IDA NAMES FOR THE NEXT SYNC"; the Allocator,
+    # FWBase::init, FWFinal<FWInstance> dtor, Average, vector<double>, checkSpeedHack, isSpeedCheater/isDebugged
+    # and startMMTimer rows are reccmp 100% in sweep7 and come through the bulk rule). Checked 2026-11-13 with
+    # capstone; STUDIO addresses from STUDIO-PLAYER-bodymatch.csv pairs, Time.cpp's GLOBAL markers, or the
+    # same instruction in the paired STUDIO body.
+    (0x0073b3f0, 0x007c3a90, "keep", "", "ios:",
+     "the iOS name RBX::Stats::Item::formatValue<double> stays: our StatsItem::formatValueId (100%) is the prior "
+     "tree's invented spelling of the same template instance (CLAUDE.md: its invented names lose to oracle names)"),
+    (0x0073b420, 0x007c3ac0, "keep", "", "ios:",
+     "the iOS name RBX::Stats::Item::formatValue<float> stays: our StatsItem::formatValueIf (100%) is the prior "
+     "tree's invented spelling of the same template instance"),
+    (0x0073b450, 0x007c3af0, "keep", "", "ios:",
+     "the iOS name RBX::Stats::Item::formatValue<int> stays: our StatsItem::formatValueIi (100%) is the prior "
+     "tree's invented spelling of the same template instance"),
+    (0x009bb130, 0x00a71f80, "rename", "_ZN3RBX8getStartEv", "ios:",
+     "RBX::getStart() | iOS 1029 has its function-local static _ZZN3RBX8getStartEvE5start (the function itself "
+     "is inlined there); body: guard bit 0x00e1b648, QueryPerformanceCounter (IAT 0x00aa1150) into the static "
+     "0x00e1b640, returns its address; called by directCallback/interpolatedCallback and now<2> (reccmp 54%)"),
+    (0x009bb180, 0x00a71fd0, "rename", "?directCallback@RBX@@YGXIIKKK@Z", "src2016:",
+     "RBX::directCallback (CALLBACK, timeSetEvent) | 2016 Base/rbx/Time.cpp name, Windows-only (no oracle); "
+     "2013 body has the 2016 shape: recguard 0x00e1b638 swap through RbxInterlockedExchange, QPC - getStart, "
+     "currentSeconds 0x00e1b620 max, checkSpeedHack 0x009bb050, isDebuggedValue 0x00e1b629 (reccmp 52%, "
+     "core-close.md: object-identical)"),
+    (0x009bb230, 0x00a72080, "rename", "?interpolatedCallback@RBX@@YGXIIKKK@Z", "src2016:",
+     "RBX::interpolatedCallback (CALLBACK) | 2016 Base/rbx/Time.cpp name, Windows-only (no oracle); 2013 body: "
+     "recguard swap, statics last/secsPerTick (guard 0x00e1b660), mmticks 0x00e1b64c % ticksPerCorrection "
+     "0x00e1b608, millisecondsPerTick 0x00e1b610, currentSeconds (reccmp 72%, core-close.md: object-identical)"),
+    (0x00845c00, 0x0098b5d0, "rename", "??0?$FWFinal@VFWPartInstance@RBX@@@RBX@@QAE@ABVFWPartInstance@1@@Z", "rtti:",
+     "RBX::FWFinal<FWPartInstance>::FWFinal(const FWPartInstance&) | calls the FWPartInstance copy base 0x00845b70, "
+     "stores ??_7FWPartInstance 0x00b4c968, copies +0x38..+0x50, then stores ??_7FWFinal<FWPartInstance> "
+     "0x00b4cb8c (core-close.md; used by valueUpdate)"),
+    (0x007bc3e0, 0x00884ef0, "rename", "_ZN3RBX8InstanceD0Ev", "ios:",
+     "RBX::Instance D0 = MSVC ??_GInstance (scalar deleting destructor) | iOS 1029 _ZN3RBX8InstanceD0Ev; body: "
+     "~Instance 0x0061d510 (STUDIO 0x006f1f40), operator delete if (flags & 1), ret 4; target of the adjustor "
+     "thunks 0x007bc400 (-0x1c) and 0x00958d00 (-0x18) (STUDIO 0x00884f10, 0x00669590). The client-shell LTCG "
+     "copy of the same body is PLAYER 0x0040b010 / STUDIO 0x00477e20 (core-close.md)"),
+    (0x007bc400, 0x00884f10, "comment", "", "rtti:",
+     "adjustor thunk `sub ecx,0x1c; jmp` to Instance D0 0x007bc3e0 (STUDIO 0x00884ef0): Instance's slot 0 in a "
+     "vftable of a base at +0x1c (core-close.md)"),
+    (0x00958d00, 0x00669590, "comment", "", "rtti:",
+     "adjustor thunk `sub ecx,0x18; jmp` to Instance D0 0x007bc3e0 (STUDIO 0x00884ef0): Instance's slot 0 in a "
+     "vftable of a base at +0x18 (core-close.md)"),
+    (0x008f90b0, 0x00a0e170, "rename", "_ZN3RBX11IndexedMesh11isUpperRootEPKS0_", "ios:",
+     "RBX::IndexedMesh::isUpperRoot(const IndexedMesh*) | iOS symbol (PLAYER name); STUDIO 0x00a0e170 has the same "
+     "0x7a bytes (math-5a.md) and was a tail chunk of Clump::isClumpRootPrimitive 0x009d00f0 until "
+     "tools/ida/fix_bounds.py made it a function"),
+    (0x0040b010, 0x00477e20, "comment", "", "rtti:",
+     "the client-shell (LTCG) copy of Instance D0 (same bytes as 0x007bc3e0 / STUDIO 0x00884ef0, which carry the "
+     "name); its adjustor thunks are STUDIO 0x00481830 (-0x1c) and 0x0043fc00 (-0x18)"),
+    (0x00402240, 0x00443510, "rename", "?__TBB_LockByte@@YAEAAE@Z", "lib:",
+     "__TBB_LockByte(unsigned char&) (TBB 2.1 header, COMDAT) | loop: tbb.dll __TBB_machine_trylockbyte thunk "
+     "0x009eeea0, pause backoff to 16, then SwitchToThread (IAT 0x00aa1240); the safe_queue lock of "
+     "rbx::spin_mutex = tbb::spin_mutex (core-close.md)"),
+    (0x00e0c9dc, 0x00f83380, "data4", "_ZN3RBX10Reflection14ClassRegistrarINS_8InstanceEE9registrarE",
+     "ios:", "RBX::Reflection::ClassRegistrar<RBX::Instance>::registrar | iOS 1029 symbol; both Instance ctors "
+     "`inc dword` it (PLAYER 0x00620e22 / 0x00620f52, STUDIO 0x006f5662) (core-close.md)"),
+    (0x00e1b640, 0x00f9e828, "data8", "_ZZN3RBX8getStartEvE5start", "ios:",
+     "RBX::getStart()::start (LARGE_INTEGER) | iOS 1029 symbol; written once by getStart 0x009bb130 (STUDIO "
+     "0x00a71f80) behind the guard bit at +8"),
+    # Time.cpp globals: 2016 names (file statics there, Windows-only so no iOS/Mac symbol), each confirmed by
+    # its use in the 2013 bodies; the addresses are Time.cpp's GLOBAL markers (checkSpeedHack 0x009bb050 is 100%)
+    (0x00e1b608, 0x00f9e7f0, "data4", "RBX::ticksPerCorrection", "src2016:",
+     "ticksPerCorrection (long) | 2016 Time.cpp; interpolatedCallback's mmticks % divisor (0x009bb29f)"),
+    (0x00e1b610, 0x00f9e7f8, "data8", "RBX::millisecondsPerTick", "src2016:",
+     "millisecondsPerTick (double) | 2016 Time.cpp; interpolatedCallback's secsPerTick initialiser (0x009bb281)"),
+    (0x00e1b618, 0x00f9e800, "data8", "RBX::prevSpeedHackCheckpointTime", "src2016:",
+     "prevSpeedHackCheckpointTime (LARGE_INTEGER) | 2016 Time.cpp; checkSpeedHack 0x009bb050 (reccmp 100%)"),
+    (0x00e1b620, 0x00f9e808, "data8", "RBX::currentSeconds", "src2016:",
+     "currentSeconds (volatile double) | 2016 Time.cpp; max-updated by both timer callbacks (0x009bb1e2)"),
+    (0x00e1b628, 0x00f9e810, "data1", "RBX::cheater", "src2016:",
+     "cheater (volatile bool) | 2016 Time.cpp; set by checkSpeedHack 0x009bb050 (reccmp 100%), read by "
+     "Time::isSpeedCheater 0x009bb490"),
+    (0x00e1b629, 0x00f9e811, "data1", "RBX::isDebuggedValue", "src2016:",
+     "isDebuggedValue (volatile bool) | 2016 Time.cpp; set by directCallback (0x009bb214), read by "
+     "Time::isDebugged 0x009bb4a0"),
+    (0x00e1b62c, 0x00f9e814, "data4", "RBX::lastSpeedCheckCounter", "src2016:",
+     "lastSpeedCheckCounter (long) | 2016 Time.cpp; checkSpeedHack 0x009bb050 (reccmp 100%)"),
+    (0x00e1b630, 0x00f9e818, "data4", "RBX::violationsCount", "src2016:",
+     "violationsCount (long) | 2016 Time.cpp; checkSpeedHack 0x009bb050 (reccmp 100%)"),
+    (0x00e1b634, 0x00f9e81c, "data4", "RBX::prevTickTime", "src2016:",
+     "prevTickTime (long) | 2016 Time.cpp; checkSpeedHack 0x009bb050 (reccmp 100%)"),
+    (0x00e1b638, 0x00f9e820, "data4", "RBX::recguard", "src2016:",
+     "recguard (rbx::atomic<int>) | 2016 Time.cpp; swapped through RbxInterlockedExchange 0x009b8f20 on entry and "
+     "exit of both timer callbacks (0x009bb185, 0x009bb238)"),
 ]
 
 
@@ -247,6 +331,9 @@ def last_name(q):
     """Last component of a qualified name, without template arguments."""
     if q.startswith("?") and not q.startswith("??"):
         return q[1:].split("@")[0]      # an MSVC name reccmp could not undecorate: ?name@scope@...
+    m = re.match(r"\?\?([01])(?:\?\$)?([^@]+)@", q)
+    if m:                               # an undecoratable ctor/dtor: ??0?$Value@... -> Value, ??1X@ -> ~X
+        return ("~" if m.group(1) == "1" else "") + m.group(2)
     return split_top(q)[-1].split("<")[0]
 
 
@@ -422,7 +509,11 @@ def plan(target, json_path, exe):
         where = "" if target == "PLAYER" else f" [STUDIO: body-identical to PLAYER 0x{pa:08x}]"
         if a in updates and updates[a][0] == "rename" and act == "rename" and updates[a][1] != name:
             print(f"{target}: fact 0x{a:08x} {name} overrides the reccmp name {updates[a][1]}")
-        if act == "comment" and a in updates:     # keep the reccmp line (and its source) and add the fact
+        if act == "keep":       # the oracle name stays over our 100% body's name (our name is an invented one)
+            base = updates[a][3] if a in updates else "p4 %s" % tag
+            updates[a] = ("comment", "", tag, base + "; " + ev + where)
+            conflicts[:] = [c[:7] + ("oracle-kept (fact)", ev) if c[0] == f"0x{a:08x}" else c for c in conflicts]
+        elif act == "comment" and a in updates:     # keep the reccmp line (and its source) and add the fact
             updates[a] = updates[a][:3] + (updates[a][3] + "; " + ev + where,)
         else:
             updates[a] = (act, name, tag, f"p4 {tag} {ev}{where}")

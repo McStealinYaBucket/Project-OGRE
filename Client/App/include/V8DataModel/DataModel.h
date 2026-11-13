@@ -440,6 +440,13 @@ public:
 	   form is header-inline like 2016's addHackFlag). 2013 body = lock +
 	   insert only -- no sendStats OR at the sites (the Lua fork ORs
 	   sendStats directly; see HackDefines.h). */
+	// __forceinline on WIN32 (as 2016): the DataModel ctor 0x0064ec50 inlines it (unique_lock
+	// at esp+0x20, insert 0x00428430) although the ctor is large.
+#ifdef WIN32
+	__forceinline
+#else
+	inline
+#endif
 	void addHackFlag(unsigned int flag)
 	{
 		boost::mutex::scoped_lock l(hackFlagSetMutex);
@@ -495,7 +502,7 @@ public:
 	IMetric*			networkMetric;							// 0xbe0 src2016 (ctor NULL)
 	volatile bool		dirtyFlag;								// 0xbe4 IDataState
 	bool				isInitialized;							// 0xbe5 asserts in httpGet & co.
-	bool				isContentLoaded;						// 0xbe6 src2016 (Replicator jobs 0x00598ff7 read it)
+	volatile bool		isContentLoaded;						// 0xbe6 src2016 (Replicator jobs 0x00598ff7 read it). volatile: the ctor 0x0064ee43 stores 0xbe4/0xbe5 before the EH state, only with this volatile (probe)
 	PhysicsInstructions	physicsInstructions;					// 0xbe8 ctor 0x0084d2f0 (DataModel ctor 0x0064ee60)
 	int					numPartInstances;						// 0xc48 onDescendantAdded 0x00645dcf
 	int					numInstances;							// 0xc4c onDescendantAdded 0x00645da2

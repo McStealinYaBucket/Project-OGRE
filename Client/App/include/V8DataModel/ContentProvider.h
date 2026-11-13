@@ -28,6 +28,9 @@ namespace boost { class thread; }
 
 namespace RBX {
 
+	class Log;
+	class mutex;
+
 	extern const char* const sContentProvider;
 
 class ContentProvider
@@ -88,6 +91,10 @@ public:
 	boost::shared_ptr<const std::string> getContentString(ContentId id);
 	boost::shared_ptr<const std::string> requestContentString(const ContentId& contentId, float priority);	// 0x60C670
 	bool hasContent(const ContentId& contentId);				// 0x60A26E
+	// 2016 names; 2013 bodies at PLAYER 0x00666ca0 / 0x00666da0 (no iOS/Mac symbol: inlined
+	// there). blockingLoadContent logs "ContentProvider::requestContentString %d" as 2016 does.
+	bool blockingLoadContent(ContentId id, CachedContent* result);
+	bool isContentLoaded(ContentId id);
 	bool isUrlBad(ContentId contentId);							// 0x60A342
 	bool isRequestQueueEmpty();									// 0x60A68C
 	// mac: 0x60A38A (member; the binary's `this` slot is never touched — the
@@ -131,6 +138,13 @@ public:
 		const std::string& required, bool requiredFlag);
 	static bool isHttpUrl(const std::string& s);	// 0x60CAB6
 	static bool isUrl(const std::string& s);		// 0x60CC30
+
+	// GLOBAL: PLAYER 0x00de8340
+	// GLOBAL: STUDIO 0x00f86778
+	static Log* appLog;
+	// GLOBAL: PLAYER 0x00de8344
+	// GLOBAL: STUDIO 0x00f8677c
+	static RBX::mutex* appLogLock;
 
 private:
 	static void initAssetFolder();					// 0x60CB20 (call_once target)

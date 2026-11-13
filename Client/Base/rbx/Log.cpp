@@ -6,6 +6,7 @@
    formatTime queues (no EA banked). */
 
 #include "rbx/Log.h"
+#include "FastLog.h"
 #include "RbxFormat.h"
 #include <time.h>
 #include <stdio.h>
@@ -71,3 +72,58 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+// Base's log channels, in the 2013 registration order (PLAYER initializers 0x00a8b4d0-0x00a8b630, STUDIO
+// 0x00b3b1a0-0x00b3b300); 2016 adds TaskSchedulerSteps and KernelStats. LOGVARIABLE written out so each
+// channel can carry its GLOBAL marker (the unresolved-symbol list had them all, FLog::Asserts included).
+namespace FLog
+{
+	// GLOBAL: PLAYER 0x00db4084
+	// GLOBAL: STUDIO 0x00f2f9d4
+	Channel Crash = 1;
+	int CrashIniter = RegisterLogGroup("Crash", &Crash, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa88
+	// GLOBAL: STUDIO 0x00f9dc78
+	Channel HangDetection = 0;
+	int HangDetectionIniter = RegisterLogGroup("HangDetection", &HangDetection, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa89
+	// GLOBAL: STUDIO 0x00f9dc79
+	Channel ContentProviderCleanup = 0;
+	int ContentProviderCleanupIniter = RegisterLogGroup("ContentProviderCleanup", &ContentProviderCleanup, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8a
+	// GLOBAL: STUDIO 0x00f9dc7a
+	Channel ISteppedLifetime = 0;
+	int ISteppedLifetimeIniter = RegisterLogGroup("ISteppedLifetime", &ISteppedLifetime, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8b
+	// GLOBAL: STUDIO 0x00f9dc7b
+	Channel MutexLifetime = 0;
+	int MutexLifetimeIniter = RegisterLogGroup("MutexLifetime", &MutexLifetime, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8c
+	// GLOBAL: STUDIO 0x00f9dc7c
+	Channel TaskScheduler = 0;
+	int TaskSchedulerIniter = RegisterLogGroup("TaskScheduler", &TaskScheduler, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8d
+	// GLOBAL: STUDIO 0x00f9dc7d
+	Channel TaskSchedulerInit = 0;
+	int TaskSchedulerInitIniter = RegisterLogGroup("TaskSchedulerInit", &TaskSchedulerInit, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8e
+	// GLOBAL: STUDIO 0x00f9dc7e
+	Channel TaskSchedulerRun = 0;
+	int TaskSchedulerRunIniter = RegisterLogGroup("TaskSchedulerRun", &TaskSchedulerRun, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa8f
+	// GLOBAL: STUDIO 0x00f9dc7f
+	Channel TaskSchedulerFindJob = 0;
+	int TaskSchedulerFindJobIniter = RegisterLogGroup("TaskSchedulerFindJob", &TaskSchedulerFindJob, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa90
+	// GLOBAL: STUDIO 0x00f9dc80
+	Channel Asserts = 0;
+	int AssertsIniter = RegisterLogGroup("Asserts", &Asserts, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa91
+	// GLOBAL: STUDIO 0x00f9dc81
+	Channel FWLifetime = 0;
+	int FWLifetimeIniter = RegisterLogGroup("FWLifetime", &FWLifetime, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00e1aa92
+	// GLOBAL: STUDIO 0x00f9dc82
+	Channel FWUpdate = 0;
+	int FWUpdateIniter = RegisterLogGroup("FWUpdate", &FWUpdate, NULL, FASTVARTYPE_STATIC);
+}

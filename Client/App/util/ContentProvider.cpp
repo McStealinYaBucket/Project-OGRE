@@ -45,6 +45,8 @@
 
 LOGVARIABLE(ContentProviderRequests, 0);
 
+#define APPLOG(message) do { if (appLog != NULL) {RBX::mutex::scoped_lock lock(*appLogLock); appLog->writeEntry(RBX::Log::Information, message); } } while(0)
+
 namespace RBX {
 	const char* const sContentProvider = "ContentProvider";
 }
@@ -62,6 +64,11 @@ RBX_REGISTER_CLASS(RBX::ContentProvider);
 
 namespace RBX {
 
+	Log* ContentProvider::appLog = NULL;
+	RBX::mutex* ContentProvider::appLogLock = NULL;
+
+	// GLOBAL: PLAYER 0x00d38fdc
+	// GLOBAL: STUDIO 0x00ec56b8
 	float ContentProvider::PRIORITY_SCRIPT = 10.0f;
 	float ContentProvider::PRIORITY_MESH = 20.0f;
 	float ContentProvider::PRIORITY_INSERT = 30.0f;
@@ -76,12 +83,16 @@ namespace RBX {
 	float ContentProvider::PRIORITY_MFC;
 	// 0xFA9574: "Content/" by default (initAssetFolder); overridable once via
 	// setAssetFolder.
+	// GLOBAL: PLAYER 0x00de84ac
+	// GLOBAL: STUDIO 0x00f868e4
 	std::string ContentProvider::assetFolderPath;
 
 } // namespace RBX
 
 // 0xFB9384: guard for the default asset folder (assetFolder()/getAssetFile/
 // findAsset).
+// GLOBAL: PLAYER 0x00de8518
+// GLOBAL: STUDIO 0x00f86950
 static boost::once_flag assetFolderOnce;
 
 namespace {
@@ -135,32 +146,34 @@ namespace RBX {
 	// ---------------------------------------------------------------- asset
 	// folder
 
-	// STUB: PLAYER 0x0065fed0
-	// STUB: STUDIO 0x0078a380
+	// FUNCTION: PLAYER 0x0065fed0
+	// FUNCTION: STUDIO 0x0078a380
 	void ContentProvider::initAssetFolder()
 	{
 		// mac: 0x60CB20 (call_once target): the shipped default.
-		assetFolderPath.assign("Content/", 8);
+		assetFolderPath = "Content/";
 	}
 
+	// FUNCTION: PLAYER 0x00660d10
+	// FUNCTION: STUDIO 0x0078b1e0
 	std::string ContentProvider::assetFolder()
 	{
-		boost::call_once(&initAssetFolder, assetFolderOnce);
+		boost::call_once(assetFolderOnce, &initAssetFolder);
 		return assetFolderPath;
 	}
 
-	// STUB: PLAYER 0x00660d50
-	// STUB: STUDIO 0x0078b220
+	// FUNCTION: PLAYER 0x00660d50
+	// FUNCTION: STUDIO 0x0078b220
 	std::string ContentProvider::platformAssetFolder()
 	{
-		boost::call_once(&initAssetFolder, assetFolderOnce);
-		return assetFolderPath + "../PlatformContent/pc/";
+		return assetFolder() + "../PlatformContent/pc/";
 	}
 
+	// FUNCTION: PLAYER 0x006616b0
+	// FUNCTION: STUDIO 0x0078baa0
 	std::string ContentProvider::getAssetFile(const char* filePath)
 	{
-		boost::call_once(&initAssetFolder, assetFolderOnce);
-		return assetFolderPath + filePath;
+		return std::string(assetFolder() + filePath);
 	}
 
 	// STUB: PLAYER 0x00661f00
@@ -219,6 +232,8 @@ namespace RBX {
 	}
 
 	// mac: 0x609182 (static): the local cache path for a content-hash id.
+	// STUB: PLAYER 0x00661df0
+	// STUB: STUDIO 0x0078c1e0
 	std::string ContentProvider::findHashFile(ContentId contentId)
 	{
 		boost::filesystem::path filePath(getLocalCachePath());
@@ -229,24 +244,24 @@ namespace RBX {
 	}
 
 	// mac: 0x6089CC (static): map a URL/path to a local file, if one exists.
-	// STUB: PLAYER 0x006623a0
-	// STUB: STUDIO 0x0078c710
+	// FUNCTION: PLAYER 0x006623a0
+	// FUNCTION: STUDIO 0x0078c710
 	bool ContentProvider::findLocalFile(const std::string& fileName, std::string* result)
 	{
 		ContentId contentId(fileName);
 		if (contentId.isAsset())
 		{
 			*result = findAsset(contentId);
+			if (result->empty())
+				return false;
 		}
-		else if (contentId.isHttp())
-		{
-			return true;
-		}
-		else
+		else if (!contentId.isHttp())
 		{
 			*result = findHashFile(contentId);
+			if (result->empty())
+				return false;
 		}
-		return !result->empty();
+		return true;
 	}
 
 	// ---------------------------------------------------------------- fetch
@@ -337,7 +352,7 @@ namespace RBX {
 	// STUB: STUDIO 0x00790e80
 	boost::shared_ptr<const std::string> ContentProvider::requestContentString(const ContentId& contentId, float priority)
 	{
-		RBXASSERT(this != NULL);		// line 603
+		RBXASSERT(this!=NULL);		// line 603
 
 		ContentId activeId(contentId);
 		CachedContent item;
@@ -368,19 +383,27 @@ namespace RBX {
 	// malformed XML propagates; the 2016 exception param arrives later).
 	// STUB: PLAYER 0x00665810
 	// STUB: STUDIO 0x0078fcb0
-	static void parseContent(const ContentId& id, AsyncHttpQueue::RequestResult result, std::istream* stream, boost::function<void(AsyncHttpQueue::RequestResult, boost::shared_ptr<Instances>)> callback)
+	static void parseXml(const ContentId& id, AsyncHttpQueue::RequestResult result, std::istream* stream, boost::function<void(AsyncHttpQueue::RequestResult, boost::shared_ptr<Instances>)> callback)
 	{
 		boost::shared_ptr<Instances> instances(new Instances());
 
 		if (result == AsyncHttpQueue::Succeeded)
 		{
-			FASTLOGS(FLog::ContentProviderRequests, "Parsing xml for content: %s", id.c_str());
+			try
+			{
+				FASTLOGS(FLog::ContentProviderRequests, "Parsing xml for content: %s", id.c_str());
 
-			TextXmlParser parser(stream->rdbuf());
-			std::auto_ptr<XmlElement> root(parser.parse());
+				TextXmlParser parser(stream->rdbuf());
+				std::auto_ptr<XmlElement> root(parser.parse());
 
-			SerializerV2 serializer;
-			serializer.loadInstancesFromText(root.get(), *instances);
+				SerializerV2 serializer;
+				serializer.loadInstancesFromText(root.get(), *instances);
+			}
+			catch (std::runtime_error e)
+			{
+				StandardOut::singleton()->printf(MESSAGE_ERROR, "Content failed to parse for %s because %s", id.c_str(), e.what());
+				result = AsyncHttpQueue::Failed;
+			}
 		}
 
 		callback(result, instances);
@@ -396,12 +419,11 @@ namespace RBX {
 
 	// mac: 0x60B562: async front-end.  The bind drops RequestCallback's trailing
 	// response argument (parseContent wants id/result/stream/callback only).
-	// STUB: PLAYER 0x00667140
-	// STUB: STUDIO 0x00791680
+	// FUNCTION: PLAYER 0x00667140
+	// FUNCTION: STUDIO 0x00791680
 	void ContentProvider::loadContent(const ContentId& id, float priority, boost::function<void(AsyncHttpQueue::RequestResult, boost::shared_ptr<Instances>)> callback, AsyncHttpQueue::ResultJob jobType)
 	{
-		ContentId contentId(id);
-		getContent(contentId, priority, boost::bind(&parseContent, contentId, _1, _2, callback), jobType);
+		getContent(id, priority, boost::bind(&parseXml, id, _1, _2, callback), jobType);
 	}
 
 	// mac: 0x60B760: callback getContent.  Data items dispatch with the payload;
@@ -412,7 +434,7 @@ namespace RBX {
 	void ContentProvider::getContent(const ContentId& id, float priority, AsyncHttpQueue::RequestCallback callback, AsyncHttpQueue::ResultJob jobType)
 	{
 		ContentId activeId(id);
-		RBXASSERT(this != NULL);		// line 490
+		RBXASSERT(this!=NULL);		// line 490
 
 		CachedContent item;
 		AsyncHttpQueue::RequestResult requestResult = privateLoadContent(activeId, AsyncHttpRequest, priority, &item, &callback, jobType);
@@ -440,7 +462,7 @@ namespace RBX {
 	// STUB: STUDIO 0x00790d00
 	void ContentProvider::requestContentFile(const ContentId& id, float priority, AsyncHttpQueue::RequestResult& result, std::string& fileName)
 	{
-		RBXASSERT(this != NULL);		// line 512
+		RBXASSERT(this!=NULL);		// line 512
 
 		ContentId activeId(id);
 		CachedContent item;
@@ -469,19 +491,58 @@ namespace RBX {
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x60C356: blocking string load: request, then sync-load once on miss.
 	// Shared_ptr return proven by the loadfile sret ABI (batch640; 2016 agrees).
-	// STUB: PLAYER 0x006672c0
+	// FUNCTION: PLAYER 0x006672c0
 	// STUB: STUDIO 0x00791800
 	boost::shared_ptr<const std::string> ContentProvider::getContentString(ContentId id)
 	{
-		boost::shared_ptr<const std::string> result = requestContentString(id, PRIORITY_SCRIPT);
+		APPLOG("ContentProvider::getContentString");
 
+		boost::shared_ptr<const std::string> result = requestContentString(id, PRIORITY_SCRIPT);
 		if (!result)
 		{
 			CachedContent item;
-			ContentId contentId(id);
-			if (privateLoadContent(contentId, SyncHttpRequest, -1.0f, &item, NULL, AsyncHttpQueue::AsyncInline) != AsyncHttpQueue::Succeeded)
+			if (!blockingLoadContent(id, &item))
 				throw RBX::runtime_error("Unable to load %s", id.c_str());
 
 			result = requestContentString(id, PRIORITY_SCRIPT);
@@ -509,29 +570,9 @@ namespace RBX {
 		return std::auto_ptr<std::istream>(new std::ifstream(item.filename->c_str(), std::ios_base::in | std::ios_base::binary));
 	}
 
-	// mac: 0x60CF86: id -> a local file path (hash-file registration on demand).
-	// STUB: PLAYER 0x00666e10
-	// STUB: STUDIO 0x00791350
-	std::string ContentProvider::getFile(ContentId id)
-	{
-		CachedContent item;
-		ContentId contentId(id);
-
-		if (privateLoadContent(contentId, SyncHttpRequest, -1.0f, &item, NULL, AsyncHttpQueue::AsyncInline) != AsyncHttpQueue::Succeeded
-			|| !registerFile(id, &item))
-			throw RBX::runtime_error("Unable to load %s", id.c_str());
-
-		return *item.filename;
-	}
-
-	// mac: 0x60A26E: synchronous availability probe (no network).
-	bool ContentProvider::hasContent(const ContentId& contentId)
-	{
-		ContentId id(contentId);
-		return privateLoadContent(id, NoHttpRequest, -1.0f, NULL, NULL, AsyncHttpQueue::AsyncInline) == AsyncHttpQueue::Succeeded;
-	}
-
 	// mac: 0x60A342: url validity via the queue's failed-url list.
+	// FUNCTION: PLAYER 0x00660470
+	// FUNCTION: STUDIO 0x0078a920
 	bool ContentProvider::isUrlBad(ContentId contentId)
 	{
 		contentId.convertAssetId(baseUrl);
@@ -540,37 +581,41 @@ namespace RBX {
 	}
 
 	// mac: 0x60A38A: blocks asset-url spoofing (host must match before the .com).
-	// STUB: PLAYER 0x00661750
-	// STUB: STUDIO 0x0078bb40
+	// FUNCTION: PLAYER 0x00661750
+	// FUNCTION: STUDIO 0x0078bb40
 	bool ContentProvider::isValidRobloxAssetUrl(ContentId contentId)
 	{
-		if (contentId.toString().compare(0, 4, "http") != 0)
-			return true;
-
-		std::string lower(contentId.toString());
-		std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-
-		if (lower.find("/asset/") == std::string::npos)
-			return true;
-
-		size_t posCom = lower.find(".com");
-
-		if (lower.find(".roblox.com/asset/") < posCom
-			|| lower.find(".roblox.com//asset/") < posCom
-			|| lower.find("http://roblox.com/asset/") < posCom
-			|| lower.find("http://roblox.com//asset/") < posCom
-			|| lower.find(".robloxlabs.com/asset/") < posCom
-			|| lower.find(".robloxlabs.com//asset/") < posCom)
+		// 2013 shares one 'return true' epilogue for the http, /asset/ and allowed-host exits.
+		if (contentId.isHttp())
 		{
-			if (lower.find("asset/..") == std::string::npos)
-				return true;
-		}
+			std::string lower(contentId.toString());
+			std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
-		StandardOut::singleton()->printf(RBX::MESSAGE_WARNING, "blocking %s", lower.c_str());
-		return false;
+			if (lower.find("/asset/") != std::string::npos)
+			{
+				size_t posCom = lower.find(".com");
+
+				if (lower.find(".roblox.com/asset/") < posCom
+					|| lower.find(".roblox.com//asset/") < posCom
+					|| lower.find("http://roblox.com/asset/") < posCom
+					|| lower.find("http://roblox.com//asset/") < posCom
+					|| lower.find(".robloxlabs.com/asset/") < posCom
+					|| lower.find(".robloxlabs.com//asset/") < posCom)
+				{
+					if (lower.find("asset/..") == std::string::npos)
+						return true;
+				}
+
+				StandardOut::singleton()->printf(RBX::MESSAGE_WARNING, "blocking %s", lower.c_str());
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// mac: 0x60A6A8: register in-memory data as a loadable hash file.
+	// FUNCTION: PLAYER 0x00664090
+	// FUNCTION: STUDIO 0x0078e6a0
 	bool ContentProvider::registerFile(const ContentId& contentId, CachedContent* item)
 	{
 		if (!item->filename)
@@ -585,6 +630,40 @@ namespace RBX {
 			contentCache->insertCacheItem(contentId.c_str(), *item);
 		}
 		return true;
+	}
+
+	// FUNCTION: PLAYER 0x00666ca0
+	// FUNCTION: STUDIO 0x007911e0
+	bool ContentProvider::blockingLoadContent(ContentId id, CachedContent* result)
+	{
+		APPLOG(RBX::format("ContentProvider::requestContentString %d", id.c_str()).c_str());
+		return privateLoadContent(id, SyncHttpRequest, -1, result, NULL, AsyncHttpQueue::AsyncInline) == AsyncHttpQueue::Succeeded;
+	}
+
+	// FUNCTION: PLAYER 0x00666da0
+	// FUNCTION: STUDIO 0x007912e0
+	bool ContentProvider::isContentLoaded(ContentId id)
+	{
+		return privateLoadContent(id, NoHttpRequest, -1, NULL, NULL, AsyncHttpQueue::AsyncInline) == AsyncHttpQueue::Succeeded;
+	}
+
+	// mac: 0x60CF86: id -> a local file path (hash-file registration on demand).
+	// FUNCTION: PLAYER 0x00666e10
+	// FUNCTION: STUDIO 0x00791350
+	std::string ContentProvider::getFile(ContentId id)
+	{
+		CachedContent item;
+		if (!blockingLoadContent(id, &item) || !registerFile(id, &item))
+			throw RBX::runtime_error("Unable to load %s", id.c_str());
+
+		return *item.filename;
+	}
+
+	// FUNCTION: PLAYER 0x00667110
+	// FUNCTION: STUDIO 0x00791650
+	bool ContentProvider::hasContent(const ContentId& id)
+	{
+		return isContentLoaded(id);
 	}
 
 	// mac: 0x60A9E6: hash a stream, store it under the hash in the local cache.
@@ -688,14 +767,6 @@ namespace RBX {
 
 namespace RBX {
 
-ContentProvider::CachedContent::CachedContent(
-	boost::shared_ptr<const std::string> data,
-	boost::shared_ptr<const std::string> filename)
-	: data(data)
-	, filename(filename)
-{
-}
-
 // STUB: PLAYER 0x00660220
 // STUB: STUDIO 0x0078a6d0
 const char* ContentProvider::verifyScriptSignature(const char* script, bool required)
@@ -766,6 +837,15 @@ const char* ContentProvider::verifyRequestedScriptSignature(const char* script,
 	return body;
 }
 
+// FUNCTION: PLAYER 0x006649e0
+ContentProvider::CachedContent::CachedContent(
+	boost::shared_ptr<const std::string> data,
+	boost::shared_ptr<const std::string> filename)
+	: data(data)
+	, filename(filename)
+{
+}
+
 bool ContentProvider::isHttpUrl(const std::string& s)
 {
 	return s.find("http://") == 0 || s.find("https://") == 0;
@@ -788,3 +868,57 @@ void ContentProvider::readContent(const char* name, std::istream& stream, unsign
 }
 
 } // namespace RBX
+
+// Template and implicit member bodies this TU emits (identical to the 2013 bytes in a private
+// compile; markers pair them so their callers match).
+
+// TEMPLATE: PLAYER 0x0065fc10
+// TEMPLATE: STUDIO 0x0078a080
+// ?system_complete@filesystem@boost@@YA?AVpath@12@ABV312@@Z
+
+// TEMPLATE: PLAYER 0x0065ffa0
+// TEMPLATE: STUDIO 0x0078a450
+// ??0?$storage1@V?$value@VContentId@RBX@@@_bi@boost@@@_bi@boost@@QAE@V?$value@VContentId@RBX@@@12@@Z
+
+// TEMPLATE: PLAYER 0x00660600
+// ??$?0PBD@path@filesystem@boost@@QAE@ABQBDPAX@Z
+
+// TEMPLATE: PLAYER 0x00660710
+// TEMPLATE: STUDIO 0x0078ac10
+// ??0?$storage2@V?$value@VContentId@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@boost@@QAE@V?$value@VContentId@RBX@@@12@U?$arg@$00@2@@Z
+
+// TEMPLATE: PLAYER 0x00660780
+// TEMPLATE: STUDIO 0x0078ac80
+// ??$append@$$BY01$$CBD@path@filesystem@boost@@QAEAAV012@AAY01$$CBDABV?$codecvt@_WDH@std@@@Z
+
+// TEMPLATE: PLAYER 0x00660a60
+// TEMPLATE: STUDIO 0x0078af30
+// ??0CachedContent@ContentProvider@RBX@@QAE@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z
+
+// TEMPLATE: PLAYER 0x006611e0
+// TEMPLATE: STUDIO 0x0078b610
+// ??$?_0PBD@path@filesystem@boost@@QAEAAV012@ABQBD@Z
+
+// TEMPLATE: PLAYER 0x00661290
+// TEMPLATE: STUDIO 0x0078b6c0
+// ??0?$storage3@V?$value@VContentId@RBX@@@_bi@boost@@U?$arg@$00@3@U?$arg@$01@3@@_bi@boost@@QAE@V?$value@VContentId@RBX@@@12@U?$arg@$00@2@U?$arg@$01@2@@Z
+
+// TEMPLATE: PLAYER 0x006633d0
+// TEMPLATE: STUDIO 0x0078d990
+// ?clear@?$LRUCache@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VCachedContent@ContentProvider@RBX@@@RBX@@QAEXXZ
+
+// TEMPLATE: PLAYER 0x00663820
+// TEMPLATE: STUDIO 0x0078de30
+// ?setCacheSize@?$AsyncHttpCache@VCachedContent@ContentProvider@RBX@@$0A@@RBX@@QAEXH@Z
+
+// TEMPLATE: PLAYER 0x00663980
+// TEMPLATE: STUDIO 0x0078df90
+// ??0?$LRUCache@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VCachedContent@ContentProvider@RBX@@@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00663c80
+// TEMPLATE: STUDIO 0x0078e290
+// ??1?$LRUCache@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VCachedContent@ContentProvider@RBX@@@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00664c70
+// TEMPLATE: STUDIO 0x0078f190
+// ??1?$AsyncHttpCache@VCachedContent@ContentProvider@RBX@@$0A@@RBX@@UAE@XZ

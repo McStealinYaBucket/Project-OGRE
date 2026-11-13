@@ -471,8 +471,8 @@ int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_eq(lua_State* L)
 }
 
 // mac: 0x1713A8 (62B, batch456): checkudata + forward.
-// STUB: PLAYER 0x0087fa40
-// STUB: STUDIO 0x009e40c0
+// FUNCTION: PLAYER 0x0087fa40
+// FUNCTION: STUDIO 0x009e40c0
 template<>
 int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_tostring(lua_State* L)
 {
@@ -481,15 +481,15 @@ int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_tostring(lua_Sta
 
 // mac: 0x1AB6BA (51B, batch457): fixed "WeakThreadRef" literal (13 chars --
 // NOT "WeakThreadRef::Node" like the className).
-// FUNCTION: PLAYER 0x008a8f60
-// FUNCTION: STUDIO 0x009ecb80
+// Defined in ScriptEvent.cpp (PLAYER 0x008a8f60): 2013 calls it out of line from
+// on_tostring(lua_State*) 0x0087fa55.
 template<>
 int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_tostring(
-	const boost::intrusive_ptr<WeakThreadRef::Node>& object, lua_State* L)
-{
-	lua_pushlstring(L, "WeakThreadRef", 13);
-	return 1;
-}
+	const boost::intrusive_ptr<WeakThreadRef::Node>& object, lua_State* L);
+
+
+
+
 
 template<>
 // GLOBAL: PLAYER 0x00d8e508
@@ -845,8 +845,8 @@ int Bridge<shared_ptr<GenericFunction>, true>::on_eq(lua_State* L)
 }
 
 // mac: 0x17161C (62B, batch467): checkudata + forward.
-// STUB: PLAYER 0x0087faa0
-// STUB: STUDIO 0x009e4120
+// FUNCTION: PLAYER 0x0087faa0
+// FUNCTION: STUDIO 0x009e4120
 template<>
 int Bridge<shared_ptr<GenericFunction>, true>::on_tostring(lua_State* L)
 {
@@ -854,15 +854,15 @@ int Bridge<shared_ptr<GenericFunction>, true>::on_tostring(lua_State* L)
 }
 
 // mac: 0x1AB6EE (51B, batch468): fixed "GenericFunction" literal (15 chars).
-// FUNCTION: PLAYER 0x008a8f80
-// FUNCTION: STUDIO 0x009ecba0
+// Defined in ScriptEvent.cpp (PLAYER 0x008a8f80).
+
 template<>
 int Bridge<shared_ptr<GenericFunction>, true>::on_tostring(
-	const shared_ptr<GenericFunction>& object, lua_State* L)
-{
-	lua_pushlstring(L, "GenericFunction", 15);
-	return 1;
-}
+	const shared_ptr<GenericFunction>& object, lua_State* L);
+
+
+
+
 
 template<>
 // GLOBAL: PLAYER 0x00d8e50c
@@ -1016,8 +1016,8 @@ int Bridge<shared_ptr<GenericAsyncFunction>, true>::on_eq(lua_State* L)
 }
 
 // mac: 0x171890 (batch467): checkudata + forward.
-// STUB: PLAYER 0x0087fac0
-// STUB: STUDIO 0x009e4140
+// FUNCTION: PLAYER 0x0087fac0
+// FUNCTION: STUDIO 0x009e4140
 template<>
 int Bridge<shared_ptr<GenericAsyncFunction>, true>::on_tostring(lua_State* L)
 {
@@ -1025,15 +1025,15 @@ int Bridge<shared_ptr<GenericAsyncFunction>, true>::on_tostring(lua_State* L)
 }
 
 // mac: 0x1AB722 (51B, batch468): "GenericAsyncFunction" (20 chars).
-// FUNCTION: PLAYER 0x008a8fa0
-// FUNCTION: STUDIO 0x009ecbc0
+// Defined in ScriptEvent.cpp (PLAYER 0x008a8fa0).
+
 template<>
 int Bridge<shared_ptr<GenericAsyncFunction>, true>::on_tostring(
-	const shared_ptr<GenericAsyncFunction>& object, lua_State* L)
-{
-	lua_pushlstring(L, "GenericAsyncFunction", 20);
-	return 1;
-}
+	const shared_ptr<GenericAsyncFunction>& object, lua_State* L);
+
+
+
+
 
 template<>
 // GLOBAL: PLAYER 0x00d8e510

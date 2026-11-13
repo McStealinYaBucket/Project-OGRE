@@ -39,15 +39,9 @@ namespace RBX { namespace Lua {
 		return (float)value;
 	}
 
-	// FUNCTION: PLAYER 0x0066fad0
-	// FUNCTION: STUDIO 0x007d7e90
-	void protect_metatable(lua_State* thread, int index)
-	{
-		// mac: 0x18994C (batch349): push the lock string, then set __metatable
-		// on index-1 (the metatable sits below the pushed string).
-		lua_pushstring(thread, "The metatable is locked");
-		lua_setfield(thread, index - 1, "__metatable");
-	}
+	// protect_metatable (PLAYER 0x0066fad0) lives in ScriptContext.cpp: 2013 places it between
+	// ScriptContext.cpp's libraryWriteGuard and openScriptLibrary, and the registerClass bodies
+	// here call it out of line (0x00880484).
 
 	// mac: 0x165EB0 (58B, batch435): tolstring-or-empty (carried 2016 location).
 	const char* safe_lua_tostring(lua_State* L, int idx)
@@ -76,8 +70,8 @@ namespace RBX { namespace Lua {
 	static bool enumItemIsA(const RBX::Reflection::EnumDescriptor::Item* item,
 		const std::type_info& ti, const char* gccName)
 	{
-		const std::type_info* owner = item->owner.typeInfo;
-		return owner == &ti || strcmp(owner->name(), gccName) == 0;
+		// Windows: pointer test, then type_info::operator== (0x00884027/0x00884034)
+		return item->owner.typeInfo == &ti || ti == *item->owner.typeInfo;
 	}
 
 	// mac: 0x198254 (96B, batch380): luaL_checklstring wrapper verbatim.
@@ -801,8 +795,8 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x170EE6 (394B, batch373): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x00880470
-	// STUB: STUDIO 0x009e4af0
+	// FUNCTION: PLAYER 0x00880470
+	// FUNCTION: STUDIO 0x009e4af0
 	void Bridge<G3D::Color3, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -865,8 +859,8 @@ namespace RBX { namespace Lua {
 	const char* Bridge<RBX::Axes, true>::className = "Axes";
 
 	// mac: 0x170710 (394B, batch387): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x00880550
-	// STUB: STUDIO 0x009e4bd0
+	// FUNCTION: PLAYER 0x00880550
+	// FUNCTION: STUDIO 0x009e4bd0
 	void Bridge<RBX::RbxRay, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -892,8 +886,8 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x1704A6 (394B, batch375): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x00880630
-	// STUB: STUDIO 0x009e4cb0
+	// FUNCTION: PLAYER 0x00880630
+	// FUNCTION: STUDIO 0x009e4cb0
 	void Bridge<RBX::BrickColor, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -928,8 +922,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x17023C (394B, batch365): index/newindex/gc/eq/tostring only.
 	// No arithmetic (Faces has none in the bridge).
-	// STUB: PLAYER 0x00880710
-	// STUB: STUDIO 0x009e4d90
+	// FUNCTION: PLAYER 0x00880710
+	// FUNCTION: STUDIO 0x009e4d90
 	void Bridge<RBX::Faces, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -973,8 +967,8 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x16FD5C (394B, batch366): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x008807f0
-	// STUB: STUDIO 0x009e4e70
+	// FUNCTION: PLAYER 0x008807f0
+	// FUNCTION: STUDIO 0x009e4e70
 	void Bridge<RBX::Axes, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -1000,8 +994,8 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x16FFC6 (394B, batch367): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x008808d0
-	// STUB: STUDIO 0x009e4f50
+	// FUNCTION: PLAYER 0x008808d0
+	// FUNCTION: STUDIO 0x009e4f50
 	void Bridge<RBX::CellID, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -1027,8 +1021,8 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x16FAEE (394B, batch370): index/newindex/gc/eq/tostring only.
-	// STUB: PLAYER 0x008809b0
-	// STUB: STUDIO 0x009e5030
+	// FUNCTION: PLAYER 0x008809b0
+	// FUNCTION: STUDIO 0x009e5030
 	void Bridge<RBX::InputObject, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -1085,8 +1079,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x170986 (Region3) / 0x170C46 (Region3int16): index/newindex/gc/eq/
 	// tostring only (both batches 380-381).
-	// STUB: PLAYER 0x00880a90
-	// STUB: STUDIO 0x009e5110
+	// FUNCTION: PLAYER 0x00880a90
+	// FUNCTION: STUDIO 0x009e5110
 	void Bridge<RBX::Region3, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -1578,30 +1572,30 @@ namespace RBX { namespace Lua {
 	const char* Bridge<RBX::BrickColor, true>::className = "BrickColor";
 
 	// mac: 0x166F5C (240B, batch421): Enum.NormalId item -> unit vector.
-	// STUB: PLAYER 0x00884000
-	// STUB: STUDIO 0x0092e000
+	// FUNCTION: PLAYER 0x00884000
+	// FUNCTION: STUDIO 0x0092e000
 	int Vector3Bridge::newVector3FromNormalId(lua_State* L)
 	{
-		EnumDescriptorItemPtr item = NULL;
-		if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)
-			|| !enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE"))
-			throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
-		pushVector3(L, RBX::normalIdToVector3((RBX::NormalId)item->value));
-		return 1;
+		EnumDescriptorItemPtr item;
+		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {	// two throw sites (0x0088403e, 0x00884091)
+			if (!enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE")) throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
+			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3((RBX::NormalId)item->value));
+			return 1; }
+		throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
 	}
 
 	// mac: 0x16704C (248B, batch421): Enum.Axis item -> NormalId -> unit vector.
-	// STUB: PLAYER 0x008840c0
-	// STUB: STUDIO 0x0092e0c0
+	// FUNCTION: PLAYER 0x008840c0
+	// FUNCTION: STUDIO 0x0092e0c0
 	int Vector3Bridge::newVector3FromAxis(lua_State* L)
 	{
-		EnumDescriptorItemPtr item = NULL;
-		if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)
-			|| !enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE"))
-			throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
-		pushVector3(L, RBX::normalIdToVector3(
-			RBX::Axes::axisToNormalId((G3D::Vector3::Axis)item->value)));
-		return 1;
+		EnumDescriptorItemPtr item;
+		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {
+			if (!enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE")) throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
+			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3(
+				RBX::Axes::axisToNormalId((G3D::Vector3::Axis)item->value))); return 1; }
+		throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
+		
 	}
 
 	// mac: 0x1698B8 (102B, batch375): always throws, with the name.
@@ -2144,15 +2138,15 @@ namespace RBX { namespace Lua {
 		return count;
 	}
 
-	// STUB: PLAYER 0x00886800
-	// STUB: STUDIO 0x00930800
+	// FUNCTION: PLAYER 0x00886800
+	// FUNCTION: STUDIO 0x00930800
 	int CoordinateFrameBridge::on_pointToWorldSpace(lua_State* L)
 	{
 		const G3D::CoordinateFrame& a = getObject(L, 1);
 		int count = lua_gettop(L) - 1;
 		if (count == 0)
 		{
-			Bridge<G3D::Vector3>::pushNewObject(L,
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
 				a.pointToWorldSpace(G3D::Vector3::zero()));
 			return 1;
 		}
@@ -2164,15 +2158,15 @@ namespace RBX { namespace Lua {
 		return count;
 	}
 
-	// STUB: PLAYER 0x008869e0
-	// STUB: STUDIO 0x009309e0
+	// FUNCTION: PLAYER 0x008869e0
+	// FUNCTION: STUDIO 0x009309e0
 	int CoordinateFrameBridge::on_pointToObjectSpace(lua_State* L)
 	{
 		const G3D::CoordinateFrame& a = getObject(L, 1);
 		int count = lua_gettop(L) - 1;
 		if (count == 0)
 		{
-			Bridge<G3D::Vector3>::pushNewObject(L,
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
 				a.pointToObjectSpace(G3D::Vector3::zero()));
 			return 1;
 		}
@@ -2184,15 +2178,15 @@ namespace RBX { namespace Lua {
 		return count;
 	}
 
-	// STUB: PLAYER 0x00886bd0
-	// STUB: STUDIO 0x00930bd0
+	// FUNCTION: PLAYER 0x00886bd0
+	// FUNCTION: STUDIO 0x00930bd0
 	int CoordinateFrameBridge::on_vectorToWorldSpace(lua_State* L)
 	{
 		const G3D::CoordinateFrame& a = getObject(L, 1);
 		int count = lua_gettop(L) - 1;
 		if (count == 0)
 		{
-			Bridge<G3D::Vector3>::pushNewObject(L,
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
 				a.vectorToWorldSpace(G3D::Vector3::zero()));
 			return 1;
 		}
@@ -2298,15 +2292,15 @@ namespace RBX { namespace Lua {
 	// below; it was first defined here for the Region3int16 Min/Max link
 	// and moved to avoid C2086.)
 
-	// STUB: PLAYER 0x00886e90
-	// STUB: STUDIO 0x00930e90
+	// FUNCTION: PLAYER 0x00886e90
+	// FUNCTION: STUDIO 0x00930e90
 	int CoordinateFrameBridge::on_vectorToObjectSpace(lua_State* L)
 	{
 		const G3D::CoordinateFrame& a = getObject(L, 1);
 		int count = lua_gettop(L) - 1;
 		if (count == 0)
 		{
-			Bridge<G3D::Vector3>::pushNewObject(L,
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
 				a.vectorToObjectSpace(G3D::Vector3::zero()));
 			return 1;
 		}
@@ -2802,8 +2796,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x16CC00 / 0x16CEB4: index/newindex/gc/eq/tostring/add/sub/mul/
 	// div/unm + readonly + pop (both batches 394/396).
-	// STUB: PLAYER 0x00888160
-	// STUB: STUDIO 0x00932160
+	// FUNCTION: PLAYER 0x00888160
+	// FUNCTION: STUDIO 0x00932160
 	void Bridge<G3D::Vector3int16, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -2848,8 +2842,8 @@ namespace RBX { namespace Lua {
 	// __newindex are the caller-passed lua_CFunctions (openState passes
 	// Bridge<Vector3>::on_index/on_newindex 0x19855C/0x1985BC); arithmetic
 	// is this type's Vector3Bridge metamethods. Ends readonly + pop.
-	// STUB: PLAYER 0x00888460
-	// STUB: STUDIO 0x00932460
+	// FUNCTION: PLAYER 0x00888460
+	// FUNCTION: STUDIO 0x00932460
 	void Bridge<G3D::Vector3, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -2999,8 +2993,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x16D41C (692B, batch357): same 3-arg shape as Vector3 (no __type,
 	// __gc kept, arithmetic is Vector2Bridge's).
-	// STUB: PLAYER 0x008885e0
-	// STUB: STUDIO 0x009325e0
+	// FUNCTION: PLAYER 0x008885e0
+	// FUNCTION: STUDIO 0x009325e0
 	void Bridge<G3D::Vector2, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -3042,8 +3036,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x16D948 (512B, batch360): index/newindex/gc/eq/add/sub/unm only.
 	// NO __tostring, NO __mul/__div (verified by body, not by absence).
-	// STUB: PLAYER 0x00888760
-	// STUB: STUDIO 0x00932760
+	// FUNCTION: PLAYER 0x00888760
+	// FUNCTION: STUDIO 0x00932760
 	void Bridge<RBX::UDim, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -3150,8 +3144,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x16DB48 (512B, batch361): same set as UDim (add/sub/unm; no
 	// tostring/mul/div).
-	// STUB: PLAYER 0x00888880
-	// STUB: STUDIO 0x00932880
+	// FUNCTION: PLAYER 0x00888880
+	// FUNCTION: STUDIO 0x00932880
 	void Bridge<RBX::UDim2, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
@@ -3418,8 +3412,8 @@ namespace RBX { namespace Lua {
 
 	// mac: 0x16D6D0 (632B, batch377): index/newindex/gc/eq/tostring/add/sub/
 	// mul + named "inverse" entry (NOT __unm -- body-proven DELTA).
-	// STUB: PLAYER 0x008890a0
-	// STUB: STUDIO 0x00932f70
+	// FUNCTION: PLAYER 0x008890a0
+	// FUNCTION: STUDIO 0x00932f70
 	void Bridge<G3D::CoordinateFrame, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{

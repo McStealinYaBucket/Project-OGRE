@@ -200,7 +200,7 @@ namespace RBX {
 		(void)stats;
 		if (shared_ptr<ScriptContext> sc = scriptContext.lock())
 		{
-			DataModel* d = DataModel::get(sc.get());
+			DataModel* d = dynamic_cast<DataModel*>(sc->getParent());	// 2013: __RTDynamicCast of parent (0x00679eb3)
 			if (FLog::DataModelJobs != 0)
 				FLog::FastLog(FLog::DataModelJobs, "GC Job start, data model: %p", d);
 			DataModel::scoped_write_request request(d);
@@ -262,7 +262,7 @@ namespace RBX {
 		(void)stats;
 		if (shared_ptr<ScriptContext> sc = scriptContext.lock())
 		{
-			DataModel* d = DataModel::get(sc.get());
+			DataModel* d = dynamic_cast<DataModel*>(sc->getParent());	// 2013: __RTDynamicCast of parent (0x0068a533)
 			if (FLog::DataModelJobs != 0)
 				FLog::FastLog(FLog::DataModelJobs, "Waiting scripts start, data model: %p", d);
 			DataModel::scoped_write_request request(d);

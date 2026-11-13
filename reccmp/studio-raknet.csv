@@ -1,6 +1,6 @@
 # Generated from ida/exports/STUDIO-lib-resolved.csv (status identical). Do not edit.
 # Library rows skipped for all libraries: not identical 202, not a kept function 33.
-# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1308, static name 332, not in our link 18, folded in our link 2.
+# Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1303, static name 332, not in our link 23, folded in our link 2.
 address,type,size,symbol,name
 0056e7a0,library,50,??_H@YGXPAXIHP6EPAX0@Z@Z,"void __stdcall `vector ctor iterator'(void *, unsigned int, int, void * (__thiscall *)(void *))"
 005b7b00,library,65,??0AddressOrGUID@RakNet@@QAE@ABUSystemAddress@1@@Z,public: __thiscall RakNet::AddressOrGUID::AddressOrGUID(struct RakNet::SystemAddress const &)

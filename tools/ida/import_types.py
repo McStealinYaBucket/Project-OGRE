@@ -43,6 +43,14 @@ CLASSES = [
     # IMoving} at 100%, {for CameraSubject} 0.7 on twins only)
     "RBX::GuiBuilder", "RBX::Edge", "RBX::IHasPrimaryPart", "RBX::IHasLocation", "RBX::CameraSubject",
     "RBX::Selectable", "RBX::IMoving",
+    # wave1 sync (sweep7, P-final.json effective 100%; size from the // SIZE annotation = the PDB's):
+    # Team ctor 0x006aa970 / dtor 0x006aa130 (0x6c), Teams ctor 0x007a4f10 / dtor 0x007a44f0 (0x6c),
+    # ~ContentProviderJob 0x008f0020 (0x288), LegacyContentTable ctor 0x008f08a0 (0x34), Average<double> ctor
+    # 0x0084d260 (0x18), FWPartInstance ctor 0x00723fa0 (0x54, core-close.md), ~FWFinal<FWInstance> 0x0061f1c0,
+    # ~FWFinal<FWPartInstance> 0x00725020. Not yet: PhysicsInstructions (ctor 0x0084d2f0 at 83.8%), LuaSettings
+    # (0x0085e360 58.7%), TaskScheduler (ctor 97.2%, dtor 99.5%)
+    "RBX::Team", "RBX::Teams", "RBX::ContentProviderJob", "RBX::LegacyContentTable", "RBX::Average<double>",
+    "RBX::FWPartInstance", "RBX::FWFinal<RBX::FWInstance>", "RBX::FWFinal<RBX::FWPartInstance>",
 ]
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
@@ -169,7 +177,9 @@ def vtbl_slots(json_path, res):
             slots.setdefault(off, re.sub(r"\W", "_", q.split("::")[-1]) or "slot")
         names, seen = [], set()
         for off in range(0, max(slots) + 4, 4):
-            n = slots.get(off) or VTBL_FOLDED.get(want[e["name"]], {}).get(off, "slot_%02x" % off)
+            # a VTBL_FOLDED slot keeps its declared name even when reccmp now pairs the slot (the pairing names
+            # the folded body's other owner, e.g. RakNet's IsSendThrottled for askSetParent, sweep7)
+            n = VTBL_FOLDED.get(want[e["name"]], {}).get(off) or slots.get(off) or "slot_%02x" % off
             n = n if n not in seen else "%s_%02x" % (n, off)
             seen.add(n)
             names.append("void *%s" % n)

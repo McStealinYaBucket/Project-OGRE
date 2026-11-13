@@ -92,7 +92,7 @@ namespace Reflection
 {
 	/* EnumDesc<Material> 0x441DC4: pair order verbatim + legacy aliases
 	   ("Corroded Metal", "Aluminum" — spaces bar addPair, hence legacy). */
-	// STUB: PLAYER 0x00722680
+	// FUNCTION: PLAYER 0x00722680
 	// STUB: STUDIO 0x007bde50
 	template<>
 	EnumDesc<Material>::EnumDesc()

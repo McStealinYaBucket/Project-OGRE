@@ -106,8 +106,8 @@ namespace RBX
 		}
 	}
 
-	// STUB: PLAYER 0x0074ecf0
-	// STUB: STUDIO 0x00779cd0
+	// FUNCTION: PLAYER 0x0074ecf0
+	// FUNCTION: STUDIO 0x00779cd0
 	void ContentId::convertToLegacyContent(const std::string& baseUrl)	// 0x1F8B2C
 	{
 		if (isAsset())

@@ -60,22 +60,22 @@ namespace RBX { namespace Lua {
 	// (ties-to-even, the default rounding mode; 42.5 -> 42, 43.5 -> 44).
 	// The MSVC CRT (VC12) has no lrint/rint, so the same result is
 	// spelled out by hand below.
-	// STUB: PLAYER 0x00877bb0
-	// STUB: STUDIO 0x009dc2b0
+	// FUNCTION: PLAYER 0x00877bb0
+	// FUNCTION: STUDIO 0x009dc2b0
 	bool LuaArguments::getLong(int index, long& value) const
 	{
 		double v;
 		if (getDouble(index, v))
 		{
-			double rounded = ::floor(v);
-			double fraction = v - rounded;	// exact for |v| < 2^52
-			if (fraction > 0.5
-				|| (fraction == 0.5 && ::fmod(rounded, 2.0) != 0.0))
-			{
-				rounded += 1.0;		// a tie rounds to the even neighbour
-			}
-			value = (long)rounded;
+			value = G3D::iRound(v);	// fld/fistp (0x00877bca): G3D's inline-asm lrint
 			return true;
+
+
+
+
+
+
+
 		}
 		return false;
 	}
@@ -161,17 +161,17 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x161A8E (91B, batch465): boolean slot only.
-	// STUB: PLAYER 0x008a41c0
-	// STUB: STUDIO 0x009279f0
+	// FUNCTION: PLAYER 0x008a41c0
+	// FUNCTION: STUDIO 0x009279f0
 	bool LuaArguments::getBool(int index, bool& value) const
 	{
 		index += offset;
 		if (index > lua_gettop(L))
 			return false;
-		if (lua_type(L, index) != LUA_TBOOLEAN)
-			return false;
-		value = lua_toboolean(L, index) != 0;
-		return true;
+		switch (lua_type(L, index))	// switch: `sub eax,1; jne` (0x008a41ef)
+		{
+		case LUA_TBOOLEAN: value = lua_toboolean(L, index) != 0; return true;
+		default: return false; }
 	}
 
 	// mac: 0x161874/0x1618B8/0x1618FC/0x161940 (68B each, batch465): top-check

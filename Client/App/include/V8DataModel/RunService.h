@@ -59,15 +59,10 @@ namespace RBX {
 	private:
 		shared_ptr<TaskScheduler::Job> physicsJob;   // +96 (TODO: verify).
 		shared_ptr<TaskScheduler::Job> heartbeatJob; // +104 (TODO: verify).
-		RunState runState;		// +112: writer-side run-state mirror. The binary
-			// keeps a RunState slot on RunService maintained from the transition
-			// bind (0x2D3336); loud DELTA: the 2013 DataModel::onRunTransition
-			// body itself is unported, the port writes it from the 2016-shape
-			// handler below (DataModel.cpp) so RSS-era readers see the same
-			// value the signal carries.
+		RunState runState;		// +112 (mac). setRunState writes it; the 2013 DataModel::
+			// onRunTransition 0x0062ef20 does not (no mirror store there).
 		double gameTimeValue;  // +116 (TODO: writer — HeartbeatTask steps it)
 
-		friend class DataModel;	// onRunTransition runState writer.
 		friend class RuntimeScriptService;	// onServiceProvider 0x196AC4 reads runState (+112).
 	};
 

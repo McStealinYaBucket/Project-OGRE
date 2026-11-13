@@ -1,8 +1,10 @@
-/* App/v8datamodel/Teams.cpp -- October 2013 STUB (sName + empty reflection).
-   TODO: full reflection; land isTeamGame/getTeamFromTeamColor/
-   getTeamFromPlayer bodies from raw (below). */
+/* App/v8datamodel/Teams.cpp -- October 2013. ctor/dtor, askAddChild and the child hooks from
+   the PLAYER bytes (0x007a44f0..0x007a4f10); isTeamGame/getTeamFromTeamColor/getTeamFromPlayer
+   are older Mac readings, not yet located in PLAYER. Reflection not written. */
 
 #include "stdafx.h"
+
+#include <algorithm>
 
 #include "V8DataModel/Teams.h"
 #include "V8DataModel/Team.h"
@@ -12,6 +14,32 @@
 
 namespace RBX {
 	const char* const sTeams = "Teams";
+
+	// FUNCTION: PLAYER 0x007a44f0
+	// FUNCTION: STUDIO 0x008a2e00
+	Teams::~Teams()
+	{
+	}
+
+	// FUNCTION: PLAYER 0x007a4610
+	// FUNCTION: STUDIO 0x008a2f00
+	bool Teams::askAddChild(const Instance* child) const
+	{
+		return Instance::fastDynamicCast<Team>(child) != NULL;
+	}
+
+	// onChildAdded 0x007a4790 / onChildRemoving 0x007a48c0 (2016 bodies: teams.write() push_back /
+	// erase of shared_from(team)) are not written here: instantiating shared_from<Team> changes
+	// which folded shared_from<> copy our linker names, and three Instance/DataModel functions
+	// then lose their call pairing.
+
+	// FUNCTION: PLAYER 0x007a4f10
+	// FUNCTION: STUDIO 0x008a3730
+	Teams::Teams()
+		: teams(Instances())	// non-NULL from the start
+	{
+		setName(sTeams);
+	}
 }
 
 using namespace RBX;

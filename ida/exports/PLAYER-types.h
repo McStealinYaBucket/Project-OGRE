@@ -4079,7 +4079,7 @@ struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX:
   bool isInitialized;
   bool isContentLoaded;
   unsigned __int8 gap_BE7[1];
-  unsigned __int8 m_unk0xbe8[96];       ///< array
+  unsigned __int8 physicsInstructions[96]; ///< RBX::PhysicsInstructions
   int numPartInstances;
   int numInstances;
   int shutdownRequestedCount;
@@ -4256,5 +4256,119 @@ struct RBX::DataModel_vtbl
   void *renderPass2d;
   void *renderMouse;
   void *processEvent;
+};
+
+/* 505 */
+struct __cppobj RBX::Allocator<RBX::FWInstance>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 506 */
+struct __cppobj RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 507 */
+struct __cppobj RBX::Reflection::Described<RBX::Team, char const *const RBX::sTeam, RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>
+{
+};
+
+/* 508 */
+struct __cppobj RBX::DescribedCreatable<RBX::Team, RBX::Instance, char const *const RBX::sTeam, 27, 0> : RBX::Reflection::Described<RBX::Team, char const *const RBX::sTeam, RBX::FactoryProduct<RBX::Team, RBX::Instance, char const *const RBX::sTeam, RBX::Instance>, 27, 0>
+{
+};
+
+/* 509 */
+struct __cppobj RBX::Team : RBX::DescribedCreatable<RBX::Team, RBX::Instance, char const *const RBX::sTeam, 27, 0>
+{
+  int score;
+  unsigned __int8 color[4];             ///< RBX::BrickColor
+  bool autoAssignable;
+  bool autoColorCharacters;
+  unsigned __int8 gap_6A[2];
+};
+
+/* 510 */
+struct __cppobj RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 511 */
+struct __cppobj RBX::Reflection::Described<RBX::Teams, char const *const RBX::sTeams, RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>, 11, 0> : RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>
+{
+};
+
+/* 512 */
+struct __cppobj RBX::DescribedCreatable<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, 11, 0> : RBX::Reflection::Described<RBX::Teams, char const *const RBX::sTeams, RBX::FactoryProduct<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, RBX::Instance>, 11, 0>
+{
+};
+
+/* 513 */
+struct __cppobj RBX::Teams : RBX::DescribedCreatable<RBX::Teams, RBX::Instance, char const *const RBX::sTeams, 11, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 teams[8];             ///< RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>> >
+};
+
+/* 514 */
+struct __cppobj RBX::ContentProviderJob : RBX::DataModelJob
+{
+  unsigned __int8 processFunc[32];      ///< boost::function<RBX::TaskScheduler::StepResult __cdecl(std::string,boost::shared_ptr<std::string const>)>
+  unsigned __int8 errorFunc[32];        ///< boost::function<void __cdecl(std::string)>
+  bool aborted;
+  unsigned __int8 gap_259[3];
+  unsigned __int8 tasks[36];            ///< rbx::safe_queue<RBX::ContentProviderJob::ContentProviderTask>
+  int execMode;                         ///< enum RBX::ContentProviderJob::ExecutionMode
+  unsigned __int8 gap_284[4];
+};
+
+/* 515 */
+struct __cppobj RBX::LegacyContentTable
+{
+  unsigned __int8 mMap[24];             ///< boost::unordered::unordered_map<std::string,std::string,boost::hash<std::string >,std::equal_to<std::string >,std::allocator<std::pair<std::string const,std::string > > >
+  unsigned __int8 mEmpty[28];           ///< std::string
+};
+
+/* 516 */
+struct __cppobj RBX::Average<double>
+{
+  unsigned int samples;
+  unsigned int tag;
+  unsigned __int8 history[16];          ///< std::vector<double>
+};
+
+/* 517 */
+struct __cppobj RBX::FWPVInstance : RBX::FWInstance
+{
+};
+
+/* 518 */
+struct __cppobj RBX::Allocator<RBX::FWPartInstance>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 519 */
+struct __cppobj RBX::FWPartInstance : RBX::FWPVInstance
+{
+  int material;                         ///< enum RBX::Material
+  unsigned __int8 brickColor[4];        ///< RBX::BrickColor
+  float transparency;
+  float reflectance;
+  float alphaModifier;
+  bool locked;
+  unsigned __int8 _pad49[3];            ///< array
+  int fw52;
+};
+
+/* 520 */
+struct __cppobj RBX::FWFinal<RBX::FWInstance> : RBX::FWInstance
+{
+};
+
+/* 521 */
+struct __cppobj RBX::FWFinal<RBX::FWPartInstance> : RBX::FWPartInstance
+{
 };
 

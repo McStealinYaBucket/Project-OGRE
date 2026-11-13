@@ -149,29 +149,6 @@ Http::MutexGuard::~MutexGuard()
 	}
 }
 
-// mac: 0x71335C - Http::Http(const char*)
-Http::Http(const char* url)
-	: url(url)
-{
-	init();
-}
-
-// mac: 0x253430 - Http::Http(const std::string&)
-Http::Http(const std::string& url)
-	: url(url)
-{
-	init();
-}
-
-// Instance init shared by both ctors (inlined into 0x253430/0x71335C):
-// instanceApi = defaultApi; additionalHeaders map rooted at +12; scratch
-// string at +36 default constructed.
-void Http::init()
-{
-	// ctor sets *((_DWORD*)this + 1) = RBX::Http::defaultApi (offset +4)
-	instanceApi = defaultApi;
-}
-
 // mac: 0x1FA134 - Http::init(RBX::Http::API)
 // Assert string verbatim from binary:
 //   "Http::defaultApi==Http::Uninitialized file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/util/Darwin/Http.cpp line: 67"
@@ -597,25 +574,19 @@ bool Http::trustCheckBrowser(const char* url)
 // false... reconstructed as the standard unreserved set the arithmetic
 // encodes: alnum plus a small punctuation range; everything else is emitted
 // as "%%%2X" (the format string in the binary is literally "%%%2X").
-// STUB: PLAYER 0x00629c80
-// STUB: STUDIO 0x006ca1b0
-std::string Http::urlEncode(const std::string& s)
+// FUNCTION: PLAYER 0x00629c80
+// FUNCTION: STUDIO 0x006ca1b0
+std::string Http::urlEncode(std::string s)
 {
 	std::string result;
-	for (size_t i = 0; i < s.size(); ++i)
+	size_t len = s.size();
+	for (size_t i = 0; i < len; ++i)
 	{
 		char c = s[i];
-		bool keep = (c >= '0' && c != ':' && c != '[' && c != '\'' && c < '{');
-		// (unsigned)(c - 58) >= 7 excludes ':'..'@'; (unsigned)(c - 91) >= 6
-		// excludes '['..'`'; c < 123 keeps the rest of the alnum range.
-		if (keep)
-		{
-			result.push_back(c);
-		}
+		if (c > '/' && !(c >= ':' && c <= '@') && !(c >= '[' && c <= '`') && c < '{')
+			result += c;
 		else
-		{
-			result.append(format("%%%2X", (unsigned char)c));
-		}
+			result += format("%%%2X", c);
 	}
 	return result;
 }

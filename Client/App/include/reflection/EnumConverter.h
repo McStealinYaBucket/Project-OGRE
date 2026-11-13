@@ -191,7 +191,7 @@ template<typename Enum> class EnumRegistrar;
 			// (0x007761a0), convertToIndex @350 (0x008dd850). Keep these lines where they are.
 			// (2304 = the largest legal enum value; the assert is not in the 2016 header.)
 			//
-			void addPair(Enum value, const char* name, Descriptor::Attributes attributes = Descriptor::Attributes())
+			void addPair(Enum value, const char* name)	// 2013: two args (ctor 0x0063d6a0 pushes 2)
 			{
 				RBXASSERT_VERY_FAST(value >= 0);
 				// No spaces in enums:
@@ -199,7 +199,7 @@ template<typename Enum> class EnumRegistrar;
 				// No no CamelCase in enums:
 				RBXASSERT_VERY_FAST(!isCamel(name));
 
-				const Item* item = new Item(name, attributes, value, enumCount, *this);
+				const Item* item = new Item(name, Descriptor::Attributes(), value, enumCount, *this);
 
 				allItems.push_back(item);
 
@@ -266,8 +266,8 @@ template<typename Enum> class EnumRegistrar;
 				return enumToString[value];
 			}
 
-			// STUB: PLAYER 0x007761a0
-			// STUB: STUDIO 0x0071dfb0
+			// FUNCTION: PLAYER 0x007761a0
+			// FUNCTION: STUDIO 0x0071dfb0
 			const Item* convertToItem(const Enum& value) const
 			{
 				RBXASSERT(value>=0);

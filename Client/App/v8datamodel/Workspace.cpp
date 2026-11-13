@@ -229,6 +229,15 @@ void Workspace::setDistributedGameTime(double value)
 	}
 }
 
+// 2016 name (DataModel::onChildAdded calls it when a network Client is added); body not
+// written yet (237 bytes).
+// STUB: PLAYER 0x00710080
+// STUB: STUDIO 0x0082d340
+void Workspace::setNullMouseCommand()
+{
+	STUB(0x00710080);
+}
+
 // iOS: RBX::registerNetworkStreamingProp(), run once by the DataModel ctor (call_once on
 // PLAYER 0x00de4778). Body not written yet.
 // STUB: PLAYER 0x007154c0

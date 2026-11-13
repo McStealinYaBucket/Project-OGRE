@@ -301,8 +301,8 @@ namespace RBX { namespace Lua {
 	// (g_allowSignalConnect is defined above EventBridge::connect, its first user.)
 
 	// mac: 0x171CD4 (62B, batch442): checkudata + forward.
-	// STUB: PLAYER 0x0087f9d0
-	// STUB: STUDIO 0x009e4050
+	// FUNCTION: PLAYER 0x0087f9d0
+	// FUNCTION: STUDIO 0x009e4050
 	template<>
 	int Bridge<rbx::signals::connection, true>::on_tostring(lua_State* L)
 	{
@@ -383,15 +383,15 @@ namespace RBX { namespace Lua {
 	}
 
 	// mac: 0x1AB686 (51B, batch442): fixed "Connection" literal.
-	// FUNCTION: PLAYER 0x008a8f40
-	// FUNCTION: STUDIO 0x009ecb60
+	// Defined in ScriptEvent.cpp (PLAYER 0x008a8f40): 2013 calls it out of line from
+	// on_tostring(lua_State*) 0x0087f9e5.
 	template<>
 	int Bridge<rbx::signals::connection, true>::on_tostring(const rbx::signals::connection& object,
-		lua_State* L)
-	{
-		lua_pushlstring(L, "Connection", 10);
-		return 1;
-	}
+		lua_State* L);
+
+
+
+
 
 	// VS2012 odr-use holders (openState names connection's at 0x18B897;
 	// EventInstance's queue with the yield era).

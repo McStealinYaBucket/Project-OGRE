@@ -99,16 +99,6 @@ public:
 		setName("HttpQueue_" + httpQueueOwner->getName());
 	}
 
-	static shared_ptr<HttpQueueStatsItem> create(AsyncHttpQueue* httpQueue, Instance* httpQueueOwner)
-	{
-		// DELTA: the binary went through Creatable<Instance>::create
-		// (0x1E4CEA); in-tree convention for non-reflected helper items is
-		// direct new + shared (see StatsItem.h note). Same observable.
-		shared_ptr<HttpQueueStatsItem> result(new HttpQueueStatsItem(httpQueue, httpQueueOwner));
-		result->init();
-		return result;
-	}
-
 	// FUNCTION: PLAYER 0x0086f330
 	// FUNCTION: STUDIO 0x009bc4e0
 	virtual void update()
@@ -121,19 +111,31 @@ public:
 		numSlowRequests->formatValueIi(httpQueue->getNumSlowRequests());
 	}
 
-	// STUB: PLAYER 0x0086f610
-	// STUB: STUDIO 0x009bc7a0
+	// Inlined into create in 2013 (no out-of-line body).
 	void init()
 	{
 		avgTimeInQueue = createChildItem("Average time in queue");
 		avgRequestCompleteTime = createChildItem("Average process time");
 		numSlowRequests = createChildItem("Num slow requests");
 	}
+
+	// 0x0086f610 is create, not init: it calls Creatable<Instance>::create<HttpQueueStatsItem>
+	// (0x0086f470) and then the three createChildItem calls inline.
+	// FUNCTION: PLAYER 0x0086f610
+	// FUNCTION: STUDIO 0x009bc7a0
+	static shared_ptr<HttpQueueStatsItem> create(AsyncHttpQueue* httpQueue, Instance* httpQueueOwner)
+	{
+		shared_ptr<HttpQueueStatsItem> result = Creatable<Instance>::create<HttpQueueStatsItem>(httpQueue, httpQueueOwner);
+		result->init();
+		return result;
+	}
 };
 
 // 2013-only URL screening helper (see file-header note). Called with a
 // fresh COPY at processRequests 0x1E29B8 / syncRequest 0x1E47F3.
-static void sanitizeUrl(std::string& url)
+// FUNCTION: PLAYER 0x0086b770
+// FUNCTION: STUDIO 0x009b8a50
+static void checkContentUrl(std::string url)
 {
 	safeToLower(url);
 
@@ -149,6 +151,33 @@ static void sanitizeUrl(std::string& url)
 		throw std::runtime_error("invalid request 5");
 }
 
+// FUNCTION: PLAYER 0x0086bad0
+// FUNCTION: STUDIO 0x009b8db0
+void AsyncHttpQueue::setThreadPool(int count)
+{
+	if(!threadPool || (threadPool->getThreadCount() != count)){
+		threadPool.reset(new PriorityThreadPool(count, ThreadPool::NoAction));
+	}
+}
+
+// FUNCTION: PLAYER 0x0086e380
+// FUNCTION: STUDIO 0x009bb540
+int AsyncHttpQueue::getRequestQueueSize() const
+{
+	boost::recursive_mutex::scoped_lock lock(requestSync);
+	return requestQueue.size();
+}
+
+// FUNCTION: PLAYER 0x0086e3f0
+// FUNCTION: STUDIO 0x009bb5b0
+void AsyncHttpQueue::addAsyncRetryTask(RequestHandle request)
+{
+	boost::recursive_mutex::scoped_lock lock(asyncRetrySync);
+	asyncRetryTasks.push(AsyncRetryTask(request, currentWallTime + 5));
+}
+
+// FUNCTION: PLAYER 0x00870780
+// FUNCTION: STUDIO 0x009bd910
 AsyncHttpQueue::AsyncHttpQueue(Instance* owner, boost::function<bool(const std::string& url, std::string* result)> getLocalFile, int threadCount)
 	:owner(owner)
 	,getLocalFile(getLocalFile)
@@ -160,6 +189,8 @@ AsyncHttpQueue::AsyncHttpQueue(Instance* owner, boost::function<bool(const std::
 	setThreadPool(threadCount);
 }
 
+// FUNCTION: PLAYER 0x00870a00
+// FUNCTION: STUDIO 0x009bdb90
 void AsyncHttpQueue::resetStatsItem(ServiceProvider* provider)
 {
 	if (statsItem)
@@ -177,21 +208,8 @@ void AsyncHttpQueue::resetStatsItem(ServiceProvider* provider)
 	}
 }
 
-int AsyncHttpQueue::getRequestQueueSize() const
-{
-	boost::recursive_mutex::scoped_lock lock(requestSync);
-	return requestQueue.size();
-}
-
-void AsyncHttpQueue::setThreadPool(int count)
-{
-	if(!threadPool || (threadPool->getThreadCount() != count)){
-		threadPool.reset(new PriorityThreadPool(count, ThreadPool::NoAction));
-	}
-}
-
-// STUB: PLAYER 0x00871000
-// STUB: STUDIO 0x009be190
+// FUNCTION: PLAYER 0x00870ad0
+// FUNCTION: STUDIO 0x009bdc60
 AsyncHttpQueue::~AsyncHttpQueue()
 {
 	{
@@ -204,13 +222,9 @@ AsyncHttpQueue::~AsyncHttpQueue()
 	setThreadPool(0);
 }
 
-void AsyncHttpQueue::addAsyncRetryTask(RequestHandle request)
-{
-	boost::recursive_mutex::scoped_lock lock(asyncRetrySync);
-	asyncRetryTasks.push(AsyncRetryTask(request, currentWallTime + 5));
-}
 
-
+// FUNCTION: PLAYER 0x00870d30
+// FUNCTION: STUDIO 0x009bdec0
 void AsyncHttpQueue::onHeartbeat(const Heartbeat& heartbeatEvent)
 {
 	std::list<AsyncRetryTask> objectsToRequeue;
@@ -306,12 +320,16 @@ static void callback(AsyncHttpQueue::CallbackWrapper f, Instance* owner, AsyncHt
 	}
 }
 
+// FUNCTION: PLAYER 0x0086e4c0
+// FUNCTION: STUDIO 0x009bb680
 bool AsyncHttpQueue::isRequestQueueEmpty()
 {
 	boost::recursive_mutex::scoped_lock lock(requestSync);
 	return requestQueue.empty();
 }
 
+// STUB: PLAYER 0x0086f9d0
+// STUB: STUDIO 0x009bcb60
 void AsyncHttpQueue::processRequests(boost::weak_ptr<AsyncHttpQueue> weakHttpQueue, RequestHandle request, boost::shared_ptr<rbx::spin_mutex> criticalSection)
 {
 	shared_ptr<std::string> response(new std::string());
@@ -362,10 +380,7 @@ void AsyncHttpQueue::processRequests(boost::weak_ptr<AsyncHttpQueue> weakHttpQue
 				{	
 					//RBXASSERT(id.isHttp());
 					// must be a net file.
-					{
-						std::string urlString(url);
-						sanitizeUrl(urlString);
-					}
+					checkContentUrl(url);
 
 					boost::shared_ptr<Http> httpRequest;
 					httpRequest.reset(new RBX::Http(url));
@@ -472,6 +487,8 @@ void AsyncHttpQueue::processRequests(boost::weak_ptr<AsyncHttpQueue> weakHttpQue
 	}
 }
 
+// FUNCTION: PLAYER 0x0086b980
+// FUNCTION: STUDIO 0x009b8c60
 AsyncHttpQueue::FailedUrl::FailedUrl(const char* url)
 	:url(url)
 #ifdef _DEBUG
@@ -488,8 +505,8 @@ bool AsyncHttpQueue::FailedUrl::expired() const
 }
 
 
-// STUB: PLAYER 0x0086e540
-// STUB: STUDIO 0x009bb700
+// FUNCTION: PLAYER 0x0086e540
+// FUNCTION: STUDIO 0x009bb700
 bool AsyncHttpQueue::isUrlBad(const std::string& id)
 {
 	if(id.empty())
@@ -511,6 +528,32 @@ bool AsyncHttpQueue::isUrlBad(const std::string& id)
 	return false;
 }
 
+// STUB: PLAYER 0x0086eb40
+// STUB: STUDIO 0x009bbd00
+bool AsyncHttpQueue::syncRequest(const std::string& id)
+{
+	if (!isUrlBad(id))
+	{
+		shared_ptr<std::string> response(new std::string());
+		try
+		{
+			checkContentUrl(id);
+			RBX::Http(id).get(*response);
+		}
+		catch (RBX::base_exception&)
+		{
+			boost::recursive_mutex::scoped_lock lock(requestSync);
+			FASTLOGS(FLog::HttpQueue, "Failed url on sync fetch: %s", id);
+			failedUrls.push_front(id.c_str());
+			throw;
+		}
+		registerContent(id, response, shared_ptr<const std::string>());
+		return true;
+	}
+	return false;
+}
+// STUB: PLAYER 0x00870430
+// STUB: STUDIO 0x009bd5c0
 void AsyncHttpQueue::asyncRequest(const std::string& id, float priority, RequestCallback* callback, ResultJob jobType, bool ignoreBadRequests)
 {
 	if (ignoreBadRequests || !isUrlBad(id)) {
@@ -544,43 +587,47 @@ void AsyncHttpQueue::asyncRequest(const std::string& id, float priority, Request
 			dispatchCallback(*callback, owner, Failed, shared_ptr<std::string>(), jobType);
 	}
 }
-// STUB: PLAYER 0x0086eb40
-// STUB: STUDIO 0x009bbd00
-bool AsyncHttpQueue::syncRequest(const std::string& id)
-{
-	if (!isUrlBad(id)) {
-		shared_ptr<std::string> response(new std::string());
-
-		{
-			std::string urlString(id);
-			sanitizeUrl(urlString);
-		}
-
-		try
-		{
-			// TODO: Should we check for isBadUrl() here or only in the request queue?
-				RBX::Http http(id);
-
-                http.get(*response);
-            }
-		catch(RBX::base_exception&)
-		{
-			boost::recursive_mutex::scoped_lock lock(requestSync);
-			FASTLOGS(FLog::HttpQueue, "Failed url on sync fetch: %s", id);
-			failedUrls.push_front(id.c_str());
-			throw;
-		}
-		try
-		{
-			registerContent(id, response, shared_ptr<const std::string>());
-		}
-		catch(RBX::base_exception&)
-		{
-			return false;
-		}
-		return true;
-	}
-	return false;
-}
 
 } // namespace RBX
+
+// Template and implicit member bodies this TU emits (identical to the 2013 bytes in a private
+// compile; markers pair them so their callers match).
+
+// TEMPLATE: PLAYER 0x0086b9e0
+// TEMPLATE: STUDIO 0x009b8cc0
+// ??$_Construct@UFailedUrl@AsyncHttpQueue@RBX@@U123@@std@@YAXPAUFailedUrl@AsyncHttpQueue@RBX@@ABU123@@Z
+
+// TEMPLATE: PLAYER 0x0086bbd0
+// TEMPLATE: STUDIO 0x009b8ed0
+// ?_Incsize@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086bc70
+// ?_Incsize@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086c5b0
+// TEMPLATE: STUDIO 0x009b97c0
+// ?push_front@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@QAEXABUFailedUrl@AsyncHttpQueue@RBX@@@Z
+
+// TEMPLATE: PLAYER 0x0086c670
+// TEMPLATE: STUDIO 0x009b9880
+// ?_Growmap@?$deque@UAsyncRetryTask@AsyncHttpQueue@RBX@@V?$allocator@UAsyncRetryTask@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+
+// TEMPLATE: PLAYER 0x0086e0d0
+// TEMPLATE: STUDIO 0x009bb290
+// ??0Request@AsyncHttpQueue@RBX@@QAE@ABU012@@Z
+
+// TEMPLATE: PLAYER 0x0086e6e0
+// TEMPLATE: STUDIO 0x009bb8a0
+// ??0Request@AsyncHttpQueue@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0086e730
+// TEMPLATE: STUDIO 0x009bb8f0
+// ??1Request@AsyncHttpQueue@RBX@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0086e7e0
+// TEMPLATE: STUDIO 0x009bb9a0
+// ??4?$vector@UCallbackWrapper@AsyncHttpQueue@RBX@@V?$allocator@UCallbackWrapper@AsyncHttpQueue@RBX@@@std@@@std@@QAEAAV01@ABV01@@Z
+
+// TEMPLATE: PLAYER 0x0086f430
+// TEMPLATE: STUDIO 0x009bc5c0
+// ?clear@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@QAEXXZ

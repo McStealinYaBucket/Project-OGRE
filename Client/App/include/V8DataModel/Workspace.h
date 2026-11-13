@@ -63,6 +63,7 @@ namespace RBX {
 		// real getTerrain returns Terrain* (v8world; Terrain : Instance, FW at +68).
 		Instance* getTerrain();
 		void setMouseCommand(shared_ptr<MouseCommand> command);
+		void setNullMouseCommand();	// PLAYER 0x00710080
 		void setCurrentCamera(Camera* camera);
 		Workspace* getCameraOwnerModel() { return this; }
 

@@ -1,20 +1,9 @@
 # STUDIO: unresolved externals with no stub (reason, decorated, demangled). Generated.
 claimed	?parse@TextXmlParser@@UAE?AV?$auto_ptr@VXmlElement@@@std@@XZ	public: virtual class std::auto_ptr<class XmlElement> __thiscall TextXmlParser::parse(void)
-data	?Asserts@FLog@@3EA	unsigned char FLog::Asserts
-data	?CloseDataModel@FLog@@3EA	unsigned char FLog::CloseDataModel
-data	?CoreScripts@FLog@@3EA	unsigned char FLog::CoreScripts
-data	?DataModelJobs@FLog@@3EA	unsigned char FLog::DataModelJobs
-data	?FWLifetime@FLog@@3EA	unsigned char FLog::FWLifetime
-data	?FWUpdate@FLog@@3EA	unsigned char FLog::FWUpdate
-data	?LegacyLock@FLog@@3EA	unsigned char FLog::LegacyLock
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
 data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
-data	?MutexLifetime@FLog@@3EA	unsigned char FLog::MutexLifetime
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
-data	?TaskSchedulerFindJob@FLog@@3EA	unsigned char FLog::TaskSchedulerFindJob
-data	?TaskSchedulerInit@FLog@@3EA	unsigned char FLog::TaskSchedulerInit
-data	?TaskSchedulerRun@FLog@@3EA	unsigned char FLog::TaskSchedulerRun
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
 unknown	??$convert@V?$shared_ptr@$$CBV?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@std@@@boost@@@Variant@Reflection@RBX@@QAEAAV?$shared_ptr@$$CBV?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@std@@@boost@@XZ	public: class boost::shared_ptr<class std::map<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, class RBX::Reflection::Variant, struct std::less<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>>, class std::allocator<struct std::pair<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const, class RBX::Reflection::Variant>>> const> & __thiscall RBX::Reflection::Variant::convert<class boost::shared_ptr<class std::map<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>, class RBX::Reflection::Variant, struct std::less<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>>, class std::allocator<struct std::pair<class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const, class RBX::Reflection::Variant>>> const>>(void)

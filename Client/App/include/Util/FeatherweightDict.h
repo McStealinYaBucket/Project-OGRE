@@ -266,9 +266,9 @@ namespace RBX {
 		// SYNTHETIC: STUDIO 0x006ee4a0
 		// RBX::FWInstance::~FWInstance
 
-		// SYNTHETIC: PLAYER 0x0061c320
-		// SYNTHETIC: STUDIO 0x007be5f0
-		// RBX::FWInstance::`scalar deleting destructor'
+		// The scalar deleting destructor 0x0061c320 (STUDIO 0x007be5f0) is FWPVInstance's too (its
+		// vftable 0x00b4bce8 slot 0); both links kept FWPVInstance's name: marker below.
+		//
 
 		// mac: 0x545822: base eq + bytes + name compare.
 		// FUNCTION: PLAYER 0x00619140
@@ -293,6 +293,10 @@ namespace RBX {
 	{
 	public:
 		FWPVInstance() {}
+
+		// SYNTHETIC: PLAYER 0x0061c320
+		// SYNTHETIC: STUDIO 0x007be5f0
+		// RBX::FWPVInstance::`scalar deleting destructor'
 	};
 
 	// 2013 RTTI (vftable 0x00b4c968): Allocator<FWPartInstance> @0x38, pool size 0x54 (D0

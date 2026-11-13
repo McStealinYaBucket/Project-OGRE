@@ -195,8 +195,8 @@ namespace RBX
 	}
 
 	/* mac: 0x5524E0 */
-	// STUB: PLAYER 0x006a9650
-	// STUB: STUDIO 0x0076f690
+	// FUNCTION: PLAYER 0x006a9650
+	// FUNCTION: STUDIO 0x0076f690
 	shared_ptr<Instance> ServiceProvider::createChild(const RBX::Name& className, RBX::CreatorRole creatorRole)
 	{
 		// If the childElement is data for a Service, then have an existing Service read the data
@@ -205,7 +205,8 @@ namespace RBX
 		if (instance)
 			return instance;
 		else
-			return Super::createChild(className, creatorRole);
+			// 2013 inlines Instance::createChild here (0x006a970e calls createByName directly).
+			return Creatable<Instance>::createByName(className, creatorRole);
 	}
 
 	/* mac: 0x551FE2 */

@@ -804,8 +804,8 @@ static const RBX::Name* const nameParent = RBX::Name::declare("Parent");
 
 // 2013: Limits::Countable() 0x009b94d0 and the Diagnostics::Countable<Instance> increment
 // (RbxInterlockedIncrement 0x009b8f10 on 0x00de31b0) come first, as the bases declared first.
-// STUB: PLAYER 0x00620da0
-// STUB: STUDIO 0x006f55e0
+// FUNCTION: PLAYER 0x00620da0
+// FUNCTION: STUDIO 0x006f55e0
 Instance::Instance(FWInstance* fw)
 	:parent(NULL)
 	,isSettingParent(false)
@@ -816,8 +816,8 @@ Instance::Instance(FWInstance* fw)
 
 // No NULL check on name in 2013: a default-constructed string assigned from it, then copied
 // over fw+0x1c.
-// STUB: PLAYER 0x00620ed0
-// STUB: STUDIO 0x006f5710
+// FUNCTION: PLAYER 0x00620ed0
+// FUNCTION: STUDIO 0x006f5710
 Instance::Instance(const char* name, FWInstance* fw)
 	:parent(NULL)
 	,isSettingParent(false)
@@ -839,8 +839,8 @@ Instance::Instance(const char* name, FWInstance* fw)
 
 
 
-// STUB: PLAYER 0x0061d510
-// STUB: STUDIO 0x006f1f40
+// FUNCTION: PLAYER 0x0061d510
+// FUNCTION: STUDIO 0x006f1f40
 Instance::~Instance() 
 {
 	RBXASSERT(parent==NULL);
