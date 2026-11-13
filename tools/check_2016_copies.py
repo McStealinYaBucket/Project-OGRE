@@ -13,6 +13,9 @@ from collections import defaultdict
 REF = "ref/src2016/extracted"
 ALLOWED = {"LICENSE_1_0.txt",  # upstream licence texts that the 2016 tree also vendors
            "lz4_decoder.h"}  # upstream LZ4 r94 (BSD 2-clause), vendored unchanged by 2016 too
+# Third-party library trees, committed at the owner's decision (2026-11-13); 2016 vendors the same libraries.
+THIRD_PARTY = ("Client/Network/raknet/", "Client/Rendering/g3d/", "Client/fmod/", "Client/App/include/fmod/",
+               "staging/raknet/")
 
 
 def sha1(path):
@@ -26,7 +29,7 @@ def main():
         check=True, capture_output=True).stdout.decode().split("\0")
     by_size = defaultdict(list)
     for p in filter(None, files):
-        if os.path.isfile(p) and os.path.basename(p) not in ALLOWED:
+        if os.path.isfile(p) and os.path.basename(p) not in ALLOWED and not p.startswith(THIRD_PARTY):
             by_size[os.path.getsize(p)].append(p)
     found = {}
     for dp, _, fn in os.walk(REF):

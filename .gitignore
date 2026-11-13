@@ -13,18 +13,8 @@ toolchain/
 3rdparty/_downloads/
 reccmp-build.yml
 __pycache__/
-# Vendored copies from the prior App tree that are byte-identical to the 2016 source
-# (phase2-skeleton lib-raknet / lib-g3d reports) or third-party SDK headers.
-# Kept on disk for the build; never committed. Replace with staging/ builds.
-Client/Network/raknet/
-Client/Rendering/g3d/G3Dcpp/
-Client/Rendering/g3d/ijg/
-Client/Rendering/g3d/include/
-Client/Rendering/g3d/png/
-Client/fmod/
-Client/App/include/fmod/
-# RakNet 4.034 ships only an evaluation licence (no redistribution): never commit it.
-staging/raknet/
+# Third-party libraries (RakNet, the G3D fork with IJG, the FMOD headers, staging/raknet) are committed
+# since 2026-11-13 at the repository owner's decision, so a fresh clone has them.
 
 # Not for the public repo (2026-11-12):
 # - the prior tree as received: it vendors 2016-identical code; Client/ holds the imported copy

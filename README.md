@@ -36,7 +36,7 @@ cmake --build build-studio --target studio
 
 This gives you `build/RobloxPlayerBeta.exe` and `build-studio/RobloxStudioBeta.exe` with their PDBs. Studio builds in its own tree because the original's assert messages record a different build machine path, and we reproduce those paths.
 
-A fresh clone doesn't build yet. Some sources can't be published here: RakNet 4.034 ships under an evaluation licence, pristine G3D 8.00 is no longer downloadable so we patch a later copy, and a few headers are identical to Roblox source. Where an upstream archive exists, `tools/lib/install_libs.py` rebuilds the library from it plus our patches in `staging/`.
+A fresh clone doesn't build yet. The third-party libraries are included (RakNet 4.036 in `Client/Network/raknet`, the G3D 8.00 fork with its patches, the FMOD headers), but about 80 headers and sources inherited from the earlier decompilation are identical to Roblox's own source and stay out of the repository until they are rewritten from the 2013 binaries. The remaining upstream libraries (boost 1.53, TBB, zlib, Lua 5.1.4) are fetched and patched by `tools/lib/install_libs.py`.
 
 ## Comparing With the Original
 
