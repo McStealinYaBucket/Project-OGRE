@@ -116,7 +116,7 @@ namespace RBX
 
 			if (!mappedAssetId.empty())
 			{
-				if (isdigit(static_cast<unsigned char>(mappedAssetId[0])))
+				if (isdigit(mappedAssetId[0]))
 					createIdUrl(id, baseUrl, mappedAssetId);
 				else
 					id = mappedAssetId;

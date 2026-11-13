@@ -6,20 +6,16 @@
 #include "Util/G3DCore.h"
 #include "rbx/Debug.h"
 #include "Util/Math.h"
-
 namespace RBX {
-
 	class Extents {
 	private:
 		Vector3		low;
 		Vector3		high;
-
 	public:
 		Extents()				// initialize to negativeInfiniteExtents;
 			: low(Vector3::maxFinite())
 			, high(-Vector3::maxFinite())
 		{}
-
 		Extents(const Vector3& _min, const Vector3& _max)
 			: low(_min)
 			, high(_max)
@@ -27,13 +23,11 @@ namespace RBX {
 			RBXASSERT_SLOW(low == low.min(high));
 			RBXASSERT_SLOW(high == high.max(low));
 		}
-
 		// mac: 0x56AD04 (also 0x966BC8)
 		bool isNanInf() const
 		{
 			return (Math::isNanInfVector3(low) || Math::isNanInfVector3(high));
 		}
-
 		// mac: 0x3425D2 (also 0x95F53C) - asserts at include/Util/Extents.h:35/36
 		// STUB: PLAYER 0x0051c320
 		// STUB: STUDIO 0x005b2a90

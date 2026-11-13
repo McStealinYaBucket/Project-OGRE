@@ -209,6 +209,14 @@ class Side:
             d = json.loads(l)
             self.F[d["address"]] = d
         self.addrs = sorted(self.F)
+        # Windows target: the names a later step gave (oracle transfer, reccmp/library matches, facts) are
+        # not inputs; the pairing reruns as on the auto-analysed database, so its rows (and their evidence
+        # classes, which tools/ida/match_names.py and tools/lib/lib_consistency.py read) stay complete.
+        self.native = None
+        src = os.path.join(EXP, target + "-names.csv")
+        if msvc and os.path.exists(src):
+            self.native = {int(r["address"], 16) for r in csv.DictReader(open(src))
+                           if r["kind"] == "func" and r["source"] in ("flirt:", "ida:")}
         # Itanium-only wrappers MSVC has no counterpart for: a C1/D1 that only calls its C2/D2
         # sibling, IDA `j_` thunks and armv7 `$shim` islands. They are removed and their edges
         # redirected to what they call, so the callgraph never pairs a target function with one.
@@ -262,6 +270,8 @@ class Side:
         n = self.F[a]["name"]
         if n.startswith(UNNAMED) or n.startswith(" ") or (not self.msvc and not n.startswith("_")):
             return None
+        if self.msvc and (n.startswith("_Z") or (self.native is not None and a not in self.native)):
+            return None     # see self.native: names given after the first pairing do not count
         return n
 
     def dem(self, a):

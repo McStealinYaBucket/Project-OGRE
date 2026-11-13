@@ -1,30 +1,15 @@
 /* script/LuaArguments.h -- October 2013 (first import, section 246).
-   Evidence: withVariantValue<int,ArgumentPusher> 0x163828 + 8
-     ArgumentPusher::operator() overloads (0x164334-0x164794) +
-     push 0x162624 + pushTuple 0x1996EA + pushArray pair
-     (0x164E22/0x165016) + getValues 0x1B0348 + get 0x161BDA
-     (batches 460-464). Original file: Client/App/script/LuaArguments.cpp
-     (.h companion; the binary's assert literals give the header path as
-     "include/Script/LuaArguments.h" (capital S -- getValues 0x1B03DD,
-     getVariant 0x17B8E0); our tree keeps the file at include/script/
-     (lowercase, established) and spells the binary literal in assert
-     strings only (likewise 0x1646B0/0x1996EA).
-   2013-vs-2016 DELTAs: the withVariantValue SET is 2013-pinned (order
-     below; no Rect2D/PhysicalProperties/sequences/Instances/connection;
-     +InputObject +PropertyDescriptor const*); checks are the dual
-     typeinfo-pointer/GCC-name form (cf. enumItemIsA); the template takes
-     (value, L) with F constructed from L (3 template params per the
-     mangling -- 2016's 2-param shape does NOT match); only the
-     shared/alias types dispatch through F -- scalars, strings, enums,
-     WeakFunctionRef and value types push DIRECTLY (body-proven); the
-     Asserts-gated "0"/"count == 1"/"success" tripwires carry
-     LuaArguments.h/.cpp line numbers (114/213/146); ContentId pushes
-     like string; PropertyDescriptor pushes its name string.
-   Queued with later eras (arms omitted here, NOT silently -- each is
-     referenced by an unported caller): shared_ptr<Instance> +
-     Instances-vector (Instance bridge era); shared_ptr<GenericFunction
-     /GenericAsyncFunction> (Tuple era: closures + overloads + getValues);
-     get/getValues + the getX family (247). */
+   Evidence: withVariantValue<int,ArgumentPusher> 0x163828 + ArgumentPusher overloads
+     (0x164334-0x164794) + push 0x162624 + pushTuple 0x1996EA + pushArray pair + getValues
+     0x1B0348 + get 0x161BDA (batches 460-464). 2013 asserts in this header (PLAYER strings,
+     "include\script/LuaArguments.h"): "0" line 114 (withVariantValue), "success" line 146
+     (getValues), "luaIndex>0" line 178 (getVariant), "count == 1" line 213 (pushArray).
+     getValues and getVariant sit on their lines; withVariantValue (defined last, after the
+     class) and pushArray still carry the Mac-form literals.
+   2013-vs-2016 DELTAs: the withVariantValue SET is 2013-pinned (no Rect2D/PhysicalProperties/
+     sequences/Instances/connection; +InputObject +PropertyDescriptor const*); dual
+     typeinfo-pointer/GCC-name checks; 3 template params (value, L); only shared/alias types
+     dispatch through F. */
 
 #pragma once
 
@@ -45,6 +30,184 @@
 #include <boost/type_traits.hpp>
 
 namespace RBX {
+
+	// Defined after the classes below (dispatcher 0x163828).
+	template<typename R, typename F, typename T>
+	R withVariantValue(const Reflection::Variant& value, T L);
+
+	namespace Lua {
+
+		// Pushes one value per Variant (returns values pushed). Holds the
+		// lua_State for the delegated arms.
+		class ArgumentPusher
+		{
+			lua_State* L;
+		public:
+			ArgumentPusher(lua_State* L) : L(L) {}
+			int operator()(const boost::shared_ptr<const Reflection::ValueArray>& value);
+			int operator()(const boost::shared_ptr<const Reflection::ValueMap>& value);
+			int operator()(const boost::shared_ptr<const Reflection::ValueTable>& value);
+			int operator()(const boost::shared_ptr<const Reflection::Tuple>& value);
+			// Sync-function pusher (0x1646B0, batch463: by-value shared,
+			// matching the mangling). Async twin queues (yield era).
+			int operator()(boost::shared_ptr<Lua::GenericFunction> value);
+			// Async-function pusher (0x164722, batch463: same by-value
+			// shape as sync).
+			int operator()(boost::shared_ptr<Lua::GenericAsyncFunction> value);
+			// (Instance + Instances-vector queue behind the Instance
+			// bridge era; decls land with it.)
+			template<class T>
+			int operator()(const T& value,
+				typename boost::disable_if<boost::is_arithmetic<T>, void>::type* = NULL)
+			{
+				// mac: 0x164794 (122B, batch463): local copy (shared-aware) +
+				// push + scope-end destruction. Only CellID instantiates
+				// this in the binary.
+				T copy(value);
+				Bridge<T>::pushNewObject(L, copy);
+				return 1;
+			}
+		};
+
+		// Stack <-> Variant marshaling.  Base derived in the YFSO era: the
+		// first caller (YieldFunctionStateObject::execute 0x178C06) passes
+		// *this to YieldFunctionDescriptor::execute(
+		// FunctionDescriptor::Arguments&, ...).  The 12-slot 2013 interface
+		// (batch727 vtable 0xED1B00-0xED1B38) is satisfied 1:1 by the member
+		// fns below: size/getVariant/getBool/getLong/getDouble/getString/
+		// getVector3int16/getRegion3int16/getVector3/getRegion3/getObject/
+		// getEnum.
+		class LuaArguments : public Reflection::FunctionDescriptor::Arguments
+		{
+		public:
+			// Binary layout (all getX EAs; re-confirmed batch726 --
+			// getString/getVariant read this+72 / this+76): offset at
+			// +72, L at +76.  The ported base carries the interface +
+			// returnValue only, so offset/L sit at +20/+24 here (DELTA,
+			// behavior-neutral: every access is by name; the rest of
+			// the binary's 72-byte base is a Function-era item).
+			const int offset;
+			lua_State* const L;
+			LuaArguments(lua_State* L, int offset):L(L),offset(offset) {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			// Inline here in 2013: its assert is include/script/LuaArguments.h line 146.
+			// FUNCTION: PLAYER 0x00683f90
+			// FUNCTION: STUDIO 0x007e9d50
+			static boost::shared_ptr<Reflection::Tuple> getValues(lua_State* L)
+			{
+				int argCount = lua_gettop(L);
+				boost::shared_ptr<Reflection::Tuple> args(rbx::make_shared<Reflection::Tuple>(argCount));
+				for (int i = 0; i < argCount; ++i)
+				{
+					Reflection::Variant& v = args->values.at(i);
+					bool success = LuaArguments::get(L, i + 1, v, false);
+					RBXASSERT(success);
+				}
+				return args;
+			}
+			static int pushTuple(const Reflection::Tuple& arguments, lua_State* L);
+			static bool get(lua_State* L, int luaIndex, Reflection::Variant& value, bool treatNilAsMissing);
+			bool getString(int index, std::string& value) const;
+			bool getVector3int16(int index, G3D::Vector3int16& value) const;
+			bool getRegion3int16(int index, RBX::Region3int16& value) const;
+			bool getVector3(int index, G3D::Vector3& value) const;
+			bool getRegion3(int index, RBX::Region3& value) const;
+			bool getObject(int index, boost::shared_ptr<Reflection::DescribedBase>& value) const;
+			bool getDouble(int index, double& value) const;
+			bool getBool(int index, bool& value) const;
+			bool getEnum(int index, const Reflection::EnumDescriptor& desc, int& value) const;
+
+
+
+
+
+
+
+
+
+
+			// Inline here in 2013: its assert is include/script/LuaArguments.h line 178.
+			// Offset slot, then a nil-tolerant get (treatNilAsMissing=true).
+			// FUNCTION: PLAYER 0x00877b40
+			// FUNCTION: STUDIO 0x009dc240
+			bool getVariant(int index, Reflection::Variant& value) const
+			{
+				int luaIndex = index + offset;
+				RBXASSERT(luaIndex>0);
+				return LuaArguments::get(L, luaIndex, value, true);
+			}
+			bool getLong(int index, long& value) const;
+			size_t size() const;
+			// STUB: PLAYER 0x008a6460
+			// STUB: STUDIO 0x0092a2e0
+			template<class Iterator>
+			static int pushArray(Iterator first, Iterator last, lua_State* const L)
+			{
+				lua_createtable(L, (int)(last - first), 0);
+				unsigned int i = 0;
+				while (first != last)
+				{
+					int count = RBX::withVariantValue<int, ArgumentPusher>(*first, L);
+					if (FLog::Asserts != 0 && count != 1)
+					{
+						if (RBX::_internal::_debugHook == 0
+							|| RBX::_internal::_debugHook("count == 1", "include/Script/LuaArguments.h", 213) == 0)
+						{
+							ReleaseAssert(FLog::Asserts,
+								"count == 1 file: include/Script/LuaArguments.h line: 213");
+						}
+					}
+					lua_rawseti(L, -2, ++i);
+					++first;
+				}
+				return 1;
+			}
+			static int push(const Reflection::Variant& value, lua_State* const L);
+		};
+
+	}
 
 	// Variant-to-Lua dispatcher (0x163828). First match wins; the order
 	// below is the binary's. Only the shared/alias arms dispatch through
@@ -252,103 +415,5 @@ namespace RBX {
 			}
 		}
 		return 0;
-	}
-
-	namespace Lua {
-
-		// Pushes one value per Variant (returns values pushed). Holds the
-		// lua_State for the delegated arms.
-		class ArgumentPusher
-		{
-			lua_State* L;
-		public:
-			ArgumentPusher(lua_State* L) : L(L) {}
-			int operator()(const boost::shared_ptr<const Reflection::ValueArray>& value);
-			int operator()(const boost::shared_ptr<const Reflection::ValueMap>& value);
-			int operator()(const boost::shared_ptr<const Reflection::ValueTable>& value);
-			int operator()(const boost::shared_ptr<const Reflection::Tuple>& value);
-			// Sync-function pusher (0x1646B0, batch463: by-value shared,
-			// matching the mangling). Async twin queues (yield era).
-			int operator()(boost::shared_ptr<Lua::GenericFunction> value);
-			// Async-function pusher (0x164722, batch463: same by-value
-			// shape as sync).
-			int operator()(boost::shared_ptr<Lua::GenericAsyncFunction> value);
-			// (Instance + Instances-vector queue behind the Instance
-			// bridge era; decls land with it.)
-			template<class T>
-			int operator()(const T& value,
-				typename boost::disable_if<boost::is_arithmetic<T>, void>::type* = NULL)
-			{
-				// mac: 0x164794 (122B, batch463): local copy (shared-aware) +
-				// push + scope-end destruction. Only CellID instantiates
-				// this in the binary.
-				T copy(value);
-				Bridge<T>::pushNewObject(L, copy);
-				return 1;
-			}
-		};
-
-		// Stack <-> Variant marshaling.  Base derived in the YFSO era: the
-		// first caller (YieldFunctionStateObject::execute 0x178C06) passes
-		// *this to YieldFunctionDescriptor::execute(
-		// FunctionDescriptor::Arguments&, ...).  The 12-slot 2013 interface
-		// (batch727 vtable 0xED1B00-0xED1B38) is satisfied 1:1 by the member
-		// fns below: size/getVariant/getBool/getLong/getDouble/getString/
-		// getVector3int16/getRegion3int16/getVector3/getRegion3/getObject/
-		// getEnum.
-		class LuaArguments : public Reflection::FunctionDescriptor::Arguments
-		{
-		public:
-			// Binary layout (all getX EAs; re-confirmed batch726 --
-			// getString/getVariant read this+72 / this+76): offset at
-			// +72, L at +76.  The ported base carries the interface +
-			// returnValue only, so offset/L sit at +20/+24 here (DELTA,
-			// behavior-neutral: every access is by name; the rest of
-			// the binary's 72-byte base is a Function-era item).
-			const int offset;
-			lua_State* const L;
-			LuaArguments(lua_State* L, int offset):L(L),offset(offset) {}
-			static boost::shared_ptr<Reflection::Tuple> getValues(lua_State* L);
-			static int pushTuple(const Reflection::Tuple& arguments, lua_State* L);
-			static bool get(lua_State* L, int luaIndex, Reflection::Variant& value, bool treatNilAsMissing);
-			bool getString(int index, std::string& value) const;
-			bool getVector3int16(int index, G3D::Vector3int16& value) const;
-			bool getRegion3int16(int index, RBX::Region3int16& value) const;
-			bool getVector3(int index, G3D::Vector3& value) const;
-			bool getRegion3(int index, RBX::Region3& value) const;
-			bool getObject(int index, boost::shared_ptr<Reflection::DescribedBase>& value) const;
-			bool getDouble(int index, double& value) const;
-			bool getBool(int index, bool& value) const;
-			bool getEnum(int index, const Reflection::EnumDescriptor& desc, int& value) const;
-			bool getVariant(int index, Reflection::Variant& value) const;
-			bool getLong(int index, long& value) const;
-			size_t size() const;
-			// STUB: PLAYER 0x008a6460
-			// STUB: STUDIO 0x0092a2e0
-			template<class Iterator>
-			static int pushArray(Iterator first, Iterator last, lua_State* const L)
-			{
-				lua_createtable(L, (int)(last - first), 0);
-				unsigned int i = 0;
-				while (first != last)
-				{
-					int count = RBX::withVariantValue<int, ArgumentPusher>(*first, L);
-					if (FLog::Asserts != 0 && count != 1)
-					{
-						if (RBX::_internal::_debugHook == 0
-							|| RBX::_internal::_debugHook("count == 1", "include/Script/LuaArguments.h", 213) == 0)
-						{
-							ReleaseAssert(FLog::Asserts,
-								"count == 1 file: include/Script/LuaArguments.h line: 213");
-						}
-					}
-					lua_rawseti(L, -2, ++i);
-					++first;
-				}
-				return 1;
-			}
-			static int push(const Reflection::Variant& value, lua_State* const L);
-		};
-
 	}
 }

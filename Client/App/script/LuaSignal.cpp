@@ -36,34 +36,6 @@ namespace RBX { namespace Lua {
 	// Bridge<rbx::signals::connection,1>::className
 	const char* Bridge<rbx::signals::connection, true>::className = "RBXScriptConnection";
 
-	// mac: 0x171A9C (394B, batch442): index/newindex/gc/eq/tostring + readonly.
-	// FUNCTION: PLAYER 0x00881190
-	// FUNCTION: STUDIO 0x009e5810
-	template<>
-	void Bridge<rbx::signals::connection, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
-	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
 	// mac: 0x17F148 (56B, batch444): method-call form of disconnect.
 	// FUNCTION: PLAYER 0x0087d550
 	// FUNCTION: STUDIO 0x009e1bd0
@@ -93,6 +65,34 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s is not a valid member", name);
 	}
 
+	// mac: 0x171A9C (394B, batch442): index/newindex/gc/eq/tostring + readonly.
+	// FUNCTION: PLAYER 0x00881190
+	// FUNCTION: STUDIO 0x009e5810
+	template<>
+	void Bridge<rbx::signals::connection, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
 	// mac: 0x17F180 (102B, batch442): always throws, with the name.
 	template<>
 	void Bridge<rbx::signals::connection, true>::on_newindex(rbx::signals::connection& object,
@@ -111,16 +111,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198130 (98B-pattern): same verbatim.
-	// STUB: PLAYER 0x00671610
-	// STUB: STUDIO 0x007d9570
-	template<>
-	int Bridge<rbx::signals::connection, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x171C26 (64B, batch442): releases the slot weak ref (the member
 	// destructor takes the identical path).
@@ -197,15 +187,6 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x1721D6 (62B, batch441): checkudata + forward.
-	// FUNCTION: PLAYER 0x0087fae0
-	// FUNCTION: STUDIO 0x009e4160
-	template<>
-	int Bridge<EventInstance, true>::on_tostring(lua_State* L)
-	{
-		return on_tostring(getObject(L, 1), L);
-	}
-
 	// mac: 0x17F1E6 (204B, batch441): "Signal " + the descriptor's name.
 	// FUNCTION: PLAYER 0x0087d470
 	// FUNCTION: STUDIO 0x009e1af0
@@ -217,6 +198,15 @@ namespace RBX { namespace Lua {
 		s += object.event->name->str;
 		lua_pushlstring(L, s.c_str(), s.size());
 		return 1;
+	}
+
+	// mac: 0x1721D6 (62B, batch441): checkudata + forward.
+	// FUNCTION: PLAYER 0x0087fae0
+	// FUNCTION: STUDIO 0x009e4160
+	template<>
+	int Bridge<EventInstance, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
 	}
 
 	// mac: 0x17F008 (102B, batch441): always throws, with the name.
@@ -235,32 +225,14 @@ namespace RBX { namespace Lua {
 	// flag-ident audit. No setter is banked DB-wide.
 	static bool g_allowSignalConnect = false;
 
-	// mac: 0x171F8E (394B, batch444): index/newindex/gc/eq/tostring + readonly.
-	// FUNCTION: PLAYER 0x00881510
-	// FUNCTION: STUDIO 0x009e5b90
+	// Standard luaL_checklstring wrappers (0x19800E/0x19806E banked).
+	// FUNCTION: PLAYER 0x006717c0
+	// FUNCTION: STUDIO 0x007d9720
 	template<>
-	void Bridge<EventInstance, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	int Bridge<EventInstance, true>::on_index(lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
 	}
 
 	// mac: 0x17E872 (498B, batch437): connect/connectFirst/connectLast/wait
@@ -305,14 +277,32 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s is not a valid member", name);
 	}
 
-	// Standard luaL_checklstring wrappers (0x19800E/0x19806E banked).
-	// FUNCTION: PLAYER 0x006717c0
-	// FUNCTION: STUDIO 0x007d9720
+	// mac: 0x171F8E (394B, batch444): index/newindex/gc/eq/tostring + readonly.
+	// FUNCTION: PLAYER 0x00881510
+	// FUNCTION: STUDIO 0x009e5b90
 	template<>
-	int Bridge<EventInstance, true>::on_index(lua_State* L)
+	void Bridge<EventInstance, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	template<>
@@ -407,8 +397,6 @@ namespace RBX { namespace Lua {
 	// EventInstance's queue with the yield era).
 	int (*volatile g_bridgeConnectionIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<rbx::signals::connection>::on_index;
-	int (*volatile g_bridgeConnectionNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<rbx::signals::connection>::on_newindex;
 	int (*volatile g_bridgeEventIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<EventInstance>::on_index;
 	int (*volatile g_bridgeEventNewIndex)(lua_State*) =

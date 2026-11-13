@@ -79,18 +79,6 @@ Camera::Camera()
 	zoom = 1.0f / (2.0f * tanf(fov * 0.5f));
 }
 
-// mac: 0x2898F0 (103B): the negated far plane feeds the 3-arg build; the out
-// slot returns by value (the binary sign-masks the negate -- the source
-// unary minus bakes the same IEEE result).
-// STUB: PLAYER 0x006b6e60
-// STUB: STUDIO 0x006fa5b0
-Frustum Camera::frustum(const G3D::Rect2D& rect) const
-{
-	Frustum out;
-	frustum(rect, -farPlane, out);
-	return out;
-}
-
 // mac: 0x28E146 (398B, const): the frustum build.  Sequence per the bubsurf6
 // 403-445 + prologue decode: resize(0,false) FIRST; hasNanOrInf(cf)
 // early-out (leaves the caller's out.faceArray empty); width/height
@@ -119,6 +107,18 @@ void Camera::frustum(const G3D::Rect2D& rect, float negatedFarPlane,
 		horizontalFov,
 		fov);
 	out.faceArray = local.faceArray;
+}
+
+// mac: 0x2898F0 (103B): the negated far plane feeds the 3-arg build; the out
+// slot returns by value (the binary sign-masks the negate -- the source
+// unary minus bakes the same IEEE result).
+// STUB: PLAYER 0x006b6e60
+// STUB: STUDIO 0x006fa5b0
+Frustum Camera::frustum(const G3D::Rect2D& rect) const
+{
+	Frustum out;
+	frustum(rect, -farPlane, out);
+	return out;
 }
 
 // mac: 0x28DD88 (41B, const): the image-plane depth the imposter chain uses =

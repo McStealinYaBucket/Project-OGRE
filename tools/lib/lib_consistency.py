@@ -25,6 +25,10 @@ demangled, names (all names at the address, '|'), note):
   status span       inside a library TU span with no compiled counterpart (empty masked_diff_bytes)
   status inside     check 3: the body matched inside a longer IDA function (dropped)
   status conflict   rejected by check 1 or 2: no name applied, no reccmp library row
+An identical body over 8 bytes outranks an oracle name that only a call position placed (evidence class
+callgraph/callgraph-guess/body-match/body-match-guess in <T>-names-proposed.csv), as in
+tools/ida/match_names.py resolve(): e.g. 0x009dab20 is G3D::Vector3::maxFinite (three FLT_MAX stores, 53
+callers), not the callgraph-paired RBX::Extents::vv (g3d-2013.md). Rtti-slot and string evidence still win.
 A row at no IDA function at all keeps its status and the note "create it" (IDA missed the function).
 """
 import collections
@@ -37,6 +41,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 EXP = os.path.join(ROOT, "ida", "exports")
 LIBS = ("lua", "raknet", "g3d", "boost")
 TARGETS = ("PLAYER", "STUDIO")
+WEAK = ("callgraph", "callgraph-guess", "body-match", "body-match-guess")
 CC = re.compile(r"\b__(?:thiscall|cdecl|stdcall|fastcall|clrcall)\s+")
 
 
@@ -95,6 +100,11 @@ def load_names(target):
     with open(os.path.join(EXP, f"{target}-functions.csv")) as f:
         for r in csv.DictReader(f):
             extents[int(r["address"], 16)] = int(r["size"])
+    p = os.path.join(EXP, f"{target}-names-proposed.csv")
+    for r in (csv.DictReader(open(p)) if os.path.exists(p) else ()):
+        n = names.get(int(r["address"], 16))
+        if n is not None and "evidence_class" not in n:
+            n["evidence_class"] = r["evidence_class"]
     return names, set(extents), extents
 
 
@@ -165,7 +175,9 @@ def resolve(target, rows, names, starts, extents):
                     # code and the byte-identical compiled body outranks the oracle's pairing.
                     roblox = "RBX" in qualname(n["demangled"])
                     kind = "roblox" if roblox else "library"
-                    if status == "identical" and roblox:
+                    if status == "identical" and n.get("evidence_class") in WEAK and extents.get(a, 0) > 8:
+                        kind = "%s, %s evidence only; superseded by the identical body" % (kind, n["evidence_class"])
+                    elif status == "identical" and roblox:
                         status = "conflict"
                     note.append(f"oracle disagrees ({kind}): {n['source']} {n['demangled'][:120]}")
                     rep[f"oracle disagrees, {kind} name, status {status}"] += 1
@@ -215,6 +227,14 @@ def selftest():
                  "lua_exception::~lua_exception() [D0, deleting]") == "exact"
     assert agree("public: __thiscall G3D::Table<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,int>::Table(void)",
                  "G3D::Table<std::string, int>::Table()") == "exact"
+    row = {"address": "0x009dab20", "identical": "yes", "masked_diff_bytes": "0", "_lib": "g3d", "library": "G3D",
+           "version": "8.00-roblox", "name": "?maxFinite@Vector3@G3D@@SAABV12@XZ",
+           "demangled": "public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void)"}
+    orc = {"name": "_ZN3RBX7Extents2vvERKN3G3D7Vector3ES4_", "source": "ios:",
+           "demangled": "RBX::Extents::vv(G3D::Vector3 const&, G3D::Vector3 const&)"}
+    for ev, want in (("callgraph", "identical"), ("rtti-slot", "conflict")):
+        out = resolve("PLAYER", [row], {0x009dab20: dict(orc, evidence_class=ev)}, {0x009dab20}, {0x009dab20: 57})[0]
+        assert out[0]["status"] == want, (ev, out)
     print("selftest ok")
 
 

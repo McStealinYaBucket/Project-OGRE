@@ -191,14 +191,14 @@ int RBX::Guid::compare(const Guid* a0, const Guid* a1, const Guid* b0, const Gui
 
 // mac: 0x204720 -- sprintf("%s_%d", scopeName.substr(min(3,len), min(scopeLength,32)), index);
 // or sprintf("%d", index) when scopeLength <= 0.
-// STUB: PLAYER 0x006f95f0
-// STUB: STUDIO 0x007733f0
+// FUNCTION: PLAYER 0x006f95f0
+// FUNCTION: STUDIO 0x007733f0
 std::string RBX::Guid::Data::readableString(int scopeLength) const
 {
 	char result[64];
 	if (scopeLength>0)
 	{
-		std::string s = scope.getName()->toString();
+		std::string s = scope.getName()->str;
 		s = s.substr(std::min((size_t)3,s.size()), std::min(scopeLength,32));
 		sprintf(result, "%s_%d", s.c_str(), index);
 	}

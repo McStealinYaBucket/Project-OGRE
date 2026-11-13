@@ -45,9 +45,68 @@
 
 using namespace RBX;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // An implementation of IReferenceBinder
-// STUB: PLAYER 0x006fb300
-// STUB: STUDIO 0x00749890
+// FUNCTION: PLAYER 0x006fb300
+// FUNCTION: STUDIO 0x00749890
 bool ArchiveBinder::processID(const XmlNameValuePair* valueID, RBX::Reflection::DescribedBase* source)
 {
 	if (Super::processID(valueID, source))
@@ -85,6 +144,24 @@ void MemoryBinder::announceID(const XmlNameValuePair* valueID, RBX::Reflection::
 void MemoryBinder::announceIDREF(const XmlNameValuePair* valueIDREF, RBX::Reflection::DescribedBase* propertyOwner, const RBX::IIDREF* idref)
 {
 	processIDREF(valueIDREF, propertyOwner, idref);
+}
+
+// STUB: PLAYER 0x006fb520
+// STUB: STUDIO 0x00749ab0
+shared_ptr<RBX::Instance> SerializerV2::loadInstance(const XmlElement* itemElement, RBX::IReferenceBinder& binder, RBX::CreatorRole creatorRole)  // 0x5AEB9E
+{
+	const RBX::Name* className = NULL;
+	if (itemElement->findAttributeValue(*tag_class, className) && className)
+	{
+		if (shared_ptr<RBX::Instance> inst = RBX::Creatable<RBX::Instance>::createByName(*className, creatorRole))
+		{
+			inst->read(itemElement, binder, creatorRole);
+			return inst;
+		}
+		RBX::StandardOut::singleton()->print(RBX::MESSAGE_WARNING,
+			std::string("Unknown object class \"") + className->c_str() + "\" while reading XML");
+	}
+	return shared_ptr<RBX::Instance>();
 }
 
 // STUB: PLAYER 0x006fc420
@@ -135,48 +212,6 @@ bool MemoryBinder::processIDREF(const XmlNameValuePair* valueIDREF, RBX::Reflect
 	return false;
 }
 
-// FUNCTION: PLAYER 0x006fd510
-// FUNCTION: STUDIO 0x0074baa0
-XmlElement* SerializerV2::newRootElement()  // 0x5AF136
-{
-	return newRootElement("");
-}
-
-// STUB: PLAYER 0x006fcec0
-// STUB: STUDIO 0x0074b450
-XmlElement* SerializerV2::newRootElement(const std::string& type)  // 0x5AF1DA
-{
-	static const RBX::Name* xmlnsxmime = RBX::Name::declare("xmlns:xmime");
-	XmlElement* root = new XmlElement(*tag_roblox);
-	root->addAttribute(*xmlnsxmime, "http://www.w3.org/2005/05/xmlmime");
-	root->addAttribute(*tag_xmlnsxsi, "http://www.w3.org/2001/XMLSchema-instance");
-	root->addAttribute(*tag_xsinoNamespaceSchemaLocation, "http://www.roblox.com/roblox.xsd");
-	root->addAttribute(*tag_version, 4);
-	if (!type.empty())
-		root->addAttribute(*tag_assettype, type);
-	root->addChild(new XmlElement(*tag_External, value_IDREF_null));
-	root->addChild(new XmlElement(*tag_External, value_IDREF_nil));
-	return root;
-}
-
-// STUB: PLAYER 0x006fb520
-// STUB: STUDIO 0x00749ab0
-shared_ptr<RBX::Instance> SerializerV2::loadInstance(const XmlElement* itemElement, RBX::IReferenceBinder& binder, RBX::CreatorRole creatorRole)  // 0x5AEB9E
-{
-	const RBX::Name* className = NULL;
-	if (itemElement->findAttributeValue(*tag_class, className) && className)
-	{
-		if (shared_ptr<RBX::Instance> inst = RBX::Creatable<RBX::Instance>::createByName(*className, creatorRole))
-		{
-			inst->read(itemElement, binder, creatorRole);
-			return inst;
-		}
-		RBX::StandardOut::singleton()->print(RBX::MESSAGE_WARNING,
-			std::string("Unknown object class \"") + className->c_str() + "\" while reading XML");
-	}
-	return shared_ptr<RBX::Instance>();
-}
-
 // STUB: PLAYER 0x006fc990
 // STUB: STUDIO 0x0074af20
 void SerializerV2::loadInstances(const XmlElement* root, RBX::Instances& result, RBX::IReferenceBinder& binder, RBX::CreatorRole creatorRole)  // 0x5AEE84
@@ -202,6 +237,30 @@ void SerializerV2::loadInstances(const XmlElement* root, RBX::Instances& result,
 		RBX::StandardOut::singleton()->print(RBX::MESSAGE_WARNING,
 			"Version 1.0 - 3.0 model files not supported - all future version will be supported");
 	}
+}
+
+// FUNCTION: PLAYER 0x006fcec0
+// FUNCTION: STUDIO 0x0074b450
+XmlElement* SerializerV2::newRootElement(const std::string& type)  // 0x5AF1DA
+{
+	static const RBX::Name* xmlnsxmime = RBX::Name::declare("xmlns:xmime");
+	XmlElement* root = new XmlElement(*tag_roblox);
+	root->addAttribute(*xmlnsxmime, "http://www.w3.org/2005/05/xmlmime");
+	root->addAttribute(*tag_xmlnsxsi, "http://www.w3.org/2001/XMLSchema-instance");
+	root->addAttribute(*tag_xsinoNamespaceSchemaLocation, "http://www.roblox.com/roblox.xsd");
+	root->addAttribute(*tag_version, 4);
+	if (!type.empty())
+		root->addAttribute(*tag_assettype, type);
+	root->addChild(new XmlElement(*tag_External, value_IDREF_null));
+	root->addChild(new XmlElement(*tag_External, value_IDREF_nil));
+	return root;
+}
+
+// FUNCTION: PLAYER 0x006fd510
+// FUNCTION: STUDIO 0x0074baa0
+XmlElement* SerializerV2::newRootElement()  // 0x5AF136
+{
+	return newRootElement("");
 }
 
 void SerializerV2::loadInstancesFromText(const XmlElement* root, RBX::Instances& result)  // 0x5AECFC

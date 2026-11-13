@@ -38,6 +38,7 @@ namespace RBX {
 		return (NormalId)((normalId + 3) % 6);
 	}
 
+
 	// STUB: PLAYER 0x008c6cd0
 	// STUB: STUDIO 0x009c9ab0
 	NormalId normalIdToU(NormalId normalId)	// 0x232C92 (assert at NormalId.cpp line 55)
@@ -162,6 +163,21 @@ namespace RBX {
 	// For +/- X and Z faces, (front, back, left, right) - V always points up
 	// For +/- Y faces (top, bottom) - V always points to the back (+z)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	Vector3 uvwToObject(const Vector3& uvwPt, NormalId faceId)
 	{
 		switch (faceId)
@@ -178,6 +194,12 @@ namespace RBX {
 		}
 	}
 
+
+
+
+
+
+
 	Vector3 objectToUvw(const Vector3& objectPt, NormalId faceId)
 	{
 		switch (faceId)
@@ -193,10 +215,7 @@ namespace RBX {
 			return Vector3::unitX();
 		}
 	}
-
-	//////////////////////////////////////////////////
-	//////////////////////////////////////////////////
-
+	////////////////////////////////////////////////// ////////////////////////////////////////////////
 	template<NormalId normalId>
 	Vector3 normalIdToVector3Internal()
 	{
@@ -206,7 +225,6 @@ namespace RBX {
 		answer[xyz] = (normalId < NORM_X_NEG) ? 1.0f : -1.0f;
 		return answer;
 	}
-
 	// STUB: PLAYER 0x008c7760
 	// STUB: STUDIO 0x009ca540
 	const Vector3& normalIdToVector3(NormalId normalId)	// 0x233054 (assert at NormalId.cpp line 268)
@@ -240,6 +258,8 @@ namespace RBX {
 			}
 		case NORM_Z_NEG:
 			{
+
+
 				static Vector3 v(normalIdToVector3Internal<NORM_Z_NEG>());
 				return v;
 			}
@@ -250,24 +270,20 @@ namespace RBX {
 			}
 		}
 	}
-
-	// STUB: PLAYER 0x008c7020
-	// STUB: STUDIO 0x009c9e00
+	// FUNCTION: PLAYER 0x008c7020
+	// FUNCTION: STUDIO 0x009c9e00
 	Matrix3 normalIdToMatrix3Internal(NormalId normalId)	// 0x2332B4 (asserts at NormalId.cpp lines 280-282)
 	{
 		Vector3 uInObject = uvwToObject(Vector3::unitX(), normalId);
 		Vector3 vInObject = uvwToObject(Vector3::unitY(), normalId);
 		Vector3 wInObject = uvwToObject(Vector3::unitZ(), normalId);
-
 		RBXASSERT(uInObject == uvwToObject(objectToUvw(uInObject, normalId), normalId));
 		RBXASSERT(vInObject == uvwToObject(objectToUvw(vInObject, normalId), normalId));
 		RBXASSERT(wInObject == uvwToObject(objectToUvw(wInObject, normalId), normalId));
-
 		return Matrix3(	uInObject.x,	vInObject.x,	wInObject.x,
 						uInObject.y,	vInObject.y,	wInObject.y,
 						uInObject.z,	vInObject.z,	wInObject.z);
 	}
-
 	// STUB: PLAYER 0x008c7290
 	// STUB: STUDIO 0x009ca070
 	const Matrix3& normalIdToMatrix3(NormalId normalId)	// 0x2335CD (assert at NormalId.cpp line 319)
@@ -444,28 +460,12 @@ namespace RBX {
 		return (axisMask & axisToMask(axis)) != 0;
 	}
 
-	// mac: 0x1E7FEA
-	// FUNCTION: PLAYER 0x0081caa0
-	// FUNCTION: STUDIO 0x008ed9b0
-	template<>
-	std::string StringConverter<Axes>::convertToString(const Axes& value)
-	{
-		std::string seperator = "";
-		std::string result = "";
-		for(int axis = 0; axis < 3; axis++){
-			if(value.getAxis((RBX::Vector3::Axis)axis)){
-				result += seperator;
-				switch((RBX::Vector3::Axis)axis){
-					case RBX::Vector3::X_AXIS:		result += "X";	break;
-					case RBX::Vector3::Y_AXIS:		result += "Y";	break;
-					case RBX::Vector3::Z_AXIS:		result += "Z";	break;
-					default: break;
-				}
-				seperator = ", ";
-			}
-		}
-		return result;
-	}
+	// mac: 0x201920
+	// FUNCTION: PLAYER 0x0081c670
+	// FUNCTION: STUDIO 0x008ed840
+	Faces::Faces(int normalIdMask)
+		: normalIdMask(normalIdMask)
+	{}
 
 	// mac: 0x1E855E
 	template<>
@@ -492,30 +492,6 @@ namespace RBX {
 		return true;
 	}
 
-	// mac: 0x201920
-	// FUNCTION: PLAYER 0x0081c670
-	// FUNCTION: STUDIO 0x008ed840
-	Faces::Faces(int normalIdMask)
-		: normalIdMask(normalIdMask)
-	{}
-
-	// mac: 0x201930
-	void Faces::setNormalId(NormalId normalId, bool value)
-	{
-		if(value){
-			normalIdMask |= normalIdToMask(normalId);
-		}
-		else{
-			normalIdMask &= ~normalIdToMask(normalId);
-		}
-	}
-
-	// mac: 0x201958
-	bool Faces::getNormalId(NormalId normalId) const
-	{
-		return (normalIdMask & (normalIdToMask(normalId))) != 0;
-	}
-
 	// mac: 0x20197C
 	// STUB: PLAYER 0x0081c6e0
 	// STUB: STUDIO 0x0087a180
@@ -534,6 +510,46 @@ namespace RBX {
 					case NORM_Z_NEG:	result += "Front";	break;
 					case NORM_X:		result += "Right";	break;
 					case NORM_X_NEG:	result += "Left";	break;
+					default: break;
+				}
+				seperator = ", ";
+			}
+		}
+		return result;
+	}
+
+	// mac: 0x201930
+	void Faces::setNormalId(NormalId normalId, bool value)
+	{
+		if(value){
+			normalIdMask |= normalIdToMask(normalId);
+		}
+		else{
+			normalIdMask &= ~normalIdToMask(normalId);
+		}
+	}
+
+	// mac: 0x201958
+	bool Faces::getNormalId(NormalId normalId) const
+	{
+		return (normalIdMask & (normalIdToMask(normalId))) != 0;
+	}
+
+	// mac: 0x1E7FEA
+	// FUNCTION: PLAYER 0x0081caa0
+	// FUNCTION: STUDIO 0x008ed9b0
+	template<>
+	std::string StringConverter<Axes>::convertToString(const Axes& value)
+	{
+		std::string seperator = "";
+		std::string result = "";
+		for(int axis = 0; axis < 3; axis++){
+			if(value.getAxis((RBX::Vector3::Axis)axis)){
+				result += seperator;
+				switch((RBX::Vector3::Axis)axis){
+					case RBX::Vector3::X_AXIS:		result += "X";	break;
+					case RBX::Vector3::Y_AXIS:		result += "Y";	break;
+					case RBX::Vector3::Z_AXIS:		result += "Z";	break;
 					default: break;
 				}
 				seperator = ", ";

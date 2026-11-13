@@ -1,32 +1,23 @@
-/* Util/Face.h -- October 2013 (face quad for overlap/join math).
-   Carried from March 2016 App/include/util/Face.h (first-party; agent-verified
-   2013-identical: snapToGrid 0x200C84 / toWorldSpace 0x201504 / toObjectSpace
-   0x20166C / fromExtentsSide 0x201476 / fuzzyContainsInExtrusion 0x20113C
-   (assert Face.cpp:49) / cornersAligned 0x20137C (assert :94) / hasOverlap
-   0x2012D4 / projectOverlapOnMe 0x200DF4 / overlapWithinPlanes 0x200CE2).
-   No 2013 deltas.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/util/Face.h */
-
+/* Util/Face.h -- October 2013 (face quad for overlap/join math). Carried from the 2016 header; 2013-identical (mac):
+   snapToGrid 0x200C84, toWorldSpace 0x201504, toObjectSpace 0x20166C, fromExtentsSide 0x201476, fuzzyContainsInExtrusion
+   0x20113C (Face.cpp:49), cornersAligned 0x20137C (:94), hasOverlap 0x2012D4, projectOverlapOnMe 0x200DF4,
+   overlapWithinPlanes 0x200CE2. */
 #pragma once
-
 #include "Util/G3DCore.h"
 #include "Util/NormalId.h"
 #include "rbx/Debug.h"
-
 namespace RBX {
-
 	class Extents;
-
 	class Face
 	{
 	private:
 		Vector3			c0, c1, c2, c3;
-
 		Face(const Vector3& c0, const Vector3& c1, const Vector3& c2, const Vector3& c3)
 			: c0(c0), c1(c1), c2(c2), c3(c3)
 		{}
-
 		Vector3 getAxis(int i) const	{
+
+
 			RBXASSERT((i == 0) || (i==1));
 			return i == 0 ? getU() : getV();
 		}

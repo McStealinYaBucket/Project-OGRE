@@ -5,6 +5,7 @@
    member pairs. */
 
 #include "stdafx.h"
+#include "decomp.h"
 
 #include "V8DataModel/Workspace.h"
 #include "V8DataModel/Camera.h"
@@ -178,7 +179,7 @@ void Workspace::clearTerrain()
 	{
 		if (FLog::MegaClusterInit)
 			FLog::FastLog(FLog::MegaClusterInit, "Clearing terrain", 0);
-		if (FWBase* f = terrain->fw())
+		if (FWInstance* f = terrain->fw())
 		{
 			bool unlocked = false;
 			FWValue<bool>::set(*reinterpret_cast<bool*>(&f->b21), unlocked,
@@ -226,6 +227,15 @@ void Workspace::setDistributedGameTime(double value)
 		distributedGameTime = value;
 		raiseChanged(prop_DistributedGameTime);
 	}
+}
+
+// iOS: RBX::registerNetworkStreamingProp(), run once by the DataModel ctor (call_once on
+// PLAYER 0x00de4778). Body not written yet.
+// STUB: PLAYER 0x007154c0
+// STUB: STUDIO 0x008321d0
+void registerNetworkStreamingProp()
+{
+	STUB(0x007154c0);
 }
 
 // mac: 0x515636: assemble, assert the mouse command is free, raise the CoreGui

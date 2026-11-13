@@ -42,16 +42,6 @@ namespace RBX {
 		result += "StatDisplaySettings.json";
 	}
 
-	// STUB: PLAYER 0x007e66f0
-	// STUB: STUDIO 0x008aa270
-	bool CustomStatsGuiJSON::DefaultHandler(const std::string& name, const std::string& text)
-	{
-		// mac: 0x39608E: EquationDisplay/TextDisplay creation TODO (classes absent).
-		if (builder != NULL)
-			builder->customStatsMap()[name] = GuiBuilder::Data(text);
-		return true;
-	}
-
 	// STUB: PLAYER 0x007e5710
 	// STUB: STUDIO 0x008a9290
 	void CustomStatsGuiJSON::WriteFile()
@@ -72,6 +62,16 @@ namespace RBX {
 			file << "\"" << it->first << "\": \"" << it->second.text << "\",\n";
 		}
 		file.write("}", 1);
+	}
+
+	// STUB: PLAYER 0x007e66f0
+	// STUB: STUDIO 0x008aa270
+	bool CustomStatsGuiJSON::DefaultHandler(const std::string& name, const std::string& text)
+	{
+		// mac: 0x39608E: EquationDisplay/TextDisplay creation TODO (classes absent).
+		if (builder != NULL)
+			builder->customStatsMap()[name] = GuiBuilder::Data(text);
+		return true;
 	}
 
 } // namespace RBX

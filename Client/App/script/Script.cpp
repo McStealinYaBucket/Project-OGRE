@@ -72,39 +72,53 @@ namespace RBX {
 		return s_defaultScriptCode;
 	}
 
-	// mac: 0x1812DC (batch768 disasm): BaseScript() -> Described fixes ->
-	// setName("Script") -> boost::call_once(initStatics) -> embeddedSource.setCode(
-	// getDefaultScriptCode(), true). (GCC ctor also left ES.requested unzeroed --
-	// port value-inits it false, LOUD DELTA.)
-	// STUB: PLAYER 0x0066e970
-	// STUB: STUDIO 0x0077f6d0
-	Script::Script()
+	// mac: 0x182DA4 (batch742:280-294)
+	// STUB: PLAYER 0x006692c0
+	// STUB: STUDIO 0x0077a1b0
+	bool Script::isRobloxScript()
 	{
-		setName("Script");
-		boost::call_once(&initStatics, s_staticsOnce);
-		embeddedSource.setCode(getDefaultScriptCode(), true);
+		if (scriptId.isNull())
+		{
+			if (embeddedSource.ready)
+				return embeddedSource.unknown135;
+			return false;
+		}
+		return true;
 	}
 
 	Script::~Script()
 	{
 	}
 
-	// mac: 0x182D00 (batch742:216-257)
-	// STUB: PLAYER 0x0066ebe0
-	// STUB: STUDIO 0x0077f940
-	BaseScript::Code Script::requestCode(ScriptInformationProvider* sip)
+	// mac: 0x182DE2 (batch768:170-179): reference return.
+	// STUB: PLAYER 0x00669300
+	// STUB: STUDIO 0x0077a1f0
+	const std::string& Script::requestHash()
 	{
-		if (!scriptId.isNull())
-			return BaseScript::requestCode(sip);
+		if (scriptId.isNull())
+			return embeddedSource.hash;
+		return BaseScript::emptyString;
+	}
 
-		ScriptInformationProvider* localSip = sip;
-		if (localSip == NULL)
-			localSip = ServiceProvider::create<ScriptInformationProvider>(this);
-
-		if (localSip != NULL && embeddedSource.embeddedCodeIsReady(localSip))
-			return Code(true, embeddedSource.requestEmbeddedCode(localSip, this));
-
-		return Code(false, emptyScriptCode());
+	// mac: 0x182E06 (batch769:1159-1180, eighth era): the persistent-cost payload is
+	// the code string, counted only for embedded scripts (scriptId empty --
+	// linked scripts carry no source payload). ready&&!fresh reads the empty
+	// static PS (the getEmbeddedCodeSafe guard arm, dword_FADA1C landed as
+	// ProtectedString::emptyString); otherwise embeddedSource.source. The
+	// length adder is Instance::computeStringCost (selects >= 1).
+	// STUB: PLAYER 0x0066a510
+	// STUB: STUDIO 0x0077b2f0
+	int Script::getPersistentDataCost() const
+	{
+		int cost = Instance::getPersistentDataCost();
+		if (scriptId.isNull())
+		{
+			const ProtectedString* ps = &embeddedSource.source;
+			if (embeddedSource.ready && !embeddedSource.fresh)
+				ps = &ProtectedString::emptyString;
+			cost += computeStringCost(ps->getStringForImmediateUse());
+		}
+		return cost;
 	}
 
 	// mac: 0x18290E (batch768:141-160)
@@ -122,52 +136,6 @@ namespace RBX {
 		{
 			BaseScript::preloadCode();
 		}
-	}
-
-	// mac: 0x182DA4 (batch742:280-294)
-	// STUB: PLAYER 0x006692c0
-	// STUB: STUDIO 0x0077a1b0
-	bool Script::isRobloxScript()
-	{
-		if (scriptId.isNull())
-		{
-			if (embeddedSource.ready)
-				return embeddedSource.unknown135;
-			return false;
-		}
-		return true;
-	}
-
-	// mac: 0x182DE2 (batch768:170-179): reference return.
-	// STUB: PLAYER 0x00669300
-	// STUB: STUDIO 0x0077a1f0
-	const std::string& Script::requestHash()
-	{
-		if (scriptId.isNull())
-			return embeddedSource.hash;
-		return BaseScript::emptyString;
-	}
-
-	// mac: 0x182F18 ("GetHash" BoundFuncDesc, InitFunc_122)
-	std::string Script::getHashSlow()
-	{
-		return scriptId.isNull() ? embeddedSource.hash : std::string();
-	}
-
-	// mac: 0x180E52 (batch747:507-535). Port comment: getter const-marked for the
-	// reflection GetSet; CalculateHash is const in the port (loads only).
-	const ProtectedString& Script::getEmbeddedCodeSafe() const
-	{
-		if (embeddedSource.ready && !embeddedSource.fresh)
-			return ProtectedString::emptyString;
-
-		if (!Network::Players::clientIsPresent(this) || embeddedSource.source == getDefaultScriptCode())
-			return embeddedSource.source;
-
-		std::string calcHash = embeddedSource.CalculateHash();
-		if (calcHash.compare(embeddedSource.hash) != 0)
-			return ProtectedString::emptyString;
-		return embeddedSource.source;
 	}
 
 	// mac: 0x180F08 (batch747:468-504): three-literal blacklist (values below are the
@@ -195,6 +163,41 @@ namespace RBX {
 		}
 	}
 
+	// mac: 0x182F18 ("GetHash" BoundFuncDesc, InitFunc_122)
+	std::string Script::getHashSlow()
+	{
+		return scriptId.isNull() ? embeddedSource.hash : std::string();
+	}
+
+	// mac: 0x180E52 (batch747:507-535). Port comment: getter const-marked for the
+	// reflection GetSet; CalculateHash is const in the port (loads only).
+	const ProtectedString& Script::getEmbeddedCodeSafe() const
+	{
+		if (embeddedSource.ready && !embeddedSource.fresh)
+			return ProtectedString::emptyString;
+
+		if (!Network::Players::clientIsPresent(this) || embeddedSource.source == getDefaultScriptCode())
+			return embeddedSource.source;
+
+		std::string calcHash = embeddedSource.CalculateHash();
+		if (calcHash.compare(embeddedSource.hash) != 0)
+			return ProtectedString::emptyString;
+		return embeddedSource.source;
+	}
+
+	// mac: 0x1812DC (batch768 disasm): BaseScript() -> Described fixes ->
+	// setName("Script") -> boost::call_once(initStatics) -> embeddedSource.setCode(
+	// getDefaultScriptCode(), true). (GCC ctor also left ES.requested unzeroed --
+	// port value-inits it false, LOUD DELTA.)
+	// STUB: PLAYER 0x0066e970
+	// STUB: STUDIO 0x0077f6d0
+	Script::Script()
+	{
+		setName("Script");
+		boost::call_once(&initStatics, s_staticsOnce);
+		embeddedSource.setCode(getDefaultScriptCode(), true);
+	}
+
 	// Instance.h:756 signature; 2013 guard body (checkpoint decode): an Embedded
 	// source without a fresh hash serializes to nothing.
 	XmlElement* Script::writeXml(const boost::function<bool(Instance*)>& isInScope, RBX::CreatorRole creatorRole)
@@ -209,25 +212,22 @@ namespace RBX {
 		return true;
 	}
 
-	// mac: 0x182E06 (batch769:1159-1180, eighth era): the persistent-cost payload is
-	// the code string, counted only for embedded scripts (scriptId empty --
-	// linked scripts carry no source payload). ready&&!fresh reads the empty
-	// static PS (the getEmbeddedCodeSafe guard arm, dword_FADA1C landed as
-	// ProtectedString::emptyString); otherwise embeddedSource.source. The
-	// length adder is Instance::computeStringCost (selects >= 1).
-	// STUB: PLAYER 0x0066a510
-	// STUB: STUDIO 0x0077b2f0
-	int Script::getPersistentDataCost() const
+	// mac: 0x182D00 (batch742:216-257)
+	// STUB: PLAYER 0x0066ebe0
+	// STUB: STUDIO 0x0077f940
+	BaseScript::Code Script::requestCode(ScriptInformationProvider* sip)
 	{
-		int cost = Instance::getPersistentDataCost();
-		if (scriptId.isNull())
-		{
-			const ProtectedString* ps = &embeddedSource.source;
-			if (embeddedSource.ready && !embeddedSource.fresh)
-				ps = &ProtectedString::emptyString;
-			cost += computeStringCost(ps->getStringForImmediateUse());
-		}
-		return cost;
+		if (!scriptId.isNull())
+			return BaseScript::requestCode(sip);
+
+		ScriptInformationProvider* localSip = sip;
+		if (localSip == NULL)
+			localSip = ServiceProvider::create<ScriptInformationProvider>(this);
+
+		if (localSip != NULL && embeddedSource.embeddedCodeIsReady(localSip))
+			return Code(true, embeddedSource.requestEmbeddedCode(localSip, this));
+
+		return Code(false, emptyScriptCode());
 	}
 
 	// ------------------------------------------------------------------

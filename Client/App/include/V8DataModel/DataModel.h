@@ -86,6 +86,7 @@ class DataModel;
 class GenericJob;
 class InputObject;
 class GuiResponse;
+class GuiEvent;
 class UIEvent;
 class Game;
 class IMetric;
@@ -253,7 +254,14 @@ public:
 	void internalSave(ContentId contentId);
 	shared_ptr<std::stringstream> serializeDataModel(const Instance::SaveFilter saveFilter = SAVE_ALL);
 	void saveToRoblox(boost::function<void(bool)> resumeFunction, boost::function<void(std::string)> errorFunction);
-	void savePlaceAsync(const Instance::SaveFilter saveFilter, boost::function<void(shared_ptr<const Reflection::Tuple>)> resumeFunction, boost::function<void(std::string)> errorFunction);
+	// DataModel's own virtuals, in 2013 slot order (vftable 0x00b2ffec +0x70..+0x84, 34 slots;
+	// iOS names; OverlayDataModel overrides savePlaceAsync/renderPass2d/renderMouse).
+	virtual GuiResponse processAccelerators(const GuiEvent& event);		// vtable+0x70 0x0064fce0
+	virtual GuiResponse processCameraCommands(const GuiEvent& event);	// vtable+0x74 0x0062f010
+	virtual void savePlaceAsync(const Instance::SaveFilter saveFilter, boost::function<void(shared_ptr<const Reflection::Tuple>)> resumeFunction, boost::function<void(std::string)> errorFunction);	// vtable+0x78 0x0063f980
+	virtual void renderPass2d(Adorn* adorn, IMetric* graphicsMetric);	// vtable+0x7c 0x00645770
+	virtual void renderMouse(Adorn* adorn);								// vtable+0x80 0x00640970
+	virtual bool processEvent(const UIEvent& event);					// vtable+0x84 0x0064ae00
 	// sub_E8856 response fan-out (0x2D25EA callee family; public for bind).
 	static void uploadPlaceResponse(shared_ptr<Reflection::Tuple> responseTuple, std::string* response, std::exception* exception, boost::function<void(shared_ptr<const Reflection::Tuple>)> resumeFunction, boost::function<void(std::string)> errorFunction);
 	bool serverSavePlace(const Instance::SaveFilter saveFilter, boost::function<void(shared_ptr<const Reflection::Tuple>)> resumeFunction, boost::function<void(std::string)> errorFunction);
@@ -311,11 +319,7 @@ public:
 	void renderPass();
 	void renderGuiRoot();
 	void renderMessageBox();
-	void renderMouse();
 	void renderPlayerGui();
-	GuiResponse processAccelerators(const shared_ptr<InputObject>& event);
-	GuiResponse processCameraCommands(const shared_ptr<InputObject>& event);
-	void processEvent(const shared_ptr<InputObject>& event);
 	void processUiEvent(const shared_ptr<InputObject>& event);
 	void processWorkspaceEvent();
 	void processPlayerGui();
@@ -353,16 +357,8 @@ public:
 	void loadAssetIdIntoStream(unsigned assetId, std::istream& stream);
 
 	// Tree events
-	// NOTE (s435): onChildAdded/onChildChanged below are DECL-ONLY
-	// (2016-carry, no bodies, no EA banked) and unreachable: every
-	// call site uses the Instance* virtuals, which these shared_ptr
-	// overloads HIDE rather than override. (A prior note cited the
-	// s414 onDescendantAdded DELTA as the same pattern -- that one is
-	// RETIRED: s521 proved the binary takes Instance* and fixed the
-	// signature.) Kept as declarations for the future
-	// decompile; do not call.
-	void onChildAdded(const shared_ptr<Instance>& child);
-	void onChildChanged(const shared_ptr<Instance>& child);
+	/*override*/ virtual void onChildAdded(Instance* child);		// vtable+0x58 0x0062ee00
+	/*override*/ virtual void onChildChanged(Instance* instance, const PropertyChanged& event);	// vtable+0x64 0x0063e180
 	// mac: 0x2E3120 (batches 622-624): takes Instance* -- a true override of
 	// the Instance virtual (s521 correction: the shared_ptr shape was
 	// 2016-carry and merely HID the virtual, so live adopts skipped the
@@ -418,12 +414,6 @@ public:
 	void writeStatsSettings();  // 0x2D16F4 — delegates to GuiBuilder::saveCustomStats (+3488).
 	void updatePhysicsInstructions();
 	void onRunTransition(RunTransition event);  // bound in initializeContents 0x2D3336
-	// Named double stat read through DataModel vtable slot +160
-	// (GuiBuilder::updateSummaryStats 0x3A330A calls it 9+ times with
-	// "Effective FPS"-style names).  The live counters (TaskScheduler /
-	// network / render) are unported, so the default body returns 0.0 --
-	// documented, not hidden.  The slot exists so overrides plug in.
-	virtual double getStatValue(const std::string& name) const;
 	// IDataState (Verb.h interface: setDirty(bool)=0, isDirty()=0)
 	virtual void setDirty(bool dirty);
 	virtual bool isDirty() const;
@@ -454,6 +444,10 @@ public:
 		boost::mutex::scoped_lock l(hackFlagSetMutex);
 		hackFlagSet.insert(flag);
 	}
+
+	// Live DataModels (ctor ++ at 0x0064f179, dtor -- at 0x0064d8c3); separate from
+	// Diagnostics::Countable<DataModel>::count, which the base counts.
+	static rbx::atomic<int> count;
 
 	// ---- 2013 members (PLAYER ctor 0x0064ec50 and dtor 0x0064d850 read store by store) ----
 	// Names: the existing tree's where a 2013 function proves the slot, else the 2016 member in
@@ -540,7 +534,7 @@ public:
 	Genre				genre;									// 0xde0 (not set by the ctor)
 	GearGenreSetting	gearGenreSetting;						// 0xde4 (not set by the ctor)
 	unsigned			allowedGearTypes;						// 0xde8 (not set by the ctor)
-	GuiBuilder			guiBuilder;								// 0xdec ctor 0x00644f30, dtor 0x0056b810
+	GuiBuilder			guiBuilder;								// 0xdec 0x20 (STUDIO 0x1c); ctor 0x00644f30, dtor 0x0056b810
 	DataModel*			parentDataModel;						// 0xe0c second ctor argument
 };
 

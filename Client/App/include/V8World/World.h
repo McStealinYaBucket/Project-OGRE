@@ -112,6 +112,24 @@ namespace RBX {
 		Kernel* getKernel() { return stage->getKernel(); }
 		const Kernel* getKernel() const { return stage->getKernel(); }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		void joinAll();       // 0x5AB34C (TODO: primitive scan -- see World.cpp)
 		// 0x518A3E: defined here as in 2013 (assert World.h:166; the prior tree had it in World.cpp).
 		// mac: 0x518A3E: refuse while stepping.  The +14 dword the old shell zeroed

@@ -24,6 +24,15 @@ namespace Reflection
 Region3::Region3()
 {}
 
+// mac: 0x62E014 - cframe rotation = Matrix3::identity(), translation = extents center, size = hi-lo
+// FUNCTION: PLAYER 0x007fa5e0
+// FUNCTION: STUDIO 0x008ee130
+void Region3::init(const Extents &extents)
+{
+	cframe = CoordinateFrame(extents.center());
+	size = extents.size();
+}
+
 // mac: 0x62DFB4 - builds Extents(min, max) on the stack then forwards to init
 // FUNCTION: PLAYER 0x007fa780
 // FUNCTION: STUDIO 0x008ee2d0
@@ -38,15 +47,6 @@ Region3::Region3(const Vector3& min, const Vector3& max)
 Region3::Region3(const Extents &extents)
 {
 	init(extents);
-}
-
-// mac: 0x62E014 - cframe rotation = Matrix3::identity(), translation = extents center, size = hi-lo
-// FUNCTION: PLAYER 0x007fa5e0
-// FUNCTION: STUDIO 0x008ee130
-void Region3::init(const Extents &extents)
-{
-	cframe = CoordinateFrame(extents.center());
-	size = extents.size();
 }
 
 // mac: 0x62E154 - translation - size*0.5

@@ -163,11 +163,11 @@ namespace RBX {
 		// mac: 0x562B74 (count = ptr != 0) / 0x55E21C (get = ptr, index
 		// ignored -- binary-verbatim). Single-connector store at +48
 		// (was int48; same 0 bits, pointer-typed per the bodies).
-		// STUB: PLAYER 0x007b9050
-		// STUB: STUDIO 0x008d59f0
+		// FUNCTION: PLAYER 0x007b9050 FOLDED
+		// FUNCTION: STUDIO 0x008d59f0 FOLDED
 		virtual int numConnectors() const { return connector48 != NULL; }
-		// STUB: PLAYER 0x00850a40
-		// STUB: STUDIO 0x009a8770
+		// FUNCTION: PLAYER 0x00850a40 FOLDED
+		// FUNCTION: STUDIO 0x009a8770 FOLDED
 		virtual GeoPairConnector* getConnector(int i) { (void)i; return connector48; }
 		// mac: 0x55E228 (42B, batch584: deleteConnector(+48) + null).
 		virtual void deleteAllConnectors();
@@ -189,11 +189,11 @@ namespace RBX {
 		}
 		// mac: 0x562BC8 / 0x55E4C4 (batch582: same single-pointer shape as
 		// BallBall).
-		// STUB: PLAYER 0x007b9050
-		// STUB: STUDIO 0x008d59f0
+		// FUNCTION: PLAYER 0x007b9050 FOLDED
+		// FUNCTION: STUDIO 0x008d59f0 FOLDED
 		virtual int numConnectors() const { return connector48 != NULL; }
-		// STUB: PLAYER 0x00850a40
-		// STUB: STUDIO 0x009a8770
+		// FUNCTION: PLAYER 0x00850a40 FOLDED
+		// FUNCTION: STUDIO 0x009a8770 FOLDED
 		virtual GeoPairConnector* getConnector(int i) { (void)i; return connector48; }
 		// mac: 0x55E4D0 (42B, batch584: identical twin of BallBall's).
 		virtual void deleteAllConnectors();

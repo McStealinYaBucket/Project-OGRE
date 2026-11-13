@@ -1399,7 +1399,7 @@ mac_address,mac_name,player_address,evidence_class,files
 0x00441b30,__ZNK3RBX12PartInstance18getSpecificGravityEv,,,App/v8datamodel/PartInstance.cpp
 0x00441dc4,__ZN3RBX10Reflection8EnumDescINS_8MaterialEEC2Ev,0x007bde50,string-unique via ios1021 name,App/include/Util/Material.h;App/v8datamodel/PartInstance.cpp
 0x00442602,__ZNK3RBX12PartInstance14getPartSizeXmlEv,,,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
-0x0044261e,__ZNK3RBX12PartInstance13getPartSizeUiEv,0x007b77a0,callgraph-guess,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
+0x0044261e,__ZNK3RBX12PartInstance13getPartSizeUiEv,0x007b77a0,callgraph,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
 0x0044264e,__ZN3RBX12PartInstance13setPartSizeUiERKN3G3D7Vector3E,0x007be200,callgraph,App/include/V8DataModel/PartInstance.h;App/include/V8Tree/OnDemand.h;App/v8datamodel/PartInstance.cpp
 0x0044277a,__ZNK3RBX12PartInstance13getElasticityEv,,,App/v8datamodel/PartInstance.cpp
 0x0044278e,__ZNK3RBX12PartInstance11getFrictionEv,,,App/v8datamodel/PartInstance.cpp
@@ -2321,7 +2321,7 @@ mac_address,mac_name,player_address,evidence_class,files
 0x005bc158,__ZN13TextXmlParser15parseAttributesERKSs,0x0074cb80,body-match,App/include/v8xml/TextXmlParser.h;App/v8xml/TextXmlParser.cpp
 0x005bc666,__ZN9XmlParserC2EPSt15basic_streambufIcSt11char_traitsIcEE,,,App/include/v8xml/TextXmlParser.h;App/v8xml/TextXmlParser.cpp
 0x005bc6e8,__ZN13TextXmlParser5parseEv,0x0074cde0,rtti-slot,App/include/v8xml/TextXmlParser.h;App/v8xml/TextXmlParser.cpp
-0x005bd818,__ZN13TextXmlWriter9serializeEPK10XmlElement,0x0074d4a0,body-match,App/include/v8xml/TextXmlWriter.h;App/v8xml/TextXmlWriter.cpp
+0x005bd818,__ZN13TextXmlWriter9serializeEPK10XmlElement,0x0074d4a0,rtti-slot,App/include/v8xml/TextXmlWriter.h;App/v8xml/TextXmlWriter.cpp
 0x005bd83e,__ZN13TextXmlWriter9serializeEPK10XmlElementi,0x0074cb00,body-match,App/include/v8xml/TextXmlWriter.h;App/v8xml/TextXmlWriter.cpp
 0x005bd8f6,__ZN13TextXmlWriter13serializeNodeEPK10XmlElementi,0x0074c8d0,string-unique,App/include/v8xml/TextXmlWriter.h;App/v8xml/TextXmlWriter.cpp
 0x005bec7e,__ZN3RBX9ContentIdC2ERKSsRKNS_4NameE,,,App/include/Util/ContentId.h

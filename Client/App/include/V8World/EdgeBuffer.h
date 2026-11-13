@@ -44,6 +44,10 @@ namespace RBX {
 	public:
 		virtual ~EdgeBuffer();
 
+		// SYNTHETIC: PLAYER 0x008ea600
+		// SYNTHETIC: STUDIO 0x00a08810
+		// RBX::EdgeBuffer::`scalar deleting destructor'
+
 		// mac: 0x572C2A (batch240: :149/:150 asserts + putInStage + push).
 		virtual void onEdgeAdded(Edge* edge);
 		// mac: 0x572D36 (batch240: downstream-first + removeFromStage).

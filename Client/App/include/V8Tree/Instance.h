@@ -208,7 +208,7 @@ protected:
 public:
 	// FUNCTION: PLAYER 0x006beaa0
 	// FUNCTION: STUDIO 0x006ede50
-	FWBase* fw() const { return fwBase.get(); }	// 0x544AF8 (free helper in binary)
+	FWInstance* fw() const { return static_cast<FWInstance*>(fwBase.get()); }	// the slot always holds an FWInstance (or subclass)
 	// Live +68 slot as FWRef (layout-identical single shared_ptr): the FW
 	// machinery (registerFlyweight, FWValue::set redirect) must act on the
 	// LIVE slot, not a local copy -- binary passes +68 directly (clearTerrain
@@ -223,14 +223,14 @@ public:
 	// 2013 lock state = FW b21 (see above; no member).
 	bool getIsParentLocked() const
 	{
-		FWBase* f = fwBase.get();
+		FWInstance* f = fw();
 		return f != NULL && f->b21 != 0;
 	}
 	void securityCheck() const;
 	void securityCheck(RBX::Security::Context& context) const;
 
 	static Reflection::PropDescriptor<Instance, bool> propArchivable;
-	bool getIsArchivable() const { return fwBase->b23 != 0; }	// 0x0061d7b0 reads fw+0x1a
+	bool getIsArchivable() const { return fw()->b23 != 0; }	// 0x0061d7b0 reads fw+0x1a
 	virtual void setIsArchivable(bool value);
 
 	// Call "destroy" to delete an Instance fully so it can't be used again
@@ -392,7 +392,7 @@ public:
 	static Instance* getRootAncestor(Instance* instance) { return instance ? instance->getRootAncestor() : NULL; }
 	static const Instance* getRootAncestor(const Instance* instance) { return instance ? instance->getRootAncestor() : NULL; }
 
-	bool getRobloxLocked() const { return fwBase->b22 != 0; }	// 0x0061d780 reads fw+0x19
+	bool getRobloxLocked() const { return fw()->b22 != 0; }	// 0x0061d780 reads fw+0x19
 	void setRobloxLocked(bool value);
 
 	bool contains(const Instance* child) const;		// Recursive. Also returns true if this==child

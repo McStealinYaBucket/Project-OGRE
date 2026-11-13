@@ -1,6 +1,6 @@
 # Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
-# Library rows skipped for all libraries: not identical 212, not a kept function 49.
-# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1383, static name 337, not in our link 18, folded in our link 0.
+# Library rows skipped for all libraries: not identical 211, not a kept function 49.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1384, static name 337, not in our link 18, folded in our link 0.
 address,type,size,symbol,name
 004b0320,library,7,?clear@Faces@RBX@@QAEXXZ,?clear@Faces@RBX@@QAEXXZ
 004e67d0,library,50,??_H@YGXPAXIHP6EPAX0@Z@Z,"void __stdcall `vector ctor iterator'(void *, unsigned int, int, void * (__thiscall *)(void *))"

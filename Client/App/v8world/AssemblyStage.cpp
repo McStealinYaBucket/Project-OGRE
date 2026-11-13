@@ -21,6 +21,11 @@ namespace RBX {
 	{
 	}
 
+	// Inlined into the deleting destructor (see AssemblyStage.h); no out-of-line copy in PLAYER.
+	AssemblyStage::~AssemblyStage()
+	{
+	}
+
 	// mac: 0x55807E (batch297: putInStage + afterAssemblyAdded).
 	void AssemblyStage::onFixedAssemblyRootAdded(Assembly* assembly)
 	{

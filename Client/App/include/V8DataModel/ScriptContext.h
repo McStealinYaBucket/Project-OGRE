@@ -204,6 +204,7 @@ namespace RBX {
 		// startPendingScripts (0x18A304 -- the only other xref is the
 		// onHeartbeat deadline 0x1934DF).
 		void onChangedScriptEnabled(const Reflection::PropertyDescriptor& descriptor);
+		void onCamelCaseViolation(boost::shared_ptr<Instance> object, std::string memberName, boost::shared_ptr<Instance> script);
 
 		// runScript/releaseScript's assert contract (binary
 		// '!scriptContext->hasScript(script)', binary line 2780): the

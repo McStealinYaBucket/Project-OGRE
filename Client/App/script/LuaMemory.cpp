@@ -63,6 +63,40 @@ namespace RBX {
 		return allocator->alloc(ptr, osize, nsize);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x17CB2C (990B, batch318).
 	// STUB: PLAYER 0x0086b400
 	// STUB: STUDIO 0x009ad420
@@ -90,6 +124,10 @@ namespace RBX {
 					int index2 = poolIndex(osize);
 					if (index2 >= 0)
 					{
+
+
+
+
 						RBXASSERT(osize == memPools[index2]->get_requested_size());  // :131
 						memPools[index2]->free(ptr);
 					}
@@ -99,6 +137,7 @@ namespace RBX {
 					int index2 = poolIndex(osize);
 					if (index2 >= 0)
 					{
+
 						RBXASSERT(osize == memPools[index2]->get_requested_size());  // :141
 						result = malloc(nsize);
 						memcpy(result, ptr, std::min(osize, nsize));

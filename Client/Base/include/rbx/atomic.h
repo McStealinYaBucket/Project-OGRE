@@ -52,6 +52,163 @@ namespace rbx
 #include "boost/static_assert.hpp"
 #include <cstdint>
 
+// 2013 layout: the parameterless ctor's assert is atomic.h line 224 in both targets
+// ("(((long)(&(this->v))) & 0x3) == 0", PLAYER rbx::atomic<int>::atomic() 0x004022d0, out of line,
+// 26 callers). A second copy of that assert sits at line 182 (PLAYER 0x005ba6f0, called once, by
+// TaskScheduler::TaskScheduler 0x009b55e0 for its member at +8); its class is not identified, so
+// the lines before the class below are padding that puts our assert on line 224.
+// atomic(T) has no assert in 2013: ScriptContext's ctor 0x0068ad20 stores timedoutCount and
+// timedout (atomic<int>(0)) with a bare `mov [esi+0x124], ebx`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace rbx
 {
     template <typename T>
@@ -61,18 +218,14 @@ namespace rbx
         long v;
 
     public:
-        // 2013: a separate parameterless ctor, emitted out of line (PLAYER 0x004022d0 for
-        // atomic<int>: `ret`, no argument; Name::Name 0x006136c0 calls it).
+        // Out of line in 2013 (PLAYER 0x004022d0 for atomic<int>; Name::Name 0x006136c0 calls it).
         atomic() : v(0)
         {
-            // http://msdn.microsoft.com/en-us/library/ms683614.aspx: The variable pointed to must be aligned on a 32-bit boundary
-            RBXASSERT((((uintptr_t)(&(this->v))) & (sizeof(T) - 1)) == 0);
+            RBXASSERT((((long)(&(this->v))) & 0x3) == 0);
         }
 
         atomic(T value) : v(value)
         {
-            // http://msdn.microsoft.com/en-us/library/ms683614.aspx: The variable pointed to must be aligned on a 32-bit boundary
-            RBXASSERT((((uintptr_t)(&(this->v))) & (sizeof(T) - 1)) == 0);
         }
 
         T operator=(T v)
@@ -117,6 +270,8 @@ namespace RBX
     // call them too.
     long RbxInterlockedIncrement(long volatile* value);
     long RbxInterlockedDecrement(long volatile* value);
+    long RbxInterlockedExchange(long volatile* value, long exchange);
+    long RbxInterlockedCompareExchange(long volatile* value, long exchange, long comparand);
 } // namespace RBX
 #else // you are using the wrong atomic
 #error "not supported"

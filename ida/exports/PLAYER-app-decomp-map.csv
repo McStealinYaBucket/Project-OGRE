@@ -1399,7 +1399,7 @@ mac_address,mac_name,player_address,evidence_class,files
 0x00441b30,__ZNK3RBX12PartInstance18getSpecificGravityEv,,,App/v8datamodel/PartInstance.cpp
 0x00441dc4,__ZN3RBX10Reflection8EnumDescINS_8MaterialEEC2Ev,0x00722680,string-unique,App/include/Util/Material.h;App/v8datamodel/PartInstance.cpp
 0x00442602,__ZNK3RBX12PartInstance14getPartSizeXmlEv,,,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
-0x0044261e,__ZNK3RBX12PartInstance13getPartSizeUiEv,,,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
+0x0044261e,__ZNK3RBX12PartInstance13getPartSizeUiEv,0x0071bd40,callgraph-guess,App/include/V8DataModel/PartInstance.h;App/v8datamodel/PartInstance.cpp
 0x0044264e,__ZN3RBX12PartInstance13setPartSizeUiERKN3G3D7Vector3E,0x00722a90,callgraph,App/include/V8DataModel/PartInstance.h;App/include/V8Tree/OnDemand.h;App/v8datamodel/PartInstance.cpp
 0x0044277a,__ZNK3RBX12PartInstance13getElasticityEv,,,App/v8datamodel/PartInstance.cpp
 0x0044278e,__ZNK3RBX12PartInstance11getFrictionEv,,,App/v8datamodel/PartInstance.cpp

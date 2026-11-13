@@ -73,7 +73,6 @@ namespace RBX {
 		}
 		focus.reset();
 	}
-
 	// mac: 0x3EC670 (42B, batch784): copies the FWInstance name string at
 	// fw()+24 (no NULL gate on fw(), like the binary).
 	// STUB: PLAYER 0x006c8c10
@@ -83,7 +82,6 @@ namespace RBX {
 		FWInstance* fwInstance = (FWInstance*)fw();
 		return fwInstance->name.value;
 	}
-
 	// GuiItem::process 0x5CD47E (332B, batch784) -- the base click router:
 	// type 7 short-circuits zero; the rest walks the focus chain.
 	// STUB: PLAYER 0x00769440
@@ -117,8 +115,6 @@ namespace RBX {
 			}
 			loseFocus();
 		}
-
-
 		RBXASSERT(focus == NULL);               // binary: App/gui/GUI.cpp:118
 		return processNonFocus(e);
 	}
@@ -464,14 +460,10 @@ namespace RBX {
 
 
 
-
-
 		RBXASSERT(0);                           // binary: App/gui/GUI.cpp:463
 		return result;
 	}
-
 	// ---- UnifiedWidget::processShown family (batch781) ----
-
 	// mac: 0x5CE8D2 (175B): canvas from the e+8/+10 shorts, getMyRect, then the
 	// in-title interval test on the e+4 short pair (LO=x HI=y, the same
 	// ucomiss jb directions as the binary).
@@ -491,7 +483,6 @@ namespace RBX {
 		}
 		return processShown_OutOfTitle(e);
 	}
-
 	// mac: 0x5CE7FA (215B, assert "menuState == SHOWN_APPEARING" :503): the
 	// press LOUD: SHOWN demotes to HOVER; SHOWN_APPEARING promotes to SHOWN.
 	// STUB: PLAYER 0x00768d40
@@ -509,7 +500,6 @@ namespace RBX {
 		}
 		else
 		{
-
 			RBXASSERT(menuState == SHOWN_APPEARING); // binary: App/gui/GUI.cpp:503
 			if (e.eventType == 4 && menuState != SHOWN)
 			{
@@ -539,16 +529,13 @@ namespace RBX {
 
 
 
-
-
 		RBXASSERT(menuState == HOVER);          // binary: App/gui/GUI.cpp:532
 		loseFocus();
 		Canvas canvas;
 		canvas.x = (float)e.canvasX;
 		canvas.y = (float)e.canvasY;
 		Rect rect = getMyRect(canvas);
-		float mx = (float)e.mouseX;
-		float my = (float)e.mouseY;
+		float mx = (float)e.mouseX; float my = (float)e.mouseY;
 		if (mx >= rect.low.x && rect.high.x >= mx && my >= rect.low.y && rect.high.y >= my)
 		{
 			if (e.eventType == 4 && menuState != SHOWN)
@@ -566,7 +553,6 @@ namespace RBX {
 		if (menuState != NOTHING) { menuState = NOTHING; onMenuStateChanged(); }
 		return GuiResponse();
 	}
-
 	// mac: 0x5CED6A (374B, assert "menuState == NOTHING" :561): in-rect press/release state walks; out-of-rect demotes.
 	// STUB: PLAYER 0x00768fb0
 	// STUB: STUDIO 0x007b4a50
@@ -606,7 +592,6 @@ namespace RBX {
 		}
 		return GuiResponse::sunk();
 	}
-
 	// mac: 0x5CE982 (628B, asserts :619/:635, batch781): the out-of-title machine.
 	// STUB: PLAYER 0x0076a090
 	// STUB: STUDIO 0x007b5b30
@@ -631,7 +616,6 @@ namespace RBX {
 				}
 				return r;
 			}
-
 			RBXASSERT(getFocus() == NULL);      // binary: App/gui/GUI.cpp:619
 			if (menuState != NOTHING) { menuState = NOTHING; onMenuStateChanged(); }
 			return r;
@@ -870,6 +854,32 @@ namespace RBX {
 		return menuSelectColor;
 	}
 
+	// mac: 0x37AD10 (slot 35; batch785): the "0" assert is the GUI.h:69 hook;
+	// the binary then returns G3D::Vector2::zero()'s two floats.
+	// FUNCTION: PLAYER 0x006c89b0
+	// FUNCTION: STUDIO 0x007aa2c0
+	Vector2 GuiItem::getChildPosition(const GuiItem* child, Canvas canvas) const
+	{
+		assertChildPosZeroHook();
+		(void)child; (void)canvas;
+		return G3D::Vector2::zero();
+	}
+
+	// mac: 0x4D8490 (slot 34; batch783): dispatches the parent's walk.
+	// STUB: PLAYER 0x006c8b90
+	// STUB: STUDIO 0x007aa540
+	Vector2 GuiItem::getPosition(Canvas canvas) const
+	{
+		assertGetGuiParentHook();
+		return getGuiParent()->getChildPosition(this, canvas);
+	}
+
+
+	// ---- Slot-34/35 bodies out-of-line (the binary had the expansions in
+	// include/Gui/GUI.h; MSVC needs one addressable definition per vtable
+	// slot, so the bodies live here and open with the GUI.h assert hooks,
+	// which keeps the debugHook strings at the header site). ----
+
 	// mac: 0x5CD5F4 (387B, batch787; CONST per mangle __ZNK...): the length
 	// guard (rep -12), then extents (+0x20), Canvas = {f[2]-f[0],
 	// f[3]-f[1]}, getMyRect (+0x5CE65C), the center start ((high+low)*0.5f
@@ -924,32 +934,6 @@ namespace RBX {
 			const G3D::Color4& fgColor = *(const G3D::Color4*)(const void*)&textColor;  // the +120..135 fg view
 			label2d(adorn, labelText, fgColor, backdrop, (Text::XAlign)xAlign);
 		}
-	}
-
-
-	// ---- Slot-34/35 bodies out-of-line (the binary had the expansions in
-	// include/Gui/GUI.h; MSVC needs one addressable definition per vtable
-	// slot, so the bodies live here and open with the GUI.h assert hooks,
-	// which keeps the debugHook strings at the header site). ----
-
-	// mac: 0x4D8490 (slot 34; batch783): dispatches the parent's walk.
-	// STUB: PLAYER 0x006c8b90
-	// STUB: STUDIO 0x007aa540
-	Vector2 GuiItem::getPosition(Canvas canvas) const
-	{
-		assertGetGuiParentHook();
-		return getGuiParent()->getChildPosition(this, canvas);
-	}
-
-	// mac: 0x37AD10 (slot 35; batch785): the "0" assert is the GUI.h:69 hook;
-	// the binary then returns G3D::Vector2::zero()'s two floats.
-	// STUB: PLAYER 0x006c89b0
-	// STUB: STUDIO 0x007aa2c0
-	Vector2 GuiItem::getChildPosition(const GuiItem* child, Canvas canvas) const
-	{
-		assertChildPosZeroHook();
-		(void)child; (void)canvas;
-		return G3D::Vector2::zero();
 	}
 
 	// mac: 0x5CCDB6 (103B): the guarded static singleton.  The body reads the

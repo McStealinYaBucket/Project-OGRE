@@ -33,6 +33,336 @@ static float segSizeRadians()
 	255 = ~ pi
 */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static unsigned char rotationToByteBase(float angle)
 {
 	RBXASSERT(angle <= (Math::pif()+0.0001f));
@@ -159,14 +489,10 @@ void Math::setHeadingElevation(CoordinateFrame& c, float heading, float elevatio
 	float elevationVector = sinf(elevation);
 
 	float xzLength = sqrtf(1 - elevationVector * elevationVector);
-
 	Vector3 look(-sinf(heading) * xzLength, elevationVector, -cosf(heading) * xzLength);
-
 	Vector3 lookAt = c.translation + look.direction();
-
 	c.lookAt(lookAt);
 }
-
 // mac: 0x22CAA4
 bool Math::lessThan(const Vector3& min, const Vector3& max)
 {
@@ -174,7 +500,6 @@ bool Math::lessThan(const Vector3& min, const Vector3& max)
 			&&	(min.y < max.y)
 			&&	(min.z < max.z)	);
 }
-
 // mac: 0x22CAD4. TOOLCHAIN FIX (s485): the Mach-O build classified with
 // __fpclassifyf, but MSVC's _fpclass takes a DOUBLE -- float denormals
 // normalize on conversion, so _fpclass never reported them (proved by
@@ -187,13 +512,11 @@ bool Math::isDenormal(float f)
 	return ((bits & 0x7F800000u) == 0) && ((bits & 0x007FFFFFu) != 0);
 }
 /* MOVED VERBATIM to App/util/OrientId.cpp (2026-09-26; same Math:: member). */
-
 // mac: 0x22CB24
 bool Math::isNanInfVector3(const Vector3& v)
 {
 	return (isNanInf(v.x) || isNanInf(v.y) || isNanInf(v.z));
 }
-
 // helper matching binary use in isNanInfDenormVector3: true unless the
 // float is zero or normal. TOOLCHAIN FIX (s485, same _fpclass-double
 // cause as isDenormal above): bit-exact -- exponent all-set (NaN/Inf)
@@ -213,7 +536,6 @@ bool Math::isNanInfDenormVector3(const Vector3& v)
 	return (isNanInfDenorm(v.x) || isNanInfDenorm(v.y) || isNanInfDenorm(v.z));
 }
 /* MOVED VERBATIM to App/util/OrientId.cpp (2026-09-26; same Math:: member). */
-
 // mac: 0x22CC5A
 bool Math::fixDenorm(float& f)
 {
@@ -224,7 +546,6 @@ bool Math::fixDenorm(float& f)
 	}
 	return false;
 }
-
 // mac: 0x22CC5A (inlined float version per component in binary)
 bool Math::fixDenorm(Vector3& v)
 {
@@ -246,7 +567,6 @@ bool Math::fixDenorm(Vector3& v)
 	}
 	return result;
 }
-
 // mac: 0x22CEBA
 unsigned char Math::rotationToByte(float angle)
 {
@@ -254,13 +574,11 @@ unsigned char Math::rotationToByte(float angle)
 	unsigned char answer = rotationToByteBase(wrapped);
 	return answer;
 }
-
 // mac: 0x22CFB2
 float Math::rotationFromByte(unsigned char byteAngle)
 {
 	return rotationFromByteBase(byteAngle);
 }
-
 // see  http://kwon3d.com/theory/moi/triten.html
 // mac: 0x22CFEA
 Matrix3 Math::getIWorldAtPoint(const Vector3& cofmPos,
@@ -282,7 +600,6 @@ Matrix3 Math::getIWorldAtPoint(const Vector3& cofmPos,
 										-xz,	-yz,		x2 + y2	);
 	return answer;
 }
-
 // see  http://kwon3d.com/theory/moi/triten.html
 // mac: 0x22D0D9
 Matrix3 Math::getIBodyAtPoint(const Vector3& p,
@@ -300,50 +617,41 @@ Matrix3 Math::getIBodyAtPoint(const Vector3& p,
 		+	mass		 * Matrix3(	y2 + z2,	-xy,		-xz,
 										-xy,	x2 + z2,	-yz,
 										-xz,	-yz,		x2 + y2	);
-
 	return answer;
 }
-
 // see  http://kwon3d.com/theory/moi/triten.html
 // mac: 0x22D1B7
 Matrix3 Math::momentToObjectSpace(const Matrix3& iWorld, const Matrix3& bodyRotation)
 {
 	return bodyRotation.transpose() * iWorld * bodyRotation;
 }
-
 // mac: 0x22D209
 Matrix3 Math::momentToWorldSpace(const Matrix3& iBody, const Matrix3& bodyRotation)
 {
 	return bodyRotation * iBody * bodyRotation.transpose();
 }
-
 // mac: 0x22D25B
 Vector3 Math::toDiagonal(const Matrix3& m)
 {
 	return Vector3(m[0][0], m[1][1], m[2][2]);
 }
-
 // mac: 0x22D284
 Matrix3 Math::fromVectorToVectorRotation( const Vector3& fromVec, const Vector3& toVec )
 {
 	Matrix3 rotMatrix = Matrix3::identity();
 	Vector3 rotationAxis = fromVec.cross(toVec);
-
 	if( rotationAxis.magnitude() > kEpsilon )
 	{
 		float rotAngle = acos(fromVec.dot(toVec)/(fromVec.magnitude() * toVec.magnitude()));
 		rotationAxis /= rotationAxis.magnitude();
 		rotMatrix = fromRotationAxisAndAngle(rotationAxis, rotAngle);
 	}
-
 	return rotMatrix;
 }
-
 // mac: 0x22D45B
 Matrix3 Math::fromRotationAxisAndAngle( const Vector3& axis, const float& angleRads )
 {
 	Matrix3 rotMatrix = Matrix3::identity();
-
 	if( axis.magnitude() > kEpsilon )
 	{
 		float r00 = 1 + (1-cos(angleRads))*(axis.x*axis.x-1);
@@ -358,10 +666,8 @@ Matrix3 Math::fromRotationAxisAndAngle( const Vector3& axis, const float& angleR
 		rotMatrix.set(r00, r01, r02, r10, r11, r12, r20, r21, r22);
 	}
 	Math::orthonormalizeIfNecessary(rotMatrix);
-
 	return rotMatrix;
 }
-
 // mac: 0x22D674
 Matrix3 Math::fromDirectionCosines(	const Vector3& fromX, const Vector3& fromY, const Vector3& fromZ,
 									const Vector3& toX, const Vector3& toY, const Vector3& toZ )
@@ -375,38 +681,29 @@ Matrix3 Math::fromDirectionCosines(	const Vector3& fromX, const Vector3& fromY, 
 	float r20 = toZ.dot(fromX);
 	float r21 = toZ.dot(fromY);
 	float r22 = toZ.dot(fromZ);
-
 	Matrix3 rotMatrix(r00, r01, r02, r10, r11, r12, r20, r21, r22);
 	Math::orthonormalizeIfNecessary(rotMatrix);
-
 	return rotMatrix;
 }
-
 /*
 	OrientId = 6 * NormalX + NormalY
 */
-
 // catches bad matrices set by users
 // mac: 0x22D892
 // NOTE (2026-09-26): isAxisAligned/getOrientId/idToMatrix3 bodies MOVED VERBATIM
 // to App/util/OrientId.cpp (same Math:: members, same 2013 EAs below). Math.obj
 // drags Line/CoordinateFrame/gpc link debts; the CFrame binary codec needs only
 // these three, so they live in a debt-free TU. See OrientId.cpp.
-
 // mac: 0x22DAD8
 Matrix3 Math::rotateAboutZ(const Matrix3& matrix, float radians)
 {
 	Matrix3 rotMatrix(Matrix3::identity());
-
 	float sinR = sin(radians);
 	float cosR = cos(radians);
-
 	rotMatrix.setColumn(0, Vector3(cosR, sinR, 0.0f));
 	rotMatrix.setColumn(1, Vector3(-sinR, cosR, 0.0f));
-
 	return matrix * rotMatrix;
 }
-
 // mac: 0x22DBC3
 Matrix3 Math::snapToAxes(const Matrix3& align)
 {
@@ -415,7 +712,6 @@ Matrix3 Math::snapToAxes(const Matrix3& align)
 	int tBest = -1;
 	float best = 0.0;
 	float dots[3][3];
-
 	for (int a = 0; a < 3; ++a) {
 		Vector3 aAxis = align.column(a);
 		for (int t = 0; t < 3; ++t) {
@@ -435,7 +731,6 @@ Matrix3 Math::snapToAxes(const Matrix3& align)
 	if (best < 0.0) {
 		bestV *= -1.0;
 	}
-
 	int aSecond = -1;
 	int tSecond = -1;
 	float second = 0.0;
@@ -460,29 +755,24 @@ Matrix3 Math::snapToAxes(const Matrix3& align)
 	if (second < 0.0) {
 		secondV *= -1.0;
 	}
-
 	int aThird = 3 - aBest - aSecond;
 	int tThird = 3 - tBest - tSecond;
 	Vector3 thirdV = Matrix3::identity().column(tThird);
 	if (dots[aThird][tThird] < 0.0) {
 		thirdV *= -1.0;
 	}
-
 	Matrix3 answer;
 	answer.setColumn(aBest, bestV);
 	answer.setColumn(aSecond, secondV);
 	answer.setColumn(aThird, thirdV);
-
 	return answer;
 }
-
 // mac: 0x22DF0A
 Vector3 Math::toGrid(const Vector3& v, const Vector3& grid)
 {
 	Vector3 units = v / grid;
 	return iRoundVector3(units) * grid;
 }
-
 // mac: 0x22DF8D
 // STUB: PLAYER 0x00757ab0
 // STUB: STUDIO 0x00896c30
@@ -492,34 +782,29 @@ Vector3 Math::iRoundVector3(const Vector3& point)
 					(float)iRound(point.y),
 					(float)iRound(point.z)	);
 }
-
 // mac: 0x22E003
 Vector3 Math::toGrid(const Vector3& v, float grid)
 {
 	return toGrid(v, Vector3(grid, grid, grid));
 }
-
 // mac: 0x22E03D
 CoordinateFrame Math::snapToGrid(const CoordinateFrame& snap, float grid)
 {
 	return CoordinateFrame(	snapToAxes(snap.rotation),
 							toGrid(snap.translation, grid)	);
 }
-
 // mac: 0x22E0B2
 CoordinateFrame Math::snapToGrid(const CoordinateFrame& snap, const Vector3& grid)
 {
 	return CoordinateFrame( snapToAxes(snap.rotation),
 							toGrid(snap.translation, grid)	);
 }
-
 // mac: 0x22E113 - asserts at Math.cpp:811 ("answer.magnitude() < 1.01f") and :814 ("0")
-// STUB: PLAYER 0x00757960
-// STUB: STUDIO 0x00896ae0
+// FUNCTION: PLAYER 0x00757960
+// FUNCTION: STUDIO 0x00896ae0
 Vector3 Math::safeDirection(const Vector3& v)
 {
 	float fMagnitude = v.magnitude();
-
     if (fMagnitude > 1e-12f) {
 		float fInvMagnitude = 1.0f / fMagnitude;
 		Vector3 answer = Vector3(v.x * fInvMagnitude, v.y * fInvMagnitude, v.z * fInvMagnitude);
@@ -791,11 +1076,203 @@ const Matrix3 Math::matrixTiltQuadrant(int quadrant)
 	// 3:  tilt around the z axis negatively
 	case (3):	return matrixTiltNegativeZ();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	default:	RBXASSERT(0);
 				return Matrix3::identity();
 	}
 }
-
 // mac: 0x22EE98 - assert "radians >= 0.0" at Math.cpp:1282
 // STUB: PLAYER 0x00758430
 // STUB: STUDIO 0x008975b0
@@ -816,6 +1293,10 @@ int Math::toYAxisQuadrant(const CoordinateFrame& c)
 	float angle = atan2(-look.x, -look.z);
 	return radiansToQuadrant(angle);
 }
+
+
+
+
 
 // mac: 0x22EF9E - assert "0" at Math.cpp:1308
 // STUB: PLAYER 0x0075a070
@@ -850,16 +1331,13 @@ bool Math::intersectRayConvexPolygon(const RBX::RbxRay& ray,  const std::vector<
 
     return true;
 }
-
 const float areaTolerance = 0.5;
-
 // mac: 0x22F408 - assert "0" at Math.cpp:1343
-// STUB: PLAYER 0x0075aee0
-// STUB: STUDIO 0x00899cc0
+// FUNCTION: PLAYER 0x0075aee0
+// FUNCTION: STUDIO 0x00899cc0
 std::vector<Vector3> Math::spatialPolygonIntersection(const std::vector<Vector3>& polyA,  const std::vector<Vector3>& polyB)
 {
     std::vector<Vector3> result;
-
     if( polyA.size() < 3 || polyB.size() < 3 )
     {
         RBXASSERT(0);
@@ -925,10 +1403,8 @@ std::vector<Vector3> Math::spatialPolygonIntersection(const std::vector<Vector3>
         result.clear();
         return result;
     }
-
     return result;
 }
-
 // mac: 0x22F274 - assert "hit != Vector3::inf()" at Math.cpp:1420
 // STUB: PLAYER 0x00759190
 // STUB: STUDIO 0x00898310
@@ -936,7 +1412,6 @@ bool Math::intersectRayPlane(const RBX::RbxRay& ray, const G3D::Plane& plane, G3
 {
 	float dotProd = ray.direction().dot(plane.normal());
 	bool onPositiveSide = plane.halfSpaceContains(ray.origin());
-
 	if (	(onPositiveSide && (dotProd < 0.0))
 		||	(!onPositiveSide && (dotProd > 0.0))	)
 	{
@@ -1025,6 +1500,16 @@ const Matrix3& Math::getAxisRotationMatrix(int face)
 	static Matrix3 z = Matrix3::fromEulerAnglesXYZ(0.0f, (float)G3D::halfPi(), 0.0f);
 	static Matrix3 y_neg = y;
 	static Matrix3 z_neg = z;
+
+
+
+
+
+
+
+
+
+
 
 	switch (face) {
 		case (0):	return Matrix3::identity();

@@ -40,7 +40,6 @@ namespace RBX {
 		Vector2 size = getSize(canvas);				// vt+156 (slot 39; ignores canvas)
 		return Rect(position.x, position.y, position.x + size.x, position.y + size.y);
 	}
-
 	// getMyRect2D (0x3EC564): min/max canonicalization (the binary calls
 	// fminf/fmaxf; VS2012 lacks the C99 pair, so the ternaries here are
 	// the identical min/max selects).
@@ -52,7 +51,6 @@ namespace RBX {
 					r.low.x < r.high.x ? r.high.x : r.low.x,
 					r.low.y < r.high.y ? r.high.y : r.low.y);
 	}
-
 	// The binary expanded getPosition/getChildPosition from this header:
 	// the debugHook strings say "include/Gui/GUI.h" at :64/:69, and the
 	// verbatim expressions are #expr-generated.  The bodies are out-of-

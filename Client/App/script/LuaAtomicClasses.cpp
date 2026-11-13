@@ -268,6 +268,29 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
+	// mac: 0x19855C (96B, batch352): lua_CFunction wrapper. DELTA vs the
+	// header's generic wrapper (lua_checkstring_secure): the binary uses
+	// luaL_checklstring verbatim.
+	// FUNCTION: PLAYER 0x00671940
+	// FUNCTION: STUDIO 0x007d98a0
+	template<>
+	int Bridge<G3D::Vector3, true>::on_index(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
+	}
+
+	// mac: 0x167CB2 (102B, batch352): always throws, with the name. The original's linker folded every
+	// "%s cannot be assigned to" thrower onto this one body (the generic on_newindex wrappers all call it).
+	// FUNCTION: PLAYER 0x00881b80
+	// FUNCTION: STUDIO 0x0092c410
+	template<>
+	void Bridge<G3D::Vector3, true>::on_newindex(G3D::Vector3& object,
+		const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("%s cannot be assigned to", name);
+	}
+
 	// mac: 0x1676B8 (784B, batch352). Member order + case variants replicated:
 	// x/X y/Y z/Z unit/Unit magnitude/Magnitude lerp/Lerp Cross Dot
 	// isClose, else runtime_error with the name. unit/magnitude use
@@ -330,36 +353,6 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s is not a valid member", name);
 	}
 
-	// mac: 0x167CB2 (102B, batch352): always throws, with the name.
-	template<>
-	void Bridge<G3D::Vector3, true>::on_newindex(G3D::Vector3& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
-	// mac: 0x19855C (96B, batch352): lua_CFunction wrapper. DELTA vs the
-	// header's generic wrapper (lua_checkstring_secure): the binary uses
-	// luaL_checklstring verbatim.
-	// FUNCTION: PLAYER 0x00671940
-	// FUNCTION: STUDIO 0x007d98a0
-	template<>
-	int Bridge<G3D::Vector3, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-	// mac: 0x1985BC (98B, batch352): same luaL_checklstring verbatim.
-	// STUB: PLAYER 0x00671910
-	// STUB: STUDIO 0x007d9870
-	template<>
-	int Bridge<G3D::Vector3, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// VS2012 RULE (proven by dumpbin 2026-10-07): an explicit member
 	// specialization that is never odr-used in-TU is silently dropped from
@@ -372,8 +365,6 @@ namespace RBX { namespace Lua {
 	// the lib will odr-use them itself and these holders can go.
 	int (*volatile g_bridgeV3Index)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<G3D::Vector3>::on_index;
-	int (*volatile g_bridgeV3NewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::Vector3>::on_newindex;
 
 	// mac: 0x16EB12 (48B, batch352): checkudata + return 0. No dtor call
 	// (POD; the header's generic on_gc runs ~Class() instead).
@@ -770,16 +761,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198986 (98B, batch360): same verbatim.
-	// STUB: PLAYER 0x00671b50
-	// STUB: STUDIO 0x007d9ab0
-	template<>
-	int Bridge<RBX::UDim, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x16EE06 (48B, batch360): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -805,6 +786,31 @@ namespace RBX { namespace Lua {
 	// GLOBAL: STUDIO 0x00f0b99c
 	// Bridge<RBX::UDim2,1>::className
 	const char* Bridge<RBX::UDim2, true>::className = "UDim2";
+
+	// mac: 0x16BB50 (336B, batch361): X/Width -> UDim copy @+0, Y/Height ->
+	// UDim @+8 (UDim2 is two packed UDims per UDim.h); same isupper-gated
+	// errors as UDim.
+	// STUB: PLAYER 0x00887be0
+	// STUB: STUDIO 0x00931be0
+	template<>
+	int Bridge<RBX::UDim2, true>::on_index(const RBX::UDim2& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "X") == 0 || strcmp(name, "Width") == 0)
+		{
+			Bridge<RBX::UDim>::pushNewObject(L, object.x);
+			return 1;
+		}
+		if (strcmp(name, "Y") == 0 || strcmp(name, "Height") == 0)
+		{
+			Bridge<RBX::UDim>::pushNewObject(L, object.y);
+			return 1;
+		}
+		if (name && !isupper(name[0]))
+			throw RBX::runtime_error(
+				"%s is not a valid member, did you forget to capitalize the first letter?", name);
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
 
 	// mac: 0x16DB48 (512B, batch361): same set as UDim (add/sub/unm; no
 	// tostring/mul/div).
@@ -840,31 +846,6 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x16BB50 (336B, batch361): X/Width -> UDim copy @+0, Y/Height ->
-	// UDim @+8 (UDim2 is two packed UDims per UDim.h); same isupper-gated
-	// errors as UDim.
-	// STUB: PLAYER 0x00887be0
-	// STUB: STUDIO 0x00931be0
-	template<>
-	int Bridge<RBX::UDim2, true>::on_index(const RBX::UDim2& object,
-		const char* name, lua_State* L)
-	{
-		if (strcmp(name, "X") == 0 || strcmp(name, "Width") == 0)
-		{
-			Bridge<RBX::UDim>::pushNewObject(L, object.x);
-			return 1;
-		}
-		if (strcmp(name, "Y") == 0 || strcmp(name, "Height") == 0)
-		{
-			Bridge<RBX::UDim>::pushNewObject(L, object.y);
-			return 1;
-		}
-		if (name && !isupper(name[0]))
-			throw RBX::runtime_error(
-				"%s is not a valid member, did you forget to capitalize the first letter?", name);
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
 	// mac: 0x16BCA0 (102B, batch361): always throws, with the name.
 	template<>
 	void Bridge<RBX::UDim2, true>::on_newindex(RBX::UDim2& object,
@@ -883,16 +864,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198A48 (98B, batch361): same verbatim.
-	// STUB: PLAYER 0x00671bb0
-	// STUB: STUDIO 0x007d9b10
-	template<>
-	int Bridge<RBX::UDim2, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x16EEB2 (48B, batch361): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -941,12 +912,8 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18B9CB-0x18B9E7).
 	int (*volatile g_bridgeUdimIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::UDim>::on_index;
-	int (*volatile g_bridgeUdimNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::UDim>::on_newindex;
 	int (*volatile g_bridgeUdim2Index)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::UDim2>::on_index;
-	int (*volatile g_bridgeUdim2NewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::UDim2>::on_newindex;
 
 	// ---- Faces (section 225) ----
 
@@ -1048,16 +1015,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198B0A (98B, batch365): same verbatim.
-	// STUB: PLAYER 0x00671c10
-	// STUB: STUDIO 0x007d9b70
-	template<>
-	int Bridge<RBX::Faces, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x1703C6 (50B, batch365): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -1148,8 +1105,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18BA03).
 	int (*volatile g_bridgeFacesIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::Faces>::on_index;
-	int (*volatile g_bridgeFacesNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::Faces>::on_newindex;
 
 	// ---- Axes (section 226) ----
 
@@ -1265,16 +1220,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198BCC (98B, batch366): same verbatim.
-	// STUB: PLAYER 0x00671c70
-	// STUB: STUDIO 0x007d9bd0
-	template<>
-	int Bridge<RBX::Axes, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x16FEE6 (48B, batch366): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -1293,15 +1238,6 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x16FF82 (67B, batch366): checkudata + forward.
-	// FUNCTION: PLAYER 0x0087ff50
-	// FUNCTION: STUDIO 0x009e45d0
-	template<>
-	int Bridge<RBX::Axes, true>::on_tostring(lua_State* L)
-	{
-		return on_tostring(getObject(L, 1), L);
-	}
-
 	// mac: 0x16F8F0 (170B, batch366): StringConverter (EA-backed in
 	// util/NormalId.cpp 0x1E7FEA; single home -- EnumProperty only calls)
 	// + pushlstring.
@@ -1314,6 +1250,15 @@ namespace RBX { namespace Lua {
 		std::string s = RBX::StringConverter<RBX::Axes>::convertToString(object);
 		lua_pushlstring(L, s.c_str(), s.size());
 		return 1;
+	}
+
+	// mac: 0x16FF82 (67B, batch366): checkudata + forward.
+	// FUNCTION: PLAYER 0x0087ff50
+	// FUNCTION: STUDIO 0x009e45d0
+	template<>
+	int Bridge<RBX::Axes, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
 	}
 
 	// mac: 0x16C07E (321B, batch422): up-to-6 Enum.Axis-or-NormalId items ORed
@@ -1366,8 +1311,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18BA1F).
 	int (*volatile g_bridgeAxesIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::Axes>::on_index;
-	int (*volatile g_bridgeAxesNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::Axes>::on_newindex;
 
 	// ---- CellID (section 227) ----
 
@@ -1450,16 +1393,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198C8E (98B, batch367): same verbatim.
-	// STUB: PLAYER 0x00671d30
-	// STUB: STUDIO 0x007d9c90
-	template<>
-	int Bridge<RBX::CellID, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x17018A (110B, batch367): CellID::operator== (carried in the
 	// CellID import); reuse it.
@@ -1491,8 +1424,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18BA3B).
 	int (*volatile g_bridgeCellIDIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::CellID>::on_index;
-	int (*volatile g_bridgeCellIDNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::CellID>::on_newindex;
 
 	// ---- InputObject (section 228) ----
 
@@ -1601,16 +1532,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x198D50 (98B, batch370): same verbatim.
-	// STUB: PLAYER 0x00671d90
-	// STUB: STUDIO 0x007d9cf0
-	template<>
-	int Bridge<RBX::InputObject, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x16FC78 (50B, batch370): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -1712,8 +1633,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18BA57).
 	int (*volatile g_bridgeInputObjectIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::InputObject>::on_index;
-	int (*volatile g_bridgeInputObjectNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::InputObject>::on_newindex;
 
 	// ---- Color3 (section 229) ----
 
@@ -2447,16 +2366,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x1981F2 (98B, batch378): same verbatim.
-	// STUB: PLAYER 0x006717f0
-	// STUB: STUDIO 0x007d9750
-	template<>
-	int Bridge<G3D::CoordinateFrame, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x16ECFE (48B, batch378): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -2497,8 +2406,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18B8B3).
 	int (*volatile g_bridgeCFrameIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<G3D::CoordinateFrame>::on_index;
-	int (*volatile g_bridgeCFrameNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::CoordinateFrame>::on_newindex;
 
 	// ---- Region3 / Region3int16 (section 232) ----
 
@@ -2607,16 +2514,6 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x1982B4 (98B, batch380): same verbatim.
-	// STUB: PLAYER 0x00671850
-	// STUB: STUDIO 0x007d97b0
-	template<>
-	int Bridge<RBX::Region3, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x170B10 (48B, batch380): checkudata + return 0 (no dtor, POD).
 	template<>
@@ -2736,8 +2633,6 @@ namespace RBX { namespace Lua {
 	// VS2012 odr-use holders (openState names these at 0x18B8CF/0x18B8EB).
 	int (*volatile g_bridgeRegion3Index)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::Region3>::on_index;
-	int (*volatile g_bridgeRegion3NewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<RBX::Region3>::on_newindex;
 	int (*volatile g_bridgeRegion3int16Index)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<RBX::Region3int16>::on_index;
 	int (*volatile g_bridgeRegion3int16NewIndex)(lua_State*) =
@@ -3008,8 +2903,8 @@ namespace RBX { namespace Lua {
 	// mac: 0x167F66 (310B, batch393). No-throw shape; scalar converts via
 	// (int)lua_tofloat (cvttss2si truncation); int lane products narrowed
 	// to int16 (wrap). Matches G3D operator*(int) lane-for-lane.
-	// STUB: PLAYER 0x008849c0
-	// STUB: STUDIO 0x0092e9c0
+	// FUNCTION: PLAYER 0x008849c0
+	// FUNCTION: STUDIO 0x0092e9c0
 	int Vector3int16Bridge::on_mul(lua_State* L)
 	{
 		G3D::Vector3int16 a;
@@ -3026,9 +2921,9 @@ namespace RBX { namespace Lua {
 		}
 		else
 		{
-			const G3D::Vector3int16& b = getObject(L, 2);
+			a = getObject(L, 2);
 			int c = (int)lua_tofloat(L, 1);
-			pushVector3int16(L, G3D::Vector3int16(c * b.x, c * b.y, c * b.z));
+			pushVector3int16(L, G3D::Vector3int16(c * a.x, c * a.y, c * a.z));
 		}
 		return 1;
 	}
@@ -3059,9 +2954,9 @@ namespace RBX { namespace Lua {
 		}
 		else
 		{
-			const G3D::Vector3int16& b = getObject(L, 2);
+			a = getObject(L, 2);
 			int c = lua_tointeger(L, 1);
-			pushVector3int16(L, G3D::Vector3int16(c / b.x, c / b.y, c / b.z));
+			pushVector3int16(L, G3D::Vector3int16(c / a.x, c / a.y, c / a.z));
 		}
 		return 1;
 	}
@@ -3225,9 +3120,9 @@ namespace RBX { namespace Lua {
 		}
 		else
 		{
-			const G3D::Vector2int16& b = getObject(L, 2);
+			a = getObject(L, 2);
 			int c = lua_tointeger(L, 1);
-			pushVector2int16(L, G3D::Vector2int16(c / b.x, c / b.y));
+			pushVector2int16(L, G3D::Vector2int16(c / a.x, c / a.y));
 		}
 		return 1;
 	}

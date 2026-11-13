@@ -21,6 +21,16 @@ LOGGROUP(ScriptContext);
 
 namespace RBX { namespace Lua {
 
+// mac: 0x1AB302 (224B, batch473): deadline waiter; asserts the thread isn't already yield-captured.
+// FUNCTION: PLAYER 0x008a9ed0
+// FUNCTION: STUDIO 0x009edaf0
+void YieldingThreads::queueWaiter(lua_State* L, double timeout)
+{
+	RBXASSERT(!RobloxExtraSpace::get(L)->yieldCaptured);
+	RobloxExtraSpace::get(L)->yieldCaptured = true;
+	waiters.push(WaitingThread(L, Time::Interval(timeout)));
+}
+
 // mac: 0x1AB266/0x1AB270 (C1 9B delegates to C2 100B, batch473/475):
 // context at +0, default-constructed queue at +4.
 YieldingThreads::YieldingThreads(ScriptContext* context)
@@ -42,26 +52,6 @@ YieldingThreads::WaitingThread::WaitingThread(lua_State* thread, Time::Interval 
 void YieldingThreads::queueWaiter(lua_State* thread)
 {
 	queueWaiter(thread, 0);
-}
-
-// mac: 0x1AB302 (224B, batch473): deadline waiter. Asserts the thread isn't
-// already yield-captured (ScriptEvent.cpp:29), then marks it.
-// STUB: PLAYER 0x008a9ed0
-// STUB: STUDIO 0x009edaf0
-void YieldingThreads::queueWaiter(lua_State* thread, double timeout)
-{
-	if (FLog::Asserts != 0 && (RobloxExtraSpace::get(thread)->yieldCaptured))
-	{
-		if (RBX::_internal::_debugHook == 0
-			|| RBX::_internal::_debugHook("!RobloxExtraSpace::get(thread)->yieldCaptured",
-				"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ScriptEvent.cpp", 29) == 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"!RobloxExtraSpace::get(thread)->yieldCaptured file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ScriptEvent.cpp line: 29");
-		}
-	}
-	RobloxExtraSpace::get(thread)->yieldCaptured = true;
-	waiters.push(WaitingThread(thread, Time::Interval(timeout)));
 }
 
 // mac: 0x1AB3E2 (23B, batch473): queue size.

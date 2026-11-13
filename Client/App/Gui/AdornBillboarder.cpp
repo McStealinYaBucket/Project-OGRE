@@ -62,42 +62,6 @@ AdornBillboarder::AdornBillboarder(Adorn* adornArg, const Camera& camera,
 	vp->update(rectTemp, camera, size, frameCopy);
 }
 
-// STUB: PLAYER 0x009d3450
-// STUB: STUDIO 0x00a9fd20
-bool AdornBillboarder::isVisibleAndValid() const
-{
-	// mac: 0x820864 (15B): movzx of the +0x40 isValid byte through the
-	// stored vp; the method body reads only it.
-	return vp->isValid;
-}
-
-Rect AdornBillboarder::get2DExtents()
-{
-	// The slot-8 twin (the binary's own-named getViewport 0x820874;
-	// const there, our Adorn decl is non-const): the memberwise
-	// vp->rect copy riding our Rect container.
-	return Rect(vp->rect);
-}
-
-// STUB: PLAYER 0x009d3470
-// STUB: STUDIO 0x00a9fd40
-G3D::Rect2D AdornBillboarder::getViewport() const
-{
-	// mac: 0x820874 (55B): the four movss of the vp->rect homes
-	// (+0x30..+0x3C) into the sret destination = the memberwise
-	// Rect2D copy.
-	return vp->rect;
-}
-
-// STUB: PLAYER 0x009d5650
-// STUB: STUDIO 0x00aa1f20
-Camera* AdornBillboarder::getCamera() const
-{
-	// mac: 0x821F12 (7B): xor eax, eax -- the head-slot override is always
-	// null; the camera flows through the VP's update instead.
-	return NULL;
-}
-
 // STUB: PLAYER 0x0096baf0
 // STUB: STUDIO 0x00a1a5c0
 G3D::Vector2 AdornBillboarder::drawFont2D(const std::string& text,
@@ -114,6 +78,33 @@ G3D::Vector2 AdornBillboarder::drawFont2D(const std::string& text,
 	return G3D::Vector2(0.0f, 0.0f);
 }
 
+Rect AdornBillboarder::get2DExtents()
+{
+	// The slot-8 twin (the binary's own-named getViewport 0x820874;
+	// const there, our Adorn decl is non-const): the memberwise
+	// vp->rect copy riding our Rect container.
+	return Rect(vp->rect);
+}
+
+// STUB: PLAYER 0x009d3450
+// STUB: STUDIO 0x00a9fd20
+bool AdornBillboarder::isVisibleAndValid() const
+{
+	// mac: 0x820864 (15B): movzx of the +0x40 isValid byte through the
+	// stored vp; the method body reads only it.
+	return vp->isValid;
+}
+
+// STUB: PLAYER 0x009d3470
+// STUB: STUDIO 0x00a9fd40
+G3D::Rect2D AdornBillboarder::getViewport() const
+{
+	// mac: 0x820874 (55B): the four movss of the vp->rect homes
+	// (+0x30..+0x3C) into the sret destination = the memberwise
+	// Rect2D copy.
+	return vp->rect;
+}
+
 // STUB: PLAYER 0x009d5600
 // STUB: STUDIO 0x00aa1ed0
 boost::shared_ptr<TextureProxyBase> AdornBillboarder::createTextureProxy(
@@ -123,6 +114,15 @@ boost::shared_ptr<TextureProxyBase> AdornBillboarder::createTextureProxy(
 	// Adorn declares no such slot -- sig-correct stub (DELTAs (2)/(5)).
 	(void)contentId; (void)flag; (void)b;
 	return boost::shared_ptr<TextureProxyBase>();
+}
+
+// STUB: PLAYER 0x009d5650
+// STUB: STUDIO 0x00aa1f20
+Camera* AdornBillboarder::getCamera() const
+{
+	// mac: 0x821F12 (7B): xor eax, eax -- the head-slot override is always
+	// null; the camera flows through the VP's update instead.
+	return NULL;
 }
 
 // STUB: PLAYER 0x009d5660

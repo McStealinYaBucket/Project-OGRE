@@ -39,6 +39,7 @@
 #include "V8DataModel/Workspace.h"
 #include "V8DataModel/Lighting.h"
 #include "V8DataModel/GuiRoot.h"
+#include "Gui/GuiEvent.h"
 #include "V8DataModel/ContentProvider.h"
 #include "V8DataModel/ContentFilter.h"
 #include "V8DataModel/KeyframeSequenceProvider.h"
@@ -107,6 +108,11 @@
 
 LOGGROUP(CloseDataModel)
 LOGGROUP(LegacyLock)
+
+// Registered by DataModel.cpp's static initializers (PLAYER 0x00a665a0 / 0x00a665c0, between
+// MachineIdUploader's flag and the "ItemChanged" event); both start false (.bss).
+FASTFLAGVARIABLE(NewLightAPI, false)			// GLOBAL 0x00de4760 (STUDIO 0x00f83b31)
+FASTFLAGVARIABLE(ImageRectEnabled, false)		// GLOBAL 0x00de4761
 
 namespace RBX {
 
@@ -347,7 +353,53 @@ namespace RBX {
 	//////////////////////////////////////////////////////////////////////////////////
 	// DataModel (ctor 0x2D41E0)
 	//////////////////////////////////////////////////////////////////////////////////
+	// iOS: internal RBX::registerNewImageAPI() (DataModel.cpp), run once by the ctor under
+	// FFlag::ImageRectEnabled. Body not written yet.
+	// STUB: PLAYER 0x0064ea00
+	// STUB: STUDIO 0x0076b4d0
+	static void registerNewImageAPI()
+	{
+		STUB(0x0064ea00);
+	}
+
+	// Defined in Light.cpp (PLAYER 0x0075ed40) and Workspace.cpp (0x007154c0).
+	void registerNewLightAPI();
+	void registerNetworkStreamingProp();
+
+	// GLOBAL: PLAYER 0x00de4768
+	// GLOBAL: STUDIO 0x00f83b38
+	static boost::once_flag newImageAPIFlag = BOOST_ONCE_INIT;
+	// GLOBAL: PLAYER 0x00de4770
+	// GLOBAL: STUDIO 0x00f83b40
+	static boost::once_flag newLightAPIFlag = BOOST_ONCE_INIT;
+	// GLOBAL: PLAYER 0x00de4778
+	// GLOBAL: STUDIO 0x00f83b48
+	static boost::once_flag networkStreamingPropFlag = BOOST_ONCE_INIT;
+
+	// GLOBAL: PLAYER 0x00de4c0c
+	// GLOBAL: STUDIO 0x00f83fd8
+	rbx::atomic<int> DataModel::count;
+
+	// IMetric overrides (2013 vftable 0x00b2ffa4). Bodies not written yet.
+	// STUB: PLAYER 0x00642af0
+	// STUB: STUDIO 0x00760370
+	double DataModel::getMetricValue(const std::string& name) const
+	{
+		STUB(0x00642af0);
+		return 0.0;
+	}
+
+	// STUB: PLAYER 0x0064d850
+	// STUB: STUDIO 0x0076a340
+	DataModel::~DataModel()
+	{
+		count--;
+		if (placeID != 0)
+			RbxDbgInfo::RemovePlace(placeID);
+	}
+
 	// STUB: PLAYER 0x0064ec50
+	// STUB: STUDIO 0x0076b720
 	DataModel::DataModel(Verb* lockVerb, DataModel* parentDM)
 		:DescribedNonCreatable<DataModel, ServiceProvider, sDataModel>()
 		,VerbContainer(NULL)
@@ -378,34 +430,28 @@ namespace RBX {
 		,placeVersion(0)
 		,creatorID(0)
 		,creatorType(CREATOR_USER)
-		,guiBuilder(this)
 		,parentDataModel(parentDM)
 	{
-		/* 2013 body (0x0064f05b..): FFlag-gated registerNewLightAPI/registerNewImageAPI and
-		   registerNetworkStreamingProp through call_once, hackFlagSet.insert(0x800) under
-		   hackFlagSetMutex, ++count (0x00de4c0c), setName("Game"), the parent lock
-		   (fw()->b21.set(true, fwRef())) and guiBuilder.Initialize(this). Not written yet. */
-	}
+		if (FFlag::NewLightAPI)
+		{
+			FASTLOG(FLog::CloseDataModel, "Register new light API");
+			boost::call_once(&registerNewLightAPI, newLightAPIFlag);
+		}
+		if (FFlag::ImageRectEnabled)
+		{
+			FASTLOG(FLog::CloseDataModel, "Register new image API");
+			boost::call_once(&registerNewImageAPI, newImageAPIFlag);
+		}
+		FASTLOG(FLog::CloseDataModel, "Register network streaming prop");
+		boost::call_once(&registerNetworkStreamingProp, networkStreamingPropFlag);
 
-	DataModel::~DataModel()
-	{
-	}
-
-	// IMetric overrides (2013 vftable 0x00b2ffa4). Bodies not written yet.
-	// STUB: PLAYER 0x00642af0
-	// STUB: STUDIO 0x00760370
-	double DataModel::getMetricValue(const std::string& name) const
-	{
-		STUB(0x00642af0);
-		return 0.0;
-	}
-
-	// STUB: PLAYER 0x00650660
-	// STUB: STUDIO 0x0076d120
-	std::string DataModel::getMetric(const std::string& name) const
-	{
-		STUB(0x00650660);
-		return std::string();
+		addHackFlag(0x800);
+		count++;
+		setName("Game");
+		// The parent lock: FWInstance's first byte (fw+0x18), through the out-of-line
+		// Instance::fw() 0x006beaa0 and FWValue<bool>::set 0x0052c000.
+		fw()->b21.set(true, fwRef());
+		guiBuilder.Initialize(this);
 	}
 
 	/* mac: 0x2D3742 — creates via Creatable<Instance>::create<DataModel, Verb*, DataModel*> */
@@ -417,6 +463,14 @@ namespace RBX {
 		shared_ptr<DataModel> dm = Creatable<Instance>::create<DataModel>(lockVerb, parentDM);
 		doDataModelSetup(dm, flag);
 		return dm;
+	}
+
+	// STUB: PLAYER 0x00650660
+	// STUB: STUDIO 0x0076d120
+	std::string DataModel::getMetric(const std::string& name) const
+	{
+		STUB(0x00650660);
+		return std::string();
 	}
 
 	/* mac: 0x2D83C4 — asserts "runService" (DataModel.cpp:1485), reads gameTime at runService+116 */
@@ -495,6 +549,63 @@ namespace RBX {
 			numPartInstances--;
 		ServiceProvider::onDescendantRemoving(descendant);
 		this->setDirty(true);
+	}
+
+	// Bodies not written yet (2013 vftable slots +0x58 / +0x64).
+	// STUB: PLAYER 0x0062ee00
+	// STUB: STUDIO 0x0074eb20
+	void DataModel::onChildAdded(Instance* child)
+	{
+		STUB(0x0062ee00);
+		ServiceProvider::onChildAdded(child);
+	}
+
+	// STUB: PLAYER 0x0063e180
+	// STUB: STUDIO 0x0075c030
+	void DataModel::onChildChanged(Instance* instance, const PropertyChanged& event)
+	{
+		RBXASSERT(write_requested==1);
+		ServiceProvider::onChildChanged(instance, event);
+		this->setDirty(true);
+		itemChangedSignal(shared_from(instance), &event.getDescriptor());
+	}
+
+	// STUB: PLAYER 0x0064fce0
+	// STUB: STUDIO 0x0076c790
+	GuiResponse DataModel::processAccelerators(const GuiEvent& event)
+	{
+		STUB(0x0064fce0);
+		return GuiResponse();
+	}
+
+	// STUB: PLAYER 0x0062f010
+	// STUB: STUDIO 0x0074eda0
+	GuiResponse DataModel::processCameraCommands(const GuiEvent& event)
+	{
+		STUB(0x0062f010);
+		return GuiResponse();
+	}
+
+	// STUB: PLAYER 0x00645770
+	// STUB: STUDIO 0x00762730
+	void DataModel::renderPass2d(Adorn* adorn, IMetric* graphicsMetric)
+	{
+		STUB(0x00645770);
+	}
+
+	// STUB: PLAYER 0x00640970
+	// STUB: STUDIO 0x0075e200
+	void DataModel::renderMouse(Adorn* adorn)
+	{
+		STUB(0x00640970);
+	}
+
+	// STUB: PLAYER 0x0064ae00
+	// STUB: STUDIO 0x007679f0
+	bool DataModel::processEvent(const UIEvent& event)
+	{
+		STUB(0x0064ae00);
+		return false;
 	}
 
 	int DataModel::getNumPlayers() const
@@ -1784,26 +1895,6 @@ workspace->setAndLockParent(this);
 
 	/* mac: 0x2D257A — matches 2016 exactly. Binary reads Visit+96 string inline;
 	   2016 spells it visit->getUploadUrl(). */
-	// FUNCTION: PLAYER 0x00641c50
-	// FUNCTION: STUDIO 0x0075f440
-	bool DataModel::canSave(const Instance* instance)
-	{
-		// If the UploadURL is empty, they don't have permissions to save.  Shut. It. Down.
-		if (Visit* visit = ServiceProvider::find<Visit>(instance))
-			return !visit->getUploadUrl().empty();
-
-		return true;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////
-	// Load / save (0x2CD928/0x2CDA8C/0x2CDBAA/0x2CDDFE + helper 0x2D7FFE)
-	// Evidence: LoadSave.txt + LoadCallees.txt decompiles; March 2016
-	// DataModel.cpp used as shape template (see session notes — 2013 omits the
-	// 2016 additions: RobloxReplicatedStorage/ReplicatedFirst clears,
-	// LuaSourceContainer blocking loads, processAfterLoad, isContentLoaded
-	// guards, analytics, workspaceLoadedSignal, timed stats).
-	//////////////////////////////////////////////////////////////////////////////////
-
 	/* mac: 0x2D7FFE — "asset/?id=<n>" on the provider base URL + fetch. */
 	// STUB: PLAYER 0x00640280
 	// STUB: STUDIO 0x0075db10
@@ -1815,6 +1906,26 @@ workspace->setAndLockParent(this);
 		StandardOut::singleton()->printf(RBX::MESSAGE_INFO, "DataModel loading from: %s", url.c_str());
 
 		return ServiceProvider::create<ContentProvider>(this)->getContent(ContentId(url));
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Load / save (0x2CD928/0x2CDA8C/0x2CDBAA/0x2CDDFE + helper 0x2D7FFE)
+	// Evidence: LoadSave.txt + LoadCallees.txt decompiles; March 2016
+	// DataModel.cpp used as shape template (see session notes — 2013 omits the
+	// 2016 additions: RobloxReplicatedStorage/ReplicatedFirst clears,
+	// LuaSourceContainer blocking loads, processAfterLoad, isContentLoaded
+	// guards, analytics, workspaceLoadedSignal, timed stats).
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// FUNCTION: PLAYER 0x00641c50
+	// FUNCTION: STUDIO 0x0075f440
+	bool DataModel::canSave(const Instance* instance)
+	{
+		// If the UploadURL is empty, they don't have permissions to save.  Shut. It. Down.
+		if (Visit* visit = ServiceProvider::find<Visit>(instance))
+			return !visit->getUploadUrl().empty();
+
+		return true;
 	}
 
 	/* mac: 0x2CD928 — server-gated world replace: clear terrain + service
@@ -1968,13 +2079,6 @@ workspace->setAndLockParent(this);
 	{
 		guiBuilder.buildGui(adorn, workspace.get(), buildInGameGui);
 		loadCoreScripts();
-	}
-
-	// DataModel vtable slot +160 reader (see header).  Live counters TODO.
-	double DataModel::getStatValue(const std::string& name) const
-	{
-		(void)name;
-		return 0.0;
 	}
 
 	/* mac: 0x2E2906 — first call sets +3108 and fires the loaded signal. */
@@ -2213,8 +2317,7 @@ RBX_REGISTER_CLASS(RBX::Network::Players);
 }
 
 DECOMP_SIZE_ASSERT(RBX::DataModel::GenericJob, 0x248);
-// DataModel is 0xe10 (operator new in 0x0064f760) and every member up to guiBuilder sits at its
-// 2013 offset (probe compile 2026-11-12); the size assert waits on GuiBuilder, which is 0x24 here
-// against 0x20 in PLAYER (ctor 0x00644f30: zeros at +8/+0xc, map at +0x10, page at +0x1c), so
-// parentDataModel lands at 0xe10 instead of 0xe0c.
-// DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);
+// DataModel is 0xe10 in PLAYER (operator new in 0x0064f760); STUDIO's is 0xe0c (no
+// networkStatsWindowsOn, GuiBuilder 0x1c). GuiBuilder is 0x20 (ctor 0x00644f30).
+DECOMP_SIZE_ASSERT(RBX::GuiBuilder, 0x20);
+DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);

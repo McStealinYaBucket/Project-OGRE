@@ -107,8 +107,8 @@ namespace RBX {
 			return 0.0f;
 		}
 
-		// STUB: PLAYER 0x006ceaa0
-		// STUB: STUDIO 0x00812790
+		// FUNCTION: PLAYER 0x006ceaa0 FOLDED
+		// FUNCTION: STUDIO 0x00812790 FOLDED
 		virtual bool isVisible(const G3D::Rect2D& rect) const { (void)rect; return true; }
 
 		// FUNCTION: PLAYER 0x00575d00 FOLDED

@@ -1,6 +1,6 @@
 # Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
-# Library rows skipped for all libraries: not identical 212, not a kept function 49.
-# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1383, static name 337, not in our link 18, folded in our link 0.
+# Library rows skipped for all libraries: not identical 211, not a kept function 49.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1384, static name 337, not in our link 18, folded in our link 0.
 address,type,size,symbol,name
 00873950,library,126,,index2adr
 008739d0,library,34,?luaA_pushobject@@YAXPAUlua_State@@PBUlua_TValue@@@Z,"void __cdecl luaA_pushobject(struct lua_State *, struct lua_TValue const *)"

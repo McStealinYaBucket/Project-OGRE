@@ -54,15 +54,17 @@ namespace RBX {
 		static const Name& getNullName();				// 0x231DBC
 		static const Name* lookup(const char* name);	// 0x231CF8
 		static const Name* lookup(const std::string& name);	// 0x231DEE
-		static const Name* declare(const char* name);	// 0x23206A
+		static const Name* declare(const char* const& name);	// 0x23206A (by reference: iOS name; getNullName's init 0x00613a70 passes &ptr)
 
 		int getOrderIndex() const { return sortIndex; }
 
 		// 2016-style conveniences (inlined at use sites in the 2013 binary)
-		bool operator==(const Name& other) const { return str == other.str; }
+		// Names are interned: == / != compare addresses (ServiceProvider::onChildAdded 0x006a9770 and
+		// GuidItem::Registry::lookupByGuid 0x0055e030 cmp the getNullName() pointer; 2016 agrees).
+		bool operator==(const Name& other) const { return this == &other; }
 		bool operator==(const std::string& other) const { return str == other; }
 		bool operator!=(const std::string& other) const { return str != other; }
-		bool operator!=(const Name& other) const { return str != other.str; }
+		bool operator!=(const Name& other) const { return this != &other; }
 		bool operator<(const Name& other) const { return str < other.str; }
 		int compare(const std::string& other) const { return str.compare(other); }
 		int compare(const Name& other) const { return str.compare(other.str); }

@@ -3,13 +3,10 @@
    byte-identical, 3481 bytes; no 2013 divergence expected for this machinery).
    TODO: verify against 2013 (ThreadPool EAs pending).
    Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/util/ThreadPool.cpp */
-
 #include "stdafx.h"
-
 #include "Util/ThreadPool.h"
 #include "rbx/Debug.h"
 #include "boost/cast.hpp"
-
 namespace RBX
 {
 	BaseThreadPool::BaseThreadPool(int count, ShutdownPolicy shutdownPolicy,  PoolData* poolDataRaw)
@@ -19,7 +16,6 @@ namespace RBX
 	{
 		pool.resize(count);
 		poolLocks.resize(count);
-
 		for (int i=0; i<count; ++i){
 			poolLocks[i].reset(new rbx::spin_mutex());
 			pool[i].reset(new boost::thread(boost::bind(&loop, poolData, poolLocks[i], shutdownPolicy)));
@@ -44,7 +40,6 @@ namespace RBX
 			poolData->done = true;
 			poolData->cond.notify_all();
 		}
-
 		switch(shutdownPolicy)
 		{
 		case WaitForRunningTasks:

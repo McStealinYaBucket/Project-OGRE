@@ -14,18 +14,13 @@
    (ActivityMeter averageValue, InvocationMeter getTotalValuePerSecond).
    LOUD DELTA: ctor + these four bodies are conventional 2016-shape
    ports, not binary-faithful reconstructions. */
-
 #include "stdafx.h"
-
 #include "script/ScriptStats.h"
-
 namespace RBX
 {
-	// mac: 0x1AC40E: C1 no-op (the holder retains its default meters state
-	// until the resume probes add map entries).
+	// mac: 0x1AC40E: C1 no-op (the holder retains its default meters state until the resume probes add map entries).
 	ScriptStats::ScriptStats()
 	{}
-
 	// 2016-shaped (body unrecovered; see header).
 	void ScriptStats::stopCollection(const std::string& scriptHash)
 	{
@@ -37,7 +32,6 @@ namespace RBX
 			//We lost this sample somehow
 		}
 	}
-
 	// 2016-shaped (body unrecovered; see header).
 	void ScriptStats::startCollection(const std::string& scriptHash, bool firstTime)
 	{
@@ -60,10 +54,7 @@ namespace RBX
 			}
 		}
 	}
-
-	// 2016-shaped (body unrecovered; call gates binary-pinned
-	// batch716:503-507 -- only when the holder and script px are
-	// live, keyed by getFullName()).
+	// 2016-shaped (body unrecovered; call gates binary-pinned batch716:503-507 -- only when the holder and script px are live, keyed by getFullName()).
 	void ScriptStats::scriptResumeStarted(const std::string& scriptHash)
 	{
 		if (!scriptStack.empty()){
@@ -72,9 +63,7 @@ namespace RBX
 		startCollection(scriptHash, true);
 		scriptStack.push(scriptHash);
 	}
-
-	// 2016-shaped (body unrecovered; call gates binary-pinned
-	// batch716:592-596, the post-lua_resume/continuation slot).
+	// 2016-shaped (body unrecovered; call gates binary-pinned batch716:592-596, the post-lua_resume/continuation slot).
 	void ScriptStats::scriptResumeStopped(const std::string& scriptHash)
 	{
 		RBXASSERT(!scriptStack.empty());

@@ -63,6 +63,13 @@
 
 namespace RBX {
 
+	// FUNCTION: PLAYER 0x005c30c0 FOLDED
+	// FUNCTION: STUDIO 0x008a8950 FOLDED
+	void GuiBuilder::Initialize(DataModel* dataModel)
+	{
+		this->dataModel = dataModel;
+	}
+
 	void GuiBuilder::addCustomStat(const std::string& name, const std::string& text)
 	{
 		// mac: 0x3A436C: no-op when the name is already registered.
@@ -116,21 +123,48 @@ namespace RBX {
 		row->backdrop = G3D::Color4::clear();
 	}
 
-	// STUB: PLAYER 0x007ea3b0
-	// STUB: STUDIO 0x008ae4e0
-	shared_ptr<RelativePanel> GuiBuilder::buildFPS()
+	// mac: 0x3A230A (322B).  Layout ints verbatim: x=3 (RIGHT), y=1 (BOTTOM),
+	// offset (0,0) (one dword zero store over both words), style=1
+	// (VERTICAL), backdrop=clear.  Adorn* is never read -- NULL-safe.
+	// STUB: PLAYER 0x007e6950
+	// STUB: STUDIO 0x008aa4d0
+	shared_ptr<RelativePanel> GuiBuilder::buildRightPalette(Adorn* adorn)
 	{
-		// mac: 0x39FAAC: panel "FPS" variant 0 + EquationDisplay row, restyle 400x22.
-		// Panel +132 store (global byte) TODO — member unmapped.
-		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
-		panel->setName("FPS");
-		shared_ptr<EquationDisplay> row = Creatable<Instance>::create<EquationDisplay>("FPS              : ", "Render");
-		row->setParent(panel.get());
-		// End-state equivalent (binary writes 240x48 transiently, then 400x22).
-		restyleStatRow(row.get(), 24, 400.0f, 22.0f);
+		(void)adorn;
+		Layout layout;
+		layout.xLocation = Rect::RIGHT;
+		layout.yLocation = Rect::BOTTOM;
+		layout.offset = Vector2int16(0, 0);
+		layout.layoutStyle = Layout::VERTICAL;
+		layout.backdropColor = G3D::Color4::clear();
+		shared_ptr<RelativePanel> panel =
+			Creatable<Instance>::create<RelativePanel>(layout);
+		panel->setName("RightPalette");
 		return panel;
 	}
 
+	// mac: 0x3A1DB4 (430B).  Layout ints verbatim from disasm: x=2 (LEFT), y=0
+	// (TOP), offset (15,100), style=1 (VERTICAL), backdrop=clear.  The child
+	// goes under the panel via setParent (public wrapper for the binary's
+	// setParentInternal(child, panel, false) -- same call, same arg).
+	// STUB: PLAYER 0x007e6a90
+	// STUB: STUDIO 0x008aa610
+	shared_ptr<RelativePanel> GuiBuilder::buildChatHud()
+	{
+		Layout layout;
+		layout.xLocation = Rect::LEFT;
+		layout.yLocation = Rect::TOP;
+		layout.offset = Vector2int16(15, 100);
+		layout.layoutStyle = Layout::VERTICAL;
+		layout.backdropColor = G3D::Color4::clear();
+		shared_ptr<RelativePanel> panel =
+			Creatable<Instance>::create<RelativePanel>(layout);
+		panel->setName("ChatHud");
+		shared_ptr<ChatOutput> chat =
+			Creatable<Instance>::create<ChatOutput>();
+		chat->setParent(panel.get());
+		return panel;
+	}
 	// STUB: PLAYER 0x007e7260
 	// STUB: STUDIO 0x008aade0
 	shared_ptr<RelativePanel> GuiBuilder::buildStatsHud1()
@@ -186,151 +220,6 @@ namespace RBX {
 				row->setParent(panel.get());
 				restyleStatRow(row.get(), 12, 310.0f, 22.0f);
 			}
-		}
-		return panel;
-	}
-	// STUB: PLAYER 0x007ec640
-	// STUB: STUDIO 0x008af690
-	shared_ptr<RelativePanel> GuiBuilder::buildStatsHud2()
-	{
-		// Rows verbatim from IDA table; updaters TODO.
-		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
-		panel->setName("StatsHud2");
-		panel->visible = false;
-		{
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Contacts ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("CtctStageCtcts: ", "numContactsInCollisionStage"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("SteppingCtcts : ", "numSteppingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("TouchingCtcts : ", "numTouchingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Pair Hit    : ", "contactPairHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Feature Hit : ", "contactFeatureHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("# link(p)     : ", "numLinkCalls"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Nodes Out  : ", "numHashNodes"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Max Bucket : ", "maxBucketSize"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Kernel ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Solver Iteratn: ", "solverIterations"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Matrix Size   : ", "matrixSize"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Bodies        : ", "numBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("MaxBodies     : ", "maxBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Leaves        : ", "numLeafBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Constraints   : ", "numConstraints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Points        : ", "numPoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Active CC's : ", "percentConnectorsActive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy B      : ", "energyBody"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy C      : ", "energyConnector"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-		}
-		return panel;
-	}
-
-	// STUB: PLAYER 0x007ed390
-	// STUB: STUDIO 0x008b03e0
-	shared_ptr<RelativePanel> GuiBuilder::buildPhysicsStats()
-	{
-		// Rows verbatim from IDA table; updaters TODO.
-		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
-		panel->setName("PhysicsStats");
-		panel->visible = false;
-		{
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- FPS ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Physics       : ", "Physics"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("PhysicsReal   : ", "PhysicsReal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Render        : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Heartbeat     : ", "Heartbeat"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network send  : ", "Network Send"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network recv  : ", "Network Receive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Rx data pkts  : ", "Received Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Rx phys pkts  : ", "Received Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- World ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Player Radius : ", "Player Radius"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Parts		  : ", "numPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Moving parts  : ", "numMovingPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Joints        : ", "numJoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Contacts      : ", "numContactsAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Pair Hit    : ", "contactPairHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Feature Hit : ", "contactFeatureHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Nodes      : ", "numHashNodes"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Kernel ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Bodies        : ", "numBodiesAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Connectors    : ", "numConnectorsAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Iterations    : ", "numIterations"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-		}
-		return panel;
-	}
-
-	// STUB: PLAYER 0x007f01a0
-	// STUB: STUDIO 0x008b31f0
-	shared_ptr<RelativePanel> GuiBuilder::buildPhysicsStats2()
-	{
-		// Rows verbatim from IDA table; updaters TODO.
-		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
-		panel->setName("PhysicsStats2");
-		panel->visible = false;
-		{
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Physics Profiling ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "World Step -"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Break Time:			", "Break Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Assembler Time:	", "Assembler Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Filter Time:            ", "Filter Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  UI Step:                  ", "UI Step"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Broadphase:           ", "Broadphase"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Collision:                 ", "Collision"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Joint Sleep:           ", "Joint Sleep"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Wake:                    ", "Wake"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Sleep:                     ", "Sleep"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Joint Update:          ", "Joint Update"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Bodies:                   ", "Kernel Bodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Connectors:             ", "Kernel Connectors"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
-		}
-		return panel;
-	}
-
-	// STUB: PLAYER 0x007eed30
-	// STUB: STUDIO 0x008b1d80
-	shared_ptr<RelativePanel> GuiBuilder::buildSummaryStats()
-	{
-		// Rows verbatim from IDA table; updaters TODO.
-		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
-		panel->setName("SummaryStats");
-		panel->visible = false;
-		{
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FPS         : ", "Effective FPS"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Physics         : ", "Physics"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Render          : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network receive : ", "Network Receive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Rendering -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Video Memory  : ", "Video Memory"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Auto Quality: ", "Auto Quality"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Quality     : ", "FRM Quality"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Visible     : ", "FRM Visible"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Particles     : ", "Particles"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Scheduler Render        : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Present time            : ", "Present Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (total): ", "RenderStatsPassTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (scene): ", "RenderStatsPassScene"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (shadow): ", "RenderStatsPassShadow"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (UI): ", "RenderStatsPassUI"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (3D Adorns): ", "RenderStatsPass3dAdorns"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("----- Physics -----", "----- Physics -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Parts		  : ", "numPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Moving parts  : ", "numMovingPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Joints        : ", "numJoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Contacts      : ", "numContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("EnviroSpeed % : ", "environmentSpeed"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("TouchingCtcts : ", "numTouchingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("----- Network -----", "----- Network -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Data Ping       : ", "Data Ping"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Send KBytesPerSec       : ", "Send kBps"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Receive KBytesPerSec       : ", "Receive kBps"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Incoming Packet Queue       : ", "Packet Queue"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Data Packets      : ", "Received Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Physics Packets       : ", "Received Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Cluster Packets      : ", "Received Cluster Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("messagesInResendQueue      : ", "messagesInResendQueue"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Sent Data Packets       : ", "Sent Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
-			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Sent Physics Packets       : ", "Sent Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
 		}
 		return panel;
 	}
@@ -413,6 +302,21 @@ namespace RBX {
 		return panel;
 	}
 
+	// STUB: PLAYER 0x007ea3b0
+	// STUB: STUDIO 0x008ae4e0
+	shared_ptr<RelativePanel> GuiBuilder::buildFPS()
+	{
+		// mac: 0x39FAAC: panel "FPS" variant 0 + EquationDisplay row, restyle 400x22.
+		// Panel +132 store (global byte) TODO — member unmapped.
+		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
+		panel->setName("FPS");
+		shared_ptr<EquationDisplay> row = Creatable<Instance>::create<EquationDisplay>("FPS              : ", "Render");
+		row->setParent(panel.get());
+		// End-state equivalent (binary writes 240x48 transiently, then 400x22).
+		restyleStatRow(row.get(), 24, 400.0f, 22.0f);
+		return panel;
+	}
+
 	// STUB: PLAYER 0x007ea7a0
 	shared_ptr<RelativePanel> GuiBuilder::buildNetworkStats2(bool resetPage)
 	{
@@ -480,6 +384,162 @@ namespace RBX {
 			panel->visible = true;
 		return panel;
 	}
+
+	// STUB: PLAYER 0x007ec640
+	// STUB: STUDIO 0x008af690
+	shared_ptr<RelativePanel> GuiBuilder::buildStatsHud2()
+	{
+		// Rows verbatim from IDA table; updaters TODO.
+		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
+		panel->setName("StatsHud2");
+		panel->visible = false;
+		{
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Contacts ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("CtctStageCtcts: ", "numContactsInCollisionStage"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("SteppingCtcts : ", "numSteppingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("TouchingCtcts : ", "numTouchingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Pair Hit    : ", "contactPairHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Feature Hit : ", "contactFeatureHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("# link(p)     : ", "numLinkCalls"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Nodes Out  : ", "numHashNodes"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Max Bucket : ", "maxBucketSize"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Kernel ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Solver Iteratn: ", "solverIterations"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Matrix Size   : ", "matrixSize"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Bodies        : ", "numBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("MaxBodies     : ", "maxBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Leaves        : ", "numLeafBodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Constraints   : ", "numConstraints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Points        : ", "numPoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Active CC's : ", "percentConnectorsActive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy B      : ", "energyBody"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy C      : ", "energyConnector"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+		}
+		return panel;
+	}
+
+	// STUB: PLAYER 0x007ed390
+	// STUB: STUDIO 0x008b03e0
+	shared_ptr<RelativePanel> GuiBuilder::buildPhysicsStats()
+	{
+		// Rows verbatim from IDA table; updaters TODO.
+		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
+		panel->setName("PhysicsStats");
+		panel->visible = false;
+		{
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- FPS ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Physics       : ", "Physics"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("PhysicsReal   : ", "PhysicsReal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Render        : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Heartbeat     : ", "Heartbeat"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network send  : ", "Network Send"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network recv  : ", "Network Receive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Rx data pkts  : ", "Received Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Rx phys pkts  : ", "Received Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- World ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Player Radius : ", "Player Radius"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Parts		  : ", "numPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Moving parts  : ", "numMovingPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Joints        : ", "numJoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Contacts      : ", "numContactsAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Pair Hit    : ", "contactPairHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("% Feature Hit : ", "contactFeatureHitRatio"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("sH Nodes      : ", "numHashNodes"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Kernel ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Bodies        : ", "numBodiesAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Connectors    : ", "numConnectorsAll"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Iterations    : ", "numIterations"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+		}
+		return panel;
+	}
+	// STUB: PLAYER 0x007eed30
+	// STUB: STUDIO 0x008b1d80
+	shared_ptr<RelativePanel> GuiBuilder::buildSummaryStats()
+	{
+		// Rows verbatim from IDA table; updaters TODO.
+		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
+		panel->setName("SummaryStats");
+		panel->visible = false;
+		{
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FPS         : ", "Effective FPS"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Physics         : ", "Physics"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Render          : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Network receive : ", "Network Receive"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Rendering -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Video Memory  : ", "Video Memory"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Auto Quality: ", "Auto Quality"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Quality     : ", "FRM Quality"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("FRM Visible     : ", "FRM Visible"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Particles     : ", "Particles"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Scheduler Render        : ", "Render"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Present time            : ", "Present Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (total): ", "RenderStatsPassTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (scene): ", "RenderStatsPassScene"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (shadow): ", "RenderStatsPassShadow"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (UI): ", "RenderStatsPassUI"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Draw (3D Adorns): ", "RenderStatsPass3dAdorns"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("----- Physics -----", "----- Physics -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Parts		  : ", "numPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Moving parts  : ", "numMovingPrimitives"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Joints        : ", "numJoints"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Contacts      : ", "numContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("EnviroSpeed % : ", "environmentSpeed"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Energy T      : ", "energyTotal"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("TouchingCtcts : ", "numTouchingContacts"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("----- Network -----", "----- Network -----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Data Ping       : ", "Data Ping"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Send KBytesPerSec       : ", "Send kBps"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Receive KBytesPerSec       : ", "Receive kBps"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Incoming Packet Queue       : ", "Packet Queue"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Data Packets      : ", "Received Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Physics Packets       : ", "Received Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Received Cluster Packets      : ", "Received Cluster Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("messagesInResendQueue      : ", "messagesInResendQueue"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Sent Data Packets       : ", "Sent Data Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("Sent Physics Packets       : ", "Sent Physics Packets"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 440.0f, 22.0f); }
+		}
+		return panel;
+	}
+	// STUB: PLAYER 0x007f01a0
+	// STUB: STUDIO 0x008b31f0
+	shared_ptr<RelativePanel> GuiBuilder::buildPhysicsStats2()
+	{
+		// Rows verbatim from IDA table; updaters TODO.
+		shared_ptr<RelativePanel> panel = Creatable<Instance>::create<RelativePanel>();
+		panel->setName("PhysicsStats2");
+		panel->visible = false;
+		{
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "----- Physics Profiling ----"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<TextDisplay> w = Creatable<Instance>::create<TextDisplay>("", "World Step -"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Break Time:			", "Break Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Assembler Time:	", "Assembler Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Filter Time:            ", "Filter Time"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  UI Step:                  ", "UI Step"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Broadphase:           ", "Broadphase"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Collision:                 ", "Collision"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Joint Sleep:           ", "Joint Sleep"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Wake:                    ", "Wake"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Sleep:                     ", "Sleep"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Joint Update:          ", "Joint Update"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Bodies:                   ", "Kernel Bodies"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+			{ shared_ptr<EquationDisplay> w = Creatable<Instance>::create<EquationDisplay>("  Connectors:             ", "Kernel Connectors"); w->setParent(panel.get()); restyleStatRow(w.get(), 12, 260.0f, 22.0f); }
+		}
+		return panel;
+	}
+
+	// STUB: PLAYER 0x007f14e0
+	// STUB: STUDIO 0x008b44f0
+	void GuiBuilder::saveCustomStats()
+	{
+		// mac: 0x3A4F38: persist the registry via CustomStatsGuiJSON::WriteFile
+		// (binary builds the writer object on the stack; heap here — same
+		// observable behavior. Registry callback map + JSON reader TODO).
+		CustomStatsGuiJSON writer(this);
+		writer.WriteFile();
+	}
+
 	// STUB: PLAYER 0x007f1590
 	// STUB: STUDIO 0x008b45a0
 	shared_ptr<RelativePanel> GuiBuilder::buildCustomStats()
@@ -498,65 +558,6 @@ namespace RBX {
 			it->second.display = row;
 		}
 		restyleStatRow(header.get(), 12, 440.0f, 22.0f);
-		return panel;
-	}
-	// STUB: PLAYER 0x007f2e80
-	void GuiBuilder::nextNetworkStats()
-	{
-		networkStatsPage = (networkStatsPage >= 3) ? 1 : networkStatsPage + 1;
-	}
-
-	// STUB: PLAYER 0x007f14e0
-	// STUB: STUDIO 0x008b44f0
-	void GuiBuilder::saveCustomStats()
-	{
-		// mac: 0x3A4F38: persist the registry via CustomStatsGuiJSON::WriteFile
-		// (binary builds the writer object on the stack; heap here — same
-		// observable behavior. Registry callback map + JSON reader TODO).
-		CustomStatsGuiJSON writer(this);
-		writer.WriteFile();
-	}
-
-	// mac: 0x3A1DB4 (430B).  Layout ints verbatim from disasm: x=2 (LEFT), y=0
-	// (TOP), offset (15,100), style=1 (VERTICAL), backdrop=clear.  The child
-	// goes under the panel via setParent (public wrapper for the binary's
-	// setParentInternal(child, panel, false) -- same call, same arg).
-	// STUB: PLAYER 0x007e6a90
-	// STUB: STUDIO 0x008aa610
-	shared_ptr<RelativePanel> GuiBuilder::buildChatHud()
-	{
-		Layout layout;
-		layout.xLocation = Rect::LEFT;
-		layout.yLocation = Rect::TOP;
-		layout.offset = Vector2int16(15, 100);
-		layout.layoutStyle = Layout::VERTICAL;
-		layout.backdropColor = G3D::Color4::clear();
-		shared_ptr<RelativePanel> panel =
-			Creatable<Instance>::create<RelativePanel>(layout);
-		panel->setName("ChatHud");
-		shared_ptr<ChatOutput> chat =
-			Creatable<Instance>::create<ChatOutput>();
-		chat->setParent(panel.get());
-		return panel;
-	}
-
-	// mac: 0x3A230A (322B).  Layout ints verbatim: x=3 (RIGHT), y=1 (BOTTOM),
-	// offset (0,0) (one dword zero store over both words), style=1
-	// (VERTICAL), backdrop=clear.  Adorn* is never read -- NULL-safe.
-	// STUB: PLAYER 0x007e6950
-	// STUB: STUDIO 0x008aa4d0
-	shared_ptr<RelativePanel> GuiBuilder::buildRightPalette(Adorn* adorn)
-	{
-		(void)adorn;
-		Layout layout;
-		layout.xLocation = Rect::RIGHT;
-		layout.yLocation = Rect::BOTTOM;
-		layout.offset = Vector2int16(0, 0);
-		layout.layoutStyle = Layout::VERTICAL;
-		layout.backdropColor = G3D::Color4::clear();
-		shared_ptr<RelativePanel> panel =
-			Creatable<Instance>::create<RelativePanel>(layout);
-		panel->setName("RightPalette");
 		return panel;
 	}
 
@@ -584,6 +585,12 @@ namespace RBX {
 		const TopMenuBar* bar = Instance::fastDynamicCast<TopMenuBar>(found);
 		if (bar != NULL && bar->isVisible())
 			updateSummaryStats(const_cast<TopMenuBar*>(bar));
+	}
+
+	// STUB: PLAYER 0x007f2e80
+	void GuiBuilder::nextNetworkStats()
+	{
+		networkStatsPage = (networkStatsPage >= 3) ? 1 : networkStatsPage + 1;
 	}
 
 	// mac: 0x3A55E8 (250B).  Colors inlined as literals (Color3.cpp is NOT in
@@ -624,7 +631,7 @@ namespace RBX {
 
 	// mac: 0x3A330A (4193B).
 	// Stat reads go through DataModel vtable slot +160
-	// (DataModel::getStatValue); live counters are unported so the default
+	// (DataModel::getMetricValue, IMetric); live counters are unported so the default
 	// is 0.0 -- the whole threshold tree below is still exact and is tested
 	// with those zeros.
 	// Row mapping is INDEX-faithful to the binary (child0<-Effective,
@@ -644,11 +651,11 @@ namespace RBX {
 		static bool showPhysicsRows = false;  // FB2AC1.
 		static bool showNetworkRows = false;  // FB2AC2.
 
-		double effFPS = dataModel->getStatValue("Effective FPS");
-		double renderFPS = dataModel->getStatValue("Render FPS");
-		double physicsFPS = dataModel->getStatValue("Physics FPS");
-		double netCPU = dataModel->getStatValue("Network Receive CPU");
-		double physPackets = dataModel->getStatValue("Received Physics Packets");
+		double effFPS = dataModel->getMetricValue("Effective FPS");
+		double renderFPS = dataModel->getMetricValue("Render FPS");
+		double physicsFPS = dataModel->getMetricValue("Physics FPS");
+		double netCPU = dataModel->getMetricValue("Network Receive CPU");
+		double physPackets = dataModel->getMetricValue("Received Physics Packets");
 
 		// Render-time dominance (only when Effective < 30).
 		bool renderDominant = false;
@@ -656,10 +663,10 @@ namespace RBX {
 		bool unstable = false;
 		if ((float)effFPS < 30.0f)
 		{
-			double frameT = dataModel->getStatValue("Frame Time");
-			double renderT = dataModel->getStatValue("Render Time");
-			double physT = dataModel->getStatValue("Physics Time");
-			double netT = dataModel->getStatValue("Network Receive Time");
+			double frameT = dataModel->getMetricValue("Frame Time");
+			double renderT = dataModel->getMetricValue("Render Time");
+			double physT = dataModel->getMetricValue("Physics Time");
+			double netT = dataModel->getMetricValue("Network Receive Time");
 			float fT = (float)frameT;
 			float rT = (float)renderT;
 			float pT = (float)physT;
@@ -859,7 +866,6 @@ namespace RBX {
 			Creatable<Instance>::create<ChatButton>(adorn, "Chat", 15);
 		button->setParent(panel.get());
 		buildChatMenu(SafeChat::singleton().getChatRoot(), "", button);
-		chatMenu = panel;
 		return panel;
 	}
 

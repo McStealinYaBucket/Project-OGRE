@@ -61,7 +61,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<AllEnumDescriptorsPtr, true>::on_newindex(
 		AllEnumDescriptorsPtr& object, const char* name, lua_State* L);
 	template<> int Bridge<AllEnumDescriptorsPtr, true>::on_index(lua_State* L);
-	template<> int Bridge<AllEnumDescriptorsPtr, true>::on_newindex(lua_State* L);
 	template<> int Bridge<AllEnumDescriptorsPtr, true>::on_gc(lua_State* L);
 	template<> int Bridge<AllEnumDescriptorsPtr, true>::on_eq(lua_State* L);
 	template<> int Bridge<AllEnumDescriptorsPtr, true>::on_tostring(lua_State* L);
@@ -74,7 +73,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<EnumDescriptorPtr, true>::on_newindex(
 		EnumDescriptorPtr& object, const char* name, lua_State* L);
 	template<> int Bridge<EnumDescriptorPtr, true>::on_index(lua_State* L);
-	template<> int Bridge<EnumDescriptorPtr, true>::on_newindex(lua_State* L);
 	template<> int Bridge<EnumDescriptorPtr, true>::on_gc(lua_State* L);
 	template<> int Bridge<EnumDescriptorPtr, true>::on_eq(lua_State* L);
 	template<> int Bridge<EnumDescriptorPtr, true>::on_tostring(lua_State* L);
@@ -87,7 +85,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<EnumDescriptorItemPtr, true>::on_newindex(
 		EnumDescriptorItemPtr& object, const char* name, lua_State* L);
 	template<> int Bridge<EnumDescriptorItemPtr, true>::on_index(lua_State* L);
-	template<> int Bridge<EnumDescriptorItemPtr, true>::on_newindex(lua_State* L);
 	template<> int Bridge<EnumDescriptorItemPtr, true>::on_gc(lua_State* L);
 	template<> int Bridge<EnumDescriptorItemPtr, true>::on_eq(lua_State* L);
 	template<> int Bridge<EnumDescriptorItemPtr, true>::on_tostring(lua_State* L);

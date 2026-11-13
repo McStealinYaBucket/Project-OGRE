@@ -13,6 +13,8 @@ Two steps:
      Itanium C1/C2/D0/D1/D2) gets `this` typed as Class*, keeping the rest of its prototype.
          TVHEADLESS=1 ~/ida-pro-9.4/idat -A -S"tools/ida/import_types.py apply" -Lida/logs/PLAYER-06-types.log ida/PLAYER.i64
      The struct sizes are checked against the PDB's; a mismatch is logged and the type is not applied.
+fix_2013() then writes the 2013 layout where our tree is knowingly different (FWBase/FWInstance, DataModel's
+GuiBuilder size and the STUDIO DataModel); the changes are listed in the JSON's "fixups_2013".
 Classes and their 2013 proof: see CLASSES. A base class not in CLASSES is imported too (it is part of the
 proven layout), flagged "base" in the JSON and the type comment.
 """
@@ -28,6 +30,11 @@ CLASSES = [
     "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>", "RBX::Name",
     "RBX::DataModelJob", "RBX::DataModel::GenericJob", "RBX::GcJob", "RBX::LibraryService",
     "RBX::MovingAssemblyStage", "RBX::DataModelArbiter",
+    # phase4-core2 (core-datamodel.md): FWBase ctor 0x00619740, FWInstance ctor 0x0061d7e0 + operator== 0x00619140
+    # (100%), IFWHolder vftable 0x00b79100, ScriptContext ctor 0x0068ad20 / dtor 0x0068b1a0 (size assert 0x288),
+    # DataModel ctor 0x0064ec50 / dtor 0x0064d850 / operator new 0xe10 at 0x0064f760, MouseStats ctor 0x00641bd0
+    "RBX::FWBase", "RBX::FWInstance", "RBX::IFWHolder", "RBX::ScriptContext", "RBX::DataModel",
+    "RBX::DataModel::MouseStats", "RBX::RunningAverage<double,double>",
 ]
 
 
@@ -38,7 +45,62 @@ PRIM_SIZE = {"T_INT4": 4, "T_UINT4": 4, "T_LONG": 4, "T_ULONG": 4, "T_SHORT": 2,
              "T_INT8": 8, "T_UINT8": 8, "T_WCHAR": 2, "T_INT2": 2, "T_UINT2": 2, "T_INT1": 1, "T_UINT1": 1,
              "T_HRESULT": 4, "T_REAL80": 10}
 HEAD = re.compile(r"^(0x[0-9a-fA-F]+) : Length = \d+, Leaf = 0x[0-9a-fA-F]+ (\w+)")
-UDTLINE = re.compile(r"Size = (\d+)\s*,\s*class name = (.*), unique name = (.*), UDT\((0x[0-9a-fA-F]+)\)")
+UDTLINE = re.compile(r"Size = (\d+)\s*,\s*class name = (.*), unique name = ([^,\s]+)(?:, UDT\((0x[0-9a-fA-F]+)\))?")
+
+
+def fix_2013(res, target):
+    """Where our tree's layout still differs from the 2013 binary for a known reason, write the 2013 layout
+    (each case cites the 2013 function that proves it). target: PLAYER or STUDIO (from the output name).
+    Returns the list of changes made, stored in the JSON."""
+    done = []
+
+    def mem(c, name):
+        return next(m for m in res[c]["members"] if m["name"] == name)
+    fwb, fwi = res.get("RBX::FWBase"), res.get("RBX::FWInstance")
+    if fwb and fwb["size"] == 0x1c:
+        # FWBase ctor 0x00619740 stores 0x4..0x14 only and FWBase ends at 0x18; the three FWValue<bool> at
+        # 0x18/0x19/0x1a belong to FWInstance (its ctor 0x0061d7e0 stores 0, 0, 1 there). Our header keeps
+        # them in FWBase so Instance's accessors through shared_ptr<FWBase> compile (FeatherweightDict.h).
+        moved = [m for m in fwb["members"] if m["offset"] >= 0x18]
+        fwb["members"] = [m for m in fwb["members"] if m["offset"] < 0x15]
+        fwb["size"] = 0x18
+        if fwi:
+            fwi["members"] = sorted(fwi["members"] + moved, key=lambda m: m["offset"])
+            for b in fwi["bases"]:
+                if b["name"] == "RBX::FWBase":
+                    b["size"] = 0x18
+        done.append("FWBase 0x1c -> 0x18; b21/b22/b23 (0x18..0x1a) moved to FWInstance")
+    if "RBX::IFWHolder" in res:
+        # vftable 0x00b79100: five slots, no virtual destructor (FeatherweightDict.h)
+        res["RBX::IFWHolder"]["slots"] = [
+            "void (__thiscall *destroyFlyweight)(RBX::IFWHolder *this, RBX::FWBase *base)",
+            "RBX::FWBase *(__thiscall *valueUpdate)(RBX::IFWHolder *this, void *ref)",
+            "void (__thiscall *insertCopy)(RBX::IFWHolder *this, RBX::FWBase *base, void *ref)",
+            "bool (__thiscall *checkIfInDict)(RBX::IFWHolder *this, RBX::FWBase *base)",
+            "unsigned int (__thiscall *checkHash)(RBX::IFWHolder *this, RBX::FWBase *base)"]
+        done.append("IFWHolder: 5 vftable slots (PLAYER 0x00b79100)")
+    dm = res.get("RBX::DataModel")
+    if dm and mem("RBX::DataModel", "guiBuilder")["offset"] == 0xdec and dm["size"] == 0xe18:
+        # operator new(0xe10) at PLAYER 0x0064f760 / STUDIO 0x0076c210. GuiBuilder is 0x20 in PLAYER and 0x1c
+        # in STUDIO (ctor 0x00644f30; ours is 0x24, DataModel.cpp's size assert is off for that reason).
+        g = mem("RBX::DataModel", "guiBuilder")
+        g.update(kind="array", type="RBX::GuiBuilder (2013 size; ours is 0x24)", size=0x20)
+        mem("RBX::DataModel", "parentDataModel")["offset"] = 0xe0c
+        dm["size"] = 0xe10
+        if target == "STUDIO":
+            # the Oct 17 build has no networkStatsWindowsOn (0xc60): members 0xc64..0xcac sit 4 bytes lower
+            # (STUDIO ctor 0x0076b720: mutex 0xc60, hackFlagSet 0xc68, jobId 0xc80, write_requested 0xc9c,
+            # itemChangedSignal 0xca8); the 8-aligned boost::function at 0xcb0 absorbs it. GuiBuilder 0x1c.
+            dm["members"] = [m for m in dm["members"] if m["name"] != "networkStatsWindowsOn"]
+            for m in dm["members"]:
+                if 0xc64 <= m["offset"] < 0xcb0:
+                    m["offset"] -= 4
+            g["size"] = 0x1c
+            mem("RBX::DataModel", "parentDataModel")["offset"] = 0xe08
+        done.append("DataModel 0xe18 -> 0xe10: guiBuilder 0x%x, parentDataModel 0x%x%s" % (
+            g["size"], mem("RBX::DataModel", "parentDataModel")["offset"],
+            "; no networkStatsWindowsOn, 0xc64..0xcac -4" if target == "STUDIO" else ""))
+    return done
 
 
 def dump(pdb, out):
@@ -56,23 +118,23 @@ def dump(pdb, out):
     win = "Z:" + os.path.abspath(pdb).replace("/", "\\")
     proc = subprocess.Popen(["wine", CVDUMP, "-t", win], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     offs, uniq_at, newest, names = {}, {}, {}, {}
-    pos, cur = 0, None
-    prev = ""
+    pos, cur, fwd = 0, None, False
     for raw in proc.stdout:
         tmp.write(raw)
         line = raw.decode("latin-1")
         m = HEAD.match(line)
         if m:
-            cur = int(m.group(1), 16)
+            cur, fwd = int(m.group(1), 16), False
             offs[cur] = pos
+        elif "FORWARD REF" in line:
+            fwd = True      # a declaration only (also for a class the PDB never defines, e.g. RBX::Game)
         elif cur is not None and "class name = " in line:
             u = UDTLINE.search(line)
             if u:
                 uniq_at[cur] = u.group(3)
-                if u.group(1) != "0" or "FORWARD REF" not in prev:
+                names.setdefault(u.group(2), set()).add(u.group(3))
+                if not fwd:
                     newest[u.group(3)] = max(newest.get(u.group(3), 0), cur)
-                    names.setdefault(u.group(2), set()).add(u.group(3))
-        prev = line
         pos += len(raw)
     if proc.wait() != 0:
         sys.exit("cvdump failed")
@@ -102,6 +164,8 @@ def dump(pdb, out):
         d = {}
         if leaf in ("LF_CLASS", "LF_STRUCTURE", "LF_UNION"):
             u = UDTLINE.search(body)
+            if u is None:
+                sys.exit("unparsed class record:\n" + "".join(ls))
             d["size"], d["name"], d["unique"] = int(u.group(1)), u.group(2), u.group(3)
             d["fields"] = int(re.search(r"field list type (0x[0-9a-fA-F]+)", body).group(1), 16)
         elif leaf == "LF_POINTER":
@@ -235,7 +299,10 @@ def dump(pdb, out):
         mem.sort(key=lambda m: m["offset"])
         res[n] = {"size": c["size"], "vftable": vf, "virtual_bases": vb, "bases": bases, "members": mem,
                   "base": n not in listed, "unique": uniq_at.get(key, "")}
-    json.dump({"pdb": os.path.basename(pdb), "classes": res, "missing": missing}, open(out, "w"), indent=1)
+    target = os.path.basename(out).split("-")[0]
+    fixed = fix_2013(res, target)
+    json.dump({"pdb": os.path.basename(pdb), "classes": res, "missing": missing, "fixups_2013": fixed},
+              open(out, "w"), indent=1)
     print("import_types dump: %d classes (%d listed, %d bases), records read %d of %d, missing %s" % (
         len(res), sum(not v["base"] for v in res.values()), sum(v["base"] for v in res.values()),
         len(cache), len(offs), missing))
@@ -322,7 +389,10 @@ def apply():
             if c["vftable"] and not any(o == 0 and k == "b" and classes.get(b["name"], {}).get("vftable")
                                         for o, k, b in first):
                 vt = ida_typeinf.tinfo_t()
-                ida_typeinf.parse_decl(vt, None, "void **x;", ida_typeinf.PT_SIL)
+                if final and c.get("slots") and named(n + "_vtbl"):
+                    vt.create_ptr(named(n + "_vtbl"))
+                else:
+                    ida_typeinf.parse_decl(vt, None, "void **x;", ida_typeinf.PT_SIL)
                 add("__vftable", 0, vt)
             for off, k, x in first:
                 if off < pos:
@@ -381,6 +451,24 @@ def apply():
                 say("type %-80s size 0x%x%s" % (n, c["size"], " (base)" if c["base"] else ""))
 
     build(False)
+    for n, c in classes.items():
+        # a vftable whose slots are proven (fix_2013 "slots"): Class_vtbl, IDA's convention for __vftable
+        if not c.get("slots"):
+            continue
+        udt = ida_typeinf.udt_type_data_t()
+        for k, decl in enumerate(c["slots"]):
+            t = ida_typeinf.tinfo_t()
+            if ida_typeinf.parse_decl(t, None, decl + ";", ida_typeinf.PT_SIL) is None:
+                say("vtbl slot not parsed, void *:", decl)
+                ida_typeinf.parse_decl(t, None, "void *x;", ida_typeinf.PT_SIL)
+            nm = re.search(r"\*(\w+)\)", decl).group(1)     # parse_decl's name carries a C '_' prefix
+            u = ida_typeinf.udm_t()
+            u.name, u.offset, u.size, u.type = nm, k * 32, 32, t
+            udt.push_back(u)
+        t = ida_typeinf.tinfo_t()
+        if t.create_udt(udt, ida_typeinf.BTF_STRUCT) and \
+                t.set_named_type(None, n + "_vtbl", ida_typeinf.NTF_REPLACE) == ida_typeinf.TERR_OK:
+            say("type %s_vtbl (%d slots)" % (n, len(c["slots"])))
     build(True)
 
     # `this` of ctors/dtors
@@ -398,7 +486,7 @@ def apply():
         hit = next((c for c in ok if re.sub(r"\s+", "", c) == cls_n), None)
         if hit is None:
             continue
-        base = hit.split("::")[-1].split("<")[0]
+        base = re.sub(r"<.*>", "", hit).split("::")[-1]     # RBX::GuidItem<RBX::Instance> -> GuidItem
         structor = fn.startswith(base) or fn.startswith("~" + base) or "deleting destructor" in fn
         if not structor and not nm.startswith("?"):
             continue    # an Itanium name does not say whether a method is static
@@ -407,23 +495,44 @@ def apply():
             say("no prototype for 0x%08x %s" % (ea, dem))
             continue
         fd = ida_typeinf.func_type_data_t()
-        if not tif.get_func_details(fd) or fd.size() == 0:
-            say("no arguments for 0x%08x %s" % (ea, dem))
+        if not tif.get_func_details(fd):
+            say("no prototype details for 0x%08x %s" % (ea, dem))
             continue
+        if fd.size() == 0:
+            if not structor:
+                say("no arguments for 0x%08x %s" % (ea, dem))
+                continue
+            # a ctor/dtor always gets `this` in ecx, used or not (~GuidItem<Instance> 0x0061b060: IDA saw no use)
+            fd.push_back(ida_typeinf.funcarg_t())
+            fd.set_cc(ida_typeinf.CM_CC_THISCALL)
         cc = fd.get_cc()
         # IDA's prototype from an Itanium name passes `this` as the first stack argument (cdecl/stdcall);
         # MSVC passes it in ecx with the other arguments on the stack in the same order, so thiscall fits.
         itanium = nm.startswith("_ZN") and cc in (ida_typeinf.CM_CC_CDECL, ida_typeinf.CM_CC_STDCALL)
+        # IDA's own guess for a structor can be __usercall with the one argument in ecx (~DataModel 0x0064d850,
+        # ~ScriptContext 0x0068b1a0: `mov esi, ecx`, plain ret), or __stdcall without `this` where the MSVC name
+        # says __thiscall (??0/??1/??_G/??_E...@QAE...: RunningAverage<double,double> ctor 0x005b9790, ret 0x14)
+        ecx_only = (structor and cc == ida_typeinf.CM_CC_SPECIAL and fd.size() == 1 and fd[0].argloc.is_reg1()
+                    and fd[0].argloc.reg1() == 1)
+        add_this = (structor and cc == ida_typeinf.CM_CC_STDCALL and re.match(r"^\?\?(?:[01]|_[GE]).*?@@[QUAIEM]AE", nm)
+                    is not None)
+        if add_this:
+            rest = [ida_typeinf.funcarg_t(fd[k]) for k in range(fd.size())]
+            fd.clear()
+            for a in [ida_typeinf.funcarg_t()] + rest:
+                fd.push_back(a)
         if not structor and cc != ida_typeinf.CM_CC_THISCALL:
             continue    # static member functions (MSVC names say so; IDA's prototype is not thiscall)
         if not (cc == ida_typeinf.CM_CC_THISCALL or (cc == ida_typeinf.CM_CC_FASTCALL and fd.size() == 1)
-                or itanium):
+                or itanium or ecx_only or add_this):
             say("not thiscall (cc 0x%x, %d args), left alone: 0x%08x %s" % (cc, fd.size(), ea, dem))
             continue
         pt = ida_typeinf.tinfo_t()
         pt.create_ptr(named(hit))
         fd[0].type, fd[0].name = pt, "this"
         fd.set_cc(ida_typeinf.CM_CC_THISCALL)
+        if ecx_only:
+            fd[0].argloc = ida_typeinf.argloc_t()   # let thiscall place it (ecx)
         nt = ida_typeinf.tinfo_t()
         nt.create_func(fd)
         if ida_typeinf.apply_tinfo(ea, nt, ida_typeinf.TINFO_DEFINITE):

@@ -5,35 +5,25 @@
    VERIFIED against 2013: D2 0x2F8E80 (batch216) asserts writing==0
    (:30) + reading==0 (:31) then destroys the string member -- matches
    this layout exactly (int + string + int = 12B; JointStage+16). */
-
 #pragma once
-
 #include "rbx/Debug.h"
 #include "rbx/atomic.h"
-
-
 #ifdef __RBX_NOT_RELEASE
 	#define RBX_USE_CONCURRENCY_VALIDATOR(expr) (expr)
 #else
 	#define RBX_USE_CONCURRENCY_VALIDATOR(expr) ((void)0)
 #endif
-
-
-
 namespace RBX { 
-
 class ConcurrencyValidator
 {
 private:
     rbx::atomic<int> writing;
 	std::string writeLocation;
     mutable rbx::atomic<int> reading;
-
 public:
 	ConcurrencyValidator() : writing(0), reading(0)
 	{
 	}
-
 	// STUB: PLAYER 0x00501660
 	// STUB: STUDIO 0x00591940
 	~ConcurrencyValidator() {

@@ -766,6 +766,1144 @@
    "base": false,
    "unique": "VDataModelArbiter@RBX@@"
   },
+  "RBX::FWBase": {
+   "size": 24,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::enable_shared_from_this<RBX::FWBase>",
+     "offset": 4,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "holder",
+     "offset": 12,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::FWDictionnaryBase>",
+     "scalar": null
+    },
+    {
+     "name": "flag",
+     "offset": 20,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VFWBase@RBX@@"
+  },
+  "RBX::FWInstance": {
+   "size": 56,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FWBase",
+     "offset": 0,
+     "size": 24,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "b21",
+     "offset": 24,
+     "size": 1,
+     "kind": "class",
+     "type": "RBX::FWValue<bool>",
+     "scalar": null
+    },
+    {
+     "name": "b22",
+     "offset": 25,
+     "size": 1,
+     "kind": "class",
+     "type": "RBX::FWValue<bool>",
+     "scalar": null
+    },
+    {
+     "name": "b23",
+     "offset": 26,
+     "size": 1,
+     "kind": "class",
+     "type": "RBX::FWValue<bool>",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 28,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::FWStringValue",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VFWInstance@RBX@@"
+  },
+  "RBX::IFWHolder": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": false,
+   "unique": "VIFWHolder@RBX@@",
+   "slots": [
+    "void (__thiscall *destroyFlyweight)(RBX::IFWHolder *this, RBX::FWBase *base)",
+    "RBX::FWBase *(__thiscall *valueUpdate)(RBX::IFWHolder *this, void *ref)",
+    "void (__thiscall *insertCopy)(RBX::IFWHolder *this, RBX::FWBase *base, void *ref)",
+    "bool (__thiscall *checkIfInDict)(RBX::IFWHolder *this, RBX::FWBase *base)",
+    "unsigned int (__thiscall *checkHash)(RBX::IFWHolder *this, RBX::FWBase *base)"
+   ]
+  },
+  "RBX::ScriptContext": {
+   "size": 648,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::IScriptFilter",
+     "offset": 96,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 100,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "globalStates",
+     "offset": 104,
+     "size": 8,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "commandLineSandbox",
+     "offset": 112,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::Lua::WeakThreadRef",
+     "scalar": null
+    },
+    {
+     "name": "scripts",
+     "offset": 140,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::BaseScript *,std::less<RBX::BaseScript *>,std::allocator<RBX::BaseScript *> >",
+     "scalar": null
+    },
+    {
+     "name": "nextPendingScripts",
+     "offset": 152,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "pendingScripts",
+     "offset": 160,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::ScriptContext::ScriptStart,std::allocator<RBX::ScriptContext::ScriptStart> >",
+     "scalar": null
+    },
+    {
+     "name": "loadingScripts",
+     "offset": 176,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::ScriptContext::ScriptStart,std::allocator<RBX::ScriptContext::ScriptStart> >",
+     "scalar": null
+    },
+    {
+     "name": "runService",
+     "offset": 192,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::RunService>",
+     "scalar": null
+    },
+    {
+     "name": "yieldEvent",
+     "offset": 200,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Lua::YieldingThreads>",
+     "scalar": null
+    },
+    {
+     "name": "waitingThreads",
+     "offset": 204,
+     "size": 36,
+     "kind": "class",
+     "type": "rbx::safe_queue<RBX::ScriptContext::WaitingThread>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xf0",
+     "offset": 240,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "robloxPlace",
+     "offset": 241,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "scriptsDisabled",
+     "offset": 242,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "contentClearing",
+     "offset": 243,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "gcFullStepThreshold",
+     "offset": 244,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "gcFrequencyBase",
+     "offset": 248,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "lastGcTime",
+     "offset": 256,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "lastGcKb",
+     "offset": 264,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "statsItem",
+     "offset": 268,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::LuaStatsItem>",
+     "scalar": null
+    },
+    {
+     "name": "collectStats",
+     "offset": 276,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "scriptStats",
+     "offset": 280,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::ScriptStats>",
+     "scalar": null
+    },
+    {
+     "name": "reentrancy",
+     "offset": 288,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "timedoutCount",
+     "offset": 292,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    },
+    {
+     "name": "timoutSpan",
+     "offset": 296,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "timoutTime",
+     "offset": 304,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "timedout",
+     "offset": 312,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    },
+    {
+     "name": "timeoutThread",
+     "offset": 316,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "timeoutMutex",
+     "offset": 320,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::mutex",
+     "scalar": null
+    },
+    {
+     "name": "endTimoutThread",
+     "offset": 328,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "checkTimeout",
+     "offset": 332,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::CEvent",
+     "scalar": null
+    },
+    {
+     "name": "avgLuaGcInterval",
+     "offset": 336,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "avgLuaGcTime",
+     "offset": 384,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "avgLuaGcMem",
+     "offset": 432,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "threadsResumedRate",
+     "offset": 480,
+     "size": 64,
+     "kind": "class",
+     "type": "RBX::RunningAverageTimeInterval<1>",
+     "scalar": null
+    },
+    {
+     "name": "threadsThrottled",
+     "offset": 544,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "errorSignal",
+     "offset": 592,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "camelCaseViolation",
+     "offset": 596,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "libraryService",
+     "offset": 600,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::LibraryService>",
+     "scalar": null
+    },
+    {
+     "name": "heartbeatConnection",
+     "offset": 604,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    },
+    {
+     "name": "luaAllocator",
+     "offset": 608,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::LuaAllocator>",
+     "scalar": null
+    },
+    {
+     "name": "gcJob",
+     "offset": 612,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "waitingScriptsJob",
+     "offset": 620,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "scriptStatsMap",
+     "offset": 628,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::ScriptContext::ScriptStatInformation,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,RBX::ScriptContext::ScriptStatInformation> > >",
+     "scalar": null
+    },
+    {
+     "name": "camelCaseViolationCount",
+     "offset": 640,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "camelCaseViolationConnection",
+     "offset": 644,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VScriptContext@RBX@@"
+  },
+  "RBX::DataModel": {
+   "size": 3600,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::DataModel, RBX::ServiceProvider, char const *const RBX::sDataModel, 27, 0>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    },
+    {
+     "name": "RBX::VerbContainer",
+     "offset": 140,
+     "size": 20,
+     "empty": false
+    },
+    {
+     "name": "RBX::IDataState",
+     "offset": 160,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::IMetric",
+     "offset": 164,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::DataModelArbiter",
+     "offset": 168,
+     "size": 2592,
+     "empty": false
+    },
+    {
+     "name": "RBX::Diagnostics::Countable<RBX::DataModel>",
+     "offset": 2760,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "lockVerb",
+     "offset": 2760,
+     "size": 4,
+     "kind": "class",
+     "type": "std::auto_ptr<RBX::Verb>",
+     "scalar": null
+    },
+    {
+     "name": "screenshotSignal",
+     "offset": 2764,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "screenshotReadySignal",
+     "offset": 2768,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> > const &)>",
+     "scalar": null
+    },
+    {
+     "name": "screenshotUploadSignal",
+     "offset": 2772,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "graphicsQualityShortcutSignal",
+     "offset": 2776,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "allowedGearTypeChanged",
+     "offset": 2780,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xae0",
+     "offset": 2784,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::UIEvent const &)>",
+     "scalar": null
+    },
+    {
+     "name": "gameLoadedSignal",
+     "offset": 2788,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "luaExceptionSignal",
+     "offset": 2792,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "mouseStats",
+     "offset": 2800,
+     "size": 128,
+     "kind": "structure",
+     "type": "RBX::DataModel::MouseStats",
+     "scalar": null
+    },
+    {
+     "name": "playerHud",
+     "offset": 2928,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::PlayerHUD>",
+     "scalar": null
+    },
+    {
+     "name": "coreGuiService",
+     "offset": 2936,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::CoreGuiService>",
+     "scalar": null
+    },
+    {
+     "name": "localBackpack",
+     "offset": 2944,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::LocalBackpack>",
+     "scalar": null
+    },
+    {
+     "name": "workspace",
+     "offset": 2952,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Workspace>",
+     "scalar": null
+    },
+    {
+     "name": "runService",
+     "offset": 2960,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::RunService>",
+     "scalar": null
+    },
+    {
+     "name": "starterPack",
+     "offset": 2968,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::StarterPackService>",
+     "scalar": null
+    },
+    {
+     "name": "starterGui",
+     "offset": 2976,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::StarterGuiService>",
+     "scalar": null
+    },
+    {
+     "name": "guiRoot",
+     "offset": 2984,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::GuiRoot>",
+     "scalar": null
+    },
+    {
+     "name": "guiRoot2",
+     "offset": 2992,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::GuiRoot>",
+     "scalar": null
+    },
+    {
+     "name": "forceArrowCursor",
+     "offset": 3000,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "uiMessage",
+     "offset": 3004,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "drawId",
+     "offset": 3032,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "tempMetric",
+     "offset": 3036,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IMetric",
+     "scalar": null
+    },
+    {
+     "name": "networkMetric",
+     "offset": 3040,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IMetric",
+     "scalar": null
+    },
+    {
+     "name": "dirtyFlag",
+     "offset": 3044,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isInitialized",
+     "offset": 3045,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isContentLoaded",
+     "offset": 3046,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xbe8",
+     "offset": 3048,
+     "size": 96,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "numPartInstances",
+     "offset": 3144,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numInstances",
+     "offset": 3148,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "shutdownRequestedCount",
+     "offset": 3152,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "physicsStepID",
+     "offset": 3156,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "isGameLoaded",
+     "offset": 3160,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isPersonalServer",
+     "offset": 3161,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "game",
+     "offset": 3164,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Game",
+     "scalar": null
+    },
+    {
+     "name": "networkStatsWindowsOn",
+     "offset": 3168,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "hackFlagSetMutex",
+     "offset": 3172,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::mutex",
+     "scalar": null
+    },
+    {
+     "name": "hackFlagSet",
+     "offset": 3180,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_set<unsigned int,boost::hash<unsigned int>,std::equal_to<unsigned int>,std::allocator<unsigned int> >",
+     "scalar": null
+    },
+    {
+     "name": "jobId",
+     "offset": 3204,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "write_requested",
+     "offset": 3232,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "read_requested",
+     "offset": 3236,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "writeRequestingThread",
+     "offset": 3240,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_ULONG"
+    },
+    {
+     "name": "itemChangedSignal",
+     "offset": 3244,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Reflection::PropertyDescriptor const *)>",
+     "scalar": null
+    },
+    {
+     "name": "requestShutdownCallback",
+     "offset": 3248,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<bool __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "saveFinishedSignal",
+     "offset": 3280,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "guiTargetInstance",
+     "offset": 3284,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "mouseOverGui",
+     "offset": 3292,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "suppressNavKeys",
+     "offset": 3293,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "genericJobsLock",
+     "offset": 3296,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::mutex",
+     "scalar": null
+    },
+    {
+     "name": "genericJobs",
+     "offset": 3320,
+     "size": 88,
+     "kind": "class",
+     "type": "boost::array<boost::shared_ptr<RBX::DataModel::GenericJob>,11>",
+     "scalar": null
+    },
+    {
+     "name": "debugLock",
+     "offset": 3408,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::mutex",
+     "scalar": null
+    },
+    {
+     "name": "dataModelReportingData",
+     "offset": 3432,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,int> > >",
+     "scalar": null
+    },
+    {
+     "name": "remoteBuildMode",
+     "offset": 3444,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "serverSaveUrl",
+     "offset": 3448,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "screenshotSEOInfo",
+     "offset": 3476,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "videoSEOInfo",
+     "offset": 3504,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "placeID",
+     "offset": 3532,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "experimentalFeatures",
+     "offset": 3536,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "placeVersion",
+     "offset": 3540,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "creatorID",
+     "offset": 3544,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "creatorType",
+     "offset": 3548,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::DataModel::CreatorType",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "genre",
+     "offset": 3552,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::DataModel::Genre",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "gearGenreSetting",
+     "offset": 3556,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::DataModel::GearGenreSetting",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "allowedGearTypes",
+     "offset": 3560,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "guiBuilder",
+     "offset": 3564,
+     "size": 32,
+     "kind": "array",
+     "type": "RBX::GuiBuilder (2013 size; ours is 0x24)",
+     "scalar": null
+    },
+    {
+     "name": "parentDataModel",
+     "offset": 3596,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDataModel@RBX@@"
+  },
+  "RBX::DataModel::MouseStats": {
+   "size": 128,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "osMouseMove",
+     "offset": 0,
+     "size": 64,
+     "kind": "class",
+     "type": "RBX::RunningAverageTimeInterval<1>",
+     "scalar": null
+    },
+    {
+     "name": "mouseMove",
+     "offset": 64,
+     "size": 64,
+     "kind": "class",
+     "type": "RBX::RunningAverageTimeInterval<1>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "UMouseStats@DataModel@RBX@@"
+  },
+  "RBX::RunningAverage<double,double>": {
+   "size": 48,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "buffer",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<boost::circular_buffer<double,std::allocator<double> > >",
+     "scalar": null
+    },
+    {
+     "name": "lerp",
+     "offset": 8,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "lastSampleValue",
+     "offset": 16,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "averageValue",
+     "offset": 24,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "averageVariance",
+     "offset": 32,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "firstTime",
+     "offset": 40,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "V?$RunningAverage@NN@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -1341,6 +2479,110 @@
    "base": true,
    "unique": "VSimpleThrottlingArbiter@RBX@@"
   },
+  "boost::enable_shared_from_this<RBX::FWBase>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "weak_this_",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::FWBase>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$enable_shared_from_this@VFWBase@RBX@@@boost@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VScriptContext@RBX@@VInstance@2@$E?sScriptContext@2@3QBDB$0BB@$0A@@RBX@@"
+  },
+  "RBX::Service": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "isPublic",
+     "offset": 0,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": true,
+   "unique": "VService@RBX@@"
+  },
+  "RBX::IScriptFilter": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VIScriptFilter@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::DataModel, RBX::ServiceProvider, char const *const RBX::sDataModel, 27, 0>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::DataModel, char const *const RBX::sDataModel, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>, 27, 0>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VDataModel@RBX@@VServiceProvider@2@$E?sDataModel@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::IDataState": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VIDataState@RBX@@"
+  },
+  "RBX::IMetric": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VIMetric@RBX@@"
+  },
+  "RBX::Diagnostics::Countable<RBX::DataModel>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Countable@VDataModel@RBX@@@Diagnostics@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -1484,6 +2726,38 @@
    "base": true,
    "unique": "VArbiter@TaskScheduler@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VScriptContext@RBX@@$E?sScriptContext@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sScriptContext@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::DataModel, char const *const RBX::sDataModel, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>, 27, 0>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VDataModel@RBX@@$E?sDataModel@2@3QBDBV?$NonFactoryProduct@VServiceProvider@RBX@@$E?sDataModel@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -1543,6 +2817,38 @@
    "members": [],
    "base": true,
    "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@UWaitingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sScriptContext@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::ServiceProvider",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VServiceProvider@RBX@@$E?sDataModel@2@3QBDB@RBX@@"
   },
   "boost::intrusive::detail::no_default_definer": {
    "size": 1,
@@ -1612,5 +2918,10 @@
    "unique": "U?$list_node@PAX@intrusive@boost@@"
   }
  },
- "missing": []
+ "missing": [],
+ "fixups_2013": [
+  "FWBase 0x1c -> 0x18; b21/b22/b23 (0x18..0x1a) moved to FWInstance",
+  "IFWHolder: 5 vftable slots (0x00b79100)",
+  "DataModel 0xe18 -> 0xe10: guiBuilder 0x20, parentDataModel 0xe0c"
+ ]
 }

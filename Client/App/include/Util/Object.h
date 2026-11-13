@@ -38,61 +38,50 @@ namespace RBX
 		EngineCreator
 	};
 
-
 	template<class T, class U> boost::shared_ptr<T> shared_polymorphic_downcast(const boost::shared_ptr<U>& r)
 	{
 		BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
 		return boost::static_pointer_cast<T>(r);
 	}
-
 	template<class T, class U> boost::shared_ptr<T> shared_dynamic_cast(const boost::shared_ptr<U>& r)
 	{
 		return boost::dynamic_pointer_cast<T>(r);
 	}
-
 	template<class T, class U> boost::shared_ptr<T> shared_static_cast(const boost::shared_ptr<U>& r)
 	{
 		return boost::static_pointer_cast<T>(r);
 	}
-
 	// Use this to convert an object to its corresponding boost::shared_ptr
 	template<class T> boost::shared_ptr<T> shared_from(T* r)
 	{
 		return r ? boost::static_pointer_cast<T>(r->shared_from_this()) : boost::shared_ptr<T>();
 	}
-
 	template<class T> weak_ptr<T> weak_from(T* r)
 	{
 		return r ? boost::static_pointer_cast<T>(r->shared_from_this()) : boost::shared_ptr<T>();
 	}
-
 	// Use this to downcast an object to a shared_ptr
 	template<class T, class U> shared_ptr<T> shared_from_polymorphic_downcast(enable_shared_from_this<U>* r)
 	{
 		return r ? shared_polymorphic_downcast<T>(r->shared_from_this()) : shared_ptr<T>(); 
 	}
-
 	template<class T, class U> shared_ptr<T> shared_from_static_cast(enable_shared_from_this<U>* r)
 	{
 		return r ? shared_static_cast<T>(r->shared_from_this()) : shared_ptr<T>();
 	}
-
 	template<class T, class U> shared_ptr<T> shared_from_dynamic_cast(enable_shared_from_this<U>* r)
 	{
 		return r ? shared_dynamic_cast<T>(r->shared_from_this()) : shared_ptr<T>();
 	}
-
     template <class T> inline bool weak_equal(const weak_ptr<T>& lhs, const weak_ptr<T>& rhs)
     {
         return !(lhs < rhs) && !(rhs < lhs);
     }
-
 	class RBXInterface ICreator
 	{
 	public:
 		virtual shared_ptr<Reflection::DescribedBase> create() const = 0;
 	};
-
 	// 2013 (absent from 2016): every Instance carries an RBX::Object subobject at +0x18,
 	// reached through AbstractFactoryProduct<Instance> -> Creatable<Instance> -> Object
 	// (RTTI of Instance vftable 0x00b2a6ec). Its vftable 0x00b29f08 is {destructor,
@@ -106,7 +95,6 @@ namespace RBX
 		virtual ~Object() {}								// vtable+0x00
 		virtual const RBX::Name& getClassName() const = 0;	// vtable+0x04
 	};
-
 	template<class Class>
 	class RBXBaseClass Creatable : public Object
 	{
@@ -120,7 +108,6 @@ namespace RBX
 				delete instance;
 			}
 		};
-
 		// STUB: PLAYER 0x00597980
 		// STUB: STUDIO 0x0063ac30
 		template<class T>
@@ -179,14 +166,12 @@ namespace RBX
 			shared_ptr<T> (*thisFunction)(P1, P2, P3, P4, P5, P6, P7) = &create;
 			return obj;
 		}
-
 		static std::map<const Name*, const ICreator*>& getCreators()
         {
 			// TODO: replace with a faster lookup map, like the Loki AssocVector?
 			static std::map<const Name*, const ICreator*> creators;
 			return creators;
 		}
-
 		static shared_ptr<Class> createByName(const Name& name, CreatorRole creatorRole)
         {
 			std::map<const Name*, const ICreator*>::iterator iter = getCreators().find(&name);
@@ -211,18 +196,15 @@ namespace RBX
 			}
 			return shared_ptr<Class>();
 		}
-		
 		// Get object creator by className
 		static const ICreator* getCreator(const Name& name)
 		{
 			std::map<const Name*, const ICreator*>::iterator iter = getCreators().find(&name);
 			return (iter!=getCreators().end()) ? iter->second : NULL;
 		}
-
 	protected:
 		Creatable() {}
 	};
-
 	// 2013: AbstractFactoryProduct<Instance>::create(const Name&, CreatorRole) is PLAYER
 	// 0x0059a5e0 (our Creatable<Class>::createByName); vftable 0x00b2a2f0.
 	// SIZE 0x4
@@ -232,21 +214,17 @@ namespace RBX
 	protected:
 		AbstractFactoryProduct() {}
 	};
-
 	template <class Class, class BaseClass, const char* const& sClassName, class FactoryClass>
 	class FactoryProduct : public BaseClass {
 		class Creator : public ICreator {
 		private:
 			static int isConstructedTrue() {return 666;}
 			static int isConstructed;				// debugging - if constructed, == 666
-
 			const RBX::Name& getClassNameUnconstructed() const {
 				return RBX::Name::doDeclare<sClassName>();
 			}
-
 		public:
 			static bool wasConstructed() {return isConstructed == isConstructedTrue();}
-
 			// STUB: PLAYER 0x0077ebf0
 			// STUB: STUDIO 0x00729990
 			/* override */ shared_ptr<Reflection::DescribedBase> create() const {
@@ -258,31 +236,24 @@ namespace RBX
 				RBXASSERT(wasConstructed());
 				return RBX::Name::doDeclare<sClassName>();
 			}
-
 			// STUB: PLAYER 0x006f0aa0
 			// STUB: STUDIO 0x00805bf0
 			Creator()
-            {
-				// Register this creator for create-by-className
-				const RBX::Name& name = getClassNameUnconstructed();
-                
-                std::map<const Name*, const ICreator*>& creators = Creatable<FactoryClass>::getCreators(); // OGRE vc9: was C++11 auto&
-
-				RBXASSERT(creators.find(&name)==creators.end());
+			{
+				const RBX::Name& name = getClassNameUnconstructed();  // register for create-by-className
+				RBXASSERT(Class::getCreators().find(&name)==Class::getCreators().end());
 				RBXASSERT(!wasConstructed());
 
-				creators[&name] = this;
+				Class::getCreators()[&name] = this;
 				isConstructed = isConstructedTrue();
 
-				RBXASSERT(creators.find(&name)!=creators.end());
+				RBXASSERT(Class::getCreators().find(&name)!=Class::getCreators().end());
 				RBXASSERT(wasConstructed());
 			}
 
 			~Creator() {
-                std::map<const Name*, const ICreator*>& creators = Creatable<FactoryClass>::getCreators(); // OGRE vc9: was C++11 auto&
-
 				RBXASSERT(wasConstructed());
-				creators.erase(&getClassName());
+				Class::getCreators().erase(&getClassName());
 			}
 		};
 	private:

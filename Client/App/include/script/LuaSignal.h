@@ -56,7 +56,6 @@ namespace RBX {
 		template<> void Bridge<rbx::signals::connection>::on_newindex(rbx::signals::connection& object,
 			const char* name, lua_State* L);
 		template<> int Bridge<rbx::signals::connection>::on_index(lua_State* L);
-		template<> int Bridge<rbx::signals::connection>::on_newindex(lua_State* L);
 		template<> int Bridge<rbx::signals::connection>::on_gc(lua_State* L);
 		template<> int Bridge<rbx::signals::connection>::on_eq(lua_State* L);
 		template<> int Bridge<rbx::signals::connection>::on_tostring(lua_State* L);

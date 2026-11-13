@@ -58,14 +58,18 @@ void VerbContainer::addVerb(Verb* verb)
 	RBXASSERT(verbs.find(&verb->getName())==verbs.end());
 	verbs[&verb->getName()] = verb;
 }
-
+// FUNCTION: PLAYER 0x006f9190
+// FUNCTION: STUDIO 0x007fa190
+void VerbContainer::removeVerb(Verb* verb) {
+	int verEraseCount = static_cast<int>(verbs.erase(&verb->getName()));
+	RBXASSERT(verEraseCount==1);
+}
 // FUNCTION: PLAYER 0x006f90d0
 // FUNCTION: STUDIO 0x007fa070
 Verb* VerbContainer::getVerb(const std::string& name)
 {
 	return getVerb(*Name::lookup(name));
 }
-
 // FUNCTION: PLAYER 0x006f90f0
 // FUNCTION: STUDIO 0x007fa0f0
 VerbContainer::~VerbContainer()
@@ -73,14 +77,6 @@ VerbContainer::~VerbContainer()
 	// delete any remaining verbs
 	while (verbs.begin()!=verbs.end())
 		delete verbs.begin()->second;
-}
-
-// STUB: PLAYER 0x006f9190
-// STUB: STUDIO 0x007fa190
-void VerbContainer::removeVerb(Verb* verb)
-{
-	int verEraseCount = static_cast<int>(verbs.erase(&verb->getName()));
-	RBXASSERT(verEraseCount==1);
 }
 
 Verb* VerbContainer::getVerb(const Name& name)

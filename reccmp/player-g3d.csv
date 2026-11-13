@@ -1,6 +1,6 @@
 # Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
-# Library rows skipped for all libraries: not identical 212, not a kept function 49.
-# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1383, static name 337, not in our link 18, folded in our link 0.
+# Library rows skipped for all libraries: not identical 211, not a kept function 49.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1384, static name 337, not in our link 18, folded in our link 0.
 address,type,size,symbol,name
 0048fa90,library,31,??4Rect@RBX@@QAEAAV01@ABV01@@Z,??4Rect@RBX@@QAEAAV01@ABV01@@Z
 005a6560,library,149,?isFinite@Vector3@G3D@@QBE_NXZ,?isFinite@Vector3@G3D@@QBE_NXZ
@@ -86,6 +86,7 @@ address,type,size,symbol,name
 009daa20,library,60,?unitZ@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitZ(void)
 009daa60,library,118,?inf@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::inf(void)
 009daae0,library,57,?minFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::minFinite(void)
+009dab20,library,57,?maxFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void)
 009dab60,library,50,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,public: enum G3D::Vector3::Axis __thiscall G3D::Vector3::primaryAxis(void) const
 009daba0,library,46,??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int16 const &)
 009dabd0,library,46,?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,public: static class G3D::Vector3 __cdecl G3D::Vector3::random(class G3D::Random &)

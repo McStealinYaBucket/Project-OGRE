@@ -18,6 +18,8 @@ RbxDbgInfo::RbxDbgInfo()
 	memset(this, 0, sizeof(RbxDbgInfo));
 }
 
+// FUNCTION: PLAYER 0x009bc7d0
+// FUNCTION: STUDIO 0x00a72bc0
 void RbxDbgInfo::AddPlace(long ID)
 {
 	// Shift all places to upper indices
@@ -29,6 +31,8 @@ void RbxDbgInfo::AddPlace(long ID)
 	s_instance.PlaceCounter++;
 }
 
+// FUNCTION: PLAYER 0x009bc810
+// FUNCTION: STUDIO 0x00a72c00
 void RbxDbgInfo::RemovePlace(long ID)
 {
 	s_instance.PlaceCounter--;

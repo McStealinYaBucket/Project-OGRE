@@ -128,23 +128,22 @@ public:
 		return on_tostring(getObject(L, 1), L);
 	}
 
+	// 2013 generic wrappers (instantiations named at the end of this file).
 	static int on_newindex(lua_State *L) {
-		const char* name = lua_checkstring_secure(L, 2);
+		const char* name = luaL_checkstring(L, 2);
 		on_newindex(getObject(L, 1), name, L);
 		return 0;
 	}
 
 	static int on_index(lua_State *L) {
-		const char* name = lua_checkstring_secure(L, 2);
+		const char* name = luaL_checkstring(L, 2);
 		return on_index(getObject(L, 1), name, L);
 	}
-
 	static int on_eq(lua_State *L) {
 		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
 		return 1;
 	}
 };
-
 // This class hides parent on purpose
 template<class Class>
 class SharedPtrBridge : protected Bridge<boost::shared_ptr<Class>, false>
@@ -154,16 +153,14 @@ public:
 	{
         Bridge<boost::shared_ptr<Class>, false>::registerClass(L);
 	}
-
 	static void registerClassLibrary (lua_State *L) {
 		// Declare the UserData re-use table
 		lua_pushlightuserdata(L, (void*)&push);
 		newweaktable(L, "v");
         lua_rawset(L, LUA_REGISTRYINDEX);
 	}
-
-	// STUB: PLAYER 0x006730e0
-	// STUB: STUDIO 0x007dafa0
+	// FUNCTION: PLAYER 0x006730e0
+	// FUNCTION: STUDIO 0x007dafa0
 	static void push(lua_State *L, boost::shared_ptr<Class> instance)
 	{
 		if (instance==NULL)
@@ -177,7 +174,6 @@ public:
 			// a single instance of the userdata and re-use it. This way the userdata
 			// can be used in table keys, and we don't need an __eq operator
 			// Also see http://lua-users.org/lists/lua-l/2004-07/msg00391.html
-
 			lua_pushlightuserdata(L, (void*)&push ); /* Registry mapping for weak table. Key is arbitrary. */
 			lua_rawget(L, LUA_REGISTRYINDEX);                             // Stack:   t
 			RBXASSERT(!lua_isnil( L, -1 ));  // Did you forget to call registerClassLibrary??
@@ -246,19 +242,12 @@ public:
 		lua_rawset(L, LUA_REGISTRYINDEX);
 	}
 
+
 	static void push(lua_State *L, T item)
 	{
 		lua_pushlightuserdata(L, (void*)&push);
 		lua_rawget(L, LUA_REGISTRYINDEX);
-		// mac: 0x1A2734-gate (FLog::Asserts + debugHook consult the missing
-		// table; ReleaseAssert is log-and-continue in this build).
-		if (FLog::Asserts != 0
-			&& lua_type(L, -1) == LUA_TNIL
-			&& (RBX::_internal::_debugHook == 0
-				|| RBX::_internal::_debugHook("!lua_isnil( L, -1 )", "include/lua/luabridge.h", 250) == 0))
-		{
-			ReleaseAssert(FLog::Asserts, "!lua_isnil( L, -1 ) file: include/lua/luabridge.h line: 250");
-		}
+		RBXASSERT(!lua_isnil( L, -1 ));
 		lua_pushlightuserdata(L, (void*)item);
 		lua_rawget(L, -2);
 		if (lua_type(L, -1) == LUA_TNIL) {
@@ -274,5 +263,48 @@ public:
 
 } }
 
-
-
+// Bridge<T>::on_newindex(lua_State*) instantiations. 2013 instantiates the generic wrapper where openState takes
+// its address (ScriptContext.cpp), so a 3-arg on_newindex that only throws is not known there to never return
+// (0x00670170-0x00672190 end in add esp,0x24 / pop / ret); the wrappers call luaL_checkstring.
+// STUB: PLAYER 0x00670170
+// STUB: STUDIO 0x007d8440
+// ?on_newindex@?$Bridge@PBVItem@EnumDescriptor@Reflection@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671610
+// STUB: STUDIO 0x007d9570
+// ?on_newindex@?$Bridge@Vconnection@signals@rbx@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x006717f0
+// STUB: STUDIO 0x007d9750
+// ?on_newindex@?$Bridge@VCoordinateFrame@G3D@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671850
+// STUB: STUDIO 0x007d97b0
+// ?on_newindex@?$Bridge@VRegion3@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671910
+// STUB: STUDIO 0x007d9870
+// ?on_newindex@?$Bridge@VVector3@G3D@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671b50
+// STUB: STUDIO 0x007d9ab0
+// ?on_newindex@?$Bridge@VUDim@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671bb0
+// STUB: STUDIO 0x007d9b10
+// ?on_newindex@?$Bridge@VUDim2@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671c10
+// STUB: STUDIO 0x007d9b70
+// ?on_newindex@?$Bridge@VFaces@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671c70
+// STUB: STUDIO 0x007d9bd0
+// ?on_newindex@?$Bridge@VAxes@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671d30
+// STUB: STUDIO 0x007d9c90
+// ?on_newindex@?$Bridge@VCellID@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671d90
+// STUB: STUDIO 0x007d9cf0
+// ?on_newindex@?$Bridge@VInputObject@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00671df0
+// STUB: STUDIO 0x007d9d50
+// ?on_newindex@?$Bridge@VLibrary@Lua@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00672040
+// STUB: STUDIO 0x007d9fa0
+// ?on_newindex@?$Bridge@PBVAllEnumDescriptors@Lua@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z
+// STUB: PLAYER 0x00672190
+// STUB: STUDIO 0x007da0f0
+// ?on_newindex@?$Bridge@PBVEnumDescriptor@Reflection@RBX@@$00@Lua@RBX@@SAHPAUlua_State@@@Z

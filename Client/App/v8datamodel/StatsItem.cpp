@@ -71,6 +71,14 @@ namespace RBX {
 		return displayString;
 	}
 
+	// formatMem 0x4A2D80: Log::formatMem into the display (no value store).
+	// STUB: PLAYER 0x0073b300
+	// STUB: STUDIO 0x007c39a0
+	void StatsItem::formatMem(unsigned int bytes)
+	{
+		displayString.assign(RBX::Log::formatMem(bytes));
+	}
+
 	// formatValue(double,fmt,...) 0x4A2EA8: store +0x5C, vformat into +0x64.
 	// STUB: PLAYER 0x0073b380
 	// STUB: STUDIO 0x007c3a20
@@ -100,6 +108,12 @@ namespace RBX {
 		formatValue(wide, "%.3g", wide);
 	}
 
+	// formatValueIm 0x4A3108 ("%d", unsigned-long flavor).
+	void StatsItem::formatValueIm(unsigned long value)
+	{
+		formatValue((double)value, "%d", (int)value);
+	}
+
 	// formatValueIi 0x4A30CE ("%d").
 	// STUB: PLAYER 0x0073b450
 	// STUB: STUDIO 0x007c3af0
@@ -108,8 +122,8 @@ namespace RBX {
 		formatValue((double)value, "%d", value);
 	}
 
-	// formatValueIm 0x4A3108 ("%d", unsigned-long flavor).
-	void StatsItem::formatValueIm(unsigned long value)
+	// formatValueIj 0x4A31A6 ("%d", unsigned flavor).
+	void StatsItem::formatValueIj(unsigned int value)
 	{
 		formatValue((double)value, "%d", (int)value);
 	}
@@ -125,12 +139,6 @@ namespace RBX {
 		formatValue((double)value, "%I64u", value);
 	}
 
-	// formatValueIj 0x4A31A6 ("%d", unsigned flavor).
-	void StatsItem::formatValueIj(unsigned int value)
-	{
-		formatValue((double)value, "%d", (int)value);
-	}
-
 	// formatValueIb 0x4A31F0: true/false display + 1.0/0.0 store
 	// (does NOT route through the core).
 	// STUB: PLAYER 0x0073b510
@@ -139,14 +147,6 @@ namespace RBX {
 	{
 		displayString.assign(value ? "true" : "false");
 		statValue = value ? 1.0 : 0.0;
-	}
-
-	// formatMem 0x4A2D80: Log::formatMem into the display (no value store).
-	// STUB: PLAYER 0x0073b300
-	// STUB: STUDIO 0x007c39a0
-	void StatsItem::formatMem(unsigned int bytes)
-	{
-		displayString.assign(RBX::Log::formatMem(bytes));
 	}
 
 	// formatRate 0x4A2E40: rate + CV math + "%.1f/s (%.0f%%CV)".

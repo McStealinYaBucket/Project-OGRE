@@ -85,12 +85,12 @@ namespace RBX {
 		virtual void generateDataForMovingAssemblyStage() {}
 
 	private:
-		Sim::EdgeState edgeState;    // +8 (C2 UNDEFINED).
-		Sim::ThrottleType throttleType;  // +12 (C2 UNDEFINED_THROTTLE).
-		Primitive* prim0;  // +16
-		Primitive* prim1;  // +20
-		int index0;        // +24
-		int index1;        // +28
+		Sim::EdgeState edgeState;    // 0x08 byte (C2 UNDEFINED); Mac +8 dword
+		Sim::ThrottleType throttleType;  // 0x09 byte (C2 UNDEFINED_THROTTLE); Mac +12 dword
+		Primitive* prim0;  // 0x0c (Edge dtor 0x0081f840)
+		Primitive* prim1;  // 0x10
+		int index0;        // 0x14
+		int index1;        // 0x18 (size 0x1c: Joint's SpanningEdge thunk 0x008eaa40 is `sub ecx,0x1c`)
 	};
 
 } // namespace RBX

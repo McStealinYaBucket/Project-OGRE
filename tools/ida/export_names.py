@@ -57,7 +57,10 @@ def source(ea, n, func):
             if l.startswith("p4 ") and not DUMMY.match(n):
                 tag = l.split(" ")[1]
                 if l.startswith("p4 match: reccmp "):
-                    if (" vs our %s " % n) in l:
+                    # "... vs our <name> @0x...": apply_db_updates.py cuts the line at 900 characters, which
+                    # can cut a long template name too (then only its prefix is there)
+                    ours = l.split(" vs our ", 1)[1].split(" @0x", 1) if " vs our " in l else [""]
+                    if ours[0] == n or (len(ours) == 1 and len(ours[0]) > 100 and n.startswith(ours[0])):
                         return "match:"
                 elif tag != "guess:":
                     return tag

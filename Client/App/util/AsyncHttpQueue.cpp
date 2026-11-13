@@ -109,15 +109,6 @@ public:
 		return result;
 	}
 
-	// STUB: PLAYER 0x0086f610
-	// STUB: STUDIO 0x009bc7a0
-	void init()
-	{
-		avgTimeInQueue = createChildItem("Average time in queue");
-		avgRequestCompleteTime = createChildItem("Average process time");
-		numSlowRequests = createChildItem("Num slow requests");
-	}
-
 	// STUB: PLAYER 0x0086f330
 	// STUB: STUDIO 0x009bc4e0
 	virtual void update()
@@ -128,6 +119,15 @@ public:
 		// (0x4A30CE); formatValueIi (StatsItem.cpp:97) is this tree's int
 		// forwarder -- same "%d" observable.
 		numSlowRequests->formatValueIi(httpQueue->getNumSlowRequests());
+	}
+
+	// STUB: PLAYER 0x0086f610
+	// STUB: STUDIO 0x009bc7a0
+	void init()
+	{
+		avgTimeInQueue = createChildItem("Average time in queue");
+		avgRequestCompleteTime = createChildItem("Average process time");
+		numSlowRequests = createChildItem("Num slow requests");
 	}
 };
 

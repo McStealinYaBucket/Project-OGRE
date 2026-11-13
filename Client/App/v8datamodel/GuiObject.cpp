@@ -107,39 +107,6 @@ namespace RBX {
 			&& iy >= rect.x0y0().y && rect.x1y1().y >= iy;
 	}
 
-	// mac: 0x3ABBE2 (113B; GuiObject's slot-38 override of GuiBase2d::
-	// handleResize, rarc11 ZTV).  Binary ORDER: getWindowRect(this) --
-	// raw 3ABBE9..3ABBFA passes the receiver twice ([ebp+arg_0] =
-	// [ebp+arg_4] = the self-pass, sret = var_18) -- then the VERBATIM
-	// four-dword copy into the +0x208..+0x214 cache (3ABC02..3ABC2E:
-	// sret dwords -> movss [esi+208h]/+20Ch/+210h/+214h), then the
-	// DIRECT (non-virtual; 3ABC48 mangle __ZN3RBX9GuiBase2d12
-	// handleResizeERKN3G3D6Rect2DEb) base call with the INCOMING rect.
-	// In our spelling the verbatim copy = the plain Rect2D assign (a
-	// four-float copy, same observable).
-	// STUB: PLAYER 0x007c88f0
-	// STUB: STUDIO 0x008e53d0
-	void GuiObject::handleResize(const G3D::Rect2D& rect, bool flag)
-	{
-		windowRectCache = getWindowRect(this);
-		GuiBase2d::handleResize(rect, flag);
-	}
-
-	// mac: 0x3AC2AC (55B, rarc10 raw 3AC2B2..3AC2DE): see GuiObject.h for
-	// the ordering note.  Our spelling: the guard = getParent() == NULL
-	// (the +0x34 read = the landed getParent), the resize vcall = our
-	// unqualified virtual call (same dynamic dispatch as [vptr+0x98]),
-	// the tail-jmp = a plain statement (GCC's tail form carries the
-	// same (this, adorn) argument slots).
-	void GuiObject::legacyRender2d(RBX::Adorn* adorn, const G3D::Rect2D& rect)
-	{
-		if (getParent() == NULL)
-		{
-			handleResize(rect, true);
-			recursiveRender2d(adorn);
-		}
-	}
-
 	// mac: 0x3ABA9A (327B; mangle __ZN3RBX9GuiObject13getWindowRectEPNS_9GuiBase2dE
 	// = ONE explicit GuiBase2d* start; the binary's __stdcall retn 4 =
 	// the sret struct return, and the RECEIVER slot [ebp+arg_4] is
@@ -173,6 +140,39 @@ namespace RBX {
 		if (node != NULL && node->getDescriptor().isA(BillboardGui::classDescriptor()))
 			return static_cast<BillboardGui*>(node)->windowRect;
 		return G3D::Rect2D::xyxy(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	// mac: 0x3AC2AC (55B, rarc10 raw 3AC2B2..3AC2DE): see GuiObject.h for
+	// the ordering note.  Our spelling: the guard = getParent() == NULL
+	// (the +0x34 read = the landed getParent), the resize vcall = our
+	// unqualified virtual call (same dynamic dispatch as [vptr+0x98]),
+	// the tail-jmp = a plain statement (GCC's tail form carries the
+	// same (this, adorn) argument slots).
+	void GuiObject::legacyRender2d(RBX::Adorn* adorn, const G3D::Rect2D& rect)
+	{
+		if (getParent() == NULL)
+		{
+			handleResize(rect, true);
+			recursiveRender2d(adorn);
+		}
+	}
+
+	// mac: 0x3ABBE2 (113B; GuiObject's slot-38 override of GuiBase2d::
+	// handleResize, rarc11 ZTV).  Binary ORDER: getWindowRect(this) --
+	// raw 3ABBE9..3ABBFA passes the receiver twice ([ebp+arg_0] =
+	// [ebp+arg_4] = the self-pass, sret = var_18) -- then the VERBATIM
+	// four-dword copy into the +0x208..+0x214 cache (3ABC02..3ABC2E:
+	// sret dwords -> movss [esi+208h]/+20Ch/+210h/+214h), then the
+	// DIRECT (non-virtual; 3ABC48 mangle __ZN3RBX9GuiBase2d12
+	// handleResizeERKN3G3D6Rect2DEb) base call with the INCOMING rect.
+	// In our spelling the verbatim copy = the plain Rect2D assign (a
+	// four-float copy, same observable).
+	// STUB: PLAYER 0x007c88f0
+	// STUB: STUDIO 0x008e53d0
+	void GuiObject::handleResize(const G3D::Rect2D& rect, bool flag)
+	{
+		windowRectCache = getWindowRect(this);
+		GuiBase2d::handleResize(rect, flag);
 	}
 
 } // namespace RBX

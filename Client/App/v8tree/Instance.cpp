@@ -248,7 +248,7 @@ XmlElement* Instance::writeXml(const boost::function<bool(Instance*)>& isInScope
 	// mac: 0x542612: FW+23 inclusion gate (and null-classname gate).
 	// TODO(unify): archivable bool vs FW+23 — both default true; setIsArchivable
 	// must sync FW+23 when the name migration lands (see FeatherweightDict.h).
-	if (!fwBase || !fwBase->b23)
+	if (!fwBase || !fw()->b23)
 		return NULL;
 	if (!getIsArchivable() || (getClassName()==RBX::Name::getNullName()))
 		return NULL;
@@ -1109,23 +1109,23 @@ void Instance::setAndLockParent(Instance* instance)
 {
 	if (FFlag::NoThrowOnReparenting)
 	{
-		bool wasLocked = fwBase->b21 != 0;
+		bool wasLocked = fw()->b21 != 0;
 		FWRef ref;
 		ref.fwPtr = fwBase;
 		bool locked = true;
-		FWValue<bool>::set(*reinterpret_cast<bool*>(&fwBase->b21), locked, &ref);
+		FWValue<bool>::set(*reinterpret_cast<bool*>(&fw()->b21), locked, &ref);
 		bool ok = setParentInternal(instance, true);
 		if (!wasLocked && !ok)
 		{
 			bool unlocked = false;
-			FWValue<bool>::set(*reinterpret_cast<bool*>(&fwBase->b21), unlocked, &ref);
+			FWValue<bool>::set(*reinterpret_cast<bool*>(&fw()->b21), unlocked, &ref);
 		}
 		return;
 	}
 	FWRef ref;
 	ref.fwPtr = fwBase;
 	bool locked = true;
-	FWValue<bool>::set(*reinterpret_cast<bool*>(&fwBase->b21), locked, &ref);
+	FWValue<bool>::set(*reinterpret_cast<bool*>(&fw()->b21), locked, &ref);
 	setParentInternal(instance, true);
 }
 

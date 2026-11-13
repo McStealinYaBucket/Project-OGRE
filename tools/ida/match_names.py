@@ -97,6 +97,58 @@ FACTS = [
     (0x004a2dc0, 0x00532180, "rename", "?inverse@CoordinateFrame@G3D@@QBE?AV12@XZ", "lib:",
      "G3D::CoordinateFrame::inverse() | G3D 8.00-roblox located, not identical: inline copy in App code, "
      "93% against ours when paired (g3d-2013.md)"),
+    # phase4-core2 (notes/runs/2026-11-12-phase4-core2/core-datamodel.md "IDA updates to make"); STUDIO addresses
+    # from STUDIO-PLAYER-bodymatch.csv pairs and, for the bodies it leaves open, the same DataModel ctor/dtor
+    # call order, the same vftable stores or the jobId offset 4 bytes lower (checked 2026-11-12 with capstone).
+    (0x0064ec50, 0x0076b720, "rename", "_ZN3RBX9DataModelC2EPNS_4VerbEPS0_", "ios:",
+     "RBX::DataModel::DataModel(RBX::Verb*, RBX::DataModel*) | iOS 1029/1021 symbol; operator new(0xe10) then this "
+     "call (PLAYER 0x0064f760, STUDIO 0x0076c210); stores the DataModel vftables (PLAYER 0x00b2ffec, STUDIO 0x00bf607c)"),
+    (0x0064d850, 0x0076a340, "rename", "_ZN3RBX9DataModelD2Ev", "ios:",
+     "RBX::DataModel::~DataModel() | iOS 1029/1021 symbol; the only other function storing the DataModel vftables "
+     "(PLAYER 0x00b2ffec, STUDIO 0x00bf607c), same size (1436 bytes) in both builds"),
+    (0x00641bd0, 0x0075f3c0, "rename", "_ZN3RBX9DataModel10MouseStatsC2Ev", "ios:",
+     "RBX::DataModel::MouseStats::MouseStats() | iOS/Mac symbol; the DataModel ctor calls it on this+0xaf0 (PLAYER "
+     "0x0064ed9b, STUDIO 0x0076b86b): two RunningAverageTimeInterval<>(0.5), size 0x80 (core-datamodel.md)"),
+    (0x00644f30, 0x00761ef0, "rename", "_ZN3RBX10GuiBuilderC2Ev", "prior:",
+     "RBX::GuiBuilder::GuiBuilder() | no oracle symbol (inlined there); the DataModel ctor calls it on this+0xdec, "
+     "the guiBuilder member (PLAYER 0x0064f047, STUDIO 0x0076bb11); no stack argument (plain ret): zeros +8/+0xc, "
+     "map at +0x10; the dataModel pointer is set later by Initialize (core-datamodel.md)"),
+    (0x0056b810, 0x005d0cc0, "rename", "_ZN3RBX10GuiBuilderD2Ev", "prior:",
+     "RBX::GuiBuilder::~GuiBuilder() | no oracle symbol; ~DataModel calls it on this+0xdec (PLAYER 0x0064d8e9, "
+     "STUDIO 0x0076a3d9); also called from Network::Players::createLocalPlayer 0x0056dd48 (a local GuiBuilder or "
+     "an identical folded dtor, not checked)"),
+    (0x0062d240, 0x0074d560, "rename", "_ZNK3RBX9DataModel19getIsPersonalServerEv", "ios:",
+     "RBX::DataModel::getIsPersonalServer() const | iOS/Mac symbol; returns the byte at 0xc59 (isPersonalServer in "
+     "the 2013 layout, core-datamodel.md); the setter follows at +0x10"),
+    (0x0062d250, 0x0074d570, "rename", "_ZN3RBX9DataModel19setIsPersonalServerEb", "ios:",
+     "RBX::DataModel::setIsPersonalServer(bool) | iOS/Mac symbol; stores its argument to 0xc59 (isPersonalServer), "
+     "ret 4"),
+    (0x0062d1e0, 0x0074d500, "rename", "_ZNK3RBX9DataModel8getJobIdEv", "ios:",
+     "RBX::DataModel::getJobId() const | iOS/Mac symbol; returns a copy of the std::string at 0xc84 (PLAYER) / "
+     "0xc80 (STUDIO, no networkStatsWindowsOn): jobId in the 2013 layout (core-datamodel.md)"),
+    (0x0068b1a0, 0x007f0900, "rename", "_ZN3RBX13ScriptContextD2Ev", "ios:",
+     "RBX::ScriptContext::~ScriptContext() | iOS symbol; the dtor body the 0x288 layout was read from (every member "
+     "offset confirmed by a probe compile, core-datamodel.md); called by the deleting dtor 0x0068b950"),
+    (0x006f2fb0, 0x00807fb0, "rename", "_ZN3RBX10Soundscape12SoundChannelC2Ev", "ios:",
+     "RBX::Soundscape::SoundChannel::SoundChannel() | iOS symbol; Diagnostics::Countable<SoundChannel> increment "
+     "through RbxInterlockedIncrement at 0x006f2ffc (core-datamodel.md)"),
+    (0x0084d2f0, 0x009a4fe0, "rename", "_ZN3RBX19PhysicsInstructionsC2Ev", "ios:",
+     "RBX::PhysicsInstructions::PhysicsInstructions() | iOS symbol; the DataModel ctor calls it on this+0xbe8, the "
+     "PhysicsInstructions member (PLAYER 0x0064ee60, STUDIO 0x0076b930), its only caller"),
+    (0x00619a70, 0x006ee740, "comment", "", "ios:",
+     "FWValue<std::string>::set(const std::string&, FWRef*) confirmed by the 2013 FWValue<T> member set() "
+     "(FWValue<bool>::set 0x0052c000 has the same shape; core-datamodel.md)"),
+    (0x005c30c0, 0x008a8950, "comment", "", "match:",
+     "RakNet::BitStream::SetWriteOffset(unsigned int) | ICF-folded with RBX::GuiBuilder::Initialize(RBX::DataModel*) (iOS _ZN3RBX10GuiBuilder10InitializeEPNS_9DataModelE): "
+     "the 9-byte body `mov eax,[esp+4]; mov [ecx],eax; ret 4` is both; callers: the DataModel ctor (PLAYER 0x0064f1ce, "
+     "STUDIO 0x0076bc98) as Initialize, RakPeer::ShiftIncomingTimestamp and two RakNet functions as SetWriteOffset; "
+     "the address lies in the RakNet .obj block, so the RakNet name stays and Initialize is FOLDED"),
+    (0x009bc7d0, 0x00a72bc0, "comment", "", "match:",
+     "the 'register a watched value' call of setPlaceID (core-datamodel.md) is RbxDbgInfo::AddPlace(placeID)"),
+    (0x009bc810, 0x00a72c00, "rename", "_ZN3RBX10RbxDbgInfo11RemovePlaceEl", "ios:",
+     "RBX::RbxDbgInfo::RemovePlace(long) | iOS symbol; body = --PlaceCounter (0x00e1b9d4), find the ID in the 4 "
+     "PlaceIDs (0x00e1b9c4), shift the rest down; next to AddPlace 0x009bc7d0 (reccmp 100%); ~DataModel calls it "
+     "on placeID (0x0064d8d4), the 'unregister a watched value' of core-datamodel.md"),
 ]
 
 
@@ -271,7 +323,10 @@ def plan(target, json_path, exe):
         where = "" if target == "PLAYER" else f" [STUDIO: body-identical to PLAYER 0x{pa:08x}]"
         if a in updates and updates[a][0] == "rename" and act == "rename" and updates[a][1] != name:
             print(f"{target}: fact 0x{a:08x} {name} overrides the reccmp name {updates[a][1]}")
-        updates[a] = (act, name, tag, f"p4 {tag} {ev}{where}")
+        if act == "comment" and a in updates:     # keep the reccmp line (and its source) and add the fact
+            updates[a] = updates[a][:3] + (updates[a][3] + "; " + ev + where,)
+        else:
+            updates[a] = (act, name, tag, f"p4 {tag} {ev}{where}")
         stat[f"fact {act} ({tag})"] += 1
 
     if target == "STUDIO":

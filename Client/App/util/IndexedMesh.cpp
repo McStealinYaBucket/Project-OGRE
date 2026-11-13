@@ -1,24 +1,9 @@
-/* App/util/IndexedMesh.cpp -- October 2013 (upper/lower lattice + computed-upper
-   propagation).  Bodies from the symbolled Studio binary (batch202):
-   C2 0x206020 / D2 0x206098 / setComputedUpper 0x20627E / setUpper 0x2062CC /
-   setLower 0x20633E / attachChildren 0x206492 / onParentChanged 0x2064E4 /
-   severeChildren 0x206560 / getConstIndexedMeshParent 0x2065B6 /
-   getComputedUpper 0x20647C / getConstComputedUpper 0x206642 /
-   getIndexedMeshParent 0x206488.
-   Queued (no EA in the capture): computeUpper/computeConstUpper statics
-   (only referenced by the isUpperRoot assert, itself unported), the
-   (lower,parent) 2-arg C2, isUpperRoot 0x20664E.
-   Asserts carry the binary's IndexedMesh.cpp line numbers (:19-:23, :78,
-   :173).  The getConstIndexedMeshParent null-lower guard is an asserts-on
-   hardening (binary reads lower->parent unguarded; valid flows always have
-   lower there -- prod runs asserts-off anyway). */
-
+/* App/util/IndexedMesh.cpp -- October 2013. Mac bodies (batch202): C2 0x206020, D2 0x206098, setComputedUpper 0x20627E, setUpper 0x2062CC, setLower 0x20633E,
+   attachChildren 0x206492, onParentChanged 0x2064E4, severeChildren 0x206560, getConstIndexedMeshParent 0x2065B6, getComputedUpper 0x20647C, getConstComputedUpper
+   0x206642, getIndexedMeshParent 0x206488. 2013 asserts: :19-:23 (D2), :78 (setLower), :173 (getConstIndexedMeshParent), :219 (isUpperRoot, unported). */
 #include "stdafx.h"
-
 #include "Util/IndexedMesh.h"
-
 namespace RBX {
-
 // mac: 0x206020 (61B).
 IndexedMesh::IndexedMesh()
 	: upper(NULL)
@@ -26,17 +11,15 @@ IndexedMesh::IndexedMesh()
 	, computedUpper(NULL)
 {
 }
-
-// mac: 0x206098 (486B).  Destruction requires a fully unlinked mesh -- the
-// binary asserts rather than severing, so tests must unlink first.
-// STUB: PLAYER 0x008f9160
-// STUB: STUDIO 0x00a0e220
+// mac: 0x206098 (486B).  Destruction requires a fully unlinked mesh -- the binary asserts rather than severing, so tests must unlink first.
+// FUNCTION: PLAYER 0x008f9160
+// FUNCTION: STUDIO 0x00a0e220
 IndexedMesh::~IndexedMesh()
 {
-	RBXASSERT(lower == NULL);  // :19 "!lower" (IndexedMesh.cpp:19)
-	RBXASSERT(upper == NULL);  // :20 "!upper" (IndexedMesh.cpp:20)
-	RBXASSERT(computedUpper == NULL);  // :21 "!computedUpper" (IndexedMesh.cpp:21)
-	RBXASSERT(getTypedParent<IndexedMesh>() == NULL);  // :22 (IndexedMesh.cpp:22)
+	RBXASSERT(!lower);  // :19 "!lower" (IndexedMesh.cpp:19)
+	RBXASSERT(!upper);  // :20 "!upper" (IndexedMesh.cpp:20)
+	RBXASSERT(!computedUpper);  // :21 "!computedUpper" (IndexedMesh.cpp:21)
+	RBXASSERT(!getTypedParent<IndexedMesh>());  // :22 (IndexedMesh.cpp:22)
 	RBXASSERT(numChildren() == 0);  // :23 "numChildren() == 0" (IndexedMesh.cpp:23)
 }
 
@@ -52,6 +35,134 @@ const IndexedMesh* IndexedMesh::computeParentFromLower() const
 		node = node->getConstTypedParent<IndexedMesh>();
 	return (node != NULL) ? node->getConstUpper() : NULL;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // mac: 0x2065B6 (139B): typed parent + the :173 cross-check.
 // STUB: PLAYER 0x008f9300

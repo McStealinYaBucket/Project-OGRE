@@ -185,6 +185,12 @@ template<typename Enum> class EnumRegistrar;
 
 			
 			// Used in constructor
+			// 2013 __LINE__ layout (PLAYER/STUDIO assert strings, reflection/enumconverter.h):
+			// addPair value>=0 @210 and (int)value<=2304 @211 (addPair 0x008217f0),
+			// convertToString(const Enum&) @262/263 (0x006c8c60), convertToItem @273/274
+			// (0x007761a0), convertToIndex @350 (0x008dd850). Keep these lines where they are.
+			// (2304 = the largest legal enum value; the assert is not in the 2016 header.)
+			//
 			void addPair(Enum value, const char* name, Descriptor::Attributes attributes = Descriptor::Attributes())
 			{
 				RBXASSERT_VERY_FAST(value >= 0);
@@ -202,6 +208,7 @@ template<typename Enum> class EnumRegistrar;
 				intToEnum[value] = value;
 
 				RBXASSERT(value>=0);
+				RBXASSERT((int)value<=2304);
 
 				if (enumToIndex.size()<=(size_t)value)
 					enumToIndex.resize(value+1, -1);
@@ -243,24 +250,24 @@ template<typename Enum> class EnumRegistrar;
 			{
 				RBXASSERT(value>=0);
 				RBXASSERT(value<enumToItem.size());
-				if (value<0)
-					return RBX::Name::getNullName();
-				if ((size_t)value>=enumToName.size())
-					return RBX::Name::getNullName();
-
+				if (value<0) return RBX::Name::getNullName();
+				if ((size_t)value>=enumToName.size()) return RBX::Name::getNullName();
 				return *enumToName[value];
 			}
+
+			// FUNCTION: PLAYER 0x006c8c60
+			// FUNCTION: STUDIO 0x00719270
 			std::string convertToString(const Enum& value) const
 			{
 				RBXASSERT(value>=0);
 				RBXASSERT((size_t)value<enumToItem.size());
-				if (value<0)
-					return "";
-				if ((size_t)value>=enumToString.size())
-					return "";
-
+				if (value<0) return "";
+				if ((size_t)value>=enumToString.size()) return "";
 				return enumToString[value];
 			}
+
+			// STUB: PLAYER 0x007761a0
+			// STUB: STUDIO 0x0071dfb0
 			const Item* convertToItem(const Enum& value) const
 			{
 				RBXASSERT(value>=0);
@@ -323,7 +330,8 @@ template<typename Enum> class EnumRegistrar;
 				value = enumValue;
 				return result;
 			}
-			// STUB: PLAYER 0x00772590
+			// FUNCTION: PLAYER 0x00772590
+			// FUNCTION: STUDIO 0x00719380
 			/*implement*/ bool convertToString(size_t index, std::string& stringValue) const
 			{
 				Enum enumValue;
@@ -333,8 +341,6 @@ template<typename Enum> class EnumRegistrar;
 				}
 				return false;
 			}
-
-
 			bool convertToValue(const char* text, Enum& value) const
 			{
 				return convertToValue(*RBX::Name::lookup(text), value);  // 2013: lookup returns pointer

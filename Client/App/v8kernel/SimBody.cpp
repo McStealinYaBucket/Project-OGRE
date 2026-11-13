@@ -36,6 +36,16 @@ namespace RBX {
 			numConnectors[i] = 0;
 	}
 
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x534A60 (batch243).
 	// STUB: PLAYER 0x00976a00
 	// STUB: STUDIO 0x009c4330
@@ -47,11 +57,7 @@ namespace RBX {
 		RBXASSERT(jointBodyIndex == -1);  // :57
 		RBXASSERT(contactBodyIndex == -1);  // :58
 	}
-
-	// Batch261: zero the velocity pair (+60/+72), mirror into the
-	// body linVel/angVel (+212/+224), bump the body serial. (2016
-	// refactored SimBody around a pv member; the binary stores are
-	// used verbatim here with our member names.)
+	// Batch261: zero the velocity pair (+60/+72), mirror into the body linVel/angVel (+212/+224), bump the body serial. (2016 refactored SimBody around a pv member; the binary stores are used verbatim here with our member names.)
 	void SimBody::clearVelocity()
 	{
 		linVel = G3D::Vector3::zero();
@@ -61,10 +67,7 @@ namespace RBX {
 		b->angVel = angVel;
 		b->advanceStateIndex();
 	}
-
-	// mac: 0x534E72 (batch298; 2016 SimBody::update text, spelled on the
-	// split 2013 PV members -- the binary reads worldFrame/linVel/angVel
-	// directly and replicates the offset lanes explicitly, as below).
+	// mac: 0x534E72 (batch298; 2016 SimBody::update text, spelled on the split 2013 PV members -- the binary reads worldFrame/linVel/angVel directly and replicates the offset lanes explicitly, as below).
 	// STUB: PLAYER 0x00978150
 	// STUB: STUDIO 0x009c5a80
 	void SimBody::update()

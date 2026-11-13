@@ -81,7 +81,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<G3D::Vector3>::on_newindex(G3D::Vector3& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<G3D::Vector3>::on_index(lua_State* L);
-	template<> int Bridge<G3D::Vector3>::on_newindex(lua_State* L);
 	template<> int Bridge<G3D::Vector3>::on_gc(lua_State* L);
 	template<> int Bridge<G3D::Vector3>::on_eq(lua_State* L);
 	template<> int Bridge<G3D::Vector3>::on_tostring(lua_State* L);
@@ -189,7 +188,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::UDim>::on_newindex(RBX::UDim& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::UDim>::on_index(lua_State* L);
-	template<> int Bridge<RBX::UDim>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::UDim>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::UDim>::on_eq(lua_State* L);
 	template<> void Bridge<RBX::UDim2>::registerClass(lua_State* L,
@@ -199,7 +197,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::UDim2>::on_newindex(RBX::UDim2& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::UDim2>::on_index(lua_State* L);
-	template<> int Bridge<RBX::UDim2>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::UDim2>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::UDim2>::on_eq(lua_State* L);
 
@@ -233,7 +230,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::Faces>::on_newindex(RBX::Faces& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::Faces>::on_index(lua_State* L);
-	template<> int Bridge<RBX::Faces>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::Faces>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::Faces>::on_eq(lua_State* L);
 	template<> int Bridge<RBX::Faces>::on_tostring(lua_State* L);
@@ -269,7 +265,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::Axes>::on_newindex(RBX::Axes& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::Axes>::on_index(lua_State* L);
-	template<> int Bridge<RBX::Axes>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::Axes>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::Axes>::on_eq(lua_State* L);
 	template<> int Bridge<RBX::Axes>::on_tostring(lua_State* L);
@@ -310,7 +305,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::CellID>::on_newindex(RBX::CellID& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::CellID>::on_index(lua_State* L);
-	template<> int Bridge<RBX::CellID>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::CellID>::on_eq(lua_State* L);
 	template<> int Bridge<RBX::CellID>::on_tostring(lua_State* L);
 	template<> int Bridge<RBX::CellID>::on_tostring(const RBX::CellID& object,
@@ -349,7 +343,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::InputObject>::on_newindex(RBX::InputObject& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::InputObject>::on_index(lua_State* L);
-	template<> int Bridge<RBX::InputObject>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::InputObject>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::InputObject>::on_eq(lua_State* L);
 	template<> int Bridge<RBX::InputObject>::on_tostring(lua_State* L);
@@ -484,7 +477,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<G3D::CoordinateFrame>::on_newindex(G3D::CoordinateFrame& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<G3D::CoordinateFrame>::on_index(lua_State* L);
-	template<> int Bridge<G3D::CoordinateFrame>::on_newindex(lua_State* L);
 	template<> int Bridge<G3D::CoordinateFrame>::on_gc(lua_State* L);
 	template<> int Bridge<G3D::CoordinateFrame>::on_eq(lua_State* L);
 	template<> int Bridge<G3D::CoordinateFrame>::on_tostring(lua_State* L);
@@ -543,7 +535,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<RBX::Region3>::on_newindex(RBX::Region3& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<RBX::Region3>::on_index(lua_State* L);
-	template<> int Bridge<RBX::Region3>::on_newindex(lua_State* L);
 	template<> int Bridge<RBX::Region3>::on_gc(lua_State* L);
 	template<> int Bridge<RBX::Region3>::on_eq(lua_State* L);
 	template<> int Bridge<RBX::Region3>::on_tostring(lua_State* L);

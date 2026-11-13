@@ -1,34 +1,9 @@
 /* App/script/ThreadRef.cpp -- October 2013 (thread/fiber refs).
-   Evidence: LiveThreadRef C1/C2 0x1AE868/0x1AF68C + D1/D2 0x1AF7A2/
-     0x1AF7AC + WeakThreadRef C1/C2 0x1AE368/0x1AE590 + D1/D2 0x1AE680/
-     0x1AE68A + addToNode 0x1AE43E + addRef 0x1AE4A6 + reset 0x1AE708 +
-     removeFromNode 0x1AE764 + removeRef 0x1AE872 + Node::create 0x1AE980
-     + Node::eraseAllRefs 0x1AE8C6 + Node D1/D2 0x1AE938/0x1AE942 +
-     WeakFunctionRef C1 0x1AEB2A + D1/D2 0x1AF45E/0x1AF468 + removeRef
-     0x1AF4FA + ThreadRef C1 0x180860 + lua_tofunction 0x1AED68 +
-     lua_pushfunction 0x1AED8E + dumpThreadRefCounts 0x1AEAC8
-     (batches 445-453). Original file: Client/App/script/ThreadRef.cpp
-     (assert paths ThreadRef.cpp lines 112/419; the 2016 carry this file
-     replaces had the wrong eraseAllRefs/dtor shapes).
-   Layout (binary-pinned): WeakThreadRef = {vptr +0, refs +4 (intrusive
-     base, zeroed, managed by boost free fns), previous +8, next +12,
-     liveThreadRef +16 (intrusive_ptr), node +20 (borrowed Node* from
-     L-20)} = 24B; WeakFunctionRef adds functionId at +24;
-     LiveThreadRef = {refs +0, L +4, threadId +8 (the REGISTRY ref of
-     the pushed thread -- the header name is kept)} = 12B; Node =
-     {refs +0, first +4} = 8B. The carried ThreadRef.h already matches
-     (no header change).
-   DELTAs: counting is MANUAL (RbxInterlockedIncrement/Decrement calls;
-     see Base/include/rbx/Countable.h -- the 2016 auto-count would
-     double-count); sync stays rbx::spin_mutex (binary uses tbb's --
-     unobservable exclusion equivalent; the shim tbb type is untested);
-     FFlag::AllowYieldInHooks gates global-state routing (BSS false);
-     FastLog texts kept verbatim (WeakThreadRef channel + counts text);
-     the lua_State-20 Node slot is read/written raw (the fork's
-     RobloxExtraSpace owns it; Node::get has no binary symbol, so no
-     accessor is assumed).
-   Queued (yield era): WeakThreadRef operator==/!=/=, Node::get,
-     Node/GenericFunction bridges + wiring (slots landed 252). */
+   Evidence: iOS/Mac symbols (batches 445-453). Laid out so the 2013 asserts land on their
+     lines: addRef "!liveThreadRef" 112, LiveThreadRef(lua_State*) "L" 419. Not yet: 338
+     ("!RobloxExtraSpace::get(L)->yieldCaptured") and the LuaSignalBridge.cpp /
+     LuaInstanceBridge.cpp bodies below, which keep literal asserts until they move.
+   WeakThreadRef 24B {vptr, refs, previous, next, liveThreadRef, node}; WeakFunctionRef +functionId. */
 
 #include "stdafx.h"
 
@@ -53,53 +28,6 @@ LOGVARIABLE(ThreadRefCounts, 0)
 LOGVARIABLE(LuaBridge, 0)
 
 WeakThreadRef::Mutex WeakThreadRef::sync;
-
-// Binary-passing helper: Countable<T>::count is rbx::atomic<int>, a
-// single-{long} standard-layout member, so its address is the long the
-// out-of-line interlocked helpers take (the binary passes it directly).
-template<class Counted>
-static long volatile* countAddr()
-{
-	return reinterpret_cast<long volatile*>(&Diagnostics::Countable<Counted>::count);
-}
-
-// mac: 0x1AF68C (278B, batch451): thread + non-null assert (ThreadRef.cpp:
-// 419) + pushthread/registry-ref (global-routed iff AllowYieldInHooks).
-// (C1 0x1AE868 forwards here; one definition emits both.)
-// STUB: PLAYER 0x008713a0
-// STUB: STUDIO 0x00827820
-Lua::detail::LiveThreadRef::LiveThreadRef(lua_State* thread)
-	: L(thread)
-{
-	if (FLog::Asserts != 0 && thread == NULL)
-	{
-		if (RBX::_internal::_debugHook == 0
-			|| RBX::_internal::_debugHook("L",
-				"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ThreadRef.cpp", 419) == 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"L file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ThreadRef.cpp line: 419");
-		}
-	}
-	lua_pushthread(thread);
-	if (FFlag::AllowYieldInHooks != 0)
-	{
-		lua_State* global = ScriptContext::getGlobalState(thread);
-		lua_xmove(thread, global, 1);
-		threadId = luaL_ref(global, LUA_REGISTRYINDEX);
-	}
-	else
-		threadId = luaL_ref(thread, LUA_REGISTRYINDEX);
-}
-
-// mac: 0x1AF7AC (138B, batch448): unref (global-routed iff flag) + count--.
-Lua::detail::LiveThreadRef::~LiveThreadRef()
-{
-	lua_State* state = L;
-	if (FFlag::AllowYieldInHooks != 0)
-		state = ScriptContext::getGlobalState(L);
-	luaL_unref(state, LUA_REGISTRYINDEX, threadId);
-}
 
 // mac: 0x1AE368 (213B, batch448): node from L-20 + link + live ref.
 // STUB: PLAYER 0x008723d0
@@ -126,11 +54,7 @@ WeakThreadRef::WeakThreadRef(const WeakThreadRef& other)
 	addToNode();
 }
 
-// Behavior-derived operator= (no binary symbol DB-wide -- batch506
-// sweep: the only WeakThreadRef symbols are C1/C2/D1/D2/addToNode/
-// addRef/reset/removeFromNode/removeRef/Node fns -- so byte-verify is
-// impossible; unlink+copy+link is the only assignment semantics under
-// which the slot-refresh path is memory-safe).
+// No binary symbol (batch506): behavior-derived unlink + copy + link.
 WeakThreadRef& WeakThreadRef::operator=(const WeakThreadRef& other)
 {
 	if (this != &other)
@@ -142,15 +66,6 @@ WeakThreadRef& WeakThreadRef::operator=(const WeakThreadRef& other)
 		addToNode();
 	}
 	return *this;
-}
-
-// mac: 0x1AE68A (126B, batch448): unlink + release live + count--.
-// STUB: PLAYER 0x00871c40
-// STUB: STUDIO 0x008280c0
-WeakThreadRef::~WeakThreadRef()
-{
-	reset();
-	liveThreadRef.reset();
 }
 
 // mac: 0x1AE43E (104B, batch450): head-insert into node->first (+20 gate).
@@ -180,22 +95,21 @@ void WeakThreadRef::addToNode()
 	}
 }
 
-// mac: 0x1AE4A6 (224B, batch450): asserts no live ref yet (ThreadRef.cpp:
-// 112), then news a LiveThreadRef for a non-null thread.
-// STUB: PLAYER 0x00871d60
-// STUB: STUDIO 0x008281e0
+// mac: 0x1AE68A (126B, batch448): unlink + release live + count--.
+// STUB: PLAYER 0x00871c40
+// STUB: STUDIO 0x008280c0
+WeakThreadRef::~WeakThreadRef()
+{
+	reset();
+	liveThreadRef.reset();
+}
+
+// mac: 0x1AE4A6 (224B, batch450): asserts no live ref yet, then news a LiveThreadRef.
+// FUNCTION: PLAYER 0x00871d60
+// FUNCTION: STUDIO 0x008281e0
 void WeakThreadRef::addRef(lua_State* L)
 {
-	if (FLog::Asserts != 0 && liveThreadRef.get() != NULL)
-	{
-		if (RBX::_internal::_debugHook == 0
-			|| RBX::_internal::_debugHook("!liveThreadRef",
-				"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ThreadRef.cpp", 112) == 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"!liveThreadRef file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/ThreadRef.cpp line: 112");
-		}
-	}
+	RBXASSERT(!liveThreadRef);
 	if (L != NULL)
 	{
 		liveThreadRef = new Lua::detail::LiveThreadRef(L);
@@ -242,36 +156,6 @@ void WeakThreadRef::removeFromNode()
 	}
 }
 
-// mac: 0x1AE872 (84B, batch450): releases the live ref (logged).
-// FUNCTION: PLAYER 0x00871e50
-// FUNCTION: STUDIO 0x008282d0
-void WeakThreadRef::removeRef()
-{
-	if (FLog::WeakThreadRef != 0)
-	{
-		FLog::FastLog(FLog::WeakThreadRef,
-			"WeakThreadRef::removeRef() for node %p",
-			reinterpret_cast<const void*>(node));
-	}
-	liveThreadRef.reset();
-}
-
-// mac: 0x1AE980 (124B, batch450): owns a fresh Node into the L-20 slot.
-// STUB: PLAYER 0x00872480
-// STUB: STUDIO 0x00828970
-boost::intrusive_ptr<WeakThreadRef::Node> WeakThreadRef::Node::create(lua_State* thread)
-{
-	boost::intrusive_ptr<Node> created(new Node());
-	*reinterpret_cast<boost::intrusive_ptr<Node>*>(reinterpret_cast<char*>(thread) - 20) = created;
-	if (FLog::WeakThreadRef != 0)
-	{
-		FLog::FastLog(FLog::WeakThreadRef,
-			"WeakThreadRef::Node::create node %p",
-			reinterpret_cast<const void*>(created.get()));
-	}
-	return created;
-}
-
 // mac: 0x1AE8C6 (114B, batch451): virtual-clear every ref, then clears first.
 // (Replaces the 2016 carry, which dropped the per-ref virtual removeRef
 // calls and zeroed ref->node instead of the +20 cache.)
@@ -300,6 +184,36 @@ WeakThreadRef::Node::~Node()
 			reinterpret_cast<const void*>(this));
 	}
 	eraseAllRefs();
+}
+
+// mac: 0x1AE872 (84B, batch450): releases the live ref (logged).
+// FUNCTION: PLAYER 0x00871e50
+// FUNCTION: STUDIO 0x008282d0
+void WeakThreadRef::removeRef()
+{
+	if (FLog::WeakThreadRef != 0)
+	{
+		FLog::FastLog(FLog::WeakThreadRef,
+			"WeakThreadRef::removeRef() for node %p",
+			reinterpret_cast<const void*>(node));
+	}
+	liveThreadRef.reset();
+}
+
+// mac: 0x1AE980 (124B, batch450): owns a fresh Node into the L-20 slot.
+// STUB: PLAYER 0x00872480
+// STUB: STUDIO 0x00828970
+boost::intrusive_ptr<WeakThreadRef::Node> WeakThreadRef::Node::create(lua_State* thread)
+{
+	boost::intrusive_ptr<Node> created(new Node());
+	*reinterpret_cast<boost::intrusive_ptr<Node>*>(reinterpret_cast<char*>(thread) - 20) = created;
+	if (FLog::WeakThreadRef != 0)
+	{
+		FLog::FastLog(FLog::WeakThreadRef,
+			"WeakThreadRef::Node::create node %p",
+			reinterpret_cast<const void*>(created.get()));
+	}
+	return created;
 }
 
 // mac: 0x1AEB2A (166B, batch448): base + vptr + function registry ref
@@ -346,6 +260,17 @@ WeakFunctionRef::WeakFunctionRef(const WeakFunctionRef& other)
 	}
 }
 
+// mac: 0x180860 (122B, batch446): count++ + owning LiveThreadRef.
+// (No out-of-line dtor in the binary; the implicit member teardown
+// stands. The manual count has no matching decrement evidenced --
+// ThreadRef's count is cumulative, not live; noted, not invented.)
+// FUNCTION: PLAYER 0x00673910
+// FUNCTION: STUDIO 0x007db670
+ThreadRef::ThreadRef(lua_State* thread)
+	: liveThreadRef(new Lua::detail::LiveThreadRef(thread))
+{
+}
+
 // mac: 0x1AF468 (145B, batch452): vptr + unref function (iff live) + base.
 // (No lock() here -- the binary reads the live thread straight through;
 // locking would perturb the diagnostics counts.)
@@ -385,17 +310,6 @@ void WeakFunctionRef::removeRef()
 		functionId = 0;
 	}
 	WeakThreadRef::removeRef();
-}
-
-// mac: 0x180860 (122B, batch446): count++ + owning LiveThreadRef.
-// (No out-of-line dtor in the binary; the implicit member teardown
-// stands. The manual count has no matching decrement evidenced --
-// ThreadRef's count is cumulative, not live; noted, not invented.)
-// FUNCTION: PLAYER 0x00673910
-// FUNCTION: STUDIO 0x007db670
-ThreadRef::ThreadRef(lua_State* thread)
-	: liveThreadRef(new Lua::detail::LiveThreadRef(thread))
-{
 }
 
 // mac: 0x1AED68 (38B, batch451): placement construction into the return slot.
@@ -493,6 +407,36 @@ void Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_newindex(
 	throw RBX::runtime_error("%s cannot be assigned to", name);
 }
 
+// (Placed here so its assert sits on ThreadRef.cpp line 419, as in 2013.)
+// mac: 0x1AF68C (278B, batch451): thread + non-null assert (ThreadRef.cpp:
+// 419) + pushthread/registry-ref (global-routed iff AllowYieldInHooks).
+// (C1 0x1AE868 forwards here; one definition emits both.)
+// STUB: PLAYER 0x008713a0
+// STUB: STUDIO 0x00827820
+Lua::detail::LiveThreadRef::LiveThreadRef(lua_State* L)
+	: L(L)
+{
+	RBXASSERT(L);
+	lua_pushthread(L);
+	if (FFlag::AllowYieldInHooks != 0)
+	{
+		lua_State* global = ScriptContext::getGlobalState(L);
+		lua_xmove(L, global, 1);
+		threadId = luaL_ref(global, LUA_REGISTRYINDEX);
+	}
+	else
+		threadId = luaL_ref(L, LUA_REGISTRYINDEX);
+}
+
+// mac: 0x1AF7AC (138B, batch448): unref (global-routed iff flag) + count--.
+Lua::detail::LiveThreadRef::~LiveThreadRef()
+{
+	lua_State* state = L;
+	if (FFlag::AllowYieldInHooks != 0)
+		state = ScriptContext::getGlobalState(L);
+	luaL_unref(state, LUA_REGISTRYINDEX, threadId);
+}
+
 // mac: 0x198DB2 (96B, batch456): luaL_checklstring wrapper verbatim.
 template<>
 int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_index(lua_State* L)
@@ -560,6 +504,15 @@ int (*volatile g_bridgeNodeIndex)(lua_State*) =
 int (*volatile g_bridgeNodeNewIndex)(lua_State*) =
 	(int (*)(lua_State*))&Bridge<boost::intrusive_ptr<WeakThreadRef::Node>>::on_newindex;
 
+// Binary-passing helper: Countable<T>::count is rbx::atomic<int>, a
+// single-{long} standard-layout member, so its address is the long the
+// out-of-line interlocked helpers take (the binary passes it directly).
+template<class Counted>
+static long volatile* countAddr()
+{
+	return reinterpret_cast<long volatile*>(&Diagnostics::Countable<Counted>::count);
+}
+
 // mac: 0x180B1C (193B, batch446): null connection + context + function +
 // null cached thread + zero reentrancy + diagnostic count.
 FunctionScriptSlot::FunctionScriptSlot(lua_State* thread, int index)
@@ -568,97 +521,6 @@ FunctionScriptSlot::FunctionScriptSlot(lua_State* thread, int index)
 	, reentrancy(0)
 {
 	RBX::RbxInterlockedIncrement(countAddr<FunctionScriptSlot>());
-}
-
-// mac: 0x17FFF2 (2157B, batch446): reentrancy-guarded fire -- push the
-// function + event arguments onto an exec thread (cached spare if
-// first-level, else fresh) and resume it. Yield/error resets the cache
-// (first-level only); clean runs refresh it; errors disconnect.
-// ThreadRef pins + net-zero count pairs stand in for the manual
-// addref/release dance. All Asserts are log-continue (never branch).
-// STUB: PLAYER 0x0087dee0
-// STUB: STUDIO 0x009e2560
-void FunctionScriptSlot::operator()(const Reflection::EventArguments& arguments)
-{
-	int depth = reentrancy++;
-	if (depth + 1 >= 7)
-	{
-		StandardOut::singleton()->print(MESSAGE_ERROR,
-			"maximum event re-entrancy depth exceeded");
-		--reentrancy;
-		return;
-	}
-	Lua::ThreadRef fnPin = function.lock();
-	lua_State* fnThread = fnPin.get();
-	if (fnThread == NULL)
-	{
-		if (FLog::Asserts != 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"cachedSlotThread.empty() file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 173");
-		}
-		connection.disconnect();
-		--reentrancy;
-		return;
-	}
-	if (FLog::LuaBridge != 0)
-	{
-		FLog::FastLog(FLog::LuaBridge, "Executing lua from signal, execution depth: %u",
-			reinterpret_cast<const void*>((size_t)reentrancy));
-	}
-	Lua::ThreadRef execPin;
-	bool firstLevel = (depth <= 0);
-	if (firstLevel)
-		execPin = cachedSlotThread.lock();
-	lua_State* execThread = execPin.get();
-	if (execThread == NULL)
-	{
-		lua_State* fresh = lua_newthread(fnThread);
-		// Fresh-child L-20 slot (same rule as delay/spawn): zero it --
-		// the refresh below wraps it in a WeakThreadRef immediately.
-		*(void**)((char*)fresh - 20) = NULL;
-		execPin = Lua::ThreadRef(fresh);
-		execThread = fresh;
-	}
-	if (FLog::Asserts != 0 && lua_type(fnThread, -1) != LUA_TTHREAD)
-	{
-		ReleaseAssert(FLog::Asserts,
-			"lua_isthread(functionThread, -1) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 131");
-	}
-	lua_settop(fnThread, -2);
-	int pushed = 0;
-	Lua::lua_pushfunction(execThread, function);
-	for (Reflection::ValueArray::const_iterator iter = arguments.begin();
-		iter != arguments.end(); ++iter)
-	{
-		pushed += Lua::LuaArguments::push(*iter, execThread);
-	}
-	Lua::ThreadRef callPin(execPin);
-	int status = context->resume(callPin, pushed);
-	if ((status == 1 || status == 2) && depth <= 0)
-		cachedSlotThread.reset();
-	if (status == 2)
-	{
-		StandardOut::singleton()->print(MESSAGE_WARNING,
-			"Disconnected event because of exception");
-		connection.disconnect();
-	}
-	if (fnThread != NULL && status == 0 && depth <= 0)
-	{
-		Lua::WeakThreadRef refresh(execThread);
-		cachedSlotThread = refresh;
-	}
-	if (FLog::Asserts != 0)
-	{
-		Lua::ThreadRef spareCheck = cachedSlotThread.lock();
-		if (spareCheck.get() == NULL)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"slotThread file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 186");
-		}
-	}
-	lua_settop(execThread, 0);
-	--reentrancy;
 }
 
 // mac: 0x175E1A (2228B, batches 489-495): invoke a Lua callback with Tuple
@@ -792,6 +654,97 @@ shared_ptr<Reflection::Tuple> RBX::Lua::callCallback(WeakFunctionRef function,
 		LuaArguments::get(execThread, (int)i + 1, result->at(i), true);
 	lua_settop(execThread, 0);
 	return result;
+}
+
+// mac: 0x17FFF2 (2157B, batch446): reentrancy-guarded fire -- push the
+// function + event arguments onto an exec thread (cached spare if
+// first-level, else fresh) and resume it. Yield/error resets the cache
+// (first-level only); clean runs refresh it; errors disconnect.
+// ThreadRef pins + net-zero count pairs stand in for the manual
+// addref/release dance. All Asserts are log-continue (never branch).
+// STUB: PLAYER 0x0087dee0
+// STUB: STUDIO 0x009e2560
+void FunctionScriptSlot::operator()(const Reflection::EventArguments& arguments)
+{
+	int depth = reentrancy++;
+	if (depth + 1 >= 7)
+	{
+		StandardOut::singleton()->print(MESSAGE_ERROR,
+			"maximum event re-entrancy depth exceeded");
+		--reentrancy;
+		return;
+	}
+	Lua::ThreadRef fnPin = function.lock();
+	lua_State* fnThread = fnPin.get();
+	if (fnThread == NULL)
+	{
+		if (FLog::Asserts != 0)
+		{
+			ReleaseAssert(FLog::Asserts,
+				"cachedSlotThread.empty() file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 173");
+		}
+		connection.disconnect();
+		--reentrancy;
+		return;
+	}
+	if (FLog::LuaBridge != 0)
+	{
+		FLog::FastLog(FLog::LuaBridge, "Executing lua from signal, execution depth: %u",
+			reinterpret_cast<const void*>((size_t)reentrancy));
+	}
+	Lua::ThreadRef execPin;
+	bool firstLevel = (depth <= 0);
+	if (firstLevel)
+		execPin = cachedSlotThread.lock();
+	lua_State* execThread = execPin.get();
+	if (execThread == NULL)
+	{
+		lua_State* fresh = lua_newthread(fnThread);
+		// Fresh-child L-20 slot (same rule as delay/spawn): zero it --
+		// the refresh below wraps it in a WeakThreadRef immediately.
+		*(void**)((char*)fresh - 20) = NULL;
+		execPin = Lua::ThreadRef(fresh);
+		execThread = fresh;
+	}
+	if (FLog::Asserts != 0 && lua_type(fnThread, -1) != LUA_TTHREAD)
+	{
+		ReleaseAssert(FLog::Asserts,
+			"lua_isthread(functionThread, -1) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 131");
+	}
+	lua_settop(fnThread, -2);
+	int pushed = 0;
+	Lua::lua_pushfunction(execThread, function);
+	for (Reflection::ValueArray::const_iterator iter = arguments.begin();
+		iter != arguments.end(); ++iter)
+	{
+		pushed += Lua::LuaArguments::push(*iter, execThread);
+	}
+	Lua::ThreadRef callPin(execPin);
+	int status = context->resume(callPin, pushed);
+	if ((status == 1 || status == 2) && depth <= 0)
+		cachedSlotThread.reset();
+	if (status == 2)
+	{
+		StandardOut::singleton()->print(MESSAGE_WARNING,
+			"Disconnected event because of exception");
+		connection.disconnect();
+	}
+	if (fnThread != NULL && status == 0 && depth <= 0)
+	{
+		Lua::WeakThreadRef refresh(execThread);
+		cachedSlotThread = refresh;
+	}
+	if (FLog::Asserts != 0)
+	{
+		Lua::ThreadRef spareCheck = cachedSlotThread.lock();
+		if (spareCheck.get() == NULL)
+		{
+			ReleaseAssert(FLog::Asserts,
+				"slotThread file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaSignalBridge.cpp line: 186");
+		}
+	}
+	lua_settop(execThread, 0);
+	--reentrancy;
 }
 
 // getSingleton spec for the sync-function Variant arm (section 248).

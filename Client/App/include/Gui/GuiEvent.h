@@ -59,11 +59,9 @@ namespace RBX {
 
 		bool getMouseWasOver() const	{return mouseWasOver == MOUSE_OVER;}
 		void setMouseWasOver()			{mouseWasOver = MOUSE_OVER;}
-
 		bool wasSunk()		{return (response == SUNK);}
-
-		// STUB: PLAYER 0x00768100
-		// STUB: STUDIO 0x007b3ba0
+		// FUNCTION: PLAYER 0x00768100
+		// FUNCTION: STUDIO 0x007b3ba0
 		bool wasSunkAndFinished() {
 			RBXASSERT(!((finished == FINISHED) && !wasSunk()));		// binary: include/Gui/GuiEvent.h:66
 			return (finished == FINISHED);

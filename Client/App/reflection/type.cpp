@@ -43,8 +43,8 @@ namespace RBX { namespace Reflection {
 		return allTypes();
 	}
 
-	// STUB: PLAYER 0x0079ff00
-	// STUB: STUDIO 0x0073e720
+	// FUNCTION: PLAYER 0x0079ff00
+	// FUNCTION: STUDIO 0x0073e720
 	template<>
 	const Type& Type::getSingleton<void>()	// 0x15E8EC
 	{

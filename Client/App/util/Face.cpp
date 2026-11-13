@@ -8,24 +8,19 @@
 #include "Util/Extents.h"
 #include "rbx/Debug.h"
 #include "Util/Math.h"
-
 namespace RBX {
-	
 	const Vector3& Face::operator[] (int i) const {
 	    return ((Vector3*)this)[i];
 	}
-
 	Vector3& Face::operator[] (int i) {
 		return ((Vector3*)this)[i];
 	}
-
 	void Face::snapToGrid(float grid)
 	{
 		for (int i = 0; i < 4; ++i) {
 			(*this)[i] = Math::toGrid((*this)[i], grid);
 		}
 	}
-
 	// FUNCTION: PLAYER 0x008fd070
 	// FUNCTION: STUDIO 0x009bf1c0
 	bool Face::overlapWithinPlanes(const Face& f0, const Face& f1, float tolerance)
@@ -33,14 +28,11 @@ namespace RBX {
 		for (int i = 0; i < 2; ++i) {
 			const Face& _f0 = (i == 0) ? f0 : f1;
 			const Face& _f1 = (i == 0) ? f1 : f0;
-
 			Plane p0(_f0.c0, _f0.c1, _f0.c3);
 			Vector3 normal;
 			float distance;
 			p0.getEquation(normal, distance);	// norm + distance = 0;
-
 			Face overlapOn1 = _f1.projectOverlapOnMe(_f0);
-
 			for (int j = 0; j < 4; ++j) {
 				float delta = normal.dot(overlapOn1[j]) + distance;
 				if (std::abs(delta) > tolerance) {
@@ -50,8 +42,6 @@ namespace RBX {
 		}
 		return true;
 	}
-
-
 	// STUB: PLAYER 0x008fc120
 	// STUB: STUDIO 0x009be270
 	bool Face::fuzzyContainsInExtrusion(const Vector3& point, float tolerance) const
@@ -69,8 +59,6 @@ namespace RBX {
 		}
 		return true;
 	}
-
-
 	void Face::minMax(const Vector3& point, const Vector3& normal, float& min, float& max) const
 	{
 		min = FLT_MAX;
@@ -81,7 +69,6 @@ namespace RBX {
 			max = std::max(max, thisDistance);
 		}
 	}
-
 	// FUNCTION: PLAYER 0x008fcbb0
 	// FUNCTION: STUDIO 0x009bed00
 	bool Face::hasOverlap(const Face& f0, const Face& f1, float byAtLeast)
@@ -100,7 +87,6 @@ namespace RBX {
 		}
 		return true;
 	}
-
 	// STUB: PLAYER 0x008fc240
 	// STUB: STUDIO 0x009be390
 	bool Face::cornersAligned(const Face& f0, const Face& f1, float tolerance)

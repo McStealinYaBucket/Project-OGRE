@@ -14,15 +14,29 @@
 #include "V8Tree/OnDemand.h"
 #include "RbxG3D/RbxRay.h"
 #include "Util/Extents.h"
+#include "Util/IHasLocation.h"
 
 namespace RBX {
 
 	extern const char* const sPVInstance;
 
+	class PartInstance;
+
+	// 2013 only (2016 keeps just the comment "// IHasPrimaryPart" in ModelInstance.h/PartInstance.h).
+	// RTTI of PartInstance 0x00b4c784 and ModelInstance 0x00b3f6bc: IHasPrimaryPart at +96 with the
+	// virtual IHasLocation reached through the vbptr at +100 (pdisp 100). One slot: getPrimaryPart
+	// (PartInstance 0x00723500 `lea eax,[ecx-0x60]; ret`, ModelInstance 0x006d48b0).
+	class RBXInterface IHasPrimaryPart : public virtual IHasLocation
+	{
+	public:
+		virtual PartInstance* getPrimaryPart() = 0;  // vtable+0x00
+	};
+
 	class PVInstance
 		: public DescribedNonCreatable<PVInstance, Instance, sPVInstance, Reflection::ClassDescriptor::PERSISTENT>
 		// Functionality 27 per the 0x4687C8 classDescriptor reference
 		// (Described<..., Instance, 27, Permissions 0>).
+		, public IHasPrimaryPart  // +0x60 (vbptr +0x64), RTTI above
 	{
 	public:
 		PVInstance();

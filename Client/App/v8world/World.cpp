@@ -42,6 +42,25 @@ namespace RBX {
 		return true;
 	}
 
+	// STUB: PLAYER 0x00749ae0
+	// STUB: STUDIO 0x0088a430
+	World::~World()
+	{
+		// mac: 0x5A8A28 (batch778) deleting order: groundPrim ->
+		// sendPhysics -> stage -> contactManager. (The D2's
+		// CleanStage::onPrimitiveRemoving(groundPrimitive), its
+		// World.cpp:187-:193 empty-state asserts and the groundPrim
+		// field-clears queue with their own pass -- not modelled yet.)
+		delete megaClusterPrim;
+		megaClusterPrim = NULL;
+		delete sendPhysics;
+		sendPhysics = NULL;
+		delete stage;
+		stage = NULL;
+		delete contactManager;
+		contactManager = NULL;
+	}
+
 	// STUB: PLAYER 0x0074ae30
 	// STUB: STUDIO 0x0088b780
 	World::World()
@@ -61,25 +80,6 @@ namespace RBX {
 		// megaClusterPrim+World, then CleanStage::onPrimitiveAdded.
 		megaClusterPrim->setAnchoredProperty(true);
 		static_cast<CleanStage*>(stage)->onPrimitiveAdded(megaClusterPrim);
-	}
-
-	// STUB: PLAYER 0x00749ae0
-	// STUB: STUDIO 0x0088a430
-	World::~World()
-	{
-		// mac: 0x5A8A28 (batch778) deleting order: groundPrim ->
-		// sendPhysics -> stage -> contactManager. (The D2's
-		// CleanStage::onPrimitiveRemoving(groundPrimitive), its
-		// World.cpp:187-:193 empty-state asserts and the groundPrim
-		// field-clears queue with their own pass -- not modelled yet.)
-		delete megaClusterPrim;
-		megaClusterPrim = NULL;
-		delete sendPhysics;
-		sendPhysics = NULL;
-		delete stage;
-		stage = NULL;
-		delete contactManager;
-		contactManager = NULL;
 	}
 
 	// mac: 0x5A902E (batch776/777): the binary reads this+188 in one

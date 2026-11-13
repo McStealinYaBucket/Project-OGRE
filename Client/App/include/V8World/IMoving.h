@@ -1,38 +1,37 @@
-/* V8World/IMoving.h -- October 2013 (sleep/wake motion tracking).
-   Evidence: IMoving C2 0x576584 / D2 0x44B8C8 / makeMoving 0x5765AC /
-     setMovingManager 0x576648 / checkSleep 0x5766E8 / notifyMoved 0x5767DE /
-     forceSleep 0x576830; IMovingManager C2 0x576858 / remove 0x576688 /
-     onMovingHeartbeat 0x5769D4 (TODO); vtable 0xF4E9E0 (6 pure virtuals,
-     slots shared with PartInstance primary 70-75 via Thn96 thunks);
-     source leaks App/v8world/IMoving.h:33 + IMoving.cpp lines 18/40/50/109.
-   2013 has NO MovementHistory/lastCFrame/getConstPartPrimitiveVirtual
-   (all 2016-only; zero name hits). onNetworkIsSleepingChanged takes no
-   Time arg (diverges from 2016).
-   Deltas from a literal port (all marked): FastLog GfxClusters calls skipped
-   (channels absent from tree); makeMoving/notifyMoved/setMovingManager/
-   forceSleep return void here (binary returns insert-status/char, ignored on
-   every known caller path - TODO-verify); dtor virtual here (binary shows
-   only D2; our tree deletes polymorphically - revisit at PartInstance MI
-   integration, where +96 secondary-vtable placement also lands).
-   CRT rule (session 72): IMoving itself owns no heap; IMovingManager owns a
-   std::set - manager and its members must live/die on the same CRT side
-   (lib /MT vs harness /MD). World-owned (lib/lib) and test-local (exe/exe)
-   uses are same-side and safe.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8world/IMoving.h */
+/* V8World/IMoving.h -- October 2013 (sleep/wake motion tracking). Mac: IMoving C2 0x576584, D2 0x44B8C8, makeMoving
+   0x5765AC, setMovingManager 0x576648, checkSleep 0x5766E8, notifyMoved 0x5767DE, forceSleep 0x576830; IMovingManager
+   C2 0x576858, remove 0x576688, onMovingHeartbeat 0x5769D4 (TODO). vtable: 6 pure virtuals, no virtual dtor (makeMoving
+   0x00822e00 calls onSleepingChanged through slot 0); the dtor is inline here, assert at IMoving.h:33 (inlined into
+   PartInstance::~PartInstance 0x00723190). 2013 has no MovementHistory/lastCFrame (2016-only), and
+   onNetworkIsSleepingChanged takes no Time. makeMoving/notifyMoved/setMovingManager/forceSleep return void here
+   (binary returns insert-status/char, ignored on every known caller path - TODO-verify). */
 
 #pragma once
 
 #include <set>
+#include "rbx/Debug.h"
 
 namespace RBX {
 
 	class IMovingManager;
 
+
+
+
+
+
+
+
+
+
+
 	class IMoving
 	{
 	public:
 		IMoving();
-		virtual ~IMoving();
+		~IMoving() {
+			RBXASSERT(!iMovingManager);
+		}
 
 		// Slot 0. Called with false on wake (makeMoving), true on sleep (checkSleep).
 		virtual void onSleepingChanged(bool sleeping) = 0;
@@ -51,8 +50,8 @@ namespace RBX {
 		void makeMoving();
 		// mac: 0x576648: detach from old manager, attach to new (re-makeMoving if awake).
 		void setMovingManager(IMovingManager* manager);
-		// mac: 0x5766E8: heartbeat tick. Returns 1 when this call put us to sleep, else 0.
-		int checkSleep();
+		// mac: 0x5766E8: heartbeat tick. True when this call put us to sleep (0x00822bc0 returns al).
+		bool checkSleep();
 		// mac: 0x5767DE: steps=30; wake (makeMoving) if we were asleep.
 		void notifyMoved();
 		// mac: 0x576830: steps=0 + detach (no sleep notification).

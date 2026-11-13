@@ -28,59 +28,14 @@ namespace RBX { namespace Lua {
 
 	static int pushEnumList(lua_State* L);
 
-	// mac: 0x172214 (394B, batch409): index/newindex/gc/eq/tostring + readonly.
-	// FUNCTION: PLAYER 0x008802b0
-	// FUNCTION: STUDIO 0x009e4930
+	// mac: 0x1A28EE (96B, batch413): checklstring wrapper verbatim.
+	// FUNCTION: PLAYER 0x006701a0
+	// FUNCTION: STUDIO 0x007d8470
 	template<>
-	void Bridge<AllEnumDescriptorsPtr, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	int Bridge<EnumDescriptorItemPtr, true>::on_index(lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x172F0E (158B, batch409): Name::lookup + lookupDescriptor(Name),
-	// pushed via SingletonBridge<EnumDescriptor>; NULL -> "%s is not a
-	// valid EnumItem".
-	// STUB: PLAYER 0x0087d3f0
-	// STUB: STUDIO 0x009e1a70
-	template<>
-	int Bridge<AllEnumDescriptorsPtr, true>::on_index(
-		const AllEnumDescriptorsPtr& object, const char* name, lua_State* L)
-	{
-		const Reflection::EnumDescriptor* desc =
-			Reflection::EnumDescriptor::lookupDescriptor(*RBX::Name::lookup(name));
-		if (desc == NULL)
-			throw RBX::runtime_error("%s is not a valid EnumItem", name);
-		Enum::push(L, desc);
-		return 1;
-	}
-
-	// mac: 0x172FAC (95B, batch409).
-	// FUNCTION: PLAYER 0x0087cf60
-	// FUNCTION: STUDIO 0x009e15e0
-	template<>
-	void Bridge<AllEnumDescriptorsPtr, true>::on_newindex(
-		AllEnumDescriptorsPtr& object, const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("Enums cannot be modified");
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
 	}
 
 	// mac: 0x1A2A72 (96B, batch413): checklstring wrapper verbatim.
@@ -93,16 +48,26 @@ namespace RBX { namespace Lua {
 		return on_index(getObject(L, 1), name, L);
 	}
 
-	// mac: 0x1A2AD2 (98B, batch413): same verbatim.
-	// STUB: PLAYER 0x00672040
-	// STUB: STUDIO 0x007d9fa0
+	// mac: 0x1A29B0 (96B, batch413): checklstring wrapper verbatim.
+	// FUNCTION: PLAYER 0x006721c0
+	// FUNCTION: STUDIO 0x007da120
 	template<>
-	int Bridge<AllEnumDescriptorsPtr, true>::on_newindex(lua_State* L)
+	int Bridge<EnumDescriptorPtr, true>::on_index(lua_State* L)
 	{
 		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
+		return on_index(getObject(L, 1), name, L);
 	}
+
+	// mac: 0x172FAC (95B, batch409).
+	// FUNCTION: PLAYER 0x0087cf60
+	// FUNCTION: STUDIO 0x009e15e0
+	template<>
+	void Bridge<AllEnumDescriptorsPtr, true>::on_newindex(
+		AllEnumDescriptorsPtr& object, const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("Enums cannot be modified");
+	}
+
 
 	// mac: 0x17239E (50B, batch410): checkudata + return 0.
 	template<>
@@ -136,52 +101,58 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x172476 (394B, batch409): same metatable set as AllEnums.
-	// FUNCTION: PLAYER 0x00880390
-	// FUNCTION: STUDIO 0x009e4a10
+	// mac: 0x1731EA (95B, batch409).
+	// FUNCTION: PLAYER 0x0087cf90
+	// FUNCTION: STUDIO 0x009e1610
 	template<>
-	void Bridge<EnumDescriptorPtr, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	void Bridge<EnumDescriptorPtr, true>::on_newindex(
+		EnumDescriptorPtr& object, const char* name, lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		throw RBX::runtime_error("Enum cannot be modified");
 	}
 
-	// mac: 0x17300C (202B, batch409): "GetEnumItems" -> sub_1730D6 closure;
-	// else virtual lookup(name) -> SingletonBridge<Item>::push; NULL ->
-	// "%s is not a valid EnumItem".
-	// STUB: PLAYER 0x0087d310
-	// STUB: STUDIO 0x009e1990
+	// mac: 0x17324A (219B, batch409): Name (owner-name string chain) + Value
+	// (int +20); plain failure otherwise.
+	// FUNCTION: PLAYER 0x0087cfc0
+	// FUNCTION: STUDIO 0x009e1640
 	template<>
-	int Bridge<EnumDescriptorPtr, true>::on_index(
-		const EnumDescriptorPtr& object, const char* name, lua_State* L)
+	int Bridge<EnumDescriptorItemPtr, true>::on_index(
+		const EnumDescriptorItemPtr& object, const char* name, lua_State* L)
 	{
-		if (strcmp(name, "GetEnumItems") == 0)
+		if (strcmp(name, "Name") == 0)
 		{
-			lua_pushcfunction(L, pushEnumList);
+			const std::string& s = object->name->str;
+			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}
-		const Reflection::EnumDescriptor::Item* item = object->lookup(name);
-		if (item == NULL)
-			throw RBX::runtime_error("%s is not a valid EnumItem", name);
-		EnumItem::push(L, item);
+		if (strcmp(name, "Value") == 0)
+		{
+			lua_pushnumber(L, object->value);
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x173326 (95B, batch409).
+	// FUNCTION: PLAYER 0x0087d0b0
+	// FUNCTION: STUDIO 0x009e1730
+	template<>
+	void Bridge<EnumDescriptorItemPtr, true>::on_newindex(
+		EnumDescriptorItemPtr& object, const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("EnumItem cannot be modified");
+	}
+
+	// mac: 0x17346E (194B, batch411): "Enum.<Owner>.<Item>" via RBX::format.
+	// FUNCTION: PLAYER 0x0087d140
+	// FUNCTION: STUDIO 0x009e17c0
+	template<>
+	int Bridge<EnumDescriptorItemPtr, true>::on_tostring(
+		const EnumDescriptorItemPtr& object, lua_State* L)
+	{
+		std::string s = RBX::format("Enum.%s.%s",
+			object->owner.name->str.c_str(), object->name->str.c_str());
+		::lua_pushstring(L, s.c_str());
 		return 1;
 	}
 
@@ -207,36 +178,6 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x1731EA (95B, batch409).
-	// FUNCTION: PLAYER 0x0087cf90
-	// FUNCTION: STUDIO 0x009e1610
-	template<>
-	void Bridge<EnumDescriptorPtr, true>::on_newindex(
-		EnumDescriptorPtr& object, const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("Enum cannot be modified");
-	}
-
-	// mac: 0x1A29B0 (96B, batch413): checklstring wrapper verbatim.
-	// FUNCTION: PLAYER 0x006721c0
-	// FUNCTION: STUDIO 0x007da120
-	template<>
-	int Bridge<EnumDescriptorPtr, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-	// mac: 0x1A2A10 (98B, batch413): same verbatim.
-	// STUB: PLAYER 0x00672190
-	// STUB: STUDIO 0x007da0f0
-	template<>
-	int Bridge<EnumDescriptorPtr, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x172600 (50B-pattern): checkudata + return 0.
 	template<>
@@ -272,6 +213,53 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
+	// mac: 0x17300C (202B, batch409): "GetEnumItems" -> sub_1730D6 closure;
+	// else virtual lookup(name) -> SingletonBridge<Item>::push; NULL ->
+	// "%s is not a valid EnumItem".
+	// STUB: PLAYER 0x0087d310
+	// STUB: STUDIO 0x009e1990
+	template<>
+	int Bridge<EnumDescriptorPtr, true>::on_index(
+		const EnumDescriptorPtr& object, const char* name, lua_State* L)
+	{
+		if (strcmp(name, "GetEnumItems") == 0)
+		{
+			lua_pushcfunction(L, pushEnumList);
+			return 1;
+		}
+		const Reflection::EnumDescriptor::Item* item = object->lookup(name);
+		if (item == NULL)
+			throw RBX::runtime_error("%s is not a valid EnumItem", name);
+		EnumItem::push(L, item);
+		return 1;
+	}
+
+	// mac: 0x172F0E (158B, batch409): Name::lookup + lookupDescriptor(Name),
+	// pushed via SingletonBridge<EnumDescriptor>; NULL -> "%s is not a
+	// valid EnumItem".
+	// STUB: PLAYER 0x0087d3f0
+	// STUB: STUDIO 0x009e1a70
+	template<>
+	int Bridge<AllEnumDescriptorsPtr, true>::on_index(
+		const AllEnumDescriptorsPtr& object, const char* name, lua_State* L)
+	{
+		const Reflection::EnumDescriptor* desc =
+			Reflection::EnumDescriptor::lookupDescriptor(*RBX::Name::lookup(name));
+		if (desc == NULL)
+			throw RBX::runtime_error("%s is not a valid EnumItem", name);
+		Enum::push(L, desc);
+		return 1;
+	}
+
+	// mac: 0x1728FC (62B, batch410): checkudata + forward.
+	// FUNCTION: PLAYER 0x0087f6f0
+	// FUNCTION: STUDIO 0x009e3d70
+	template<>
+	int Bridge<EnumDescriptorItemPtr, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
+	}
+
 	// mac: 0x1726D8 (394B-pattern): same metatable set.
 	// FUNCTION: PLAYER 0x0087f8f0
 	// FUNCTION: STUDIO 0x009e3f70
@@ -300,58 +288,6 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x17324A (219B, batch409): Name (owner-name string chain) + Value
-	// (int +20); plain failure otherwise.
-	// FUNCTION: PLAYER 0x0087cfc0
-	// FUNCTION: STUDIO 0x009e1640
-	template<>
-	int Bridge<EnumDescriptorItemPtr, true>::on_index(
-		const EnumDescriptorItemPtr& object, const char* name, lua_State* L)
-	{
-		if (strcmp(name, "Name") == 0)
-		{
-			const std::string& s = object->name->str;
-			lua_pushlstring(L, s.c_str(), s.size());
-			return 1;
-		}
-		if (strcmp(name, "Value") == 0)
-		{
-			lua_pushnumber(L, object->value);
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
-	// mac: 0x173326 (95B, batch409).
-	// FUNCTION: PLAYER 0x0087d0b0
-	// FUNCTION: STUDIO 0x009e1730
-	template<>
-	void Bridge<EnumDescriptorItemPtr, true>::on_newindex(
-		EnumDescriptorItemPtr& object, const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("EnumItem cannot be modified");
-	}
-
-	// mac: 0x1A28EE (96B, batch413): checklstring wrapper verbatim.
-	// FUNCTION: PLAYER 0x006701a0
-	// FUNCTION: STUDIO 0x007d8470
-	template<>
-	int Bridge<EnumDescriptorItemPtr, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-	// mac: 0x1A294E (98B, batch413): same verbatim.
-	// STUB: PLAYER 0x00670170
-	// STUB: STUDIO 0x007d8440
-	template<>
-	int Bridge<EnumDescriptorItemPtr, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
 
 	// mac: 0x172862 (50B-pattern): checkudata + return 0.
 	template<>
@@ -369,26 +305,60 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x1728FC (62B, batch410): checkudata + forward.
-	// FUNCTION: PLAYER 0x0087f6f0
-	// FUNCTION: STUDIO 0x009e3d70
+	// mac: 0x172214 (394B, batch409): index/newindex/gc/eq/tostring + readonly.
+	// FUNCTION: PLAYER 0x008802b0
+	// FUNCTION: STUDIO 0x009e4930
 	template<>
-	int Bridge<EnumDescriptorItemPtr, true>::on_tostring(lua_State* L)
+	void Bridge<AllEnumDescriptorsPtr, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
-		return on_tostring(getObject(L, 1), L);
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
-	// mac: 0x17346E (194B, batch411): "Enum.<Owner>.<Item>" via RBX::format.
-	// STUB: PLAYER 0x0087d140
-	// STUB: STUDIO 0x009e17c0
+	// mac: 0x172476 (394B, batch409): same metatable set as AllEnums.
+	// FUNCTION: PLAYER 0x00880390
+	// FUNCTION: STUDIO 0x009e4a10
 	template<>
-	int Bridge<EnumDescriptorItemPtr, true>::on_tostring(
-		const EnumDescriptorItemPtr& object, lua_State* L)
+	void Bridge<EnumDescriptorPtr, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
-		std::string s = RBX::format("Enum.%s.%s",
-			object->owner.name->str.c_str(), object->name->str.c_str());
-		lua_pushlstring(L, s.c_str(), s.size());
-		return 1;
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// Binary singleton holder (BSS unk_FAD891): one static instance.
@@ -415,15 +385,9 @@ namespace RBX { namespace Lua {
 	// mac: 0x18B843).
 	int (*volatile g_bridgeAllEnumsIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<AllEnumDescriptorsPtr, true>::on_index;
-	int (*volatile g_bridgeAllEnumsNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<AllEnumDescriptorsPtr, true>::on_newindex;
 	int (*volatile g_bridgeEnumDescIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<EnumDescriptorPtr, true>::on_index;
-	int (*volatile g_bridgeEnumDescNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<EnumDescriptorPtr, true>::on_newindex;
 	int (*volatile g_bridgeEnumItemIndex)(lua_State*) =
 		(int (*)(lua_State*))&Bridge<EnumDescriptorItemPtr, true>::on_index;
-	int (*volatile g_bridgeEnumItemNewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<EnumDescriptorItemPtr, true>::on_newindex;
 
 } }

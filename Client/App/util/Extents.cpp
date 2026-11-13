@@ -45,10 +45,9 @@ NormalId Extents::closestFace(const Vector3& point)
 									+x -->
 	1	5				0	4
 */
-
 // mac: 0x1FFD46 - asserts at Extents.cpp:53 ("i >= 0") and :54 ("i <= 7")
-// STUB: PLAYER 0x00796070
-// STUB: STUDIO 0x0089f230
+// FUNCTION: PLAYER 0x00796070
+// FUNCTION: STUDIO 0x0089f230
 Vector3int16 Extents::getCornerIndex(int i) const
 {
 	RBXASSERT(i >= 0);
@@ -95,21 +94,17 @@ void Extents::getFaceCorners(
     case 3:
         v0 = getCorner(0); v1 = getCorner(1); v2 = getCorner(3); v3 = getCorner(2);
         break;
-
     case 4:
         v0 = getCorner(0); v1 = getCorner(4); v2 = getCorner(5); v3 = getCorner(1);
         break;
-
     case 5:
         v0 = getCorner(0); v1 = getCorner(2); v2 = getCorner(6); v3 = getCorner(4);
         break;
-
     default:
 		RBXASSERT(0);
 		break;
     }
 }
-
 // mac: 0x2001E0 - the 2013 binary loops the 8 corners, transforming each
 // myFrame.pointToWorldSpace(corner) then expressInFrame.pointToObjectSpace(world)
 // FUNCTION: PLAYER 0x00796920
@@ -119,7 +114,6 @@ Extents Extents::express(const CoordinateFrame& myFrame,
 {
 	Vector3 minC(Math::inf(), Math::inf(), Math::inf());
 	Vector3 maxC(-Math::inf(), -Math::inf(), -Math::inf());
-
 	for (int i = 0; i < 8; ++i) {
 		Vector3 corner = this->getCorner(i);
 		Vector3 world = myFrame.pointToWorldSpace(corner);
@@ -129,7 +123,6 @@ Extents Extents::express(const CoordinateFrame& myFrame,
 	}
 	return Extents::vv(minC, maxC);
 }
-
 // mac: 0x20050E - the 2013 binary loops the 8 corners of *this through
 // localCoord.pointToWorldSpace and takes min/max (no early-out on isNull)
 // FUNCTION: PLAYER 0x00796d00
@@ -138,7 +131,6 @@ Extents Extents::toWorldSpace(const CoordinateFrame& localCoord) const
 {
 	Vector3 minC(Math::inf(), Math::inf(), Math::inf());
 	Vector3 maxC(-Math::inf(), -Math::inf(), -Math::inf());
-
 	for (int i = 0; i < 8; ++i) {
 		Vector3 corner = this->getCorner(i);
 		Vector3 world = localCoord.pointToWorldSpace(corner);
@@ -147,14 +139,12 @@ Extents Extents::toWorldSpace(const CoordinateFrame& localCoord) const
 	}
 	return Extents::vv(minC, maxC);
 }
-
 Plane Extents::getPlane(NormalId normalId) const
 {
 	Vector3 point = faceCenter(normalId);
 	Vector3 normal = normalIdToVector3(normalId);
 	return Plane(normal, point);
 }
-
 // mac: 0x2007D8
 Vector3 Extents::faceCenter(NormalId faceId) const
 {
@@ -170,11 +160,9 @@ Vector3 Extents::faceCenter(NormalId faceId) const
 	}
 	return answer;
 }
-
 Vector3 Extents::clamp(const Extents& innerExtents) const
 {
 	Vector3 answer(Vector3::zero());
-
 	// for x..z
 	for (int i = 0; i < 3; i++) {
 		RBXASSERT(innerExtents.size()[i] <= this->size()[i]);
@@ -187,22 +175,14 @@ Vector3 Extents::clamp(const Extents& innerExtents) const
 	}
 	return answer;
 }
-
 // mac: 0x200860 - per-axis squared overshoot of point beyond the box
 float Extents::computeClosestSqDistanceToPoint(const Vector3& point) const
 {
 	Vector3 center = (high + low) / 2;
 	Vector3 extents = (high - low) / 2;
-
 	return ClosestSqDistanceToAABB(point, center, extents);
 }
-
-// mac: 0x200970 - asserts at Extents.cpp:190 ("distance > 0.0")
-// VERIFIED 2026-09-27: the binary builds a fresh 24-byte Extents with
-//   low  = this->low  - (d,d,d)     (ssub on all three lanes)
-//   high = this->high + (d,d,d)     (sadd on all three lanes)
-// and returns `overlapsOrTouches(grown, other) ^ 1`.  expand() is exactly that
-// growth, so this body is semantically identical.
+// mac: 0x200970 - asserts at Extents.cpp:190 ("distance > 0.0") VERIFIED 2026-09-27: the binary builds a fresh 24-byte Extents with low  = this->low  - (d,d,d)     (ssub on all three lanes) high = this->high + (d,d,d)     (sadd on all three lanes) and returns `overlapsOrTouches(grown, other) ^ 1`.  expand() is exactly that growth, so this body is semantically identical.
 // STUB: PLAYER 0x00796580
 // STUB: STUDIO 0x0089f740
 bool Extents::separatedByMoreThan(const Extents& other, float distance) const

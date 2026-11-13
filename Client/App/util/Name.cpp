@@ -17,6 +17,14 @@
 #include <vector>
 #include <algorithm>
 
+// getNullName's call_once state (file statics outside RBX: the PDB names them unqualified).
+// GLOBAL: PLAYER 0x00de2810
+// GLOBAL: STUDIO 0x00f69544
+static const RBX::Name* nullName;
+// GLOBAL: PLAYER 0x00de286c
+// GLOBAL: STUDIO 0x00f695a0
+static boost::once_flag nullNameFlag = BOOST_ONCE_INIT;
+
 namespace RBX {
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +115,7 @@ namespace RBX {
 
 	// STUB: PLAYER 0x006138c0
 	// STUB: STUDIO 0x00703190
-	const Name* Name::declare(const char* name)	// 0x23206A
+	const Name* Name::declare(const char* const& name)	// 0x23206A
 	{
 		if (!name)
 			return &getNullName();
@@ -125,11 +133,21 @@ namespace RBX {
 		return n;
 	}
 
-	// STUB: PLAYER 0x0090e3d0
-	// STUB: STUDIO 0x00547620
-	const Name& Name::getNullName()	// 0x231DBC
+	// call_once-guarded static (mac 0x231DBC). 0x0090e3d0 / STUDIO 0x00547620, which the prior markers named,
+	// are a constructor that stores getNullName() at +0x1c, not this function.
+
+	// FUNCTION: PLAYER 0x00613a70
+	// FUNCTION: STUDIO 0x00703340
+	static void initNullName()
 	{
-		static Name* nullName = new Name("");	// call_once-guarded in the original (unk_FAE378)
+		nullName = Name::declare("");
+	}
+
+	// FUNCTION: PLAYER 0x00613a90
+	// FUNCTION: STUDIO 0x00703360
+	const Name& Name::getNullName()
+	{
+		boost::call_once(&initNullName, nullNameFlag);
 		return *nullName;
 	}
 

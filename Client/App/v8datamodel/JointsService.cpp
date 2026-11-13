@@ -21,6 +21,21 @@ RBX_REGISTER_CLASS(RBX::JointsService);
 
 namespace RBX {
 
+// mac: 0x418EA6 (batch625): dynamic_cast<IAdornable> the child
+// (null-skipped), forward hits to the +0x74 collector, then TAIL-JUMP
+// Instance::onDescendantRemoving (skips the ServiceProvider wiring).
+// STUB: PLAYER 0x007ff2c0
+// STUB: STUDIO 0x008ee490
+void JointsService::onDescendantRemoving(const shared_ptr<Instance>& descendant)
+{
+	if (descendant.get() != NULL)
+	{
+		if (IAdornable* adornable = dynamic_cast<IAdornable*>(descendant.get()))
+			adornableCollector->onRenderableDescendantRemoving(adornable);
+	}
+	Instance::onDescendantRemoving(descendant);
+}
+
 // mac: 0x418EFE (batch625): Instance::onDescendantAdded FIRST (direct --
 // skips the ServiceProvider service wiring by binary design), then
 // dynamic_cast<IAdornable> the child (null-skipped) and forward hits
@@ -36,21 +51,6 @@ void JointsService::onDescendantAdded(Instance* descendant)
 		if (IAdornable* adornable = dynamic_cast<IAdornable*>(descendant))
 			adornableCollector->onRenderableDescendantAdded(adornable);
 	}
-}
-
-// mac: 0x418EA6 (batch625): dynamic_cast<IAdornable> the child
-// (null-skipped), forward hits to the +0x74 collector, then TAIL-JUMP
-// Instance::onDescendantRemoving (skips the ServiceProvider wiring).
-// STUB: PLAYER 0x007ff2c0
-// STUB: STUDIO 0x008ee490
-void JointsService::onDescendantRemoving(const shared_ptr<Instance>& descendant)
-{
-	if (descendant.get() != NULL)
-	{
-		if (IAdornable* adornable = dynamic_cast<IAdornable*>(descendant.get()))
-			adornableCollector->onRenderableDescendantRemoving(adornable);
-	}
-	Instance::onDescendantRemoving(descendant);
 }
 
 } // namespace RBX

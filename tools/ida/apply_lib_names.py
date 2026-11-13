@@ -11,7 +11,8 @@ library CSVs (tools/lib/{lua,raknet,g3d,boost}_match.py). Per address, by status
              run are removed.
 A name is set only when the function's current name is an IDA dummy/auto name (sub_, nullsub_,
 unknown_libname_, IDA's jmp-thunk name j_<target>), an ios:/mac: oracle name, or a name an earlier run of
-this script set (its match:/lib: line is there) that the row now corrects. lib_consistency.py has already rejected every row whose
+this script set (its match:/lib: line is there) that the row now corrects, and never a name
+tools/ida/apply_db_updates.py set from a fact (a "p4 <tag>" line that is not a reccmp line). lib_consistency.py has already rejected every row whose
 oracle name names Roblox code; an oracle name that names other library code at an identical row is
 superseded by the byte match and kept as a "superseded <tag> <name>" comment line. FLIRT (FUNC_LIB) and
 any other name are never overwritten. A row at an address with no IDA function (IDA missed it) gets one
@@ -113,12 +114,18 @@ for r in csv.DictReader(open(os.path.join(EXP, TARGET + "-lib-resolved.csv"))):
     # a name an earlier run of this script set from a row the matchers have since corrected (g3d-2013.md:
     # Color3::one -> gray, Vector3::ignore -> unitZ, rayAABox -> collisionLocationForMovingPointFixedAABox)
     stale = any(l.startswith(("match: ", "lib: ")) for l in (idc.get_func_cmt(ea, 1) or "").split("\n"))
+    # a name tools/ida/apply_db_updates.py set from a hand-checked fact ("p4 <tag> ...", not a reccmp line)
+    # stays: e.g. 0x0066ee10 EventSource::raiseEventInvocation (rtti:), ICF-folded with a RakNet `ret 0Ch` body
+    fact = any(l.startswith("p4 ") and not l.startswith("p4 match: reccmp")
+               for l in (idc.get_func_cmt(ea, 1) or "").split("\n"))
     action = "kept"
     if cur == r["name"]:
         action = "already"
         lines += [l for l in (idc.get_func_cmt(ea, 1) or "").split("\n") if l.startswith("superseded ")]
     elif f.flags & ida_funcs.FUNC_LIB:
         action = "kept (FUNC_LIB)"
+    elif fact and not auto:
+        action = "kept (p4 fact)"
     elif auto or oracle_named or stale:
         if oracle_named and "oracle disagrees" in r["note"]:
             lines.append("superseded " + orc)

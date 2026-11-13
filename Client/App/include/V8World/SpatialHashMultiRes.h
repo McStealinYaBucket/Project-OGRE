@@ -71,20 +71,17 @@ namespace RBX {
 		// function is static in spirit and hexrays prints it __cdecl).
 		// See v8world/SpatialHashMultiRes.cpp.
 		static int getHash(int level, const Vector3int32& cell);
-
 		// numBuckets(level) == (0x10000u >> level): named by the findNode
 		// :255 assert text ("SpatialHashStatic::numBuckets(l) ==
 		// hashTables[l].size()") and the handoff's level table
 		// (65536>>L).  Inline -- pure arithmetic.
-		static unsigned long numBuckets(int level) { return 0x10000u >> level; }
-
+		static unsigned long numBuckets(int level) { return 0x10000 >> level; }  // signed shift: getHash 0x007925a0 sar
 		// cellMinSize 8: rodata-proved (the "\b" dword computeMinMax
 		// multiplies by).  maxLevelForAnchored: loaded but value not yet
 		// read from rodata -- 2 is contextual (anchored cap below the
 		// default 3), marked TODO-verify.
 		static const int cellMinSize = 8;
 		static const int maxLevelForAnchored = 2;
-
 		// mac: 0x5A3BCC (342B).  Cell range covering an extents at a level:
 		// assert level != -1 (:79); clamp the extents inside the million
 		// cube; minOut = floor(lo / (8<<level)), maxOut = floor(hi /
@@ -92,7 +89,6 @@ namespace RBX {
 		// million-cube DELTA.
 		static void computeMinMax(int level, const Extents& extents,
 			Vector3int32& minOut, Vector3int32& maxOut);
-
 		// mac: 0x56E084 (319B).  Inline in the ORIGINAL header (:105/:107), so
 		// inline here too.  Assert Extents(e.min(),e.max())==e (:105);
 		// return e unless isNanInf, in which case assert "0" (:107) and
@@ -107,10 +103,8 @@ namespace RBX {
 		{
 			// SpatialHashMultiRes.h:105.
 			RBXASSERT(Extents(e.min(), e.max()) == e);
-			if (e.isNanInf())
-			{
-				// SpatialHashMultiRes.h:107 ("0").
-				RBXASSERT(false);
+			if (e.isNanInf()) {
+				RBXASSERT(0);
 				return Extents::zero();
 			}
 			return e;

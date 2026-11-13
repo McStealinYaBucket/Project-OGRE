@@ -151,17 +151,21 @@ namespace RBX {
 	   Limits::Counter::Activator; Done when unlocked. The Activator counter
 	   (arbiter +2088/2092) is TODO-identified, so the guard is omitted
 	   pending that member (limits-tracking only, no functional effect). */
-	// STUB: PLAYER 0x0070ccb0
-	// STUB: STUDIO 0x00845380
-	TaskScheduler::StepResult DataModelJob::step(const Stats& stats)
+	// mac: 0x1AA0EA (batch575: "LuaGc" / Write / false / arbiter from the
+	// parent DataModel / 0.003 budget; weak copy at +0x1E0; frequency =
+	// (int)(30.0 / ((double)(float)base + 1.0)) at +0x1E8, by name).
+	// FUNCTION: PLAYER 0x00679c00
+	// FUNCTION: STUDIO 0x007e1b20
+	GcJob::GcJob(shared_ptr<ScriptContext> scriptContext)
+		: DataModelJob(
+			"LuaGc",
+			DataModelJob::Write,
+			false,
+			shared_from_dynamic_cast<DataModel>(scriptContext->getParent()),
+			Time::Interval(0.003))
+		, scriptContext(scriptContext)
+		, frequency((int)(30.0 / ((double)(float)scriptContext->gcFrequencyBase + 1.0)))
 	{
-		TaskScheduler::StepResult result = TaskScheduler::Done;
-		if (shared_ptr<TaskScheduler::Arbiter> arbiter = getArbiter())
-		{
-			(void)arbiter;
-			result = stepDataModelJob(stats);
-		}
-		return result;
 	}
 
 	// Binary size note: the 2013 DataModelJob base is 0x1E0 (derived weak
@@ -169,6 +173,44 @@ namespace RBX {
 	// layout drift in the Job running-average tail); the derived member
 	// is spelled BY NAME so no raw offset is baked in. Exact numbers
 	// pinned by parsetest sizeof probe (section 279).
+
+	// mac: 0x1AA302: standard sleep at the live frequency.
+	// FUNCTION: PLAYER 0x00679d70
+	// FUNCTION: STUDIO 0x007e1c90
+	Time::Interval GcJob::sleepTime(const Stats& stats)
+	{
+		return computeStandardSleepTime(stats, (double)frequency);
+	}
+
+	// mac: 0x1AA32E: standard error at the live frequency.
+	// FUNCTION: PLAYER 0x00679da0
+	// FUNCTION: STUDIO 0x007e1cc0
+	GcJob::Error GcJob::error(const Stats& stats)
+	{
+		return computeStandardError(stats, (double)frequency);
+	}
+
+	// mac: 0x1AA362 (batch575: weak lock, DataModel::get, FLog start/finish,
+	// scoped_write_request, stepGc, frequency refresh, Stepped). Same
+	// direct-parent DELTA as WaitingScriptsJob above.
+	// STUB: PLAYER 0x00679e60
+	// STUB: STUDIO 0x007e1d80
+	TaskScheduler::StepResult GcJob::stepDataModelJob(const Stats& stats)
+	{
+		(void)stats;
+		if (shared_ptr<ScriptContext> sc = scriptContext.lock())
+		{
+			DataModel* d = DataModel::get(sc.get());
+			if (FLog::DataModelJobs != 0)
+				FLog::FastLog(FLog::DataModelJobs, "GC Job start, data model: %p", d);
+			DataModel::scoped_write_request request(d);
+			sc->stepGc();
+			frequency = (int)(30.0 / ((double)(float)sc->gcFrequencyBase + 1.0));
+			if (FLog::DataModelJobs != 0)
+				FLog::FastLog(FLog::DataModelJobs, "GC Job finish, data model: %p", d);
+		}
+		return TaskScheduler::Stepped;
+	}
 
 	// mac: 0x1A9CE8 (batch575: shared_from_dynamic_cast<DataModel> of the
 	// script context's parent, +0xB8 arbiter alias, "LuaResumeWaitingScripts"
@@ -231,59 +273,17 @@ namespace RBX {
 		return TaskScheduler::Stepped;
 	}
 
-	// mac: 0x1AA0EA (batch575: "LuaGc" / Write / false / arbiter from the
-	// parent DataModel / 0.003 budget; weak copy at +0x1E0; frequency =
-	// (int)(30.0 / ((double)(float)base + 1.0)) at +0x1E8, by name).
-	// FUNCTION: PLAYER 0x00679c00
-	// FUNCTION: STUDIO 0x007e1b20
-	GcJob::GcJob(shared_ptr<ScriptContext> scriptContext)
-		: DataModelJob(
-			"LuaGc",
-			DataModelJob::Write,
-			false,
-			shared_from_dynamic_cast<DataModel>(scriptContext->getParent()),
-			Time::Interval(0.003))
-		, scriptContext(scriptContext)
-		, frequency((int)(30.0 / ((double)(float)scriptContext->gcFrequencyBase + 1.0)))
+	// STUB: PLAYER 0x0070ccb0
+	// STUB: STUDIO 0x00845380
+	TaskScheduler::StepResult DataModelJob::step(const Stats& stats)
 	{
-	}
-
-	// mac: 0x1AA302: standard sleep at the live frequency.
-	// FUNCTION: PLAYER 0x00679d70
-	// FUNCTION: STUDIO 0x007e1c90
-	Time::Interval GcJob::sleepTime(const Stats& stats)
-	{
-		return computeStandardSleepTime(stats, (double)frequency);
-	}
-
-	// mac: 0x1AA32E: standard error at the live frequency.
-	// FUNCTION: PLAYER 0x00679da0
-	// FUNCTION: STUDIO 0x007e1cc0
-	GcJob::Error GcJob::error(const Stats& stats)
-	{
-		return computeStandardError(stats, (double)frequency);
-	}
-
-	// mac: 0x1AA362 (batch575: weak lock, DataModel::get, FLog start/finish,
-	// scoped_write_request, stepGc, frequency refresh, Stepped). Same
-	// direct-parent DELTA as WaitingScriptsJob above.
-	// STUB: PLAYER 0x00679e60
-	// STUB: STUDIO 0x007e1d80
-	TaskScheduler::StepResult GcJob::stepDataModelJob(const Stats& stats)
-	{
-		(void)stats;
-		if (shared_ptr<ScriptContext> sc = scriptContext.lock())
+		TaskScheduler::StepResult result = TaskScheduler::Done;
+		if (shared_ptr<TaskScheduler::Arbiter> arbiter = getArbiter())
 		{
-			DataModel* d = DataModel::get(sc.get());
-			if (FLog::DataModelJobs != 0)
-				FLog::FastLog(FLog::DataModelJobs, "GC Job start, data model: %p", d);
-			DataModel::scoped_write_request request(d);
-			sc->stepGc();
-			frequency = (int)(30.0 / ((double)(float)sc->gcFrequencyBase + 1.0));
-			if (FLog::DataModelJobs != 0)
-				FLog::FastLog(FLog::DataModelJobs, "GC Job finish, data model: %p", d);
+			(void)arbiter;
+			result = stepDataModelJob(stats);
 		}
-		return TaskScheduler::Stepped;
+		return result;
 	}
 
 } // namespace RBX

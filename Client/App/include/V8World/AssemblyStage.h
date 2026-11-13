@@ -22,6 +22,14 @@ namespace RBX {
 	{
 	public:
 		AssemblyStage(IStage* upstream, World* world);
+		// User-declared in 2013 (2016 too): the deleting destructor 0x008ea3c0 stores
+		// AssemblyStage's vftable before calling ~EdgeBuffer 0x009994a0, so it does not fold
+		// with EdgeBuffer's 0x008ea600.
+		~AssemblyStage();
+
+		// SYNTHETIC: PLAYER 0x008ea3c0
+		// SYNTHETIC: STUDIO 0x00a085d0
+		// RBX::AssemblyStage::`scalar deleting destructor'
 
 		// mac: 0x558126 (10B): ASSEMBLY_STAGE.
 		// FUNCTION: PLAYER 0x00918e20

@@ -838,7 +838,7 @@ address,status,library,version,name,demangled,names,note
 0x006ab1e0,span,G3D,8.00-roblox,sub_6AB1E0,,sub_6AB1E0,
 0x006ab450,span,G3D,8.00-roblox,_ZN3G3D9_internal18_handleErrorCheck_EPKcRKSsS2_ib,"G3D::_internal::_handleErrorCheck_(char const*, std::string const&, char const*, int, bool)",_ZN3G3D9_internal18_handleErrorCheck_EPKcRKSsS2_ib,
 0x006ab730,identical,G3D,8.00-roblox,?one@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::one(void),?one@Vector2@G3D@@SAABV12@XZ,
-0x006ab770,identical,G3D,8.00-roblox,?zero@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::zero(void),?zero@Vector2@G3D@@SAABV12@XZ,oracle agrees: G3D::Vector2::zero()
+0x006ab770,identical,G3D,8.00-roblox,?zero@Vector2@G3D@@SAABV12@XZ,public: static class G3D::Vector2 const & __cdecl G3D::Vector2::zero(void),?zero@Vector2@G3D@@SAABV12@XZ,
 0x006ab7a0,identical,G3D,8.00-roblox,??KVector2@G3D@@QBE?AV01@M@Z,public: class G3D::Vector2 __thiscall G3D::Vector2::operator/(float) const,??KVector2@G3D@@QBE?AV01@M@Z,
 0x006ab7d0,identical,G3D,8.00-roblox,??_0Vector2@G3D@@QAEAAV01@M@Z,public: class G3D::Vector2 & __thiscall G3D::Vector2::operator/=(float),??_0Vector2@G3D@@QAEAAV01@M@Z,
 0x006ab800,identical,G3D,8.00-roblox,?yx@Quat@G3D@@QBE?AVVector2@2@XZ,public: class G3D::Vector2 __thiscall G3D::Quat::yx(void) const,?yx@Quat@G3D@@QBE?AVVector2@2@XZ|?yx@Vector2@G3D@@QBE?AV12@XZ|?yx@Vector3@G3D@@QBE?AVVector2@2@XZ|?yx@Vector4@G3D@@QBE?AVVector2@2@XZ,
@@ -910,7 +910,7 @@ address,status,library,version,name,demangled,names,note
 0x006ae920,identical,G3D,8.00-roblox,?unitZ@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::unitZ(void),?unitZ@Vector3@G3D@@SAABV12@XZ,
 0x006ae960,identical,G3D,8.00-roblox,?inf@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::inf(void),?inf@Vector3@G3D@@SAABV12@XZ|?nan@Vector3@G3D@@SAABV12@XZ,
 0x006ae9e0,identical,G3D,8.00-roblox,?minFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::minFinite(void),?minFinite@Vector3@G3D@@SAABV12@XZ,
-0x006aea20,conflict,G3D,8.00-roblox,?maxFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void),?maxFinite@Vector3@G3D@@SAABV12@XZ,"oracle disagrees (roblox): ios: RBX::Extents::vv(G3D::Vector3 const&, G3D::Vector3 const&)"
+0x006aea20,identical,G3D,8.00-roblox,?maxFinite@Vector3@G3D@@SAABV12@XZ,public: static class G3D::Vector3 const & __cdecl G3D::Vector3::maxFinite(void),?maxFinite@Vector3@G3D@@SAABV12@XZ,
 0x006aea60,identical,G3D,8.00-roblox,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,public: enum G3D::Vector3::Axis __thiscall G3D::Vector3::primaryAxis(void) const,?primaryAxis@Vector3@G3D@@QBE?AW4Axis@12@XZ,
 0x006aeaa0,identical,G3D,8.00-roblox,??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int16 const &),??0Vector3@G3D@@QAE@ABVVector3int16@1@@Z,
 0x006aead0,identical,G3D,8.00-roblox,?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,public: static class G3D::Vector3 __cdecl G3D::Vector3::random(class G3D::Random &),?random@Vector3@G3D@@SA?AV12@AAVRandom@2@@Z,
@@ -1096,7 +1096,7 @@ address,status,library,version,name,demangled,names,note
 0x006b9390,span,G3D,8.00-roblox,sub_6B9390,,sub_6B9390,
 0x006b93e0,span,G3D,8.00-roblox,sub_6B93E0,,sub_6B93E0,
 0x006b9410,identical,G3D,8.00-roblox,?PromptDlgProc@_internal@G3D@@YGHPAUHWND__@@IIJ@Z,"int __stdcall G3D::_internal::PromptDlgProc(struct HWND__*, unsigned int, unsigned int, long)",?PromptDlgProc@_internal@G3D@@YGHPAUHWND__@@IIJ@Z,
-0x006b94d0,identical,G3D,8.00-roblox,?textPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::textPrompt(char const *, char const *, char const **, int)",?textPrompt@G3D@@YAHPBD0PAPBDH@Z,"oracle disagrees (library): ios: G3D::prompt(char const*, char const*, char const**, int, bool)"
+0x006b94d0,identical,G3D,8.00-roblox,?textPrompt@G3D@@YAHPBD0PAPBDH@Z,"int __cdecl G3D::textPrompt(char const *, char const *, char const **, int)",?textPrompt@G3D@@YAHPBD0PAPBDH@Z,
 0x006b95d0,identical,G3D,8.00-roblox,?AppendData@DialogTemplate@_internal@G3D@@IAEXPBXH@Z,"protected: void __thiscall G3D::_internal::DialogTemplate::AppendData(void const *, int)",?AppendData@DialogTemplate@_internal@G3D@@IAEXPBXH@Z,
 0x006b9630,identical,G3D,8.00-roblox,?AppendString@DialogTemplate@_internal@G3D@@IAEXPBD@Z,protected: void __thiscall G3D::_internal::DialogTemplate::AppendString(char const *),?AppendString@DialogTemplate@_internal@G3D@@IAEXPBD@Z,
 0x006b9690,identical,G3D,8.00-roblox,??0DialogTemplate@_internal@G3D@@QAE@PBDKHHHH0G@Z,"public: __thiscall G3D::_internal::DialogTemplate::DialogTemplate(char const *, unsigned long, int, int, int, int, char const *, unsigned short)",??0DialogTemplate@_internal@G3D@@QAE@PBDKHHHH0G@Z,

@@ -338,7 +338,6 @@ namespace RBX {
 		inline double windingPart(double rad) {
 			return ::floor((rad + pi()) / twoPi()) ;
 		}
-
 		inline float radWrap(double rad) {			// extra part
 			if ((rad >= -pi()) && (rad < pi())) {
 				return static_cast<float>(rad);

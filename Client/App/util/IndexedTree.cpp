@@ -1,29 +1,14 @@
 /* Copyright 2003-2005 ROBLOX Corporation, All Rights Reserved */
-//
-// Reconstructed from Oct 2013 binary. Assert strings embedded in the binary
-// pin the original source line numbers exactly onto this file:
-//   util/IndexedTree.cpp line 17: RBXASSERT(children.size() == 0)
-//   util/IndexedTree.cpp line 18: RBXASSERT(!parent)
-//   util/IndexedTree.cpp line 19: RBXASSERT(index == -1)
-//   util/IndexedTree.cpp line 42: RBXASSERT(!newParent || (newParent->parent != this))
-//   util/IndexedTree.cpp line 43: RBXASSERT(newParent != this)
-// Matches the 2016 reference implementation.
-//
+// Reconstructed from Oct 2013 binary. Assert strings embedded in the binary pin the original source line numbers exactly onto this file: util/IndexedTree.cpp line 17: RBXASSERT(children.size() == 0) util/IndexedTree.cpp line 18: RBXASSERT(!parent) util/IndexedTree.cpp line 19: RBXASSERT(index == -1) util/IndexedTree.cpp line 42: RBXASSERT(!newParent || (newParent->parent != this)) util/IndexedTree.cpp line 43: RBXASSERT(newParent != this) Matches the 2016 reference implementation.
 #include "stdafx.h"
-
 #include "Util/IndexedTree.h"
-
-
 namespace RBX {
-
-
 // mac: 0x2068AA
 IndexedTree::IndexedTree()
 : parent(NULL)
 , index(-1)
 {
 }
-
 // mac: 0x20691A (complete object dtor); deleting dtor 0x206910 wraps this + operator delete
 // STUB: PLAYER 0x00999690
 // STUB: STUDIO 0x00a43f50
@@ -33,7 +18,6 @@ IndexedTree::~IndexedTree()
 	RBXASSERT(!parent);
 	RBXASSERT(index == -1);
 }
-
 
 
 // Make sure newAncestor and all parents do not have child as their parent
@@ -50,11 +34,9 @@ bool IndexedTree::circularReference(IndexedTree* newAncestor, IndexedTree* child
 		return circularReference(newAncestor->parent, child);
 	}
 }
-
-
 // mac: 0x206A62
-// STUB: PLAYER 0x00999850
-// STUB: STUDIO 0x00a44060
+// FUNCTION: PLAYER 0x00999850
+// FUNCTION: STUDIO 0x00a44060
 void IndexedTree::setIndexedTreeParent(IndexedTree* newParent)
 {
 	RBXASSERT(!newParent || (newParent->parent != this));

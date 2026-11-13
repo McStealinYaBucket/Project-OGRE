@@ -11,24 +11,15 @@
      (rbx::spin_mutex::lock precedent, rbx/threadsafe.h; tbb not landed);
      the 1-byte cmpxchg lock is ours as the same-slot 4-byte rbx::atomic.
    Self-audit: fidelity ~92%, function ~55% (see the header). */
-
 #include "stdafx.h"
-
 #include "V8World/SendPhysics.h"
 #include "V8World/SimJob.h"
 #include "V8World/SimJobTracker.h"
 #include "V8World/Assembly.h"
 #include "V8World/Mechanism.h"
-
 #include <algorithm>
-
 namespace RBX {
-
-	// mac: 0x599C1C (batch778): stores count 0, the empty-list anchor
-	// (self-pointing), the CV zero-state, the lock byte 0, then
-	// provisions the two signal heads (SAFE_HEAP-mutexed statics in
-	// the binary, +0x1C before +0x20). Our member ctors produce the
-	// same state in the same order.
+	// mac: 0x599C1C (batch778): stores count 0, the empty-list anchor (self-pointing), the CV zero-state, the lock byte 0, then provisions the two signal heads (SAFE_HEAP-mutexed statics in the binary, +0x1C before +0x20). Our member ctors produce the same state in the same order.
 	SendPhysics::SendPhysics()
 		: count(0)
 		, simJobs()
@@ -38,11 +29,7 @@ namespace RBX {
 		, signalRemoving()
 	{
 	}
-
-	// mac: 0x599D6E (batch778): assert "simJobs.empty()" SendPhysics.cpp:18,
-	// then member teardown (signal +0x20 disconnect+release, +0x1C ditto,
-	// CV word asserts, the list-clear walk -- dead for the empty list
-	// the assert guarantees). No job deletes in either build.
+	// mac: 0x599D6E (batch778): assert "simJobs.empty()" SendPhysics.cpp:18, then member teardown (signal +0x20 disconnect+release, +0x1C ditto, CV word asserts, the list-clear walk -- dead for the empty list the assert guarantees). No job deletes in either build.
 	// STUB: PLAYER 0x008e60f0
 	// STUB: STUDIO 0x00a043f0
 	SendPhysics::~SendPhysics()

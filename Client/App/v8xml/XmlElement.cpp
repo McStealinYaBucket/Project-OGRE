@@ -231,22 +231,17 @@ bool XmlNameValuePair::isValueType<const RBX::Name*>() const
 {
 	return valueType==NAME;
 }
-
 template<>
 bool XmlNameValuePair::isValueType<RBX::InstanceHandle>() const
 {
 	return valueType==HANDLE;
 }
-
-
-
 bool XmlNameValuePair::getValue(RBX::ContentId& value) const
 {
 	if (valueType==CONTENTID) {
 		value = *contentIdValue;
 		return true;
 	}
-
 	if (valueType==STRING) {
 		value = ContentId(*stringValue);
 		clearValue();
@@ -254,10 +249,8 @@ bool XmlNameValuePair::getValue(RBX::ContentId& value) const
 		valueType = CONTENTID;
 		return true;
 	}
-
 	return false;
 }
-
 bool XmlNameValuePair::getValue(std::string& value) const
 {
 	if (valueType==STRING) {
@@ -270,14 +263,12 @@ bool XmlNameValuePair::getValue(std::string& value) const
 	}
 	return false;
 }
-
 bool XmlNameValuePair::getValue(int& value) const
 {
 	if (valueType==INT) {
 		value = intValue;
 		return true;
 	}
-
 	if (valueType==STRING) {
 		if (StringConverter<int>::convertToValue(*stringValue, value)) {
 			clearValue();
@@ -286,17 +277,14 @@ bool XmlNameValuePair::getValue(int& value) const
 			return true;
 		}
 	}
-
 	return false;
 }
-
 bool XmlNameValuePair::getValue(unsigned int& value) const
 {
 	if (valueType==UINT) {
 		value = uintValue;
 		return true;
 	}
-
 	if (valueType==STRING) {
 		if (StringConverter<unsigned int>::convertToValue(*stringValue, value)) {
 			clearValue();
@@ -305,17 +293,14 @@ bool XmlNameValuePair::getValue(unsigned int& value) const
 			return true;
 		}
 	}
-
 	return false;
 }
-
 bool XmlNameValuePair::getValue(bool& value) const
 {
 	if (valueType==BOOL) {
 		value = boolValue;
 		return true;
 	}
-
 	if (valueType==STRING) {
 		if (StringConverter<bool>::convertToValue(*stringValue, value)) {
 			clearValue();
@@ -324,17 +309,14 @@ bool XmlNameValuePair::getValue(bool& value) const
 			return true;
 		}
 	}
-
 	return false;
 }
-
 bool XmlNameValuePair::getValue(float& value) const
 {
 	if (valueType==FLOAT) {
 		value = floatValue;
 		return true;
 	}
-
 	if (valueType==STRING) {
 		if (RBX::StringConverter<float>::convertToValue(*stringValue, value)) {
 			clearValue();
@@ -343,7 +325,6 @@ bool XmlNameValuePair::getValue(float& value) const
 			return true;
 		}
 	}
-
 	RBXASSERT(valueType!=DOUBLE);	// No provision (yet) for converting from double back to float
 
 	return false;
@@ -450,10 +431,8 @@ std::string XmlNameValuePair::toString(XmlWriter* writer) const
 
 	case CONTENTID:
 		return contentIdValue->toString();
-
 	case NONE:
 		return "";
-
 	default:
 		RBXASSERT(false);
 		return "";

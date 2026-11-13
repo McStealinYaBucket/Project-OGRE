@@ -514,6 +514,25 @@ lua_State* ScriptContext::getGlobalState(Security::Identities identity)
 	return *slot;
 }
 
+// iOS name; the ctor connects it to camelCaseViolation. After 100 reports it disconnects.
+// STUB: PLAYER 0x00670df0
+// STUB: STUDIO 0x007d8d50
+void ScriptContext::onCamelCaseViolation(boost::shared_ptr<Instance> object, std::string memberName, boost::shared_ptr<Instance> script)
+{
+	if (++camelCaseViolationCount > 100)
+	{
+		camelCaseViolationConnection.disconnect();
+		return;
+	}
+	std::string trueName = memberName;
+	trueName[0] = toupper(memberName[0]);
+
+	if (script)
+		StandardOut::singleton()->printf(MESSAGE_WARNING, "\"%s.%s\" should be \"%s\" in %s", object->getClassNameStr().c_str(), memberName.c_str(), trueName.c_str(), script->getFullName().c_str());
+	else
+		StandardOut::singleton()->printf(MESSAGE_WARNING, "\"%s.%s\" should be \"%s\"", object->getClassNameStr().c_str(), memberName.c_str(), trueName.c_str());
+}
+
 // mac: 0x190A9E (101B, batch313/455). Binary-pinned STATIC (called with no
 // instance); the context comes from the thread's own extra space
 // (NULL pre-open -> NULL, matching the tested pre-open delegation).
@@ -1553,8 +1572,8 @@ int ScriptContext::print(lua_State* L)
 }
 
 // mac: 0x18B48A (56B, batch326).
-// STUB: PLAYER 0x0067a190
-// STUB: STUDIO 0x007e20b0
+// FUNCTION: PLAYER 0x0067a190
+// FUNCTION: STUDIO 0x007e20b0
 int ScriptContext::crash(lua_State* L)
 {
 	(void)L;
@@ -1599,6 +1618,30 @@ int ScriptContext::wait(lua_State* L)
 	return lua_yield(L, 0);
 }
 
+// mac: 0x18D8A4 (499B, batch471/475): spawn = delay with arg-1 and timeout 0
+// ("Spawn function requires 1 argument", ... line: 1606).
+// STUB: PLAYER 0x00674740
+// STUB: STUDIO 0x007dc330
+int ScriptContext::spawn(lua_State* L)
+{
+	Lua::ThreadRef threadLock(L);
+	if (lua_gettop(L) <= 0)
+		throw std::runtime_error("Spawn function requires 1 argument");
+	lua_State* child = lua_newthread(L);
+	// Fresh-child L-20 slot: see delay() -- same zeroing.
+	*(void**)((char*)child - 20) = NULL;
+	Lua::WeakThreadRef functor(child);
+	Lua::ThreadRef safeFunctor = functor.lock();
+	RBXASSERT_LINE(safeFunctor, 1606);
+	lua_pushvalue(L, 1);
+	lua_xmove(L, safeFunctor.get(), 1);
+	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
+	if (yt != NULL)
+		yt->queueWaiter(safeFunctor.get(), 0);
+	lua_settop(L, -2);
+	return 0;
+}
+
 // mac: 0x18CC3A (523B, batch471/475): new thread + move arg-2 + queue with
 // timeout; returns immediately (0 values). Error texts pinned by
 // batch475 disasm ("delay function requires 2 arguments") and batch476
@@ -1627,30 +1670,6 @@ int ScriptContext::delay(lua_State* L)
 	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
 	if (yt != NULL)
 		yt->queueWaiter(safeFunctor.get(), timeout);
-	lua_settop(L, -2);
-	return 0;
-}
-
-// mac: 0x18D8A4 (499B, batch471/475): spawn = delay with arg-1 and timeout 0
-// ("Spawn function requires 1 argument", ... line: 1606).
-// STUB: PLAYER 0x00674740
-// STUB: STUDIO 0x007dc330
-int ScriptContext::spawn(lua_State* L)
-{
-	Lua::ThreadRef threadLock(L);
-	if (lua_gettop(L) <= 0)
-		throw std::runtime_error("Spawn function requires 1 argument");
-	lua_State* child = lua_newthread(L);
-	// Fresh-child L-20 slot: see delay() -- same zeroing.
-	*(void**)((char*)child - 20) = NULL;
-	Lua::WeakThreadRef functor(child);
-	Lua::ThreadRef safeFunctor = functor.lock();
-	RBXASSERT_LINE(safeFunctor, 1606);
-	lua_pushvalue(L, 1);
-	lua_xmove(L, safeFunctor.get(), 1);
-	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
-	if (yt != NULL)
-		yt->queueWaiter(safeFunctor.get(), 0);
 	lua_settop(L, -2);
 	return 0;
 }
@@ -2003,7 +2022,8 @@ double ScriptContext::gcStepThreshold = 0.0;
 // STUB: PLAYER 0x0068ad20
 // STUB: STUDIO 0x007f0480
 ScriptContext::ScriptContext()
-	: m_unk0xf0(false), robloxPlace(false), scriptsDisabled(false), contentClearing(false)
+	: nextPendingScripts(Time::now<Time::Fast>())
+	, m_unk0xf0(false), robloxPlace(false), scriptsDisabled(false), contentClearing(false)
 	, lastGcKb(0)
 	, collectStats(false)
 	, reentrancy(0)
@@ -2011,11 +2031,14 @@ ScriptContext::ScriptContext()
 	, endTimoutThread(false), checkTimeout(false)
 	, camelCaseViolationCount(0)
 {
-	// 2013 body (0x0068b05c..): setName("Script Context"), the LibraryService below,
-	// gcFullStepThreshold/gcFrequencyBase from LuaSettings (+0x78/+0x7c) and the
-	// camelCaseViolation connection. Only the LibraryService part is written.
+	setName("Script Context");
 	// mac: 0x18F8EA: ctor-tail libraryService.reset(new LibraryService(this)).
 	libraryService.reset(new LibraryService(this));
+	// 2013 0x0068b0ed: gcFullStepThreshold = LuaSettings +0x78 and gcFrequencyBase = +0x7c, each
+	// through GlobalAdvancedSettingsItem<LuaSettings, sLuaSettings>::singleton() 0x00654600. Not
+	// written: our LuaSettings.h is 8 bytes short (2013 ctor 0x0085e360 stores gcPause/gcStepMul
+	// at +0x64/+0x68, the double at +0x70, 2 at +0x78, 0 at +0x7c) and has no accessors for them.
+	camelCaseViolationConnection = camelCaseViolation.connect(boost::bind(&ScriptContext::onCamelCaseViolation, this, _1, _2, _3));
 }
 
 ScriptContext::~ScriptContext()
@@ -2047,26 +2070,6 @@ int ScriptContext::debuggermanager(lua_State* L)
 	return 1;
 }
 
-
-// mac: 0x18DC8C (520B, batch640): dofile -- cached-file fetch + luaL_loadfile.
-// RobloxPlace gate; chunk errors go through lua_error (longjmp), otherwise
-// lua_call(0, MULTRET) and the result-count delta is returned. Registration
-// mac: 0x18C033 pushcclosure / 0x18C038 setfield "dofile" (batch637).
-// STUB: PLAYER 0x006826b0
-// STUB: STUDIO 0x007e8500
-int ScriptContext::dofile(lua_State* L)
-{
-	Security::Context::current().requirePermission((Security::Permissions)2);
-	const char* filename = luaL_optlstring(L, 1, NULL, NULL);
-	int oldTop = lua_gettop(L);
-	ContentId contentId(filename);
-	ContentProvider* provider = ServiceProvider::create<ContentProvider>(RobloxExtraSpace::get(L)->context());
-	std::string file = provider->getFile(contentId);
-	if (luaL_loadfile(L, file.c_str()))
-		lua_error(L);
-	lua_call(L, 0, LUA_MULTRET);
-	return lua_gettop(L) - oldTop;
-}
 
 // mac: 0x18DE94 (1261B, batch640): loadfile -- cached-string fetch + signature
 // gate + protected load. RobloxPlace gate; the verified body (verify
@@ -2103,6 +2106,26 @@ int ScriptContext::loadfile(lua_State* L)
 		lua_insert(L, -2);
 	}
 	return result;
+}
+
+// mac: 0x18DC8C (520B, batch640): dofile -- cached-file fetch + luaL_loadfile.
+// RobloxPlace gate; chunk errors go through lua_error (longjmp), otherwise
+// lua_call(0, MULTRET) and the result-count delta is returned. Registration
+// mac: 0x18C033 pushcclosure / 0x18C038 setfield "dofile" (batch637).
+// STUB: PLAYER 0x006826b0
+// STUB: STUDIO 0x007e8500
+int ScriptContext::dofile(lua_State* L)
+{
+	Security::Context::current().requirePermission((Security::Permissions)2);
+	const char* filename = luaL_optlstring(L, 1, NULL, NULL);
+	int oldTop = lua_gettop(L);
+	ContentId contentId(filename);
+	ContentProvider* provider = ServiceProvider::create<ContentProvider>(RobloxExtraSpace::get(L)->context());
+	std::string file = provider->getFile(contentId);
+	if (luaL_loadfile(L, file.c_str()))
+		lua_error(L);
+	lua_call(L, 0, LUA_MULTRET);
+	return lua_gettop(L) - oldTop;
 }
 
 

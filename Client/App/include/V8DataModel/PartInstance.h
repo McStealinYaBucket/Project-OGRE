@@ -77,6 +77,8 @@
 #include "V8World/IMoving.h"
 #include "V8Tree/OnDemand.h"
 #include "GfxBase/IAdornable.h"
+#include "Util/CameraSubject.h"
+#include "Util/Selectable.h"
 #include "rbx/signal.h"
 #include "Util/BrickColor.h"
 #include "Util/Faces.h"
@@ -120,9 +122,27 @@ namespace RBX {
 
 	// VTABLE: PLAYER 0x00b4c784 RBX::Debugable
 	// VTABLE: STUDIO 0x00c08b8c RBX::Debugable
+	// VTABLE: PLAYER 0x00b4c754 RBX::IHasPrimaryPart
+	// VTABLE: STUDIO 0x00c08b5c RBX::IHasPrimaryPart
+	// VTABLE: PLAYER 0x00b4c738 RBX::IMoving
+	// VTABLE: STUDIO 0x00c08b40 RBX::IMoving
+	// VTABLE: PLAYER 0x00b4c704 RBX::IAdornable
+	// VTABLE: STUDIO 0x00c08b0c RBX::IAdornable
+	// VTABLE: PLAYER 0x00b4c6d8 RBX::CameraSubject
+	// VTABLE: STUDIO 0x00c08ae0 RBX::CameraSubject
+	// VTABLE: PLAYER 0x00b4c6d0 RBX::Selectable
+	// VTABLE: STUDIO 0x00c08ad8 RBX::Selectable
+	// VTABLE: PLAYER 0x00b4c6c8 RBX::IHasLocation
+	// VTABLE: STUDIO 0x00c08ad0 RBX::IHasLocation
 	class PartInstance
 		: public DescribedNonCreatable<PartInstance, PVInstance, sPart, Reflection::ClassDescriptor::PERSISTENT>
-		, public IMoving  // +96 MI base (thunks Thn96; 6 overrides below).
+		, public IMoving        // +0x68 (2013 RTTI 0x00b4c784; +0x60 is PVInstance's IHasPrimaryPart)
+		, public IAdornable     // +0x74 (2013 subobject is 0x18: its `float depth` is not in our IAdornable yet)
+		, public CameraSubject  // 2013 +0x8c
+		, public Selectable     // 2013 +0xa0
+		// 2013 also lists Diagnostics::Countable<PartInstance> and Intrusive::Set<PartInstance,
+		// PhysicsService>::Hook at +0xa4 and the virtual IHasLocation at +0x15c (vtordisp +0x158);
+		// the members below are still the Mac layout (primitive is +0xb8 in 2013).
 	{
 		friend class InterpolatedCFrame;  // +73/+257 latch sync (see header note).
 public:
@@ -289,6 +309,15 @@ public:
 		// vtable+0xfc, the last slot PartInstance adds (iOS 10-29 PartInstance::partNeeds3dAdorn;
 		// PLAYER 0x00927cc0 is a shared `xor al,al; ret`). BasicPartInstance overrides it.
 		virtual bool partNeeds3dAdorn() const { return false; }
+
+		// IAdornable overrides (vftable {for IAdornable} 0x00b4c704 slots +0x04/+0x20/+0x28).
+	protected:
+		/*override*/ virtual bool shouldRender3dAdorn() const;
+	public:
+		/*override*/ virtual void render3dAdorn(RBX::Adorn* adorn);
+		/*override*/ virtual void render3dSelect(RBX::Adorn* adorn, SelectState selectState);
+		// CameraSubject override (vftable {for CameraSubject} 0x00b4c6d8 slot +0x18).
+		/*override*/ virtual void getCameraIgnorePrimitives(std::vector<const Primitive*>& primitives);
 		// [slot 67]
 		virtual void onSleepingChanged(bool sleeping);  // IMoving slot 0 (0x444C98).: see cpp.
 		// [slot 68]

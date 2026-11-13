@@ -31,9 +31,7 @@
 #include <algorithm>
 
 #include "rbx/Debug.h"
-
 namespace RBX {
-
 	// mac: 0x59AD96 (batch780). Binary mangle:
 	//   __ZN3RBX15fastRemoveShortIPNS_13SimJobTrackerEEEmRSt6vectorIT_SaIS4_EERKS4_
 	// = template<class T> unsigned long fastRemoveShort(

@@ -15,9 +15,17 @@
      buildChatHud-PORTED/buildChatMenu/buildRightPalette-PORTED/buildLuaGui/addSafeChatMenu/
      Initialize(DataModel*)/updateGui-PORTED/updateSummaryStats-decl-PORTED/getVerb/
      buildNetworkStatsOutput (0x396E20..0x3A31EE).
-   LAYOUT TODO: minimal class below does NOT preserve binary offsets (+16 map,
-     +2968 model pointer); Data entries carry name+text only (binary Data holds
-     GUI item refs — see 0x3A436C past the map-find + 0x3A4DAC node teardown).
+   LAYOUT (2013 Windows, ctor PLAYER 0x00644f30 / STUDIO 0x00761ef0, dtor PLAYER 0x0056b810):
+     0x00 dataModel (stored by Initialize, PLAYER 0x005c30c0, folded with
+     RakNet::BitStream::SetWriteOffset), 0x04 workspace (buildGui), 0x08 safeChatMenu
+     (shared_ptr, zeroed by the ctor), 0x10 customStats map (head at 0x14, size at 0x18),
+     0x1c networkStatsPage (nextNetworkStats PLAYER 0x007f2e80 reads/writes +0x1c).
+     PLAYER SIZE 0x20 (DataModel's parentDataModel follows at 0xe0c).
+     STUDIO (Oct 17) SIZE 0x1c: no networkStatsPage, a real source difference (the
+     STUDIO DataModel stores parentDataModel at 0xe08 right after guiBuilder 0xdec,
+     ctor 0x0076b720). This header follows PLAYER.
+     Data entries carry name+text only (binary Data holds GUI item refs — see
+     0x3A436C past the map-find + 0x3A4DAC node teardown).
    Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/GuiBuilder.h */
 
 #pragma once
@@ -59,12 +67,16 @@ namespace RBX {
 			Data(const std::string& t, shared_ptr<EquationDisplay> d) : text(t), display(d) {}
 		};
 
-		explicit GuiBuilder(DataModel* dataModel = NULL)
-			: dataModel(dataModel)
-			, workspace(NULL)
-			, safeChatMenu(NULL)
-			, networkStatsPage(1)
-		{}
+		// Inline, emitted in DataModel.cpp (PLAYER 0x00644f30, STUDIO 0x00761ef0): only
+		// safeChatMenu and customStats are constructed; dataModel, workspace and
+		// networkStatsPage stay uninitialized until Initialize/buildGui.
+		// FUNCTION: PLAYER 0x00644f30
+		// FUNCTION: STUDIO 0x00761ef0
+		GuiBuilder() {}
+
+		// iOS: GuiBuilder::Initialize(DataModel*). PLAYER 0x005c30c0 holds it folded with
+		// RakNet::BitStream::SetWriteOffset (that row owns the address, so no marker here).
+		void Initialize(DataModel* dataModel);
 
 		// mac: 0x2D617A callee (via DataModel::startCoreScripts): build the
 		// in-game GUI. TODO: body (needs GuiItem/TextLabel/Adorn).
@@ -108,9 +120,6 @@ namespace RBX {
 		// ChatButton : UnifiedImageWidget (landed s219) + the factory
 		// string ("Chat", rodata 0xB99CF8, batch342).
 		shared_ptr<RelativePanel> buildChatMenu(Adorn* adorn);
-		// Binary stores the panel pair at this+0/+4; ours keeps a
-		// named member (offsets model-relative here).
-		shared_ptr<RelativePanel> getChatMenu() const { return chatMenu; }
 		// mac: 0x3A51A8 (1087B): 4-arg recursive core (PORTED below) -- per child
 		// ChatWidget ("prefix index", child label) parented under the passed
 		// widget, then recurse with the child's subtree.
@@ -143,9 +152,6 @@ namespace RBX {
 		void addSafeChatMenu();
 		// mac: 0x3A4FDA (45B): unparent the gb+8 holder if set.
 		void removeSafeChatMenu();
-		// Bring-up helper (not in binary): the gb+8 holder is written by the
-		// unported 1-arg buildChatMenu path; tests set it directly.
-		void setSafeChatMenuForTest(Instance* menu) { safeChatMenu = menu; }
 		int getNetworkStatsPage() const { return networkStatsPage; }
 		// mac: 0x3A4F38 — persists via CustomStatsGuiJSON::WriteFile (TODO: body).
 		void saveCustomStats();
@@ -156,19 +162,11 @@ namespace RBX {
 		const std::map<std::string, Data>& customStatsMap() const { return customStats; }
 
 	private:
-		// Binary: gb+0 DataModel*, gb+4 Workspace*, gb+8 safe-chat holder
-		// (raw observer -- the owning ref lives with the parent linkage /
-		// the buildChatMenu caller, same exposure as the binary).
-		// customStats map at +16 (offsets NOT preserved -- see header).
-		std::map<std::string, Data> customStats;
-		// +40 network-stats page (nextNetworkStats 0x3A5008 cycles 1->2->3).
-		int networkStatsPage;
-		DataModel* dataModel;
-		Workspace* workspace;  // gb+4 (stored by buildGui).
-		Instance* safeChatMenu;  // gb+8 (stored by the chatMenu path).
-		shared_ptr<RelativePanel> chatMenu;  // binary this+0 (stored by 1-arg buildChatMenu).
-	private:
-	private:
+		DataModel* dataModel;						// 0x00 Initialize
+		Workspace* workspace;						// 0x04 buildGui
+		shared_ptr<TopMenuBar> safeChatMenu;		// 0x08 (2016 type; nothing in 2013 stores it)
+		std::map<std::string, Data> customStats;	// 0x10
+		int networkStatsPage;						// 0x1c PLAYER only (nextNetworkStats 0x007f2e80)
 		// Bring-up factoring (binary inlines these writes in each restyle loop).
 		static void restyleStatRow(TextDisplay* row, int fontSize, float w, float h);
 	};

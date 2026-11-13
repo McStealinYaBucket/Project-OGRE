@@ -484,7 +484,7 @@ address,size,flags,name
 0x00411020,56,0x5400,??0exception@boost@@QAE@ABV01@@Z
 0x00411060,31,0x5400,??_Gclone_base@exception_detail@boost@@UAEPAXI@Z
 0x00411080,11,0x5400,??0clone_base@exception_detail@boost@@QAE@ABV012@@Z
-0x00411090,87,0x1000,sub_411090
+0x00411090,87,0x1000,_ZN5boost15throw_exceptionIN3rbx22bad_placement_any_castEEEvRKT_
 0x004110f0,31,0x5400,_ZN3rbx22bad_placement_any_castD0Ev
 0x00411110,6,0x5400,_ZNK3rbx22bad_placement_any_cast4whatEv
 0x00411120,6,0x54c0,??1bad_cast@std@@UAE@XZ_0
@@ -583,7 +583,7 @@ address,size,flags,name
 0x00415030,37,0x5400,sub_415030
 0x00415060,5,0x54c0,j__ZNK16XmlNameValuePair10clearValueEv
 0x00415070,8,0x5400,sub_415070
-0x00415080,80,0x5400,sub_415080
+0x00415080,80,0x5400,?get_pool@?$singleton_pool@VXmlAttribute@@$0BI@Udefault_user_allocator_malloc_free@boost@@Vmutex@3@$0CA@$0A@@boost@@CAAAUpool_type@12@XZ
 0x004150d0,79,0x5400,sub_4150D0
 0x00415120,21,0x5400,sub_415120
 0x00415140,346,0x5400,sub_415140
@@ -873,7 +873,7 @@ address,size,flags,name
 0x004218e0,448,0x5400,sub_4218E0
 0x00421aa0,113,0x5400,sub_421AA0
 0x00421b20,109,0x5000,sub_421B20
-0x00421b90,109,0x5400,sub_421B90
+0x00421b90,109,0x5400,_ZN5boost10shared_ptrIN3RBX21TaskSchedulerSettingsEEC2IS2_NS1_9CreatableINS1_8InstanceEE7DeleterEEEPT_T0_
 0x00421c00,101,0x5400,sub_421C00
 0x00421c70,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_14sDebugSettingsEEEERKS0_v
 0x00421c80,114,0x5400,_ZN3RBX4Name9doDeclareILZNS_14sDebugSettingsEEEERKS0_v
@@ -2586,7 +2586,7 @@ address,size,flags,name
 0x00479000,152,0x5400,sub_479000
 0x004790a0,152,0x5400,sub_4790A0
 0x00479140,155,0x5400,sub_479140
-0x004791e0,91,0x5400,sub_4791E0
+0x004791e0,91,0x5400,??$_Allocate@PAVChatOption@RBX@@@std@@YAPAPAVChatOption@RBX@@IPAPAV12@@Z
 0x00479240,457,0x5400,sub_479240
 0x00479410,116,0x5400,sub_479410
 0x00479490,457,0x5400,_ZN3RBX14FactoryProductINS_13FriendServiceENS_8InstanceELZNS_14sFriendServiceEES2_E7CreatorC2Ev
@@ -2936,7 +2936,7 @@ address,size,flags,name
 0x00486590,8,0x5400,sub_486590
 0x004865a0,8,0x5400,sub_4865A0
 0x004865b0,8,0x5400,sub_4865B0
-0x004865c0,73,0x5400,sub_4865C0
+0x004865c0,73,0x5400,??$construct@Uptr_bucket@detail@unordered@boost@@@?$array_constructor@V?$allocator@Uptr_bucket@detail@unordered@boost@@@std@@@detail@unordered@boost@@QAEXABUptr_bucket@123@I@Z
 0x00486610,69,0x5400,sub_486610
 0x00486660,5,0x5480,sub_486660
 0x00486670,151,0x5400,sub_486670
@@ -6610,7 +6610,7 @@ address,size,flags,name
 0x00519df0,85,0x5400,_ZZN3RBX10ViewRbxGfx13renderPrepareEPNS_7IMetricEENK11ProxyMetric9getMetricERKSs
 0x00519e50,454,0x5c10,sub_519E50
 0x0051a020,71,0x5400,sub_51A020
-0x0051a070,167,0x5400,sub_51A070
+0x0051a070,167,0x5400,?allocate@?$circular_buffer@NV?$allocator@N@std@@@boost@@AAEPANI@Z
 0x0051a120,46,0x1401,?on_error@?$simple_exception_policy@G$00$0BP@Ubad_day_of_month@gregorian@boost@@@CV@boost@@SAXGGW4violation_enum@23@@Z
 0x0051a150,46,0x1401,?on_error@?$simple_exception_policy@G$0FHI@$0CHBA@Ubad_year@gregorian@boost@@@CV@boost@@SAXGGW4violation_enum@23@@Z
 0x0051a180,46,0x1401,?on_error@?$simple_exception_policy@G$00$0M@Ubad_month@gregorian@boost@@@CV@boost@@SAXGGW4violation_enum@23@@Z
@@ -6678,7 +6678,7 @@ address,size,flags,name
 0x0051f1b0,99,0x5400,sub_51F1B0
 0x0051f220,40,0x5400,sub_51F220
 0x0051f250,157,0x5400,sub_51F250
-0x0051f2f0,212,0x5400,sub_51F2F0
+0x0051f2f0,212,0x5400,??DCoordinateFrame@G3D@@QBE?AV01@ABV01@@Z
 0x0051f3d0,75,0x5400,sub_51F3D0
 0x0051f420,31,0x5400,??0Color4@G3D@@QAE@ABVVector4@1@@Z
 0x0051f440,7,0x5400,sub_51F440
@@ -6981,7 +6981,7 @@ address,size,flags,name
 0x00531e10,82,0x5400,?_Rrotate@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@@std@@@2@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@@std@@@2@$0A@@std@@@2@@Z
 0x00531e70,28,0x5400,?_Max@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@@std@@@2@$0A@@std@@@std@@KAPAU_Node@?$_Tree_nod@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vvariable_value@program_options@boost@@@std@@@2@$0A@@std@@@2@PAU342@@Z
 0x00531e90,97,0x5400,sub_531E90
-0x00531f00,62,0x5400,sub_531F00
+0x00531f00,62,0x5400,?segregate@?$simple_segregated_storage@I@boost@@SAPAXPAXII0@Z
 0x00531f40,99,0x5400,_ZN3RBX4Name9doDeclareILZNS_13sAccoutrementEEEERKS0_v
 0x00531fb0,99,0x5400,sub_531FB0
 0x00532020,102,0x5400,sub_532020
@@ -7323,7 +7323,7 @@ address,size,flags,name
 0x005437d0,130,0x5400,?_Eqrange@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@PBVICreator@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@PBVICreator@2@@std@@@5@$0A@@std@@@std@@IAE?AU?$pair@Viterator@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@PBVICreator@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@PBVICreator@2@@std@@@5@$0A@@std@@@std@@V123@@2@ABQBVName@RBX@@@Z
 0x00543860,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_6sSmokeEEEERKS0_v
 0x00543870,5,0x5480,sub_543870
-0x00543880,71,0x5400,sub_543880
+0x00543880,71,0x5400,?add_ordered_block@?$simple_segregated_storage@I@boost@@QAEXQAXII@Z
 0x005438d0,47,0x5400,sub_5438D0
 0x00543900,79,0x5400,sub_543900
 0x00543950,84,0x5400,sub_543950
@@ -8644,7 +8644,7 @@ address,size,flags,name
 0x005b9e90,78,0x5400,sub_5B9E90
 0x005b9ee0,83,0x5400,?_Dec@const_iterator@?$_Tree@V?$_Tmap_traits@PBXUtss_data_node@detail@boost@@U?$less@PBX@std@@V?$allocator@U?$pair@QBXUtss_data_node@detail@boost@@@std@@@5@$0A@@std@@@std@@QAEXXZ
 0x005b9f40,57,0x5400,sub_5B9F40
-0x005b9f80,82,0x5400,sub_5B9F80
+0x005b9f80,82,0x5400,?_Rrotate@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@6@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@PBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@6@$0A@@std@@@2@@Z
 0x005b9fe0,145,0x5400,sub_5B9FE0
 0x005ba080,103,0x5400,sub_5BA080
 0x005ba0f0,5,0x5480,sub_5BA0F0
@@ -8876,7 +8876,7 @@ address,size,flags,name
 0x005c1a60,366,0x5400,sub_5C1A60
 0x005c1bd0,378,0x5400,sub_5C1BD0
 0x005c1d50,347,0x5000,sub_5C1D50
-0x005c1eb0,90,0x5400,sub_5C1EB0
+0x005c1eb0,90,0x5400,?malloc@?$singleton_pool@VXmlAttribute@@$0BI@Udefault_user_allocator_malloc_free@boost@@Vmutex@3@$0CA@$0A@@boost@@SAPAXXZ
 0x005c1f10,284,0x5400,sub_5C1F10
 0x005c2030,284,0x5400,sub_5C2030
 0x005c2150,284,0x5400,sub_5C2150
@@ -9173,7 +9173,7 @@ address,size,flags,name
 0x005d0ac0,182,0x5400,sub_5D0AC0
 0x005d0b80,196,0x5400,sub_5D0B80
 0x005d0c50,111,0x5400,sub_5D0C50
-0x005d0cc0,162,0x5400,sub_5D0CC0
+0x005d0cc0,162,0x5400,_ZN3RBX10GuiBuilderD2Ev
 0x005d0d70,65,0x5400,sub_5D0D70
 0x005d0dc0,80,0x5400,sub_5D0DC0
 0x005d0e10,309,0x5400,sub_5D0E10
@@ -9445,7 +9445,7 @@ address,size,flags,name
 0x005db600,131,0x5410,sub_5DB600
 0x005db690,131,0x5410,sub_5DB690
 0x005db720,92,0x5400,sub_5DB720
-0x005db780,77,0x5000,sub_5DB780
+0x005db780,77,0x5000,??0?$holder@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@any@boost@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
 0x005db7d0,6,0x5400,?type@?$holder@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@any@boost@@UBEABVtype_info@@XZ
 0x005db7e0,96,0x5400,?clone@?$holder@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@any@boost@@UBEPAVplaceholder@23@XZ
 0x005db840,88,0x5400,_ZN5boost3any6holderISsED0Ev
@@ -11200,12 +11200,12 @@ address,size,flags,name
 0x006201b0,112,0x5400,sub_6201B0
 0x00620220,158,0x5400,sub_620220
 0x006202c0,60,0x5400,sub_6202C0
-0x00620300,101,0x5400,sub_620300
+0x00620300,101,0x5400,??$reset@V?$circular_buffer@NV?$allocator@N@std@@@boost@@@?$shared_ptr@V?$circular_buffer@NV?$allocator@N@std@@@boost@@@boost@@QAEXPAV?$circular_buffer@NV?$allocator@N@std@@@1@@Z
 0x00620370,224,0x5400,sub_620370
 0x00620450,112,0x5400,sub_620450
 0x006204c0,69,0x5400,sub_6204C0
 0x00620510,350,0x5400,sub_620510
-0x00620670,166,0x5400,sub_620670
+0x00620670,166,0x5400,??0?$RunningAverage@NN@RBX@@QAE@NNI@Z
 0x00620720,328,0x5400,sub_620720
 0x00620870,377,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJobC2EN5boost10shared_ptrIN6RakNet16RakPeerInterfaceEEEPNS_9DataModelE
 0x006209f0,48,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJob9sleepTimeERKNS_13TaskScheduler3Job5StatsE
@@ -11253,7 +11253,7 @@ address,size,flags,name
 0x00622510,7,0x5400,sub_622510
 0x00622520,24,0x5400,sub_622520
 0x00622540,8,0x5400,sub_622540
-0x00622550,28,0x5400,sub_622550
+0x00622550,28,0x5400,?_Max@?$_Tree@V?$_Tmap_traits@UData@Guid@RBX@@PAVInstance@3@U?$less@UData@Guid@RBX@@@std@@V?$allocator@U?$pair@$$CBUData@Guid@RBX@@PAVInstance@3@@std@@@6@$0A@@std@@@std@@KAPAU_Node@?$_Tree_nod@V?$_Tmap_traits@UData@Guid@RBX@@PAVInstance@3@U?$less@UData@Guid@RBX@@@std@@V?$allocator@U?$pair@$$CBUData@Guid@RBX@@PAVInstance@3@@std@@@6@$0A@@std@@@2@PAU342@@Z
 0x00622570,75,0x5400,sub_622570
 0x006225c0,60,0x5400,sub_6225C0
 0x00622600,67,0x5400,sub_622600
@@ -11340,7 +11340,7 @@ address,size,flags,name
 0x00624bd0,131,0x5410,sub_624BD0
 0x00624c60,131,0x5410,sub_624C60
 0x00624cf0,131,0x5410,sub_624CF0
-0x00624d80,131,0x5410,sub_624D80
+0x00624d80,131,0x5410,??$?0PAVChatService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVChatService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
 0x00624e10,131,0x5410,sub_624E10
 0x00624ea0,131,0x5410,sub_624EA0
 0x00624f30,131,0x5410,sub_624F30
@@ -11487,7 +11487,7 @@ address,size,flags,name
 0x00629e00,33,0x1401,sub_629E00
 0x00629e30,189,0x5400,sub_629E30
 0x00629ef0,182,0x5400,sub_629EF0
-0x00629fb0,144,0x5400,sub_629FB0
+0x00629fb0,144,0x5400,??0?$storage3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@boost@@QAE@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@12@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@12@U?$arg@$00@2@@Z
 0x0062a040,167,0x5400,sub_62A040
 0x0062a0f0,88,0x5400,sub_62A0F0
 0x0062a150,83,0x5400,sub_62A150
@@ -14612,7 +14612,7 @@ address,size,flags,name
 0x006a96c0,136,0x5400,?check@zlib_error@iostreams@boost@@SAXH@Z
 0x006a9750,116,0x5400,?do_init@zlib_base@detail@iostreams@boost@@AAEXABUzlib_params@34@_NP6APAXPAXII@ZP6AX22@Z2@Z
 0x006a97d0,43,0x5400,sub_6A97D0
-0x006a9800,182,0x5400,sub_6A9800
+0x006a9800,182,0x5400,?halfSpaceContains@Plane@G3D@@QBE_NVVector3@2@@Z
 0x006a98c0,269,0x5400,sub_6A98C0
 0x006a99d0,369,0x5400,sub_6A99D0
 0x006a9b50,229,0x5400,sub_6A9B50
@@ -14704,7 +14704,7 @@ address,size,flags,name
 0x006ad370,31,0x5400,_ZN3G3D4LineD0Ev
 0x006ad390,86,0x5400,sub_6AD390
 0x006ad3f0,95,0x5400,?fromOriginAndDirection@RbxRay@RBX@@SA?AV12@ABVVector3@G3D@@0@Z
-0x006ad450,42,0x5400,_ZN3G3D15CoordinateFrameC1Ev
+0x006ad450,42,0x5400,??0CoordinateFrame@G3D@@QAE@XZ
 0x006ad480,309,0x5c10,?fuzzyEq@CoordinateFrame@G3D@@QBE_NABV12@@Z
 0x006ad5c0,19,0x5400,?toMatrix4@CoordinateFrame@G3D@@QBE?AVMatrix4@2@XZ
 0x006ad5e0,346,0x5400,?toObjectSpace@CoordinateFrame@G3D@@QBE?AVPlane@2@ABV32@@Z
@@ -14718,7 +14718,7 @@ address,size,flags,name
 0x006ae5a0,550,0x5400,?AABBtoWorldSpace@CoordinateFrame@G3D@@QBE?AVAABox@2@ABV32@@Z
 0x006ae7d0,45,0x5400,?lookAt@CoordinateFrame@G3D@@QAEXABVVector3@2@@Z
 0x006ae800,30,0x5400,??0Vector3@G3D@@QAE@ABVVector2@1@M@Z
-0x006ae820,52,0x5400,_ZN3G3D7Vector34zeroEv
+0x006ae820,52,0x5400,?zero@Vector3@G3D@@SAABV12@XZ
 0x006ae860,57,0x5400,?one@Vector3@G3D@@SAABV12@XZ
 0x006ae8a0,60,0x5400,?unitX@Vector3@G3D@@SAABV12@XZ
 0x006ae8e0,60,0x5400,?unitY@Vector3@G3D@@SAABV12@XZ
@@ -15638,7 +15638,7 @@ address,size,flags,name
 0x006df300,160,0x5010,sub_6DF300
 0x006df3b0,192,0x5000,sub_6DF3B0
 0x006df470,30,0x5400,_ZN5boost6detail18sp_counted_impl_pdIPSsN3rbx6detail13sp_ms_deleterISsEEED0Ev
-0x006df490,81,0x5000,sub_6DF490
+0x006df490,81,0x5000,??1ThreadRef@Lua@RBX@@QAE@XZ
 0x006df4f0,540,0x5400,_ZN3RBX9Scripting14ScriptDebugger11shouldBreakEPNS0_18DebuggerBreakpointEP9lua_State
 0x006df710,62,0x5400,sub_6DF710
 0x006df750,9,0x1400,sub_6DF750
@@ -15659,7 +15659,7 @@ address,size,flags,name
 0x006dfd90,117,0x5000,sub_6DFD90
 0x006dfe10,64,0x5400,sub_6DFE10
 0x006dfe50,224,0x5400,sub_6DFE50
-0x006dff30,84,0x5000,sub_6DFF30
+0x006dff30,84,0x5000,?lock@WeakThreadRef@Lua@RBX@@QAE?AVThreadRef@23@XZ
 0x006dff90,23,0x5400,sub_6DFF90
 0x006dffb0,12,0x5400,sub_6DFFB0
 0x006dffc0,156,0x5000,sub_6DFFC0
@@ -15911,7 +15911,7 @@ address,size,flags,name
 0x006ed320,390,0x5400,sub_6ED320
 0x006ed4b0,330,0x5400,_ZN3RBX9Scripting15DebuggerManager22addDebugger_ReflectionEN5boost10shared_ptrINS_8InstanceEEE
 0x006ed600,7,0x5400,sub_6ED600
-0x006ed610,31,0x5400,sub_6ED610
+0x006ed610,31,0x5400,??_GEventSource@Reflection@RBX@@UAEPAXI@Z
 0x006ed630,94,0x5400,sub_6ED630
 0x006ed690,4,0x5400,sub_6ED690
 0x006ed6a0,17,0x5400,_ZN3RBX8Instance14onChildChangedEPS0_RKNS_15PropertyChangedE
@@ -16015,7 +16015,7 @@ address,size,flags,name
 0x006f01d0,715,0x5400,sub_6F01D0
 0x006f04a0,435,0x5400,sub_6F04A0
 0x006f0660,77,0x5400,sub_6F0660
-0x006f06b0,90,0x5400,sub_6F06B0
+0x006f06b0,90,0x5400,?malloc@?$singleton_pool@VOnDemandInstance@RBX@@$0CI@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAPAXXZ
 0x006f0710,77,0x5400,?free@?$singleton_pool@VOnDemandInstance@RBX@@$0CI@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAXQAX@Z
 0x006f0760,77,0x5400,sub_6F0760
 0x006f07b0,77,0x5400,?release_memory@?$singleton_pool@VOnDemandInstance@RBX@@$0CI@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SA_NXZ
@@ -16024,7 +16024,7 @@ address,size,flags,name
 0x006f0960,284,0x5400,_ZNK3RBX15ServiceProvider4findINS_13ScriptServiceEEEPT_v
 0x006f0a80,18,0x5400,sub_6F0A80
 0x006f0aa0,21,0x5400,sub_6F0AA0
-0x006f0ac0,87,0x5400,sub_6F0AC0
+0x006f0ac0,87,0x5400,??2?$Allocator@VOnDemandInstance@RBX@@@RBX@@SAPAXI@Z
 0x006f0b20,21,0x5400,sub_6F0B20
 0x006f0b40,130,0x5400,sub_6F0B40
 0x006f0bd0,369,0x5410,sub_6F0BD0
@@ -16488,7 +16488,7 @@ address,size,flags,name
 0x00706120,172,0x5400,??0?$MemberDescriptorContainer@VCallbackDescriptor@Reflection@RBX@@@Reflection@RBX@@IAE@PAV012@@Z
 0x007061d0,349,0x5000,_ZN3RBX10Reflection15ClassDescriptorC2Ev
 0x00706330,641,0x5000,_ZN3RBX10Reflection15ClassDescriptorC2ERS1_PKcNS1_10AttributesENS_8Security11PermissionsE
-0x007065c0,148,0x5400,sub_7065C0
+0x007065c0,148,0x5400,?isMemberOf@MemberDescriptor@Reflection@RBX@@QBE_NABVClassDescriptor@23@@Z
 0x00706660,91,0x5400,_ZNK3RBX10Reflection16MemberDescriptor10isMemberOfEPKNS0_13DescribedBaseE
 0x007066c0,26,0x5400,sub_7066C0
 0x007066e0,449,0x5400,_ZN3RBX15StringConverterINS_8NormalIdEE14convertToValueERKSsRS1_
@@ -18291,8 +18291,8 @@ address,size,flags,name
 0x0073fa90,179,0x5400,sub_73FA90
 0x0073fb50,179,0x5400,sub_73FB50
 0x0073fc10,201,0x5000,??0ServiceProvider@RBX@@QAE@XZ
-0x0073fce0,16,0x5400,sub_73FCE0
-0x0073fcf0,30,0x5400,sub_73FCF0
+0x0073fce0,16,0x5400,??_EGlobalBasicSettings@RBX@@WBM@AEPAXI@Z
+0x0073fcf0,30,0x5400,??_E?$NonFactoryProduct@VServiceProvider@RBX@@$E?sDataModel@2@3QBDB@RBX@@UAEPAXI@Z
 0x0073fd10,73,0x5400,sub_73FD10
 0x0073fd60,35,0x5400,_ZN5boost6detail18sp_counted_impl_pdIPNS_9unordered13unordered_mapISsN3RBX10Reflection7VariantENS_4hashISsEESt8equal_toISsESaISt4pairIKSsS6_EEEEN3rbx6detail13sp_ms_deleterISF_EEE11get_deleterERKSt9type_info
 0x0073fd90,75,0x5400,_ZN5boost6detail18sp_counted_impl_pdIPNS_9unordered13unordered_mapISsN3RBX10Reflection7VariantENS_4hashISsEESt8equal_toISsESaISt4pairIKSsS6_EEEEN3rbx6detail13sp_ms_deleterISF_EEE7disposeEv
@@ -18528,12 +18528,12 @@ address,size,flags,name
 0x0074d4b0,33,0x5400,sub_74D4B0
 0x0074d4e0,7,0x5400,sub_74D4E0
 0x0074d4f0,7,0x5400,sub_74D4F0
-0x0074d500,36,0x5400,sub_74D500
+0x0074d500,36,0x5400,_ZNK3RBX9DataModel8getJobIdEv
 0x0074d530,7,0x5400,sub_74D530
 0x0074d540,7,0x5400,sub_74D540
 0x0074d550,7,0x5400,sub_74D550
-0x0074d560,7,0x5400,sub_74D560
-0x0074d570,13,0x5400,sub_74D570
+0x0074d560,7,0x5400,_ZNK3RBX9DataModel19getIsPersonalServerEv
+0x0074d570,13,0x5400,_ZN3RBX9DataModel19setIsPersonalServerEb
 0x0074d580,7,0x5400,sub_74D580
 0x0074d590,18,0x5400,_ZN3RBX9DataModel22setUiMessageBrickCountEv
 0x0074d5b0,4,0x5400,sub_74D5B0
@@ -18710,7 +18710,7 @@ address,size,flags,name
 0x007514c0,8,0x5400,??_E?$clone_impl@U?$error_info_injector@Vbad_lexical_cast@boost@@@exception_detail@boost@@@exception_detail@boost@@WBE@AEPAXI@Z
 0x007514d0,114,0x5400,sub_7514D0
 0x00751550,118,0x5400,sub_751550
-0x007515d0,163,0x5400,sub_7515D0
+0x007515d0,163,0x5400,??$_internal_accept_owner@VYieldFunctionStateObject@@V1@@?$enable_shared_from_this@VYieldFunctionStateObject@@@boost@@QBEXPBV?$shared_ptr@VYieldFunctionStateObject@@@1@PAVYieldFunctionStateObject@@@Z
 0x00751680,160,0x5400,sub_751680
 0x00751720,35,0x5400,sub_751720
 0x00751750,173,0x5400,??$_internal_accept_owner@VTextureTrail@RBX@@V12@@?$enable_shared_from_this@VDescribedBase@Reflection@RBX@@@boost@@QBEXPBV?$shared_ptr@VTextureTrail@RBX@@@1@PAVTextureTrail@RBX@@@Z
@@ -18771,7 +18771,7 @@ address,size,flags,name
 0x007537b0,123,0x5400,sub_7537B0
 0x00753830,53,0x5400,sub_753830
 0x00753870,365,0x5400,??0?$storage4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@boost@@QAE@U?$arg@$00@2@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@12@2@Z
-0x007539e0,105,0x5400,sub_7539E0
+0x007539e0,105,0x5400,??$sp_pointer_construct@VGenericJob@DataModel@RBX@@V123@@detail@boost@@YAXPAV?$shared_ptr@VGenericJob@DataModel@RBX@@@1@PAVGenericJob@DataModel@RBX@@AAVshared_count@01@@Z
 0x00753a50,98,0x5400,sub_753A50
 0x00753ac0,31,0x5400,sub_753AC0
 0x00753ae0,31,0x5400,sub_753AE0
@@ -18999,7 +18999,7 @@ address,size,flags,name
 0x0075f220,171,0x5400,sub_75F220
 0x0075f2d0,103,0x5400,sub_75F2D0
 0x0075f340,124,0x5400,??$assign_to@V?$bind_t@XP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@5@@_bi@boost@@@?$function2@XPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@@boost@@AAEXV?$bind_t@XP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@5@@_bi@1@@Z
-0x0075f3c0,92,0x5400,sub_75F3C0
+0x0075f3c0,92,0x5400,_ZN3RBX9DataModel10MouseStatsC2Ev
 0x0075f420,30,0x5400,_ZN3RBX19UserInputServiceJobD0Ev
 0x0075f440,63,0x5400,_ZN3RBX9DataModel7canSaveEPKNS_8InstanceE
 0x0075f480,209,0x5400,_ZN3RBX9DataModel16completeShutdownEb
@@ -19047,7 +19047,7 @@ address,size,flags,name
 0x00761cb0,76,0x5400,sub_761CB0
 0x00761d00,76,0x5400,sub_761D00
 0x00761d50,404,0x5400,_ZN3RBX9DataModel10GenericJob16stepDataModelJobERKNS_13TaskScheduler3Job5StatsE
-0x00761ef0,100,0x5400,sub_761EF0
+0x00761ef0,100,0x5400,_ZN3RBX10GuiBuilderC2Ev
 0x00761f60,283,0x5400,sub_761F60
 0x00762080,947,0x5400,_ZN3RBX9DataModel24getUpdatedMessageBoxTextEv
 0x00762440,745,0x5400,_ZN3RBX9DataModel16renderMessageBoxEPNS_5AdornE
@@ -19160,7 +19160,7 @@ address,size,flags,name
 0x0076a110,288,0x5400,sub_76A110
 0x0076a240,119,0x5400,_ZN3RBX9CreatableINS_8InstanceEE6createINS_14PhysicsServiceEEEN5boost10shared_ptrIT_EEv
 0x0076a2c0,116,0x5400,sub_76A2C0
-0x0076a340,1436,0x5000,sub_76A340
+0x0076a340,1436,0x5000,_ZN3RBX9DataModelD2Ev
 0x0076a8e0,13,0x5400,sub_76A8E0
 0x0076a8f0,7,0x5400,sub_76A8F0
 0x0076a900,11,0x5000,sub_76A900
@@ -19179,7 +19179,7 @@ address,size,flags,name
 0x0076b1d0,374,0x5400,sub_76B1D0
 0x0076b350,374,0x5400,sub_76B350
 0x0076b4d0,589,0x5400,_ZN3RBXL19registerNewImageAPIEv
-0x0076b720,1428,0x5000,sub_76B720
+0x0076b720,1428,0x5000,_ZN3RBX9DataModelC2EPNS_4VerbEPS0_
 0x0076bcc0,1048,0x5400,_ZN3RBX9DataModel18initializeContentsEb
 0x0076c0e0,298,0x5400,_ZN3RBX9DataModel14switchViewModeEv
 0x0076c210,129,0x5400,sub_76C210
@@ -19525,7 +19525,7 @@ address,size,flags,name
 0x0077a520,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_11sBaseScriptEEEERKS0_v
 0x0077a530,5,0x5480,sub_77A530
 0x0077a540,5,0x54c0,??$callDoGetClassIndex@VRuntimeScriptService@RBX@@@ServiceProvider@RBX@@CAXXZ
-0x0077a550,131,0x5410,sub_77A550
+0x0077a550,131,0x5410,??$?0PAVRuntimeScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@shared_count@detail@boost@@QAE@PAVRuntimeScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@4@@Z
 0x0077a5e0,113,0x5400,sub_77A5E0
 0x0077a660,14,0x5400,sub_77A660
 0x0077a670,194,0x5400,sub_77A670
@@ -20501,7 +20501,7 @@ address,size,flags,name
 0x007a09d0,8,0x1400,sub_7A09D0
 0x007a09e0,5,0x1400,sub_7A09E0
 0x007a09f0,43,0x5400,sub_7A09F0
-0x007a0a20,47,0x5400,sub_7A0A20
+0x007a0a20,47,0x5400,?isGroundJoint@Joint@RBX@@SA_NPBVEdge@2@@Z
 0x007a0a50,53,0x5400,sub_7A0A50
 0x007a0a90,116,0x5400,sub_7A0A90
 0x007a0b10,8,0x5400,_ZThn32_N3RBX15ManualGlueJointD0Ev
@@ -20789,7 +20789,7 @@ address,size,flags,name
 0x007a8170,14,0x5400,sub_7A8170
 0x007a8180,11,0x5000,sub_7A8180
 0x007a8190,230,0x5400,_ZN3RBX11VehicleSeat19loadMotorsAndHingesEv
-0x007a8280,30,0x5400,sub_7A8280
+0x007a8280,30,0x5400,_ZN3RBX11VehicleSeatD0Ev
 0x007a82a0,137,0x5400,_ZN3RBX11VehicleSeat6stepUiEd
 0x007a8330,16,0x5400,_ZNK3RBX11VehicleSeat12getNumHingesEv
 0x007a8340,1057,0x5400,sub_7A8340
@@ -21207,7 +21207,7 @@ address,size,flags,name
 0x007b7770,15,0x5400,sub_7B7770
 0x007b7780,15,0x5400,sub_7B7780
 0x007b7790,11,0x5400,sub_7B7790
-0x007b77a0,36,0x5400,sub_7B77A0
+0x007b77a0,36,0x5400,_ZNK3RBX12PartInstance13getPartSizeUiEv
 0x007b77d0,270,0x5400,_ZN3RBX12PartInstance14setPartSizeXmlERKN3G3D7Vector3E
 0x007b78e0,13,0x5400,sub_7B78E0
 0x007b78f0,43,0x5400,_ZN3RBX12PartInstance11setDraggingEb
@@ -22090,7 +22090,7 @@ address,size,flags,name
 0x007db6f0,50,0x5400,sub_7DB6F0
 0x007db730,137,0x5400,??1Continuations@Lua@RBX@@QAE@XZ
 0x007db7c0,8,0x5400,sub_7DB7C0
-0x007db7d0,119,0x5400,sub_7DB7D0
+0x007db7d0,119,0x5400,??1WaitingThread@ScriptContext@RBX@@QAE@XZ
 0x007db850,589,0x5400,_ZN3RBX13ScriptContext16extractCallStackEP9lua_StateRN5boost10shared_ptrINS_10BaseScriptEEERi
 0x007dbaa0,49,0x5400,sub_7DBAA0
 0x007dbae0,340,0x5000,sub_7DBAE0
@@ -22107,7 +22107,7 @@ address,size,flags,name
 0x007dc250,37,0x5400,sub_7DC250
 0x007dc280,37,0x5400,sub_7DC280
 0x007dc2b0,77,0x5400,sub_7DC2B0
-0x007dc300,43,0x5400,sub_7DC300
+0x007dc300,43,0x5400,?hasScript@ScriptContext@RBX@@QBE_NPAVBaseScript@2@@Z
 0x007dc330,400,0x5400,_ZN3RBX13ScriptContext5spawnEP9lua_State
 0x007dc4c0,8,0x5400,sub_7DC4C0
 0x007dc4d0,93,0x5400,sub_7DC4D0
@@ -22245,7 +22245,7 @@ address,size,flags,name
 0x007e28d0,322,0x5400,_ZN3RBX13ScriptContext13printidentityEP9lua_State
 0x007e2a20,184,0x5400,sub_7E2A20
 0x007e2ae0,736,0x5400,_ZN3RBX13ScriptContext14printCallStackEP9lua_StatePSs
-0x007e2dc0,242,0x5400,sub_7E2DC0
+0x007e2dc0,242,0x5400,?scheduleResume@ScriptContext@RBX@@QAEXVThreadRef@Lua@2@V?$shared_ptr@$$CBUTuple@Reflection@RBX@@@boost@@@Z
 0x007e2ec0,393,0x5410,_ZN3rbx7signals16signal_with_argsILi3EFvSsSsN5boost10shared_ptrIN3RBX8InstanceEEEEEclESsSsS6_
 0x007e3050,130,0x5400,sub_7E3050
 0x007e30e0,130,0x5400,sub_7E30E0
@@ -22283,7 +22283,7 @@ address,size,flags,name
 0x007e4db0,574,0x5400,_ZN3RBX13ScriptContext10setTimeoutEd
 0x007e4ff0,187,0x5400,sub_7E4FF0
 0x007e50b0,5,0x5480,sub_7E50B0
-0x007e50c0,99,0x5400,sub_7E50C0
+0x007e50c0,99,0x5400,?erase@?$vector@UScriptStart@ScriptContext@RBX@@V?$allocator@UScriptStart@ScriptContext@RBX@@@std@@@std@@QAE?AV?$_Vector_iterator@UScriptStart@ScriptContext@RBX@@V?$allocator@UScriptStart@ScriptContext@RBX@@@std@@@2@V?$_Vector_const_iterator@UScriptStart@ScriptContext@RBX@@V?$allocator@UScriptStart@ScriptContext@RBX@@@std@@@2@@Z
 0x007e5130,431,0x5400,sub_7E5130
 0x007e52e0,352,0x5400,sub_7E52E0
 0x007e5440,348,0x5400,sub_7E5440
@@ -22424,7 +22424,7 @@ address,size,flags,name
 0x007f0480,1105,0x5800,_ZN3RBX13ScriptContextC2Ev
 0x007f08e0,8,0x5400,sub_7F08E0
 0x007f08f0,8,0x5400,sub_7F08F0
-0x007f0900,1099,0x5000,sub_7F0900
+0x007f0900,1099,0x5000,_ZN3RBX13ScriptContextD2Ev
 0x007f0d50,863,0x5000,_ZN3RBX13ScriptContext17onServiceProviderEPNS_15ServiceProviderES2_
 0x007f10b0,30,0x5400,sub_7F10B0
 0x007f10d0,82,0x5400,sub_7F10D0
@@ -22561,7 +22561,7 @@ address,size,flags,name
 0x007f66a0,12,0x5400,sub_7F66A0
 0x007f66b0,23,0x5400,sub_7F66B0
 0x007f66d0,97,0x5400,sub_7F66D0
-0x007f6740,759,0x5400,sub_7F6740
+0x007f6740,759,0x5400,?erase@?$_Tree@V?$_Tmap_traits@W4SoundType@RBX@@V?$shared_ptr@VSoundChannel@Soundscape@RBX@@@boost@@U?$less@W4SoundType@RBX@@@std@@V?$allocator@U?$pair@$$CBW4SoundType@RBX@@V?$shared_ptr@VSoundChannel@Soundscape@RBX@@@boost@@@std@@@6@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@@Z
 0x007f6a40,167,0x5410,sub_7F6A40
 0x007f6af0,97,0x5400,sub_7F6AF0
 0x007f6b60,97,0x5400,sub_7F6B60
@@ -22574,7 +22574,7 @@ address,size,flags,name
 0x007f7080,207,0x5400,sub_7F7080
 0x007f7150,183,0x5400,??A?$map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$shared_ptr@VScript@RBX@@@boost@@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$shared_ptr@VScript@RBX@@@boost@@@std@@@2@@std@@QAEAAV?$shared_ptr@VScript@RBX@@@boost@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@@Z
 0x007f7210,122,0x5410,sub_7F7210
-0x007f7290,202,0x5400,sub_7F7290
+0x007f7290,202,0x5400,?erase@?$_Tree@V?$_Tmap_traits@W4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@U?$less@W4BubbleColor@ChatLine@RBX@@@std@@V?$allocator@U?$pair@$$CBW4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@0@Z
 0x007f7360,350,0x5400,_ZN3RBX13PluginManager14StateDataEntry12hideStudioUIEbPNS_17IStudioPluginHostE
 0x007f74c0,399,0x5400,sub_7F74C0
 0x007f7650,77,0x5400,sub_7F7650
@@ -22866,7 +22866,7 @@ address,size,flags,name
 0x00802970,78,0x5400,?_Lrotate@?$_Tree@V?$_Tmap_traits@VSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@U?$less@VSoundId@Soundscape@RBX@@@std@@V?$allocator@U?$pair@$$CBVSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@VSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@U?$less@VSoundId@Soundscape@RBX@@@std@@V?$allocator@U?$pair@$$CBVSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@@std@@@7@$0A@@std@@@2@@Z
 0x008029c0,119,0x5400,sub_8029C0
 0x00802a40,61,0x5400,sub_802A40
-0x00802a80,78,0x5400,sub_802A80
+0x00802a80,78,0x5400,?_Lrotate@?$_Tree@V?$_Tmap_traits@W4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@U?$less@W4BubbleColor@ChatLine@RBX@@@std@@V?$allocator@U?$pair@$$CBW4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@W4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@U?$less@W4BubbleColor@ChatLine@RBX@@@std@@V?$allocator@U?$pair@$$CBW4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@@std@@@7@$0A@@std@@@2@@Z
 0x00802ad0,83,0x5400,sub_802AD0
 0x00802b30,69,0x5400,sub_802B30
 0x00802b80,5,0x54c0,_ZN3RBX4Name13callDoDeclareILZNS_11sStockSoundEEEEvv
@@ -22914,7 +22914,7 @@ address,size,flags,name
 0x00804010,105,0x5400,sub_804010
 0x00804080,718,0x5400,?erase@?$_Tree@V?$_Tmap_traits@VSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@U?$less@VSoundId@Soundscape@RBX@@@std@@V?$allocator@U?$pair@$$CBVSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@@Z
 0x00804350,111,0x5400,_ZNK3RBX10Reflection23TypedPropertyDescriptorINS_10Soundscape7SoundIdEE10getVariantEPKNS0_13DescribedBaseERNS0_7VariantE
-0x008043c0,104,0x5400,sub_8043C0
+0x008043c0,104,0x5400,?_Erase@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@6@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@PBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@6@$0A@@std@@@2@@Z
 0x00804430,61,0x5400,?_Erase@?$_Tree@V?$_Tmap_traits@VSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@U?$less@VSoundId@Soundscape@RBX@@@std@@V?$allocator@U?$pair@$$CBVSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@VSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@U?$less@VSoundId@Soundscape@RBX@@@std@@V?$allocator@U?$pair@$$CBVSoundId@Soundscape@RBX@@V?$shared_ptr@VSound@Soundscape@RBX@@@boost@@@std@@@7@$0A@@std@@@2@@Z
 0x00804470,185,0x5400,sub_804470
 0x00804530,208,0x5400,sub_804530
@@ -22995,7 +22995,7 @@ address,size,flags,name
 0x00807ac0,159,0x5400,sub_807AC0
 0x00807b60,348,0x5400,_ZN21SoundServiceStatsItem6updateEv
 0x00807cc0,750,0x5400,_ZN3RBX10Soundscape12SoundService4stepEv
-0x00807fb0,297,0x5000,sub_807FB0
+0x00807fb0,297,0x5000,_ZN3RBX10Soundscape12SoundChannelC2Ev
 0x008080e0,212,0x5400,_ZN3RBX10Soundscape12SoundChannel17updateListenStateEv
 0x008081c0,88,0x5400,sub_8081C0
 0x00808220,179,0x5400,sub_808220
@@ -23598,7 +23598,7 @@ address,size,flags,name
 0x0081ed70,308,0x5400,sub_81ED70
 0x0081eeb0,308,0x5400,sub_81EEB0
 0x0081eff0,308,0x5400,sub_81EFF0
-0x0081f130,30,0x5400,sub_81F130
+0x0081f130,30,0x5400,_ZN3RBX8HumanoidD0Ev
 0x0081f150,103,0x5000,sub_81F150
 0x0081f1c0,179,0x5400,sub_81F1C0
 0x0081f280,141,0x5400,sub_81F280
@@ -23832,7 +23832,7 @@ address,size,flags,name
 0x008289b0,150,0x5400,sub_8289B0
 0x00828a50,36,0x5400,sub_828A50
 0x00828a80,529,0x5010,_ZL13onAsyncResultN3RBX3Lua9ThreadRefEN5boost8weak_ptrINS_13ScriptContextEEEPNS0_12IAsyncResultE
-0x00828ca0,5,0x5480,sub_828CA0
+0x00828ca0,5,0x54c0,j_??1ThreadRef@Lua@RBX@@QAE@XZ
 0x00828cb0,178,0x5000,sub_828CB0
 0x00828d70,94,0x5400,sub_828D70
 0x00828dd0,286,0x5400,sub_828DD0
@@ -24550,7 +24550,7 @@ address,size,flags,name
 0x0084ad30,98,0x5400,sub_84AD30
 0x0084ada0,97,0x5400,sub_84ADA0
 0x0084ae10,7,0x5400,sub_84AE10
-0x0084ae20,5,0x5480,sub_84AE20
+0x0084ae20,5,0x54c0,j__ZN3RBX9DataModelD2Ev
 0x0084ae30,34,0x5400,sub_84AE30
 0x0084ae60,46,0x5400,_ZN3RBX16OverlayDataModel12renderPass2dEPNS_5AdornEPNS_7IMetricE
 0x0084af00,93,0x5400,sub_84AF00
@@ -24868,7 +24868,7 @@ address,size,flags,name
 0x00857070,191,0x5400,_ZNK3RBX10GuiService26shouldPreemptCurrentDialogEPNS0_13DialogWrapperE
 0x00857130,95,0x5400,_ZNK3RBX10GuiService20getModalDialogStatusEv
 0x008571a0,150,0x5400,sub_8571A0
-0x00857240,27,0x5400,sub_857240
+0x00857240,27,0x5400,?_Min@?$_Tree@V?$_Tmap_traits@W4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@U?$less@W4BubbleColor@ChatLine@RBX@@@std@@V?$allocator@U?$pair@$$CBW4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@@std@@@7@$0A@@std@@@std@@KAPAU_Node@?$_Tree_nod@V?$_Tmap_traits@W4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@U?$less@W4BubbleColor@ChatLine@RBX@@@std@@V?$allocator@U?$pair@$$CBW4BubbleColor@ChatLine@RBX@@V?$shared_ptr@VGuiObject@RBX@@@boost@@@std@@@7@$0A@@std@@@2@PAU342@@Z
 0x00857260,28,0x5400,sub_857260
 0x00857280,27,0x5400,sub_857280
 0x008572a0,82,0x5400,sub_8572A0
@@ -26412,7 +26412,7 @@ address,size,flags,name
 0x0089f300,77,0x5400,?getCorner@Extents@RBX@@QBE?AVVector3@G3D@@H@Z
 0x0089f350,969,0x5400,_ZNK3RBX7Extents14getFaceCornersENS_8NormalIdERN3G3D7Vector3ES4_S4_S4_
 0x0089f740,277,0x5400,_ZNK3RBX7Extents19separatedByMoreThanERKS0_f
-0x0089f860,325,0x5400,sub_89F860
+0x0089f860,325,0x5400,?clampInsideOf@Extents@RBX@@QBE?AV12@ABV12@@Z
 0x0089f9b0,128,0x5400,sub_89F9B0
 0x0089fa30,164,0x5400,sub_89FA30
 0x0089fae0,981,0x5400,_ZNK3RBX7Extents7expressERKN3G3D15CoordinateFrameES4_
@@ -26614,7 +26614,7 @@ address,size,flags,name
 0x008a56e0,112,0x5400,sub_8A56E0
 0x008a5750,125,0x5400,sub_8A5750
 0x008a57d0,82,0x5400,??$construct_value_impl@V?$allocator@U?$ptr_node@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$_Iterator@$0A@@?$list@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@@2@@2@@std@@@detail@unordered@boost@@@std@@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$_Iterator@$0A@@?$list@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@@2@@2@@2@U32@@detail@unordered@boost@@YAXAAV?$allocator@U?$ptr_node@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$_Iterator@$0A@@?$list@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@@2@@2@@std@@@detail@unordered@boost@@@std@@PAU?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$_Iterator@$0A@@?$list@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@@2@@2@@4@ABU?$emplace_args1@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$_Iterator@$0A@@?$list@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$pair@KVCachedContent@ContentProvider@RBX@@@2@@std@@@2@@2@@std@@@012@@Z
-0x008a5830,130,0x5400,sub_8A5830
+0x008a5830,130,0x5400,_ZN3RBX8LRUCacheISsNS_25ScriptInformationProvider16CachedScriptInfoEE6removeERKSs
 0x008a58c0,155,0x5000,sub_8A58C0
 0x008a5960,38,0x5400,sub_8A5960
 0x008a5990,176,0x5000,sub_8A5990
@@ -28936,7 +28936,7 @@ address,size,flags,name
 0x0091e430,116,0x1401,sub_91E430
 0x0091e4b0,3979,0x5010,sub_91E4B0
 0x0091f440,93,0x5400,sub_91F440
-0x0091f4a0,21,0x5400,sub_91F4A0
+0x0091f4a0,21,0x5400,?no_waiters@basic_cv_list_entry@detail@boost@@SA_NABV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@3@@Z
 0x0091f4c0,35,0x5400,??0?$shared_ptr@VGlue@RBX@@@boost@@QAE@ABV01@@Z
 0x0091f4f0,96,0x5400,??0?$storage1@V?$value@V?$shared_ptr@VLibraryStateObject@LibraryService@RBX@@@boost@@@_bi@boost@@@_bi@boost@@QAE@V?$value@V?$shared_ptr@VLibraryStateObject@LibraryService@RBX@@@boost@@@12@@Z
 0x0091f550,131,0x5410,sub_91F550
@@ -28947,23 +28947,23 @@ address,size,flags,name
 0x0091f750,253,0x5400,sub_91F750
 0x0091f850,98,0x5400,sub_91F850
 0x0091f8c0,136,0x5400,??$_Copy_opt@PAV?$shared_ptr@Vspin_mutex@rbx@@@boost@@PAV12@Urandom_access_iterator_tag@std@@@std@@YAPAV?$shared_ptr@Vspin_mutex@rbx@@@boost@@PAV12@00Urandom_access_iterator_tag@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
-0x0091f950,177,0x5400,sub_91F950
-0x0091fa10,134,0x5400,sub_91FA10
+0x0091f950,177,0x5400,??$_Remove_copy_if@V?$_Vector_iterator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@std@@V12@P6A_NABV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@Z@std@@YA?AV?$_Vector_iterator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@0@V10@00P6A_NABV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@ZU_Range_checked_iterator_tag@0@@Z
+0x0091fa10,134,0x5400,??$_Copy_backward_opt@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@Urandom_access_iterator_tag@std@@@std@@YAPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@00Urandom_access_iterator_tag@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
 0x0091faa0,26,0x5400,sub_91FAA0
 0x0091fac0,33,0x5400,sub_91FAC0
 0x0091faf0,83,0x5400,sub_91FAF0
 0x0091fb50,259,0x5400,sub_91FB50
 0x0091fc60,125,0x5400,??$_Copy_opt@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@Urandom_access_iterator_tag@std@@@std@@YAPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@00Urandom_access_iterator_tag@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
-0x0091fce0,115,0x5400,sub_91FCE0
+0x0091fce0,115,0x5400,??$_Fill@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V12@@std@@YAXPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@0ABV12@@Z
 0x0091fd60,219,0x5400,sub_91FD60
 0x0091fe40,56,0x5400,sub_91FE40
 0x0091fe80,352,0x5400,sub_91FE80
-0x0091ffe0,192,0x5400,sub_91FFE0
-0x009200a0,43,0x5400,sub_9200A0
+0x0091ffe0,192,0x5400,??0PriorityTask@PriorityThreadPool@RBX@@QAE@V?$function@$$A6AXV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@Z@boost@@M@Z
+0x009200a0,43,0x5400,??$_Unchecked_move_backward@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@@stdext@@YAPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@00@Z
 0x009200d0,44,0x5400,sub_9200D0
 0x00920100,85,0x5400,sub_920100
 0x00920160,265,0x5400,sub_920160
-0x00920270,55,0x5400,sub_920270
+0x00920270,55,0x5400,??$_Uninit_copy@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@std@@YAPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV12@00AAV?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
 0x009202b0,8,0x5400,sub_9202B0
 0x009202c0,347,0x5400,sub_9202C0
 0x00920420,346,0x5000,sub_920420
@@ -28990,7 +28990,7 @@ address,size,flags,name
 0x00920de0,49,0x5400,??1?$lock_guard@Vmutex@boost@@@boost@@QAE@XZ
 0x00920e20,226,0x5400,_ZN5boost11unique_lockINS_5mutexEE6unlockEv
 0x00920f10,27,0x5400,?_Destroy@?$vector@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@std@@IAEXPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@0@Z
-0x00920f30,51,0x5400,sub_920F30
+0x00920f30,51,0x5400,?_Ufill@?$vector@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@std@@IAEPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV34@IABV34@@Z
 0x00920f70,152,0x5400,?_Tidy@?$deque@V?$function@$$A6AXV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@Z@boost@@V?$allocator@V?$function@$$A6AXV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@Z@boost@@@std@@@std@@IAEXXZ
 0x00921010,41,0x5400,??$_Umove@PAV?$shared_ptr@Voption_description@program_options@boost@@@boost@@@?$vector@V?$shared_ptr@Voption_description@program_options@boost@@@boost@@V?$allocator@V?$shared_ptr@Voption_description@program_options@boost@@@boost@@@std@@@std@@IAEPAV?$shared_ptr@Voption_description@program_options@boost@@@boost@@PAV23@00@Z
 0x00921040,14,0x5400,sub_921040
@@ -28998,10 +28998,10 @@ address,size,flags,name
 0x009210c0,717,0x5410,sub_9210C0
 0x00921390,27,0x5400,sub_921390
 0x009213b0,54,0x5400,sub_9213B0
-0x009213f0,41,0x5400,sub_9213F0
+0x009213f0,41,0x5400,??$_Umove@PAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@?$vector@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@V?$allocator@V?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@@std@@@std@@IAEPAV?$intrusive_ptr@Vbasic_cv_list_entry@detail@boost@@@boost@@PAV23@00@Z
 0x00921420,114,0x5000,sub_921420
 0x009214a0,105,0x5400,??1basic_condition_variable@detail@boost@@QAE@XZ
-0x00921510,377,0x5000,sub_921510
+0x00921510,377,0x5000,?notify_one@basic_condition_variable@detail@boost@@QAEXXZ
 0x00921690,334,0x5400,?notify_all@basic_condition_variable@detail@boost@@QAEXXZ
 0x009217e0,36,0x5400,sub_9217E0
 0x00921810,57,0x5400,_ZN3RBX14BaseThreadPool8PoolDataD0Ev
@@ -29036,7 +29036,7 @@ address,size,flags,name
 0x009230e0,793,0x5000,sub_9230E0
 0x00923400,114,0x5400,sub_923400
 0x00923480,114,0x5400,sub_923480
-0x00923500,318,0x5400,sub_923500
+0x00923500,318,0x5400,?schedule@PriorityThreadPool@RBX@@QAEXV?$function@$$A6AXV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@Z@boost@@M@Z
 0x00923640,126,0x5400,?index2adr@@YAPAUlua_TValue@@PAUlua_State@@H@Z
 0x009236c0,34,0x5400,?luaA_pushobject@@YAXPAUlua_State@@PBUlua_TValue@@@Z
 0x009236f0,99,0x5400,?lua_checkstack@@YAHPAUlua_State@@H@Z
@@ -29197,7 +29197,7 @@ address,size,flags,name
 0x00927a90,69,0x5400,sub_927A90
 0x00927ae0,24,0x5400,sub_927AE0
 0x00927b00,65,0x5400,sub_927B00
-0x00927b50,5,0x54c0,j__ZN3RBX16withVariantValueIiNS_3Lua14ArgumentPusherEEET_RKNS_10Reflection7VariantET0_
+0x00927b50,5,0x54c0,?push@LuaArguments@Lua@RBX@@SAHABVVariant@Reflection@3@QAUlua_State@@@Z
 0x00927b60,152,0x5400,_ZN3RBX3Lua6BridgeIN3G3D15CoordinateFrameELb1EE13pushNewObjectIS3_EEPS3_P9lua_StateT_
 0x00927c00,173,0x5400,_ZN3RBX3Lua6BridgeINS_7Region3ELb1EE13pushNewObjectIS2_EEPS2_P9lua_StateT_
 0x00927cb0,76,0x5400,sub_927CB0
@@ -30583,7 +30583,7 @@ address,size,flags,name
 0x0095bbf0,11,0x5000,sub_95BBF0
 0x0095bc00,11,0x5000,sub_95BC00
 0x0095bc10,162,0x5400,sub_95BC10
-0x0095bcc0,30,0x5400,sub_95BCC0
+0x0095bcc0,30,0x5400,_ZN3RBX18SkateboardPlatformD0Ev
 0x0095bce0,667,0x5400,_ZN3RBX18SkateboardPlatform23onLocalPlatformStandingEPNS_8HumanoidE
 0x0095bf80,307,0x5400,sub_95BF80
 0x0095c0c0,527,0x5400,sub_95C0C0
@@ -32231,7 +32231,7 @@ address,size,flags,name
 0x009a4c70,91,0x5400,sub_9A4C70
 0x009a4cd0,626,0x5410,_ZN3RBX19PhysicsInstructions12setThrottlesEPNS_7Network6PlayerEPNS_9WorkspaceEdd
 0x009a4f50,134,0x5400,sub_9A4F50
-0x009a4fe0,126,0x5400,sub_9A4FE0
+0x009a4fe0,126,0x5400,_ZN3RBX19PhysicsInstructionsC2Ev
 0x009a5060,6,0x5400,sub_9A5060
 0x009a5070,18,0x5400,sub_9A5070
 0x009a5090,19,0x5400,sub_9A5090
@@ -32444,7 +32444,7 @@ address,size,flags,name
 0x009b8eb0,26,0x5400,?_Buynode@?$list@UAsyncRetryTask@AsyncHttpQueue@RBX@@V?$allocator@UAsyncRetryTask@AsyncHttpQueue@RBX@@@std@@@std@@IAEPAU_Node@?$_List_nod@UAsyncRetryTask@AsyncHttpQueue@RBX@@V?$allocator@UAsyncRetryTask@AsyncHttpQueue@RBX@@@std@@@2@XZ
 0x009b8ed0,154,0x5400,sub_9B8ED0
 0x009b8f70,110,0x5400,sub_9B8F70
-0x009b8fe0,167,0x5400,sub_9B8FE0
+0x009b8fe0,167,0x5400,??0?$storage2@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@@_bi@boost@@QAE@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@12@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@12@@Z
 0x009b9090,81,0x5400,sub_9B9090
 0x009b90f0,96,0x5400,sub_9B90F0
 0x009b9150,134,0x5410,sub_9B9150
@@ -32455,7 +32455,7 @@ address,size,flags,name
 0x009b93f0,188,0x5400,sub_9B93F0
 0x009b94b0,63,0x5400,?clear@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@QAEXXZ
 0x009b94f0,296,0x5400,sub_9B94F0
-0x009b9620,149,0x5400,sub_9B9620
+0x009b9620,149,0x5400,??0?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@boost@@QAE@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@12@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@12@U?$arg@$00@2@@Z
 0x009b96c0,56,0x5400,sub_9B96C0
 0x009b9700,145,0x5400,sub_9B9700
 0x009b97a0,29,0x5400,sub_9B97A0
@@ -32477,7 +32477,7 @@ address,size,flags,name
 0x009ba130,43,0x5400,sub_9BA130
 0x009ba160,327,0x5400,??0?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@boost@@QAE@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@12@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@12@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@12@@Z
 0x009ba2b0,217,0x5410,sub_9BA2B0
-0x009ba450,89,0x5400,sub_9BA450
+0x009ba450,89,0x5400,??$assign_functor@V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@boost@@@?$basic_vtable1@XV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@function@detail@boost@@ABEXV?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@3@AATfunction_buffer@123@U?$bool_@$00@mpl@3@@Z
 0x009ba4b0,386,0x5400,RBX::InvokeAsyncCallback
 0x009ba640,292,0x5400,_ZN3RBX14AsyncHttpQueue23dispatchGenericCallbackEN5boost8functionIFvPNS_9DataModelEEEEPNS_8InstanceENS0_9ResultJobE
 0x009ba780,5,0x54c0,j_??1?$storage3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@boost@@QAE@XZ
@@ -32491,7 +32491,7 @@ address,size,flags,name
 0x009bab20,476,0x5000,??$bind@XV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V12@W4345@V62@@boost@@YA?AV?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@0@P6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@0@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@0@@Z012@Z
 0x009bad00,75,0x5400,??0?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@boost@@QAE@ABV012@@Z
 0x009bad50,193,0x5410,sub_9BAD50
-0x009bae20,168,0x5400,sub_9BAE20
+0x009bae20,168,0x5400,??$assign_to@V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@boost@@@?$basic_vtable1@XV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@function@detail@boost@@QBE_NV?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@3@AATfunction_buffer@123@@Z
 0x009baed0,108,0x5000,??$assign_functor@V?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@boost@@@?$basic_vtable1@XPAVDataModel@RBX@@@function@detail@boost@@ABEXV?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@3@AATfunction_buffer@123@U?$bool_@$0A@@mpl@3@@Z
 0x009baf40,847,0x5410,sub_9BAF40
 0x009bb290,128,0x5400,sub_9BB290
@@ -32506,11 +32506,11 @@ address,size,flags,name
 0x009bb8f0,175,0x5400,sub_9BB8F0
 0x009bb9a0,375,0x5400,sub_9BB9A0
 0x009bbb20,97,0x5400,sub_9BBB20
-0x009bbb90,173,0x5400,sub_9BBB90
+0x009bbb90,173,0x5400,??$assign_to@V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@boost@@@?$function1@XV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@boost@@AAEXV?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@1@@Z
 0x009bbc40,183,0x5400,??$assign_to@V?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@boost@@@?$basic_vtable1@XPAVDataModel@RBX@@@function@detail@boost@@QBE_NV?$bind_t@XP6AXV?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@W4RequestResult@AsyncHttpQueue@RBX@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@ZV?$list3@V?$value@V?$function@$$A6AXW4RequestResult@AsyncHttpQueue@RBX@@PAV?$basic_istream@DU?$char_traits@D@std@@@std@@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@Z@boost@@@_bi@boost@@V?$value@W4RequestResult@AsyncHttpQueue@RBX@@@23@V?$value@V?$shared_ptr@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@@23@@_bi@2@@_bi@3@AATfunction_buffer@123@@Z
 0x009bbd00,491,0x5410,_ZN3RBX14AsyncHttpQueue11syncRequestERKSs
 0x009bbef0,137,0x5400,sub_9BBEF0
-0x009bbf80,159,0x5400,sub_9BBF80
+0x009bbf80,159,0x5400,??$?0V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@boost@@@?$function1@XV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@1@H@Z
 0x009bc020,58,0x5400,sub_9BC020
 0x009bc060,144,0x5410,sub_9BC060
 0x009bc100,155,0x5400,??$?0V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@boost@@@?$function@$$A6AXV?$shared_ptr@Vspin_mutex@rbx@@@boost@@@Z@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@V?$shared_ptr@Vspin_mutex@rbx@@@2@@ZV?$list3@V?$value@V?$weak_ptr@VAsyncHttpQueue@RBX@@@boost@@@_bi@boost@@V?$value@V?$_Iterator@$0A@@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@@23@U?$arg@$00@3@@_bi@2@@_bi@1@H@Z
@@ -32737,7 +32737,7 @@ address,size,flags,name
 0x009c8160,1803,0x5000,_ZN3RBX12GuiDrawImage8setImageEPNS_5AdornERKNS_9TextureIdEjPN3G3D7Vector2E
 0x009c8870,285,0x5400,_ZN3RBX12GuiDrawImage16setImageFromNameEPNS_5AdornERKSsj
 0x009c8990,74,0x5400,sub_9C8990
-0x009c89e0,89,0x5400,sub_9C89E0
+0x009c89e0,89,0x5400,?setRenderedFrame@InterpolatedCFrame@RBX@@QAEXABVCoordinateFrame@G3D@@ABVRemoteTime@2@@Z
 0x009c8a40,119,0x5400,sub_9C8A40
 0x009c8ac0,147,0x5c10,sub_9C8AC0
 0x009c8b80,83,0x5400,sub_9C8B80
@@ -33360,8 +33360,8 @@ address,size,flags,name
 0x009e1c90,81,0x5400,sub_9E1C90
 0x009e1cf0,17,0x5400,sub_9E1CF0
 0x009e1d10,76,0x5000,sub_9E1D10
-0x009e1d60,100,0x5000,sub_9E1D60
-0x009e1dd0,87,0x5400,sub_9E1DD0
+0x009e1d60,100,0x5000,??1FunctionScriptSlot@Lua@RBX@@QAE@XZ
+0x009e1dd0,87,0x5400,??1WaitScriptSlot@Lua@RBX@@QAE@XZ
 0x009e1e30,207,0x5400,_ZN3RBX3Lua6BridgeIN3rbx7signals10connectionELb1EE8on_indexERKS4_PKcP9lua_State
 0x009e1f00,163,0x5010,sub_9E1F00
 0x009e1fb0,163,0x5010,sub_9E1FB0
@@ -33375,12 +33375,12 @@ address,size,flags,name
 0x009e23a0,110,0x5400,sub_9E23A0
 0x009e2410,81,0x5400,sub_9E2410
 0x009e2470,104,0x5000,sub_9E2470
-0x009e24e0,89,0x5400,sub_9E24E0
+0x009e24e0,89,0x5400,??1?$TGenericSlotWrapper@VFunctionScriptSlot@Lua@RBX@@@Reflection@RBX@@UAE@XZ
 0x009e2540,30,0x5400,_ZN3RBX10Reflection19TGenericSlotWrapperINS_3Lua18FunctionScriptSlotEED0Ev
 0x009e2560,1393,0x5000,_ZN3RBX3Lua18FunctionScriptSlotclERKSt6vectorINS_10Reflection7VariantESaIS4_EE
 0x009e2ae0,134,0x5410,_ZN3RBX10Reflection19TGenericSlotWrapperINS_3Lua18FunctionScriptSlotEE7executeERKSt6vectorINS0_7VariantESaIS6_EE
 0x009e2b70,104,0x5000,sub_9E2B70
-0x009e2be0,89,0x5400,sub_9E2BE0
+0x009e2be0,89,0x5400,??1?$TGenericSlotWrapper@VWaitScriptSlot@Lua@RBX@@@Reflection@RBX@@UAE@XZ
 0x009e2c40,30,0x5400,_ZN3RBX10Reflection19TGenericSlotWrapperINS_3Lua14WaitScriptSlotEED0Ev
 0x009e2c60,215,0x5000,sub_9E2C60
 0x009e2d40,134,0x5410,_ZN3RBX10Reflection19TGenericSlotWrapperINS_3Lua14WaitScriptSlotEE7executeERKSt6vectorINS0_7VariantESaIS6_EE
@@ -33786,7 +33786,7 @@ address,size,flags,name
 0x009f27d0,196,0x5400,?luaB_loadstring@@YAHPAUlua_State@@@Z
 0x009f28a0,101,0x5400,sub_9F28A0
 0x009f2910,504,0x5410,_ZN3RBX10Soundscape14CollisionSound4PlayEPN4FMOD6SystemEPNS2_12ChannelGroupERKN3G3D7Vector3ESA_f
-0x009f2b10,75,0x5400,sub_9F2B10
+0x009f2b10,75,0x5400,?_Inc@const_iterator@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@6@$0A@@std@@@std@@QAEXXZ
 0x009f2b60,43,0x5400,sub_9F2B60
 0x009f2b90,68,0x5400,sub_9F2B90
 0x009f2be0,71,0x5400,sub_9F2BE0
@@ -35994,12 +35994,12 @@ address,size,flags,name
 0x00a71210,243,0x5400,sub_A71210
 0x00a71310,838,0x5000,_ZN3RBX13TaskScheduler3JobD2Ev
 0x00a71660,122,0x5400,sub_A71660
-0x00a716e0,112,0x5400,sub_A716E0
+0x00a716e0,112,0x5400,??0?$WindowAverageDutyCycle@$00@RBX@@QAE@VInterval@Time@1@@Z
 0x00a71750,91,0x5400,sub_A71750
 0x00a717b0,103,0x5400,sub_A717B0
 0x00a71820,162,0x5400,sub_A71820
 0x00a718d0,169,0x5400,sub_A718D0
-0x00a71980,101,0x5400,sub_A71980
+0x00a71980,101,0x5400,??0?$RunningAverageDutyCycle@$00@RBX@@QAE@NH@Z
 0x00a719f0,78,0x5400,sub_A719F0
 0x00a71a40,587,0x5000,_ZN3RBX13TaskScheduler3JobC2EPKcN5boost10shared_ptrINS0_7ArbiterEEENS_4Time8IntervalE
 0x00a71c90,521,0x5400,_ZN3RBX13TaskScheduler3Job8postStepENS0_10StepResultE
@@ -36008,7 +36008,7 @@ address,size,flags,name
 0x00a71fd0,176,0x5400,sub_A71FD0
 0x00a72080,450,0x5400,fptc
 0x00a72250,143,0x5400,sub_A72250
-0x00a722e0,18,0x5400,sub_A722E0
+0x00a722e0,18,0x5400,?nowFast@Time@RBX@@SA?AV12@XZ
 0x00a72300,20,0x5400,_ZN3RBX4Time10nowFastSecEv
 0x00a72320,19,0x5400,??GRBX@@YA?AVInterval@Time@0@ABV120@0@Z
 0x00a72340,357,0x5400,sub_A72340
@@ -36026,7 +36026,7 @@ address,size,flags,name
 0x00a72af0,68,0x5400,sub_A72AF0
 0x00a72b40,106,0x5400,sub_A72B40
 0x00a72bc0,50,0x5400,?AddPlace@RbxDbgInfo@RBX@@SAXJ@Z
-0x00a72c00,75,0x5400,sub_A72C00
+0x00a72c00,75,0x5400,_ZN3RBX10RbxDbgInfo11RemovePlaceEl
 0x00a72c50,29,0x5400,sub_A72C50
 0x00a72c70,29,0x5400,sub_A72C70
 0x00a72c90,29,0x5400,sub_A72C90
@@ -36898,7 +36898,7 @@ address,size,flags,name
 0x00b07460,59,0x5400,sub_B07460
 0x00b074a0,17,0x5400,sub_B074A0
 0x00b074c0,28,0x5400,sub_B074C0
-0x00b074e0,5,0x5480,sub_B074E0
+0x00b074e0,5,0x54c0,j_?get_pool@?$singleton_pool@VXmlAttribute@@$0BI@Udefault_user_allocator_malloc_free@boost@@Vmutex@3@$0CA@$0A@@boost@@CAAAUpool_type@12@XZ
 0x00b074f0,12,0x5400,sub_B074F0
 0x00b07500,5,0x54c0,j_?get_pool@?$singleton_pool@VXmlElement@@$0CI@Udefault_user_allocator_malloc_free@boost@@Vmutex@3@$0CA@$0A@@boost@@CAAAUpool_type@12@XZ
 0x00b07510,12,0x5400,sub_B07510
@@ -41627,7 +41627,7 @@ address,size,flags,name
 0x00b3c2e0,1,0x5440,nullsub_9
 0x00b3c2f0,1,0x5440,nullsub_10
 0x00b3c300,53,0x5400,sub_B3C300
-0x00b3c340,10,0x5400,sub_B3C340
+0x00b3c340,10,0x5400,??__Froot@?1??rootDescriptor@ClassDescriptor@Reflection@RBX@@SAAAV123@XZ@YAXXZ
 0x00b3c350,10,0x5400,sub_B3C350
 0x00b3c360,1,0x5440,nullsub_11
 0x00b3c370,1,0x5440,nullsub_170
@@ -42470,7 +42470,7 @@ address,size,flags,name
 0x00b40b50,11,0x5400,??__Ftype@?1???$getSingleton@_N@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
 0x00b40b60,11,0x5400,??__Ftype@?1???$getSingleton@M@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
 0x00b40b70,11,0x5400,??__Ftype@?1???$getSingleton@N@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
-0x00b40b80,11,0x5400,sub_B40B80
+0x00b40b80,11,0x5400,??__Ftype@?1???$getSingleton@VContentId@RBX@@@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
 0x00b40b90,11,0x5400,??__Ftype@?1???$getSingleton@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
 0x00b40ba0,11,0x5400,??__Ftype@?1???$getSingleton@VVector3@G3D@@@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ
 0x00b40bb0,11,0x5400,??__Ftype@?1???$getSingleton@VVector3int16@G3D@@@Type@Reflection@RBX@@SAABV012@XZ@YAXXZ

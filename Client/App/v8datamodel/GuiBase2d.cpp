@@ -66,6 +66,16 @@ namespace RBX {
 		return true;
 	}
 
+	// mac: 0x3F6380 (31B, ZTV slot 37; raw 3F6393 call __ZNK3RBX9GuiBase2d9
+	// getRect2DEv tail with __stdcall retn 4 = the sret artifact):
+	// getChildRect2D forwards to getRect2D, full stop.
+	// STUB: PLAYER 0x006bd920
+	// STUB: STUDIO 0x0083aa70
+	G3D::Rect2D GuiBase2d::getChildRect2D() const
+	{
+		return getRect2D();
+	}
+
 	// mac: 0x6E4C4C (266B).
 	// STUB: PLAYER 0x007bc5d0
 	// STUB: STUDIO 0x008d9000
@@ -107,16 +117,6 @@ namespace RBX {
 			y0 < absolutePosition.y ? y0 : absolutePosition.y,
 			x0 > absolutePosition.x ? x0 : absolutePosition.x,
 			y0 > absolutePosition.y ? y0 : absolutePosition.y);
-	}
-
-	// mac: 0x3F6380 (31B, ZTV slot 37; raw 3F6393 call __ZNK3RBX9GuiBase2d9
-	// getRect2DEv tail with __stdcall retn 4 = the sret artifact):
-	// getChildRect2D forwards to getRect2D, full stop.
-	// STUB: PLAYER 0x006bd920
-	// STUB: STUDIO 0x0083aa70
-	G3D::Rect2D GuiBase2d::getChildRect2D() const
-	{
-		return getRect2D();
 	}
 
 	// sub_6E501D (101B): the GCC-UNNAMED static behind handleResize's

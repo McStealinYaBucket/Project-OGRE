@@ -22,10 +22,35 @@ namespace RBX {
 		// tempEdges default-constructs (binary Array::Array at +4).
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	SpanningTree::~SpanningTree()
 	{
 		RBXASSERT(size == 0);
 	}
+
+
+
+
+
+
+
+
 
 	// STUB: PLAYER 0x0099a1b0
 	// STUB: STUDIO 0x00a5a460
@@ -47,16 +72,13 @@ namespace RBX {
 	void SpanningTree::removeSpanningTreeEdge(SpanningEdge* removeEdge)
 	{
 		RBXASSERT(removeEdge->inSpanningTree());  // :74
-
 		SpanningNode* newParentNode = NULL;
 		SpanningEdge* heaviest = findHeaviestDownstream(
 			removeEdge->getChildSpanningNode(), newParentNode);
-
 		swapTree(removeEdge, heaviest, newParentNode);
 	}
-
-	// STUB: PLAYER 0x0099a140
-	// STUB: STUDIO 0x00a5a3f0
+	// FUNCTION: PLAYER 0x0099a140
+	// FUNCTION: STUDIO 0x00a5a3f0
 	void SpanningTree::swapTree(SpanningEdge* deactivate, SpanningEdge* activate,
 		SpanningNode* newParent)
 	{
@@ -77,8 +99,8 @@ namespace RBX {
 		}
 	}
 
-	// STUB: PLAYER 0x00999970
-	// STUB: STUDIO 0x00a59c20
+	// FUNCTION: PLAYER 0x00999970
+	// FUNCTION: STUDIO 0x00a59c20
 	void SpanningTree::removeEdge(SpanningEdge* edge)
 	{
 		RBXASSERT(edge->inSpanningTree());  // :106
@@ -90,9 +112,8 @@ namespace RBX {
 
 		RBXASSERT(!edge->inSpanningTree());  // :113
 	}
-
-	// STUB: PLAYER 0x00999a40
-	// STUB: STUDIO 0x00a59cf0
+	// FUNCTION: PLAYER 0x00999a40
+	// FUNCTION: STUDIO 0x00a59cf0
 	void SpanningTree::addEdge(SpanningEdge* edge, SpanningNode* newParent)
 	{
 		RBXASSERT(!edge->inSpanningTree());  // :119
@@ -104,8 +125,8 @@ namespace RBX {
 		RBXASSERT(edge->inSpanningTree());  // :125
 	}
 
-	// STUB: PLAYER 0x00999f00
-	// STUB: STUDIO 0x00a5a1b0
+	// FUNCTION: PLAYER 0x00999f00
+	// FUNCTION: STUDIO 0x00a5a1b0
 	void SpanningTree::findAndDeactivateEdges(SpanningNode* child,
 		SpanningEdge* deactivate, G3D::Array<SpanningEdge*>& toActivate)
 	{
@@ -128,8 +149,8 @@ namespace RBX {
 		}
 	}
 
-	// STUB: PLAYER 0x00999b10
-	// STUB: STUDIO 0x00a59dc0
+	// FUNCTION: PLAYER 0x00999b10
+	// FUNCTION: STUDIO 0x00a59dc0
 	void SpanningTree::activateEdges(SpanningNode* child,
 		const G3D::Array<SpanningEdge*>& toActivate)
 	{
@@ -137,7 +158,6 @@ namespace RBX {
 		for (int i = 0; i < toActivate.size(); ++i)
 		{
 			SpanningEdge* e = toActivate[i];
-
 			RBXASSERT(!e->inSpanningTree());  // :161
 
 			addEdge(e, newParent);

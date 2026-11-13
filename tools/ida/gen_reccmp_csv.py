@@ -59,6 +59,9 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
     name alone for a C function or static); <t>-symbols.csv has a type column for them.
   - <t>-libdata.csv keeps every row of the previous file that still resolves and nothing contradicts.
   - Vtable rows carry the original's slot count (vt_slots), also for `// VTABLE:` markers.
+  - Every vftable a --json run paired votes its slot functions (vt_slot_refs, one vote per slot).
+  - A non-STUB marker reccmp could not pair (its log <json>.txt says 'Debug data out of sync') does not
+    keep data_rows off its address.
   - Typing: an oracle-named original is library only in a third-party namespace (third_party); otherwise
     library unless the name mentions rbx/RBX.
 A generated file that reccmp-project.yml does not list is reported, so it can be added there.
@@ -637,6 +640,51 @@ def marked(target, kinds=("FUNCTION", "STUB", "TEMPLATE", "SYNTHETIC", "LIBRARY"
     return out
 
 
+def vt_slot_refs(orig, exe, json_path, view, code):
+    """{our function node: [original address, ...]} from the vftables a reccmp --json run paired (type 5
+    rows: a VTABLE marker or a vtable CSV row, i.e. RTTI class): slot i of ours names slot i of the
+    original, up to the first slot that is not code in our image or the next symbol of ours. Weighs like
+    one call site per slot, so it fills slot functions nothing else pairs (ICF-shared EnumDesc<T> bodies)
+    but never outvotes a body reccmp proved at 100%."""
+    import json
+    rpe = pefile.PE(exe, fast_load=True)
+    rbase, rimg = rpe.OPTIONAL_HEADER.ImageBase, rpe.get_memory_mapped_image()
+    isfunc = lambda a: view[a][0] == "FUNCTION" or view[a][0] == "-" and view[a][1] and a in code
+    refs = {}
+    with open(json_path) as f:
+        data = json.load(f)["data"]
+    for e in data:
+        if e.get("type") != 5 or not e.get("recomp"):
+            continue
+        o, r = int(e["address"], 16), int(e["recomp"], 16)
+        if view.get(r, ("",))[0] != "VTABLE":
+            continue
+        for i in range(0x400):
+            if r + 4 * i + 4 - rbase > len(rimg) or (i and r + 4 * i in view):
+                break
+            sr = struct.unpack_from("<I", rimg, r - rbase + 4 * i)[0]
+            if sr not in view or not isfunc(sr) or not orig.in_text(orig.u32(o + 4 * i)):
+                break
+            refs.setdefault(sr, []).append(orig.u32(o + 4 * i))
+    return refs
+
+
+def markers_above(path, line, target):
+    """Original addresses of the non-STUB markers in the comment block right above `line` (1-based)."""
+    try:
+        with open(path, errors="replace") as f:
+            lines = f.read().split("\n")
+    except OSError:
+        return set()
+    out, i = set(), line - 2
+    while i >= 0 and lines[i].strip().startswith("//"):
+        m = re.match(r"\s*//\s*(FUNCTION|TEMPLATE|SYNTHETIC|LIBRARY):\s*" + target + r"\s+0x([0-9a-fA-F]+)", lines[i])
+        if m:
+            out.add(int(m.group(2), 16))
+        i -= 1
+    return out
+
+
 def sticky(path, new, view, kept, held, used_sym, orig, labels):
     """new + the rows of the previous <t>-libdata.csv that still hold: its symbol (or a static's proc
     name) is still in our PDB, no new row or other source takes its address or its symbol, and a
@@ -803,6 +851,16 @@ def gen(target, build=BUILD, json_path=None):
                 names[lib].append((f"{a:08x}", "library", size_of[a], n))
     labels = sorted(labels)
     mk = marked(target)
+    # A marker reccmp could not pair ('Debug data out of sync with function near: <file>:<line>' in the
+    # run's log, <json minus .json>.txt: one template line whose instantiations carry two __FILE__
+    # spellings) leaves its address to a position or vftable-slot row. STUB markers stay skipped.
+    failed = set()
+    for jp in (json_path or "").split(",") if json_path else []:
+        log = jp[:-5] + ".txt"
+        if os.path.exists(log):
+            with open(log, errors="replace") as f:
+                for m in re.finditer(r"Debug data out of sync with function near: (.+?):(\d+)\.", f.read()):
+                    failed |= markers_above(m.group(1), int(m.group(2)), target)
     named, nstats = {}, {}
     if have_build and not os.environ.get("OGRE_NO_SIGPAIR"):
         named, nstats = oracle_pairs(oracle, view, kept - claimed - mk, used)
@@ -842,6 +900,7 @@ def gen(target, build=BUILD, json_path=None):
                                 got[o, r] = "100" if full else nxt[j] if j < len(nxt) else None
             jpairs = [(o, r, size_of[o], end) for (o, r), end in sorted(got.items())]
         skip = mk | {int(row[0], 16) for rows in libs.values() for row in rows}
+        skip -= failed
         if os.environ.get("OGRE_NO_SIGPAIR"):  # the method before signature pairing, for A/B scoring
             skip |= {a for a, (d, _) in oracle.items() if "RBX" in d}
         datarows = data_rows(im, recomp, [p for p in pairs if p[2]], view, code, kept, skip, labels=labels, prefer=prefer, oracle_lib=oracle_lib)
@@ -857,6 +916,8 @@ def gen(target, build=BUILD, json_path=None):
             refs = {}
             for jp in json_path.split(","):
                 for node, oas in aligned_refs(im, recomp, jp, view).items():
+                    refs.setdefault(node, []).extend(oas)
+                for node, oas in vt_slot_refs(im, recomp, jp, view, code).items():
                     refs.setdefault(node, []).extend(oas)
             more = data_rows(im, recomp, [p for p in pairs if p[2]] + jpairs, view, code, kept, skip, refs,
                              labels, prefer, oracle_lib)
@@ -918,6 +979,10 @@ def gen(target, build=BUILD, json_path=None):
         dstats["paired"] = dstats.get("paired", 0) + 1
         typ = "library" if src == "lib:" or not roblox(nm) else ""
         names["symbols"].append((f"{a:08x}", nm if c_name else dem, "" if c_name else d, typ))
+    # An oracle label (no symbol) at an address a marker owns would rename the original under the marker:
+    # a SYNTHETIC/TEMPLATE nameref then looks up a name the original no longer carries and never pairs
+    # (AssemblyStage's deleting destructor 0x008ea3c0 under "~AssemblyStage() [D0, ...]"). The marker names it.
+    names["symbols"] = [r for r in names["symbols"] if r[2] or int(r[0], 16) not in mk]
     names["symbols"].sort()
     for lib, rows in names.items():
         path = os.path.join(ROOT, "reccmp", f"{t}-{lib}.csv")
@@ -939,7 +1004,7 @@ def gen(target, build=BUILD, json_path=None):
 
     if datarows:
         path = os.path.join(ROOT, "reccmp", f"{t}-libdata.csv")
-        rows, nsticky = sticky(path, datarows, view, kept, mk | claimed | {int(r[0], 16) for r in names["symbols"]},
+        rows, nsticky = sticky(path, datarows, view, kept, (mk - failed) | claimed | {int(r[0], 16) for r in names["symbols"]},
                                {r[2] for r in names["symbols"] if r[2]} | used_sym, im, labels)
         # a VTABLE marker gets the original's slot count the same way
         have = {int(r[0], 16) for r in rows}

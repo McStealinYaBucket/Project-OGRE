@@ -1,32 +1,18 @@
-/* App/v8world/IMoving.cpp -- October 2013.
-   Bodies per decomp (see header EAs). Asserts carried with their
-   IMoving.cpp line numbers (18/40/50) + IMoving.h:33; RBXASSERT maps to the
-   tree's FLog::Asserts-gated crash assert (live in test exes).
-   TODO: FastLog GfxClusters/GfxClustersFull calls in notifyMoved (0x5767DE)
-   and onMovingHeartbeat (0x5769D4); onMovingHeartbeat body itself.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8world/IMoving.cpp */
+/* App/v8world/IMoving.cpp -- October 2013. 2013 asserts: makeMoving :18, checkSleep :40/:50, IMovingManager :87-88/:109;
+   the dtor's is inline at IMoving.h:33 (PartInstance::~PartInstance 0x00723190). TODO: FastLog GfxClusters calls. */
 
 #include "stdafx.h"
 
 #include "V8World/IMoving.h"
 #include "rbx/Debug.h"
-
 namespace RBX {
-
 	IMoving::IMoving()
 		: iMovingManager(NULL)
 		, stepsToSleep(0)
 	{
 	}
-
-	IMoving::~IMoving()
-	{
-		// IMoving.h:33: must be detached before destruction.
-		RBXASSERT(iMovingManager == NULL);
-	}
-
-	// STUB: PLAYER 0x00822e00
-	// STUB: STUDIO 0x00916d20
+	// FUNCTION: PLAYER 0x00822e00
+	// FUNCTION: STUDIO 0x00916d20
 	void IMoving::makeMoving()
 	{
 		RBXASSERT(stepsToSleep > 0);  // IMoving.cpp:18
@@ -46,24 +32,27 @@ namespace RBX {
 			makeMoving();
 	}
 
-	// STUB: PLAYER 0x00822bc0
-	// STUB: STUDIO 0x00916960
-	int IMoving::checkSleep()
+
+	// FUNCTION: PLAYER 0x00822bc0
+	// FUNCTION: STUDIO 0x00916960
+	bool IMoving::checkSleep()
 	{
 		RBXASSERT(stepsToSleep > 0);  // IMoving.cpp:40
 		if (!isInContinousMotion())
 		{
-			if (stepsToSleep >= 2)
+			if (stepsToSleep > 1)
 			{
 				--stepsToSleep;
-				return 0;
+				return false;
 			}
+
+
 			RBXASSERT(stepsToSleep == 1);  // IMoving.cpp:50
 			stepsToSleep = 0;
 			onSleepingChanged(true);
-			return 1;
+			return true;
 		}
-		return 0;
+		return false;
 	}
 
 	// STUB: PLAYER 0x00822ef0

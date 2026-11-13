@@ -61,9 +61,7 @@ namespace RBX
 		{
 			BOOST_STATIC_ASSERT((boost::is_base_of<Service, ServiceClass>::value));
 			BOOST_STATIC_ASSERT((boost::is_base_of<Instance, ServiceClass>::value));
-
 			size_t index = getClassIndex<ServiceClass>();
-
 			ServiceClass* service;
 			if (index+1>serviceArray.size())
 			{
@@ -77,10 +75,8 @@ namespace RBX
 				if (service!=NULL)
 					return service;
 			}
-
 			if (ServiceClass::isNullClassName())
 				return NULL;
-
 			// See if the service is in the className map
 			shared_ptr<Instance> i = findServiceByClassName(ServiceClass::className());
 			if (!i)
@@ -89,27 +85,22 @@ namespace RBX
 			serviceArray[index] = i;
 			return service;
 		}
-
 		//mutable RBX::reentrant_concurrency_catcher threadGuard;
 		template<class ServiceClass>
 		ServiceClass* create() const
 		{
 			//RBX::reentrant_concurrency_catcher::scoped_lock lock(threadGuard);
-
 			ServiceClass* service = this->find<ServiceClass>();
 			if (service==NULL)
 			{
 				// If all else fails, create the service and put it in the table and map
 				shared_ptr<ServiceClass> s = Creatable<Instance>::create<ServiceClass>();
-
 				service = s.get();
-
 				// setParent can throw, so do not mutate any internal state until
 				// setParent has returned without throwing.
 				service->setAndLockParent(const_cast<ServiceProvider*>(this));
 				size_t index = getClassIndex<ServiceClass>();
 				serviceArray[index] = s;				
-
 				// By now onDescendantAdded will have been called, which will add the service to serviceMap:
 				RBXASSERT((ServiceClass::className()==RBX::Name::getNullName()) || serviceMap.find(&ServiceClass::className())!=serviceMap.end());
 				

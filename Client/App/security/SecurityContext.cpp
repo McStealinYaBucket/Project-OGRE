@@ -1,18 +1,13 @@
 #include "stdafx.h"
-
 #include "security/SecurityContext.h"
 #include "rbx/Thread.hpp"
 #include "rbx/Debug.h"
-
-namespace RBX
-{
-	namespace Security
-	{
+namespace RBX {
+	namespace Security {
 		bool Context::isInRole(Identities identity, Permissions p)
 		{
 			if (p == None)
 				return true;
-
 			switch (identity)
 			{
 			case Anonymous:
@@ -52,12 +47,6 @@ namespace RBX
 			return *t;
 		}
 
-		// mac: 0x546150 (126B, batch439).
-		void Context::requirePermission(Permissions permission, const char* operation) const
-		{
-			if (!isInRole(identity, permission))
-				throw RBX::runtime_error("");
-		}
 
 
 		void Context::tssCleanup(Context*)

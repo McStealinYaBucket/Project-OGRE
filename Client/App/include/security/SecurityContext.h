@@ -67,10 +67,15 @@ namespace RBX
 			static Context& current();
 
 			// Throws an exception if the current thread's Context doesn't have the requested Role.
-			// mac: 0x546150 (126B, batch439): out-of-line in the binary (called
-			// from Event connect/wait + Instance security checks); always
-			// throws an EMPTY runtime_error (no _DEBUG verbose arm).
-			void requirePermission(Permissions permission, const char* operation = 0) const;
+			// mac: 0x546150 (126B, batch439); always throws an EMPTY runtime_error. Inline here: Windows
+			// inlines it into Bridge<EventInstance>::on_index 0x0087ee40 and keeps an out-of-line copy.
+			// FUNCTION: PLAYER 0x00527310
+			// FUNCTION: STUDIO 0x005d7ec0
+			void requirePermission(Permissions permission, const char* operation = 0) const
+			{
+				if (!isInRole(identity, permission))
+					throw RBX::runtime_error("");
+			}
 
 			bool hasPermission(Permissions permission)
 			{

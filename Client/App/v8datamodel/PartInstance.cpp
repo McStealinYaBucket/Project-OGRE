@@ -8,6 +8,7 @@
 
 #include "V8DataModel/PartInstance.h"
 #include "V8DataModel/ModelInstance.h"
+#include "V8DataModel/Surface.h"
 #include "V8DataModel/FWService.h"
 #include "Util/Utilities.h"
 #include "Util/Math.h"
@@ -315,7 +316,9 @@ namespace RBX {
 		}
 	}
 
-	// [77] +0x134 onCameraNear 0x444BBA (93B, batch265).
+	// [77] +0x134 onCameraNear 0x444BBA (93B, batch265). 2013: CameraSubject slot +0x14.
+	// STUB: PLAYER 0x00720ae0
+	// STUB: STUDIO 0x007bc500
 	void PartInstance::onCameraNear(float distance)
 	{
 		if (distance < 3.0f)
@@ -416,6 +419,16 @@ namespace RBX {
 		}
 	}
 
+	// vtable+0xd4. 2013 body: grid-ray hit against the primitive's extents, then
+	// Surface(this, normalId) through the hidden return pointer (ctor 0x009b1a20).
+	// STUB: PLAYER 0x0071c220
+	// STUB: STUDIO 0x007b7c80
+	Surface PartInstance::getSurface(const RbxRay& gridRay, int& surfaceId)
+	{
+		STUB(0x0071c220);
+		return Surface(this, NORM_X);
+	}
+
 	/* mac: 0x4427FE (batch252: prim+0xAC deref + prim+253 byte -- the
 	anchored flag; Primitive.h +252/+253 labels swapped to match). */
 	bool PartInstance::getAnchored() const
@@ -474,7 +487,9 @@ namespace RBX {
 		return primitive->getCoordinateFrame();
 	}
 
-	// [50] +0xC8 getLocation 0x37D7D0 (61B).
+	// [50] +0xC8 getLocation 0x37D7D0 (61B). 2013: IHasLocation slot (vtordisp thunk 0x00723590).
+	// STUB: PLAYER 0x00723520
+	// STUB: STUDIO 0x0079f3b0
 	G3D::CoordinateFrame PartInstance::getLocation()
 	{
 		return getCoordinateFrame();
@@ -683,11 +698,26 @@ namespace RBX {
 	   euler-degrees <-> rotation via from/toEulerAnglesXYZ; setter funnels through
 	   virtual setCoordinateFrame (which raises CFrame+Position+Rotation).
 	   destroyJoints/safeMove/join (slots 61/60) TODO: methods absent from tree. */
+	// IMoving override.
+	// STUB: PLAYER 0x0071aff0
+	// STUB: STUDIO 0x007b6b30
+	bool PartInstance::isInContinousMotion()
+	{
+		return continousMotion;
+	}
 	// STUB: PLAYER 0x0071bc70
 	// STUB: STUDIO 0x007b76d0
 	G3D::Vector3 PartInstance::getTranslationUi() const
 	{
 		return primitive->getCoordinateFrame().translation;
+	}
+	// STUB: PLAYER 0x0071bc80
+	// STUB: STUDIO 0x007b76e0
+	G3D::Vector3 PartInstance::getRotationUi() const
+	{
+		float x, y, z;
+		primitive->getCoordinateFrame().rotation.toEulerAnglesXYZ(x, y, z);
+		return G3D::Vector3(G3D::toDegrees(x), G3D::toDegrees(y), G3D::toDegrees(z));
 	}
 	// STUB: PLAYER 0x00720db0
 	// STUB: STUDIO 0x007bc8d0
@@ -700,13 +730,13 @@ namespace RBX {
 			setCoordinateFrame(current);
 		}
 	}
-	// STUB: PLAYER 0x0071bc80
-	// STUB: STUDIO 0x007b76e0
-	G3D::Vector3 PartInstance::getRotationUi() const
+	/* Sleep/motion/buoyancy (moverrides EAs; MI wiring TODO, see header).
+	   getSleeping reads the +0x68 store; isInContinousMotion (0x444E3A,
+	   non-const per mangling) reads the +0x101 flag; onBuoyancyChanged
+	   (0x444DF2) fires the +0x144 signal. */
+	bool PartInstance::getSleeping() const
 	{
-		float x, y, z;
-		primitive->getCoordinateFrame().rotation.toEulerAnglesXYZ(x, y, z);
-		return G3D::Vector3(G3D::toDegrees(x), G3D::toDegrees(y), G3D::toDegrees(z));
+		return sleepingState != 0;
 	}
 	// STUB: PLAYER 0x00720e70
 	// STUB: STUDIO 0x007bc990
@@ -720,18 +750,9 @@ namespace RBX {
 			setCoordinateFrame(current);
 		}
 	}
-	/* Sleep/motion/buoyancy (moverrides EAs; MI wiring TODO, see header).
-	   getSleeping reads the +0x68 store; isInContinousMotion (0x444E3A,
-	   non-const per mangling) reads the +0x101 flag; onBuoyancyChanged
-	   (0x444DF2) fires the +0x144 signal. */
-	bool PartInstance::getSleeping() const
-	{
-		return sleepingState != 0;
-	}
-	bool PartInstance::isInContinousMotion()
-	{
-		return continousMotion;
-	}
+	// IMoving override (2013 slot is a `this+0xec` jump into the signal, 0x00439b20).
+	// STUB: PLAYER 0x00722a80
+	// STUB: STUDIO 0x007be1f0
 	void PartInstance::onBuoyancyChanged(bool buoyant)
 	{
 		buoyancyChangedSignal(buoyant);
@@ -766,6 +787,9 @@ namespace RBX {
 		const OnDemandPartInstance* od = static_cast<const OnDemandPartInstance*>(onDemandRead());
 		return od != NULL && od->touchTransmitter != NULL;
 	}
+	// IMoving override.
+	// STUB: PLAYER 0x00726c10
+	// STUB: STUDIO 0x007c2140
 	bool PartInstance::reportTouches() const
 	{
 		// Non-const Write calls from a const method mirror the binary (which calls
@@ -835,6 +859,9 @@ namespace RBX {
 		if (sleeping)
 			interpolatedCFrame.clearHistory();
 	}
+	// IMoving override.
+	// STUB: PLAYER 0x007228d0
+	// STUB: STUDIO 0x007be040
 	void PartInstance::onClumpChanged()
 	{
 		if (onDemandRead())
@@ -860,6 +887,9 @@ namespace RBX {
 	{
 		networkIsSleeping = value;
 	}
+	// IMoving override.
+	// STUB: PLAYER 0x0071bee0
+	// STUB: STUDIO 0x007b7940
 	void PartInstance::onNetworkIsSleepingChanged()
 	{
 		interpolatedCFrame.setRenderedFrame(primitive->getCoordinateFrame());
@@ -926,7 +956,9 @@ namespace RBX {
 		return BLOCK_PART;
 	}
 
-	/* mac: 0x44CA30: self (subclasses with children override). */
+	/* mac: 0x44CA30: self (subclasses with children override). 2013: IHasPrimaryPart slot. */
+	// FUNCTION: PLAYER 0x00723500
+	// FUNCTION: STUDIO 0x0079f430
 	PartInstance* PartInstance::getPrimaryPart()
 	{
 		return this;
@@ -1007,13 +1039,17 @@ namespace RBX {
 		return primitive->getSize();
 	}
 
-	// [52] +0xD0 getRenderSize 0x280400 (31B).
+	// [52] +0xD0 getRenderSize 0x280400 (31B). 2013: CameraSubject slot +0x10.
+	// STUB: PLAYER 0x00723560
+	// STUB: STUDIO 0x0079f410
 	G3D::Vector3 PartInstance::getRenderSize()
 	{
 		return getPartSizeUi();
 	}
 
-	// [51] +0xCC getRenderLocation 0x2803E0 (31B).
+	// [51] +0xCC getRenderLocation 0x2803E0 (31B). 2013: CameraSubject slot +0x0c.
+	// STUB: PLAYER 0x007235a0
+	// STUB: STUDIO 0x0079f3f0
 	G3D::CoordinateFrame PartInstance::getRenderLocation()
 	{
 		G3D::CoordinateFrame out;
@@ -1428,6 +1464,39 @@ namespace RBX {
 			return rootRendering * composed;
 		}
 		return interpolatedCFrame.renderedFrame;
+	}
+
+	// IAdornable vtable+0x04 (0x00b4c704). Body not written yet.
+	// STUB: PLAYER 0x0071d570
+	// STUB: STUDIO 0x007b8fe0
+	bool PartInstance::shouldRender3dAdorn() const
+	{
+		STUB(0x0071d570);
+		return false;
+	}
+
+	// IAdornable vtable+0x20. Body not written yet.
+	// STUB: PLAYER 0x0071ed40
+	// STUB: STUDIO 0x007ba790
+	void PartInstance::render3dAdorn(RBX::Adorn* adorn)
+	{
+		STUB(0x0071ed40);
+	}
+
+	// IAdornable vtable+0x28. Body not written yet.
+	// STUB: PLAYER 0x00720340
+	// STUB: STUDIO 0x007bbd90
+	void PartInstance::render3dSelect(RBX::Adorn* adorn, SelectState selectState)
+	{
+		STUB(0x00720340);
+	}
+
+	// CameraSubject vtable+0x18 (0x00b4c6d8). Body not written yet.
+	// STUB: PLAYER 0x007235c0
+	// STUB: STUDIO 0x0079fc10
+	void PartInstance::getCameraIgnorePrimitives(std::vector<const Primitive*>& primitives)
+	{
+		STUB(0x007235c0);
 	}
 
 } // namespace RBX

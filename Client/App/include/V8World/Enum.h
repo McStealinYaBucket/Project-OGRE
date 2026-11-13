@@ -36,12 +36,16 @@ namespace RBX {
 			return (isSleepingAssemblyState(state) || (state == REMOVING));
 		}
 
-		typedef enum {		CAN_NOT_THROTTLE = 0,
+		// One byte each on Windows (MSVC's `enum : unsigned char` extension, C4480; 2016 keeps it
+		// under #ifdef _WIN32): SleepStage 0x008e7e00 tests `byte [edge+8]` (edgeState) and
+		// `byte [edge+9]` == 3 (throttleType), and the Edge dtor 0x0081f840 finds prim0..index1 at
+		// +0x0c..+0x18. The Mac build keeps 4-byte enums (its Edge has them at +8/+12).
+		typedef enum : unsigned char {		CAN_NOT_THROTTLE = 0,
 							CAN_THROTTLE,
 							NUM_THROTTLE_TYPE,
 							UNDEFINED_THROTTLE	} ThrottleType;
 
-		typedef enum {		UNDEFINED,
+		typedef enum : unsigned char {		UNDEFINED,
 							STEPPING,
 							SLEEPING,
 							CONTACTING,

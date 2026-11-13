@@ -1140,8 +1140,8 @@ void SoundChannel::stop()
 	}
 }
 
-// FUNCTION: PLAYER 0x006ceaa0
-// FUNCTION: STUDIO 0x00812790
+// FUNCTION: PLAYER 0x006ceaa0 FOLDED
+// FUNCTION: STUDIO 0x00812790 FOLDED
 bool SoundChannel::askSetParent(const Instance* instance) const
 {
 	(void)instance;

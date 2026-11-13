@@ -154,7 +154,7 @@ namespace RBX {
 	{
 	public:
 		T value;
-		FWValue() : value() {}
+		FWValue() {}	// trivial in 2013: FWBase ctor 0x00619740 leaves 0x18..0x1a alone
 		FWValue(const T& v) : value(v) {}
 		operator const T&() const { return value; }
 		void set(const T& v, FWRef* ref);
@@ -221,13 +221,7 @@ namespace RBX {
 
 		shared_ptr<FWDictionnaryBase> holder;	// 0x0c (compared in operator==)
 		bool flag;								// 0x14 (FWValue re-entrancy guard; set 0x0052c139)
-		char m_pad0x15[0x18 - 0x15];			// 0x15 (FWBase ends at 0x18: ctor 0x00619740 stores 0x4..0x14)
-		// 2013 declares these three in FWInstance (its ctor 0x0061d7e0 stores 0x18 = 0, 0x19 = 0,
-		// 0x1a = 1; FWBase's ctor does not). They sit here so Instance's accessors through
-		// shared_ptr<FWBase> compile; the offsets are the same.
-		FWValue<bool> b21;						// 0x18 parent lock (setAndLockParent)
-		FWValue<bool> b22;						// 0x19 RobloxLocked (setRobloxLocked 0x0061d780)
-		FWValue<bool> b23;						// 0x1a Archivable (setIsArchivable 0x0061d7b0)
+		// FWBase ends at 0x18 (ctor 0x00619740 stores 0x4..0x14).
 	};
 
 	// Last-release hook: erase the entry from the holder dict, then delete.
@@ -272,10 +266,8 @@ namespace RBX {
 		// STUB: PLAYER 0x0061d7e0
 		// STUB: STUDIO 0x006f2210
 		FWInstance()
+			: b21(false), b22(false), b23(true)
 		{
-			b21 = false;
-			b22 = false;
-			b23 = true;
 			name.value = "Instance";
 		}
 
@@ -293,7 +285,13 @@ namespace RBX {
 		// hash_value overloads below are the binary-faithful entry points).
 		virtual size_t fwHash() const { return hash_value(*this); }
 
-		FWStringValue name;	// +24
+		// The ctor 0x0061d7e0 stores 0x18 = 0, 0x19 = 0, 0x1a = 1; FWBase's ctor does not. Before
+		// them it calls 0x0061c800 on this+0x18 (an empty base or member whose ctor registers pool
+		// stats once, flag 0x00de31dc, vectors at 0x00e1b9f4: likely Allocator<FWInstance>; not here).
+		FWValue<bool> b21;						// 0x18 parent lock (setAndLockParent, DataModel ctor)
+		FWValue<bool> b22;						// 0x19 RobloxLocked (setRobloxLocked 0x0061d780)
+		FWValue<bool> b23;						// 0x1a Archivable (setIsArchivable 0x0061d7b0)
+		FWStringValue name;						// 0x1c
 	};
 
 	// Marker subclass for per-class PV dicts/inits (no payload of its own —

@@ -3811,8 +3811,8 @@ struct __cppobj RBX::TaskScheduler::Job : boost::enable_shared_from_this<RBX::Ta
   unsigned __int8 joinEvent[8];         ///< boost::shared_ptr<RBX::CEvent>
   unsigned __int8 gap_EC[4];
   unsigned __int8 dutyCycle[112];       ///< RBX::RunningAverageDutyCycle<1>
-  unsigned __int8 sleepRate[48];        ///< RBX::RunningAverage<double,double>
-  unsigned __int8 runningAverageError[48]; ///< RBX::RunningAverage<double,double>
+  RBX::RunningAverage<double,double> sleepRate;
+  RBX::RunningAverage<double,double> runningAverageError;
   unsigned __int8 dutyCycleWindow[80];  ///< RBX::WindowAverageDutyCycle<1>
 };
 
@@ -3843,7 +3843,7 @@ struct __cppobj RBX::GcJob : RBX::DataModelJob
 /* 469 */
 struct __cppobj RBX::LibraryService
 {
-  void *context;                        ///< RBX::ScriptContext *
+  RBX::ScriptContext *context;
   bool librariesRegistered;
   unsigned __int8 gap_5[3];
   unsigned __int8 delayedQueue[12];     ///< std::list<boost::shared_ptr<RBX::LibraryService::LibraryStateObject>>
@@ -3900,5 +3900,257 @@ struct __cppobj RBX::DataModelArbiter : RBX::SimpleThrottlingArbiter
   unsigned __int8 m_unk0x830[8];        ///< boost::shared_ptr<RBX::Limits::Counter>
   unsigned __int8 lookup[484];          ///< array
   unsigned __int8 gap_A1C[4];
+};
+
+/* 476 */
+struct __cppobj boost::enable_shared_from_this<RBX::FWBase>
+{
+  unsigned __int8 weak_this_[8];        ///< boost::weak_ptr<RBX::FWBase>
+};
+
+/* 477 */
+struct __cppobj RBX::FWBase : boost::enable_shared_from_this<RBX::FWBase>
+{
+  void **__vftable;
+  unsigned __int8 holder[8];            ///< boost::shared_ptr<RBX::FWDictionnaryBase>
+  bool flag;
+  unsigned __int8 gap_15[3];
+};
+
+/* 478 */
+struct __cppobj RBX::FWInstance : RBX::FWBase
+{
+  unsigned __int8 b21[1];               ///< RBX::FWValue<bool>
+  unsigned __int8 b22[1];               ///< RBX::FWValue<bool>
+  unsigned __int8 b23[1];               ///< RBX::FWValue<bool>
+  unsigned __int8 gap_1B[1];
+  unsigned __int8 name[28];             ///< RBX::FWStringValue
+};
+
+/* 479 */
+struct __cppobj RBX::IFWHolder
+{
+  RBX::IFWHolder_vtbl *__vftable;
+};
+
+/* 480 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext> : RBX::Instance
+{
+};
+
+/* 481 */
+struct __cppobj RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>
+{
+};
+
+/* 482 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0> : RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>
+{
+};
+
+/* 483 */
+struct __cppobj RBX::IScriptFilter
+{
+  void **__vftable;
+};
+
+/* 484 */
+struct __cppobj RBX::Service
+{
+  bool isPublic;
+};
+
+/* 485 */
+struct __cppobj RBX::ScriptContext : RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>, RBX::IScriptFilter, RBX::Service
+{
+  unsigned __int8 gap_65[3];
+  unsigned __int8 globalStates[8];      ///< array
+  unsigned __int8 commandLineSandbox[28]; ///< RBX::Lua::WeakThreadRef
+  unsigned __int8 scripts[12];          ///< std::set<RBX::BaseScript *>
+  unsigned __int8 nextPendingScripts[8]; ///< RBX::Time
+  unsigned __int8 pendingScripts[16];   ///< std::vector<RBX::ScriptContext::ScriptStart>
+  unsigned __int8 loadingScripts[16];   ///< std::vector<RBX::ScriptContext::ScriptStart>
+  unsigned __int8 runService[8];        ///< boost::shared_ptr<RBX::RunService>
+  unsigned __int8 yieldEvent[4];        ///< boost::scoped_ptr<RBX::Lua::YieldingThreads>
+  unsigned __int8 waitingThreads[36];   ///< rbx::safe_queue<RBX::ScriptContext::WaitingThread>
+  bool m_unk0xf0;
+  bool robloxPlace;
+  bool scriptsDisabled;
+  bool contentClearing;
+  int gcFullStepThreshold;
+  int gcFrequencyBase;
+  unsigned __int8 gap_FC[4];
+  unsigned __int8 lastGcTime[8];        ///< RBX::Time
+  int lastGcKb;
+  unsigned __int8 statsItem[8];         ///< boost::shared_ptr<RBX::LuaStatsItem>
+  bool collectStats;
+  unsigned __int8 gap_115[3];
+  unsigned __int8 scriptStats[8];       ///< boost::shared_ptr<RBX::ScriptStats>
+  int reentrancy;
+  unsigned __int8 timedoutCount[4];     ///< rbx::atomic<int>
+  unsigned __int8 timoutSpan[8];        ///< RBX::Time::Interval
+  unsigned __int8 timoutTime[8];        ///< RBX::Time
+  unsigned __int8 timedout[4];          ///< rbx::atomic<int>
+  unsigned __int8 timeoutThread[4];     ///< boost::scoped_ptr<boost::thread>
+  unsigned __int8 timeoutMutex[8];      ///< boost::mutex
+  bool endTimoutThread;
+  unsigned __int8 gap_149[3];
+  unsigned __int8 checkTimeout[4];      ///< RBX::CEvent
+  RBX::RunningAverage<double,double> avgLuaGcInterval;
+  RBX::RunningAverage<double,double> avgLuaGcTime;
+  RBX::RunningAverage<double,double> avgLuaGcMem;
+  unsigned __int8 threadsResumedRate[64]; ///< RBX::RunningAverageTimeInterval<1>
+  RBX::RunningAverage<double,double> threadsThrottled;
+  unsigned __int8 errorSignal[4];       ///< rbx::signal<void __cdecl(std::string,std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 camelCaseViolation[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 libraryService[4];    ///< boost::scoped_ptr<RBX::LibraryService>
+  unsigned __int8 heartbeatConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 luaAllocator[4];      ///< boost::scoped_ptr<RBX::LuaAllocator>
+  unsigned __int8 gcJob[8];             ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  unsigned __int8 waitingScriptsJob[8]; ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  unsigned __int8 scriptStatsMap[12];   ///< std::map<std::string,RBX::ScriptContext::ScriptStatInformation>
+  int camelCaseViolationCount;
+  unsigned __int8 camelCaseViolationConnection[4]; ///< rbx::signals::connection
+};
+
+/* 486 */
+struct __cppobj RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel> : RBX::ServiceProvider
+{
+};
+
+/* 487 */
+struct __cppobj RBX::Reflection::Described<RBX::DataModel, char const *const RBX::sDataModel, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>, 27, 0> : RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>
+{
+};
+
+/* 488 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::DataModel, RBX::ServiceProvider, char const *const RBX::sDataModel, 27, 0> : RBX::Reflection::Described<RBX::DataModel, char const *const RBX::sDataModel, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>, 27, 0>
+{
+};
+
+/* 489 */
+struct __cppobj RBX::IDataState
+{
+  void **__vftable;
+};
+
+/* 490 */
+struct __cppobj RBX::IMetric
+{
+  void **__vftable;
+};
+
+/* 491 */
+struct __cppobj RBX::Diagnostics::Countable<RBX::DataModel>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 492 */
+struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX::ServiceProvider, char const *const RBX::sDataModel, 27, 0>, RBX::VerbContainer, RBX::IDataState, RBX::IMetric, RBX::DataModelArbiter
+{
+  unsigned __int8 lockVerb[4];          ///< std::auto_ptr<RBX::Verb>
+  unsigned __int8 screenshotSignal[4];  ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 screenshotReadySignal[4]; ///< rbx::signal<void __cdecl(std::string const &)>
+  unsigned __int8 screenshotUploadSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  unsigned __int8 graphicsQualityShortcutSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  unsigned __int8 allowedGearTypeChanged[4]; ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 m_unk0xae0[4];        ///< rbx::signal<void __cdecl(RBX::UIEvent const &)>
+  unsigned __int8 gameLoadedSignal[4];  ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 luaExceptionSignal[4]; ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 gap_AEC[4];
+  RBX::DataModel::MouseStats mouseStats;
+  unsigned __int8 playerHud[8];         ///< boost::shared_ptr<RBX::PlayerHUD>
+  unsigned __int8 coreGuiService[8];    ///< boost::shared_ptr<RBX::CoreGuiService>
+  unsigned __int8 localBackpack[8];     ///< boost::shared_ptr<RBX::LocalBackpack>
+  unsigned __int8 workspace[8];         ///< boost::shared_ptr<RBX::Workspace>
+  unsigned __int8 runService[8];        ///< boost::shared_ptr<RBX::RunService>
+  unsigned __int8 starterPack[8];       ///< boost::shared_ptr<RBX::StarterPackService>
+  unsigned __int8 starterGui[8];        ///< boost::shared_ptr<RBX::StarterGuiService>
+  unsigned __int8 guiRoot[8];           ///< boost::shared_ptr<RBX::GuiRoot>
+  unsigned __int8 guiRoot2[8];          ///< boost::shared_ptr<RBX::GuiRoot>
+  bool forceArrowCursor;
+  unsigned __int8 gap_BB9[3];
+  unsigned __int8 uiMessage[28];        ///< std::string
+  int drawId;
+  RBX::IMetric *tempMetric;
+  RBX::IMetric *networkMetric;
+  bool dirtyFlag;
+  bool isInitialized;
+  bool isContentLoaded;
+  unsigned __int8 gap_BE7[1];
+  unsigned __int8 m_unk0xbe8[96];       ///< array
+  int numPartInstances;
+  int numInstances;
+  int shutdownRequestedCount;
+  int physicsStepID;
+  bool isGameLoaded;
+  bool isPersonalServer;
+  unsigned __int8 gap_C5A[2];
+  void *game;                           ///< RBX::Game *
+  bool networkStatsWindowsOn;
+  unsigned __int8 gap_C61[3];
+  unsigned __int8 hackFlagSetMutex[8];  ///< boost::mutex
+  unsigned __int8 hackFlagSet[24];      ///< boost::unordered::unordered_set<unsigned int,boost::hash<unsigned int>,std::equal_to<unsigned int>,std::allocator<unsigned int> >
+  unsigned __int8 jobId[28];            ///< std::string
+  int write_requested;
+  int read_requested;
+  unsigned int writeRequestingThread;
+  unsigned __int8 itemChangedSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Reflection::PropertyDescriptor const *)>
+  unsigned __int8 requestShutdownCallback[32]; ///< boost::function<bool __cdecl(void)>
+  unsigned __int8 saveFinishedSignal[4]; ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 guiTargetInstance[8]; ///< boost::weak_ptr<RBX::Instance>
+  bool mouseOverGui;
+  bool suppressNavKeys;
+  unsigned __int8 gap_CDE[2];
+  unsigned __int8 genericJobsLock[24];  ///< RBX::mutex
+  unsigned __int8 genericJobs[88];      ///< boost::array<boost::shared_ptr<RBX::DataModel::GenericJob>,11>
+  unsigned __int8 debugLock[24];        ///< RBX::mutex
+  unsigned __int8 dataModelReportingData[12]; ///< std::map<std::string,int>
+  bool remoteBuildMode;
+  unsigned __int8 gap_D75[3];
+  unsigned __int8 serverSaveUrl[28];    ///< std::string
+  unsigned __int8 screenshotSEOInfo[28]; ///< std::string
+  unsigned __int8 videoSEOInfo[28];     ///< std::string
+  int placeID;
+  bool experimentalFeatures;
+  unsigned __int8 gap_DD1[3];
+  int placeVersion;
+  int creatorID;
+  int creatorType;                      ///< enum RBX::DataModel::CreatorType
+  int genre;                            ///< enum RBX::DataModel::Genre
+  int gearGenreSetting;                 ///< enum RBX::DataModel::GearGenreSetting
+  unsigned int allowedGearTypes;
+  unsigned __int8 guiBuilder[32];       ///< RBX::GuiBuilder (2013 size; ours is 0x24)
+  RBX::DataModel *parentDataModel;
+};
+
+/* 493 */
+struct __cppobj RBX::DataModel::MouseStats
+{
+  unsigned __int8 osMouseMove[64];      ///< RBX::RunningAverageTimeInterval<1>
+  unsigned __int8 mouseMove[64];        ///< RBX::RunningAverageTimeInterval<1>
+};
+
+/* 494 */
+struct __cppobj RBX::RunningAverage<double,double>
+{
+  unsigned __int8 buffer[8];            ///< boost::shared_ptr<boost::circular_buffer<double,std::allocator<double> > >
+  double lerp;
+  double lastSampleValue;
+  double averageValue;
+  double averageVariance;
+  bool firstTime;
+  unsigned __int8 gap_29[7];
+};
+
+/* 495 */
+struct RBX::IFWHolder_vtbl
+{
+  void (__thiscall *destroyFlyweight)(RBX::IFWHolder *this, RBX::FWBase *base);
+  RBX::FWBase *(__thiscall *valueUpdate)(RBX::IFWHolder *this, void *ref);
+  void (__thiscall *insertCopy)(RBX::IFWHolder *this, RBX::FWBase *base, void *ref);
+  bool (__thiscall *checkIfInDict)(RBX::IFWHolder *this, RBX::FWBase *base);
+  unsigned int (__thiscall *checkHash)(RBX::IFWHolder *this, RBX::FWBase *base);
 };
 

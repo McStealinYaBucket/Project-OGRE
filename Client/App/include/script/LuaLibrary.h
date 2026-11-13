@@ -73,7 +73,6 @@ namespace RBX { namespace Lua {
 	template<> void Bridge<Library>::on_newindex(Library& object,
 		const char* name, lua_State* L);
 	template<> int Bridge<Library>::on_index(lua_State* L);
-	template<> int Bridge<Library>::on_newindex(lua_State* L);
 	template<> int Bridge<Library>::on_gc(lua_State* L);
 	template<> int Bridge<Library>::on_eq(lua_State* L);
 	template<> int Bridge<Library>::on_tostring(lua_State* L);

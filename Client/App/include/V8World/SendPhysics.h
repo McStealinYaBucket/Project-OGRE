@@ -32,45 +32,27 @@
      +0x1C/+0x20 consumers, RoundRobinPhysicsSender and the World
      send-phase network flow all queue with the Network era).
    Original file: Client/App/v8world/SendPhysics.h (path inferred). */
-
 #pragma once
-
 #include <algorithm>
 #include <list>
 #include "rbx/signal.h"
 #include "rbx/atomic.h"
 #include "Util/ConcurrencyValidator.h"
-
 namespace RBX {
-
 	class Assembly;
 	class Primitive;
 	class SimJob;
 	class SimJobTracker;
-
 	class SendPhysics
 	{
 	public:
 		SendPhysics();                  // 0x599C1C (C1 0x599C12 tails it).
 		~SendPhysics();                 // 0x599D6E (D1 0x599D64 tails it).
-
-		// mac: 0x59A096: builds the moving root's SimJob (one per root
-		// assembly) and ++useCounts it; the +0x1C signal fires ONLY on
-		// the just-built arm, with the assembly's primitive. Assert
-		// "Mechanism::isMovingAssemblyRoot(a)" SendPhysics.cpp:53.
-		// Binary tail returns the job; nothing in the binary consumes
-		// it (port keeps the pointer return).
+		// mac: 0x59A096: builds the moving root's SimJob (one per root assembly) and ++useCounts it; the +0x1C signal fires ONLY on the just-built arm, with the assembly's primitive. Assert "Mechanism::isMovingAssemblyRoot(a)" SendPhysics.cpp:53. Binary tail returns the job; nothing in the binary consumes it (port keeps the pointer return).
 		SimJob* onMovingAssemblyRootAdded(Assembly* a);
-		// mac: 0x59A16C: --useCount; when it was 1, the +0x20 signal fires,
-		// destroySimJob unlinks/untracks, then ~SimJob + delete. No
-		// asserts in the binary (unguarded +100 read).
+		// mac: 0x59A16C: --useCount; when it was 1, the +0x20 signal fires, destroySimJob unlinks/untracks, then ~SimJob + delete. No asserts in the binary (unguarded +100 read).
 		void onMovingAssemblyRootRemoving(Assembly* a);
-
-		// mac: 0x59A1D6: next job cyclically; after the last comes the
-		// first (binary: when a2->next == &anchor it reads the
-		// anchor's first). Assert "!simJobs.empty()" is the 2013
-		// INCLUDE-file citation (SendPhysics.h:41): defined here as in 2013
-		// (the prior tree had it out of line in SendPhysics.cpp).
+		// mac: 0x59A1D6: next job cyclically; after the last comes the first (binary: when a2->next == &anchor it reads the anchor's first). Assert "!simJobs.empty()" is the 2013 INCLUDE-file citation (SendPhysics.h:41): defined here as in 2013 (the prior tree had it out of line in SendPhysics.cpp).
 		// STUB: PLAYER 0x005e3bd0
 		// STUB: STUDIO 0x0067b6e0
 		SimJob* nextSimJob(SimJob* after)

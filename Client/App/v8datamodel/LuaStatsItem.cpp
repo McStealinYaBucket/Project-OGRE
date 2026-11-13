@@ -23,6 +23,22 @@ namespace RBX {
 		setName("Lua");
 	}
 
+	// mac: 0x1ACB92 (batch610: avgInterval "%.2f msec" + avgTime "%.4f msec"
+	// + threshold "%.2f KB/gcFrequency" + resume-rate formatRate).
+	// STUB: PLAYER 0x008abb70
+	// STUB: STUDIO 0x009edc80
+	void LuaStatsItem::update()
+	{
+		ScriptContext* sc = context;
+		childAvgGcInterval->formatValue(sc->avgLuaGcInterval.value(), "%.2f msec",
+			sc->avgLuaGcInterval.value());
+		childAvgGcTime->formatValue(sc->avgLuaGcTime.value(), "%.4f msec",
+			sc->avgLuaGcTime.value());
+		childAvgMem->formatValue(sc->gcStepThreshold, "%.2f KB/gcFrequency",
+			sc->gcStepThreshold);
+		childThreadsResumed->formatRate(sc->threadsResumedRate);
+	}
+
 	// mac: 0x1ACA88 (batch581 order: disabled-bool, threads-intfn,
 	// ThreadsResumed, ThreadsThrottled-avg, AverageGcInterval/Time/Mem).
 	// STUB: PLAYER 0x008ac940
@@ -40,22 +56,6 @@ namespace RBX {
 		childAvgGcInterval = createChildItem("AverageGcInterval");
 		childAvgGcTime = createChildItem("AverageGcTime");
 		childAvgMem = createChildItem("AverageMemAlloc");
-	}
-
-	// mac: 0x1ACB92 (batch610: avgInterval "%.2f msec" + avgTime "%.4f msec"
-	// + threshold "%.2f KB/gcFrequency" + resume-rate formatRate).
-	// STUB: PLAYER 0x008abb70
-	// STUB: STUDIO 0x009edc80
-	void LuaStatsItem::update()
-	{
-		ScriptContext* sc = context;
-		childAvgGcInterval->formatValue(sc->avgLuaGcInterval.value(), "%.2f msec",
-			sc->avgLuaGcInterval.value());
-		childAvgGcTime->formatValue(sc->avgLuaGcTime.value(), "%.4f msec",
-			sc->avgLuaGcTime.value());
-		childAvgMem->formatValue(sc->gcStepThreshold, "%.2f KB/gcFrequency",
-			sc->gcStepThreshold);
-		childThreadsResumed->formatRate(sc->threadsResumedRate);
 	}
 
 } // namespace RBX

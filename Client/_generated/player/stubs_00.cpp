@@ -3,6 +3,14 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// void __cdecl RBX::registerNewLightAPI(void)
+// STUB: PLAYER 0x0075ed40
+extern "C" void ogre_stub_0075ed40()
+{
+	STUB(0x0075ed40);
+}
+#pragma comment(linker, "/alternatename:?registerNewLightAPI@RBX@@YAXXZ=_ogre_stub_0075ed40")
+
 // private: __thiscall RobloxExtraSpace::RobloxExtraSpace(class RobloxExtraSpace *)
 // STUB: PLAYER 0x00874f40
 extern "C" void ogre_stub_00874f40()
@@ -26,3 +34,11 @@ extern "C" void ogre_stub_009b1890()
 	STUB(0x009b1890);
 }
 #pragma comment(linker, "/alternatename:?writeEntry@Log@RBX@@QAEXW4Severity@12@PBD@Z=_ogre_stub_009b1890")
+
+// public: void __thiscall RBX::Limits::Counter::add(class RBX::Limits::Countable *)
+// STUB: PLAYER 0x009b90a0
+extern "C" void ogre_stub_009b90a0()
+{
+	STUB(0x009b90a0);
+}
+#pragma comment(linker, "/alternatename:?add@Counter@Limits@RBX@@QAEXPAVCountable@23@@Z=_ogre_stub_009b90a0")
