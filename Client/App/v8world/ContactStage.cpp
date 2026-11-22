@@ -24,76 +24,75 @@ namespace RBX {
 		world = worldArg;
 	}
 
-	// STUB: PLAYER 0x009aa810
-	// STUB: STUDIO 0x00a61860
+	// D0 0x009aa810 (SYNTHETIC in ContactStage.h)
+	//
 	ContactStage::~ContactStage()
 	{
 		// D1 0x56F860 / D0 0x56F88E (batch214).
-		delete static_cast<TreeStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
-	// mac: 0x56F556 (392B, batch214). Disasm setups win: the CONTACT branch
-	// calls getJoint(p0, p1, 0) -- our member getJoint(p1, n) (same EA
-	// mac: 0x590916; the "extra" decompiler args are phantom stack slots,
-	// verified at 0x56F643-0x56F658); getContact is the 2-word static
-	// (0x56F690-0x56F69D). Joint-found-but-not-downstream forwards;
-	// downstream joints are swallowed.
+
+
+
 	// STUB: PLAYER 0x009aa880
 	// STUB: STUDIO 0x00a618d0
-	void ContactStage::onEdgeAdded(Edge* edge)
+	void ContactStage::onEdgeAdded(Edge* e)
 	{
-		RBXASSERT(!edge->inStage(IStage::KERNEL_STAGE));  // :42
-		RBXASSERT(!edge->inOrDownstreamOfStage(this));  // :43
-		edge->putInStage(this);
-		if (edge->getEdgeType() == Edge::CONTACT)
+		RBXASSERT(!e->inKernel());
+		RBXASSERT(!e->inOrDownstreamOfStage(this));
+		e->putInStage(this);
+		if (e->getEdgeType() == Edge::CONTACT)
 		{
-			Primitive* p0 = edge->getPrim0();
-			Primitive* p1 = edge->getPrim1();
+			Primitive* p0 = e->getPrim0(); Primitive* p1 = e->getPrim1();
 			Joint* joint = p0->getJoint(p1, 0);
 			if (joint == NULL || !joint->downstreamOfStage(this))
 			{
-				getDownstreamWS()->onEdgeAdded(edge);
+				getDownstreamWS()->onEdgeAdded(e);
 				return;
 			}
 			return;
 		}
-		int jointType = 13;
-		if (edge->getEdgeType() == Edge::JOINT)
-			jointType = rbx_static_cast<Joint*>(edge)->getJointType();
-		if (edge->getEdgeType() != Edge::JOINT
-			|| (jointType != Joint::ANCHOR_JOINT && jointType != Joint::FREE_JOINT))
+		if (!Joint::isGroundJoint(e))
 		{
-			Contact* contact = Primitive::getContact(edge->getPrim0(), edge->getPrim1());
-			if (contact != NULL && contact->downstreamOfStage(this))
-				getDownstreamWS()->onEdgeRemoving(contact);
+			Contact* contact = Primitive::getContact(e->getPrim0(), e->getPrim1());
+			if (contact != NULL && contact->downstreamOfStage(this)) getDownstreamWS()->onEdgeRemoving(contact);
 		}
-		getDownstreamWS()->onEdgeAdded(edge);
-	}
+		getDownstreamWS()->onEdgeAdded(e);
 
-	// mac: 0x56F6DE (381B, batch214).
+
+	}
 	// STUB: PLAYER 0x009aa9d0
 	// STUB: STUDIO 0x00a61a20
-	void ContactStage::onEdgeRemoving(Edge* edge)
+	void ContactStage::onEdgeRemoving(Edge* e)
 	{
+		if (e->downstreamOfStage(this))
+			getDownstreamWS()->onEdgeRemoving(e);
 
-		if (edge->downstreamOfStage(this))
-			getDownstreamWS()->onEdgeRemoving(edge);
-		RBXASSERT(edge->inStage(this));  // :72
-		if (edge->getEdgeType() != Edge::CONTACT)
+		RBXASSERT(e->inStage(this));
+
+		if (e->getEdgeType() != Edge::CONTACT)
 		{
 			int jointType = 13;
-			if (edge->getEdgeType() == Edge::JOINT)
-				jointType = rbx_static_cast<Joint*>(edge)->getJointType();
-			if (edge->getEdgeType() != Edge::JOINT
+			if (e->getEdgeType() == Edge::JOINT)
+				jointType = rbx_static_cast<Joint*>(e)->getJointType();
+			if (e->getEdgeType() != Edge::JOINT
 				|| (jointType != Joint::ANCHOR_JOINT && jointType != Joint::FREE_JOINT))
 			{
-				Contact* contact = Primitive::getContact(edge->getPrim0(), edge->getPrim1());
+				Contact* contact = Primitive::getContact(e->getPrim0(), e->getPrim1());
 				if (contact != NULL && contact->inStage(this))
 					getDownstreamWS()->onEdgeAdded(contact);
 			}
 		}
-		edge->removeFromStage(this);
-		RBXASSERT(!edge->inOrDownstreamOfStage(this));  // :95
+
+
+
+
+
+
+
+		e->removeFromStage(this);
+		RBXASSERT(!e->inOrDownstreamOfStage(this));
 	}
 
 	// mac: 0x56F4F6 (48B, batch213).

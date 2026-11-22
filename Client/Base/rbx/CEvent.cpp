@@ -10,6 +10,8 @@
 
 #include <windows.h>
 
+// FUNCTION: PLAYER 0x009b8f60
+// FUNCTION: STUDIO 0x00a6aeb0
 static void WINAPI RbxThrowLastWin32()
 {
 	DWORD dwError = ::GetLastError();
@@ -17,6 +19,67 @@ static void WINAPI RbxThrowLastWin32()
 	throw RBX::runtime_error("HRESULT = 0x%.8X", hr);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTION: PLAYER 0x009b8fa0
+// FUNCTION: STUDIO 0x00a6aef0
 RBX::CEvent::~CEvent() throw()
 {
 	if (m_h != NULL)
@@ -27,6 +90,8 @@ RBX::CEvent::~CEvent() throw()
 	}
 }
 
+// FUNCTION: PLAYER 0x009b9000
+// FUNCTION: STUDIO 0x00a6af50
 RBX::CEvent::CEvent(bool bManualReset)
 	:m_h(NULL)
 {
@@ -35,17 +100,23 @@ RBX::CEvent::CEvent(bool bManualReset)
 		RbxThrowLastWin32();
 }
 
+// FUNCTION: PLAYER 0x009b9030
+// FUNCTION: STUDIO 0x00a6af80
 void RBX::CEvent::Set() throw()
 {
 	if (m_h && !::SetEvent(m_h))
 		RbxThrowLastWin32();
 }
 
+// FUNCTION: PLAYER 0x009b9050
+// FUNCTION: STUDIO 0x00a6afa0
 void RBX::CEvent::Wait()
 {
 	WaitForSingleObject(*this, cINFINITE);
 }
 
+// FUNCTION: PLAYER 0x009b9060
+// FUNCTION: STUDIO 0x00a6afb0
 bool RBX::CEvent::Wait(int milliseconds)
 {
 	return WaitForSingleObject(*this, milliseconds) == cWAIT_OBJECT_0;

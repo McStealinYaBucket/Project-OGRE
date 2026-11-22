@@ -49,3 +49,7 @@ namespace RBX {
 // TEMPLATE: PLAYER 0x00844f60
 // ??$?0V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
 
+
+// TEMPLATE: PLAYER 0x008448e0
+// TEMPLATE: STUDIO 0x0098a410
+// ?_Tidy@?$deque@V?$weak_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$weak_ptr@VInstance@RBX@@@boost@@@std@@@std@@IAEXXZ

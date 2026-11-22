@@ -1,0 +1,155 @@
+file,address,size,score,marker,oracle_name
+Client/App/util/Math.cpp,0x00756e20,259,100,M,"float __cdecl RBX::Math::sumDeltaAxis(class G3D::Matrix3 const &,class G3D::Matrix3 const &)"
+Client/App/util/Math.cpp,0x00756f30,143,100,M,"void __cdecl RBX::Math::mulMatrixDiagVector(class G3D::Matrix3 const &,class G3D::Vector3 const &,class G3D::Matrix3 &)"
+Client/App/util/Math.cpp,0x00756fc0,173,100,M,"void __cdecl RBX::Math::mulMatrixMatrixTranspose(class G3D::Matrix3 const &,class G3D::Matrix3 const &,class G3D::Matrix3 &)"
+Client/App/util/Math.cpp,0x00757070,23,100,M,"float __cdecl RBX::Math::deltaRotationClose(float,float)"
+Client/App/util/Math.cpp,0x00757090,41,100,M,"float __cdecl RBX::Math::averageRotationClose(float,float)"
+Client/App/util/Math.cpp,0x007570c0,48,100,M,"bool __cdecl RBX::Math::lessThan(class G3D::Vector3 const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x007570f0,67,100,M,float __cdecl RBX::Math::rotationFromByte(unsigned char)
+Client/App/util/Math.cpp,0x00757140,245,100,M,"class G3D::Matrix3 __cdecl RBX::Math::getIWorldAtPoint(class G3D::Vector3 const &,class G3D::Vector3 const &,class G3D::Matrix3 const &,float)"
+Client/App/util/Math.cpp,0x00757240,227,100,M,"class G3D::Matrix3 __cdecl RBX::Math::getIBodyAtPoint(class G3D::Vector3 const &,class G3D::Matrix3 const &,float)"
+Client/App/util/Math.cpp,0x00757330,55,100,M,"class G3D::Matrix3 __cdecl RBX::Math::momentToObjectSpace(class G3D::Matrix3 const &,class G3D::Matrix3 const &)"
+Client/App/util/Math.cpp,0x00757370,59,100,M,"class G3D::Matrix3 __cdecl RBX::Math::momentToWorldSpace(class G3D::Matrix3 const &,class G3D::Matrix3 const &)"
+Client/App/util/Math.cpp,0x007573b0,25,100,M,class G3D::Vector3 __cdecl RBX::Math::toDiagonal(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x007573d0,193,100,M,bool __cdecl RBX::Math::isAxisAligned(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x007574a0,69,100,M,int __cdecl RBX::Math::getOrientId(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x007574f0,257,100,M,"void __cdecl RBX::Math::idToMatrix3(int,class G3D::Matrix3 &)"
+Client/App/util/Math.cpp,0x00757600,141,100,M,"class G3D::Matrix3 __cdecl RBX::Math::rotateAboutZ(class G3D::Matrix3 const &,float)"
+Client/App/util/Math.cpp,0x00757690,706,100,M,class G3D::Matrix3 __cdecl RBX::Math::snapToAxes(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x00757960,331,100,M,RBX::Math::safeDirection(G3D::Vector3 const&)
+Client/App/util/Math.cpp,0x00757ab0,105,100,M,RBX::Math::iRoundVector3(G3D::Vector3 const&)
+Client/App/util/Math.cpp,0x00757b20,114,100,M,"float __cdecl RBX::Math::angle(class G3D::Vector3 const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x00757ba0,84,100,M,RBX::Math::elevationAngle(G3D::Vector3 const&)
+Client/App/util/Math.cpp,0x00757c00,9,100,M,bool __cdecl RBX::Math::isOrthonormal(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x00757c10,109,100,M,"bool __cdecl RBX::Math::fuzzyEq(class G3D::Vector3 const &,class G3D::Vector3 const &,float)"
+Client/App/util/Math.cpp,0x00757c80,130,100,M,"bool __cdecl RBX::Math::fuzzyEq(class G3D::Matrix3 const &,class G3D::Matrix3 const &,float)"
+Client/App/util/Math.cpp,0x00757d10,130,100,M,"bool __cdecl RBX::Math::fuzzyEq(class G3D::Matrix4 const &,class G3D::Matrix4 const &,float)"
+Client/App/util/Math.cpp,0x00757da0,67,100,M,"bool __cdecl RBX::Math::fuzzyEq(class G3D::CoordinateFrame const &,class G3D::CoordinateFrame const &,float,float)"
+Client/App/util/Math.cpp,0x00757df0,66,100,M,"void __cdecl RBX::Math::rotateAboutYGlobal(class G3D::CoordinateFrame &,float)"
+Client/App/util/Math.cpp,0x00757e40,163,100,M,"class G3D::Vector3 __cdecl RBX::Math::rotateAboutYGlobal(class G3D::Vector3 const &,float)"
+Client/App/util/Math.cpp,0x00757ef0,254,100,M,"enum RBX::NormalId __cdecl RBX::Math::getClosestObjectNormalId(class G3D::Vector3 const &,class G3D::Matrix3 const &)"
+Client/App/util/Math.cpp,0x00757ff0,31,100,M,class G3D::Vector3 __cdecl RBX::Math::vector3Abs(class G3D::Vector3 const &)
+Client/App/util/Math.cpp,0x00758010,70,100,M,"void __cdecl RBX::Math::getHeadingElevation(class G3D::CoordinateFrame const &,float &,float &)"
+Client/App/util/Math.cpp,0x00758060,170,100,M,"void __cdecl RBX::Math::setHeadingElevation(class G3D::CoordinateFrame &,float,float)"
+Client/App/util/Math.cpp,0x00758110,127,100,M,class G3D::Matrix3 const & __cdecl RBX::Math::matrixRotateX(void)
+Client/App/util/Math.cpp,0x00758190,129,100,M,RBX::Math::matrixRotateY()
+Client/App/util/Math.cpp,0x00758220,127,100,M,class G3D::Matrix3 const & __cdecl RBX::Math::matrixTiltZ(void)
+Client/App/util/Math.cpp,0x007582a0,127,100,M,class G3D::Matrix3 const & __cdecl RBX::Math::matrixTiltNegativeZ(void)
+Client/App/util/Math.cpp,0x00758320,245,100,M,RBX::Math::matrixTiltQuadrant(int)
+Client/App/util/Math.cpp,0x00758430,140,100,M,RBX::Math::radiansToQuadrant(float)
+Client/App/util/Math.cpp,0x007584c0,51,100,M,RBX::Math::toYAxisQuadrant(G3D::CoordinateFrame const&)
+Client/App/util/Math.cpp,0x00758500,107,100,M,"bool __cdecl RBX::Math::intersectLinePlane(class G3D::Line const &,class G3D::Plane const &,class G3D::Vector3 &)"
+Client/App/util/Math.cpp,0x00758570,431,100,M,RBX::Math::getAxisRotationMatrix(int)
+Client/App/util/Math.cpp,0x00758740,234,100,M,"class G3D::Vector2 __cdecl RBX::Math::polygonStartingPoint(int,float)"
+Client/App/util/Math.cpp,0x00758830,126,100,M,bool __cdecl RBX::Math::evenWholeNumberFuzzy(float const &)
+Client/App/util/Math.cpp,0x007588b0,144,100,M,class G3D::CoordinateFrame __cdecl RBX::Math::getFocusSpace(class G3D::CoordinateFrame const &)
+Client/App/util/Math.cpp,0x00758940,439,100,M,RBX::rotationToByteBase(float)
+Client/App/util/Math.cpp,0x00758b00,30,100,M,unsigned char __cdecl RBX::Math::rotationToByte(float)
+Client/App/util/Math.cpp,0x00758b20,159,100,M,"class G3D::Vector3 __cdecl RBX::Math::toGrid(class G3D::Vector3 const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x00758bc0,157,100,M,"class G3D::Vector3 __cdecl RBX::Math::toGrid(class G3D::Vector3 const &,float)"
+Client/App/util/Math.cpp,0x00758c60,213,100,M,"class G3D::CoordinateFrame __cdecl RBX::Math::snapToGrid(class G3D::CoordinateFrame const &,float)"
+Client/App/util/Math.cpp,0x00758d40,215,100,M,"class G3D::CoordinateFrame __cdecl RBX::Math::snapToGrid(class G3D::CoordinateFrame const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x00758e20,319,100,M,"bool __cdecl RBX::Math::fuzzyAxisAligned(class G3D::Matrix3 const &,class G3D::Matrix3 const &,float)"
+Client/App/util/Math.cpp,0x00758f60,31,100,M,bool __cdecl RBX::Math::orthonormalizeIfNecessary(class G3D::Matrix3 &)
+Client/App/util/Math.cpp,0x00758f80,108,100,M,RBX::Math::sortVector3(G3D::Vector3 const&)
+Client/App/util/Math.cpp,0x00758ff0,402,100,M,"class G3D::Vector3 __cdecl RBX::Math::closestPointOnRay(class RBX::RbxRay const &,class RBX::RbxRay const &)"
+Client/App/util/Math.cpp,0x00759190,378,100,M,"RBX::Math::intersectRayPlane(RBX::RbxRay const&, G3D::Plane const&, G3D::Vector3&)"
+Client/App/util/Math.cpp,0x00759310,1025,100,M,"RBX::Math::lineSegmentDistanceIfCrossing(G3D::Vector3 const&, G3D::Vector3 const&, G3D::Vector3 const&, G3D::Vector3 const&, float&, float)"
+Client/App/util/Math.cpp,0x00759720,697,100,M,RBX::Math::getWellFormedRotForZVector(G3D::Vector3 const&)
+Client/App/util/Math.cpp,0x007599e0,35,100,,"void __cdecl std::fill<class G3D::Vector2 *,class G3D::Vector2>(class G3D::Vector2 *,class G3D::Vector2 *,class G3D::Vector2 const &)"
+Client/App/util/Math.cpp,0x00759a10,41,100,,"class G3D::Vector2 * __cdecl std::_Uninit_copy<class G3D::Vector2 *,class G3D::Vector2 *,class std::allocator<class G3D::Vector2>>(class G3D::Vector2 *,class G3D::Vector2 *,class G3D::Vector2 *,class std::allocator<class G3D::Vector2> &,struct std::_Nonscalar_ptr_iterator_tag,struct std::_Range_checked_iterator_tag)"
+Client/App/util/Math.cpp,0x00759a40,94,100,M,bool __cdecl RBX::Math::isDenormal(float)
+Client/App/util/Math.cpp,0x00759aa0,34,100,M,bool __cdecl RBX::Math::isNanInf(float)
+Client/App/util/Math.cpp,0x00759ad0,97,100,M,bool __cdecl RBX::Math::isNanInfVector3(class G3D::Vector3 const &)
+Client/App/util/Math.cpp,0x00759b40,149,100,M,bool __cdecl RBX::Math::isNanInfDenormVector3(class G3D::Vector3 const &)
+Client/App/util/Math.cpp,0x00759be0,90,100,M,bool __cdecl RBX::Math::hasNanOrInf(class G3D::Matrix3 const &)
+Client/App/util/Math.cpp,0x00759c40,92,100,M,bool __cdecl RBX::Math::fixDenorm(class G3D::Vector3 &)
+Client/App/util/Math.cpp,0x00759ca0,405,100,M,"class G3D::Matrix3 __cdecl RBX::Math::fromRotationAxisAndAngle(class G3D::Vector3 const &,float const &)"
+Client/App/util/Math.cpp,0x00759e40,558,100,M,"class G3D::Matrix3 __cdecl RBX::Math::fromDirectionCosines(class G3D::Vector3 const &,class G3D::Vector3 const &,class G3D::Vector3 const &,class G3D::Vector3 const &,class G3D::Vector3 const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x0075a070,818,100,M,"RBX::Math::intersectRayConvexPolygon(RBX::RbxRay const&, std::vector<G3D::Vector3, std::allocator<G3D::Vector3>> const&, G3D::Vector3&, bool)"
+Client/App/util/Math.cpp,0x0075a3b0,45,100,,"class G3D::Vector2 * __cdecl std::_Move_backward_opt<class G3D::Vector2 *,class G3D::Vector2 *,struct std::random_access_iterator_tag,struct std::_Undefined_move_tag>(class G3D::Vector2 *,class G3D::Vector2 *,class G3D::Vector2 *,struct std::random_access_iterator_tag,struct std::_Undefined_move_tag,struct std::_Range_checked_iterator_tag)"
+Client/App/util/Math.cpp,0x0075a3e0,39,100,,"void __cdecl std::_Uninit_fill_n<class G3D::Vector2 *,unsigned int,class G3D::Vector2,class std::allocator<class G3D::Vector2>>(class G3D::Vector2 *,unsigned int,class G3D::Vector2 const &,class std::allocator<class G3D::Vector2> &,struct std::_Nonscalar_ptr_iterator_tag,struct std::_Range_checked_iterator_tag)"
+Client/App/util/Math.cpp,0x0075a410,71,100,M,bool __cdecl RBX::Math::hasNanOrInf(class G3D::CoordinateFrame const &)
+Client/App/util/Math.cpp,0x0075a460,383,100,M,"class G3D::Matrix3 __cdecl RBX::Math::fromVectorToVectorRotation(class G3D::Vector3 const &,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x0075a5e0,51,100,,"protected: class G3D::Vector2 * __thiscall std::vector<class G3D::Vector2,class std::allocator<class G3D::Vector2>>::_Ufill(class G3D::Vector2 *,unsigned int,class G3D::Vector2 const &)"
+Client/App/util/Math.cpp,0x0075a620,41,100,,"protected: class G3D::Vector2 * __thiscall std::vector<class G3D::Vector2,class std::allocator<class G3D::Vector2>>::_Umove<class G3D::Vector2 *>(class G3D::Vector2 *,class G3D::Vector2 *,class G3D::Vector2 *)"
+Client/App/util/Math.cpp,0x0075a650,678,100,,"protected: void __thiscall std::vector<class G3D::Vector3,class std::allocator<class G3D::Vector3>>::_Insert_n(class std::_Vector_const_iterator<class G3D::Vector3,class std::allocator<class G3D::Vector3>>,unsigned int,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x0075a900,586,100,,"protected: void __thiscall std::vector<class G3D::Vector2,class std::allocator<class G3D::Vector2>>::_Insert_n(class std::_Vector_const_iterator<class G3D::Vector2,class std::allocator<class G3D::Vector2>>,unsigned int,class G3D::Vector2 const &)"
+Client/App/util/Math.cpp,0x0075ab50,95,100,,"public: class std::_Vector_iterator<class G3D::Vector3,class std::allocator<class G3D::Vector3>> __thiscall std::vector<class G3D::Vector3,class std::allocator<class G3D::Vector3>>::insert(class std::_Vector_const_iterator<class G3D::Vector3,class std::allocator<class G3D::Vector3>>,class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x0075abb0,135,100,,"public: void __thiscall std::vector<class G3D::Vector3,class std::allocator<class G3D::Vector3>>::push_back(class G3D::Vector3 const &)"
+Client/App/util/Math.cpp,0x0075ac40,103,100,,"public: void __thiscall std::vector<class G3D::Vector2,class std::allocator<class G3D::Vector2>>::push_back(class G3D::Vector2 const &)"
+Client/App/util/Math.cpp,0x0075acb0,549,100,M,"RBX::Math::planarPolygonIntersection(std::vector<G3D::Vector2, std::allocator<G3D::Vector2>> const&, std::vector<G3D::Vector2, std::allocator<G3D::Vector2>> const&)"
+Client/App/util/Math.cpp,0x0075aee0,2170,100,M,"RBX::Math::spatialPolygonIntersection(std::vector<G3D::Vector3, std::allocator<G3D::Vector3>> const&, std::vector<G3D::Vector3, std::allocator<G3D::Vector3>> const&)"
+Client/App/util/Extents.cpp,0x00795fb0,180,100,M,public: enum RBX::NormalId __thiscall RBX::Extents::closestFace(class G3D::Vector3 const &)
+Client/App/util/Extents.cpp,0x00796070,198,100,M,RBX::Extents::getCornerIndex(int) const
+Client/App/util/Extents.cpp,0x00796140,77,100,M,public: class G3D::Vector3 __thiscall RBX::Extents::getCorner(int)const
+Client/App/util/Extents.cpp,0x00796190,969,100,M,"RBX::Extents::getFaceCorners(RBX::NormalId, G3D::Vector3&, G3D::Vector3&, G3D::Vector3&, G3D::Vector3&) const"
+Client/App/util/Extents.cpp,0x00796580,277,100,M,"RBX::Extents::separatedByMoreThan(RBX::Extents const&, float) const"
+Client/App/util/Extents.cpp,0x007966a0,325,100,M,public: class RBX::Extents __thiscall RBX::Extents::clampInsideOf(class RBX::Extents const &)const
+Client/App/util/Extents.cpp,0x007967f0,128,100,M,public: class G3D::Vector3 __thiscall RBX::Extents::faceCenter(enum RBX::NormalId)const
+Client/App/util/Extents.cpp,0x00796870,164,100,M,public: float __thiscall RBX::Extents::computeClosestSqDistanceToPoint(class G3D::Vector3 const &)const
+Client/App/util/Extents.cpp,0x00796920,981,100,M,"public: class RBX::Extents __thiscall RBX::Extents::express(class G3D::CoordinateFrame const &,class G3D::CoordinateFrame const &)const"
+Client/App/util/Extents.cpp,0x00796d00,867,100,M,RBX::Extents::toWorldSpace(G3D::CoordinateFrame const&)
+Client/App/util/Face.cpp,0x008fc120,283,100,M,"RBX::Face::fuzzyContainsInExtrusion(G3D::Vector3 const&, float) const"
+Client/App/util/Face.cpp,0x008fc240,215,100,M,"RBX::Face::cornersAligned(RBX::Face const&, RBX::Face const&, float)"
+Client/App/util/Face.cpp,0x008fc320,95,100,M,"RBX::Face::fromExtentsSide(RBX::Extents const&, RBX::NormalId)"
+Client/App/util/Face.cpp,0x008fc380,615,100,M,RBX::Face::toWorldSpace(G3D::CoordinateFrame const&) const
+Client/App/util/Face.cpp,0x008fc5f0,663,100,M,public: class RBX::Face __thiscall RBX::Face::toObjectSpace(class G3D::CoordinateFrame const &)const
+Client/App/util/Face.cpp,0x008fc890,351,100,,RBX::Face::getAxis(int) const
+Client/App/util/Face.cpp,0x008fc9f0,436,100,M,"RBX::Face::minMax(G3D::Vector3 const&, G3D::Vector3 const&, float&, float&) const"
+Client/App/util/Face.cpp,0x008fcbb0,143,100,M,"RBX::Face::hasOverlap(RBX::Face const&, RBX::Face const&, float)"
+Client/App/util/Face.cpp,0x008fcc40,1061,100,M,RBX::Face::projectOverlapOnMe(RBX::Face const&) const
+Client/App/util/Face.cpp,0x008fd070,272,100,M,"RBX::Face::overlapWithinPlanes(RBX::Face const&, RBX::Face const&, float)"
+Client/App/util/NormalId.cpp,0x008c6c50,55,100,M,enum RBX::NormalIdMask __cdecl RBX::normalIdToMask(enum RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c6ca0,13,100,M,bool __cdecl RBX::validNormalId(enum RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c6cb0,18,100,M,enum RBX::NormalId __cdecl RBX::normalIdOpposite(enum RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c6cd0,109,100,M,RBX::normalIdToU(RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c6d60,327,100,M,"RBX::uvwToObject(G3D::Vector3 const&, RBX::NormalId)"
+Client/App/util/NormalId.cpp,0x008c6ec0,327,100,M,"RBX::objectToUvw(G3D::Vector3 const&, RBX::NormalId)"
+Client/App/util/NormalId.cpp,0x008c7020,610,100,M,RBX::normalIdToMatrix3Internal(RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c7290,489,100,M,RBX::normalIdToMatrix3(RBX::NormalId)
+Client/App/util/NormalId.cpp,0x008c74a0,665,100,M,RBX::Vector3ToNormalId(G3D::Vector3 const&)
+Client/App/util/NormalId.cpp,0x008c7740,29,100,M,enum RBX::NormalId __cdecl RBX::Matrix3ToNormalId(class G3D::Matrix3 const &)
+Client/App/util/NormalId.cpp,0x008c7760,561,100,M,RBX::normalIdToVector3(RBX::NormalId)
+Client/App/util/Region3.cpp,0x007fa5e0,195,100,M,RBX::Region3::init(RBX::Extents const&)
+Client/App/util/Region3.cpp,0x007fa6b0,197,71.1,,
+Client/App/util/Region3.cpp,0x007fa780,98,100,M,"RBX::Region3::Region3(G3D::Vector3 const&, G3D::Vector3 const&)"
+Client/App/util/Region3.cpp,0x007fa7f0,44,100,M,RBX::Region3::Region3(RBX::Extents const&)
+Client/App/util/Region3.cpp,0x007fa820,107,100,M,RBX::Reflection::Type const& RBX::Reflection::Type::getSingleton<RBX::Region3>()
+Client/App/util/IndexedMesh.cpp,0x008f9050,29,100,M,public: __thiscall RBX::IndexedMesh::IndexedMesh(void)
+Client/App/util/IndexedMesh.cpp,0x008f9070,4,100,M,RBX::Assembly::getConstPrimitiveAssembly(RBX::Primitive const*)
+Client/App/util/IndexedMesh.cpp,0x008f9080,36,100,M,
+Client/App/util/IndexedMesh.cpp,0x008f90b0,122,100,M,RBX::IndexedMesh::isUpperRoot(RBX::IndexedMesh const*)
+Client/App/util/IndexedMesh.cpp,0x008f9130,33,100,,public: void __thiscall RBX::IndexedMesh::lowersChanged(void)
+Client/App/util/IndexedMesh.cpp,0x008f9160,416,100,M,RBX::IndexedMesh::~IndexedMesh()
+Client/App/util/IndexedMesh.cpp,0x008f9300,105,100,M,RBX::IndexedMesh::getConstIndexedMeshParent() const
+Client/App/util/IndexedMesh.cpp,0x008f9370,5,100,M,public: class RBX::IndexedMesh * __thiscall RBX::IndexedMesh::getIndexedMeshParent(void)
+Client/App/util/IndexedMesh.cpp,0x008f9380,30,100,,"RBX::IndexedMesh::~IndexedMesh() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/util/IndexedMesh.cpp,0x008f93a0,67,100,M,public: void __thiscall RBX::IndexedMesh::setComputedUpper(class RBX::IndexedMesh *)
+Client/App/util/IndexedMesh.cpp,0x008f93f0,67,100,M,private: void __thiscall RBX::IndexedMesh::attachChildren(class RBX::IndexedMesh *)
+Client/App/util/IndexedMesh.cpp,0x008f9440,77,100,M,private: void __thiscall RBX::IndexedMesh::severeChildren(class RBX::IndexedMesh *)
+Client/App/util/IndexedMesh.cpp,0x008f9490,241,100,M,RBX::IndexedMesh::setLower(RBX::IndexedMesh*)
+Client/App/util/IndexedMesh.cpp,0x008f9590,99,100,M,RBX::IndexedMesh::setUpper(RBX::IndexedMesh*)
+Client/App/util/IndexedMesh.cpp,0x008f9600,166,100,M,RBX::IndexedMesh::onParentChanged(RBX::IndexedTree*)
+Client/App/util/InterpolatedCFrame.cpp,0x008dbb90,74,100,,public: void __thiscall RBX::InterpolatedCFrame::setRenderedFrame(class G3D::CoordinateFrame const &)
+Client/App/util/InterpolatedCFrame.cpp,0x008dbbe0,89,100,,"public: void __thiscall RBX::InterpolatedCFrame::setRenderedFrame(class G3D::CoordinateFrame const &,class RBX::RemoteTime const &)"
+Client/App/util/InterpolatedCFrame.cpp,0x008dbc40,119,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dbcc0,147,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dbd80,83,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dbde0,82,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dbe40,135,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dbed0,861,40.9,M,"RBX::InterpolatedCFrame::interpolate(RBX::Time const&, RBX::Time const&, unsigned int const&)"
+Client/App/util/InterpolatedCFrame.cpp,0x008dc230,421,32.1,M,RBX::InterpolatedCFrame::computeValue(RBX::PartInstance*)
+Client/App/util/InterpolatedCFrame.cpp,0x008dc3e0,158,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc480,128,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc500,267,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc610,106,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc680,211,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc760,83,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc7c0,92,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc820,154,-,,
+Client/App/util/InterpolatedCFrame.cpp,0x008dc8c0,685,21.4,M,"RBX::InterpolatedCFrame::setValue(RBX::PartInstance*, G3D::CoordinateFrame const&, RBX::RemoteTime const&)"
+Client/App/util/Velocity.cpp,0x005ea950,127,100,,RBX::Velocity::zero()
+Client/App/util/ExtentsInt32.cpp,0x004e5df0,135,100,M,RBX::ExtentsInt32::ExtentsInt32()
+Client/Rendering/RbxG3D/Frustum.cpp,0x009ee010,1764,100,,"RBX::Frustum::Frustum(G3D::Vector3 const&, G3D::Vector3 const&, G3D::Vector3 const&, float, float, float, float)"
+Client/Rendering/RbxG3D/RbxRay.cpp,0x0057fcd0,31,100,,"RBX::RbxRay::~RbxRay() [D0, deleting: the MSVC scalar deleting destructor]"

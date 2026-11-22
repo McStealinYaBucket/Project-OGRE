@@ -20,10 +20,19 @@
 
 #include "rbx/Debug.h"
 
+// ATL::Base64Decode (atlenc.h inline), the Crypt.obj copy (rbx/Crypt.h is a 2016 copy, not committed).
+// TEMPLATE: PLAYER 0x009bc940
+// TEMPLATE: STUDIO 0x00a731a0
+// ?Base64Decode@ATL@@YAHPBDHPAEPAH@Z
+
 namespace RBX {
 
+// FUNCTION: PLAYER 0x009bca80
+// FUNCTION: STUDIO 0x00a732e0
 Crypt::Crypt()
 {
+	// GLOBAL: PLAYER 0x00db4b60
+	// GLOBAL: STUDIO 0x00f304a8
 	static const char* keyB64 = "BgIAAACkAABSU0ExAAQAAAEAAQCjbUyx9OXTBcWEAonZOfAoT7YhMS+L21WwAZlsEjvzHXQpulpasNFhC1U6tBX6c8Qey2fiRBXHpqbh7vAC7u2niT6dMLLqY9UzII0jyxKD/EUODcQHTKpbM18FRobqLcvK0DNdIaHwypr7NRnSWk4NXhtM0v40W7/mr35PxbJ8rQ==";
 	char pbKeyBlob[256];
 	int dwBlobLen = 256;
@@ -49,12 +58,16 @@ Crypt::Crypt()
 		 throw RBX::runtime_error("Error %x during CryptImportKey", GetLastError());
 }
 
+// FUNCTION: PLAYER 0x009bcba0
+// FUNCTION: STUDIO 0x00a73400
 Crypt::~Crypt()
 {
 	CryptDestroyKey(key);
 	CryptReleaseContext(context, 0);
 }
 
+// FUNCTION: PLAYER 0x009bcbc0
+// FUNCTION: STUDIO 0x00a73420
 void Crypt::verifySignatureBase64(std::string message, std::string signatureBase64)
 {
 	HCRYPTHASH hash;

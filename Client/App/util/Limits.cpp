@@ -19,8 +19,17 @@ namespace RBX { namespace Limits {
 			static rbx::thread_specific_shared_ptr<Counter> value;
 			return value;
 		}
+		// 2013 0x009b94c0: a tail jmp to currentValue 0x009b9440.
 		void safe_static_init_current()
 		{
+			currentValue();
+		}
+		// One flag for every user (PLAYER 0x00e1b5e8: Countable(), getCurrentCount, Activator).
+		boost::once_flag once = BOOST_ONCE_INIT;
+		rbx::thread_specific_shared_ptr<Counter>& safeCurrentValue()
+		{
+			boost::call_once(&safe_static_init_current, once);
+			return currentValue();
 		}
 	}
 
@@ -34,19 +43,15 @@ namespace RBX { namespace Limits {
 
 	// getCurrentCount 0x1497E4 (100B, batch542): once-guarded
 	// thread-specific counter value, 0 when unset.
-	int Counter::getCurrentCount()
-	{
-		static boost::once_flag once = BOOST_ONCE_INIT;
-		boost::call_once(&safe_static_init_current, once);
-		boost::shared_ptr<Counter> current = currentValue();
-		return current.get() != NULL ? current->count : 0;
-	}
-
 	boost::shared_ptr<Counter> Counter::current()
 	{
-		static boost::once_flag once = BOOST_ONCE_INIT;
-		boost::call_once(&safe_static_init_current, once);
-		return currentValue();
+		return safeCurrentValue();
+	}
+
+	int Counter::getCurrentCount()
+	{
+		boost::shared_ptr<Counter> current = Counter::current();
+		return current.get() != NULL ? current->count : 0;
 	}
 
 	// FUNCTION: PLAYER 0x009b9160
@@ -64,6 +69,21 @@ namespace RBX { namespace Limits {
 		counter = Counter::current();
 		if (counter)
 			counter->add(this);
+	}
+
+	// STUB: PLAYER 0x009b96b0
+	// STUB: STUDIO 0x00a6b600
+	Counter::Activator::Activator(boost::shared_ptr<Counter> counter)
+		: oldCounter(current())
+	{
+		safeCurrentValue().reset(counter);
+	}
+
+	// FUNCTION: PLAYER 0x009b97f0
+	// FUNCTION: STUDIO 0x00a6b740
+	Counter::Activator::~Activator()
+	{
+		safeCurrentValue().reset(oldCounter);
 	}
 
 } }

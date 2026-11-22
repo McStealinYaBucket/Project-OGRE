@@ -26,8 +26,6 @@ address,type,size,symbol
 0078a170,library,7,?GetLocation@VirtualProcessor@details@Concurrency@@QBEABVlocation@3@XZ
 00799640,library,33,??$shared_dynamic_cast@VDataModel@RBX@@VDescribedBase@Reflection@2@@RBX@@YA?AV?$shared_ptr@VDataModel@RBX@@@boost@@ABV?$shared_ptr@VDescribedBase@Reflection@RBX@@@2@@Z
 007b0ea0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_1
-007b6090,library,7,?GetMaskId@VirtualProcessor@details@Concurrency@@QBEIXZ_0
-00800410,library,7,?GetExecutionResourceId@VirtualProcessor@details@Concurrency@@QBEIXZ_0
 0082aba0,library,16,__mkgmtime
 0082abb0,library,16,__mkgmtime_0
 0088faf0,library,7,?GetProxy@InternalContextBase@details@Concurrency@@UAEPAUIThreadProxy@3@XZ

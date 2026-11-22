@@ -245,3 +245,27 @@ namespace RBX
 
 
 }
+
+// TEMPLATE: PLAYER 0x009b3ae0
+// TEMPLATE: STUDIO 0x00a6bb50
+// ??$?0PAUdelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@boost@@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@boost@@@detail@2@@shared_count@detail@boost@@QAE@PAUdelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@2@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@boost@@@12@@Z
+
+// TEMPLATE: PLAYER 0x009b3d20
+// TEMPLATE: STUDIO 0x00a6bd90
+// ?erase@?$list_impl@U?$listopt@U?$base_hook_traits@VJob@TaskScheduler@RBX@@U?$list_node_traits@PAX@intrusive@boost@@$00UWaitingTag@23@$00@detail@intrusive@boost@@I$00@intrusive@boost@@@intrusive@boost@@QAE?AV?$list_iterator@V?$list_impl@U?$listopt@U?$base_hook_traits@VJob@TaskScheduler@RBX@@U?$list_node_traits@PAX@intrusive@boost@@$00UWaitingTag@23@$00@detail@intrusive@boost@@I$00@intrusive@boost@@@intrusive@boost@@$0A@@23@V?$list_iterator@V?$list_impl@U?$listopt@U?$base_hook_traits@VJob@TaskScheduler@RBX@@U?$list_node_traits@PAX@intrusive@boost@@$00UWaitingTag@23@$00@detail@intrusive@boost@@I$00@intrusive@boost@@@intrusive@boost@@$00@23@@Z
+
+// TEMPLATE: PLAYER 0x009b4460
+// TEMPLATE: STUDIO 0x00a6c250
+// ??$heap_new@Udelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@boost@@@detail@boost@@YAPAUdelete_data@?$thread_specific_ptr@PAVJob@TaskScheduler@RBX@@@1@XZ
+
+// TEMPLATE: PLAYER 0x009b4480
+// TEMPLATE: STUDIO 0x00a6c270
+// ??1?$list@VJob@TaskScheduler@RBX@@U?$base_hook@V?$list_base_hook@U?$tag@UWaitingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@@intrusive@boost@@Unone@56@U756@@intrusive@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x009b7b70
+// TEMPLATE: STUDIO 0x00a70320
+// ??$checked_delete@VThread@TaskScheduler@RBX@@@boost@@YAXPAVThread@TaskScheduler@RBX@@@Z
+
+// vector<shared_ptr<Thread>>::push_back (disableThreads); our linker folds it into the Instance copy.
+// TEMPLATE: PLAYER 0x009b7020
+// ?push_back@?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@QAEXABV?$shared_ptr@VInstance@RBX@@@boost@@@Z

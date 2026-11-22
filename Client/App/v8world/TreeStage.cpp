@@ -63,13 +63,13 @@ namespace RBX {
 		// same net state -- cf. Sleep C2 precedent).
 	}
 
-	// STUB: PLAYER 0x008ec2f0
-	// STUB: STUDIO 0x00a0a520
+	// D0 0x008ec2f0 (SYNTHETIC in TreeStage.h)
+	//
 	TreeStage::~TreeStage()
 	{
 		// D2 pattern (D0/D1 per batch214; SpanningTree member + sets clean
 		// themselves -- same net state as the explicit erases).
-		delete static_cast<MovingStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// Forwarded unless the joint is tree-internal (rigid {1,2,3} or ground
@@ -77,15 +77,15 @@ namespace RBX {
 	// ANCHOR/FREE stay in the tree; the 13 default is NO_JOINT).
 	static bool treeForwardsEdge(Edge* edge)
 	{
-		int jt = (edge->getEdgeType() == Edge::JOINT)
-			? static_cast<Joint*>(edge)->getJointType()
-			: Joint::NO_JOINT;
-		if (((jt & ~2) == 1) || (jt == 2))
-			return false;
-		if (edge->getEdgeType() != Edge::JOINT)
-			return true;
-		jt = static_cast<Joint*>(edge)->getJointType();
-		return jt != Joint::ANCHOR_JOINT && jt != Joint::FREE_JOINT;
+		return !(Joint::isRigidJoint(edge) || Joint::isGroundJoint(edge));
+
+
+
+
+
+
+
+
 	}
 
 	// mac: 0x5A4CAE (batch271).
@@ -203,13 +203,13 @@ namespace RBX {
 	// mac: 0x5A54DE (batch296: NULL-safe child -8 adjust + getMechanism
 	// (itself NULL-safe) + dirtyMechanism (:336 asserts non-NULL).
 	// 2016's _DEBUG block compiles out here.
-	// STUB: PLAYER 0x008eca40
-	// STUB: STUDIO 0x00a0ac70
+	// FUNCTION: PLAYER 0x008eca40
+	// FUNCTION: STUDIO 0x00a0ac70
 	void TreeStage::onSpanningEdgeRemoving(SpanningEdge* edge)
 	{
-		SpanningNode* childNode = edge->getChildSpanningNode();
-		Primitive* child = (childNode != NULL) ? static_cast<Primitive*>(childNode) : NULL;
-		dirtyMechanism(child != NULL ? child->getMechanism() : NULL);
+		Primitive* child = rbx_static_cast<Primitive*>(edge->getChildSpanningNode());
+		dirtyMechanism(child->getMechanism());
+
 	}
 
 	// mac: 0x5A5538 (batch296: inline range dispatch rigid{1,2,3} /
@@ -415,35 +415,35 @@ namespace RBX {
 
 
 	// mac: 0x5A5D1E (370B, batch214).
-	// STUB: PLAYER 0x008eb7a0
-	// STUB: STUDIO 0x00a099a0
+	// FUNCTION: PLAYER 0x008eb7a0
+	// FUNCTION: STUDIO 0x00a099a0
 	void TreeStage::onEdgeAdded(Edge* e)
 	{
 		RBXASSERT(e->getPrimitive(0)->inOrDownstreamOfStage(this));
 		RBXASSERT(!e->getPrimitive(1) || e->getPrimitive(1)->inOrDownstreamOfStage(this));
 		e->putInStage(this);
-		if (!Joint::isSpanningTreeJoint(e))
-		{
-			getDownstreamWS()->onEdgeAdded(e);
-			return;
+		if (Joint::isSpanningTreeJoint(e)) {
+			insertSpanningTreeEdge(rbx_static_cast<Joint*>(e));
+			if (Joint::isRigidJoint(e) || Joint::isGroundJoint(e)) {
+				return;
+			}
 		}
-		Joint* joint = static_cast<Joint*>(e);
-		insertSpanningTreeEdge(static_cast<SpanningEdge*>(joint));
-		if (treeForwardsEdge(e))
-			getDownstreamWS()->onEdgeAdded(e);
+		getDownstreamWS()->onEdgeAdded(e);
+
+
 	}
 
 
 	// mac: 0x5A5E90 (394B, batch214).
-	// STUB: PLAYER 0x008eb8d0
-	// STUB: STUDIO 0x00a09ad0
+	// FUNCTION: PLAYER 0x008eb8d0
+	// FUNCTION: STUDIO 0x00a09ad0
 	void TreeStage::onEdgeRemoving(Edge* e)
 	{
 		RBXASSERT(e->getPrimitive(0)->inOrDownstreamOfStage(this));
 		RBXASSERT(!e->getPrimitive(1) || e->getPrimitive(1)->inOrDownstreamOfStage(this));
 		if (Joint::isSpanningTreeJoint(e))
 		{
-			if (treeForwardsEdge(e))
+			if (!(Joint::isRigidJoint(e) || Joint::isGroundJoint(e)))
 				getDownstreamWS()->onEdgeRemoving(e);
 			SpanningEdge* se = static_cast<SpanningEdge*>(static_cast<Joint*>(e));
 			if (se->inSpanningTree())
@@ -457,16 +457,16 @@ namespace RBX {
 	}
 
 	// mac: 0x5A601A (135B, batch214).
-	// STUB: PLAYER 0x008eba20
-	// STUB: STUDIO 0x00a09c20
+	// FUNCTION: PLAYER 0x008eba20
+	// FUNCTION: STUDIO 0x00a09c20
 	void TreeStage::onPrimitiveAdded(Primitive* p)
 	{
 		RBXASSERT(p->getNumEdges() == 0);
 		p->putInStage(this);
 	}
 
-	// STUB: PLAYER 0x008eba90
-	// STUB: STUDIO 0x00a09c90
+	// FUNCTION: PLAYER 0x008eba90
+	// FUNCTION: STUDIO 0x00a09c90
 	void TreeStage::onPrimitiveRemoving(Primitive* p) {
 		p->removeFromStage(this);
 		RBXASSERT(p->getNumEdges() == 0);

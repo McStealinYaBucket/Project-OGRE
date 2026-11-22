@@ -47,6 +47,11 @@ namespace RBX {
 		TreeStage(IStage* upstream, World* world);
 		virtual ~TreeStage();
 
+		// SYNTHETIC: PLAYER 0x008ec2f0
+		// SYNTHETIC: STUDIO 0x00a0a520
+		// RBX::TreeStage::`scalar deleting destructor'
+
+
 		// mac: 0x5A62C6 (10B): TREE_STAGE.
 		// FUNCTION: PLAYER 0x008ec020
 		virtual StageType getStageType() const { return TREE_STAGE; }

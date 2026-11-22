@@ -26,6 +26,11 @@ namespace RBX {
 		EdgeStage(IStage* upstream, World* world);
 		virtual ~EdgeStage();
 
+		// SYNTHETIC: PLAYER 0x009995e0
+		// SYNTHETIC: STUDIO 0x00a59b70
+		// RBX::EdgeStage::`scalar deleting destructor'
+
+
 		// mac: 0x5735CE (10B): EDGE_STAGE.
 		// FUNCTION: PLAYER 0x007fa990
 		// FUNCTION: STUDIO 0x00a26f30

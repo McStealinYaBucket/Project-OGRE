@@ -277,13 +277,13 @@ namespace RBX {
 	// STUB: STUDIO 0x00845380
 	TaskScheduler::StepResult DataModelJob::step(const Stats& stats)
 	{
-		TaskScheduler::StepResult result = TaskScheduler::Done;
-		if (shared_ptr<TaskScheduler::Arbiter> arbiter = getArbiter())
-		{
-			(void)arbiter;
-			result = stepDataModelJob(stats);
-		}
-		return result;
+		// 2013: the cast is the out-of-line template at PLAYER 0x004fb420.
+		shared_ptr<DataModelArbiter> arbiter(shared_dynamic_cast<DataModelArbiter>(getArbiter()));
+		if (!arbiter)
+			return TaskScheduler::Done;
+
+		Limits::Counter::Activator activator(arbiter->m_unk0x830);
+		return stepDataModelJob(stats);
 	}
 
 } // namespace RBX

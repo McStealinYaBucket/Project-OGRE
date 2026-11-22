@@ -1,5 +1,5 @@
 /* App/v8world/EdgeBuffer.cpp -- October 2013 (assembly edge buffer; mac batches 234/235/240).
-   pushEdgeIfOk returns the binary bool verdict (2016 spells void). */
+   pushEdgeIfOk returns void (2013 leaves eax unset on return, PLAYER 0x0099926a). */
 #include "stdafx.h"
 #include "V8World/EdgeBuffer.h"
 #include "V8World/Assembly.h"
@@ -13,12 +13,12 @@
 namespace RBX {
 
 	// D2 0x57255A (batch240).
-	// STUB: PLAYER 0x009994a0
-	// STUB: STUDIO 0x00a59a30
+	// FUNCTION: PLAYER 0x009994a0
+	// FUNCTION: STUDIO 0x00a59a30
 	EdgeBuffer::~EdgeBuffer()
 	{
 		RBXASSERT(assemblyEdges.empty());
-		delete downstream;
+		// downstream: deleted by ~IStage.
 	}
 
 	// 2016 shape (first-party).
@@ -72,32 +72,32 @@ namespace RBX {
 
 
 	// mac: 0x5728E2 (289B, batch234).
-	// STUB: PLAYER 0x00999170
-	// STUB: STUDIO 0x00a59700
-	bool EdgeBuffer::pushEdgeIfOk(Edge* e)
+	// FUNCTION: PLAYER 0x00999170
+	// FUNCTION: STUDIO 0x00a59700
+	void EdgeBuffer::pushEdgeIfOk(Edge* e)
 	{
-		if (!e->inStage(this))
-			return false;
-		RBXASSERT(Joint::isKinematicJoint(e) == Joint::isMotorJoint(e));
-		bool ok;
-		if (Joint::isKinematicJoint(e)) ok = pushKinematicOk(e);
-		else ok = pushSpringOk(e);
-		if (ok) {
-			e->generateDataForMovingAssemblyStage();  // vtbl+24
-			getDownstreamWS()->onEdgeAdded(e);
+		if (e->inStage(this))
+		{
+			RBXASSERT(Joint::isKinematicJoint(e) == Joint::isMotorJoint(e));
+			bool ok;
+			if (Joint::isKinematicJoint(e)) ok = pushKinematicOk(e);
+			else ok = pushSpringOk(e);
+			if (ok) {
+				e->generateDataForMovingAssemblyStage();  // vtbl+24
+				getDownstreamWS()->onEdgeAdded(e);
+			}
 		}
-		return ok;
 	}
-	// STUB: PLAYER 0x00998ef0
-	// STUB: STUDIO 0x00a59480
+	// FUNCTION: PLAYER 0x00998ef0
+	// FUNCTION: STUDIO 0x00a59480
 	bool EdgeBuffer::pushSpringOk(Edge* e)
 	{
 		RBXASSERT(e->inStage(this));
 		Assembly* a0 = e->getPrim0()->getAssembly();
 		Assembly* a1 = e->getPrim1()->getAssembly();
-		return assemblyIsHere(a0) && assemblyIsHere(a1)
+		bool ok = assemblyIsHere(a0) && assemblyIsHere(a1)
 			&& (a0->downstreamOfStage(this) || a1->downstreamOfStage(this))
-			&& (a0 != a1);
+			&& (a0 != a1); return ok;  // through a bool local: mov al,1 (a direct return gives mov eax,1)
 	}
 
 

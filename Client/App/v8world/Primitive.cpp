@@ -6,6 +6,7 @@
 #include "stdafx.h"
 
 #include "V8World/Primitive.h"
+#include "V8World/World.h"
 #include "V8World/Assembly.h"
 #include "V8World/Clump.h"
 #include "V8World/Mechanism.h"
@@ -15,6 +16,7 @@
 #include "V8World/Contact.h"
 #include "V8World/IMoving.h"
 #include "V8Kernel/Body.h"
+#include "V8Kernel/Constants.h"
 #include "Util/Velocity.h"
 #include "Util/SpanningEdge.h"
 #include "Util/Math.h"
@@ -26,55 +28,54 @@ namespace RBX {
 	// STUB: PLAYER 0x00756a40
 	// STUB: STUDIO 0x00895d10
 	Primitive::Primitive(int geometryType)
-		: geometryType(geometryType)
+		: m_unk0x7c(false)
+		, networkOwner()
+		, guidSetExternally(false)
+		, sizeMultiplier(SIZE_MULTIPLIER_0)
+		, sortSize(0)
+		, collideCount(0)
+		, contacts(this)
+		, joints(this)
+		, worldIndex(-1)
+		, world(NULL)
+		, fuzzyExtents(G3D::Vector3::maxFinite(), -G3D::Vector3::maxFinite())
+		, fuzzyExtentsStateId(static_cast<unsigned int>(-2))
+		, geometry(NULL)
+		, body(new Body())
+		, myOwner(NULL)
+		, engineType(0)
+		, dragging(false)
+		, anchoredProperty(false)
+		, preventCollide(false)
+		, networkIsSleeping(false)
 		, specificGravity(0.0f)
 		, friction(defaultFriction())
 		, elasticity(defaultElasticity())
-		, anchoredProperty(false)
-		, dragging(false)
-		, preventCollide(false)
-		, networkIsSleeping(false)
-		, myOwner(NULL)
-		, worldIndex(-1)
-		, world(NULL)
-		, guidSynced(false)
-		, contacts(this)
-		, joints(this)
+		, jointKDirty(true)
+		, jointKOwner(this)
+		, jointK(0.0f)
+		, jointKCompute(&Primitive::computeJointK)
+		, geometryType(geometryType)
 		, partSize(4.0f, 1.0f, 2.0f)
-		// Binary C2 defaults unrecovered for +0x74/+0x78; 0 matches the
-		// setName default arm (anything-but-HRP/Torso -> 0) and the aux is
-		// only ever zeroed, so 0/0 is the consistent choice.
-		, sizeMultiplier(SIZE_MULTIPLIER_0)
-		, sizeMultiplierAux(0)
-		, sortSize(0)
-		// The fuzzy-extents cache (binary +0xD0/+0xE8) must start DIRTY:
-		// getFastFuzzyExtents only recomputes when the cached serial differs
-		// from the body serial, so seed the cache with a value the body serial
-		// cannot take.
 		, bodyUpdateSerial(0)
-		, cachedFuzzyExtentsSerial(1)
 		, contactElasticity316(0.0f)
 		, contactParamsDirty320(false)
-		// Kernel body (binary +240; 2016 `body(new Body())`). D2 below
-		// deletes it (2016 D2 shape; the !world/geometry asserts need
-		// members not yet modeled -- queued with the full C2/D2).
-		, body(new Body())
-		, collideCount(0)
-		, networkOwner()
 	{
-		for (int i = 0; i < 6; ++i)
+		for (int i = 0; i < 6; ++i) {
 			surfaces[i] = NO_SURFACE;
+			surfaceData[i] = NULL;
+		}
 	}
 
-	// D2: body teardown (see C2 note).
+	// D2 0x00755540: asserts !world/geometry/body (:76-78), deletes geometry, body and surfaceData.
 	Primitive::~Primitive()
 	{
 		delete body;
 	}
 
 	// mac: 0x5914E2 (batch257).
-	// STUB: PLAYER 0x00753e10
-	// STUB: STUDIO 0x008931c0
+	// FUNCTION: PLAYER 0x00753e10
+	// FUNCTION: STUDIO 0x008931c0
 	bool Primitive::getCanThrottle() const
 	{
 		return body->getCanThrottle();
@@ -98,11 +99,7 @@ namespace RBX {
 		return Clump::getConstPrimitiveClump(this);
 	}
 
-	// Batch261: change-gated flag (+100) + owner notify. NOTE SLOT:
-	// the binary calls owner vtbl+12 with (owner) only; our IMoving
-	// declares onNetworkIsSleepingChanged at MSVC +20, so the callee
-	// may differ -- TODO-verify with PartInstance owners (unreachable
-	// in-tree: test prims have NULL owners).
+	// Batch261: change-gated flag (+100) + owner notify (binary: owner vtbl+12, TODO-verify the slot).
 	void Primitive::setNetworkIsSleeping(bool value)
 	{
 		if (value != networkIsSleeping)
@@ -121,10 +118,31 @@ namespace RBX {
 			getBody()->setVelocity(Velocity::zero());
 	}
 
+	// FUNCTION: PLAYER 0x007542a0
 	void Primitive::setSurfaceType(NormalId normalId, SurfaceType surfaceType)
 	{
-		if (normalId >= 0 && normalId < 6)
+		if (surfaces[normalId] != surfaceType) {
 			surfaces[normalId] = surfaceType;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x00753bb0
+	const Guid& Primitive::getGuid() const
+	{
+		RBXASSERT(guidSetExternally);
+		return guid;
 	}
 
 	int Primitive::countNumAutoJoints() const
@@ -157,53 +175,39 @@ namespace RBX {
 		return NULL;
 	}
 
-	// mac: 0x5904B0.
 	Edge* Primitive::getJoint(int i)
 	{
 		return joints.getEdge(i);
 	}
 
-	// mac: 0x59084A (101B, batch223): first joints-list edge whose type is
-	// WELD(1)/UNIVERSAL(5)/MANUAL_WELD(2), i.e. (t&~4)==1 || t==2 with
-	// t = edgeType ? 13 : jointType. Static per the mangling.
+	// FUNCTION: PLAYER 0x007548b0
 	Edge* Primitive::getFirstRigidAt(Joint* start)
 	{
-		Edge* edge = start;
-		if (edge == NULL)
-			return NULL;
-		while (true)
-		{
-			int type = 13;
-			if (edge->getEdgeType() == Edge::JOINT)
-				type = rbx_static_cast<Joint*>(edge)->getJointType();
-			if ((type & ~4) == 1 || type == 2)
-				break;
-			edge = joints.getNext(this, edge);
-			if (edge == NULL)
-				return NULL;
+		for (Edge* e = start; e != NULL; e = joints.getNext(this, e)) {
+			if (Joint::isRigidJoint(e)) {
+				return e;
+			}
 		}
-		return edge;
+		return NULL;
 	}
 
-	// mac: 0x5908B0 (batch223).
+	// STUB: PLAYER 0x00754910
 	RigidJoint* Primitive::getFirstRigid()
 	{
 		return static_cast<RigidJoint*>(getFirstRigidAt(getFirstJoint()));
 	}
 
-	// mac: 0x5908E0 (batch223).
+	// FUNCTION: PLAYER 0x00754940
 	RigidJoint* Primitive::getNextRigid(RigidJoint* prev)
 	{
 		return static_cast<RigidJoint*>(getFirstRigidAt(getNextJoint(prev)));
 	}
 
-	// Const twin of getJoint(int) (binary Primitive::getConstJoint).
 	const Joint* Primitive::getConstJoint(int i) const
 	{
 		return static_cast<const Joint*>(joints.getEdge(i));
 	}
 
-	// mac: 0x5907C4 (29B, batch218).
 	Joint* Primitive::getFirstJoint()
 	{
 		if (joints.size() <= 0)
@@ -211,14 +215,10 @@ namespace RBX {
 		return static_cast<Joint*>(joints.getEdge(0));
 	}
 
-	// mac: 0x5907E2 (38B, batch218): EdgeList::getNext over the joints list.
 	Joint* Primitive::getNextJoint(Joint* prev)
 	{
 		return static_cast<Joint*>(joints.getNext(this, prev));
 	}
-
-
-	// mac: 0x590190: out of line here as in 2013 (Primitive.cpp:226-227).
 	// FUNCTION: PLAYER 0x007546b0
 	// FUNCTION: STUDIO 0x008939e0
 	Edge* EdgeList::getNext(const Primitive* p, Edge* e) const
@@ -275,61 +275,67 @@ namespace RBX {
 
 
 
+
+
+
+
+
+
 	// mac: 0x590516 (259B). Static-style: p0 = e+16, p1 = e+20 (getPrim0/1
 	// inlines); getEdgeType (vtbl+20) routes foreign edges to both prims'
 	// contacts lists (+128) and real joints to the joints lists (+164).
 	// Single-prim joints (p1 NULL) take the :301 Anchor/Free assert arm.
-	// STUB: PLAYER 0x007564b0
-	// STUB: STUDIO 0x008957d0
+	// FUNCTION: PLAYER 0x007564b0
+	// FUNCTION: STUDIO 0x008957d0
 	void Primitive::insertEdge(Edge* e)
 	{
 		Primitive* p0 = e->getPrim0();
 		Primitive* p1 = e->getPrim1();
-		if (!Joint::isJoint(e))
-		{
-			p0->contacts.insertEdge(e);
-			p1->contacts.insertEdge(e);
-		}
-		else
+		if (Joint::isJoint(e))
 		{
 			p0->joints.insertEdge(e);
 			if (p1 != NULL)
 				p1->joints.insertEdge(e);
 			else
-				// Primitive.cpp:301, binary-verbatim (classes landed 118).
 				RBXASSERT(AnchorJoint::isAnchorJoint(rbx_static_cast<Joint*>(e))
 					|| FreeJoint::isFreeJoint(rbx_static_cast<Joint*>(e)));  // :301
 		}
+		else
+		{
+			p0->contacts.insertEdge(e);
+			p1->contacts.insertEdge(e);
+		}
+
 	}
 
 
 	// mac: 0x59061A (259B). Mirror of insertEdge (:326 assert arm).
-	// STUB: PLAYER 0x00756160
-	// STUB: STUDIO 0x00895480
+	// FUNCTION: PLAYER 0x00756160
+	// FUNCTION: STUDIO 0x00895480
 	void Primitive::removeEdge(Edge* e)
 	{
 		Primitive* p0 = e->getPrim0();
 		Primitive* p1 = e->getPrim1();
-		if (!Joint::isJoint(e))
-		{
-			p0->contacts.removeEdge(e);
-			p1->contacts.removeEdge(e);
-		}
-		else
+		if (Joint::isJoint(e))
 		{
 			p0->joints.removeEdge(e);
 			if (p1 != NULL)
 				p1->joints.removeEdge(e);
 			else
-				// Primitive.cpp:326, binary-verbatim (classes landed 118).
 				RBXASSERT(AnchorJoint::isAnchorJoint(rbx_static_cast<Joint*>(e))
 					|| FreeJoint::isFreeJoint(rbx_static_cast<Joint*>(e)));  // :326
 		}
+		else
+		{
+			p0->contacts.removeEdge(e);
+			p1->contacts.removeEdge(e);
+		}
+
 	}
 
 	// mac: 0x5921E0 (32B, batch229).
-	// STUB: PLAYER 0x007553e0
-	// STUB: STUDIO 0x00894700
+	// FUNCTION: PLAYER 0x007553e0
+	// FUNCTION: STUDIO 0x00894700
 	unsigned int Primitive::getSortSize()
 	{
 		if (sortSize == 0)
@@ -399,7 +405,7 @@ namespace RBX {
 		{
 			partSize = clipped;
 			++bodyUpdateSerial;
-			sizeMultiplierAux = 0;
+			sortSize = 0;
 		}
 	}
 
@@ -411,7 +417,7 @@ namespace RBX {
 	{
 		RBXASSERT(world == NULL);  // Primitive.cpp:152 "!world"
 		guid.copyDataFrom(value);
-		guidSynced = true;
+		guidSetExternally = true;
 	}
 
 	// getMechanism 0x590F4A / getConstMechanism 0x590F54: forward to the
@@ -430,6 +436,8 @@ namespace RBX {
 	// shape). 0x590F36 (5B tail-jump, batch260: bare jmp to
 	// Assembly::getPrimitiveAssembly -- the decompiler's second arg is
 	// phantom; disasm shows (this) only).
+	// FUNCTION: PLAYER 0x00753c90
+	// FUNCTION: STUDIO 0x00893040
 	Assembly* Primitive::getAssembly()
 	{
 		return Assembly::getPrimitiveAssembly(this);
@@ -447,7 +455,7 @@ namespace RBX {
 			if (myOwner == NULL)
 			{
 				sizeMultiplier = value;
-				sizeMultiplierAux = 0;
+				sortSize = 0;
 			}
 		}
 	}
@@ -530,11 +538,11 @@ namespace RBX {
 	// reads the world frame out of the Body at this+0xF0 (offset 0xA4)
 	// after refreshing it; the primitive's own coordinate frame is the
 	// same quantity in this model.
-	// STUB: PLAYER 0x00755d40
-	// STUB: STUDIO 0x00895060
+	// FUNCTION: PLAYER 0x00755d40
+	// FUNCTION: STUDIO 0x00895060
 	Face Primitive::getFaceInWorld(NormalId normalId) const
 	{
-		return getFaceInObject(normalId).toWorldSpace(getCoordinateFrame());
+		return getFaceInObject(normalId).toWorldSpace(body->getCoordinateFrame());
 	}
 
 	Edge* Primitive::getContact(int i)
@@ -600,14 +608,14 @@ namespace RBX {
 	//       cached = body->serial;
 	//   }
 	//   return &this->fuzzyExtents;                 // this + 0xD0
-	// STUB: PLAYER 0x007558e0
-	// STUB: STUDIO 0x00894c00
+	// FUNCTION: PLAYER 0x007558e0
+	// FUNCTION: STUDIO 0x00894c00
 	const Extents& Primitive::getFastFuzzyExtents()
 	{
-		if (cachedFuzzyExtentsSerial != bodyUpdateSerial)
+		if (fuzzyExtentsStateId != body->getStateIndex())
 		{
 			fuzzyExtents = computeFuzzyExtents();
-			cachedFuzzyExtentsSerial = bodyUpdateSerial;
+			fuzzyExtentsStateId = body->getStateIndex();
 		}
 		return fuzzyExtents;
 	}
@@ -669,6 +677,105 @@ namespace RBX {
 				return assembly->computeIsGrounded();
 		}
 		return false;
+	}
+
+	// ---- 2013 bodies written after the assert-pinned functions (no asserts; lines free) ----
+	// STUB: PLAYER 0x00753da0
+	// STUB: STUDIO 0x00893150
+	float Primitive::computeJointK()
+	{
+		G3D::Vector3 size = (getGeometryType() == GEOMETRY_MEGACLUSTER) ? G3D::Vector3(4.0f, 4.0f, 4.0f) : getSize();
+		return Constants::getJointK(size, getGeometryType() == GEOMETRY_BALL);
+	}
+
+	// FUNCTION: PLAYER 0x00755f00
+	// FUNCTION: STUDIO 0x00895220
+	const G3D::CoordinateFrame& Primitive::getCoordinateFrame() const
+	{
+		return body->getPV_Spin_Lock()->position;
+	}
+
+	// FUNCTION: PLAYER 0x00753ed0
+	// FUNCTION: STUDIO 0x00893280
+	void Primitive::setEngineType(int value)
+	{
+		if (engineType != value) {
+			Assembly* a = NULL;
+			if (world) {
+				a = world->onPrimitiveEngineChanging(this);
+			}
+			engineType = value;
+			if (a) {
+				world->onPrimitiveEngineChanged(a);
+			}
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00753f40
+	// FUNCTION: STUDIO 0x008932f0
+	void Primitive::setFixed(bool newAnchored, bool newDragging)
+	{
+		bool wasFixed = (anchoredProperty || dragging);
+		bool willBeFixed = (newAnchored || newDragging);
+		bool changed = (wasFixed != willBeFixed);
+		if (changed && world) {
+			world->onPrimitiveFixedChanging(this);
+		}
+		anchoredProperty = newAnchored;
+		dragging = newDragging;
+		if (changed && world) {
+			world->onPrimitiveFixedChanged(this);
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00753fc0
+	// FUNCTION: STUDIO 0x00893370
+	void Primitive::setPreventCollide(bool value)
+	{
+		if (value != preventCollide) {
+			preventCollide = value;
+			if (world) {
+				world->onPrimitivePreventCollideChanged(this);
+			}
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00753ff0
+	// FUNCTION: STUDIO 0x008933a0
+	void Primitive::setFriction(float value)
+	{
+		if (value != friction) {
+			friction = value;
+			if (world) {
+				world->onPrimitiveContactParametersChanged(this);
+			}
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00754030
+	// FUNCTION: STUDIO 0x008933e0
+	void Primitive::setElasticity(float value)
+	{
+		if (value != elasticity) {
+			elasticity = value;
+			if (world) {
+				world->onPrimitiveContactParametersChanged(this);
+			}
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00754cb0
+	// FUNCTION: STUDIO 0x00893fe0
+	void Primitive::setDragging(bool value)
+	{
+		setFixed(anchoredProperty, value);
+	}
+
+	// FUNCTION: PLAYER 0x00754cd0
+	// FUNCTION: STUDIO 0x00894000
+	void Primitive::setAnchoredProperty(bool value)
+	{
+		setFixed(value, dragging);
 	}
 
 } // namespace RBX

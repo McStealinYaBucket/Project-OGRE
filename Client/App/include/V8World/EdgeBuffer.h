@@ -56,7 +56,7 @@ namespace RBX {
 		// mac: 0x5728E2 (batch234: inStage gate + :81 assert + kinematic/
 		// spring dispatch + generateDataForMovingAssemblyStage +
 		// downstream forward; returns the push verdict).
-		bool pushEdgeIfOk(Edge* edge);
+		void pushEdgeIfOk(Edge* edge);
 		// mac: 0x572B2E (batch235: :95 assert + both-here + one-downstream +
 		// distinct-assemblies triple).
 		bool pushSpringOk(Edge* edge);

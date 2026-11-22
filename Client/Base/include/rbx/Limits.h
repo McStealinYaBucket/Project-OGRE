@@ -74,3 +74,15 @@ namespace RBX {
 	} // namespace Limits
 
 } // namespace RBX
+
+// TEMPLATE: PLAYER 0x009b91e0
+// TEMPLATE: STUDIO 0x00a6b110
+// ??B?$thread_specific_shared_ptr@VCounter@Limits@RBX@@@rbx@@QBE?AV?$shared_ptr@VCounter@Limits@RBX@@@boost@@XZ
+
+// TEMPLATE: PLAYER 0x009b9390
+// TEMPLATE: STUDIO 0x00a6b2e0
+// ??$?0PAUdelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@boost@@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@boost@@@detail@2@@shared_count@detail@boost@@QAE@PAUdelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@2@U?$do_heap_delete@Udelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@boost@@@12@@Z
+
+// TEMPLATE: PLAYER 0x009b9420
+// TEMPLATE: STUDIO 0x00a6b370
+// ??$heap_new@Udelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@boost@@@detail@boost@@YAPAUdelete_data@?$thread_specific_ptr@V?$shared_ptr@VCounter@Limits@RBX@@@boost@@@1@XZ

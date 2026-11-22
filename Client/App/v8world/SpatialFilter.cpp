@@ -11,24 +11,24 @@
 namespace RBX {
 
 	// mac: 0x5A1F06 (361B, batch220).
-	// STUB: PLAYER 0x008e4e20
-	// STUB: STUDIO 0x009cffd0
-	SpatialFilter::SpatialFilter(IStage* upstreamArg, World* worldArg)
-		: mode(1)
+	// FUNCTION: PLAYER 0x008e4e20
+	// FUNCTION: STUDIO 0x009cffd0
+	SpatialFilter::SpatialFilter(IStage* upstream, World* world)
+		: IWorldStage(upstream, new MechToAssemblyStage(this, world), world)
+		, mode(1)
 		, phase(-1)
-		, flags(-1)
+		, flags(0xffff)
 	{
-		downstream = new MechToAssemblyStage(this, worldArg);
-		upstream = upstreamArg;
-		world = worldArg;
 	}
+
+
 
 
 	SpatialFilter::~SpatialFilter()
 	{
 		for (int i = 0; i < 4; ++i)
 			RBXASSERT(assemblies[i].empty());
-		delete static_cast<MechToAssemblyStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 

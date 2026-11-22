@@ -29,6 +29,11 @@ namespace RBX {
 		GroundStage(IStage* upstream, World* world);
 		virtual ~GroundStage();
 
+		// SYNTHETIC: PLAYER 0x008eaa70
+		// SYNTHETIC: STUDIO 0x00a08c70
+		// RBX::GroundStage::`scalar deleting destructor'
+
+
 		// mac: 0x575B66 (10B): GROUND_STAGE.
 		// FUNCTION: PLAYER 0x00742bc0
 		// FUNCTION: STUDIO 0x007a0640

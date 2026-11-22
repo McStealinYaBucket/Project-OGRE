@@ -13,6 +13,7 @@
 #include "V8World/StepJointsStage.h"
 #include "V8World/HumanoidStage.h"
 #include "V8World/Primitive.h"
+#include "V8World/Assembly.h"
 #include "V8World/Joint.h"
 #include "V8World/World.h"
 
@@ -35,9 +36,9 @@ namespace RBX {
 
 	StepJointsStage::~StepJointsStage()
 	{
-		// D2 pattern (uniform node: delete +8; members trivially
-		// destructible; profiler always NULL).
-		delete static_cast<HumanoidStage*>(downstream);
+		// 2013 D1 0x008ef340 asserts worldStepJoints.empty() (:26), deletes the profiler and clears the
+		// boost::intrusive list before ~IStage; ours keeps a raw list, so only the emptiness check stays.
+		RBXASSERT(numJoints == 0);
 	}
 
 	// mac: 0x5A440C (121B, batch228).
@@ -109,6 +110,24 @@ namespace RBX {
 		joint->moveNext = NULL;
 		joint->movePrev = NULL;
 		--numJoints;
+	}
+
+	// FUNCTION: PLAYER 0x008ef0d0
+	// FUNCTION: STUDIO 0x00a0ce50
+	void StepJointsStage::onSimulateAssemblyAdded(Assembly* a)
+	{
+		a->putInStage(this);
+
+		rbx_static_cast<HumanoidStage*>(getDownstreamWS())->onAssemblyAdded(a);
+	}
+
+	// FUNCTION: PLAYER 0x008ef0f0
+	// FUNCTION: STUDIO 0x00a0ce70
+	void StepJointsStage::onSimulateAssemblyRemoving(Assembly* a)
+	{
+		rbx_static_cast<HumanoidStage*>(getDownstreamWS())->onAssemblyRemoving(a);
+
+		a->removeFromStage(this);
 	}
 
 } // namespace RBX

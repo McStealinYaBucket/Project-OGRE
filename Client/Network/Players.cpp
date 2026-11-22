@@ -44,14 +44,14 @@ namespace Network {
 		return (int)numChildren();
 	}
 
-	// 2013 has Players::clientIsPresent in Client.cpp (0x005adc70, between Client::findClient
-	// and Client::onServiceProvider).
-	// STUB: PLAYER 0x005adc70
-	// STUB: STUDIO 0x0060c6b0
-	bool Players::clientIsPresent(const Instance* context, bool testInDatamodel)
-	{
-		return Client::clientIsPresent(context, testInDatamodel);
-	}
+	// Players::clientIsPresent is in Client.cpp (2013: PLAYER 0x005adc70, after Client::findClient).
+
+
+
+
+
+
+
 
 	bool Players::serverIsPresent(const Instance* context, bool testInDatamodel)
 	{
@@ -181,8 +181,8 @@ namespace Network {
 		const ServiceProvider* serviceProvider = ServiceProvider::findServiceProvider(context);
 		RBXASSERT(!testInDatamodel || serviceProvider!=NULL);
 		return serviceProvider && !Server::serverIsPresent(context, testInDatamodel); }
-	// STUB: PLAYER 0x005689c0
-	// STUB: STUDIO 0x005ccbc0
+	// FUNCTION: PLAYER 0x005689c0
+	// FUNCTION: STUDIO 0x005ccbc0
 	bool Players::backendProcessing(const Instance* context, bool testInDatamodel)
 	{
 		const ServiceProvider* serviceProvider = ServiceProvider::findServiceProvider(context);

@@ -58,15 +58,15 @@ namespace RBX {
 	// live-delete tests).
 	void Contact::deleteConnector(ContactConnector* connector)
 	{
-		Kernel* kernel = getKernel();
-		kernel->removeConnector(connector);
+		// 2013 pushes connector before calling getKernel(): one expression, not a local.
+		getKernel()->removeConnector(connector);
 		if (connector != NULL)
 			delete connector;
 	}
 
 	// mac: 0x55E228 (42B, batch584: deleteConnector(+48) + null when live).
-	// STUB: PLAYER 0x00850a50
-	// STUB: STUDIO 0x009a8730
+	// FUNCTION: PLAYER 0x00850a50 FOLDED
+	// FUNCTION: STUDIO 0x009a8730 FOLDED
 	void BallBallContact::deleteAllConnectors()
 	{
 		if (connector48 != NULL)
@@ -77,8 +77,8 @@ namespace RBX {
 	}
 
 	// mac: 0x55E4D0 (42B, batch584: identical twin of BallBall's).
-	// STUB: PLAYER 0x00850a50
-	// STUB: STUDIO 0x009a8730
+	// FUNCTION: PLAYER 0x00850a50 FOLDED
+	// FUNCTION: STUDIO 0x009a8730 FOLDED
 	void BallBlockContact::deleteAllConnectors()
 	{
 		if (connector48 != NULL)
@@ -402,23 +402,23 @@ namespace RBX {
 
 
 
-
-
+#define myData (myData())  // 2013 assert text "myData && contactParams" (2013 had members by these names)
+#define contactParams (getContactData())
 	// mac: 0x55EBD6 (178B, batch308: :414 myData && contactParams assert,
 	// then the Data find; NULL when ungenerated).
-	// STUB: PLAYER 0x00854510
-	// STUB: STUDIO 0x009ac1c0
+	// FUNCTION: PLAYER 0x00854510
+	// FUNCTION: STUDIO 0x009ac1c0
 	GeoPairConnector* BlockBlockContact::findGeoPairConnector(Body* b0, Body* b1,
 		GeoPairType pairType, int id0, int id1)
 	{
-		RBXASSERT(myData() != NULL && getContactData() != NULL);  // 2013: "myData && contactParams" (members)
-		if (myData() != NULL && getContactData() != NULL)
-			return myData()->findGeoPairConnector(b0, b1, pairType, id0, id1);
+		RBXASSERT(myData && contactParams);
+		if (myData != NULL && contactParams != NULL)
+			return myData->findGeoPairConnector(b0, b1, pairType, id0, id1);
 		return NULL;
 	}
-
+#undef myData
 	int BlockBlockContact::pairMisses = 0;
-
+#undef contactParams
 	// mac: 0x5612CC (batch302: myData null -> 0; FFlag true arm reads the
 	// refactor-layout count (*(myData + 36*[myData+72] + 32)) whose
 	// layout is unmapped -- loud assert + legacy fallthrough. Flag is

@@ -27,8 +27,8 @@
 #pragma once
 
 #include "V8World/IWorldStage.h"
+#include "V8World/Assembly.h"
 
-#include <list>
 #include <map>
 
 namespace RBX {
@@ -74,8 +74,9 @@ namespace RBX {
 
 	private:
 		std::map<Assembly*, int> movingAssemblyRoots;   // +16 (D2 :29).
-		std::list<Assembly*> movingDynamicAssemblies;   // +44 (D2 :27).
-		std::list<Assembly*> realTimeAssemblies;        // +56 (D2 :28).
+		typedef boost::intrusive::list<Assembly, boost::intrusive::base_hook<SimulateStageHook> > Assemblies;
+		Assemblies movingDynamicAssemblies;   // +0x1c (size, then the root node; D2 :27).
+		Assemblies realTimeAssemblies;        // +0x28 (D2 :28).
 	};
 
 } // namespace RBX

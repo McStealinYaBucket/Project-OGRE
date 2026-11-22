@@ -96,7 +96,7 @@ namespace RBX {
 		// Wake machinery (batch251/259: edge/contact -> assembly fans +
 		// state-gated transitions).
 		void wakeEvent(Edge* edge);
-		void wakeEvent(Assembly* assembly);
+		void wakeEvent(Assembly* assembly);  void onAssemblyAdded(Assembly* assembly); void onAssemblyRemoving(Assembly* assembly);
 		void recursiveWakeEvent(Contact* contact);
 		void recursiveWakeEvent(Assembly* assembly);
 		// highVelocityNewTouch STUB (banked EA batch259; needs the

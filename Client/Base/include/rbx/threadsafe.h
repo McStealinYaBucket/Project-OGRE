@@ -342,12 +342,13 @@ namespace rbx
 		}
 
 		// Returns the time that the head item has been waiting or zero.
-		double head_waittime_sec(const RBX::Time& timeNow)
+		// 2013 (iOS 10-29 head_waittime(), PLAYER 0x0063f200): no argument, reads the clock itself.
+		RBX::Time::Interval head_waittime()
 		{
 			mutex::scoped_lock lock(this->m);
 			if (this->queue.empty())
-				return 0.0;
-			return (timeNow - this->queue.front().timestamp).seconds();
+				return RBX::Time::Interval(0);
+			return RBX::Time::now<RBX::Time::Fast>() - this->queue.front().timestamp;
 		}
 
 		inline size_t size() const { return this->queue.size(); }
@@ -478,3 +479,7 @@ return *safe_static_do_get_##NAME();\
 
 
 }
+
+// TEMPLATE: PLAYER 0x0063f200
+// TEMPLATE: STUDIO 0x0075ca90
+// ?head_waittime@?$timestamped_safe_queue@V?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@@rbx@@QAE?AVInterval@Time@RBX@@XZ

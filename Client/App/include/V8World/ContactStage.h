@@ -22,6 +22,11 @@ namespace RBX {
 		ContactStage(IStage* upstream, World* world);
 		virtual ~ContactStage();
 
+		// SYNTHETIC: PLAYER 0x009aa810
+		// SYNTHETIC: STUDIO 0x00a61860
+		// RBX::ContactStage::`scalar deleting destructor'
+
+
 		// mac: 0x56F8D8 (10B): CONTACT_STAGE.
 		// FUNCTION: PLAYER 0x00962a80
 		virtual StageType getStageType() const { return CONTACT_STAGE; }

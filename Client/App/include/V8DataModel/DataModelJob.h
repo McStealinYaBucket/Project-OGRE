@@ -124,6 +124,7 @@ namespace RBX {
 		virtual void postStep(TaskScheduler::Job* job);
 
 	private:
+		friend class DataModelJob;	// step() activates the counter
 		// 2013 0x830 (ctor 0x0070cf60: `new 4`, zeroed, wrapped by shared_ptr ctor 0x0070cc50).
 		// A 4-byte zeroed object: most likely the Limits::Counter that DataModelJob::step's
 		// Counter::Activator uses (mac DataModelJob::step reads arbiter+2088/2092), not proven.

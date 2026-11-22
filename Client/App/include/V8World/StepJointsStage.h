@@ -19,6 +19,7 @@ namespace RBX {
 	class World;
 	class Edge;
 	class Joint;
+	class Assembly;
 
 	class StepJointsStage : public IWorldStage
 	{
@@ -35,6 +36,9 @@ namespace RBX {
 
 		// mac: 0x5A4302 (169B, batch232).
 		void removeJoint(Joint* joint);
+
+		void onSimulateAssemblyAdded(Assembly* a);
+		void onSimulateAssemblyRemoving(Assembly* a);
 
 	private:
 		int numJoints;        // +16.

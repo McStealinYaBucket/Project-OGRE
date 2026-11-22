@@ -163,7 +163,7 @@ namespace RBX
 		/*override*/ void onChildRemoving(Instance* child);
 
 		// FUNCTION: PLAYER 0x0062d6b0
-		// STUB: STUDIO 0x0074d920
+		// FUNCTION: STUDIO 0x0074d920
 		/* override */ bool askAddChild(const Instance* instance) const
 		{
 			return dynamic_cast<const Service*>(instance) != NULL;

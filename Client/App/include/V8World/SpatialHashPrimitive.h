@@ -21,20 +21,18 @@
 
 #pragma once
 
-#include "Util/Vector3int32.h"
+#include "Util/ExtentsInt32.h"
 
 namespace RBX {
 
 	struct BasicSpatialHashPrimitive
 	{
-		Vector3int32 minCell;
-		Vector3int32 maxCell;
+		// Windows: an ExtentsInt32 (Primitive C2 calls ExtentsInt32() 0x004e5df0 on +0x34), then the level.
+		ExtentsInt32 spatialExtents;
 		int spatialNodeLevel;   // -1 = not in any hash
 
 		BasicSpatialHashPrimitive()
-			: minCell(0, 0, 0)
-			, maxCell(0, 0, 0)
-			, spatialNodeLevel(-1)
+			: spatialNodeLevel(-1)
 		{}
 
 		int getSpatialNodeLevel() const { return spatialNodeLevel; }

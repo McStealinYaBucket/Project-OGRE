@@ -22,6 +22,11 @@ namespace RBX {
 		MechToAssemblyStage(IStage* upstream, World* world);
 		virtual ~MechToAssemblyStage();
 
+		// SYNTHETIC: PLAYER 0x00997240
+		// SYNTHETIC: STUDIO 0x00a49fd0
+		// RBX::MechToAssemblyStage::`scalar deleting destructor'
+
+
 		// mac: 0x57E8A6 (10B): MECH_TO_ASSEMBLY_STAGE.
 		// FUNCTION: PLAYER 0x00992a80 FOLDED
 		// FUNCTION: STUDIO 0x007a06a0 FOLDED

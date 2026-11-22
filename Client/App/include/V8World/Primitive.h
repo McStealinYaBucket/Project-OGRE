@@ -6,11 +6,8 @@
      zeroed +67.., PrimitiveLifetime log; PartInstance+43 holds the Primitive*.
      Defaults friction 0.0 / elasticity 0.75 match March 2016
      (defaultFriction/defaultElasticity inlines).
-     GeometryType enum carried from 2016 App/include/v8world/Geometry.h
-     (UNDEFINED..TRI_MESH; joinAll 0x5AB34C skips MEGACLUSTER=10).
-   TODO: full decompile (Body/Geometry/EdgeLists/joints/contacts/network —
-     only the PartInstance-facing live state is modeled here).
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8world/Primitive.h */
+     GeometryType enum from 2016 Geometry.h (joinAll 0x5AB34C skips MEGACLUSTER=10).
+   Data layout: Windows 2013 (see the data block); EdgeList asserts sit on Primitive.h:53-54. */
 
 #pragma once
 
@@ -30,6 +27,9 @@
 #include "rbx/Debug.h"
 #include "V8World/IPipelined.h"
 #include "V8World/SpatialHashPrimitive.h"
+#include "Util/ConcurrencyValidator.h"
+#include "V8Kernel/BodyPvSetter.h"
+#include "decomp.h"
 
 namespace RBX {
 
@@ -87,6 +87,8 @@ namespace RBX {
 	class Primitive
 		: public IPipelined
 		, public SpanningNode
+		, public BodyPvSetter
+		, public BasicSpatialHashPrimitive
 	{
 	public:
 		typedef enum {
@@ -141,17 +143,19 @@ namespace RBX {
 				return 3;
 			return 2;
 		}
-		void setFriction(float value) { friction = value; }
+		void setFriction(float value);  // 0x00753ff0
 		float getFriction() const { return friction; }
-		void setElasticity(float value) { elasticity = value; }
+		void setElasticity(float value);  // 0x00754030
 		float getElasticity() const { return elasticity; }
 		void setSpecificGravity(float value) { specificGravity = value; }
 		float getSpecificGravity() const { return specificGravity; }
-		void setAnchoredProperty(bool value) { anchoredProperty = value; }
+		void setAnchoredProperty(bool value);  // 0x00754cd0
 		bool getAnchoredProperty() const { return anchoredProperty; }
-		void setDragging(bool value) { dragging = value; }
+		void setDragging(bool value);  // 0x00754cb0
 		bool getDragging() const { return dragging; }
-		void setPreventCollide(bool value) { preventCollide = value; }
+		void setPreventCollide(bool value);  // 0x00753fc0
+		void setFixed(bool anchored, bool dragging);  // 0x00753f40
+		void setEngineType(int value);  int getEngineType() const { return engineType; }  enum EngineType { DYNAMICS_ENGINE, HUMANOID_ENGINE };  // set 0x00753ed0
 		bool getPreventCollide() const { return preventCollide; }
 		// mac: 0x58FC9E (151B): 0->1, 1->5, 2->10, 3->20, else assert "0" (:120)
 		// + return 1.
@@ -211,10 +215,7 @@ namespace RBX {
 		void setSurfaceType(NormalId normalId, SurfaceType surfaceType);
 		SurfaceType getSurfaceType(NormalId normalId) const;
 
-		// Edge adjacency (embedded lists; contacts +128, joints +164).
-		// Public like the binary's direct prim+164 access pattern.
-		EdgeList contacts;
-		EdgeList joints;
+		// Edge adjacency: contacts +0x98, joints +0xbc (data block below; public).
 
 		// mac: 0x5904B0: joints.getEdge(i).
 		Edge* getJoint(int i);
@@ -339,7 +340,8 @@ namespace RBX {
 
 		// mac: 0x4419EC/0x447A86: physics-space coordinate frame (setCoordinateFrame
 		// writes through here via PartInstance::setPhysics equivalent).
-		const G3D::CoordinateFrame& getCoordinateFrame() const { return coordinateFrame; }
+		// 2013: out of line, the body's PV position (0x00755f00 tail-jumps to Body::getPV_Spin_Lock).
+		const G3D::CoordinateFrame& getCoordinateFrame() const;
 		void setCoordinateFrame(const G3D::CoordinateFrame& value) { coordinateFrame = value; ++bodyUpdateSerial; }
 
 		// mac: 0x591E02 / 0x59199E.  Both read the GRID size from *(this+0xEC)
@@ -360,14 +362,13 @@ namespace RBX {
 		// binary's 0x150); the template reaches it through these accessors,
 		// mirroring BasicSpatialHashPrimitive::getSpatialNodeLevel().
 		// Level starts at -1 (asserted on insert, :585).
-		int getSpatialNodeLevel() const { return spatialHashState.getSpatialNodeLevel(); }
-		const Vector3int32& getSpatialMinCell() const { return spatialHashState.minCell; }
-		const Vector3int32& getSpatialMaxCell() const { return spatialHashState.maxCell; }
+		const Vector3int32& getSpatialMinCell() const { return spatialExtents.low; }
+		const Vector3int32& getSpatialMaxCell() const { return spatialExtents.high; }
 		void setSpatialCells(const Vector3int32& minCell, const Vector3int32& maxCell, int level)
 		{
-			spatialHashState.minCell = minCell;
-			spatialHashState.maxCell = maxCell;
-			spatialHashState.spatialNodeLevel = level;
+			spatialExtents.low = minCell;
+			spatialExtents.high = maxCell;
+			spatialNodeLevel = level;
 		}
 
 		// ---- Fuzzy extents (the auto-joint broadphase input) ----
@@ -445,6 +446,8 @@ namespace RBX {
 		// (deterministic; binary leaves fresh-heap garbage, which no
 		// green path may depend on -- loud DELTA).
 		const SystemAddress& getNetworkOwner() const { return networkOwner; }
+		// ios: 0x00753da0; JointK's compute function (C2 stores &computeJointK at +0x168).
+		float computeJointK();
 		// mac: 0x5914E2 (batch257: *(Body+56) canThrottle via prim+240).
 		bool getCanThrottle() const;
 		// mac: 0x590F36 (5B tail-jump, batch260: forwards to
@@ -482,70 +485,64 @@ namespace RBX {
 		// flag +112.  Identity of +112 TODO (set on sync).
 		void setGuid(const Guid& value);
 		// Bring-up view of the +104 guid (no binary getter recovered).
-		const Guid& getGuid() const { return guid; }
+		const Guid& getGuid() const;  // 0x00753bb0 (assert "guidSetExternally", Primitive.cpp:144)
 		// Contact-override elasticity (+316, C2 0.0) + dirty flag (+320,
 		// C2 false). Read by Contact::onPrimitiveContactParametersChanged
 		// (0x55E06E, batch248): flag set only through the custom-physical-
 		// properties path (unported); the callback triple (+324/+328/+332)
 		// queues with it. Fresh prims take the else arms (0.0 defaults).
-		float contactElasticity316;   // +316 (C2 0.0f).
-		bool contactParamsDirty320;   // +320 (C2 false).
 
+		// ---- Data, in the 2013 Windows layout (Primitive C2 0x00756a40, D2 0x00755540; operator new
+		// 0x170 at 0x0074aecb). Bases: IPipelined +0, SpanningNode +8, BodyPvSetter and
+		// BasicSpatialHashPrimitive both at +0x34 (RTTI BCA 0x00c250b4). MSVC keeps declaration order
+		// across access labels, so the public lists sit in sequence here. Bring-up members that 2013
+		// does not have (it keeps them in Geometry and Body) follow after +0x170.
 	private:
-		// VESTIGIAL (section 185): the upper lattice rides the
-		// SpanningNode-base IndexedMesh (see getMesh); this member is
-		// never linked. Kept (constructed/destroyed) for layout
-		// stability until the Primitive layout audit resolves it.
-		IndexedMesh mesh;
-		int geometryType;		// TODO: exact 2013 slot/meaning
-		float specificGravity;	// +256
-		float friction;			// +260
-		float elasticity;		// +264
-		// +252/+253: anchored/dragging assignment swapped 2026-10-03 --
-		// PartInstance::getAnchored 0x4427FE reads prim+253 (batch252),
-		// and the property round-trips, so anchored=+253,
-		// dragging=+252 (was reversed; members name-addressed, behavior
-		// unchanged -- documentary only).
-		bool anchoredProperty;	// +253
-		bool dragging;			// +252
-		bool preventCollide;
-		IMoving* myOwner;		// 2016 name carried (TODO verify 2013)
-		// Sleep-network flag (binary +100; setNetworkIsSleeping 0x...,
-		// batch261: change-gated owner callback). MODEL-RELATIVE byte.
-		bool networkIsSleeping;
-		// +200 world index / +204 world backref (+4 is the IPipelined
-		// currentStage, maintained by the stage entry/exit calls).
-		int worldIndex;
-		World* world;
-		// +104 guid (synced from PartInstance by onGuidChanged) +112 flag.
-		Guid guid;
-		bool guidSynced;		// +112 (TODO identity; set on sync)
+		ConcurrencyValidator concurrencyValidator;  // 0x50 (D2 ~ConcurrencyValidator(+0x50))
+		SystemAddress networkOwner;  // 0x74 (C2 NetworkOwner::Unassigned())
+		bool m_unk0x7c;              // 0x7c (C2 false)
+		Guid guid;                   // 0x80 (getGuid 0x00753bb0 returns this+0x80)
+		bool guidSetExternally;      // 0x88 (getGuid assert "guidSetExternally")
+		SizeMultiplier sizeMultiplier;  // 0x8c (getSizeMultiplier 0x00753ac0)
+		unsigned int sortSize;       // 0x90 (getSortSize 0x007553e0; 0 = dirty)
+		unsigned char collideCount : 4;  // 0x94 (C2 `and byte ptr [esi+0x94],0xf0`)
+	public:
+		EdgeList contacts;           // 0x98
+		EdgeList joints;             // 0xbc (getConstJoint 0x00754780)
+	private:
+		int worldIndex;              // 0xe0 (C2 -1)
+		World* world;                // 0xe4 (setSizeMultiplier, setFixed read it)
+		Extents fuzzyExtents;        // 0xe8 (C2 maxFinite / -maxFinite)
+		unsigned int fuzzyExtentsStateId;  // 0x100 (C2 -2)
+		Geometry* geometry;          // 0x104 (C2 newGeometry 0x00755970; getRadius slot 6)
+		Body* body;                  // 0x108 (C2 new Body, 0xec bytes)
+		IMoving* myOwner;            // 0x10c (setOwner 0x00753f10)
+		int engineType;              // 0x110 (setEngineType 0x00753ed0)
+		bool dragging;               // 0x114 (setDragging 0x00754cb0: setFixed(+0x115, value))
+		bool anchoredProperty;       // 0x115
+		bool preventCollide;         // 0x116 (setPreventCollide 0x00753fc0)
+		bool networkIsSleeping;      // 0x117 (2016 order; not touched by C2)
+		float specificGravity;       // 0x118 (setter 0x007542d0; 2016 order)
+		float friction;              // 0x11c (setFriction 0x00753ff0; C2 0)
+		float elasticity;            // 0x120 (setElasticity 0x00754030; C2 0.75)
+		SurfaceType surfaces[6];     // 0x124 (setter 0x007542a0)
+		void* surfaceData[6];        // 0x13c (D2 deletes each; setSurfaceData 0x00754170)
+		undefined4 m_unk0x154;       // 0x154
+		undefined4 m_unk0x158;       // 0x158
+		bool jointKDirty;            // 0x15c (C2 true; setMassInertia sets it)
+		Primitive* jointKOwner;      // 0x160 (C2 this)
+		float jointK;                // 0x164
+		float (Primitive::*jointKCompute)();  // 0x168 (C2 &computeJointK; 8 bytes under MI)
+
+		// ---- Bring-up members (not in the 2013 layout) ----
+		int geometryType;
 		G3D::Vector3 partSize;
-		// Binary +0x74 (29th dword): size-multiplier enum (see above).
-		SizeMultiplier sizeMultiplier;
-		// Binary +0x78/+120 (30th dword): zeroed alongside the multiplier;
-		// identity unrecovered (sits between Guid and the EdgeLists).
-		int sizeMultiplierAux;
-		// Binary +120 sort-size cache (0 = dirty; getSortSize fills via
-		// calculateSortSize). Model-relative slot like the rest.
-		unsigned int sortSize;
 		G3D::CoordinateFrame coordinateFrame;  // identity until placed
-		// Embedded PV (binary getPV dereference target; velocity lives at
-		// +48/+56 within it -- section 125. DELTA: binary may route via
-		// Body; ours is always valid (Body module absent), same values.
 		PV pv;
-		SurfaceType surfaces[6];
-		Extents fuzzyExtents;					// binary +0xD0 (24 bytes)
-		unsigned int bodyUpdateSerial;			// stands in for Body+0xA0
-		unsigned int cachedFuzzyExtentsSerial;	// binary +0xE8
-		BasicSpatialHashPrimitive spatialHashState;  // binary +52..+79
-		// Network owner (see getNetworkOwner note above).
-		SystemAddress networkOwner;
-		// Kernel body (see getBody note above; 2016 `body(new Body())`).
-		Body* body;
-		// Collision-fire counter (binary prim+124 low nibble; see
-		// bumpCollideCount above). MODEL-RELATIVE byte (see body note).
-		unsigned char collideCount;
+		unsigned int bodyUpdateSerial;  // stands in for Body+0xa0
+	public:
+		float contactElasticity316;   // Contact::onPrimitiveContactParametersChanged
+		bool contactParamsDirty320;
 	};
 
 } // namespace RBX

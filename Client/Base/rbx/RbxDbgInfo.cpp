@@ -53,30 +53,40 @@ void RbxDbgInfo::RemovePlace(long ID)
 
 #pragma warning(push)
 #pragma warning(disable:4996)
+// FUNCTION: PLAYER 0x009bc860
+// FUNCTION: STUDIO 0x00a72c50
 void RbxDbgInfo::SetGfxCardName(const char* s)
 {
 	strncpy(s_instance.GfxCardName, s, DBG_STRING_MAX - 1);
 	s_instance.GfxCardName[DBG_STRING_MAX - 1] = '\0';
 }
 
+// FUNCTION: PLAYER 0x009bc880
+// FUNCTION: STUDIO 0x00a72c70
 void RbxDbgInfo::SetGfxCardDriverVersion(const char* s)
 {
 	strncpy(s_instance.GfxCardDriverVersion, s, DBG_STRING_MAX - 1);
 	s_instance.GfxCardDriverVersion[DBG_STRING_MAX - 1] = '\0';
 }
 
+// FUNCTION: PLAYER 0x009bc8a0
+// FUNCTION: STUDIO 0x00a72c90
 void RbxDbgInfo::SetGfxCardVendor(const char* s)
 {
 	strncpy(s_instance.GfxCardVendorName, s, DBG_STRING_MAX - 1);
 	s_instance.GfxCardVendorName[DBG_STRING_MAX - 1] = '\0';
 }
 
+// FUNCTION: PLAYER 0x009bc8c0
+// FUNCTION: STUDIO 0x00a72cb0
 void RbxDbgInfo::SetCPUName(const char* s)
 {
 	strncpy(s_instance.CPUName, s, DBG_STRING_MAX - 1);
 	s_instance.CPUName[DBG_STRING_MAX - 1] = '\0';
 }
 
+// FUNCTION: PLAYER 0x009bc8e0
+// FUNCTION: STUDIO 0x00a72cd0
 void RbxDbgInfo::SetServerIP(const char* s)
 {
 	strncpy(s_instance.ServerIP, s, DBG_STRING_MAX - 1);

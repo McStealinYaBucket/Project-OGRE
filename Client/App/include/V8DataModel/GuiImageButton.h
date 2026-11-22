@@ -26,15 +26,16 @@ namespace RBX {
 	class GuiImageButton
 		: public DescribedCreatable<GuiImageButton, GuiButton, sGuiImageButton>
 	{
+		typedef DescribedCreatable<GuiImageButton, GuiButton, sGuiImageButton> Super;
 	public:
 		// Default ctor keeps FactoryProduct::createInstance() (which builds
 		// arg-less) working; matches C2(void) 0x3F4A2C's shape (named, verb
 		// NULL).  Verb-taking form below matches C2(Verb*) 0x3F4CDE.
 		GuiImageButton()
-			: imageVerb(NULL)
+			: Super("ImageButton")
+			, imageVerb(NULL)
 			, imageState(127)
 		{
-			Instance::setName("ImageButton");
 		}
 		// mac: 0x3F4CDE.  Image rect state (+0x320..+0x38C) is zeroed like the
 		// binary; the draw member default-constructs (contents TODO).  The
@@ -43,10 +44,10 @@ namespace RBX {
 		// here is the DescribedCreatable chain, so it goes through setName
 		// in the body -- same observable.
 		explicit GuiImageButton(Verb* verb)
-			: imageVerb(verb)
+			: Super("ImageButton")
+			, imageVerb(verb)
 			, imageState(127)
 		{
-			Instance::setName("ImageButton");
 		}
 
 		// mac: 0x3F4F90 (96B): ContentId change-detect + assign (+808 name copy
@@ -79,3 +80,10 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
+// clang-format off
+// TEMPLATE: PLAYER 0x006be630
+// TEMPLATE: STUDIO 0x00852a90
+// ??$?0PBD@?$Described@VGuiImageButton@RBX@@$E?sGuiImageButton@2@3QBDBV?$FactoryProduct@VGuiImageButton@RBX@@VGuiButton@2@$E?sGuiImageButton@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
+// clang-format on

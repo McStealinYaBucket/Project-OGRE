@@ -4230,7 +4230,7 @@ struct RBX::DataModel_vtbl
   void *setName;
   void *getPersistentDataCost;
   void *canClientCreate;
-  void *onServiceProvider;
+  void *AASamples____0_;
   void *createChild;
   void *writeXml;
   void *verifySetParent;
@@ -4477,33 +4477,33 @@ struct __cppobj RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char 
 /* 539 */
 struct __cppobj RBX::GuiObject : RBX::DescribedNonCreatable<RBX::GuiObject, RBX::GuiBase2d, char const *const RBX::sGuiObject, 27, 0>
 {
-  unsigned int m_unk0x94;
-  bool m_unk0x98;
-  bool m_unk0x99;
-  bool m_unk0x9a;
+  unsigned __int8 tweens[4];            ///< boost::scoped_ptr<RBX::GuiObject::Tweens>
+  bool selectionBox;
+  bool draggable;
+  bool dragging;
   unsigned __int8 gap_9B[1];
-  unsigned __int8 m_unk0x9c[8];         ///< G3D::Vector2
+  unsigned __int8 lastMousePosition[8]; ///< G3D::Vector2
   unsigned __int8 mouseEnterSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
   unsigned __int8 mouseLeaveSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
   unsigned __int8 mouseMovedSignal[8];  ///< rbx::remote_signal<void __cdecl(int,int)>
   unsigned __int8 mouseWheelForwardSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
   unsigned __int8 mouseWheelBackwardSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
   int varMouseEnterConnectionCount;
-  unsigned __int8 m_unk0xd0[28];        ///< array
+  unsigned __int8 eventReplicatorMouseEnter[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   int varMouseLeaveConnectionCount;
-  unsigned __int8 m_unk0xf0[28];        ///< array
+  unsigned __int8 eventReplicatorMouseLeave[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   int varMouseMovedConnectionCount;
-  unsigned __int8 m_unk0x110[28];       ///< array
+  unsigned __int8 eventReplicatorMouseMoved[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   int varMouseWheelForwardConnectionCount;
-  unsigned __int8 m_unk0x130[28];       ///< array
+  unsigned __int8 eventReplicatorMouseWheelForward[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   int varMouseWheelBackwardConnectionCount;
-  unsigned __int8 m_unk0x150[28];       ///< array
+  unsigned __int8 eventReplicatorMouseWheelBackward[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   unsigned __int8 dragStoppedSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
   unsigned __int8 dragBeginSignal[8];   ///< rbx::remote_signal<void __cdecl(RBX::UDim2)>
   int varDragStoppedConnectionCount;
-  unsigned __int8 m_unk0x180[28];       ///< array
+  unsigned __int8 eventReplicatorDragStopped[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(int,int)>
   int varDragBeginConnectionCount;
-  unsigned __int8 m_unk0x1a0[28];       ///< array
+  unsigned __int8 eventReplicatorDragBegin[28]; ///< RBX::EventReplicator<RBX::GuiObject,void __cdecl(RBX::UDim2)>
   bool serverGuiObject;
   bool clipping;
   unsigned __int8 gap_1BE[2];
@@ -4540,7 +4540,7 @@ struct __cppobj RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *
 struct __cppobj RBX::Frame : RBX::DescribedCreatable<RBX::Frame, RBX::GuiObject, char const *const RBX::sFrame, 27, 0>
 {
   int style;                            ///< enum RBX::Frame::Style
-  unsigned __int8 image[132];           ///< RBX::GuiDrawImage
+  RBX::GuiDrawImage image;
 };
 
 /* 544 */
@@ -4574,7 +4574,7 @@ struct __cppobj RBX::GuiImageMixin
   unsigned __int8 image[32];            ///< RBX::ContentId
   unsigned __int8 imageRectOffset[8];   ///< G3D::Vector2
   unsigned __int8 imageRectSize[8];     ///< G3D::Vector2
-  unsigned __int8 guiImageDraw[132];    ///< RBX::GuiDrawImage
+  RBX::GuiDrawImage guiImageDraw;
 };
 
 /* 549 */
@@ -4717,7 +4717,7 @@ struct __cppobj RBX::ScreenGui : RBX::DescribedCreatable<RBX::ScreenGui, RBX::Gu
 {
   unsigned __int8 windowRect[16];       ///< G3D::Rect2D
   bool m_unk0xcc;
-  bool m_unk0xcd;
+  bool renderable;
   unsigned __int8 gap_CE[2];
   unsigned __int8 m_unk0xd0[16];        ///< std::vector<RBX::GuiButton *>
   unsigned __int8 m_unk0xe0[12];        ///< std::map<RBX::Name const *,RBX::InputObject::UserInputState>
@@ -4755,5 +4755,347 @@ struct __cppobj RBX::RunService : RBX::DescribedNonCreatable<RBX::RunService, RB
   unsigned __int8 runTransitionSignal[4]; ///< rbx::signal<void __cdecl(RBX::RunTransition)>
   unsigned __int8 scriptSteppedSignal[4]; ///< rbx::signal<void __cdecl(double,double)>
   unsigned __int8 scriptHeartbeatSignal[4]; ///< rbx::signal<void __cdecl(double)>
+};
+
+/* 576 */
+struct __cppobj RBX::GlobalAdvancedSettings::Item : RBX::Instance
+{
+};
+
+/* 577 */
+struct __cppobj RBX::FactoryProduct<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 578 */
+struct __cppobj RBX::Reflection::Described<CRenderSettingsItem, char const *const sRenderSettings, RBX::FactoryProduct<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, RBX::Instance>
+{
+};
+
+/* 579 */
+struct __cppobj RBX::DescribedCreatable<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, 27, 0> : RBX::Reflection::Described<CRenderSettingsItem, char const *const sRenderSettings, RBX::FactoryProduct<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 580 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem : RBX::DescribedCreatable<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 581 */
+struct __cppobj RBX::CRenderSettings
+{
+  void **__vftable;
+  int graphicsMode;                     ///< enum RBX::CRenderSettings::GraphicsMode
+  int antialiasingMode;                 ///< enum RBX::CRenderSettings::AntialiasingMode
+  int shadowMode;                       ///< enum RBX::CRenderSettings::ShadowMode
+  int frameRateManagerMode;             ///< enum RBX::CRenderSettings::FrameRateManagerMode
+  int qualityLevel;                     ///< enum RBX::CRenderSettings::QualityLevel
+  int resolutionPreference;             ///< enum RBX::CRenderSettings::ResolutionPreset
+  int autoQualityLevel;
+  int maxQualityLevel;
+  int minCullDistance;
+  bool debugShowBoundingBoxes;
+  bool enableFRM;
+  unsigned __int8 m_unk0x2a[4];         ///< G3D::Vector2int16
+  unsigned __int8 m_unk0x2e[4];         ///< G3D::Vector2int16
+  unsigned __int8 windowSize[4];        ///< G3D::Vector2int16
+  unsigned __int8 m_unk0x36[4];         ///< G3D::Vector2int16
+  bool showAggregation;
+  bool drawConnectors;
+  bool m_unk0x3c;
+  bool eagerBulkExecution;
+  unsigned __int8 gap_3E[2];
+  unsigned int textureCacheSize;
+  unsigned int meshCacheSize;
+};
+
+/* 582 */
+struct __cppobj CRenderSettingsItem : RBX::GlobalAdvancedSettingsItem, RBX::CRenderSettings
+{
+  unsigned __int8 profileName[28];      ///< std::string
+  unsigned __int8 currentDisplaySize[4]; ///< G3D::Vector2int16
+  unsigned __int8 fullScreenSizes[16];  ///< std::vector<G3D::Vector2int16>
+  bool isSynchronizedWithPhysics;
+  bool usesPaintMessage;
+  unsigned __int8 gap_DE[2];
+  unsigned __int8 settingsChangedSignal[4]; ///< rbx::signal<void __cdecl(RBX::Reflection::PropertyDescriptor const *)>
+};
+
+/* 583 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sBasePlayerGui> : RBX::Instance
+{
+};
+
+/* 584 */
+struct __cppobj RBX::Reflection::Described<RBX::BasePlayerGui, char const *const RBX::sBasePlayerGui, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sBasePlayerGui>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sBasePlayerGui>
+{
+};
+
+/* 585 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::BasePlayerGui, RBX::Instance, char const *const RBX::sBasePlayerGui, 27, 0> : RBX::Reflection::Described<RBX::BasePlayerGui, char const *const RBX::sBasePlayerGui, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sBasePlayerGui>, 27, 0>
+{
+};
+
+/* 586 */
+struct __cppobj RBX::BasePlayerGui : RBX::DescribedNonCreatable<RBX::BasePlayerGui, RBX::Instance, char const *const RBX::sBasePlayerGui, 27, 0>, RBX::IScriptFilter, RBX::GuiTarget
+{
+  bool mouseWasOverGui;
+  unsigned __int8 gap_69[3];
+  unsigned __int8 adornableCollector[8]; ///< boost::shared_ptr<RBX::IAdornableCollector>
+};
+
+/* 587 */
+struct __cppobj RBX::FactoryProduct<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, RBX::Instance> : RBX::BasePlayerGui
+{
+};
+
+/* 588 */
+struct __cppobj RBX::Reflection::Described<RBX::PlayerGui, char const *const RBX::sPlayerGui, RBX::FactoryProduct<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, RBX::Instance>, 5, 0> : RBX::FactoryProduct<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, RBX::Instance>
+{
+};
+
+/* 589 */
+struct __cppobj RBX::DescribedCreatable<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, 5, 0> : RBX::Reflection::Described<RBX::PlayerGui, char const *const RBX::sPlayerGui, RBX::FactoryProduct<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, RBX::Instance>, 5, 0>
+{
+};
+
+/* 590 */
+struct __cppobj RBX::PlayerGui : RBX::DescribedCreatable<RBX::PlayerGui, RBX::BasePlayerGui, char const *const RBX::sPlayerGui, 5, 0>
+{
+};
+
+/* 591 */
+struct __cppobj RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sCoreGuiService> : RBX::BasePlayerGui
+{
+};
+
+/* 592 */
+struct __cppobj RBX::Reflection::Described<RBX::CoreGuiService, char const *const RBX::sCoreGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sCoreGuiService>, 1, 2> : RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sCoreGuiService>
+{
+};
+
+/* 593 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::CoreGuiService, RBX::BasePlayerGui, char const *const RBX::sCoreGuiService, 1, 2> : RBX::Reflection::Described<RBX::CoreGuiService, char const *const RBX::sCoreGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sCoreGuiService>, 1, 2>
+{
+};
+
+/* 594 */
+struct __cppobj RBX::CoreGuiService : RBX::DescribedNonCreatable<RBX::CoreGuiService, RBX::BasePlayerGui, char const *const RBX::sCoreGuiService, 1, 2>, RBX::Service
+{
+  unsigned __int8 gap_75[3];
+  unsigned __int8 robloxGui[8];         ///< boost::shared_ptr<RBX::ScreenGui>
+  unsigned __int8 onScreenMessages[16]; ///< std::vector<boost::shared_ptr<RBX::Instance>>
+};
+
+/* 595 */
+struct __cppobj RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiButton> : RBX::GuiObject
+{
+};
+
+/* 596 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiButton, char const *const RBX::sGuiButton, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiButton>, 27, 0> : RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiButton>
+{
+};
+
+/* 597 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiButton, RBX::GuiObject, char const *const RBX::sGuiButton, 27, 0> : RBX::Reflection::Described<RBX::GuiButton, char const *const RBX::sGuiButton, RBX::NonFactoryProduct<RBX::GuiObject, char const *const RBX::sGuiButton>, 27, 0>
+{
+};
+
+/* 598 */
+struct __cppobj RBX::GuiButton : RBX::DescribedNonCreatable<RBX::GuiButton, RBX::GuiObject, char const *const RBX::sGuiButton, 27, 0>
+{
+  bool clicked;
+  unsigned __int8 gap_21D[3];
+  unsigned __int8 mouseButton1ClickSignal[8]; ///< rbx::remote_signal<void __cdecl(void)>
+  unsigned __int8 mouseButton2ClickSignal[8]; ///< rbx::remote_signal<void __cdecl(void)>
+  unsigned __int8 mouseButton1DownSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseButton1UpSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseButton2DownSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  unsigned __int8 mouseButton2UpSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int)>
+  int varMouseButton1ClickConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton1Click[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(void)>
+  int varMouseButton2ClickConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton2Click[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(void)>
+  int varMouseButton1DownConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton1Down[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(int,int)>
+  int varMouseButton1UpConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton1Up[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(int,int)>
+  int varMouseButton2DownConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton2Down[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(int,int)>
+  int varMouseButton2UpConnectionCount;
+  unsigned __int8 eventReplicatorMouseButton2Up[28]; ///< RBX::EventReplicator<RBX::GuiButton,void __cdecl(int,int)>
+  bool autoButtonColor;
+  bool selected;
+  bool modal;
+  unsigned __int8 gap_313[1];
+  int style;                            ///< enum RBX::GuiButton::Style
+  RBX::Verb *verb;
+  unsigned __int8 verbToSet[28];        ///< std::string
+  unsigned __int8 images[4];            ///< boost::scoped_array<RBX::GuiDrawImage>
+};
+
+/* 599 */
+struct __cppobj RBX::GuiDrawImage
+{
+  unsigned __int8 currentTexture[32];   ///< RBX::ContentId
+  unsigned __int8 loadingTexture[32];   ///< RBX::ContentId
+  unsigned __int8 disable[8];           ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 normal[8];            ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 hover[8];             ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 down[8];              ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 selected[8];          ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 selectedHover[8];     ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 selectedDown[8];      ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 size[8];              ///< G3D::Vector2
+  unsigned __int8 unbindResourceSignalHint[4]; ///< rbx::signals::scoped_connection
+};
+
+/* 600 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiService> : RBX::Instance
+{
+};
+
+/* 601 */
+struct __cppobj RBX::Reflection::Described<RBX::GuiService, char const *const RBX::sGuiService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiService>, 1, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiService>
+{
+};
+
+/* 602 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GuiService, RBX::Instance, char const *const RBX::sGuiService, 1, 0> : RBX::Reflection::Described<RBX::GuiService, char const *const RBX::sGuiService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sGuiService>, 1, 0>
+{
+};
+
+/* 603 */
+struct __cppobj RBX::GuiService : RBX::DescribedNonCreatable<RBX::GuiService, RBX::Instance, char const *const RBX::sGuiService, 1, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 guiInset[16];         ///< G3D::Rect2D
+  bool showLegacyPlayerList;
+  bool useLuaChat;
+  unsigned __int8 gap_76[2];
+  unsigned __int8 openUrlWindow[4];     ///< rbx::signal<void __cdecl(std::string)>
+  unsigned __int8 urlWindowClosed[4];   ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 keyPressed[4];        ///< rbx::signal<void __cdecl(std::string,std::string)>
+  unsigned __int8 escapeKeyPressed[4];  ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 specialKeyPressed[4]; ///< rbx::signal<void __cdecl(RBX::GuiService::SpecialKey,std::string)>
+  void *currentDialog;                  ///< RBX::GuiService::DialogWrapper *
+  unsigned __int8 dialogQueue[12];      ///< std::map<RBX::GuiService::CenterDialogType,std::list<RBX::GuiService::DialogWrapper *>>
+  unsigned __int8 dialogWrapperMap[12]; ///< std::map<boost::weak_ptr<RBX::GuiObject>,RBX::GuiService::DialogWrapper *>
+  unsigned __int8 subscribedChars[12];  ///< std::set<char>
+  unsigned __int8 subscribedSpecials[12]; ///< std::set<RBX::GuiService::SpecialKey>
+};
+
+/* 604 */
+struct __cppobj RBX::KernelData
+{
+  unsigned __int8 freeFallBodies[16];   ///< G3D::Array<RBX::SimBody *,10,32>
+  unsigned __int8 realTimeBodies[16];   ///< G3D::Array<RBX::SimBody *,10,32>
+  unsigned __int8 jointBodies[16];      ///< G3D::Array<RBX::SimBody *,10,32>
+  unsigned __int8 contactBodies[16];    ///< G3D::Array<RBX::SimBody *,10,32>
+  unsigned __int8 leafBodies[16];       ///< G3D::Array<RBX::Body *,10,32>
+  unsigned __int8 points[16];           ///< G3D::Array<RBX::Point *,10,32>
+  unsigned __int8 humanoidConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
+  unsigned __int8 secondPassConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
+  unsigned __int8 realTimeConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
+  unsigned __int8 jointConnectors[16];  ///< G3D::Array<RBX::Connector *,10,32>
+  unsigned __int8 contactConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
+};
+
+/* 605 */
+struct __cppobj RBX::Limits::Counter::Activator
+{
+  unsigned __int8 oldCounter[8];        ///< boost::shared_ptr<RBX::Limits::Counter>
+};
+
+/* 606 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Peer, char const *const RBX::Network::sPeer, RBX::Instance, 27, 0> : RBX::Instance
+{
+};
+
+/* 607 */
+struct __cppobj RakNet::PluginInterface2
+{
+  void **__vftable;
+  void *rakPeerInterface;               ///< RakNet::RakPeerInterface *
+  void *packetizedTCP;                  ///< RakNet::PacketizedTCP *
+};
+
+/* 608 */
+struct __cppobj RBX::Network::Peer : RBX::Reflection::Described<RBX::Network::Peer, char const *const RBX::Network::sPeer, RBX::Instance, 27, 0>, RakNet::PluginInterface2
+{
+  unsigned __int8 receiveJob[8];        ///< boost::shared_ptr<RBX::Network::PacketReceiveJob>
+  unsigned __int8 rnr[2508];            ///< RakNet::RakNetRandom
+  unsigned __int8 rakDutyCycle[112];    ///< RBX::RunningAverageDutyCycle<1>
+  unsigned __int8 rakPeer[8];           ///< boost::shared_ptr<RBX::Network::ConcurrentRakPeer>
+  int protocolVersion;
+  unsigned __int8 gap_ABC[4];
+};
+
+/* 609 */
+struct __cppobj RBX::FactoryProduct<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, RBX::Instance> : RBX::Network::Peer
+{
+};
+
+/* 610 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Client, char const *const RBX::Network::sClient, RBX::FactoryProduct<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, RBX::Instance>, 1, 0> : RBX::FactoryProduct<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, RBX::Instance>
+{
+};
+
+/* 611 */
+struct __cppobj RBX::DescribedCreatable<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, 1, 0> : RBX::Reflection::Described<RBX::Network::Client, char const *const RBX::Network::sClient, RBX::FactoryProduct<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, RBX::Instance>, 1, 0>
+{
+};
+
+/* 612 */
+struct __cppobj RBX::Network::Client : RBX::DescribedCreatable<RBX::Network::Client, RBX::Network::Peer, char const *const RBX::Network::sClient, 1, 0>, RBX::Service
+{
+  unsigned __int8 gap_AC1[3];
+  unsigned __int8 closingConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 serverId[20];         ///< RakNet::SystemAddress
+  unsigned __int8 ticket[28];           ///< std::string
+  int userId;
+  void *networkSettings;                ///< RBX::NetworkSettings *
+  unsigned __int8 connectionAcceptedSignal[4]; ///< rbx::signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 connectionFailedSignal[4]; ///< rbx::signal<void __cdecl(std::string,int,std::string)>
+  unsigned __int8 connectionRejectedSignal[4]; ///< rbx::signal<void __cdecl(std::string)>
+  unsigned __int8 gap_B0C[4];
+};
+
+/* 613 */
+struct __cppobj RBX::SendPhysics
+{
+  unsigned __int8 simJobs[12];          ///< boost::intrusive::list<RBX::SimJob,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::SimJob>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>
+  unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
+  unsigned __int8 changeTrackerMutex[1]; ///< tbb::spin_mutex
+  unsigned __int8 gap_31[3];
+  unsigned __int8 assemblyPhysicsOnSignal[4]; ///< rbx::signals::signal_with_args<1,void __cdecl(RBX::Primitive *)>
+  unsigned __int8 assemblyPhysicsOffSignal[4]; ///< rbx::signals::signal_with_args<1,void __cdecl(RBX::Primitive *)>
+};
+
+/* 614 */
+struct __cppobj boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::SimJob,1,1> : boost::intrusive::list_node<void *>
+{
+};
+
+/* 615 */
+struct __cppobj boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::SimJob,1,1> : boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::SimJob,1,1>
+{
+};
+
+/* 616 */
+struct __cppobj boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::SimJob>,boost::intrusive::none,boost::intrusive::none> : boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::SimJob,1,1>
+{
+};
+
+/* 617 */
+struct __cppobj RBX::SimJob : boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::SimJob>,boost::intrusive::none,boost::intrusive::none>
+{
+  unsigned __int8 gap_0[4];
+  unsigned __int8 trackers[16];         ///< std::vector<RBX::SimJobTracker *>
+  void *assembly;                       ///< RBX::Assembly *
+  int useCount;
 };
 

@@ -1,34 +1,5 @@
-/* V8Kernel/KernelData.h -- October 2013 (kernel body/connector lists, 0xB0).
-   Evidence: C2 0x530AE8 (334B: 11 G3D::Array inits at +0/+16/+32/+48/+64/
-     +80/+96/+112/+128/+144/+160) / D2 0x530472 (1267B: 11 empty asserts,
-     KernelData.h:38-48, names banked in order below) (batch221b).
-   Members (binary order + G3D::Array element types from C2 template
-   instantiations; assert names from D2 strings):
-     +0   Array<SimBody*>   freeFallBodies    (:38)
-     +16  Array<SimBody*>   realTimeBodies    (:39)
-     +32  Array<SimBody*>   jointBodies       (:40)
-     +48  Array<SimBody*>   contactBodies     (:41)
-     +64  Array<Body*>      leafBodies        (:42)
-     +80  Array<Point*>     points            (:43)
-     +96  Array<Connector*> humanoidConnectors      (:44)
-     +112 Array<Connector*> secondPassConnectors    (:45)
-     +128 Array<Connector*> realTimeConnectors      (:46)
-     +144 Array<Connector*> jointConnectors         (:47)
-     +160 Array<Connector*> contactConnectors       (:48)
-   DELTA vs March 2016 KernelData.h (first-party diff aid): 2016 uses
-   IndexArray x12 (adds buoyancyConnectors); 2013 uses G3D::Array x11
-   (no buoyancy -- absent from C2/D2). Element classes forward-declared
-   (Body module absent); arrays of pointers need no complete type.
-   Original file: Client/App/include/V8Kernel/KernelData.h (path from
-   assert strings). 2013 defines every member here (the asserts cite
-   KernelData.h:38-230 and no KernelData.cpp string exists), so the bodies
-   the prior tree had in v8kernel/KernelData.cpp are inline below, after the
-   class; Kernel.cpp is the only includer and emits the out-of-line copies.
-   Bodies: C2 0x530AE8 / D2 0x530472 (batch221b). C2 is 11 G3D::Array
-   default constructions (implicit in C++ -- explicit body empty).
-   D2 asserts each list empty (KernelData.h:38-48) then array dtors run
-   implicitly (same net state as the binary's explicit teardown). */
-
+/* V8Kernel/KernelData.h -- October 2013: the kernel's body and connector lists (0xb0, 11 G3D::Array; D2 PLAYER 0x0082f240).
+   2013 defines every member here (asserts cite KernelData.h:38-230); Kernel.cpp emits the copies. 2016 uses IndexArray x12. */
 #pragma once
 
 #include "G3D/Array.h"
@@ -39,106 +10,77 @@
 #include "V8Kernel/Pair.h"
 #include "V8Kernel/Constants.h"
 #include "Util/FastFlags.h"
-
 namespace RBX {
+	class SimBody; class Body; class Point; class Connector;
 
-	class SimBody;
-	class Body;
-	class Point;
-	class Connector;
-
+	// SIZE 0xb0
 	class KernelData
 	{
 	public:
-		G3D::Array<SimBody*> freeFallBodies;      // +0
-		G3D::Array<SimBody*> realTimeBodies;      // +16
-		G3D::Array<SimBody*> jointBodies;         // +32
-		G3D::Array<SimBody*> contactBodies;       // +48
-		G3D::Array<Body*> leafBodies;             // +64
-		G3D::Array<Point*> points;                // +80
-		G3D::Array<Connector*> humanoidConnectors;    // +96
-		G3D::Array<Connector*> secondPassConnectors;  // +112
-		G3D::Array<Connector*> realTimeConnectors;    // +128
-		G3D::Array<Connector*> jointConnectors;       // +144
-		G3D::Array<Connector*> contactConnectors;     // +160
+		G3D::Array<SimBody*> freeFallBodies;          // 0x00
+		G3D::Array<SimBody*> realTimeBodies;          // 0x10
+		G3D::Array<SimBody*> jointBodies;             // 0x20
+		G3D::Array<SimBody*> contactBodies;           // 0x30
+		G3D::Array<Body*> leafBodies;                 // 0x40
+		G3D::Array<Point*> points;                    // 0x50
+		G3D::Array<Connector*> humanoidConnectors;    // 0x60
+		G3D::Array<Connector*> secondPassConnectors;  // 0x70
+		G3D::Array<Connector*> realTimeConnectors;    // 0x80
+		G3D::Array<Connector*> jointConnectors;       // 0x90
+		G3D::Array<Connector*> contactConnectors;     // 0xa0
 
-		KernelData();
-		~KernelData();
+		KernelData() {}
 
-		// List management (batch221b/254: index asserts + back-swap
-		// fastRemove spellings; validate via SimBody predicates).
-		void insertBody(Body* body);
+		// FUNCTION: PLAYER 0x0082f240
+		// FUNCTION: STUDIO 0x009a1780
+		~KernelData()
+		{
+			RBXASSERT(freeFallBodies.size() == 0);
+			RBXASSERT(realTimeBodies.size() == 0);
+			RBXASSERT(jointBodies.size() == 0);
+			RBXASSERT(contactBodies.size() == 0);
+			RBXASSERT(leafBodies.size() == 0);
+			RBXASSERT(points.size() == 0);
+			RBXASSERT(humanoidConnectors.size() == 0);
+			RBXASSERT(secondPassConnectors.size() == 0);
+			RBXASSERT(realTimeConnectors.size() == 0);
+			RBXASSERT(jointConnectors.size() == 0);
+			RBXASSERT(contactConnectors.size() == 0);
+		}
+
+		void insertBody(Body* b);
 		void removeBody(Body* body);
 		void addBodyToNewList(SimBody* simBody);
 		void removeBodyFromCurrentList(SimBody* simBody);
 		void addLeafBody(Body* body);
 		void addLeafBodies(Body* body);
 		void removeLeafBodies(Body* body);
-		// (batch221b: :88 single-list + kind routing below; returns kind).
 		int addConnector(Connector* connector);
-		// (batch221b: all-clear early-out + per-list fastRemove + sim
-		// decrements + symmetry pair on contact + leaf arm).
 		void removeConnector(Connector* connector);
 	};
 
-	// mac: 0x530AE8 (334B, batch221b).
-	inline KernelData::KernelData()
-	{
-		// 11 G3D::Array members default-construct (binary calls
-		// Array::Array at +0/+16/+32/+48/+64/+80/+96/+112/+128/+144/+160).
-	}
 
-	// mac: 0x530472 (1267B, batch221b).
-	// STUB: PLAYER 0x0082f240
-	// STUB: STUDIO 0x009a1780
-	inline KernelData::~KernelData()
-	{
-		RBXASSERT(freeFallBodies.size() == 0);      // :38
-		RBXASSERT(realTimeBodies.size() == 0);      // :39
-		RBXASSERT(jointBodies.size() == 0);         // :40
-		RBXASSERT(contactBodies.size() == 0);       // :41
-		RBXASSERT(leafBodies.size() == 0);          // :42
-		RBXASSERT(points.size() == 0);              // :43
-		RBXASSERT(humanoidConnectors.size() == 0);   // :44
-		RBXASSERT(secondPassConnectors.size() == 0);// :45
-		RBXASSERT(realTimeConnectors.size() == 0);   // :46
-		RBXASSERT(jointConnectors.size() == 0);     // :47
-		RBXASSERT(contactConnectors.size() == 0);   // :48
-	}
 
-	// IndexArray fastRemove equivalents below spell the back-swap +
-	// moved-occupant fix + index reset inline per list (World::
-	// removePrimitive precedent) -- each list owns a different index
-	// member, so no shared helper.
-
-	// (batch221b: :68 root + :70 single-list + :72 validate).
-	// STUB: PLAYER 0x00831a60
-	// STUB: STUDIO 0x009a40c0
-	inline void KernelData::insertBody(Body* body)
+	// FUNCTION: PLAYER 0x00831a60
+	// FUNCTION: STUDIO 0x009a40c0
+	inline void KernelData::insertBody(Body* b)
 	{
-		RBXASSERT(body->getRoot<Body>() == body);  // :68
-		SimBody* simBody = body->getSimBody();
-		RBXASSERT(!body->isLeafBody() && !simBody->isInKernel());  // :70
+		RBXASSERT(b->getRoot() == b);
+		SimBody* simBody = b->getSimBody();
+		RBXASSERT(!b->isLeafBody() && !simBody->isInKernel());
 		addBodyToNewList(simBody);
-		RBXASSERT(simBody->validateBodyLists());  // :72
+		RBXASSERT(simBody->validateBodyLists());
 	}
+	// FUNCTION: PLAYER 0x00831250
+	// FUNCTION: STUDIO 0x009a38b0
+	inline void KernelData::removeBody(Body* b) {
+		RBXASSERT(b->getRoot() == b);
+		RBXASSERT(!b->isLeafBody());
 
-	// (batch221b: :77 root + :78 non-leaf + :83 validate).
-	// STUB: PLAYER 0x00831250
-	// STUB: STUDIO 0x009a38b0
-	inline void KernelData::removeBody(Body* body)
-	{
-		RBXASSERT(body->getRoot<Body>() == body);  // :77
-		RBXASSERT(!body->isLeafBody());  // :78
-		SimBody* simBody = body->getSimBody();
+		SimBody* simBody = b->getSimBody();
 		removeBodyFromCurrentList(simBody);
-		// Clear-sym-state stores, binary-verbatim (no dt reset -- the
-		// D2 :54 dt check stays armed for removed bodies by design).
-		simBody->symmetricContact = true;
-		simBody->verticalContact = true;
-		simBody->penetrationTorque = G3D::Vector3::zero();
-		simBody->penetrationForce = G3D::Vector3::zero();
-		RBXASSERT(simBody->validateBodyLists());  // :83
+		simBody->clearSymStateAndAccummulator();
+		RBXASSERT(simBody->validateBodyLists());
 	}
 
 	// (batch221b: routed by canThrottle + connector counters with the

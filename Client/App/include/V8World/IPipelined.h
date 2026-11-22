@@ -13,14 +13,14 @@ namespace RBX {
 	class World;
 	class Kernel;
 
-	class IPipelined
+	class RBXBaseClass IPipelined
 	{
 	public:
 		IPipelined()
 			: currentStage(NULL)
 		{}
-		// mac: 0x576E4A tail-calls putInStage; first IPipelined virtual after the dtor.
-
+		// FUNCTION: PLAYER 0x00753780
+		// FUNCTION: STUDIO 0x00892b20
 		virtual ~IPipelined() {
 			RBXASSERT(currentStage == NULL);
 			currentStage = static_cast<IStage*>(Debugable::badMemory());
@@ -34,7 +34,7 @@ namespace RBX {
 		bool inPipeline() const { return currentStage != NULL; }
 		const IStage* getCurrentStage() const { return currentStage; }
 		// mac: 0x57A224: nearest World up-chain (kernel hops one upstream first).
-		World* findWorld();
+
 		IStage* getStage(IStage::StageType stageType) const;
 		Kernel* getKernel() const;
 		// mac: 0x5869C0
@@ -66,6 +66,14 @@ namespace RBX {
 			RBXASSERT(iStage);
 			RBXASSERT(currentStage);
 			return (currentStage && iStage && currentStage->getStageType() > iStage->getStageType());
+		}
+		// 2016 shape, inline in 2013 (Joint::setPrimitive 0x00820d30 inlines it).
+		World* findWorld() {
+			if (currentStage) {
+				IStage* stage = inKernel() ? currentStage->getUpstream() : currentStage;
+				return stage->getWorld();
+			}
+			return NULL;
 		}
 
 	private:

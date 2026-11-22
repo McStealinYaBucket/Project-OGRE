@@ -177,6 +177,13 @@ namespace RBX {
 		// contact manager.  The :425 half is spelled pointer-truth like the
 		// assert text (non-null, not == this).
 		void onPrimitiveExtentsChanged(Primitive* prim);
+		// Primitive setters' notifications (World.cpp, PLAYER 0x00745820-0x007461e0; bodies not written yet).
+		void onPrimitiveContactParametersChanged(Primitive* p);
+		Assembly* onPrimitiveEngineChanging(Primitive* p);
+		void onPrimitiveEngineChanged(Assembly* a);
+		void onPrimitiveFixedChanging(Primitive* p);
+		void onPrimitiveFixedChanged(Primitive* p);
+		void onPrimitivePreventCollideChanged(Primitive* p);
 		// mac: 0x5AB4B2 / 0x5AC168 -- the 1-/2-arg forwarders PartInstance::join
 		// (0x44504C) and PartInstance::destroyJoints (0x444FE0) call.
 		// mac: 0x5AB4B2 is createAutoJoints(p, NULL, NULL).

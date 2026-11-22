@@ -25,7 +25,7 @@ namespace RBX {
 
 
 
-	class IMoving
+	class RBXBaseClass IMoving
 	{
 	public:
 		IMoving();
@@ -62,7 +62,7 @@ namespace RBX {
 		int stepsToSleep;
 	};
 
-	class IMovingManager
+	class RBXBaseClass IMovingManager
 	{
 	public:
 		IMovingManager();

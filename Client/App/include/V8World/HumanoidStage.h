@@ -32,6 +32,11 @@ namespace RBX {
 		HumanoidStage(IStage* upstream, World* world);
 		virtual ~HumanoidStage();
 
+		// SYNTHETIC: PLAYER 0x0099b100
+		// SYNTHETIC: STUDIO 0x00a5aca0
+		// RBX::HumanoidStage::`scalar deleting destructor'
+
+
 		// mac: 0x576328 (10B): HUMANOID_STAGE.
 		// FUNCTION: PLAYER 0x006c8740 FOLDED
 		// FUNCTION: STUDIO 0x007a6470 FOLDED
@@ -39,6 +44,15 @@ namespace RBX {
 		// onEdge pair: inherited base bodies (see MovingStage.h note).
 		virtual void onEdgeAdded(Edge* edge) { IWorldStage::onEdgeAdded(edge); }
 		virtual void onEdgeRemoving(Edge* edge) { IWorldStage::onEdgeRemoving(edge); }
+
+		void onAssemblyAdded(Assembly* a);
+		void onAssemblyRemoving(Assembly* a);
+
+	private:
+		void toDynamics(Assembly* a);
+		void fromDynamics(Assembly* a);
+		void toHumanoid(Assembly* a);
+		void fromHumanoid(Assembly* a);
 
 	private:
 		std::set<Assembly*> movingHumanoidAssemblies;  // +20.

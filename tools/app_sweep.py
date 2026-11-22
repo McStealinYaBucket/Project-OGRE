@@ -1,7 +1,8 @@
 """One-build sweep over the imported App decomp's markers (DECOMP_PLAN Phase 3 step 0).
 
 Scope: every `// STUB:` / `// FUNCTION:` marker for PLAYER or STUDIO in Client/{App,Base,Network,Log,
-Rendering}. Client/_generated (link stubs) is never touched. A marker whose next declaration ends in
+Rendering}; `set` and `apply` never rewrite Client/Rendering/ (the other contributor's side), `report` still
+reads it. Client/_generated (link stubs) is never touched. A marker whose next declaration ends in
 `;` before any `{` is not on a definition and is left alone.
 
     python3 -P tools/app_sweep.py set FUNCTION          # flip every in-scope marker to FUNCTION
@@ -185,13 +186,16 @@ def wanted(jsons, names):
     return want
 
 
-def rewrite(want_fn):
+def rewrite(want_fn, keep_folded=False):
     changed = collections.Counter()
     cache = {}
     for p, i, tgt, addr, kind, decl, isdef in list(markers()):
-        if not isdef:
+        # Client/Rendering/ belongs to the second contributor (CLAUDE.md Division of Work): report it, never rewrite it.
+        if not isdef or os.sep + os.path.join("Client", "Rendering") + os.sep in p:
             continue
         k = want_fn(p, i, tgt)
+        if k == "FUNCTION" and kind == "FOLDED" and keep_folded:
+            continue  # `set FUNCTION` keeps FOLDED: without it the group's markers collide and none scores
         if k != kind:
             lines = cache.setdefault(p, read(p))
             word, fold = ("FUNCTION", " FOLDED") if k == "FOLDED" else (k, "")
@@ -476,7 +480,7 @@ def main():
     if a.cmd == "selftest":
         return selftest()
     if a.cmd == "set":
-        print(dict(rewrite(lambda p, i, t: a.kind)))
+        print(dict(rewrite(lambda p, i, t: a.kind, keep_folded=True)))
         return
     jsons = {"PLAYER": load_json(a.player_json), "STUDIO": load_json(a.studio_json)}
     if a.cmd == "order":

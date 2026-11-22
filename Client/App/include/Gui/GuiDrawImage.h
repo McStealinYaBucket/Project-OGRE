@@ -43,6 +43,11 @@ namespace RBX {
 			: size(0.0f, 0.0f)
 		{}
 		GuiDrawImage(Adorn* adorn, const std::string& name, unsigned int unknown);
+
+		// SYNTHETIC: PLAYER 0x006bc620
+		// SYNTHETIC: STUDIO 0x007ab4c0
+		// RBX::GuiDrawImage::~GuiDrawImage
+
 		bool setImageFromName(Adorn* adorn, const std::string& name, unsigned int unknown);
 		bool setImage(Adorn* adorn, const TextureId& textureId, unsigned int unknown1, G3D::Vector2* unknown2);
 	private:

@@ -25,16 +25,76 @@ RBX_REGISTER_CLASS(RBX::Network::Server);
 namespace RBX {
 namespace Network {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x87D908: provider lookup + assert, present iff find<Server> hits.
-	// STUB: PLAYER 0x005b34f0
-	// STUB: STUDIO 0x006134f0
+	// FUNCTION: PLAYER 0x005b34f0
+	// FUNCTION: STUDIO 0x006134f0
 	bool Server::serverIsPresent(const Instance* context, bool testInDatamodel)
 	{
-		const ServiceProvider* provider = ServiceProvider::findServiceProvider(context);
-		RBXASSERT(!testInDatamodel || provider != NULL);
-		if (provider == NULL)
-			return false;
-		return ServiceProvider::find<Server>(provider) != NULL;
+		const ServiceProvider* serviceProvider = ServiceProvider::findServiceProvider(context);
+		RBXASSERT(!testInDatamodel || serviceProvider!=NULL);
+		return ServiceProvider::find<Server>(serviceProvider) != NULL;
 	}
 
 } // namespace Network

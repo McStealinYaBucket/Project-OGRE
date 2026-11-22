@@ -238,3 +238,35 @@ namespace rbx
 		return reinterpret_cast<const Stripped*>(operand.data);
 	}
 }
+
+// TEMPLATE: PLAYER 0x009b2040
+// TEMPLATE: STUDIO 0x00a697e0
+// ?invoke@?$void_function_obj_invoker0@V?$bind_t@XP6AXABV?$function0@X@boost@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@ZV?$list2@V?$value@V?$function0@X@boost@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@2@@_bi@boost@@X@function@detail@boost@@SAXAATfunction_buffer@234@@Z
+
+// TEMPLATE: PLAYER 0x009b2070
+// TEMPLATE: STUDIO 0x00a69810
+// ?invoke@?$void_function_obj_invoker0@V?$bind_t@XP6AXV?$shared_ptr@Udata@worker_thread@RBX@@@boost@@ABV?$function0@W4work_result@worker_thread@RBX@@@2@@ZV?$list2@V?$value@V?$shared_ptr@Udata@worker_thread@RBX@@@boost@@@_bi@boost@@V?$value@V?$function0@W4work_result@worker_thread@RBX@@@boost@@@23@@_bi@2@@_bi@boost@@X@function@detail@boost@@SAXAATfunction_buffer@234@@Z
+
+// TEMPLATE: PLAYER 0x009b2120
+// TEMPLATE: STUDIO 0x00a698c0
+// ??1?$list2@V?$value@V?$shared_ptr@Udata@worker_thread@RBX@@@boost@@@_bi@boost@@V?$value@V?$function0@W4work_result@worker_thread@RBX@@@boost@@@23@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x009b2240
+// TEMPLATE: STUDIO 0x00a699e0
+// ??1?$list2@V?$value@V?$function0@X@boost@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x009b2250
+// TEMPLATE: STUDIO 0x00a699f0
+// ??1?$bind_t@XP6AXV?$shared_ptr@Udata@worker_thread@RBX@@@boost@@ABV?$function0@W4work_result@worker_thread@RBX@@@2@@ZV?$list2@V?$value@V?$shared_ptr@Udata@worker_thread@RBX@@@boost@@@_bi@boost@@V?$value@V?$function0@W4work_result@worker_thread@RBX@@@boost@@@23@@_bi@2@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x009b2480
+// TEMPLATE: STUDIO 0x00a69c20
+// ??1?$bind_t@XP6AXABV?$function0@X@boost@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@ZV?$list2@V?$value@V?$function0@X@boost@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@2@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x009b25f0
+// TEMPLATE: STUDIO 0x00a69d90
+// ?manager@?$functor_manager@V?$bind_t@XP6AXV?$shared_ptr@Udata@worker_thread@RBX@@@boost@@ABV?$function0@W4work_result@worker_thread@RBX@@@2@@ZV?$list2@V?$value@V?$shared_ptr@Udata@worker_thread@RBX@@@boost@@@_bi@boost@@V?$value@V?$function0@W4work_result@worker_thread@RBX@@@boost@@@23@@_bi@2@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z
+
+// TEMPLATE: PLAYER 0x009b2a70
+// TEMPLATE: STUDIO 0x00a6a210
+// ?manager@?$functor_manager@V?$bind_t@XP6AXABV?$function0@X@boost@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@ZV?$list2@V?$value@V?$function0@X@boost@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@2@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z

@@ -1,9 +1,7 @@
 /* App/v8world/Assembly.cpp -- October 2013 (C2 + null-safe lookups).
    Bodies: C2 0x554424 / getPrimitiveAssembly 0x554C50 /
      getConstPrimitiveAssembly 0x554C82 (batch202). */
-
 #include "stdafx.h"
-
 #include "V8World/Assembly.h"
 #include "V8World/AssemblyHistory.h"
 #include "V8World/Clump.h"
@@ -12,40 +10,104 @@
 #include "V8World/Contact.h"
 #include "V8World/IMoving.h"
 #include "V8Kernel/Body.h"
-
 #include <boost/bind.hpp>
-
 namespace RBX {
 
 	// mac: 0x554424 (243B).  Member order mirrors the C2 init order.
-	Assembly::Assembly()		: unknown04(0)
-		, unknown48(0)
-		, unknown52(0)
-		, flag56(false)
-		, flag57(false)
-		, history(NULL)
-		, assemblyState(Sim::ANCHORED)
-		, simJob(NULL)
-		, unknown104(-1)
-		, unknown108(-1)
-		, filterPhase(6)
-		, maxRadius(0.0f)
-		, flag120(true)
-		, self124(this)
+	Assembly::Assembly()
+		: flag56(false), flag57(false), history(NULL)
+		, state(Sim::ANCHORED), simJob(NULL), unknown104(-1), recursiveDepth(-1), filterPhase(6)
+		, maxRadius(0.0f), flag120(true), self124(this)
 		, radiusCallback(NULL)  // DELTA: binary stores &computeAssemblyMaxRadius (see header).
 		, unknown132(0)
 	{
 	}
 
+
+
+
+
+
 	// D2 (batch241).
+	// FUNCTION: PLAYER 0x007b1cd0
+	// FUNCTION: STUDIO 0x008cdd60
 	Assembly::~Assembly()
 	{
-		RBXASSERT(history == NULL);  // :36 "history == NULL"
-		RBXASSERT(assemblyState == Sim::ANCHORED);  // :37
-		RBXASSERT(simJob == NULL);  // :38 "simJob == NULL"
-		RBXASSERT(unknown108 == -1);  // :39 "recursiveDepth == -1"
-		// Arrays/mesh/base tear down implicitly (same net state as the
-		// explicit Array/~IndexedMesh/~IPipelined calls).
+		RBXASSERT(history == NULL);
+		RBXASSERT(state == Sim::ANCHORED);
+		RBXASSERT(simJob == NULL);
+		RBXASSERT(recursiveDepth == -1);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x554ABE (128B, batch259).
+	// FUNCTION: PLAYER 0x007b1390
+	// FUNCTION: STUDIO 0x008cd420
+	Sim::AssemblyState Assembly::getAssemblyState() const
+	{
+		RBXASSERT((state == Sim::ANCHORED) || (getCurrentStage()->getStageType() >= IStage::HUMANOID_STAGE));
+		return state;
+	}
+	// FUNCTION: PLAYER 0x007b18e0
+	// FUNCTION: STUDIO 0x008cd970
+	Primitive* Assembly::getAssemblyPrimitive()
+	{
+		Primitive* answer = getTypedLower<Clump>()->getTypedLower<Primitive>();
+		RBXASSERT(answer);
+		return answer;
+	}
+	// FUNCTION: PLAYER 0x007b1940
+	// FUNCTION: STUDIO 0x008cd9d0
+	const Primitive* Assembly::getConstAssemblyPrimitive() const {
+		const Primitive* answer = getConstTypedLower<Clump>()->getConstTypedLower<Primitive>();
+		RBXASSERT(answer);
+		return answer;
 	}
 
 	// mac: 0x554C50 (50B).
@@ -64,8 +126,7 @@ namespace RBX {
 	}
 
 	// mac: 0x554C82 (50B, symmetric).
-	// STUB: PLAYER 0x008f9070
-	// STUB: STUDIO 0x00a0e130
+	// (0x008f9070 is IndexedMesh::getComputedUpper, 8b 41 24 c3: not this function.)
 	const Assembly* Assembly::getConstPrimitiveAssembly(const Primitive* prim)
 	{
 		if (prim == NULL)
@@ -78,63 +139,6 @@ namespace RBX {
 			return NULL;
 		return reinterpret_cast<const Assembly*>(
 			reinterpret_cast<const char*>(second) - 8);
-	}
-
-	// mac: 0x555572 (151B).
-	// STUB: PLAYER 0x007b14c0
-	// STUB: STUDIO 0x008cd550
-	Assembly* Assembly::otherAssembly(Edge* e)
-	{
-		Assembly* a0 = e->getPrim0()->getAssembly();
-		Assembly* a1 = e->getPrim1()->getAssembly();
-		RBXASSERT(a0 != a1);  // Assembly.cpp:262 "a0 != a1"
-		if (a0 != this)
-			return a0;
-		return a1;
-	}
-
-	// mac: 0x554A3C (batch241/242: lower.lower - 8 container adjust +
-	// :102 answer assert. Walks DOWN (assembly -> clump -> prim mesh);
-	// the old computedUpper-up draft was backwards -- it read the
-	// mechanism mesh as a prim. Binary disasm pins lower.lower:
-	// [this+0x28] then [+0x20], -8).
-	// STUB: PLAYER 0x007b18e0
-	// STUB: STUDIO 0x008cd970
-	Primitive* Assembly::getAssemblyPrimitive()
-	{
-		IndexedMesh* lower = getMesh()->getTypedLower<IndexedMesh>();
-		IndexedMesh* primMesh = (lower != NULL)
-			? lower->getTypedLower<IndexedMesh>() : NULL;
-		Primitive* answer = (primMesh != NULL)
-			? reinterpret_cast<Primitive*>((char*)primMesh - 8) : NULL;
-		RBXASSERT(answer != NULL);  // Assembly.cpp:102 "answer"
-		return answer;
-	}
-
-	// 2016 shape (upper-chain test + walk cross-check assert).
-	bool Assembly::isAssemblyRootPrimitive(const Primitive* prim)
-	{
-		bool answer = false;
-		if (prim != NULL)
-		{
-			const Clump* clump = prim->getMesh()->getConstTypedUpper<Clump>();
-			if (clump != NULL && clump->getConstTypedUpper<Assembly>() != NULL)
-				answer = true;
-		}
-		RBXASSERT(!answer || (getConstPrimitiveAssembly(prim)->getConstTypedLower<Clump>()->getConstTypedLower<Primitive>() == prim));
-		return answer;
-	}
-
-	// Const mirror (same lower.lower shape).
-	const Primitive* Assembly::getConstAssemblyPrimitive() const
-	{
-		const IndexedMesh* lower = getMesh()->getConstTypedLower<IndexedMesh>();
-		const IndexedMesh* primMesh = (lower != NULL)
-			? lower->getConstTypedLower<IndexedMesh>() : NULL;
-		const Primitive* answer = (primMesh != NULL)
-			? reinterpret_cast<const Primitive*>((const char*)primMesh - 8) : NULL;
-		RBXASSERT(answer != NULL);  // Assembly.cpp:102 "answer"
-		return answer;
 	}
 
 	// (batch242: grounded iff an anchor joint touches the root prim).
@@ -169,16 +173,94 @@ namespace RBX {
 		return false;
 	}
 
-	// mac: 0x554ABE (128B, batch259: :94 assert + return the +64 word).
-	// The assert short-circuits on ANCHORED, so fresh (stageless)
-	// assemblies never touch the stage.
-	// STUB: PLAYER 0x007b1390
-	// STUB: STUDIO 0x008cd420
-	Sim::AssemblyState Assembly::getAssemblyState() const
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// STUB: PLAYER 0x007b19a0
+	// STUB: STUDIO 0x008cda30
+	bool Assembly::isAssemblyRootPrimitive(const Primitive* p)
 	{
-		RBXASSERT(assemblyState == Sim::ANCHORED  // :94
-			|| getCurrentStage()->getStageType() >= IStage::HUMANOID_STAGE);
-		return assemblyState;
+		bool answer = false;
+		if (p != NULL)
+		{
+			const Clump* clump = p->getMesh()->getConstTypedUpper<Clump>();
+			if (clump != NULL && clump->getConstTypedUpper<Assembly>() != NULL)
+				answer = true;
+		}
+
+		RBXASSERT(!answer || (getConstPrimitiveAssembly(p)->getConstTypedLower<Clump>()->getConstTypedLower<Primitive>() == p));
+		return answer;
+	}
+	// FUNCTION: PLAYER 0x007b14c0
+	// FUNCTION: STUDIO 0x008cd550
+	Assembly* Assembly::otherAssembly(Edge* e) {
+		Assembly* a0 = e->getPrim0()->getAssembly();
+		Assembly* a1 = e->getPrim1()->getAssembly();
+		RBXASSERT(a0 != a1);
+		return (a0 == this) ? a1 : a0;
 	}
 
 	// mac: 0x554CB4 (12B, batch273: flag120 = 1, invalidating the maxRadius

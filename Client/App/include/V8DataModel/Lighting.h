@@ -10,6 +10,7 @@
 #include "V8Tree/Instance.h"
 #include "V8Tree/Service.h"
 #include "decomp.h"
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 
 namespace RBX {
 
@@ -32,10 +33,14 @@ namespace RBX {
 	{
 	private:
 		typedef DescribedCreatable<Lighting, Instance, sLighting> Super;
-		undefined m_unk0x64[0x1e0 - 0x64];		// 0x64
+		undefined m_unk0x64[0x1a0 - 0x64];		// 0x64
+		boost::posix_time::time_duration timeOfDay;	// 0x1a0  getTimeStr 0x00706190
+		undefined m_unk0x1a8[0x1e0 - 0x1a8];	// 0x1a8
 
 	public:
 		Lighting() {}
+
+		std::string getTimeStr() const;
 
 		rbx::signal<void(bool)> lightingChangedSignal;		// 0x1e0 (arg=skyboxChanged)
 		shared_ptr<Sky> sky;								// 0x1e4
@@ -65,3 +70,7 @@ namespace RBX {
 // TEMPLATE: STUDIO 0x007d3390
 // ??0?$Described@VLighting@RBX@@$E?sLighting@2@3QBDBV?$FactoryProduct@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 
+// boost::posix_time::to_simple_string(time_duration), out of line for getTimeStr.
+// TEMPLATE: PLAYER 0x00706150
+// TEMPLATE: STUDIO 0x007d1cf0
+// ?to_simple_string@posix_time@boost@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Vtime_duration@12@@Z

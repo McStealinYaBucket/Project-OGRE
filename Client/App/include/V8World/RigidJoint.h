@@ -29,9 +29,9 @@ namespace RBX {
 
 		// TODO bodies (builder/stepper paths only; see header note).
 		virtual bool isBroken() const { return false; }
-		// Non-const: overrides Joint::isAligned (vtable+0x28); PLAYER body
-		// 0x008ee6f0 is real (TODO), not the base `return true`.
-		virtual bool isAligned() { return true; }
+		// vtable+0x28 / +0x2c (RigidJoint.cpp: PLAYER 0x008ee6f0 / 0x008ee750).
+		virtual bool isAligned();
+		virtual G3D::CoordinateFrame align(Primitive* pMove, Primitive* pStay);
 		// mac: 0x597CEA (batch271): child frame in parent from the joint
 		// coords (2016-verbatim; manual inverse in the binary matches
 		// CF::inverse + compose + orthonormalize exactly).

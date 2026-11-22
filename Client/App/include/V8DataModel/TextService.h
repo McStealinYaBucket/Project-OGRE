@@ -43,6 +43,7 @@
 #include "GfxBase/Typesetter.h"
 
 #include "Gui/Adorn.h"
+#include <boost/scoped_array.hpp>
 
 namespace RBX {
 
@@ -96,11 +97,11 @@ namespace RBX {
 		// at 0x5F9B4C (decomp line 35): new[FONT_LAST] / swap the +0x60
 		// pointer / delete[] the NULL -- ONE live allocation, the landed
 		// init-list NULL mirrors the binary's +0x60 zero (decomp line 26).
-		// STUB: PLAYER 0x0073b010
-		// STUB: STUDIO 0x008856d0
+		// FUNCTION: PLAYER 0x0073b010
+		// FUNCTION: STUDIO 0x008856d0
 		TextService()
-			: flagDelta0x5C(true)
-			, typesetters(NULL)
+			: typesetters(NULL)
+			// 0x60 is Service::isPublic (true); the Mac view's 0x5C
 		{
 			Instance::setName("TextService");
 			clearTypesetters();
@@ -129,18 +130,28 @@ namespace RBX {
 		// shipped RBXASSERT(0) -- its expansion string is literally
 		// "0" at TextService.cpp line 65.
 		static Font FromTextFont(Text::Font font);
+		static Text::Font ToTextFont(Font font);
+		static Text::XAlign ToTextXAlign(XAlignment value);
+		static Text::YAlign ToTextYAlign(YAlignment value);
 
 	private:
 		// +92/0x5C: ctor-true byte (rarc30 C2 decomp line 21; DELTA name
 		// ours -- ChatService.h pins the same byte public, access is
 		// unobservable in the binary).
-		bool flagDelta0x5C;
+		// (Service::isPublic sits at 0x60, before typesetters.)
 
 		// this+0x60: a POINTER to the 5x8B {px, ctrl} array (not a
 		// vector -- rarc27's new[](0x2C) = 4b count + 5 pairs).  C2
 		// zeroes it (decomp line 26) then the tail clearTypesetters
 		// call swaps the fresh array in.
-		boost::shared_ptr<Typesetter>* typesetters;
+		boost::scoped_array<boost::shared_ptr<Typesetter> > typesetters;  // the ctor's second EH state
 	};
 
 } // namespace RBX
+
+// Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
+// clang-format off
+// TEMPLATE: PLAYER 0x0073a930
+// TEMPLATE: STUDIO 0x00885070
+// ??1?$scoped_array@V?$shared_ptr@VTypesetter@RBX@@@boost@@@boost@@QAE@XZ
+// clang-format on

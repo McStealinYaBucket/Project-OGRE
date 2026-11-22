@@ -3,6 +3,38 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
+// STUB: PLAYER 0x006fffc0
+extern "C" void ogre_stub_006fffc0()
+{
+	STUB(0x006fffc0);
+}
+#pragma comment(linker, "/alternatename:?getStringValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBVDescribedBase@23@@Z=_ogre_stub_006fffc0")
+
+// public: virtual bool __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::setStringValue(class RBX::Reflection::DescribedBase *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &) const
+// STUB: PLAYER 0x00700000
+extern "C" void ogre_stub_00700000()
+{
+	STUB(0x00700000);
+}
+#pragma comment(linker, "/alternatename:?setStringValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBE_NPAVDescribedBase@23@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z=_ogre_stub_00700000")
+
+// private: virtual void __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::readValue(class RBX::Reflection::DescribedBase *, class XmlElement const *, class RBX::IReferenceBinder &) const
+// STUB: PLAYER 0x00700050
+extern "C" void ogre_stub_00700050()
+{
+	STUB(0x00700050);
+}
+#pragma comment(linker, "/alternatename:?readValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@EBEXPAVDescribedBase@23@PBVXmlElement@@AAVIReferenceBinder@3@@Z=_ogre_stub_00700050")
+
+// private: virtual void __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::writeValue(class RBX::Reflection::DescribedBase const *, class XmlElement *) const
+// STUB: PLAYER 0x00704a00
+extern "C" void ogre_stub_00704a00()
+{
+	STUB(0x00704a00);
+}
+#pragma comment(linker, "/alternatename:?writeValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@EBEXPBVDescribedBase@23@PAVXmlElement@@@Z=_ogre_stub_00704a00")
+
 // void __cdecl RBX::registerNewLightAPI(void)
 // STUB: PLAYER 0x0075ed40
 extern "C" void ogre_stub_0075ed40()
@@ -26,14 +58,6 @@ extern "C" void ogre_stub_008766a0()
 	STUB(0x008766a0);
 }
 #pragma comment(linker, "/alternatename:??1RobloxExtraSpace@@AAE@XZ=_ogre_stub_008766a0")
-
-// public: void __thiscall RBX::Log::writeEntry(enum RBX::Log::Severity, char const *)
-// STUB: PLAYER 0x009b1890
-extern "C" void ogre_stub_009b1890()
-{
-	STUB(0x009b1890);
-}
-#pragma comment(linker, "/alternatename:?writeEntry@Log@RBX@@QAEXW4Severity@12@PBD@Z=_ogre_stub_009b1890")
 
 // public: void __thiscall RBX::Limits::Counter::add(class RBX::Limits::Countable *)
 // STUB: PLAYER 0x009b90a0

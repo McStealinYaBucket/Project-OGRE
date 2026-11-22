@@ -571,7 +571,7 @@ unsigned char Math::rotationToByte(float angle)
 	unsigned char answer = rotationToByteBase(wrapped);
 	return answer;
 }
-// STUB: PLAYER 0x00759a40
+// FUNCTION: PLAYER 0x00759a40
 // STUB: STUDIO 0x00898bc0
 bool Math::isDenormal(float f)
 {
@@ -589,7 +589,7 @@ bool Math::isNanInfVector3(const Vector3& v)
 {
 	return (isNanInf(v.x) || isNanInf(v.y) || isNanInf(v.z));
 }
-// STUB: PLAYER 0x00759b40
+// FUNCTION: PLAYER 0x00759b40
 // STUB: STUDIO 0x00898cc0
 bool Math::isNanInfDenormVector3(const Vector3& v)
 {

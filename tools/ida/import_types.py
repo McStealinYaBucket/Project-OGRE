@@ -64,6 +64,20 @@ CLASSES = [
     "RBX::DebrisService", "RBX::Frame", "RBX::GuiBase", "RBX::GuiBase2d", "RBX::GuiBase3d", "RBX::GuiImageMixin",
     "RBX::GuiLabel", "RBX::GuiLayerCollector", "RBX::GuiTextMixin", "RBX::ImageLabel", "RBX::TextLabel",
     "RBX::PhysicsInstructions", "RBX::ScreenGui", "RBX::RunService",
+    # wave3 sync (sweep9, build/sweep9/P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT or
+    # // SIZE = the PDB's), PLAYER / STUDIO: ~CRenderSettingsItem 0x00456940 / 0x00437850 (0xe4; its
+    # CRenderSettings member is the shell header's stand-in), ~BasePlayerGui 0x00708720 / 0x00795500 (0x74),
+    # PlayerGui ctor 0x0070c050 / 0x00798750 (0x74), CoreGuiService ctor 0x0070c350 / 0x00798a60 (0x90), GuiButton
+    # ctor 0x007cb2e0 / 0x008e7d90 (0x33c), ~GuiDrawImage 0x006bc620 / 0x007ab4c0 (0x84), GuiObject ctor 0x007c77c0
+    # / 0x008e4260 (0x21c, was a base only), GuiService ctor 0x0069ed90 / ~ 0x00860c80 (0xc0), ~KernelData
+    # 0x0082f240 / 0x009a1780 (0xb0), ~Limits::Counter::Activator 0x009b97f0 / 0x00a6b740 (0x8), ~Network::Client
+    # 0x005ad760 / 0x0060c1a0 (0xb10 = the PDB's and the 2013 `push 0xb10; call operator new` before Client::Client
+    # at 0x0052443f; Client.h's `// SIZE 0xb0c` is wrong, the members end at 0xb0c and Peer's alignment pads), Network::Peer ctor 0x005b9ac0 / 0x0064b710 (0xac0), ~SendPhysics 0x008e60f0
+    # / 0x00a043f0 (0x3c), SimJob ctor 0x00822390 / 0x00916360 (0x24). Still not: Lighting, Workspace (0.19 /
+    # 0.45), TaskScheduler (0.978 / 0.995), STUDIO ScreenGui (0.982) and RunService (0.937 / 0.899)
+    "CRenderSettingsItem", "RBX::BasePlayerGui", "RBX::PlayerGui", "RBX::CoreGuiService", "RBX::GuiButton",
+    "RBX::GuiDrawImage", "RBX::GuiObject", "RBX::GuiService", "RBX::KernelData", "RBX::Limits::Counter::Activator",
+    "RBX::Network::Client", "RBX::Network::Peer", "RBX::SendPhysics", "RBX::SimJob",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 

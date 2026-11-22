@@ -80,7 +80,7 @@ namespace RBX {
 	private:
 		int mode;                        // +16 (C2 1).
 		int phase;                       // +20 (C2 -1).
-		short flags;                     // +24 (C2 -1).
+		unsigned short flags;            // +24 (C2 0xffff: mov edx,0xffff / mov word [esi+0x18],dx).
 		Region2::WeightedPoint center;   // +0x1c: C2 0x008e4e20 stores Vector2::zero() at +0x1c/+0x20 and 0.0f at +0x24.
 		G3D::Array<Region2::WeightedPoint> points;  // +40.
 		AssemblySet assemblies[4];       // +56.. (D2-erased).

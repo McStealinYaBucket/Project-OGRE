@@ -46,6 +46,9 @@ namespace RBX {
 		// mac: 0x586EE6 (201B, batch222).
 		void removeJoint(Joint* joint);
 
+		void onSimulateAssemblyAdded(Assembly* a);
+		void onSimulateAssemblyRemoving(Assembly* a);
+
 	private:
 		// 2013: these three words are a boost::intrusive::list<Joint, base_hook<
 		// list_base_hook<tag<MovingAssemblyStage>>>> (size, then the root node; Joint's

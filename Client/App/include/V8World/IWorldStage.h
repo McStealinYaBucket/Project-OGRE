@@ -17,7 +17,7 @@ namespace RBX {
 	class Edge;
 	class Kernel;
 
-	class IWorldStage
+	class RBXBaseClass IWorldStage
 		: public IStage
 	{
 	public:
@@ -44,6 +44,12 @@ namespace RBX {
 			RBXASSERT(getDownstreamWS());
 			return getDownstreamWS()->getMetric(metricType);
 		}
+	protected:
+		IWorldStage() {}
+		// SimulateStage C2 0x00998e10 builds its base from (upstream, new Kernel(this), world).
+		IWorldStage(IStage* upstream, IStage* downstream, World* world)
+			: IStage(upstream, downstream, world)
+		{}
 	};
 
 } // namespace RBX

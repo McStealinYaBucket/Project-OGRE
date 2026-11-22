@@ -35,7 +35,7 @@ namespace RBX {
 		float friction;
 	};
 
-	class Contact : public Edge
+	class RBXBaseClass Contact : public Edge
 	{
 	public:
 		Contact(Primitive* p0, Primitive* p1)

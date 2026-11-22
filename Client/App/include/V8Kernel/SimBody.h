@@ -164,6 +164,8 @@ namespace RBX {
 			force = getWorldGravityForce();
 			torque = G3D::Vector3::zero();
 		}
+		// FUNCTION: PLAYER 0x0082de80
+		// FUNCTION: STUDIO 0x009a0450
 		void clearSymStateAndAccummulator() {
 			symmetricContact = true;
 			verticalContact = true;

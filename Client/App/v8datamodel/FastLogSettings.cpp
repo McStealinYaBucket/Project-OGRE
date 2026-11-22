@@ -13,6 +13,12 @@
 
 // LOGVARIABLE(group, default) spelled out so each channel carries its reccmp marker.
 namespace FLog {
+	// Initializer PLAYER 0x00a651c0 / STUDIO 0x00b1c390, ahead of DataModelJobs's.
+	// GLOBAL: PLAYER 0x00de3f47
+	// GLOBAL: STUDIO 0x00f84e1f
+	Channel GuiTargetLifetime = 0;
+	int GuiTargetLifetimeIniter = RegisterLogGroup("GuiTargetLifetime", &GuiTargetLifetime, NULL, FASTVARTYPE_STATIC);
+
 	// GLOBAL: PLAYER 0x00d30ee9
 	// GLOBAL: STUDIO 0x00ec17d5
 	Channel DataModelJobs = 2;

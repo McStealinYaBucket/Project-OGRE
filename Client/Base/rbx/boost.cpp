@@ -120,6 +120,8 @@ namespace RBX {
 		t.join();
 	}
 
+	// FUNCTION: PLAYER 0x009b2de0
+	// FUNCTION: STUDIO 0x00a6a580
 	void worker_thread::wake()
 	{
 		boost::mutex::scoped_lock lock(_data->sync);

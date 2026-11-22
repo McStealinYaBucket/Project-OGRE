@@ -190,11 +190,13 @@ void Workspace::clearTerrain()
 	}
 }
 
-// mac: 0x515534: delegate to the physics world (World+78 in the binary).
+// mac: 0x515534: delegate to the physics world. 2013 has no NULL check: a tail jmp to
+// World::joinAll 0x0074b160 through the pointer at Workspace+0x148.
+// STUB: PLAYER 0x0070ebd0
+// STUB: STUDIO 0x0082bfa0
 void Workspace::joinAllHack()
 {
-	if (world)
-		world->joinAll();
+	world->joinAll();
 }
 
 // mac: 0x51580E: assemble the physics world + assert assembled (Workspace.cpp:913).

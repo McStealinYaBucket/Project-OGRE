@@ -9,6 +9,7 @@
 #include "stdafx.h"
 
 #include "V8World/SleepStage.h"
+#include "decomp.h"
 #include "V8World/SimulateStage.h"
 #include "V8World/Assembly.h"
 #include "V8World/Primitive.h"
@@ -55,7 +56,7 @@ namespace RBX {
 		RBXASSERT(sleepingChecking.empty());
 		RBXASSERT(sleepingDeeply.empty());
 		RBXASSERT(removing.empty());
-		delete static_cast<SimulateStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// Vector fan-out (batch257: trivial loop).
@@ -406,6 +407,20 @@ namespace RBX {
 		edge->setThrottleType(Sim::UNDEFINED_THROTTLE);
 		edge->setEdgeState(Sim::UNDEFINED);
 		edge->removeFromStage(this);
+	}
+
+	// STUB: PLAYER 0x008e6e60
+	// STUB: STUDIO 0x00a050a0
+	void SleepStage::onAssemblyAdded(Assembly* assembly)
+	{
+		STUB(0x008e6e60);
+	}
+
+	// STUB: PLAYER 0x008e7c90
+	// STUB: STUDIO 0x00a05ec0
+	void SleepStage::onAssemblyRemoving(Assembly* assembly)
+	{
+		STUB(0x008e7c90);
 	}
 
 } // namespace RBX

@@ -5,13 +5,21 @@
 
 #include "V8DataModel/Lighting.h"
 #include "V8DataModel/Sky.h"
+#include "boost/date_time/posix_time/time_formatters.hpp"
 
 DECOMP_SIZE_ASSERT(RBX::Lighting, 0x1f0);
 
 namespace RBX {
 	const char* const sLighting = "Lighting";
 
-	// FUNCTION: PLAYER 0x00706920
+	// FUNCTION: PLAYER 0x00706190
+	// FUNCTION: STUDIO 0x007d1d30
+	std::string Lighting::getTimeStr() const
+	{
+		return boost::posix_time::to_simple_string(timeOfDay);
+	}
+
+	// STUB: PLAYER 0x00706920
 	// STUB: STUDIO 0x007d2750
 	void Lighting::onChildChanged(Instance* instance, const PropertyChanged& event)
 	{

@@ -184,35 +184,35 @@ IndexedMesh* IndexedMesh::getIndexedMeshParent()
 }
 
 // mac: 0x20647C (11B) / 0x206642 (11B): plain member reads (no lazy compute).
+// FUNCTION: PLAYER 0x008f9070 FOLDED
+// FUNCTION: STUDIO 0x00a0e130 FOLDED
 IndexedMesh* IndexedMesh::getComputedUpper()
 {
 	return computedUpper;
 }
-
+// FUNCTION: PLAYER 0x008f9070 FOLDED
+// FUNCTION: STUDIO 0x00a0e130 FOLDED
 const IndexedMesh* IndexedMesh::getConstComputedUpper() const
 {
 	return computedUpper;
 }
 
-
-
-
-
-
-
-// STUB: PLAYER 0x008f9080
-// STUB: STUDIO 0x00a0e140
+// FUNCTION: PLAYER 0x008f9080
+// FUNCTION: STUDIO 0x00a0e140
 const IndexedMesh* IndexedMesh::computeConstUpper(const IndexedMesh* lower)
 {
-	if (lower->getConstUpper()) {
-		return lower->getConstUpper();
+	const IndexedMesh* answer = lower->getConstUpper();
+	while (!answer) {
+		const IndexedMesh* parent = lower->getConstTypedParent<IndexedMesh>();
+		if (!parent) return NULL;
+		lower = parent;
+		answer = parent->getConstUpper();
 	}
-	const IndexedMesh* parent = lower->getConstTypedParent<IndexedMesh>();
-	return parent ? computeConstUpper(parent) : NULL;
+	return answer;
 }
 
-// STUB: PLAYER 0x008f90b0
-// STUB: STUDIO 0x00a0e170
+// FUNCTION: PLAYER 0x008f90b0
+// FUNCTION: STUDIO 0x00a0e170
 bool IndexedMesh::isUpperRoot(const IndexedMesh* lower)
 {
 	bool answer = (lower && lower->getConstUpper());
@@ -224,7 +224,11 @@ bool IndexedMesh::isUpperRoot(const IndexedMesh* lower)
 // copy at 0x008f9080, which is a loop there (here: a tail jump; isUpperRoot calls it without inlining).
 IndexedMesh* IndexedMesh::computeUpper(IndexedMesh* lower)
 {
-	return const_cast<IndexedMesh*>(computeConstUpper(lower));
+	if (lower->getUpper()) {
+		return lower->getUpper();
+	}
+	IndexedMesh* parent = lower->getTypedParent<IndexedMesh>();
+	return parent ? const_cast<IndexedMesh*>(computeConstUpper(parent)) : NULL;
 }
 
 // FUNCTION: PLAYER 0x008f93a0
@@ -289,25 +293,36 @@ void IndexedMesh::setUpper(IndexedMesh* newUpper)
 	}
 }
 
-// STUB: PLAYER 0x008f9600
-// STUB: STUDIO 0x00a0e6c0
+// FUNCTION: PLAYER 0x008f9600
+// FUNCTION: STUDIO 0x00a0e6c0
 void IndexedMesh::onParentChanged(IndexedTree* oldParent)
 {
 	if (oldParent) {
-		IndexedMesh* oldComputed = static_cast<IndexedMesh*>(oldParent)->getComputedUpper();
-		if (oldComputed) {
-			oldComputed->severeChildren(this);
-			oldComputed->lowersChanged();
+		IndexedMesh* oldMeshParent = rbx_static_cast<IndexedMesh*>(oldParent);
+		if (IndexedMesh* oldUpper = oldMeshParent->getComputedUpper()) {
+			oldUpper->onLowerChildRemoved(this);
 		}
 	}
-	if (IndexedMesh* parent = getTypedParent<IndexedMesh>()) {
-		IndexedMesh* newComputed = parent->getComputedUpper();
-		if (newComputed) {
-			newComputed->attachChildren(this);
-			newComputed->lowersChanged();
+
+	if (IndexedMesh* newParent = getTypedParent<IndexedMesh>()) {
+		if (IndexedMesh* newUpper = newParent->getComputedUpper()) {
+			newUpper->onLowerChildAdded(this);
 		}
 	}
-	setComputedUpper(computeUpper(this));
+
+	setComputedUpper(IndexedMesh::computeUpper(this));
+}
+
+void IndexedMesh::onLowerChildAdded(IndexedMesh* lowerChild)
+{
+	attachChildren(lowerChild);
+	lowersChanged();
+}
+
+void IndexedMesh::onLowerChildRemoved(IndexedMesh* lowerChild)
+{
+	severeChildren(lowerChild);
+	lowersChanged();
 }
 
 } // namespace RBX

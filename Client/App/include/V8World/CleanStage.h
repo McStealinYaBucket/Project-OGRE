@@ -21,12 +21,18 @@ namespace RBX {
 	class Primitive;
 	class World;
 	class Joint;
+	class JointStage;
 
 	class CleanStage : public IWorldStage
 	{
 	public:
 		CleanStage(void* stageArg, World* world);
 		virtual ~CleanStage();
+
+		// SYNTHETIC: PLAYER 0x008e6340
+		// SYNTHETIC: STUDIO 0x00a04640
+		// RBX::CleanStage::`scalar deleting destructor'
+
 
 		virtual void onEdgeAdded(Edge* edge);
 		virtual void onEdgeRemoving(Edge* edge);
@@ -43,6 +49,10 @@ namespace RBX {
 		// relink notifications (Joint::setPrimitive world path).
 		void onJointPrimitiveNulling(Joint* joint, Primitive* prim);
 		void onJointPrimitiveSet(Joint* joint, Primitive* prim);
+
+	private:
+		JointStage* getJointStage();
+		bool primitivesAreOk(Edge* e);
 	};
 
 } // namespace RBX

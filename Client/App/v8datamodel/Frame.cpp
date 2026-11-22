@@ -5,7 +5,7 @@
 #include "decomp.h"
 
 #include "V8DataModel/Frame.h"
-
+#include "V8Tree/Property.h"
 namespace RBX {
 	const char* const sFrame = "Frame";
 }
@@ -42,6 +42,23 @@ namespace RBX {
 		default:
 			RBXASSERT(0);
 			return getRect2D();
+		}
+	}
+
+	// GLOBAL: PLAYER 0x00decd2c
+	// GLOBAL: STUDIO 0x00f8e9ac
+	// Frame::prop_Style
+	Reflection::EnumPropDescriptor<Frame, Frame::Style> Frame::prop_Style("Style", category_Data, &Frame::getStyle, &Frame::setStyle);
+
+	// FUNCTION: PLAYER 0x006c1ed0
+	// FUNCTION: STUDIO 0x00854de0
+	void Frame::setStyle(Style value)
+	{
+		if (style != value)
+		{
+			style = value;
+			raisePropertyChanged(prop_Style);
+			forceResize();
 		}
 	}
 

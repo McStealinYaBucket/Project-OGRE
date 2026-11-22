@@ -23,7 +23,7 @@ namespace RBX {
 	class Kernel;
 	class KernelData;
 
-	class Connector
+	class RBXBaseClass Connector
 	{
 		friend class KernelData;
 		friend class Kernel;
@@ -46,19 +46,19 @@ namespace RBX {
 			, contactIndex(-1)
 		{}
 
-		virtual ~Connector() {}
+		// 2013 vftable order (BallBallConnector 0x00b7b3dc, RotateConnector 0x00b87e14; 2016 order):
+		virtual KernelType getConnectorKernelType() const = 0;    // vtable+0x00
+		virtual ~Connector() {}                                    // vtable+0x04
+		virtual bool computeCanThrottle();                         // vtable+0x08 (0x008b9d80)
+		virtual void computeForce(bool throttling) = 0;            // vtable+0x0c
+		virtual bool computeImpulse(float& residualVelocity) { return false; }  // vtable+0x10
+		virtual bool getBroken() { return false; }                 // vtable+0x14
+		virtual Body* getBody(BodyIndex id) = 0;                   // vtable+0x18
+		virtual float potentialEnergy() { return 0.0f; }           // vtable+0x1c
 
-		virtual KernelType getConnectorKernelType() const = 0;
-		virtual Body* getBody(BodyIndex id) = 0;
-		// Stepper dispatch (binary calls computeForce via vtbl+16 in
-		// stepWorldThrottled; 2016 declares both here -- ContactConnector
-		// overrides both).
-		virtual void computeForce(bool throttling) = 0;
-		virtual bool computeImpulse(float& residualVelocity) { return false; }
 
-		// mac: 0x526464 (batch257: both bodies' Body+56 canThrottle AND).
-		// Non-virtual in the binary (no vtbl slot; called directly).
-		bool computeCanThrottle();
+
+
 
 		bool isHumanoid() const { return humanoidIndex >= 0; }
 		bool isRealTime() const { return realTimeIndex >= 0; }

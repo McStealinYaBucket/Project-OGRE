@@ -77,6 +77,7 @@ namespace RBX {
 		{
 			yaInvariant = 0,
 			yaCenter = 1,  // the drawFont2D call passes 1 (5CD756); name unobservable (DELTA)
+			yaBottom = 2,  // TextService::ToTextYAlign 0x0073a780 maps YALIGNMENT_BOTTOM here
 		};
 	}
 

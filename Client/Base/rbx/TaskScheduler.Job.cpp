@@ -1,56 +1,40 @@
-/* Base/rbx/TaskScheduler.Job.cpp — reconstructed for October 2013.
-   Evidence: symbolled Studio 0.126 decompilation
-     (F:\2013Decompile\exports\decomp\Base_TaskScheduler.cpp.txt)
-      - Job ctor/dtor/Stats/addCoordinator/removeCoordinator/isDisabled/preStep/postStep/
-        stats/standard-error/sleep-time/waiting/sleeping/update/priority/notifyCoordinator
-        methods all present under RBX::TaskScheduler::Job::* mangles.
-      - 2013 has NO cyclic executive: tryJobAgain / computeStandardErrorCyclicExecutiveSleeping
-        mangles absent, zero cyclic strings in the PE. The ctor's
-        ,cyclicExecutive(false) ,cyclicPriority(Default) inits and the Cyclic Sleeping
-        variant are 2016-only and removed here.
-      - Job ctor/dtor FASTLOGs ("Job Created - this(%p) arbiter(%p)", "Job Destroyed")
-        and JobStart/JobStop strings verified present in the 0.126 Player PE.
-   2016 source (Base/rbx/TaskScheduler.Job.cpp) used as style template; binary wins. */
-
+/* Base/rbx/TaskScheduler.Job.cpp, October 2013 (no cyclic executive: no tryJobAgain/cyclic mangles or strings in 2013; ctor/dtor FASTLOG strings verified in the 0.126 Player). */
 #include "rbx/TaskScheduler.Job.h"
 #include "rbx/Tasks/Coordinator.h"
 #include "rbx/Log.h"
 #include "FastLog.h"
-#include "FastLog.h"
-
 using namespace RBX;
-
 LOGGROUP(TaskSchedulerSteps)
-
 #if HANG_DETECTION
 #include <../../App/include/util/standardout.h>
 #define STEPTIME_SAMPLE_INTEVAL 60.0
 double RBX::TaskScheduler::Job::stepTimeThreshold = 0.0;
 #endif
-
 TaskScheduler::Job::SleepAdjustMethod TaskScheduler::Job::sleepAdjustMethod(AverageInterval);
 double RBX::TaskScheduler::Job::throttledSleepTime = 0.01;
-
+// FUNCTION: PLAYER 0x009b9a80
+// FUNCTION: STUDIO 0x00a70aa0
 double TaskScheduler::Job::averageDutyCycle() const
 {
 	return dutyCycle.dutyCycle();
 }
-
 double TaskScheduler::Job::averageSleepRate() const
 {
 	return sleepRate.value();
 }
-
+// FUNCTION: PLAYER 0x009b9a50
+// FUNCTION: STUDIO 0x00a70a70
 double TaskScheduler::Job::averageStepsPerSecond() const
 {
 	return dutyCycle.stepInterval().rate();
 }
-
+// FUNCTION: PLAYER 0x009b9990
+// FUNCTION: STUDIO 0x00a70960
 double TaskScheduler::Job::averageStepTime() const
 {
 	return dutyCycle.stepTime().value();
 }
-
+// FUNCTION: STUDIO 0x00a70970
 Time::Interval TaskScheduler::Job::getSleepingTime() const
 {
 	if (state!=Sleeping)
@@ -58,13 +42,13 @@ Time::Interval TaskScheduler::Job::getSleepingTime() const
 	else
 		return Time::now<Time::Fast>() - timeofLastSleep;
 }
-
+// FUNCTION: PLAYER 0x009b99a0
+// FUNCTION: STUDIO 0x00a709c0
 double TaskScheduler::Job::averageError() const
 {
 	return runningAverageError.value();
 }
-
-
+// STUB: STUDIO 0x00a71210
 void TaskScheduler::Job::removeCoordinator(class boost::shared_ptr<class RBX::Tasks::Coordinator> coordinator)
 {
 	coordinator->onRemoved(this);
@@ -73,8 +57,8 @@ void TaskScheduler::Job::removeCoordinator(class boost::shared_ptr<class RBX::Ta
 		coordinators.erase(std::find(coordinators.begin(), coordinators.end(), coordinator));
 	}
 }
-
-
+// STUB: PLAYER 0x009baa80
+// STUB: STUDIO 0x00a718d0
 void TaskScheduler::Job::addCoordinator(class boost::shared_ptr<class RBX::Tasks::Coordinator> coordinator)
 {
 	{
@@ -83,24 +67,22 @@ void TaskScheduler::Job::addCoordinator(class boost::shared_ptr<class RBX::Tasks
 	}
 	coordinator->onAdded(this);
 }
-
+// FUNCTION: PLAYER 0x009ba160
+// FUNCTION: STUDIO 0x00a71180
 bool TaskScheduler::Job::isDisabled()
 {
 	if (coordinators.size()==0)
 		return false;
-
 	RBX::mutex::scoped_lock lock(coordinatorMutex);
 	// TODO: Write more efficiently without boost bind
 	return std::find_if(
-		coordinators.begin(),
-		coordinators.end(),
-		boost::bind(&Tasks::Coordinator::isInhibited, _1, this)
-		) != coordinators.end();
+		coordinators.begin(), coordinators.end(),
+		boost::bind(&Tasks::Coordinator::isInhibited, _1, this)) != coordinators.end();
 }
-
 const double lerpJob = 0.05;
 extern RBX::Time::Interval maxDutyCycleWindow;
-
+// FUNCTION: PLAYER 0x009babf0
+// FUNCTION: STUDIO 0x00a71a40
 TaskScheduler::Job::Job(const char* name, shared_ptr<TaskScheduler::Arbiter> arbiter, Time::Interval stepBudget)
 	:name(name)
 	,sharedArbiter(arbiter)
@@ -121,7 +103,8 @@ TaskScheduler::Job::Job(const char* name, shared_ptr<TaskScheduler::Arbiter> arb
 	FASTLOG2(FLog::TaskSchedulerInit, "Job Created - this(%p) arbiter(%p)", this, arbiter.get());
 	FASTLOGS(FLog::TaskSchedulerInit, "JobName(%s)", name);
 }
-
+// STUB: PLAYER 0x009ba1f0
+// STUB: STUDIO 0x00a71310
 TaskScheduler::Job::~Job()
 {
 	RBXASSERT(!TaskScheduler::SleepingHook::is_linked());
@@ -131,72 +114,71 @@ TaskScheduler::Job::~Job()
 		coordinators.back()->onRemoved(this);
 		coordinators.pop_back();
 	}
-
 	FASTLOG1(FLog::TaskSchedulerInit, "Job Destroyed - this(%p)", this);
 	FASTLOGS(FLog::TaskSchedulerInit, "JobName(%s)", name);
 }
-
-// Use this to generate the error function if you just want to try to track the desiredHz
+// STUB: PLAYER 0x009b98b0
+// STUB: STUDIO 0x00a70870
 TaskScheduler::Job::Error TaskScheduler::Job::computeStandardError(const Stats& stats, double desiredHz)
 {
 	return stats.timespanSinceLastStep.seconds() * desiredHz;
 }
-
+// STUB: PLAYER 0x009b9a90
+// STUB: STUDIO 0x00a70ab0
 Time::Interval TaskScheduler::Job::computeStandardSleepTime(const Stats& stats, double desiredHz)
 {
 	shared_ptr<Arbiter> ar(getArbiter());
 	Time::Interval minTime = ar && ar->isThrottled() ? Time::Interval(throttledSleepTime) : Time::Interval::zero();
-
 	const double interval = 1.0 / desiredHz;
-
 	switch (sleepAdjustMethod)
 	{
 	case AverageInterval:
-		// If we're not being called as frequently as we'd like, then don't sleep
 		if (dutyCycle.stepInterval().value().seconds() > 1.05 * interval)
 			return minTime;
 		break;
-
 	case LastSample:
 		if (dutyCycle.lastStepInterval().seconds() > 1.05 * interval)
 			return minTime;
 		break;
-
 	default:
 		break;
 	}
-
 	Time::Interval result = Time::Interval(interval) - stats.timespanSinceLastStep;
 	if (result < minTime)
 		return minTime;
 	return result;
 }
-
+// STUB: PLAYER 0x009b98d0
+// STUB: STUDIO 0x00a70890
 TaskScheduler::Job::Stats::Stats(Job& job, Time now)
 {
 	timeNow = now;
 	timespanSinceLastStep = now - job.timeofLastStep;
 	timespanOfLastStep = job.timespanOfLastStep;
 }
-
+// FUNCTION: PLAYER 0x009b9930
+// FUNCTION: STUDIO 0x00a708f0
 void TaskScheduler::Job::startWaiting()
 {
 	state = Waiting;
 }
-
+// FUNCTION: PLAYER 0x009b9940
+// FUNCTION: STUDIO 0x00a70900
 void TaskScheduler::Job::startSleeping()
 {
 	state = Sleeping;
 	timeofLastSleep = Time::now<Time::Fast>();
 }
-
+// STUB: PLAYER 0x009b99b0
+// STUB: STUDIO 0x00a709d0
 void TaskScheduler::Job::updateWakeTime()
 {
 	Time now = Time::now<Time::Fast>();
 	Job::Stats stats(*this, now);
 	wakeTime = now + sleepTime(stats);
 }
-
+// STUB: PLAYER 0x009b9cd0
+// STUB: STUDIO 0x00a70cf0
 void TaskScheduler::Job::updateError(const Time& now)
 {
 	Job::Stats stats(*this, now);
@@ -207,6 +189,8 @@ void TaskScheduler::Job::updateError(const Time& now)
 }
 
 
+// FUNCTION: PLAYER 0x009ba060
+// FUNCTION: STUDIO 0x00a71080
 void TaskScheduler::Job::notifyCoordinatorsPreStep()
 {
 	if (coordinators.size()>0)
@@ -220,6 +204,8 @@ void TaskScheduler::Job::notifyCoordinatorsPreStep()
 	}
 }
 
+// STUB: PLAYER 0x009b9de0
+// STUB: STUDIO 0x00a70e00
 void TaskScheduler::Job::preStep()
 {
 	state = Running;
@@ -234,6 +220,8 @@ void TaskScheduler::Job::preStep()
 		ar->preStep(this);
 }
 
+// FUNCTION: PLAYER 0x009bae40
+// FUNCTION: STUDIO 0x00a71c90
 void TaskScheduler::Job::postStep(StepResult result)
 {
 	state = Unknown;
@@ -279,6 +267,8 @@ void TaskScheduler::Job::postStep(StepResult result)
 }
 
 
+// FUNCTION: PLAYER 0x009ba0e0
+// FUNCTION: STUDIO 0x00a71100
 void TaskScheduler::Job::notifyCoordinatorsPostStep()
 {
 	if (coordinators.size()>0)
@@ -292,6 +282,8 @@ void TaskScheduler::Job::notifyCoordinatorsPostStep()
 	}
 }
 
+// FUNCTION: PLAYER 0x009b9c10
+// FUNCTION: STUDIO 0x00a70c30
 void TaskScheduler::Job::updatePriority()
 {
 	switch (TaskScheduler::priorityMethod)

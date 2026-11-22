@@ -30,6 +30,8 @@ namespace RBX {
 		virtual void setImageRectOffset(G3D::Vector2 value) = 0;    // vtable+0x04
 		virtual void setImageRectSize(G3D::Vector2 value) = 0;      // vtable+0x08
 
+		// FUNCTION: PLAYER 0x006bbdf0
+		// FUNCTION: STUDIO 0x008517f0
 		TextureId getImage() const { return image; }
 		G3D::Vector2 getImageRectOffset() const { return imageRectOffset; }
 		G3D::Vector2 getImageRectSize() const { return imageRectSize; }

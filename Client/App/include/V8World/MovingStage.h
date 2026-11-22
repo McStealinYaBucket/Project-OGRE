@@ -25,6 +25,11 @@ namespace RBX {
 		MovingStage(IStage* upstream, World* world);
 		virtual ~MovingStage();
 
+		// SYNTHETIC: PLAYER 0x0099a4e0
+		// SYNTHETIC: STUDIO 0x00a5a7a0
+		// RBX::MovingStage::`scalar deleting destructor'
+
+
 		// 2016 shape (binary calls onAssemblyRootRemoving on the +8
 		// downstream directly; out-of-line to avoid the include cycle).
 		SpatialFilter* getSpatialFilter();

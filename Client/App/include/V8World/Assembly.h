@@ -22,6 +22,8 @@
 #include "V8World/Enum.h"
 #include "Util/IndexedMesh.h"
 #include "G3D/Array.h"
+#include <boost/noncopyable.hpp>
+#include <boost/intrusive/list.hpp>
 
 namespace RBX {
 
@@ -31,9 +33,17 @@ namespace RBX {
 	class AssemblyHistory;
 	class SimJob;
 
+	class SimulateStage;
+	typedef boost::intrusive::list_base_hook< boost::intrusive::tag<SimulateStage> > SimulateStageHook;
+
+	// Bases (2016 order): noncopyable is an empty non-polymorphic base after the two
+	// polymorphic ones, so VC9 gives it 4 bytes at +0x30 and the hook lands at +0x34
+	// (SimulateStage::onAssemblyAdded 0x00998ac0: lea eax,[edi+0x34]).
 	class Assembly
 		: public IPipelined
+		, public boost::noncopyable
 		, public IndexedMesh
+		, public SimulateStageHook
 	{
 	public:
 		// FilterPhase: 2013 values (binary-pinned: onFixedAssemblyRootAdded
@@ -46,24 +56,21 @@ namespace RBX {
 		typedef enum { Sim_SendIfSim, Sim_BufferZone, NoSim_Send,
 			NoSim_SendIfSim, NUM_PHASES, Fixed, NOT_ASSIGNED } FilterPhase;
 	private:
-		int unknown04;  // +4 (C2 0).
 		// IndexedMesh secondary base at +8 (vtable off_EEDE14, Thn8 thunk
 		// batch273 -- MI, same precedent as Joint/Primitive/TreeStage).
 		// (No member: the base IS the mesh; getMesh() adjusts.)
-		int unknown48;  // +48 (C2 0).
-		int unknown52;  // +52 (C2 0).
 		bool flag56;  // +56 (C2 false; TODO identity).
 		bool flag57;  // +57 (C2 false; TODO identity).
 		AssemblyHistory* history;  // +60 (C2 NULL; D2 :36 asserts NULL).
 		// mac: 0x554ABE (128B, batch259: returns this word; :94 assert
 		// (ANCHORED || stage >= HUMANOID_STAGE)). D2 :37 checks this
 		// same word for ANCHORED -- the old unknown64 name was wrong.
-		Sim::AssemblyState assemblyState;  // +64 (C2 0 = ANCHORED).
+		Sim::AssemblyState state;  // +64 (C2 0 = ANCHORED).
 	public:
 		Sim::AssemblyState getAssemblyState() const;
 		// 2016 shape (SleepStage::changeAssemblyState stores the new
 		// state; binary writes +64 directly).
-		void setAssemblyState(Sim::AssemblyState value) { assemblyState = value; }
+		void setAssemblyState(Sim::AssemblyState value) { state = value; }
 		// Batch260 (0x554A04: assembly-prim network-wake + history wake;
 		// history arm dead while +60 stays NULL -- link-covered, runs
 		// with staged assemblies in 162+).
@@ -98,7 +105,7 @@ namespace RBX {
 		const SimJob* getConstSimJob() const { return simJob; }
 	private:
 		int unknown104;  // +104 (C2 -1).
-		int unknown108;  // +108 (C2 -1).
+		int recursiveDepth;  // +108 (C2 -1).
 		// +112 filter phase (C2 6; onAssemblyRootRemoving asserts it is
 		// NOT_ASSIGNED when stageless -- binary reads +112, so this IS
 		// the phase word despite the 2016 enum placing NOT_ASSIGNED
@@ -120,11 +127,7 @@ namespace RBX {
 		Assembly* self124;  // +124 (C2 this).
 		void* radiusCallback;  // +128 (see header DELTA).
 		int unknown132;  // +132 (C2 0).
-		// Child-mesh array (binary +20 array/+24 count; group-build
-		// fills it; the onMechanismAdded/Removing + sendClumpChangedMessage
-		// walks skip when empty). MODEL-RELATIVE tail slot (see body note
-		// for the binary addresses).
-		G3D::Array<IndexedMesh*> childMeshes;
+		// (No childMeshes member: ~Assembly 0x007b1cd0 destroys no Array at +0x8c.)
 	public:
 		Assembly();
 		// D2 (batch241: :36 history NULL / :37 state ANCHORED / :38

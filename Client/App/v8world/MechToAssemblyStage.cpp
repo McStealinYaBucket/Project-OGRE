@@ -21,13 +21,13 @@ namespace RBX {
 		world = worldArg;
 	}
 
-	// STUB: PLAYER 0x00997240
-	// STUB: STUDIO 0x00a49fd0
+	// D0 0x00997240 (SYNTHETIC in MechToAssemblyStage.h)
+	//
 	MechToAssemblyStage::~MechToAssemblyStage()
 	{
 		// D2 pattern (uniform 0x10 node: delete +8; D1/D0 per batch224;
 		// members: none).
-		delete static_cast<AssemblyStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// mac: 0x57E83E (batch297: putInStage + downstream onFixedAssemblyRootAdded).

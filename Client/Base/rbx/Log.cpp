@@ -1,74 +1,135 @@
-/* Base/rbx/Log.cpp -- October 2013 (Log helpers).
-   formatMem 0x14588A (batches 612-613): B/%.1fKB/%.0fKB/%.1fMB/
-   %.0fMB/%.0fGB ladder over decimal 1000s (C1C900=1000.0,
-   C2F1A0=1e6/C2F198=1e9 -- all three VERIFIED by batch621 rodata read).
-   Declared in Base/include/rbx/Log.h (pre-existing stub header).
-   formatTime queues (no EA banked). */
+/* Base/rbx/Log.cpp -- October 2013 Log (PLAYER 0x009b0f50-0x009b1993): formatMem, formatTime,
+   timeStamp, the ctor/dtor and both writeEntry overloads, written from the PLAYER bytes (2016
+   Base/util/Log.cpp for intent). setLogProvider and Log::provider are not placed yet. */
 
 #include "rbx/Log.h"
 #include "FastLog.h"
 #include "RbxFormat.h"
-#include <time.h>
+#include "rbx/rbxTime.h"
 #include <stdio.h>
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
 
 namespace RBX {
 
-	// STUB: PLAYER 0x009b0f50
-	// STUB: STUDIO 0x00a68040
+	// FUNCTION: PLAYER 0x009b0f50
+	// FUNCTION: STUDIO 0x00a68040
 	std::string Log::formatMem(unsigned int bytes)
 	{
-		if (bytes <= 999)
-			return RBX::format("%dB", bytes);
-		double v = (double)bytes;
-		if (bytes <= 99999)
-			return RBX::format("%.1fKB", v / 1000.0);
-		if (bytes <= 999999)
-			return RBX::format("%.0fKB", v / 1000.0);
-		if (bytes <= 99999999)
-			return RBX::format("%.1fMB", v / 1000000.0);
-		if (bytes <= 999999999)
-			return RBX::format("%.0fMB", v / 1000000.0);
-		return RBX::format("%.0fGB", v / 1000000000.0);
+		char buffer[64];
+		if (bytes<1000)
+			_snprintf(buffer, sizeof(buffer), "%dB", bytes);
+		else if (bytes<100000)
+			_snprintf(buffer, sizeof(buffer), "%.1fKB", ((double)bytes)/1000.0);
+		else if (bytes<1000000)
+			_snprintf(buffer, sizeof(buffer), "%.0fKB", ((double)bytes)/1000.0);
+		else if (bytes<100000000)
+			_snprintf(buffer, sizeof(buffer), "%.1fMB", ((double)bytes)/1000000.0);
+		else if (bytes<1000000000)
+			_snprintf(buffer, sizeof(buffer), "%.0fMB", ((double)bytes)/1000000.0);
+		else if (bytes<100000000000)	// 64-bit compare in 2013 (cmp ecx,0x17 at 0x009b1053)
+			_snprintf(buffer, sizeof(buffer), "%.1fGB", ((double)bytes)/1000000000.0);
+		else
+			_snprintf(buffer, sizeof(buffer), "%.0fGB", ((double)bytes)/1000000000.0);
+		return buffer;
 	}
 
-	// formatTime 0x1459D2 (batches 615/621: v<0 or v>=0.1 -> "%.3gs",
-	// else v*1000 "%.3gms". Threshold is CA92E8=0.1 VERIFIED (batch621
-	// rodata read; an earlier comment misguessed 1.0 -- s514 fix).
-	// NOTE: the "0s" literal at the head is unreachable as-read (the
-	// zero path falls through into the ms arm, yielding "0ms") --
-	// possible binary dead code, preserved as behavior).
-	// STUB: PLAYER 0x009b10e0
-	// STUB: STUDIO 0x00a681d0
+	// FUNCTION: PLAYER 0x009b10e0
+	// FUNCTION: STUDIO 0x00a681d0
 	std::string Log::formatTime(double time)
 	{
-		if (time < 0.0 || time >= 0.1)
-			return RBX::format("%.3gs", time);
-		return RBX::format("%.3gms", time * 1000.0);
+		char buffer[64];
+		if (time==0.0)
+			_snprintf(buffer, sizeof(buffer), "0s");
+		if (time<0.0)
+			_snprintf(buffer, sizeof(buffer), "%.3gs", time);
+		else if (time>=0.1)
+			_snprintf(buffer, sizeof(buffer), "%.3gs", time);
+		else
+			_snprintf(buffer, sizeof(buffer), "%.3gms", time*1000.0);
+		return buffer;
 	}
 
-	// timeStamp(ofstream&, bool): binary body unrecovered from the dumped
-	// material (call sites only -- batch738:1241, batch745:238,
-	// batch769:1669, disasm batch758:907 show the (ofstream&, bool) shape
-	// and the "timestamp-prefix then message" flow). 2013-conventional
-	// port form: "[YYYY/MM/DD HH:MM:SS] " with the date part only when
-	// includeDate. LOUD DELTA (exact fmt bytes unrecovered).
+	// PLAYER bytes: second_clock::local_time (0x009b1240), three from_day_number calls for
+	// day/month/year (0x009b13c0), the time of day (0x009b1190), Time::nowFastSec 0x009bb4d0.
+	// FUNCTION: PLAYER 0x009b15e0
+	// FUNCTION: STUDIO 0x00a686d0
 	void Log::timeStamp(std::ofstream& stream, bool includeDate)
 	{
-		time_t timer = time(NULL);
-		struct tm tmData;
-		if (localtime_s(&tmData, &timer) != 0)
-			return;
+		boost::posix_time::ptime stime(boost::posix_time::second_clock::local_time());
+		char s[256];
 
-		char stamp[32];
-		size_t stampLen;
 		if (includeDate)
-			stampLen = (size_t)_snprintf(stamp, sizeof(stamp), "[%04d/%02d/%02d %02d:%02d:%02d] ",
-				tmData.tm_year + 1900, tmData.tm_mon + 1, tmData.tm_mday,
-				tmData.tm_hour, tmData.tm_min, tmData.tm_sec);
-		else
-			stampLen = (size_t)_snprintf(stamp, sizeof(stamp), "[%02d:%02d:%02d] ",
-				tmData.tm_hour, tmData.tm_min, tmData.tm_sec);
-		stream.write(stamp, stampLen);
+		{
+			boost::gregorian::date date(stime.date());
+			_snprintf(s, sizeof(s), "%02u.%02u.%u ", date.day().as_number(), date.month().as_number(), (unsigned short)date.year());
+			stream << s;
+		}
+		boost::posix_time::time_duration dur(stime.time_of_day());
+		_snprintf(s, sizeof(s), "%02u:%02u:%02u.%03u (%03.07f)", dur.hours(), dur.minutes(), dur.seconds(), (unsigned short)dur.total_milliseconds(), Time::nowFastSec());
+		stream << s;
+		stream.flush();
+	}
+
+	// FUNCTION: PLAYER 0x009b1740
+	// FUNCTION: STUDIO 0x00a68830
+	Log::Log(const char* logFile, const char* name)
+		:stream(logFile)
+		,logFile(logFile)
+		,worstSeverity(Information)
+		,name(name)
+	{
+		Log::timeStamp(stream, true);
+		stream << "Log \"" << name << "\"\n";
+		stream.flush();
+	}
+
+	// FUNCTION: PLAYER 0x009b1800
+	// FUNCTION: STUDIO 0x00a688f0
+	Log::~Log(void)
+	{
+		Log::timeStamp(stream, true);
+		stream << "End Log\n";
+	}
+
+	// FUNCTION: PLAYER 0x009b1890
+	// FUNCTION: STUDIO 0x00a68980
+	void Log::writeEntry(Severity severity, const char* message)
+	{
+		static const char* error =       " Error:   ";
+		static const char* warning =     " Warning: ";
+		static const char* information = "          ";
+		Log::timeStamp(stream, false);
+		switch (severity)
+		{
+			case Log::Error:
+				stream << error;
+				break;
+			case Log::Warning:
+				stream << warning;
+				break;
+			case Log::Information:
+				stream << information;
+				break;
+		}
+		stream << message;
+		stream << '\n';
+		stream.flush();
+	}
+
+	// FUNCTION: PLAYER 0x009b1920
+	// FUNCTION: STUDIO 0x00a68a10
+	void Log::writeEntry(Severity severity, const wchar_t* message)
+	{
+		size_t origsize = wcslen(message) + 1;
+		const size_t newsize = origsize+100;
+		size_t convertedChars = 0;
+		char* nstring = new char[newsize];
+		wcstombs_s(&convertedChars, nstring, origsize, message, _TRUNCATE);
+		if ( convertedChars >= origsize-1 )
+			nstring[origsize-1] = '\0';
+		writeEntry(severity, nstring);
+		delete [] nstring;
 	}
 
 } // namespace RBX

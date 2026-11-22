@@ -123,48 +123,6 @@ namespace RBX
 		return static_cast<size_t>(InterlockedIncrement(&index));
 	}
 
-	/* mac: 0x551EB8 */
-	shared_ptr<Instance> ServiceProvider::getPublicServiceByClassNameString(std::string sName)
-	{
-		const Name* serviceName = RBX::Name::lookup(sName);
-		if (serviceName == &RBX::Name::getNullName())
-			throw RBX::runtime_error("'%s' is not a valid Service name", sName.c_str());
-
-		shared_ptr<Instance> result = ServiceProvider::create(this, *serviceName);
-		if (Service* service = dynamic_cast<Service*>(result.get())) {
-			if (service->isPublic) {
-				return result;
-			}
-		}
-		return shared_ptr<Instance>();
-	}
-
-	/* mac: 0x551DAE */
-	shared_ptr<Instance> ServiceProvider::findPublicServiceByClassNameString(std::string sName)
-	{
-		const Name* serviceName = RBX::Name::lookup(sName);
-		if (serviceName == &RBX::Name::getNullName())
-			throw RBX::runtime_error("'%s' is not a valid Service name", sName.c_str());
-
-		shared_ptr<Instance> result = findServiceByClassName(*serviceName);
-		if (Service* service = dynamic_cast<Service*>(result.get())) {
-			if (service->isPublic) {
-				return result;
-			}
-		}
-		return shared_ptr<Instance>();
-	}
-
-	/* mac: 0x552106 */
-	shared_ptr<Instance> ServiceProvider::findServiceByClassName(const RBX::Name& className) const
-	{
-		std::map<const RBX::Name*, shared_ptr<Instance> >::const_iterator iter = serviceMap.find(&className);
-		if (iter != serviceMap.end())
-			return iter->second;
-		else
-			return shared_ptr<Instance>();
-	}
-
 	/* mac: 0x55219C */
 	// FUNCTION: PLAYER 0x006a9310
 	// FUNCTION: STUDIO 0x0076f350
@@ -181,6 +139,36 @@ namespace RBX
 	{
 		instance->onServiceProvider(this, NULL);
 		Super::onDescendantRemoving(instance);
+	}
+
+	/* mac: 0x552106 */
+	// FUNCTION: PLAYER 0x006a9360
+	// FUNCTION: STUDIO 0x0076f3a0
+	shared_ptr<Instance> ServiceProvider::findServiceByClassName(const RBX::Name& className) const
+	{
+		std::map<const RBX::Name*, shared_ptr<Instance> >::iterator iter = serviceMap.find(&className);
+		if (iter != serviceMap.end())
+			return iter->second;
+		else
+			return shared_ptr<Instance>();
+	}
+
+	/* mac: 0x551DAE */
+	// FUNCTION: PLAYER 0x006a93d0
+	// FUNCTION: STUDIO 0x0076f410
+	shared_ptr<Instance> ServiceProvider::findPublicServiceByClassNameString(std::string sName)
+	{
+		const Name* serviceName = RBX::Name::lookup(sName);
+		if (serviceName == &RBX::Name::getNullName())
+			throw RBX::runtime_error("'%s' is not a valid Service name", sName.c_str());
+
+		shared_ptr<Instance> result = findServiceByClassName(*serviceName);
+		if (Service* service = dynamic_cast<Service*>(result.get())) {
+			if (service->isPublic) {
+				return result;
+			}
+		}
+		return shared_ptr<Instance>();
 	}
 
 	/* mac: 0x5521D2 */
@@ -210,6 +198,8 @@ namespace RBX
 	}
 
 	/* mac: 0x551FE2 */
+	// STUB: PLAYER 0x006a98f0
+	// STUB: STUDIO 0x0076f930
 	shared_ptr<Instance> ServiceProvider::create(Instance* context, const RBX::Name& name)
 	{
 		while (context!=NULL)
@@ -225,6 +215,23 @@ namespace RBX
 				return shared_ptr<Instance>();
 			}
 			context = context->getParent();
+		}
+		return shared_ptr<Instance>();
+	}
+
+	/* mac: 0x551EB8 */
+	// FUNCTION: PLAYER 0x006a9b40
+	shared_ptr<Instance> ServiceProvider::getPublicServiceByClassNameString(std::string sName)
+	{
+		const Name* serviceName = RBX::Name::lookup(sName);
+		if (serviceName == &RBX::Name::getNullName())
+			throw RBX::runtime_error("'%s' is not a valid Service name", sName.c_str());
+
+		shared_ptr<Instance> result = ServiceProvider::create(this, *serviceName);
+		if (Service* service = dynamic_cast<Service*>(result.get())) {
+			if (service->isPublic) {
+				return result;
+			}
 		}
 		return shared_ptr<Instance>();
 	}

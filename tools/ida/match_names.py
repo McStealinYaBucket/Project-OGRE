@@ -300,6 +300,27 @@ FACTS = [
     (0x00de3f47, 0x00f84e1f, "data1", "_ZN4FLog17GuiTargetLifetimeE", "ios:",
      "FLog::GuiTargetLifetime (FLog channel byte) | iOS 1029 symbol; ~GuiLayerCollector loads it (`mov cl,[...]` "
      "at PLAYER 0x008b439b, STUDIO 0x00988b9b) before FastLog"),
+    # wave3 sync (notes/runs/2026-11-14-phase5-wave3: integrate.md / shell-5k.md link stubs, datamodel-5b-3.md
+    # getTimeStr). Checked 2026-11-22 with capstone on both targets. The two link-stub rows carry the exact
+    # decorated name our tree's unresolved external has, so tools/gen_link_stubs.py's exact lookup finds them.
+    (0x009c5ce0, 0x006c20b0, "rename", "??0CRenderSettings@RBX@@QAE@XZ", "rtti:",
+     "RBX::CRenderSettings::CRenderSettings() | stores vftable 0x00bbb474 (STUDIO 0x00be712c), whose COL names "
+     ".?AVCRenderSettings@RBX@@; GfxBase /Od body (ebp frame); called on this+0x64 by CRenderSettingsItem() "
+     "0x0045680c (STUDIO 0x0043771c); iOS 1021/1029 have _ZN3RBX15CRenderSettingsC2Ev"),
+    (0x009b59b0, 0x00a68be0, "rename", "?getVideoMemory@SystemUtil@RBX@@YAIXZ", "src2016:",
+     "RBX::SystemUtil::getVideoMemory() | 2016 Base/rbx/Win/SystemUtil.cpp name (Windows-only, no oracle); 2013: "
+     "a tail `jmp` into the DXVRAM probe 0x009c0c30 (STUDIO 0x00a77ac0, FastLog 'DXVRAM: Already initialized, "
+     "returning %d'), called by CRenderSettingsItem() 0x004568bd (STUDIO 0x004377cd), which compares eax only "
+     "with 16000000 (32-bit return, shell-5k.md)"),
+    (0x00706150, 0x007d1cf0, "rename",
+     "?to_simple_string@posix_time@boost@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@"
+     "Vtime_duration@12@@Z", "lib:",
+     "boost::posix_time::to_simple_string(time_duration) (boost 1.53 header) | free function, no this: copies the "
+     "8-byte time_duration argument and calls to_simple_string_type<char> 0x00705df0 (STUDIO 0x007d1990); the "
+     "old ios: Lighting::getTimeStr name (callgraph only) belongs to the next function (datamodel-5b-3.md)"),
+    (0x00706190, 0x007d1d30, "rename", "_ZNK3RBX8Lighting10getTimeStrEv", "ios:",
+     "RBX::Lighting::getTimeStr() const | iOS 1029 symbol; reads this+0x1a0/+0x1a4 (the time-of-day "
+     "time_duration) and calls to_simple_string_type<char>; the name sat on to_simple_string 0x00706150 before"),
 ]
 
 

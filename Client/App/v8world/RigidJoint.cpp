@@ -8,6 +8,23 @@
 
 namespace RBX {
 
+	// STUB: PLAYER 0x008ee6f0
+	// STUB: STUDIO 0x009bfdf0
+	bool RigidJoint::isAligned()
+	{
+		return Math::fuzzyEq(getPrimitive(0)->getCoordinateFrame() * getJointCoord0(),
+			getPrimitive(1)->getCoordinateFrame() * getJointCoord1(), 1e-5f, 1e-5f);
+	}
+
+	// STUB: PLAYER 0x008ee750
+	// STUB: STUDIO 0x009bfe50
+	G3D::CoordinateFrame RigidJoint::align(Primitive* pMove, Primitive* pStay)
+	{
+		const G3D::CoordinateFrame& cMove = (pMove == getPrimitive(0)) ? getJointCoord0() : getJointCoord1();
+		const G3D::CoordinateFrame& cStay = (pStay == getPrimitive(0)) ? getJointCoord0() : getJointCoord1();
+		return (pStay->getCoordinateFrame() * cStay) * cMove.inverse();
+	}
+
 	// mac: 0x597CEA (batch271; 2016-verbatim, binary-identical).
 	G3D::CoordinateFrame RigidJoint::getChildInParent(Primitive* parent, Primitive* child)
 	{

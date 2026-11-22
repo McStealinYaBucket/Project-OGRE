@@ -10,6 +10,7 @@
      under the TODO stack above (step/assemble drives era by era). */
 
 #include "stdafx.h"
+#include "decomp.h"
 
 #include "V8World/World.h"
 #include "V8World/CleanStage.h"
@@ -82,8 +83,8 @@ namespace RBX {
 		static_cast<CleanStage*>(stage)->onPrimitiveAdded(megaClusterPrim);
 	}
 
-	// mac: 0x5A902E (batch776/777): the binary reads this+188 in one
-	// instruction; the member hand-out reproduces it.
+	// STUB: PLAYER 0x008bb760
+	// (ICF-folded getter of +0xb0; mac 0x5A902E)
 	SendPhysics* World::getSendPhysics()
 	{
 		return sendPhysics;   // +188.
@@ -300,6 +301,49 @@ namespace RBX {
 			contactManager, _1));
 	}
 
+	// STUB: PLAYER 0x00745820
+	// STUB: STUDIO 0x00886660
+	void World::onPrimitiveContactParametersChanged(Primitive* p)
+	{
+		STUB(0x00745820);
+	}
+
+	// STUB: PLAYER 0x00745e50
+	// STUB: STUDIO 0x00886c70
+	Assembly* World::onPrimitiveEngineChanging(Primitive* p)
+	{
+		STUB(0x00745e50);
+		return NULL;
+	}
+
+	// STUB: PLAYER 0x00745fc0
+	// STUB: STUDIO 0x00886de0
+	void World::onPrimitiveEngineChanged(Assembly* a)
+	{
+		STUB(0x00745fc0);
+	}
+
+	// STUB: PLAYER 0x00746040
+	// STUB: STUDIO 0x00886e60
+	void World::onPrimitiveFixedChanging(Primitive* p)
+	{
+		STUB(0x00746040);
+	}
+
+	// STUB: PLAYER 0x00746110
+	// STUB: STUDIO 0x00886f30
+	void World::onPrimitiveFixedChanged(Primitive* p)
+	{
+		STUB(0x00746110);
+	}
+
+	// STUB: PLAYER 0x007461e0
+	// STUB: STUDIO 0x00887000
+	void World::onPrimitivePreventCollideChanged(Primitive* p)
+	{
+		STUB(0x007461e0);
+	}
+
 	// mac: 0x5A9754 (223B).
 	// STUB: PLAYER 0x007458a0
 	// STUB: STUDIO 0x008866e0
@@ -311,10 +355,10 @@ namespace RBX {
 	}
 
 	// mac: 0x5AB4E0 (885B).  Asserts carried verbatim (World.cpp:856-861 + :869).
-	// Routing DELTA: binary calls CleanStage::onPrimitiveAdded (pipeline,
-	// unported past the entry) AND ContactManager::onPrimitiveAdded; our
-	// stage entry already forwards to the CM (see CleanStage.cpp), so one
-	// call covers both -- same terminal state, no double-insert.  The +60
+	// Calls CleanStage::onPrimitiveAdded then ContactManager::onPrimitiveAdded
+	// (PLAYER 0x007473d5 / 0x007473e1); 2013's CleanStage does not touch the CM.
+	//
+	// The +60
 	// IndexArray append + :60/:61 asserts are spelled with the primitives
 	// member directly (worldIndex = size pre-append).
 	// STUB: PLAYER 0x007471f0
@@ -334,7 +378,7 @@ namespace RBX {
 		prim->setWorld(this);
 		// IWorldStage lacks the hooks (see header note); same static_cast
 		// the harness uses.
-		static_cast<CleanStage*>(stage)->onPrimitiveAdded(prim);
+		static_cast<CleanStage*>(stage)->onPrimitiveAdded(prim);  contactManager->onPrimitiveAdded(prim);
 		RBXASSERT(!inStepCode);  // :869 "!inStepCode" (World.cpp:869)
 	}
 

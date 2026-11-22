@@ -34,7 +34,6 @@ class TaskScheduler::Thread : public boost::enable_shared_from_this<Thread>
 	boost::scoped_ptr<boost::thread> thread;
 	volatile bool done;
 	TaskScheduler* const taskScheduler;
-
 	Thread(TaskScheduler* taskScheduler)
 		:done(false)
 		,enabled(true)
@@ -46,27 +45,22 @@ public:
 	static shared_ptr<Thread> create(TaskScheduler* taskScheduler)
 	{
 		shared_ptr<Thread> thread(new Thread(taskScheduler));
-
 		static rbx::atomic<int> count;
 		std::string name = RBX::format("Roblox TaskScheduler Thread %d", static_cast<int>(++count));
-
 		// loop holds a shared_ptr to the thread, so it won't be collected before the loop exits :)
 		thread->thread.reset(new boost::thread(RBX::thread_wrapper(boost::bind(&Thread::loop, thread), name.c_str())));
 		return thread;
 	}
-
 	void end()
 	{
 		done = true;
 	}
-
 	void join()
 	{
 		end();
 		if (thread->get_id() != boost::this_thread::get_id())
 			thread->timed_join(boost::posix_time::milliseconds(JOIN_TIMEOUT));
 	}
-
 	void printJobInfo()
 	{
 		if (RBX::Log::current() && job)
@@ -77,33 +71,30 @@ public:
 				ss << "TaskScheduler::Job: " << job->name.c_str() << ", state: " << (int)job->getState() << ", seconds spend in job: " << (now - job->stepStartTime).seconds();
 			else
 				ss << "TaskScheduler::Job: " << job->name.c_str() << ", state: " << (int)job->getState();
-
 			RBX::Log::current()->writeEntry(RBX::Log::Information, ss.str().c_str());
 		}
 	}
-
 	~Thread()
 	{
 		join();
 	}
-
 	void loop();
 	void releaseJob();
 	TaskScheduler::StepResult runJob();
 };
-
 // NOTE (2013): printJobs (2016 printf diagnostics) absent from the Oct 2013 binaries.
-
+// FUNCTION: PLAYER 0x009b7b40
+// FUNCTION: STUDIO 0x00a702f0
 void TaskScheduler::endAllThreads()
 {
 	std::for_each(threads.begin(), threads.end(), boost::bind(&Thread::join, _1));
 }
-
+// FUNCTION: PLAYER 0x009b7ec0
+// FUNCTION: STUDIO 0x00a70670
 void TaskScheduler::setThreadCount(ThreadPoolConfig threadConfig)
 {
 	static const unsigned int kDefaultCoreCount = 1;
 	int realCoreCount = RbxTotalUsableCoreCount(kDefaultCoreCount);
-
 	int requestedCount;
 	RBX::mutex::scoped_lock lock(mutex);
 	if (threadConfig==Auto)
@@ -119,7 +110,6 @@ void TaskScheduler::setThreadCount(ThreadPoolConfig threadConfig)
 	{
 		requestedCount = (int) threadConfig;
 	}
-
 	RBXASSERT(requestedCount>0);
 
 	desiredThreadCount = (size_t)requestedCount;
@@ -129,14 +119,14 @@ void TaskScheduler::setThreadCount(ThreadPoolConfig threadConfig)
 }
 
 
+// STUB: PLAYER 0x009b6850
+// STUB: STUDIO 0x00a6ed30
 TaskScheduler::StepResult TaskScheduler::Thread::runJob()
 {
 	job->stepStartTime = Time::now<Time::Fast>();
 
 	TaskScheduler::Job::Stats stats(*job, job->stepStartTime);
-
 	job->preStep();
-
 	TaskScheduler::StepResult result;
 	++taskScheduler->runningJobCount;
 	RBXASSERT(currentJob.get()==NULL);
@@ -163,11 +153,9 @@ bool TaskScheduler::conflictsWithScheduledJob(RBX::TaskScheduler::Job* job) cons
 {
 	if (threads.size() == 1)
 		return false;
-
 	const shared_ptr<Arbiter>& arbiter = job->getArbiter();
 	if (!arbiter)
 		return false;
-
 	for (Threads::const_iterator iter = threads.begin(); iter != threads.end(); ++iter)
 	{
 		RBX::TaskScheduler::Job* other = (*iter)->job.get();
@@ -175,26 +163,22 @@ bool TaskScheduler::conflictsWithScheduledJob(RBX::TaskScheduler::Job* job) cons
 		{
 			if (Job::haveDifferentArbiters(job, other))
 				continue;	// different Arbiter domains can run concurrently
-
 			if (arbiter->areExclusive(job, other))
 				return true;
 		}
 	}
 	return false;
 }
-
-
+// FUNCTION: PLAYER 0x009b6240
+// FUNCTION: STUDIO 0x00a6e7b0
 void TaskScheduler::Thread::releaseJob()
 {
 	job->state = Job::Unknown;
-
 	if (job->isRemoveRequested)
 	{
 		if (job->joinEvent)
 			job->joinEvent->Set();
-
 		// NOTE (2013): no cyclic-executive release branch (2016-only).
-
 	}
 	else
 	{
@@ -202,31 +186,30 @@ void TaskScheduler::Thread::releaseJob()
 	}
 	job.reset();
 }
-
-
+// FUNCTION: PLAYER 0x009b5bd0
+// FUNCTION: STUDIO 0x00a6e160
 bool TaskScheduler::shouldDropThread() const
 {
 	RBXASSERT(desiredThreadCount <= threads.size());
 	return desiredThreadCount < threads.size();
 }
+// STUB: PLAYER 0x009b6a70
+// STUB: STUDIO 0x00a6ef50
 void TaskScheduler::dropThread(Thread* thread)
 {
 	thread->end();
 	for (Threads::iterator iter = threads.begin(); iter != threads.end(); ++iter) {
-		if (iter->get() == thread) {
-			threads.erase(iter);
-			break;
-		}
+		if (iter->get() == thread) { threads.erase(iter); break; }
 	}
 }
-
+// FUNCTION: PLAYER 0x009b7140
+// FUNCTION: STUDIO 0x00a6f8f0
 void TaskScheduler::disableThreads(int count, Threads& threads)
 {
 	for (Threads::const_iterator iter = this->threads.begin(); count>0 && iter != this->threads.end(); ++iter)
 	{
 		const shared_ptr<Thread>& t = *iter;
-		if (t->job)
-			continue;
+		if (t->job) continue;
 		if (!t->enabled)
 			continue;
 		t->enabled = false;
@@ -234,7 +217,8 @@ void TaskScheduler::disableThreads(int count, Threads& threads)
 		count--;
 	}
 }
-
+// STUB: PLAYER 0x009b6df0
+// STUB: STUDIO 0x00a6f5a0
 void TaskScheduler::enableThreads(Threads& threads)
 {
 	for (Threads::const_iterator iter = threads.begin(); iter != threads.end(); ++iter)
@@ -244,15 +228,13 @@ void TaskScheduler::enableThreads(Threads& threads)
 	}
 	threads.clear();
 }
-
+// STUB: PLAYER 0x009b71a0
+// STUB: STUDIO 0x00a6f950
 void TaskScheduler::Thread::loop()
 {
 	Profiler::onThreadCreate(format("TS %p", this).c_str());
-
 	taskScheduler->incrementThreadCount();
-
 	TaskScheduler::Threads participatingThreads;	// threads that are turned off during a parallel run
-
 	shared_ptr<Thread> self(shared_from_this());
 	while (!done)
 	{
@@ -338,6 +320,8 @@ void TaskScheduler::Thread::loop()
 }
 
 
+// FUNCTION: PLAYER 0x009b75f0
+// STUB: STUDIO 0x00a6fda0
 void TaskScheduler::getJobsInfo(std::vector<shared_ptr<const Job> >& result)
 {
 	RBX::mutex::scoped_lock lock(mutex);
@@ -356,6 +340,8 @@ static void setJobExtendedStatsWindow(shared_ptr<TaskScheduler::Job> job, double
 
 RBX::Time::Interval maxDutyCycleWindow(0.0);
 
+// STUB: PLAYER 0x009b7760
+// STUB: STUDIO 0x00a6ff10
 void TaskScheduler::setJobsExtendedStatsWindow(double seconds)
 {
 	maxDutyCycleWindow = Time::Interval(seconds);
@@ -371,6 +357,8 @@ void TaskScheduler::setJobsExtendedStatsWindow(double seconds)
 
 // NOTE (2013): cancelCyclicExecutive / releaseCyclicExecutive (2016) absent.
 
+// FUNCTION: PLAYER 0x009b78f0
+// STUB: STUDIO 0x00a700a0
 void TaskScheduler::getJobsByName(const std::string& name, std::vector<boost::shared_ptr<const Job> >& result)
 {
 	RBX::mutex::scoped_lock lock(mutex);

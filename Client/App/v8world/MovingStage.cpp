@@ -15,14 +15,14 @@ namespace RBX {
 		return static_cast<SpatialFilter*>(downstream);
 	}
 
-	// STUB: PLAYER 0x0099a420
-	// STUB: STUDIO 0x00a5a6d0
-	MovingStage::MovingStage(IStage* upstreamArg, World* worldArg)
+	// FUNCTION: PLAYER 0x0099a420
+	// FUNCTION: STUDIO 0x00a5a6d0
+	MovingStage::MovingStage(IStage* upstream, World* world)
+		: IWorldStage(upstream, new SpatialFilter(this, world), world)
 	{
-		downstream = new SpatialFilter(this, worldArg);
-		upstream = upstreamArg;
-		world = worldArg;
 	}
+
+
 
 
 
@@ -42,11 +42,11 @@ namespace RBX {
 		return true;
 	}
 
-	// STUB: PLAYER 0x0099a4e0
-	// STUB: STUDIO 0x00a5a7a0
+	// D0 0x0099a4e0 (SYNTHETIC in MovingStage.h)
+	//
 	MovingStage::~MovingStage()
 	{
-		delete static_cast<SpatialFilter*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// mac: 0x587560 (batch220).

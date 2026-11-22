@@ -187,3 +187,14 @@ namespace RBX {
 // TEMPLATE: PLAYER 0x007162e0
 // ??$create@VRunService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VRunService@RBX@@@boost@@XZ
 
+
+// TEMPLATE: PLAYER 0x007113d0
+// ??$?0VFlag@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VFlag@RBX@@@boost@@QAE@PAVFlag@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00711c10
+// TEMPLATE: STUDIO 0x0082eac0
+// ??_EWorkspace@RBX@@WBI@AEPAXI@Z
+
+// TEMPLATE: PLAYER 0x00711c30
+// TEMPLATE: STUDIO 0x0082eae0
+// ??_EWorkspace@RBX@@WBM@AEPAXI@Z

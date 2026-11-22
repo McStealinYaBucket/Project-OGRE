@@ -232,3 +232,11 @@ namespace RBX {
 // TEMPLATE: STUDIO 0x008aa160
 // ??$create@VEquationDisplay@RBX@@PBDPBD@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VEquationDisplay@RBX@@@boost@@PBD0@Z
 
+
+// TEMPLATE: PLAYER 0x007e5eb0
+// TEMPLATE: STUDIO 0x008a9a30
+// ??$?0VChatWidget@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VChatWidget@RBX@@@boost@@QAE@PAVChatWidget@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x007e5f20
+// TEMPLATE: STUDIO 0x008a9aa0
+// ??$?0VChatButton@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VChatButton@RBX@@@boost@@QAE@PAVChatButton@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z

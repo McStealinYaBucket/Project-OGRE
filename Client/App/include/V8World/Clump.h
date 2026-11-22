@@ -12,10 +12,12 @@
 #pragma once
 
 #include "Util/IndexedMesh.h"
+#include "G3D/Array.h"
 
 namespace RBX {
 
 	class Primitive;
+	class Joint;
 
 	class Clump
 		: public IndexedMesh
@@ -25,6 +27,15 @@ namespace RBX {
 		Clump()
 			: IndexedMesh()
 		{}
+		~Clump();
+
+		// SYNTHETIC: PLAYER 0x008e4f60
+		// SYNTHETIC: STUDIO 0x009d0110
+		// RBX::Clump::`scalar deleting destructor'
+
+		static bool isClumpRootPrimitive(const Primitive* p);
+		void loadConstMotors(G3D::Array<const Joint*>& load) const;
+		void loadMotors(G3D::Array<Joint*>& load);
 
 		// mac: 0x55D23E (batch258/269: static in spirit -- no this-use;
 		// member per the mangling).

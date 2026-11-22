@@ -992,3 +992,140 @@ public:
 // TEMPLATE: STUDIO 0x0076c210
 // ??$create@VDataModel@RBX@@PAVVerb@2@PAV12@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VDataModel@RBX@@@boost@@PAVVerb@1@PAVDataModel@1@@Z
 
+
+// TEMPLATE: PLAYER 0x00630e70
+// TEMPLATE: STUDIO 0x00750b00
+// ??1?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00631040
+// TEMPLATE: STUDIO 0x00750ba0
+// ??0?$TypedPropertyDescriptor@VVector2@G3D@@@Reflection@RBX@@IAE@AAVClassDescriptor@12@PBD1V?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@VVector2@G3D@@@Reflection@RBX@@@std@@UAttributes@PropertyDescriptor@12@W4Permissions@Security@2@@Z
+
+// TEMPLATE: PLAYER 0x00631b10
+// TEMPLATE: STUDIO 0x00751910
+// ??1?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x00632a90
+// TEMPLATE: STUDIO 0x00752960
+// ??R?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@@ZV?$list1@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@@_bi@boost@@@_bi@boost@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+
+// TEMPLATE: PLAYER 0x00632ac0
+// TEMPLATE: STUDIO 0x00752990
+// ??R?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+
+// TEMPLATE: PLAYER 0x00632cd0
+// TEMPLATE: STUDIO 0x00752d80
+// ??$?0UEvents@Implementation@LegacyLock@DataModel@RBX@@@shared_count@detail@boost@@QAE@PAUEvents@Implementation@LegacyLock@DataModel@RBX@@@Z
+
+// TEMPLATE: PLAYER 0x00634630
+// TEMPLATE: STUDIO 0x00754a90
+// ??$?0VGuiRoot@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VGuiRoot@RBX@@@boost@@QAE@PAVGuiRoot@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x006346a0
+// TEMPLATE: STUDIO 0x00754b00
+// ??$?0VPlayerHUD@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VPlayerHUD@RBX@@@boost@@QAE@PAVPlayerHUD@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x006347f0
+// TEMPLATE: STUDIO 0x00754ca0
+// ??$?0VContentFilter@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VContentFilter@RBX@@@boost@@QAE@PAVContentFilter@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634860
+// ??$?0VKeyframeSequenceProvider@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VKeyframeSequenceProvider@RBX@@@boost@@QAE@PAVKeyframeSequenceProvider@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x006348d0
+// TEMPLATE: STUDIO 0x00754d10
+// ??$?0VGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VGuiService@RBX@@@boost@@QAE@PAVGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634940
+// TEMPLATE: STUDIO 0x00754d80
+// ??$?0VLocalBackpack@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VLocalBackpack@RBX@@@boost@@QAE@PAVLocalBackpack@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x006349b0
+// TEMPLATE: STUDIO 0x00754df0
+// ??$?0VCoreGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VCoreGuiService@RBX@@@boost@@QAE@PAVCoreGuiService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634a20
+// ??$?0VCollectionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VCollectionService@RBX@@@boost@@QAE@PAVCollectionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634a90
+// TEMPLATE: STUDIO 0x00754e60
+// ??$?0VPhysicsService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VPhysicsService@RBX@@@boost@@QAE@PAVPhysicsService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634b00
+// TEMPLATE: STUDIO 0x00754ed0
+// ??$?0VGeometryService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VGeometryService@RBX@@@boost@@QAE@PAVGeometryService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634b70
+// TEMPLATE: STUDIO 0x00754f40
+// ??$?0VRenderHooksService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VRenderHooksService@RBX@@@boost@@QAE@PAVRenderHooksService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634be0
+// TEMPLATE: STUDIO 0x00754fb0
+// ??$?0VGamePassService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VGamePassService@RBX@@@boost@@QAE@PAVGamePassService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634c50
+// ??$?0VDebrisService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VDebrisService@RBX@@@boost@@QAE@PAVDebrisService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634cc0
+// TEMPLATE: STUDIO 0x00755090
+// ??$?0VCookiesService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VCookiesService@RBX@@@boost@@QAE@PAVCookiesService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634d30
+// TEMPLATE: STUDIO 0x00755100
+// ??$?0VTeleportService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VTeleportService@RBX@@@boost@@QAE@PAVTeleportService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634da0
+// TEMPLATE: STUDIO 0x00755170
+// ??$?0VPersonalServerService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VPersonalServerService@RBX@@@boost@@QAE@PAVPersonalServerService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634e80
+// TEMPLATE: STUDIO 0x00755250
+// ??$?0VContextActionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VContextActionService@RBX@@@boost@@QAE@PAVContextActionService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634ef0
+// TEMPLATE: STUDIO 0x007552c0
+// ??$?0VScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VScriptService@RBX@@@boost@@QAE@PAVScriptService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00634f60
+// TEMPLATE: STUDIO 0x00755330
+// ??$?0VAssetService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VAssetService@RBX@@@boost@@QAE@PAVAssetService@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z
+
+// TEMPLATE: PLAYER 0x00635050
+// ?invoke@?$void_function_obj_invoker2@V?$bind_t@XP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@5@@_bi@boost@@XPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@5@@function@detail@boost@@SAXAATfunction_buffer@234@PAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@7@@Z
+
+// TEMPLATE: PLAYER 0x00636270
+// ??$create@VDebrisService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VDebrisService@RBX@@@boost@@XZ
+
+// TEMPLATE: PLAYER 0x00636630
+// TEMPLATE: STUDIO 0x007569a0
+// ?manage@?$functor_manager@V?$bind_t@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@P6A?AV12@ABV12@0@ZV?$list2@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_bi@boost@@V123@@_bi@boost@@@_bi@boost@@@function@detail@boost@@SAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@@Z
+
+// TEMPLATE: PLAYER 0x00637320
+// ??1?$table@U?$set@V?$allocator@V?$DumbPtr@VFWPartInstance@RBX@@@RBX@@@std@@V?$DumbPtr@VFWPartInstance@RBX@@@RBX@@U?$FWDumbHash@VFWPartInstance@RBX@@@4@U?$FWDumbEqual@VFWPartInstance@RBX@@@4@@detail@unordered@boost@@@detail@unordered@boost@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0063a2f0
+// TEMPLATE: STUDIO 0x00758f40
+// ?safe_static_do_get_currentJob@Implementation@LegacyLock@DataModel@RBX@@SAPAV?$thread_specific_reference@VGenericJob@DataModel@RBX@@@rbx@@XZ
+
+// TEMPLATE: PLAYER 0x0063d2c0
+// ??$assign_to@V?$bind_t@XP6AXV?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@AAEXV?$bind_t@XP6AXV?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@@Z
+
+// TEMPLATE: PLAYER 0x0063e850
+// TEMPLATE: STUDIO 0x0075c460
+// ??$lexical_cast@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@boost@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABH@Z
+
+// TEMPLATE: PLAYER 0x0063edb0
+// ?manage@?$functor_manager@V?$bind_t@XP6AXPAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVexception@2@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@2@ZV?$list4@U?$arg@$00@boost@@U?$arg@$01@2@V?$value@V?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@_bi@2@V452@@_bi@5@@_bi@boost@@@function@detail@boost@@SAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@@Z
+
+// TEMPLATE: PLAYER 0x00641790
+// ??$?0V?$bind_t@XP6AXV?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@QAE@V?$bind_t@XP6AXV?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@UEvents@Implementation@LegacyLock@DataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
+
+// TEMPLATE: PLAYER 0x00641940
+// TEMPLATE: STUDIO 0x0075f1f0
+// ??$fastDynamicCast@VStatsItem@RBX@@@DescribedBase@Reflection@RBX@@SAPBVStatsItem@2@PBV012@@Z
+
+// TEMPLATE: PLAYER 0x00643ff0
+// ??$connect@V?$function@$$A6AX_N@Z@boost@@@?$signal@$$A6AX_N@Z@signals@rbx@@QAE?AVconnection@12@ABV?$function@$$A6AX_N@Z@boost@@@Z
+
+// TEMPLATE: PLAYER 0x006448b0
+// ??$countDescendantsOfType@VBaseScript@RBX@@@Instance@RBX@@QBEHXZ

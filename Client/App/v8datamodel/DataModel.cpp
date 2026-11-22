@@ -1380,7 +1380,7 @@ namespace RBX {
 		if (size)
 		{
 			// Estimate the total error to be headTime * n / 2
-			result.error = tasks.head_waittime_sec(stats.timeNow) * (1 + size) / 2.0;
+			result.error = tasks.head_waittime().seconds() * (1 + size) / 2.0;
 
 			// These tasks are "urgent" because they are often used
 			// with LegacyLock to marshal tasks with the UI or Web Service requests
@@ -1432,10 +1432,10 @@ namespace RBX {
 
 			// NOTE (2013): no isCyclicExecutive early-continue (2016-only).
 
-			RBX::Time timeNow = RBX::Time::now<RBX::Time::Fast>();
+
 			if (TaskScheduler::priorityMethod != TaskScheduler::FIFO)
 				break;
-			else if (tasks.head_waittime_sec(timeNow) < 0.2)
+			else if (tasks.head_waittime().seconds() < 0.2)
 			{
 				// FIFO mode: if we are able to process incoming tasks in a timely manner, process remaining tasks next frame
 				break;
@@ -2170,8 +2170,8 @@ workspace->setAndLockParent(this);
 
 	/* mac: 0x2CD928 — server-gated world replace: clear terrain + service
 	   children, SerializerV2::load, re-join physics. */
-	// STUB: PLAYER 0x00640430
-	// STUB: STUDIO 0x0075dcc0
+	// FUNCTION: PLAYER 0x00640430
+	// FUNCTION: STUDIO 0x0075dcc0
 	void DataModel::loadWorld(int assetID)
 	{
 		if (!Network::Players::backendProcessing(this))
@@ -2201,8 +2201,8 @@ workspace->setAndLockParent(this);
 		SerializerV2 serializer;
 		serializer.load(*stream, this);
 
-		if (workspace)
-			workspace->joinAllHack();
+		// 2013 0x00640581: no NULL check on the workspace here.
+		workspace->joinAllHack();
 	}
 
 	/* mac: 0x2CDA8C — server-gated game replace: clear script/starter children,

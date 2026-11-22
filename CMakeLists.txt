@@ -268,7 +268,7 @@ endif()
 target_link_options(boost PRIVATE /DEBUG /INCREMENTAL:NO)
 
 # Sources the client projects compile themselves, once per client with that client's flags.
-set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/placeholder.cpp Client/Win/placeholder.cpp)
+set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/Win/placeholder.cpp)
 ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
 ogre_library(studio_client SOURCES Client/RobloxStudio/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
@@ -380,12 +380,15 @@ if(OGRE_PRIOR_APP)
     ogre_prior_sources(Base GLOBS Base/*.cpp)
     ogre_prior_sources(Log GLOBS Log/*.cpp)
     ogre_prior_sources(Network GLOBS Network/*.cpp EXCLUDE "/Network/raknet/")
+    # Roblox's Network code includes RakNet headers by bare name ("BitStream.h"); 2016 Network.vcxproj
+    # has .\raknet\source on its /I list. Last, so App's headers win any name clash.
+    target_include_directories(Network PRIVATE "${PROJECT_SOURCE_DIR}/Client/Network/raknet/Source")
     ogre_prior_sources(GfxBase GLOBS Rendering/GfxBase/*.cpp)
     ogre_prior_sources(RbxG3D GLOBS Rendering/RbxG3D/*.cpp)
     ogre_prior_sources(RbxOgre GLOBS Rendering/RbxOgre/*.cpp)
-    # The shells see App's headers too: Client/ClientBase/placeholder.cpp's Instance stand-in makes the
-    # /GL shell emit Instance's inline virtuals, which the original keeps as separate LTCG copies
-    # (PLAYER verifyAddChild 0x004027c0 beside the engine's 0x00575d00; see that file).
+    # The shells see App's headers too: their own Instance subclasses (ClientBase/RenderSettingsItem.cpp)
+    # make the /GL shell emit Instance's inline virtuals, which the original keeps as separate LTCG
+    # copies (PLAYER verifyAddChild 0x004027c0 beside the engine's 0x00575d00; CLAUDE.md Gotchas).
     foreach(lib player_client studio_client)
         target_include_directories(${lib} PRIVATE ${OGRE_PRIOR_INCLUDES})
         target_compile_definitions(${lib} PRIVATE BOOST_ALL_NO_LIB _CRT_SECURE_NO_WARNINGS

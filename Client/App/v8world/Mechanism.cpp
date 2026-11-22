@@ -94,17 +94,37 @@ namespace RBX {
 		return current;
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x57E11E (batch281: lower-mesh -8 container + :127 answer assert).
-	// STUB: PLAYER 0x007fa020
-	// STUB: STUDIO 0x009155b0
+	// FUNCTION: PLAYER 0x007fa020
+	// FUNCTION: STUDIO 0x009155b0
 	Assembly* Mechanism::getRootAssembly()
 	{
-		IndexedMesh* lower = getMesh()->getTypedLower<IndexedMesh>();
-		Assembly* answer = NULL;
-		if (lower != NULL)
-			answer = reinterpret_cast<Assembly*>(
-				reinterpret_cast<char*>(lower) - 8);
-		RBXASSERT(answer != NULL);  // :127 "answer"
+		Assembly* answer = getMesh()->getTypedLower<Assembly>();
+		RBXASSERT(answer);
 		return answer;
 	}
 

@@ -148,3 +148,91 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
+// clang-format off
+// TEMPLATE: PLAYER 0x0096da50
+// TEMPLATE: STUDIO 0x00a1c560
+// ??1CharacterChats@RBX@@QAE@XZ
+// TEMPLATE: PLAYER 0x0096dad0
+// TEMPLATE: STUDIO 0x00a1c5e0
+// ??$bind@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@PAV12@U?$arg@$01@5@V45@V65@@boost@@YA?AV?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@0@P8ChatOutput@RBX@@AEXPAVAdorn@4@V?$weak_ptr@$$CBVInstance@RBX@@@0@V?$weak_ptr@VPartInstance@RBX@@@0@@ZPAV34@U?$arg@$01@0@12@Z
+// TEMPLATE: PLAYER 0x0096dbf0
+// TEMPLATE: STUDIO 0x00a1c700
+// ??0?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@QAE@ABV012@@Z
+// TEMPLATE: PLAYER 0x0096dc50
+// TEMPLATE: STUDIO 0x00a1c760
+// ??0?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@boost@@QAE@V?$value@PAVChatOutput@RBX@@@12@U?$arg@$01@2@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@12@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@12@V?$value@_N@12@V?$value@VVector3@G3D@@@12@5@Z
+// TEMPLATE: PLAYER 0x0096dde0
+// TEMPLATE: STUDIO 0x00a1c8f0
+// ?push_front@?$deque@V?$shared_ptr@VChatLine@RBX@@@boost@@V?$allocator@V?$shared_ptr@VChatLine@RBX@@@boost@@@std@@@std@@QAEXABV?$shared_ptr@VChatLine@RBX@@@boost@@@Z
+// TEMPLATE: PLAYER 0x0096df30
+// TEMPLATE: STUDIO 0x00a1ca40
+// ?manager@?$functor_manager@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z
+// TEMPLATE: PLAYER 0x0096dff0
+// TEMPLATE: STUDIO 0x00a1cb00
+// ??$assign_functor@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@?$basic_vtable2@XPAVBillboardGui@RBX@@PAVAdorn@2@@function@detail@boost@@ABEXV?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@3@AATfunction_buffer@123@U?$bool_@$0A@@mpl@3@@Z
+// TEMPLATE: PLAYER 0x0096f0e0
+// TEMPLATE: STUDIO 0x00a1de30
+// ??0?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@QAE@ABV012@@Z
+// TEMPLATE: PLAYER 0x0096f1e0
+// TEMPLATE: STUDIO 0x00a1df30
+// ?manager@?$functor_manager@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@function@detail@boost@@CAXABTfunction_buffer@234@AAT5234@W4functor_manager_operation_type@234@U?$bool_@$0A@@mpl@4@@Z
+// TEMPLATE: PLAYER 0x0096f2a0
+// TEMPLATE: STUDIO 0x00a1dff0
+// ??$assign_to@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@?$basic_vtable2@XPAVBillboardGui@RBX@@PAVAdorn@2@@function@detail@boost@@QBE_NV?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@3@AATfunction_buffer@123@@Z
+// TEMPLATE: PLAYER 0x0096f310
+// TEMPLATE: STUDIO 0x00a1e060
+// ??$assign_functor@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@?$basic_vtable2@XPAVBillboardGui@RBX@@PAVAdorn@2@@function@detail@boost@@ABEXV?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@3@AATfunction_buffer@123@U?$bool_@$0A@@mpl@3@@Z
+// TEMPLATE: PLAYER 0x0096f3a0
+// TEMPLATE: STUDIO 0x00a1e0f0
+// ??0?$deque@V?$shared_ptr@VChatLine@RBX@@@boost@@V?$allocator@V?$shared_ptr@VChatLine@RBX@@@boost@@@std@@@std@@QAE@ABV01@@Z
+// TEMPLATE: PLAYER 0x0096f440
+// TEMPLATE: STUDIO 0x00a1e190
+// ?_Erase@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@IAEXPAU_Node@?$_Tree_nod@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@2@@Z
+// TEMPLATE: PLAYER 0x0096f860
+// TEMPLATE: STUDIO 0x00a1e440
+// ??$assign_to@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@?$function2@XPAVBillboardGui@RBX@@PAVAdorn@2@@boost@@AAEXV?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@1@@Z
+// TEMPLATE: PLAYER 0x0096fc90
+// TEMPLATE: STUDIO 0x00a1e870
+// ??$connect@V?$bind_t@XV?$mf1@XVChatOutput@RBX@@ABVHeartbeat@2@@_mfi@boost@@V?$list2@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@?$signal@$$A6AXABVHeartbeat@RBX@@@Z@signals@rbx@@QAE?AVconnection@12@ABV?$bind_t@XV?$mf1@XVChatOutput@RBX@@ABVHeartbeat@2@@_mfi@boost@@V?$list2@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@Z
+// TEMPLATE: PLAYER 0x0096fd20
+// TEMPLATE: STUDIO 0x00a1e900
+// ??$connect@V?$bind_t@XV?$mf1@XVChatOutput@RBX@@ABVChatMessage@Network@2@@_mfi@boost@@V?$list2@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@?$signal@$$A6AXABVChatMessage@Network@RBX@@@Z@signals@rbx@@QAE?AVconnection@12@ABV?$bind_t@XV?$mf1@XVChatOutput@RBX@@ABVChatMessage@Network@2@@_mfi@boost@@V?$list2@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@@_bi@3@@_bi@boost@@@Z
+// TEMPLATE: PLAYER 0x0096fdb0
+// TEMPLATE: STUDIO 0x00a1e990
+// ??$connect@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4ChatColor@ChatService@2@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@U?$arg@$01@3@U?$arg@$02@3@@_bi@3@@_bi@boost@@@?$signal@$$A6AXV?$shared_ptr@VInstance@RBX@@@boost@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4ChatColor@ChatService@RBX@@@Z@signals@rbx@@QAE?AVconnection@12@ABV?$bind_t@XV?$mf3@XVChatOutput@RBX@@V?$shared_ptr@VInstance@RBX@@@boost@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4ChatColor@ChatService@2@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$00@3@U?$arg@$01@3@U?$arg@$02@3@@_bi@3@@_bi@boost@@@Z
+// TEMPLATE: PLAYER 0x0096fe40
+// TEMPLATE: STUDIO 0x00a1ea20
+// ??$?0V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@?$function2@XPAVBillboardGui@RBX@@PAVAdorn@2@@boost@@QAE@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@1@H@Z
+// TEMPLATE: PLAYER 0x0096fef0
+// TEMPLATE: STUDIO 0x00a1ead0
+// ??$assign_to@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@?$basic_vtable2@XPAVBillboardGui@RBX@@PAVAdorn@2@@function@detail@boost@@QBE_NV?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@3@AATfunction_buffer@123@@Z
+// TEMPLATE: PLAYER 0x00970310
+// TEMPLATE: STUDIO 0x00a1eef0
+// ?erase@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@0@Z
+// TEMPLATE: PLAYER 0x009703e0
+// TEMPLATE: STUDIO 0x00a1efc0
+// ??0_Node@?$_Tree_nod@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@QAE@PAU012@00ABU?$pair@QBVInstance@RBX@@UCharacterChats@2@@2@D@Z
+// TEMPLATE: PLAYER 0x00970480
+// TEMPLATE: STUDIO 0x00a1f060
+// ??$?0V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@boost@@@?$function@$$A6AXPAVBillboardGui@RBX@@PAVAdorn@2@@Z@boost@@QAE@V?$bind_t@XV?$mf3@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@@_mfi@boost@@V?$list4@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@@_bi@3@@_bi@1@H@Z
+// TEMPLATE: PLAYER 0x009704f0
+// TEMPLATE: STUDIO 0x00a1f0d0
+// ??$assign_to@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@?$function2@XPAVBillboardGui@RBX@@PAVAdorn@2@@boost@@AAEXV?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@1@@Z
+// TEMPLATE: PLAYER 0x009705a0
+// TEMPLATE: STUDIO 0x00a1f180
+// ?_Buynode@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@IAEPAU_Node@?$_Tree_nod@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@2@PAU342@00ABU?$pair@QBVInstance@RBX@@UCharacterChats@2@@2@D@Z
+// TEMPLATE: PLAYER 0x00970630
+// TEMPLATE: STUDIO 0x00a1f210
+// ??$?0V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@?$function2@XPAVBillboardGui@RBX@@PAVAdorn@2@@boost@@QAE@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@1@H@Z
+// TEMPLATE: PLAYER 0x009708d0
+// TEMPLATE: STUDIO 0x00a1f4b0
+// ??$?0V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@boost@@@?$function@$$A6AXPAVBillboardGui@RBX@@PAVAdorn@2@@Z@boost@@QAE@V?$bind_t@XV?$mf6@XVChatOutput@RBX@@PAVAdorn@2@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@V?$weak_ptr@VPartInstance@RBX@@@5@_NVVector3@G3D@@V78@@_mfi@boost@@V?$list7@V?$value@PAVChatOutput@RBX@@@_bi@boost@@U?$arg@$01@3@V?$value@V?$weak_ptr@$$CBVInstance@RBX@@@boost@@@23@V?$value@V?$weak_ptr@VPartInstance@RBX@@@boost@@@23@V?$value@_N@23@V?$value@VVector3@G3D@@@23@V823@@_bi@3@@_bi@1@H@Z
+// TEMPLATE: PLAYER 0x00970f80
+// TEMPLATE: STUDIO 0x00a1fb80
+// ?insert@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@QAE?AU?$pair@Viterator@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@_N@2@ABU?$pair@QBVInstance@RBX@@UCharacterChats@2@@2@@Z
+// TEMPLATE: PLAYER 0x00971e60
+// TEMPLATE: STUDIO 0x00a20a60
+// ?insert@?$_Tree@V?$_Tmap_traits@PBVInstance@RBX@@UCharacterChats@2@U?$less@PBVInstance@RBX@@@std@@V?$allocator@U?$pair@QBVInstance@RBX@@UCharacterChats@2@@std@@@5@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@ABU?$pair@QBVInstance@RBX@@UCharacterChats@2@@2@@Z
+// clang-format on

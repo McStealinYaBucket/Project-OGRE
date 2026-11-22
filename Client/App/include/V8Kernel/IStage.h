@@ -5,7 +5,9 @@
    Slots (batch225): IStage [2]D1 [3]D0 [4]getStageType (pure) [5]getKernel (body 0x55D050, never
      overridden); IWorldStage adds [6]onEdgeAdded [7]onEdgeRemoving [8]getMetric (0x5A6240, not modeled).
    StageType: the 16 2016 values, binary-verified (batch213). DELTA vs 2016: members public (every stage
-     C2 writes +4/+8 directly); D2 does not delete (each stage D1/D2 deletes its +8 child). */
+     C2 writes +4/+8 directly). RBXBaseClass (novtable) and ~IStage deletes the +8 child, as in 2016: every
+   Windows stage dtor (CleanStage D0 0x008e6340, JointStage 0x00997df0) deletes it after the members, with
+   no IStage vftable store. */
 
 #pragma once
 
@@ -18,7 +20,7 @@ namespace RBX {
 	class World;
 	class IWorldStage;
 
-	class IStage
+	class RBXBaseClass IStage
 	{
 	public:
 		typedef enum {
@@ -45,12 +47,10 @@ namespace RBX {
 			, downstream(NULL)
 			, world(NULL)
 		{}
-		virtual ~IStage() {}
+		virtual ~IStage() { if (downstream) delete downstream; }
 
 		// +2 (vtbl+8). Pure: every banked stage returns its const above.
 		virtual StageType getStageType() const = 0;
-
-
 
 
 
@@ -73,6 +73,12 @@ namespace RBX {
 		// Inline accessors (binary reads the members directly).
 		IStage* getUpstream() const { return upstream; }
 		IStage* getDownstream() const { return downstream; }
+		// SimulateStage C2 0x00998e10 stores +4/+8/+12 straight from its base-init arguments.
+		IStage(IStage* upstream, IStage* downstream, World* world)
+			: upstream(upstream)
+			, downstream(downstream)
+			, world(world)
+		{}
 		// +12 (binary findWorld 0x57A224 reads it off any stage).
 		World* getWorld() const { return world; }
 

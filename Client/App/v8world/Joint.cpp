@@ -1,8 +1,7 @@
-/* App/v8world/Joint.cpp -- October 2013 (joint base bodies).
-   See V8World/Joint.h for evidence. isGeometryOrthogonal mapped by
-   GeometryType kind (legacy 6-sided vs generalized polyhedra, per the 2016
-   comment; TODO-verify the exact 2013 set).
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8world/Joint.cpp (path inferred) */
+/* App/v8world/Joint.cpp -- October 2013 (joint base bodies). Laid out on the 2013 assert lines:
+   Joint(p0,p1,c0,c1) :59-60, Joint() :77-78, ~Joint :83, getConstJoint :120, setJointOwner :133, the
+   isHeavierThan Guid checks :318-321. FLog::JointLifetime is PLAYER 0x00de3f56 (initializer 0x00a65480,
+   registered from v8datamodel/FastLogSettings.cpp in 2013). */
 
 #include "stdafx.h"
 
@@ -14,19 +13,31 @@
 #include "Util/Face.h"
 #include "Util/FastFlags.h"
 #include "rbx/Debug.h"
+#include "FastLog.h"
+
+LOGGROUP(JointLifetime)
 
 namespace RBX {
 
-	// STUB: PLAYER 0x00821410
-	// STUB: STUDIO 0x00914ae0
-	Joint::Joint()
-		: Edge(NULL, NULL)
-		, jointOwner(NULL)
-	{
-		// C2(void) 0x577C98 Joint.cpp:77-78 (members default to identity).
-		RBXASSERT(jointCoord0 == G3D::CoordinateFrame());
-		RBXASSERT(jointCoord1 == G3D::CoordinateFrame());
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// STUB: PLAYER 0x008215c0
 	// STUB: STUDIO 0x00914c90
@@ -35,9 +46,8 @@ namespace RBX {
 		: Edge(p0, p1)
 		, jointOwner(NULL)
 	{
-		// TODO: FastLog JointLifetime "created, empty primitives" (channel absent).
-		if (p0 != NULL && p1 != NULL &&
-			(!p0->isGeometryOrthogonal() || !p1->isGeometryOrthogonal()))
+		FASTLOG3(FLog::JointLifetime, "Joint %p created, prim0: %p, prim1: %p", this, p0, p1);
+		if (p0 && p1 && (!p0->isGeometryOrthogonal() || !p1->isGeometryOrthogonal()))
 		{
 			jointCoord0 = c0;
 			jointCoord1 = c1;
@@ -46,52 +56,105 @@ namespace RBX {
 		{
 			jointCoord0 = Math::snapToGrid(c0, 0.1f);
 			jointCoord1 = Math::snapToGrid(c1, 0.1f);
-			RBXASSERT(Math::isOrthonormal(jointCoord0.rotation));  // Joint.cpp:59-60
+			RBXASSERT(Math::isOrthonormal(jointCoord0.rotation));
 			RBXASSERT(Math::isOrthonormal(jointCoord1.rotation));
 		}
 	}
 
-	// STUB: PLAYER 0x00821010
-	// STUB: STUDIO 0x009146e0
-	Joint::~Joint()
+
+
+
+
+
+
+	// STUB: PLAYER 0x00821410
+	// STUB: STUDIO 0x00914ae0
+	Joint::Joint()
+		: Edge(NULL, NULL)
+		, jointOwner(NULL)
 	{
-		// D2 0x577EF0 Joint.cpp:83 (+ lifetime log TODO).
-		RBXASSERT(jointOwner == NULL);
+		FASTLOG1(FLog::JointLifetime, "Joint %p created, empty primitives", this);
+		RBXASSERT(jointCoord0 == G3D::CoordinateFrame());
+		RBXASSERT(jointCoord1 == G3D::CoordinateFrame());
+	}
+	// FUNCTION: PLAYER 0x00821010
+	// FUNCTION: STUDIO 0x009146e0
+	Joint::~Joint() {
+		RBXASSERT(!jointOwner);
+		FASTLOG1(FLog::JointLifetime, "Joint %p destroyed", this);
 	}
 
-	// STUB: PLAYER 0x0081fae0
-	// STUB: STUDIO 0x00913180
-	void Joint::setJointOwner(JointInstance* owner)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x00820c80
+	// FUNCTION: STUDIO 0x00914330
+	const Joint* Joint::findConstJoint(const Primitive* p, JointType type)
 	{
-		// mac: 0x5781A0 Joint.cpp:133 (exactly one side set).
-		RBXASSERT((owner == NULL) != (jointOwner == NULL));
-		jointOwner = owner;
+		int num = p->getNumJoints();
+		for (int i = 0; i < num; ++i) {
+			const Joint* joint = p->getConstJoint(i);
+			if (joint->getJointType() == type) {
+				return joint;
+			}
+		}
+		return NULL;
 	}
 
-	// mac: 0x578C5C (batch238): prim+8 node or NULL (Primitive secondary is
-	// SpanningNode at +8; static_cast spells the MSVC MI equivalent).
-	// STUB: PLAYER 0x0081fd10
-	// STUB: STUDIO 0x009133c0
+	// FUNCTION: PLAYER 0x00820cc0
+	// FUNCTION: STUDIO 0x00914370
+	const Joint* Joint::getConstJoint(const Primitive* p, JointType type)
+	{
+		const Joint* answer = findConstJoint(p, type);
+		RBXASSERT(answer);
+		return answer;
+	}
+	// FUNCTION: PLAYER 0x00820d20
+	// FUNCTION: STUDIO 0x009143d0
+	Joint* Joint::getJoint(Primitive* p, JointType type)
+	{
+		return const_cast<Joint*>(getConstJoint(p, type));
+	}
+	// FUNCTION: PLAYER 0x0081fae0
+	// FUNCTION: STUDIO 0x00913180
+	void Joint::setJointOwner(JointInstance* value)
+	{
+		RBXASSERT((value == NULL) != (jointOwner == NULL));
+		jointOwner = value;
+	}
+
+
+	// FUNCTION: PLAYER 0x0081fd10
+	// FUNCTION: STUDIO 0x009133c0
 	SpanningNode* Joint::getNode(int i)
 	{
-		Primitive* prim = getPrimitive(i);
-		if (prim == NULL)
-			return NULL;
-		return static_cast<SpanningNode*>(prim);
+		return getPrimitive(i);
+
+
+
 	}
 
-	// mac: 0x578C8C (batch238: const mirror).
 	const SpanningNode* Joint::getConstNode(int i) const
 	{
-		const Primitive* prim = const_cast<Joint*>(this)->getPrimitive(i);
-		if (prim == NULL)
-			return NULL;
-		return static_cast<const SpanningNode*>(prim);
+		return const_cast<Joint*>(this)->getPrimitive(i);  // folded with getNode in 2013 (both slots 0x0081fd10)
+
+
+
 	}
 
 	bool Joint::isAutoJoint() const
 	{
-		// Filter verbatim (getEdgeType==0 required throughout).
 		int e = getEdgeType();
 		int t = getJointType();
 		if (e == 0 && (t == 0 || t == 11))
@@ -103,7 +166,6 @@ namespace RBX {
 
 	void Joint::notifyMoved()
 	{
-		// mac: 0x57808E: ping both prims' myOwner movers (prim+244).
 		for (int i = 0; i < 2; ++i)
 		{
 			Primitive* prim = (i == 0) ? getPrim0() : getPrim1();
@@ -113,17 +175,6 @@ namespace RBX {
 		}
 	}
 
-	// mac: 0x57878E (105 bytes) -- a two-stage OR, no `this` use at all:
-	//   al = 1;
-	//   if (FaceVerticesOverlapped(p0,n0,p1,n1,tol) == 0)
-	//       al = FaceEdgesOverlapped(p0,n0,p1,n1,tol);
-	//   return al;
-	// DELTA (documented): FaceVerticesOverlapped / FaceEdgesOverlapped are
-	// the non-orthogonal (Poly/Ball) exact-polygon tests and are not
-	// ported -- they need the Geometry subclasses.  Only the OR shape and
-	// the call order are reproduced; the pair always reports "no overlap",
-	// which gates Joint::canBuildJoint's non-orthogonal branch to false
-	// exactly as the chain above does when both helpers are unavailable.
 	// STUB: PLAYER 0x00820fb0
 	// STUB: STUDIO 0x00914660
 	bool Joint::FacesOverlapped(const Primitive* p0, unsigned long n0,
@@ -133,24 +184,6 @@ namespace RBX {
 		return false;
 	}
 
-	// mac: 0x57840E (896 bytes).  Control flow, verbatim:
-	//
-	//   if (p0->isGeometryOrthogonal() && p1->isGeometryOrthogonal())
-	//   {
-	//       if (Math::fuzzyAxisAligned(cf0.rotation, cf1.rotation, angTol))
-	//       {
-	//           Face f0 = p0->getFaceInWorld(n0);
-	//           Face f1 = p1->getFaceInWorld(n1);
-	//           // 0x5784C7: FFlag branch picks the hasOverlap threshold.
-	//           if (Face::hasOverlap(f0, f1, flag ? 0.1f : 0.35f) &&
-	//               Face::overlapWithinPlanes(f0, f1, planeTol))
-	//               return true;
-	//       }
-	//   }
-	//   else
-	//   {
-	//       // geometry-driven path, 0x5784E8; see the DELTA note below.
-	//   }
 	//   return false;
 	// STUB: PLAYER 0x00821120
 	// STUB: STUDIO 0x009147f0
@@ -233,120 +266,129 @@ namespace RBX {
 	{
 	}
 
-	// mac: 0x5780CE (70B, batch218): binary loops the joints-list count (+172).
-	// STUB: PLAYER 0x00820c80
-	// STUB: STUDIO 0x00914330
-	const Joint* Joint::findConstJoint(const Primitive* p, JointType type)
+
+
+
+
+
+
+
+	static unsigned int getPrimitiveSize2(const Primitive* p)
 	{
-		for (int i = 0; i < p->joints.size(); ++i)
-		{
-			const Joint* joint = p->getConstJoint(i);
-			if (joint->getJointType() == type)
-				return joint;
-		}
-		return NULL;
+		return const_cast<Primitive*>(p)->getSortSize();
 	}
 
-	// mac: 0x578114 (129B, batch219a).
-	// STUB: PLAYER 0x00820cc0
-	// STUB: STUDIO 0x00914370
-	const Joint* Joint::getConstJoint(const Primitive* p, JointType type)
+	unsigned int getJointSize2(const Joint* j)
 	{
-		const Joint* answer = findConstJoint(p, type);
-		RBXASSERT(answer != NULL);  // Joint.cpp:120 "answer"
+		unsigned int answer = getPrimitiveSize2(j->getPrim0());
+		if (j->getPrim1()) {
+			answer = std::max(answer, getPrimitiveSize2(j->getPrim1()));
+		}
 		return answer;
 	}
 
-	// mac: 0x578196 (9B, batch219a).
-	// FUNCTION: PLAYER 0x00820d20
-	// FUNCTION: STUDIO 0x009143d0
-	Joint* Joint::getJoint(Primitive* p, JointType type)
+	// FUNCTION: PLAYER 0x00820e70
+	// FUNCTION: STUDIO 0x00914520
+	static int biggerJointSize2(const Joint* j0, const Joint* j1)
 	{
-		return const_cast<Joint*>(getConstJoint(p, type));
-	}
-
-	// mac: 0x578875 (53B, batch228).
-	// STUB: PLAYER 0x00820e70
-	// STUB: STUDIO 0x00914520
-	unsigned int getJointSize2(const Joint* joint)
-	{
-		unsigned int size = joint->getPrim0()->getSortSize();
-		if (joint->getPrim1() != NULL)
-		{
-			unsigned int other = joint->getPrim1()->getSortSize();
-			if (size < other)
-				return other;
+		unsigned int s0 = getJointSize2(j0);
+		unsigned int s1 = getJointSize2(j1);
+		if (s0 > s1) {
+			return 1;
 		}
-		return size;
+		else if (s1 > s0) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
 	}
 
-	// mac: 0x5788AA (749B, batch226): weight order (type, size, guid,
-	// address). The SpanningEdge*-to-Joint back-adjust is binary -32 MI
-	// arithmetic; static_cast is the MSVC-correct equivalent.
-	// STUB: PLAYER 0x00820ef0
-	// STUB: STUDIO 0x009145a0
+	// FUNCTION: PLAYER 0x0081fb50
+	// FUNCTION: STUDIO 0x00913200
+	static int biggerJointGuid2(const Joint* j0, const Joint* j1)
+	{
+		const Guid* j00 = &j0->getPrim0()->getGuid();
+		const Guid* j10 = &j1->getPrim0()->getGuid();
+
+		const Guid* j01 = j0->getPrim1() ? &j0->getPrim1()->getGuid() : NULL;
+		const Guid* j11 = j1->getPrim1() ? &j1->getPrim1()->getGuid() : NULL;
+
+		int answer = Guid::compare(j00, j01, j10, j11);
+		RBXASSERT(answer == Guid::compare(j01, j00, j10, j11));
+		RBXASSERT(answer == Guid::compare(j00, j01, j11, j10));
+		RBXASSERT(answer == -Guid::compare(j11, j10, j00, j01));
+		RBXASSERT(answer == -Guid::compare(j10, j11, j01, j00));
+		return answer;
+	}
+
+	// FUNCTION: PLAYER 0x00820ef0
+	// FUNCTION: STUDIO 0x009145a0
 	bool Joint::isHeavierThan(const SpanningEdge* other) const
 	{
-		const Joint* o = NULL;
-		if (other != NULL)
-			o = static_cast<const Joint*>(other);
-		if (o == this)
+		const Joint* const j0 = this;
+		const Joint* j1 = rbx_static_cast<const Joint*>(other);
+
+		if (j0 == j1) {
 			return false;
-		int t0 = getJointType();
-		int t1 = o->getJointType();
-		if (t0 != t1)
-			return t0 < t1;
-		unsigned int s0 = getJointSize2(this);
-		unsigned int s1 = getJointSize2(o);
-		if (s0 > s1)
-			return true;
-		if (s1 != s0)
-			return false;
-		const Guid* g00 = &getPrim0()->getGuid();
-		const Guid* g01 = NULL;
-		if (getPrim1() != NULL)
-			g01 = &getPrim1()->getGuid();
-		const Guid* g10 = &o->getPrim0()->getGuid();
-		const Guid* g11 = NULL;
-		if (o->getPrim1() != NULL)
-			g11 = &o->getPrim1()->getGuid();
-		int answer = Guid::compare(g00, g01, g10, g11);
-		RBXASSERT(answer == Guid::compare(g01, g00, g10, g11));  // :318
-		RBXASSERT(answer == Guid::compare(g00, g01, g11, g10));  // :319
-		RBXASSERT(answer == -Guid::compare(g11, g10, g00, g01));  // :320
-		RBXASSERT(answer == -Guid::compare(g10, g11, g01, g00));  // :321
-		if (answer > 0)
-			return true;
-		return (this < o) && (answer >= 0);
+		}
+		else {
+			Joint::JointType jt0 = (Joint::JointType)j0->getJointType();
+			Joint::JointType jt1 = (Joint::JointType)j1->getJointType();
+			if (jt0 != jt1) {
+				return (jt0 < jt1);
+			}
+			else {
+				int i = biggerJointSize2(j0, j1);
+				if (i > 0) {
+					return true;
+				}
+				else if (i < 0) {
+					return false;
+				}
+				else {
+					i = biggerJointGuid2(j0, j1);
+					if (i > 0) {
+						return true;
+					}
+					else if (i < 0) {
+						return false;
+					}
+					else {
+						return (j0 < j1);
+					}
+				}
+			}
+		}
 	}
 
 	// mac: 0x578BBC (40B, batch226): the far-end node. Binary spells the
 	// prim-lattice conversion as raw +8/-8 MI arithmetic; static_cast is
 	// the MSVC-correct equivalent (never raw offsets across the MI).
-	// STUB: PLAYER 0x00820f80
-	// STUB: STUDIO 0x00914630
+	// FUNCTION: PLAYER 0x00820f80
+	// FUNCTION: STUDIO 0x00914630
 	SpanningNode* Joint::otherNode(SpanningNode* node)
 	{
-		Primitive* base = NULL;
-		if (node != NULL)
-			base = static_cast<Primitive*>(node);
-		Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
-		if (other == NULL)
-			return NULL;
-		return static_cast<SpanningNode*>(other);
+		return otherPrimitive(rbx_static_cast<Primitive*>(node));
+
+
+
+
+
+
 	}
 
 	// mac: 0x578C0C (batch226): const mirror with a parallel body. The 2013 linker
 	// folded it with otherNode: both SpanningEdge slots +0x08/+0x0c hold 0x00820f80.
 	const SpanningNode* Joint::otherConstNode(const SpanningNode* node) const
 	{
-		const Primitive* base = NULL;
-		if (node != NULL)
-			base = static_cast<const Primitive*>(node);
-		const Primitive* other = getPrim0() == base ? getPrim1() : getPrim0();
-		if (other == NULL)
-			return NULL;
-		return static_cast<const SpanningNode*>(other);
+		return otherPrimitive(rbx_static_cast<const Primitive*>(node));  // folded with otherNode (0x00820f80)
+
+
+
+
+
+
 	}
 
 	// mac: 0x57823A (176B, batch219a): FastLog-gated world-notify relink.
@@ -356,21 +398,17 @@ namespace RBX {
 	// STUB: STUDIO 0x009143e0
 	void Joint::setPrimitive(int i, Primitive* p)
 	{
-		// FastLog JointLifetime "Joint %p, setting primitive %u to %p"
-		// skipped (channel absent -- same precedent as Joint C2).
-		if (getPrimitive(i) == p)
-			return;
-		World* world = findWorld();
-		if (world == NULL)
-		{
+		FASTLOG3(FLog::JointLifetime, "Joint %p, setting primitive %u to %p", this, i, p);
+		if (p != getPrimitive(i)) {
+			World* world = findWorld();
+			if (world && getPrimitive(i)) {
+				world->onJointPrimitiveNulling(this, getPrimitive(i));
+			}
 			Edge::setPrimitive(i, p);
-			return;
+			if (world && p) {
+				world->onJointPrimitiveSet(this, p);
+			}
 		}
-		if (getPrimitive(i) != NULL)
-			world->onJointPrimitiveNulling(this, getPrimitive(i));
-		Edge::setPrimitive(i, p);
-		if (p != NULL)
-			world->onJointPrimitiveSet(this, p);
 	}
 
 } // namespace RBX

@@ -23,6 +23,8 @@ namespace RBX
     std::vector<releaseFunc> poolReleaseMemoryFuncList;
     std::vector<size_t*> poolAllocationList;
 
+	// FUNCTION: PLAYER 0x009bc900
+	// FUNCTION: STUDIO 0x00a72cf0
 	char* roblox_allocator::malloc(const size_type size)
 	{
 		char* result = (char*)std::malloc(size > 0 ? size : 1);

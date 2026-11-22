@@ -1,6 +1,6 @@
 /* App/v8world/SimulateStage.cpp -- October 2013 (simulate node; mac batches 221b/772/776/777).
-   DELTA: the assembly lists port to std::list<Assembly*> (the binary threads the assemblies' own
-   +48/+52 ints as {next, prev}). */
+   The assembly lists are boost::intrusive lists over Assembly's SimulateStageHook (+0x34)
+   (SimulateStage::onAssemblyAdded 0x00998ac0, ~SimulateStage 0x00998ca0). */
 #include "stdafx.h"
 #include "V8World/SimulateStage.h"
 #include "V8World/Assembly.h"
@@ -12,25 +12,25 @@
 #include "V8Kernel/Kernel.h"
 #include "Util/FastFlags.h"
 namespace RBX {
-	// STUB: PLAYER 0x00998e10
-	// STUB: STUDIO 0x00a593a0
-	SimulateStage::SimulateStage(IStage* upstreamArg, World* worldArg)
+	// FUNCTION: PLAYER 0x00998e10
+	// FUNCTION: STUDIO 0x00a593a0
+	SimulateStage::SimulateStage(IStage* upstream, World* world)
+		: IWorldStage(upstream, new Kernel(this), world)
 	{
-		downstream = new Kernel(this);
-		upstream = upstreamArg;
-		world = worldArg;
 	}
-	// STUB: PLAYER 0x00998ca0
-	// STUB: STUDIO 0x00a59220
+
+
+	// FUNCTION: PLAYER 0x00998ca0
+	// FUNCTION: STUDIO 0x00a59220
 	SimulateStage::~SimulateStage()
 	{
 		RBXASSERT(movingDynamicAssemblies.size() == 0);  // :27
 		RBXASSERT(realTimeAssemblies.size() == 0);       // :28
 		RBXASSERT(movingAssemblyRoots.size() == 0);      // :29
-		delete static_cast<Kernel*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
-	// STUB: PLAYER 0x00998ac0
-	// STUB: STUDIO 0x00a59040
+	// FUNCTION: PLAYER 0x00998ac0
+	// FUNCTION: STUDIO 0x00a59040
 	void SimulateStage::onAssemblyAdded(Assembly* a)
 	{
 		RBXASSERT(!a->getAssemblyPrimitive()->requestFixed());   // :36
@@ -38,11 +38,11 @@ namespace RBX {
 		// The throttle predicate is re-read at REMOVE on the exact same expression -- count follows the CURRENT predicate (a mid-stage flip would unbalance there as well).
 		if (!a->getCanThrottle() && FFlag::SkipBroadPhaseWhenThrottling)
 		{
-			realTimeAssemblies.push_back(a);
+			realTimeAssemblies.push_back(*a);
 		}
 		else
 		{
-			movingDynamicAssemblies.push_back(a);
+			movingDynamicAssemblies.push_back(*a);
 		}
 		// (binary chains the assembly's own +48/+52 ints as the list node {next, prev}; ours store those in list heap nodes -- anchor algebra identical, see header.)
 		a->putInStage(this);
@@ -64,7 +64,7 @@ namespace RBX {
 
 
 	// mac: 0x59B91E (batch776).
-	// FUNCTION: PLAYER 0x00998920
+	// STUB: PLAYER 0x00998920
 	// FUNCTION: STUDIO 0x00a58ea0
 	void SimulateStage::putFirstMovingRootInSendPhysics(Assembly* a)
 	{
@@ -104,46 +104,45 @@ namespace RBX {
 	}
 
 	// mac: 0x59BA04 (batch772).
-	// STUB: PLAYER 0x00998c10
-	// STUB: STUDIO 0x00a59190
+	// FUNCTION: PLAYER 0x00998c10
+	// FUNCTION: STUDIO 0x00a59190
 	void SimulateStage::onAssemblyRemoving(Assembly* a)
 	{
 		removeLastMovingRootFromSendPhysics(a);
-		Kernel* kernel = getKernel();   // binary no-CSE double vcall; once.
-		kernel->removeBody(a->getAssemblyPrimitive()->getBody());
+		getKernel()->removeBody(a->getAssemblyPrimitive()->getBody());
 		a->removeFromKernel();          // IPipelined vt+12 (kernel-exit first).
 		a->removeFromStage(this);
 		// Predicate re-read, exactly like the binary's unlink sequence -- both lists get their member removed and the binary's [+48]/[+52] link zero-writes are covered by the list-node mechanics.
 		if (!a->getCanThrottle() && FFlag::SkipBroadPhaseWhenThrottling)
 		{
-			realTimeAssemblies.remove(a);
+			realTimeAssemblies.erase(realTimeAssemblies.iterator_to(*a));
 		}
 		else
 		{
-			movingDynamicAssemblies.remove(a);
+			movingDynamicAssemblies.erase(movingDynamicAssemblies.iterator_to(*a));
 		}
 	}
 
 	// mac: 0x59BBB6 (batch776/777) -- the refcount-map operator.
 	// STUB: PLAYER 0x009987f0
-	// STUB: STUDIO 0x00a58d70
+	// FUNCTION: STUDIO 0x00a58d70
 	bool SimulateStage::removeFromSendPhysics(Assembly* a)
 	{
 		std::map<Assembly*, int>::iterator it = movingAssemblyRoots.find(a);
-		if (it == movingAssemblyRoots.end())
-		{
-			return false;
+		if (it != movingAssemblyRoots.end()) {
+			if (it->second == 1) {
+				world->getSendPhysics()->onMovingAssemblyRootRemoving(a);
+				movingAssemblyRoots.erase(it);
+			}
+			else {
+				--it->second;
+			}
+			return true;
 		}
-		if (it->second == 1)
-		{
-			world->getSendPhysics()->onMovingAssemblyRootRemoving(a);
-			movingAssemblyRoots.erase(it);
-		}
-		else
-		{
-			--it->second;
-		}
-		return true;
+		return false;
+
+
+
 	}
 
 

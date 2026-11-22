@@ -93,3 +93,11 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
+// clang-format off
+// TEMPLATE: PLAYER 0x0090e920
+// ??1?$FactoryProduct@VBillboardGui@RBX@@VGuiLayerCollector@2@$E?sAdornmentGui@2@3QBDBVInstance@2@@RBX@@MAE@XZ
+// TEMPLATE: PLAYER 0x0090ecd0
+// ??$getset@P8BillboardGui@RBX@@BEPAVInstance@2@XZP812@AEXPAV32@@Z@?$PropDescriptor@VBillboardGui@RBX@@PAVInstance@2@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@PAVInstance@RBX@@@Reflection@RBX@@@std@@P8BillboardGui@2@BEPAVInstance@2@XZP852@AEXPAV62@@Z@Z
+// clang-format on

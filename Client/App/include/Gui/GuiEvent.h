@@ -16,15 +16,12 @@
 
 namespace RBX {
 
-	// No ctor symbol anywhere (8GuiEventC = 0 hits) and no dtor; only
-	// const& receivers in the family.  Value shape (12 bytes):
+	// No ctor symbol anywhere (8GuiEventC = 0 hits) and no dtor; only const& receivers. Value shape (12 bytes):
 	//   +0  int   eventType (consumer semantics in the family: 3=release?,
 	//       4=press, 5=move; 7 short-circuits a zero response in
 	//       GuiItem::process 0x5CD47E)
-	//   +4  short mouseX, mouseY (mouse pointer; the rect tests read the
-	//       low/high halves of the +4 dword)
-	//   +8  short canvasX, canvasY (builds Canvas {x,y} for getMyRect)
-	// DELTA: field names are ours (not observable in the binary).
+	//   +4  short mouseX, mouseY (mouse pointer; the rect tests read the low/high halves of the +4 dword)
+	//   +8  short canvasX, canvasY (builds Canvas {x,y} for getMyRect). DELTA: field names are ours.
 	class GuiEvent
 	{
 	public:
@@ -33,6 +30,9 @@ namespace RBX {
 		short mouseY;
 		short canvasX;
 		short canvasY;
+		// Inline helpers: GuiObject::process 0x007bd6d0 matches only through them (block order).
+		bool isMouseEvent() const { return eventType >= 1 && eventType <= 9; }
+		bool isKeyEvent() const { return eventType == 10 || eventType == 11; }
 	};
 
 	class GuiResponse

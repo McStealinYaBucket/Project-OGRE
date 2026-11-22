@@ -33,6 +33,7 @@
 
 #pragma once
 
+#include "decomp.h"
 #include "Util/IndexedTree.h"
 #include "V8Kernel/BodyPvSetter.h"
 #include "V8Kernel/Cofm.h"
@@ -74,7 +75,7 @@ namespace RBX {
 		// observable through this getter (friend pattern would sprawl:
 		// Connector, Primitive, Assembly, Sleep all read it).
 		bool getCanThrottle() const { return canThrottle; }
-		SimBody* getRootSimBody() { return getRoot<Body>()->getSimBody(); }
+		SimBody* getRootSimBody() { return root->getSimBody(); }  Body* calcRoot() { return getRoot<Body>(); }  using IndexedTree::getRoot; Body* getRoot() { return root; }
 		const SimBody* getConstRootSimBody() const { return getRoot<Body>()->getConstSimBody(); }
 		// 2016 shapes (parallel-accumulate forwarding; binary EAs queued
 		// except accumulateForceAtBranchCofm 0x5F7460, defined below).
@@ -132,7 +133,10 @@ namespace RBX {
 		Velocity getVelocity() const { return Velocity(linVel, angVel); }
 		inline bool isLeafBody() const { return leafBodyIndex >= 0; }
 		// 0x5A07xx (batch261: ++globalId stamp into stateIndex).
-		unsigned int advanceStateIndex();
+		void advanceStateIndex();
+		// 2016 shapes: Link::dirty 0x008e3740 reads link (+0x34) and root (+0x28) directly.
+		Link* getLink() { return link; }
+		void makeStateDirty() { root->advanceStateIndex(); }
 		// mac: 0x523BFE (24B, batch289: ++globalId stamp, returned (same
 		// counter advanceStateIndex consumes; Link C2 seeds from it)).
 		static unsigned int getNextStateIndex();
@@ -245,6 +249,8 @@ namespace RBX {
 		// frame IS the PV position (cf. getPV_Spin_Lock).
 		const G3D::Vector3& getPos() { updatePV(); return worldFrame.translation; }
 		const G3D::CoordinateFrame& getCoordinateFrame() { updatePV(); return worldFrame; }
+		// 2016 shape; Primitive::getFastFuzzyExtents 0x007558e0 calls updatePV and reads +0xa0 twice.
+		unsigned int getStateIndex() { updatePV(); return stateIndex; }
 		// 2016 shape (binary reads worldFrame/+164 directly with no call
 		// -- the compute* engine uses this; no updatePV by design).
 		const G3D::CoordinateFrame& getCoordinateFrameFast() const { return worldFrame; }
@@ -301,7 +307,7 @@ namespace RBX {
 		static Body* worldBody;
 		static unsigned int globalId;
 
-		int unknown24;              // +24 (C2-untouched; TODO identity).
+		// No member at +24 on Windows: IndexedTree is 0x1c there (Body C2 0x008ee2c0 puts the mutex at +0x1c).
 		// OGRE vc9: was bool, spun on with _InterlockedCompareExchange8 (VC9 has no 8-bit CAS intrinsic).
 		// PLAYER getPV_Spin_Lock 0x007554e0 holds a tbb::spin_mutex::scoped_lock on +28 (lock byte from
 		// 0x00402240, unlock stores it back under the EH frame). The 2016 name is "mutex".
@@ -321,6 +327,8 @@ namespace RBX {
 		G3D::CoordinateFrame worldFrame;  // +164 (TODO role).
 		G3D::Vector3 linVel;        // +212 (TODO role).
 		G3D::Vector3 angVel;        // +224 (TODO role).
+		// +236: no store in the C2 (0x008ee2c0), but the pool is singleton_pool<Body,240> (free 0x00756970).
+		undefined m_unk0xec[0xf0 - 0xec];
 	};
 
 } // namespace RBX

@@ -39,6 +39,13 @@ namespace RBX {
 
 		/*override*/ G3D::Rect2D getChildRect2D() const;
 
+		// FUNCTION: PLAYER 0x006c1dc0
+		// FUNCTION: STUDIO 0x00854cd0
+		Style getStyle() const { return style; }
+		void setStyle(Style value);
+
+		static Reflection::EnumPropDescriptor<Frame, Style> prop_Style;
+
 	private:
 		Style style;         // 0x21c
 		GuiDrawImage image;  // 0x220
@@ -51,4 +58,30 @@ namespace RBX {
 	// ??$?0PBD_N@?$Described@VFrame@RBX@@$E?sFrame@2@3QBDBV?$FactoryProduct@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD_N@Z
 	// clang-format on
 
+
+	// Out-of-line template and implicit-member copies the original emitted for this class, paired by
+	// identical masked bytes (tools/unpaired_twins.py on a 2026-11-13 build).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x006c22a0
+	// ??$getset@P8Frame@RBX@@BE?AW4Style@12@XZP812@AEXW4312@@Z@?$PropDescriptor@VFrame@RBX@@W4Style@12@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4Style@Frame@RBX@@@Reflection@RBX@@@std@@P8Frame@2@BE?AW4Style@52@XZP852@AEXW4652@@Z@Z
+	// TEMPLATE: PLAYER 0x006c27e0
+	// ?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4Style@Frame@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
+	// TEMPLATE: PLAYER 0x006c2900
+	// ??_G?$FactoryProduct@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDBVInstance@2@@RBX@@MAEPAXI@Z
+	// TEMPLATE: PLAYER 0x006c2b40
+	// ??1?$DescribedCreatable@VFrame@RBX@@VGuiObject@2@$E?sFrame@2@3QBDB$0BL@$0A@@RBX@@UAE@XZ
+	// SYNTHETIC: PLAYER 0x006c2c20
+	// SYNTHETIC: STUDIO 0x00855740
+	// RBX::Frame::~Frame
+	// clang-format on
+
 } // namespace RBX
+
+// Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
+// clang-format off
+// TEMPLATE: STUDIO 0x008551e0
+// ??$getset@P8Frame@RBX@@BE?AW4Style@12@XZP812@AEXW4312@@Z@?$PropDescriptor@VFrame@RBX@@W4Style@12@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4Style@Frame@RBX@@@Reflection@RBX@@@std@@P8Frame@2@BE?AW4Style@52@XZP852@AEXW4652@@Z@Z
+// clang-format on
+// SYNTHETIC: PLAYER 0x006c2ca0
+// SYNTHETIC: STUDIO 0x008557c0
+// RBX::Frame::`scalar deleting destructor'

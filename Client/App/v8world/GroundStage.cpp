@@ -20,35 +20,35 @@ namespace RBX {
 		world = worldArg;
 	}
 
-	// STUB: PLAYER 0x008eaa70
-	// STUB: STUDIO 0x00a08c70
+	// D0 0x008eaa70 (SYNTHETIC in GroundStage.h)
+	//
 	GroundStage::~GroundStage()
 	{
 		// D2 pattern (uniform 0x10 node: delete +8; D1 0x574EF0 / D0
 		// mac: 0x574EA6 per the batch225 vtable -- bodies uncaptured, the delete
 		// is certain, members: none).
-		delete static_cast<EdgeStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// mac: 0x574F1E (190B, batch214).
-	// STUB: PLAYER 0x008eadf0
-	// STUB: STUDIO 0x00a08ff0
+	// FUNCTION: PLAYER 0x008eadf0
+	// FUNCTION: STUDIO 0x00a08ff0
 	void GroundStage::onPrimitiveAdded(Primitive* p)
 	{
 		RBXASSERT(p->getNumEdges() == 0);
 		p->putInStage(this);
 		static_cast<EdgeStage*>(downstream)->onPrimitiveAdded(p);
-		addGroundJoint(p, p->getAnchoredProperty() || p->getDragging());
+		addGroundJoint(p, p->requestFixed());
 	}
 
 
 	// mac: 0x575118 (293B, batch214).
-	// STUB: PLAYER 0x008eae90
-	// STUB: STUDIO 0x00a09090
+	// FUNCTION: PLAYER 0x008eae90
+	// FUNCTION: STUDIO 0x00a09090
 	void GroundStage::onPrimitiveRemoving(Primitive* p)
 	{
 		RBXASSERT(p->getNumEdges() == 1);
-		removeGroundJoint(p, p->getAnchoredProperty() || p->getDragging());
+		removeGroundJoint(p, p->requestFixed());
 		static_cast<EdgeStage*>(downstream)->onPrimitiveRemoving(p);
 		p->removeFromStage(this);
 
@@ -187,45 +187,32 @@ namespace RBX {
 		RBXASSERT(k->getPrimitive(1));
 		RBXASSERT(k->getPrimitive(0)->downstreamOfStage(this));
 	}
-	// STUB: PLAYER 0x008eafb0
-	// STUB: STUDIO 0x00a091b0
+	// FUNCTION: PLAYER 0x008eafb0
+	// FUNCTION: STUDIO 0x00a091b0
 	void GroundStage::checkForFreeGroundJoint(RigidJoint* joint)
 	{
 		Primitive* p0 = joint->getPrim0();
 		Primitive* p1 = joint->getPrim1();
 		RBXASSERT(p0->downstreamOfStage(this));  // :196
 		RBXASSERT(p1->downstreamOfStage(this));  // :197
-		bool r0 = p0->getAnchoredProperty() || p0->getDragging();
-		if (p1->getAnchoredProperty())
-		{
-			if (r0)
-				return;
-		}
-		else
-		{
-			if ((r0 ^ p1->getDragging()) != 1)
-				return;
-			if (r0)
-			{
+		bool fixed0 = p0->requestFixed();
+		bool fixed1 = p1->requestFixed();
+		if (fixed0 != fixed1) {
+			if (fixed0) {
 				rebuildFreeGround(p1);
-				return;
+			}
+			else {
+				rebuildFreeGround(p0);
 			}
 		}
-		rebuildFreeGround(p0);
+
+
+
+
+
+
+
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -238,29 +225,28 @@ namespace RBX {
 
 
 	// mac: 0x575492 (291B, batch220).
-	// STUB: PLAYER 0x008ead20
-	// STUB: STUDIO 0x00a08f20
+	// FUNCTION: PLAYER 0x008ead20
+	// FUNCTION: STUDIO 0x00a08f20
 	void GroundStage::rebuildFreeGround(Primitive* p)
 	{
-		if (p->getAnchoredProperty() || p->getDragging())
-		{
-			RBXASSERT(Joint::findConstJoint(p, Joint::ANCHOR_JOINT));
-		}
-		else if (heaviestRigidToGround(p) != NULL)
-		{
-			if (Joint::findConstJoint(p, Joint::ANCHOR_JOINT) == NULL)
-			{
-				removeGroundJoint(p, false);
-				addGroundJoint(p, true);
+		if (!(p->getDragging() || p->getAnchoredProperty())) {
+			if (heaviestRigidToGround(p)) {
+				if (!Joint::findConstJoint(p, Joint::ANCHOR_JOINT)) {
+					removeGroundJoint(p, false);
+					addGroundJoint(p, true);
+				}
+			}
+			else {
+				if (!Joint::findConstJoint(p, Joint::FREE_JOINT)) {
+					removeGroundJoint(p, true);
+					addGroundJoint(p, false);
+				}
 			}
 		}
-		else if (Joint::findConstJoint(p, Joint::FREE_JOINT) == NULL)
-		{
-			removeGroundJoint(p, true);
-			addGroundJoint(p, false);
+		else {
+			RBXASSERT(Joint::findConstJoint(p, Joint::ANCHOR_JOINT));
 		}
 	}
-	// mac: 0x575A7E (217B, batch222).
 	// STUB: PLAYER 0x008ea980
 	// STUB: STUDIO 0x00a08b80
 	RigidJoint* GroundStage::heaviestRigidToGround(Primitive* p)
@@ -270,48 +256,45 @@ namespace RBX {
 		for (RigidJoint* joint = p->getFirstRigid(); joint != NULL;
 			joint = p->getNextRigid(joint))
 		{
-			Primitive* other = joint->getPrim0() == p ? joint->getPrim1() : joint->getPrim0();
-			if (!(other->getAnchoredProperty() || other->getDragging()))
-				continue;
-			if (best == NULL
-				|| static_cast<SpanningEdge*>(joint)->isHeavierThan(
-					static_cast<SpanningEdge*>(best)))
-				best = joint;
+			Primitive* other = joint->otherPrimitive(p);
+			if (other->requestFixed()) {
+				if (!best || joint->isHeavierThan(best)) {
+					best = joint;
+				}
+			}
+
+
 		}
 		return best;
 	}
 
 	// mac: 0x575604 (123B, batch209).
-	// STUB: PLAYER 0x008eb150
-	// STUB: STUDIO 0x00a09350
+	// FUNCTION: PLAYER 0x008eb150
+	// FUNCTION: STUDIO 0x00a09350
 	void GroundStage::onEdgeAdded(Edge* edge)
 	{
-		if (edge->getEdgeType() == Edge::JOINT
-			&& rbx_static_cast<Joint*>(edge)->getJointType() == Joint::KERNEL_JOINT)
-			onKernelJointAdded(static_cast<KernelJoint*>(edge));
+		if (Joint::isKernelJoint(edge)) {
+			onKernelJointAdded(rbx_static_cast<KernelJoint*>(edge));
+		}
 		IWorldStage::onEdgeAdded(edge);
-		int type = 13;
-		if (edge->getEdgeType() == Edge::JOINT)
-			type = rbx_static_cast<Joint*>(edge)->getJointType();
-		if ((type & ~4) == 1 || type == 2)
-			checkForFreeGroundJoint(static_cast<RigidJoint*>(edge));
+		if (Joint::isRigidJoint(edge)) {
+			checkForFreeGroundJoint(rbx_static_cast<RigidJoint*>(edge));
+		}
 	}
 
 	// mac: 0x5758DC (123B, batch209).
-	// STUB: PLAYER 0x008eb1c0
-	// STUB: STUDIO 0x00a093c0
+	// FUNCTION: PLAYER 0x008eb1c0
+	// FUNCTION: STUDIO 0x00a093c0
 	void GroundStage::onEdgeRemoving(Edge* edge)
 	{
 
 		IWorldStage::onEdgeRemoving(edge);
-		int type = 13;
-		if (edge->getEdgeType() == Edge::JOINT)
-			type = rbx_static_cast<Joint*>(edge)->getJointType();
-		if ((type & ~4) == 1 || type == 2)
-			checkForFreeGroundJoint(static_cast<RigidJoint*>(edge));
-		if (edge->getEdgeType() == Edge::JOINT
-			&& rbx_static_cast<Joint*>(edge)->getJointType() == Joint::KERNEL_JOINT)
-			onKernelJointRemoving(static_cast<KernelJoint*>(edge));
+		if (Joint::isRigidJoint(edge)) {
+			checkForFreeGroundJoint(rbx_static_cast<RigidJoint*>(edge));
+		}
+		if (Joint::isKernelJoint(edge)) {
+			onKernelJointRemoving(rbx_static_cast<KernelJoint*>(edge));
+		}
 	}
 
 } // namespace RBX

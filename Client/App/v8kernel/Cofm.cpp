@@ -20,8 +20,8 @@ namespace RBX {
 		moment = G3D::Matrix3::identity();
 	}
 	// mac: 0x525A10 (batch293).
-	// STUB: PLAYER 0x0099a650
-	// STUB: STUDIO 0x00a39960
+	// FUNCTION: PLAYER 0x0099a650
+	// FUNCTION: STUDIO 0x00a39960
 	void Cofm::updateIfDirty()
 	{
 		if (dirty) {

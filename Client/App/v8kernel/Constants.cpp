@@ -4,6 +4,7 @@
 
 #include "V8Kernel/Constants.h"
 #include "Util/FastFlags.h"
+#include "decomp.h"
 
 namespace RBX {
 
@@ -91,5 +92,13 @@ namespace RBX {
 	}
 	float Constants::impulseSolverSymStateTorqueBound() { return 0.05f; }
 	float Constants::impulseSolverSymStateForceBound() { return 0.001f; }
+
+	// STUB: PLAYER 0x0084dc00
+	// STUB: STUDIO 0x009a58f0
+	float Constants::getJointK(const G3D::Vector3& size, bool ball)
+	{
+		STUB(0x0084dc00);
+		return 0.0f;
+	}
 
 } // namespace RBX

@@ -24,6 +24,8 @@ namespace RBX {
 		// values 2016-carried (identical function; top pair lives in
 		// rodata -- byte-verification queued, batch250 has the EA).
 		static float getElasticMultiplier(float elasticity);
+		// ios: getJointK(Vector3 const&, bool) 0x0084dc00 (Primitive::computeJointK's callee).
+		static float getJointK(const G3D::Vector3& size, bool ball);
 		// Batch253 getter family (disasm-verbatim arithmetic; Physics60HZ
 		// false matches the shipped client -- see FastFlags DELTA above).
 		static int worldStepsPerSec();       // 0x527048

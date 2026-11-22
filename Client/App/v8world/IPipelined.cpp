@@ -77,14 +77,5 @@ namespace RBX {
 	}
 
 	// mac: 0x57A224 (53B).
-	World* IPipelined::findWorld()
-	{
-		if (currentStage == NULL)
-			return NULL;
-		IStage* s = currentStage;
-		if (inKernel())
-			s = s->getUpstream();
-		return s->getWorld();
-	}
 
 } // namespace RBX

@@ -22,13 +22,13 @@ namespace RBX {
 		IStage::world = world;
 	}
 
-	// STUB: PLAYER 0x009995e0
-	// STUB: STUDIO 0x00a59b70
+	// D0 0x009995e0 (SYNTHETIC in EdgeStage.h)
+	//
 	EdgeStage::~EdgeStage()
 	{
 		// D1 0x573556 / D0 0x573584 (batch214): vptr reset + delete +8
 		// via vtbl+4 (D0 also operator-deletes this -- implicit).
-		delete static_cast<ContactStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 	// mac: 0x57350C (26B, batch209): link the edge into both prims, then the

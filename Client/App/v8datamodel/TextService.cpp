@@ -52,64 +52,64 @@ namespace RBX {
 
 
 
-
-
-	// mac: 0x5F9896 (115B): the Text::Font fence convert; the unsigned `cmp esi,5 / jb` is the
-	// unsigned-cast compare, and the overflow arm returns FONT_0 after asserting "0".
-	// STUB: PLAYER 0x0073a620
-	// STUB: STUDIO 0x00884d30
-	TextService::Font TextService::FromTextFont(Text::Font font)
-	{
-		if (static_cast<unsigned int>(font) >= 5)
-		{
+	// FUNCTION: PLAYER 0x0073a620
+	// FUNCTION: STUDIO 0x00884d30
+	TextService::Font TextService::FromTextFont(Text::Font font) {
+		switch (font) {
+		case Text::font0: return FONT_0;
+		case Text::font1: return FONT_1;
+		case Text::font2: return FONT_2;
+		case Text::font3: return FONT_3;
+		case Text::font4: return FONT_4;
+		default:
 			RBXASSERT(0);
 			return FONT_0;
 		}
-		return static_cast<Font>(font);
+	}
+	// FUNCTION: PLAYER 0x0073a6a0
+	// FUNCTION: STUDIO 0x00884db0
+	Text::Font TextService::ToTextFont(Font font) {
+		switch (font) {
+		case FONT_0: return Text::font0;
+		case FONT_1: return Text::font1;
+		case FONT_2: return Text::font2;
+		case FONT_3: return Text::font3;
+		case FONT_4: return Text::font4;
+		default:
+			RBXASSERT(0);
+			return Text::font0;
+		}
 	}
 
 
 
 
+	// FUNCTION: PLAYER 0x0073a720
+	// FUNCTION: STUDIO 0x00884e30
+	Text::XAlign TextService::ToTextXAlign(XAlignment value) {
+		switch (value) {
+		case XALIGNMENT_LEFT: return Text::xaLeft;
+		case XALIGNMENT_RIGHT: return Text::xaRight;
+		case XALIGNMENT_CENTER: return Text::xaCenter;
+		default:
+			RBXASSERT(0);
+			return Text::xaLeft;
+		}
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// FUNCTION: PLAYER 0x0073a780
+	// FUNCTION: STUDIO 0x00884e90
+	Text::YAlign TextService::ToTextYAlign(YAlignment value) {
+		switch (value) {
+		case YALIGNMENT_TOP: return Text::yaInvariant;
+		case YALIGNMENT_CENTER: return Text::yaCenter;
+		case YALIGNMENT_BOTTOM: return Text::yaBottom;
+		default:
+			RBXASSERT(0);
+			return Text::yaInvariant;
+		}
+	}
 
 
 
@@ -137,13 +137,16 @@ namespace RBX {
 
 	// mac: 0x5F9C4C: operator new[](0x2C) = the 4-byte count header + 5 zero {px, ctrl} pairs; the
 	// +0x60 pointer swaps first, then the old base is delete[]d.
+	// Byte-identical but for the eh vector iterator's shared_ptr<Typesetter> dtor operand 0x007e4e40, a folded twin.
+	// STUB: PLAYER 0x0073a960
+	// STUB: STUDIO 0x008850a0
 	void TextService::clearTypesetters()
 	{
-		boost::shared_ptr<Typesetter>* fresh =
-			new boost::shared_ptr<Typesetter>[FONT_LAST];
-		boost::shared_ptr<Typesetter>* old = typesetters;
-		typesetters = fresh;
-		delete[] old;
+		typesetters.reset(new boost::shared_ptr<Typesetter>[FONT_LAST]);
+
+
+
+
 	}
 
 } // namespace RBX

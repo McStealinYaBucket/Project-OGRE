@@ -117,7 +117,8 @@ namespace RBX
 		virtual ~Job();
 
 	public:
-		inline const shared_ptr<TaskScheduler::Arbiter>& getArbiter() const
+		// 2013 returns a copy and every caller calls the COMDAT copy at PLAYER 0x005837a0 (19 calls).
+		shared_ptr<TaskScheduler::Arbiter> getArbiter() const
 		{
 			return sharedArbiter;
 		}
@@ -193,3 +194,19 @@ namespace RBX
 		void startWaiting();
 	};
 }
+
+// Job::getArbiter (PLAYER COMDAT copy; no +0x54 copy found in STUDIO).
+// TEMPLATE: PLAYER 0x005837a0
+// ?getArbiter@Job@TaskScheduler@RBX@@QBE?AV?$shared_ptr@VArbiter@TaskScheduler@RBX@@@boost@@XZ
+
+// TEMPLATE: PLAYER 0x009b9f70
+// TEMPLATE: STUDIO 0x00a70f90
+// ??$for_each@V?$_Vector_iterator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@V?$allocator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@@std@@@std@@V?$bind_t@XV?$mf1@XVCoordinator@Tasks@RBX@@PAVJob@TaskScheduler@3@@_mfi@boost@@V?$list2@U?$arg@$00@boost@@V?$value@PAVJob@TaskScheduler@RBX@@@_bi@2@@_bi@3@@_bi@boost@@@std@@YA?AV?$bind_t@XV?$mf1@XVCoordinator@Tasks@RBX@@PAVJob@TaskScheduler@3@@_mfi@boost@@V?$list2@U?$arg@$00@boost@@V?$value@PAVJob@TaskScheduler@RBX@@@_bi@2@@_bi@3@@_bi@boost@@V?$_Vector_iterator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@V?$allocator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@@std@@@0@0V123@@Z
+
+// TEMPLATE: PLAYER 0x009b9fb0
+// TEMPLATE: STUDIO 0x00a70fd0
+// ??$_Find_if@V?$_Vector_iterator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@V?$allocator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@@std@@@std@@V?$bind_t@_NV?$mf1@_NVCoordinator@Tasks@RBX@@PAVJob@TaskScheduler@3@@_mfi@boost@@V?$list2@U?$arg@$00@boost@@V?$value@PAVJob@TaskScheduler@RBX@@@_bi@2@@_bi@3@@_bi@boost@@@std@@YA?AV?$_Vector_iterator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@V?$allocator@V?$shared_ptr@VCoordinator@Tasks@RBX@@@boost@@@std@@@0@V10@0V?$bind_t@_NV?$mf1@_NVCoordinator@Tasks@RBX@@PAVJob@TaskScheduler@3@@_mfi@boost@@V?$list2@U?$arg@$00@boost@@V?$value@PAVJob@TaskScheduler@RBX@@@_bi@2@@_bi@3@@_bi@boost@@@Z
+
+// FUNCTION: PLAYER 0x009b36a0
+// FUNCTION: STUDIO 0x00a6b800
+// ?isLowerWakeTime@Job@TaskScheduler@RBX@@SA_NABV123@0@Z

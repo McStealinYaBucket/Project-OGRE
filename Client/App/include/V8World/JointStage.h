@@ -10,8 +10,8 @@
      (70B) / putJointHere 0x57C022 (186B) / removeEdgeFromDownstream 0x57B8D4
      (140B) (batches 210/211/214/216/218/219a).
    Layout: IStage base (+4 upstream / +8 downstream=GroundStage / +12 world)
-     + ConcurrencyValidator +16 (12B) + incompleteJoints +28 (BiMultiMap,
-     24B) + jointMap +52 (set<Joint*>) + primitivesHere +76 (set<Primitive*>)
+     + ConcurrencyValidator +16 (12B) + jointMap (2016 JointMap) (BiMultiMap,
+     24B) + incompleteJoints (set<Joint*>) + primitivesHere +76 (set<Primitive*>)
      = 0x64. C2 write order + D2 erase sites pin every offset.
    Original file: Client/App/v8world/JointStage.h (path inferred) */
 
@@ -60,8 +60,8 @@ namespace RBX {
 
 	private:
 		ConcurrencyValidator validator;  // +16.
-		BiMultiMap<Primitive*, Joint*> incompleteJoints;  // +28.
-		std::set<Joint*> jointMap;  // +52.
+		BiMultiMap<Primitive*, Joint*> jointMap;  // +0x34 (dtor :26 jointMap.empty() reads +0x3c).
+		std::set<Joint*> incompleteJoints;  // +0x40 (dtor :27 reads +0x48).
 		std::set<Primitive*> primitivesHere;  // +76.
 	};
 

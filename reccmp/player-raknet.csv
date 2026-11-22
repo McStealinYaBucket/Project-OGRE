@@ -1,6 +1,6 @@
 # Generated from ida/exports/PLAYER-lib-resolved.csv (status identical). Do not edit.
 # Library rows skipped for all libraries: not identical 211, not a kept function 49.
-# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1379, static name 337, not in our link 23, folded in our link 0.
+# Resolved against build/RobloxPlayerBeta.exe (map + PDB) for all libraries: public symbol 1382, static name 337, not in our link 20, folded in our link 0.
 address,type,size,symbol,name
 004b0320,library,7,?clear@Faces@RBX@@QAEXXZ,?clear@Faces@RBX@@QAEXXZ
 004e67d0,library,50,??_H@YGXPAXIHP6EPAX0@Z@Z,"void __stdcall `vector ctor iterator'(void *, unsigned int, int, void * (__thiscall *)(void *))"
@@ -37,7 +37,7 @@ address,type,size,symbol,name
 005a7020,library,81,??$Write@_K@BitStream@RakNet@@QAEXAB_K@Z,public: void __thiscall RakNet::BitStream::Write<unsigned __int64>(unsigned __int64 const &)
 005a7080,library,82,??$Read@G@BitStream@RakNet@@QAE_NAAG@Z,public: bool __thiscall RakNet::BitStream::Read<unsigned short>(unsigned short &)
 005a70e0,library,72,??$Write@M@BitStream@RakNet@@QAEXABM@Z,??$Write@M@BitStream@RakNet@@QAEXABM@Z
-005a7130,library,82,??$Read@I@BitStream@RakNet@@QAE_NAAI@Z,public: bool __thiscall RakNet::BitStream::Read<unsigned int>(unsigned int &)
+005a7130,library,82,??$Read@J@BitStream@RakNet@@QAE_NAAJ@Z,??$Read@J@BitStream@RakNet@@QAE_NAAJ@Z
 005a7190,library,90,??$Read@_K@BitStream@RakNet@@QAE_NAA_K@Z,public: bool __thiscall RakNet::BitStream::Read<unsigned __int64>(unsigned __int64 &)
 005ab350,library,156,??1StringTable@RakNet@@QAE@XZ,public: __thiscall RakNet::StringTable::~StringTable(void)
 005ab3f0,library,54,?AddReference@StringTable@RakNet@@SAXXZ,public: static void __cdecl RakNet::StringTable::AddReference(void)

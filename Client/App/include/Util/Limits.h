@@ -37,6 +37,19 @@ namespace RBX { namespace Limits {
 		// PLAYER 0x009b90a0 / STUDIO 0x00a6afd0: throws "Count exceeded" over the
 		// limit, then RbxInterlockedIncrement(&count). Not in this tree yet.
 		void add(Countable* theValue);
+
+		// Makes a counter the thread's current one for its lifetime (DataModelJob::step
+		// 0x0070ccb0 activates DataModelArbiter+0x830). ctor 0x009b96b0, dtor 0x009b97f0.
+		// SIZE 0x8
+		class Activator
+		{
+		public:
+			Activator(boost::shared_ptr<Counter> counter);
+			~Activator();
+
+		private:
+			boost::shared_ptr<Counter> oldCounter;	// 0x00
+		};
 	};
 
 	// 2013 layout (ctor 0x009b94d0, dtor 0x009b9160): one shared_ptr<Counter>, not

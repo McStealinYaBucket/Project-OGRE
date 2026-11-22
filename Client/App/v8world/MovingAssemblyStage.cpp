@@ -50,10 +50,11 @@ namespace RBX {
 		listHead = NULL;
 		listTail = NULL;
 		numJoints = 0;
-		delete static_cast<StepJointsStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
-	// mac: 0x586EC0 (batch278: erase from the +28 set, return count).
+	// FUNCTION: PLAYER 0x008eb3e0
+	// FUNCTION: STUDIO 0x00a095e0
 	size_t MovingAssemblyStage::removeMovingGroundedAssembly(Assembly* assembly)
 	{
 		return uiStepJoints.erase(assembly);
@@ -119,6 +120,24 @@ namespace RBX {
 		Assembly* assembly = joint->getPrim0()->getAssembly();
 		if (assembly != NULL)
 			uiStepJoints.erase(assembly);
+	}
+
+	// FUNCTION: PLAYER 0x008eb230
+	// FUNCTION: STUDIO 0x00a09430
+	void MovingAssemblyStage::onSimulateAssemblyAdded(Assembly* a)
+	{
+		a->putInStage(this);
+		rbx_static_cast<StepJointsStage*>(getDownstreamWS())->onSimulateAssemblyAdded(a);
+	}
+
+	// FUNCTION: PLAYER 0x008eb4a0
+	// FUNCTION: STUDIO 0x00a096a0
+	void MovingAssemblyStage::onSimulateAssemblyRemoving(Assembly* a)
+	{
+		rbx_static_cast<StepJointsStage*>(getDownstreamWS())->onSimulateAssemblyRemoving(a);
+		a->removeFromStage(this);
+
+		removeMovingGroundedAssembly(a);
 	}
 
 } // namespace RBX

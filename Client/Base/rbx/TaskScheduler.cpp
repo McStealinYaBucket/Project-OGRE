@@ -52,6 +52,8 @@ RBX::TaskScheduler::PriorityMethod TaskScheduler::priorityMethod = AccumulatedEr
 	bool TaskScheduler::updateJobPriorityOnWake = false;
 #endif
 
+// FUNCTION: PLAYER 0x009b3c20
+// FUNCTION: STUDIO 0x00a6bc90
 double TaskScheduler::getSchedulerDutyCyclePerThread() const
 {
 	return threads.size() ? schedulerDutyCycle.dutyCycle() / threads.size() : 0;
@@ -60,8 +62,6 @@ double TaskScheduler::getSchedulerDutyCyclePerThread() const
 rbx::thread_specific_reference<TaskScheduler::Job> TaskScheduler::currentJob;
 
 RBX::ExclusiveArbiter RBX::ExclusiveArbiter::singleton;
-
-
 
 
 
@@ -186,9 +186,7 @@ TaskScheduler& TaskScheduler::singleton()
 // STUB: PLAYER 0x009b55e0
 // STUB: STUDIO 0x00a6d3d0
 TaskScheduler::TaskScheduler()
-// NOTE (2013): member order/content mirrors the 0x14AA9C store sequence.
-// No DataModel30fpsThrottle / lastCyclcTimestamp / cyclic members (see header).
-// No FFlag::TaskSchedulerCyclicExecutive tail (2016-only; flag absent from 2013 PE).
+// NOTE (2013): member order/content mirrors the 0x14AA9C store sequence. No DataModel30fpsThrottle / lastCyclcTimestamp / cyclic members (see header). No FFlag::TaskSchedulerCyclicExecutive tail (2016-only; flag absent from 2013 PE).
 :sampleRunningJobCountEvent(true)
 ,threadCount(0)
 ,threadAffinityPreference(1.5)	// TODO: Come up with a good number here
@@ -249,6 +247,8 @@ void TaskScheduler::remove(boost::shared_ptr<TaskScheduler::Job> task, bool join
 		}
 	}
 }
+// FUNCTION: PLAYER 0x009b4490
+// FUNCTION: STUDIO 0x00a6c280
 void TaskScheduler::reschedule(boost::shared_ptr<Job> job)
 {
 	{
@@ -268,13 +268,12 @@ void TaskScheduler::add(boost::shared_ptr<Job> job)
 	RBX::mutex::scoped_lock lock(mutex);
 	RBXASSERT(allJobs.find(job)==allJobs.end());
 	allJobs.insert(job);
-
-	// NOTE (2013): no cyclicExecutiveEnabled branch — straight to scheduleJob.
 	scheduleJob(*job);
 }
-
-template<class List, class Item, class IsLess>
-void insert_from_back(List& list, Item& f, IsLess isLess)
+// TEMPLATE: PLAYER 0x009b42c0
+// TEMPLATE: STUDIO 0x00a6c0b0
+// ??$insert_from_back@V?$list@VJob@TaskScheduler@RBX@@U?$base_hook@V?$list_base_hook@U?$tag@USleepingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@@intrusive@boost@@Unone@56@U756@@intrusive@boost@@VJob@TaskScheduler@RBX@@P6A_NABV456@0@Z@@YAXAAV?$list@VJob@TaskScheduler@RBX@@U?$base_hook@V?$list_base_hook@U?$tag@USleepingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@@intrusive@boost@@Unone@56@U756@@intrusive@boost@@AAVJob@TaskScheduler@RBX@@P6A_NABV345@2@Z@Z
+template<class List, class Item, class IsLess> void insert_from_back(List& list, Item& f, IsLess isLess)
 {
 	for (typename List::reverse_iterator iter = list.rbegin(); iter!=list.rend(); ++iter)
 		if (!isLess(f, *iter))
@@ -284,14 +283,13 @@ void insert_from_back(List& list, Item& f, IsLess isLess)
 		}
 		list.push_front(f);
 }
-
+// STUB: PLAYER 0x009b43b0
+// STUB: STUDIO 0x00a6c1a0
 void TaskScheduler::scheduleJob(Job& job)
 {
-	// NOTE (2013): no cyclicExecutiveEnabled early-out.
 	job.updateWakeTime();
 	const Time now = Time::now<Time::Fast>();
-	if (job.wakeTime <= now)
-	{
+	if (job.wakeTime <= now) {
 		job.updateError(now);
 		if (job.currentError.error > 0)
 		{
@@ -306,6 +304,8 @@ void TaskScheduler::scheduleJob(Job& job)
 	job.startSleeping();
 	insert_from_back(sleepingJobs, job, Job::isLowerWakeTime);
 }
+// FUNCTION: PLAYER 0x009b5080
+// FUNCTION: STUDIO 0x00a6ce70
 void TaskScheduler::remove(const boost::shared_ptr<TaskScheduler::Job>& job, boost::shared_ptr<CEvent> joinEvent)
 {
 	RBX::mutex::scoped_lock lock(mutex);
@@ -355,6 +355,8 @@ void TaskScheduler::decrementThreadCount()
 	--threadCount;
 }
 
+// FUNCTION: PLAYER 0x009b3880
+// FUNCTION: STUDIO 0x00a6b9e0
 bool TaskScheduler::areExclusive(TaskScheduler::Job* task1, TaskScheduler::Job* task2, const shared_ptr<Arbiter>& arbiterHint)
 {
 	if (Job::haveDifferentArbiters(task1, task2))
@@ -376,6 +378,8 @@ void TaskScheduler::sampleRunningJobCount()
 	}
 }
 
+// FUNCTION: PLAYER 0x009b4050
+// FUNCTION: STUDIO 0x00a6bf00
 void TaskScheduler::enqueueWaitingJob(Job& job)
 {
 	FASTLOG1(FLog::TaskSchedulerFindJob,
@@ -385,6 +389,8 @@ void TaskScheduler::enqueueWaitingJob(Job& job)
 	waitingJobs.push_back(job);
 }
 
+// FUNCTION: PLAYER 0x009b36f0
+// FUNCTION: STUDIO 0x00a6b850
 Time::Interval TaskScheduler::getShortestSleepTime() const
 {
 	return nextWakeTime - Time::now<Time::Fast>();
@@ -411,14 +417,12 @@ void TaskScheduler::wakeSleepingJobs()
 		{
 			iter = sleepingJobs.erase(iter);
 			job.updateError(now);
-
 			job.updatePriority();
 			enqueueWaitingJob(job);
 		}
 	}
 	nextWakeTime = Time::max();
 }
-
 // STUB: PLAYER 0x009b4670
 // STUB: STUDIO 0x00a6c460
 boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thread> requestingThread)
@@ -429,13 +433,11 @@ boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thr
 	// every job every pass (the DFInt::TaskSchedularBatchErrorCalcFPS fastint is absent);
 	// (2) the nextScheduledJob cache block is unconditional (no cyclic guard).
 	shared_ptr<TaskScheduler::Job> result;
-
 	// nextScheduledJob fast-path (matches 2016's !cyclicExecutiveEnabled branch)
 	if (nextScheduledJob)
 	{
 		result = nextScheduledJob;
 		nextScheduledJob.reset();
-
 		if (result->WaitingHook::is_linked())
 			if (!result->isDisabled())
 				if (!conflictsWithScheduledJob(result.get()))
@@ -449,10 +451,8 @@ boost::shared_ptr<TaskScheduler::Job> TaskScheduler::findJobToRun(shared_ptr<Thr
 				}
 		result.reset();
 	}
-
 	wakeSleepingJobs();
 	Time now = Time::now<Time::Fast>();
-
 	WaitingJobs::iterator bestJob = waitingJobs.end();
 	// Note: These definitions don't strictly need to be initialized, but it eliminates pesky compiler warnings
 	bool bestHasAffinity = false;

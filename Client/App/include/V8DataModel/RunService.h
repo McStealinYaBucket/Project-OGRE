@@ -138,3 +138,11 @@ namespace RBX {
 // TEMPLATE: PLAYER 0x0052e6c0
 // TEMPLATE: STUDIO 0x005de760
 // ??0?$signal@$$A6AXN@Z@signals@rbx@@QAE@XZ
+
+// TEMPLATE: PLAYER 0x0072bc60
+// TEMPLATE: STUDIO 0x00799770
+// ??$sp_pointer_construct@VPhysicsJob@RBX@@V12@@detail@boost@@YAXPAV?$shared_ptr@VPhysicsJob@RBX@@@1@PAVPhysicsJob@RBX@@AAVshared_count@01@@Z
+
+// TEMPLATE: PLAYER 0x0072bcd0
+// TEMPLATE: STUDIO 0x007997e0
+// ??$sp_pointer_construct@VHeartbeatTask@RBX@@V12@@detail@boost@@YAXPAV?$shared_ptr@VHeartbeatTask@RBX@@@1@PAVHeartbeatTask@RBX@@AAVshared_count@01@@Z

@@ -1,10 +1,10 @@
-/* App/v8world/IMoving.cpp -- October 2013. 2013 asserts: makeMoving :18, checkSleep :40/:50, IMovingManager :87-88/:109;
-   the dtor's is inline at IMoving.h:33 (PartInstance::~PartInstance 0x00723190). TODO: FastLog GfxClusters calls. */
-
+/* App/v8world/IMoving.cpp -- October 2013. Asserts: makeMoving :18, checkSleep :40/:50, IMovingManager :87-88/:109; the
+   dtor's is inline at IMoving.h:33. FLog::GfxClustersFull is PLAYER 0x00de3f58 (registered in FastLogSettings.cpp). */
 #include "stdafx.h"
-
 #include "V8World/IMoving.h"
 #include "rbx/Debug.h"
+#include "FastLog.h"
+LOGGROUP(GfxClustersFull)
 namespace RBX {
 	IMoving::IMoving()
 		: iMovingManager(NULL)
@@ -55,15 +55,18 @@ namespace RBX {
 		return false;
 	}
 
-	// STUB: PLAYER 0x00822ef0
-	// STUB: STUDIO 0x00916e10
+	// FUNCTION: PLAYER 0x00822ef0
+	// FUNCTION: STUDIO 0x00916e10
 	void IMoving::notifyMoved()
 	{
-		// TODO: FastLog "notifyMoved on %p" via FLog::GfxClustersFull (channel absent).
-		bool wasAsleep = (stepsToSleep == 0);
-		stepsToSleep = 30;
-		if (wasAsleep)
+		FASTLOG1(FLog::GfxClustersFull, "notifyMoved on part %p", this);
+		if (stepsToSleep == 0) {
+			stepsToSleep = 30;
 			makeMoving();
+		}
+		else {
+			stepsToSleep = 30;
+		}
 	}
 
 	void IMoving::forceSleep()

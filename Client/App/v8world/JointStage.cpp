@@ -19,14 +19,14 @@ namespace RBX {
 		world = worldArg;
 	}
 
-	// STUB: PLAYER 0x00997df0
-	// STUB: STUDIO 0x00a58150
+	// FUNCTION: PLAYER 0x00997df0
+	// FUNCTION: STUDIO 0x00a58150
 	JointStage::~JointStage()
 	{
 		RBXASSERT(jointMap.empty());
 		RBXASSERT(incompleteJoints.empty());
 		RBXASSERT(primitivesHere.empty());
-		delete static_cast<GroundStage*>(downstream);
+		// downstream: deleted by ~IStage.
 	}
 
 
@@ -47,17 +47,57 @@ namespace RBX {
 		getDownstreamWS()->onEdgeRemoving(e);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x57B960 (181B, batch218/219a).
+	// STUB: PLAYER 0x00997730
+	// STUB: STUDIO 0x00a57a90
+	bool JointStage::edgeHasPrimitiveHere(Edge* e, Primitive* p)
+	{
+		RBXASSERT(e->links(p));
+		if (p == NULL)
+			return false;
+		return primitivesHere.find(p) != primitivesHere.end();
+	}
+
+
+
+	// mac: 0x57BA16 (184B, batch216).
+	// STUB: PLAYER 0x009982a0
+	// STUB: STUDIO 0x00a58600
+	void JointStage::visitAddedPrimitive(Primitive* p, Joint* j, std::vector<Joint*>& out)
+	{
+		RBXASSERT(edgeHasPrimitiveHere(j, p));
+		Primitive* other = j->getPrim0() == p ? j->getPrim1() : j->getPrim0();
+		if (edgeHasPrimitiveHere(j, other))
+			out.push_back(j);
+	}
+
+
 	// mac: 0x57BACE (437B, batch214).
 	// STUB: PLAYER 0x00998360
 	// STUB: STUDIO 0x00a586c0
-	void JointStage::onPrimitiveAdded(Primitive* prim)
+	void JointStage::onPrimitiveAdded(Primitive* p)
 	{
-		RBXASSERT(primitivesHere.insert(prim).second);  // :95 "ok"
-		prim->putInStage(this);
-		static_cast<GroundStage*>(downstream)->onPrimitiveAdded(prim);
+		bool ok = primitivesHere.insert(p).second;
+		RBXASSERT(ok);
+		p->putInStage(this);
+		static_cast<GroundStage*>(downstream)->onPrimitiveAdded(p);
 		std::vector<Joint*> found;
 		// OGRE vc9: was a C++11 lambda; boost::bind is the C++03 form (the 2016 source uses it too).
-		incompleteJoints.visitEachLeft(prim,
+		jointMap.visitEachLeft(p,
 			boost::bind(&JointStage::visitAddedPrimitive, this, _1, _2, boost::ref(found)));
 		for (size_t i = 0; i < found.size(); ++i)
 		{
@@ -66,22 +106,23 @@ namespace RBX {
 		}
 	}
 
+
+
 	// mac: 0x57BD4A (727B, batch214).
 	// STUB: PLAYER 0x00998480
 	// STUB: STUDIO 0x00a587e0
-	void JointStage::onPrimitiveRemoving(Primitive* prim)
+	void JointStage::onPrimitiveRemoving(Primitive* p)
 	{
-		RBXASSERT(prim->getNumContacts() == 0);  // :116
+		RBXASSERT(p->getNumContacts() == 0);
 		std::vector<Joint*> found;
-		for (Joint* joint = prim->getFirstJoint(); joint != NULL;
-			joint = prim->getNextJoint(joint))
+		for (Joint* j = p->getFirstJoint(); j != NULL; j = p->getNextJoint(j))
 		{
-			if (joint->getJointType() != Joint::ANCHOR_JOINT
-				&& joint->getJointType() != Joint::FREE_JOINT
-				&& joint->downstreamOfStage(this))
+			if (j->getJointType() != Joint::ANCHOR_JOINT
+				&& j->getJointType() != Joint::FREE_JOINT
+				&& j->downstreamOfStage(this))
 			{
-				RBXASSERT(edgeHasPrimitivesHere(joint));  // :124
-				found.push_back(joint);
+				RBXASSERT(edgeHasPrimitivesHere(j));
+				found.push_back(j);
 			}
 		}
 		for (size_t i = 0; i < found.size(); ++i)
@@ -89,101 +130,87 @@ namespace RBX {
 			removeEdgeFromDownstream(found[i]);
 			putJointHere(found[i]);
 		}
-		RBXASSERT(prim->getNumJoints() == 1);  // :141
-		static_cast<GroundStage*>(downstream)->onPrimitiveRemoving(prim);
-		prim->removeFromStage(this);
-		RBXASSERT(primitivesHere.erase(prim) == 1);  // :146 "num == 1"
-	}
 
+
+
+
+
+
+
+
+		RBXASSERT(p->getNumJoints() == 1);
+		static_cast<GroundStage*>(downstream)->onPrimitiveRemoving(p);
+		p->removeFromStage(this);
+		int num = primitivesHere.erase(p);
+
+		RBXASSERT(num == 1);
+	}
+	// FUNCTION: PLAYER 0x00997fb0
+	// FUNCTION: STUDIO 0x00a58310
+	void JointStage::putJointHere(Joint* j)
+	{
+		bool ok = incompleteJoints.insert(j).second;
+		RBXASSERT(ok);
+		jointMap.internalMap.insert(std::make_pair(j->getPrim0(), j));
+		jointMap.internalMap.insert(std::make_pair(j->getPrim1(), j));
+	}
+	// FUNCTION: PLAYER 0x00997c10
+	// FUNCTION: STUDIO 0x00a57f70
+	void JointStage::removeJointFromHere(Joint* j) {
+		int num = incompleteJoints.erase(j);
+		RBXASSERT(num == 1);
+		jointMap.removePair(j->getPrim0(), j);
+		jointMap.removePair(j->getPrim1(), j);
+	}
 	// mac: 0x57C0DC (284B, batch214).
-	// STUB: PLAYER 0x00998060
-	// STUB: STUDIO 0x00a583c0
-	void JointStage::onEdgeAdded(Edge* edge)
+	// FUNCTION: PLAYER 0x00998060
+	// FUNCTION: STUDIO 0x00a583c0
+	void JointStage::onEdgeAdded(Edge* e)
 	{
-		RBXASSERT(edge->getPrim0() != NULL && edge->getPrim1() != NULL
-			&& edge->getPrim0() != edge->getPrim1());  // :170
-		edge->putInStage(this);
-		if (edge->getEdgeType() != Edge::JOINT)
-		{
-			RBXASSERT(edgeHasPrimitivesHere(edge));  // :184 (foreign only)
+		RBXASSERT(e->getPrimitive(0) && e->getPrimitive(1) && (e->getPrimitive(0) != e->getPrimitive(1)));
+
+		e->putInStage(this);
+
+		if (Joint::isJoint(e)) {
+			if (edgeHasPrimitivesHere(e)) {
+				moveEdgeToDownstream(e);
+			}
+			else {
+				Joint* j = rbx_static_cast<Joint*>(e);
+				putJointHere(j);
+			}
 		}
-		else if (!edgeHasPrimitivesHere(edge))
-		{
-			putJointHere(rbx_static_cast<Joint*>(edge));
-			return;
+		else {
+			RBXASSERT(edgeHasPrimitivesHere(e));
+			moveEdgeToDownstream(e);
 		}
-		moveEdgeToDownstream(edge);
 	}
 
-	// mac: 0x57C1F8 (366B, batch214).
-	// STUB: PLAYER 0x00997cb0
-	// STUB: STUDIO 0x00a58010
-	void JointStage::onEdgeRemoving(Edge* edge)
-	{
 
-		RBXASSERT(edge->getPrim0() != NULL && edge->getPrim1() != NULL
-			&& edge->getPrim0() != edge->getPrim1());  // :194
-		if (edge->downstreamOfStage(this))
-		{
-			RBXASSERT(edgeHasPrimitivesHere(edge));  // :197
-			removeEdgeFromDownstream(edge);
+	// FUNCTION: PLAYER 0x00997cb0
+	// FUNCTION: STUDIO 0x00a58010
+	void JointStage::onEdgeRemoving(Edge* e)
+	{
+		RBXASSERT(e->getPrimitive(0) && e->getPrimitive(1) && (e->getPrimitive(0) != e->getPrimitive(1)));
+
+		if (e->downstreamOfStage(this)) {
+			RBXASSERT(edgeHasPrimitivesHere(e));
+			removeEdgeFromDownstream(e);
 		}
-		else
-		{
-			if (edge->getEdgeType() != Edge::JOINT)
-				RBXASSERT(Joint::isJoint(edge));  // :201
-			removeJointFromHere(static_cast<Joint*>(edge));
+		else {
+			RBXASSERT(Joint::isJoint(e));
+			Joint* j = rbx_static_cast<Joint*>(e);
+			removeJointFromHere(j);
 		}
-		edge->removeFromStage(this);
-	}
 
-	// mac: 0x57BA16 (184B, batch216).
-	// STUB: PLAYER 0x009982a0
-	// STUB: STUDIO 0x00a58600
-	void JointStage::visitAddedPrimitive(Primitive* p, Joint* joint, std::vector<Joint*>& out)
-	{
-		RBXASSERT(edgeHasPrimitiveHere(joint, p));  // :82
-		Primitive* other = joint->getPrim0() == p ? joint->getPrim1() : joint->getPrim0();
-		if (edgeHasPrimitiveHere(joint, other))
-			out.push_back(joint);
-	}
-
-	// mac: 0x57BC84 (197B, batch216).
-	// STUB: PLAYER 0x00997c10
-	// STUB: STUDIO 0x00a57f70
-	void JointStage::removeJointFromHere(Joint* joint)
-	{
-		RBXASSERT(jointMap.erase(joint) == 1);  // :161 "num == 1"
-		incompleteJoints.removePair(joint->getPrim0(), joint);
-		incompleteJoints.removePair(joint->getPrim1(), joint);
-	}
-
-	// mac: 0x57B960 (181B, batch218/219a).
-	// STUB: PLAYER 0x00997730
-	// STUB: STUDIO 0x00a57a90
-	bool JointStage::edgeHasPrimitiveHere(Edge* edge, Primitive* prim)
-	{
-		RBXASSERT(edge->links(prim));  // :69 "e->links(p)"
-		if (prim == NULL)
-			return false;
-		return primitivesHere.find(prim) != primitivesHere.end();
+		e->removeFromStage(this);
 	}
 
 	// mac: 0x57B88E (70B, batch216).
-	bool JointStage::edgeHasPrimitivesHere(Edge* edge)
+	bool JointStage::edgeHasPrimitivesHere(Edge* e)
 	{
-		return edgeHasPrimitiveHere(edge, edge->getPrim0())
-			&& edgeHasPrimitiveHere(edge, edge->getPrim1());
-	}
-
-	// mac: 0x57C022 (186B, batch216).
-	// STUB: PLAYER 0x00997fb0
-	// STUB: STUDIO 0x00a58310
-	void JointStage::putJointHere(Joint* joint)
-	{
-		RBXASSERT(jointMap.insert(joint).second);  // :153 "ok"
-		incompleteJoints.internalMap.insert(std::make_pair(joint->getPrim0(), joint));
-		incompleteJoints.internalMap.insert(std::make_pair(joint->getPrim1(), joint));
+		return edgeHasPrimitiveHere(e, e->getPrim0())
+			&& edgeHasPrimitiveHere(e, e->getPrim1());
 	}
 
 } // namespace RBX
