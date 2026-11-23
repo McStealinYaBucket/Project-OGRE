@@ -218,8 +218,8 @@ namespace RBX {
 	// +0x1E0). Spelled by NAME (2016 shape): getParent() inlines the +0x34
 	// member read, and the derived-to-base shared_ptr conversion computes
 	// the +0xB8 DataModelArbiter adjustment the binary spells manually.
-	// STUB: PLAYER 0x00679f90
-	// STUB: STUDIO 0x007e1eb0
+	// FUNCTION: PLAYER 0x00679f90
+	// FUNCTION: STUDIO 0x007e1eb0
 	WaitingScriptsJob::WaitingScriptsJob(shared_ptr<ScriptContext> scriptContext)
 		: DataModelJob(
 			"LuaResumeWaitingScripts",

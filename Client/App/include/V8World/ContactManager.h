@@ -28,6 +28,10 @@
 #include "Util/Extents.h"
 #include "Util/SpatialRegion.h"
 #include "G3D/Array.h"
+#include "Util/ConcurrencyValidator.h"
+#include "Util/Profiling.h"
+#include "decomp.h"
+#include <boost/scoped_ptr.hpp>
 
 namespace RBX {
 
@@ -36,7 +40,35 @@ namespace RBX {
 	class Contact;
 	class ContactManagerSpatialHash;
 
-	class ContactManager
+	namespace Profiling {
+		// Belongs in Util/Profiling.h (not this directory's owner): only what World and ContactManager need.
+		// 2013 size 0xc040 (World ctor news 0xc040), Profiler vftable 0x00b526d4, CodeProfiler 0x00b52790.
+		class CodeProfiler
+		{
+		public:
+			CodeProfiler(const char* name);
+			virtual ~CodeProfiler() {}
+		private:
+			undefined m_unk0x04[0xc040 - 0x04];
+		};
+	}
+
+	namespace Voxel {
+		struct CellChangeInfo;
+		// Belongs with the voxel headers (not this directory): only what ContactManager needs.
+		// One vftable slot, no virtual destructor (ContactManager vftable 0x00b64cc4).
+		class CellChangeListener
+		{
+		public:
+			virtual void terrainCellChanged(const CellChangeInfo& info) = 0;
+		};
+	}
+
+	// 2013 layout from the ctor 0x007b63a0 (World news 0x6c): CellChangeListener vptr 0x00,
+	// ConcurrencyValidator 0x04, spatialHash 0x28 (new 0xdc), myMegaClusterPrim 0x2c, world 0x30,
+	// two unordered_sets 0x34/0x50 with a byte between, profiler 0x68 (new 0xc040 "Broadphase").
+	// SIZE 0x6c
+	class ContactManager : public Voxel::CellChangeListener
 	{
 	public:
 		explicit ContactManager(World* world);
@@ -111,13 +143,17 @@ namespace RBX {
 		// +52 byte (0), +56 updatedTerrainRegions, +80 profiler (0xA01C).
 		// The profiler has no in-tree type -- void*, never constructed
 		// (nothing reads it in any ported body).
-		ContactManagerSpatialHash* spatialHash;
+		ConcurrencyValidator concurrencyValidator;	// 0x04
+		ContactManagerSpatialHash* spatialHash;		// 0x28
 		Primitive* myMegaClusterPrim;
 		World* world;
 		boost::unordered_set<Primitive*> scratch;
 		unsigned char byte52;
 		boost::unordered_set<SpatialRegion::Id> updatedTerrainRegions;
-		void* profiler;
+		friend class World;	// World::loadProfilers reads the profiler
+		boost::scoped_ptr<Profiling::CodeProfiler> profiler;	// 0x68
+	public:
+		/*override*/ void terrainCellChanged(const Voxel::CellChangeInfo& info);
 	};
 
 } // namespace RBX

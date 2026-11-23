@@ -1,7 +1,4 @@
-/* App/v8world/Primitive.cpp — October 2013 (ctor shell).
-   Evidence: Primitive C2 0x58F2AA (defaults friction 0.0 / elasticity 0.75 /
-     specificGravity 0.0 / unanchored / undragged).
-   TODO: full decompile. */
+/* App/v8world/Primitive.cpp -- October 2013.  Asserts at the 2013 lines; size 0x170 (World ctor). */
 
 #include "stdafx.h"
 
@@ -22,6 +19,14 @@
 #include "Util/Math.h"
 #include <cmath>
 #include <limits>
+#include "FastLog.h"
+
+namespace FLog {
+	// GLOBAL: PLAYER 0x00de3f55
+	// GLOBAL: STUDIO 0x00f84e2d
+	Channel PrimitiveLifetime = 0;
+	int PrimitiveLifetimeIniter = RegisterLogGroup("PrimitiveLifetime", &PrimitiveLifetime, NULL, FASTVARTYPE_STATIC);
+}
 
 namespace RBX {
 
@@ -40,7 +45,7 @@ namespace RBX {
 		, world(NULL)
 		, fuzzyExtents(G3D::Vector3::maxFinite(), -G3D::Vector3::maxFinite())
 		, fuzzyExtentsStateId(static_cast<unsigned int>(-2))
-		, geometry(NULL)
+		, geometry(newGeometry(geometryType))
 		, body(new Body())
 		, myOwner(NULL)
 		, engineType(0)
@@ -55,11 +60,6 @@ namespace RBX {
 		, jointKOwner(this)
 		, jointK(0.0f)
 		, jointKCompute(&Primitive::computeJointK)
-		, geometryType(geometryType)
-		, partSize(4.0f, 1.0f, 2.0f)
-		, bodyUpdateSerial(0)
-		, contactElasticity316(0.0f)
-		, contactParamsDirty320(false)
 	{
 		for (int i = 0; i < 6; ++i) {
 			surfaces[i] = NO_SURFACE;
@@ -67,13 +67,30 @@ namespace RBX {
 		}
 	}
 
-	// D2 0x00755540: asserts !world/geometry/body (:76-78), deletes geometry, body and surfaceData.
+	// The 2013 dtor asserts the primitive left its world and still owns its geometry and body,
+	// then releases them and the six surface records (PLAYER 0x00755540).
+	// STUB: PLAYER 0x00755540
+	// STUB: STUDIO 0x00894860
 	Primitive::~Primitive()
 	{
+		RBXASSERT(!world);
+		RBXASSERT(geometry);
+		RBXASSERT(body);
+
+		delete geometry;
+		geometry = NULL;
 		delete body;
+		body = NULL;
+		for (int i = 0; i < 6; ++i)
+		{
+			delete surfaceData[i];
+			surfaces[i] = NO_SURFACE;
+			surfaceData[i] = NULL;
+		}
+
+		FASTLOG1(FLog::PrimitiveLifetime, "Primitive %p destroyed", this);
 	}
 
-	// mac: 0x5914E2 (batch257).
 	// FUNCTION: PLAYER 0x00753e10
 	// FUNCTION: STUDIO 0x008931c0
 	bool Primitive::getCanThrottle() const
@@ -81,25 +98,21 @@ namespace RBX {
 		return body->getCanThrottle();
 	}
 
-	// Const mirror (2016 shape; symmetric to getAssembly).
 	const Assembly* Primitive::getConstAssembly() const
 	{
 		return Assembly::getConstPrimitiveAssembly(this);
 	}
 
-	// Clump group lookup (mirrors the getAssembly pair).
 	Clump* Primitive::getClump()
 	{
 		return Clump::getPrimitiveClump(this);
 	}
 
-	// Const mirror.
 	const Clump* Primitive::getConstClump() const
 	{
 		return Clump::getConstPrimitiveClump(this);
 	}
 
-	// Batch261: change-gated flag (+100) + owner notify (binary: owner vtbl+12, TODO-verify the slot).
 	void Primitive::setNetworkIsSleeping(bool value)
 	{
 		if (value != networkIsSleeping)
@@ -109,7 +122,6 @@ namespace RBX {
 		}
 	}
 
-	// Batch261: assembly-root-or-unassembled prims take zero velocity.
 	void Primitive::zeroVelocity()
 	{
 		Assembly* assembly = getAssembly();
@@ -125,18 +137,6 @@ namespace RBX {
 			surfaces[normalId] = surfaceType;
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	// FUNCTION: PLAYER 0x00753bb0
 	const Guid& Primitive::getGuid() const
@@ -160,10 +160,10 @@ namespace RBX {
 	// mac: 0x590916. p0 is `this`; p1 arrives as the argument.
 	// STUB: PLAYER 0x00754960
 	// STUB: STUDIO 0x00893c90
-	Joint* Primitive::getJoint(Primitive* p1, int n)
+	Joint* Primitive::getJoint(Primitive* p0, Primitive* p1, int n)
 	{
 		// Fewer-edged prim list; nth links(p0,p1) match (NULL if exhausted).
-		Primitive* p0 = this;
+		// (static in 2013: p0 is pushed like p1)
 		Primitive* least = (p0->joints.size() <= p1->joints.size()) ? p0 : p1;
 		int found = 0;
 		for (int i = 0; i < least->joints.size(); ++i)
@@ -348,9 +348,9 @@ namespace RBX {
 	// STUB: STUDIO 0x00894170
 	void Primitive::calculateSortSize()
 	{
-		float v2 = partSize.x;
-		float v3 = partSize.y;
-		float v4 = partSize.z;
+		float v2 = getSize().x;
+		float v3 = getSize().y;
+		float v4 = getSize().z;
 		float planar;
 		if (v4 <= v3)
 			planar = v3 * (v2 > v4 ? v2 : v4);
@@ -401,10 +401,10 @@ namespace RBX {
 	void Primitive::setSize(const G3D::Vector3& value)
 	{
 		G3D::Vector3 clipped = clipToSafeSize(value);
-		if (clipped != partSize)
+		if (clipped != getSize())
 		{
-			partSize = clipped;
-			++bodyUpdateSerial;
+			geometry->setSizeNonVirtual(clipped);
+
 			sortSize = 0;
 		}
 	}
@@ -465,7 +465,7 @@ namespace RBX {
 	// STUB: STUDIO 0x00621f50
 	Extents Primitive::getExtentsWorld() const
 	{
-		G3D::Vector3 half = partSize * 0.5f;
+		G3D::Vector3 half = getSize() * 0.5f;
 		Extents local(-half, half);
 		return local.toWorldSpace(getCoordinateFrame());
 	}
@@ -518,8 +518,8 @@ namespace RBX {
 	G3D::CoordinateFrame Primitive::getFaceCoordInObject(NormalId normalId) const
 	{
 		G3D::Vector3 axis = normalIdToVector3(normalId);
-		G3D::Vector3 half = G3D::Vector3(0.5f * axis.x * partSize.x,
-			0.5f * axis.y * partSize.y, 0.5f * axis.z * partSize.z);
+		G3D::Vector3 half = G3D::Vector3(0.5f * axis.x * getSize().x,
+			0.5f * axis.y * getSize().y, 0.5f * axis.z * getSize().z);
 		return G3D::CoordinateFrame(normalIdToMatrix3(normalId), half);
 	}
 
@@ -530,7 +530,7 @@ namespace RBX {
 	// STUB: STUDIO 0x00893420
 	Face Primitive::getFaceInObject(NormalId normalId) const
 	{
-		Extents objectExtents(partSize * -0.5f, partSize * 0.5f);
+		Extents objectExtents(getSize() * -0.5f, getSize() * 0.5f);
 		return Face::fromExtentsSide(objectExtents, normalId);
 	}
 
@@ -574,18 +574,38 @@ namespace RBX {
 		return result;
 	}
 
-	// mac: 0x58FEE0 -- Primitive.cpp:169 assert text recovered verbatim:
-	//   "!Math::isNanInfVector3(getBody()->getPos())"
-	// The binary then calls Body::updatePV() twice around the reads, takes
-	// the centre from Body+0xC8 (getPos()) and the half-corner from the
-	// geometry pointer at this+0xEC through vtable slot [23] (+0x5C), passing
-	// Body+0xA4 as the argument, and pads the result.
-	// PARTIAL MODEL: Body and Geometry are not ported, so the centre is the
-	// primitive's own coordinate-frame translation and the half-corner is
-	// size/2.  For the box primitives we model those are the same values
-	// (Body+0xC8 is the body world position, which is the frame translation,
-	// and the box geometry's fuzzy half extents are size/2); the padding,
-	// the extents construction and the assert are verbatim.
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x00753cb0
+	// FUNCTION: STUDIO 0x00893060
+	int Primitive::getGeometryType() const
+	{
+		RBXASSERT(geometry);
+		return geometry ? geometry->getGeometryType() : GEOMETRY_UNDEFINED;
+	}
+
+	// FUNCTION: PLAYER 0x00753d20
+	// FUNCTION: STUDIO 0x008930d0
+	int Primitive::getCollideType() const
+	{
+		RBXASSERT(geometry);
+		return geometry->getCollideType();
+	}
+
+	// FUNCTION: PLAYER 0x00753d80
+	// FUNCTION: STUDIO 0x00893130
+	const G3D::Vector3& Primitive::getSize() const
+	{
+		return geometry->getSize();
+	}
+
+	// mac: 0x58FEE0 -- Primitive.cpp:169 "!Math::isNanInfVector3(getBody()->getPos())"; the 2013 body
+	// takes the centre from the body and the half-corner from a geometry vftable slot (not modelled).
 	// STUB: PLAYER 0x007557c0
 	// STUB: STUDIO 0x00894ae0
 	Extents Primitive::computeFuzzyExtents()
@@ -680,8 +700,8 @@ namespace RBX {
 	}
 
 	// ---- 2013 bodies written after the assert-pinned functions (no asserts; lines free) ----
-	// STUB: PLAYER 0x00753da0
-	// STUB: STUDIO 0x00893150
+	// FUNCTION: PLAYER 0x00753da0
+	// FUNCTION: STUDIO 0x00893150
 	float Primitive::computeJointK()
 	{
 		G3D::Vector3 size = (getGeometryType() == GEOMETRY_MEGACLUSTER) ? G3D::Vector3(4.0f, 4.0f, 4.0f) : getSize();
@@ -776,6 +796,26 @@ namespace RBX {
 	const G3D::CoordinateFrame& Primitive::getCoordinateFrame() const
 	{
 		return body->getPV_Spin_Lock()->position;
+	}
+
+	// Our accessors over the body (2013 callers read the body directly; not 2013 functions).
+	void Primitive::setCoordinateFrame(const G3D::CoordinateFrame& value)
+	{
+		PV pv = *body->getPV_Spin_Lock();
+		pv.position = value;
+		body->setPv(pv, *this);
+	}
+	unsigned int Primitive::getBodyUpdateSerial() const
+	{
+		return body->getStateIndex();
+	}
+	PV* Primitive::getPV()
+	{
+		return body->getPV_Spin_Lock();
+	}
+	const PV* Primitive::getPV() const
+	{
+		return body->getPV_Spin_Lock();
 	}
 
 } // namespace RBX

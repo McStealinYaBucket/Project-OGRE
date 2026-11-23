@@ -325,14 +325,7 @@ const Type& Type::getSingleton<shared_ptr<const Reflection::ValueMap> >()
 	return type;
 }
 
-// WeakFunctionRef singleton for the withVariantValue function arm
-// (section 246; same convention, name unobserved).
-template<>
-const Type& Type::getSingleton<RBX::Lua::WeakFunctionRef>()
-{
-	static TType<RBX::Lua::WeakFunctionRef> type("WeakFunctionRef");
-	return type;
-}
+// getSingleton<Lua::WeakFunctionRef> ("Function") is in script/ThreadRef.cpp, as in 2013.
 
 // CellID singleton for Variant construction (section 246 test +
 // withVariantValue arm identity). Name "CellId" is 2016-carried

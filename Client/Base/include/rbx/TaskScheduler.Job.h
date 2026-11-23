@@ -52,10 +52,10 @@ namespace RBX
 
 		struct Stats
 		{
+			// 2013: no timeNow (ctor PLAYER 0x009b98d0, ret 0xc, writes +0 and +8 only).
 			Stats(Job& job, Time now);
-            Time timeNow;
-			Time::Interval timespanSinceLastStep;
-			Time::Interval timespanOfLastStep;
+			Time::Interval timespanSinceLastStep;	// 0x00
+			Time::Interval timespanOfLastStep;		// 0x08
 		};
 
 		struct Error

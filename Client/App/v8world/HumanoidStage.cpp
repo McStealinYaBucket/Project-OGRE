@@ -34,7 +34,7 @@ namespace RBX {
 	{
 		rbx_static_cast<SleepStage*>(getDownstreamWS())->onAssemblyRemoving(a);
 	}
-	// STUB: PLAYER 0x0099ad70
+	// FUNCTION: PLAYER 0x0099ad70
 	// FUNCTION: STUDIO 0x00a5a910
 	void HumanoidStage::toHumanoid(Assembly* a)
 	{
@@ -45,7 +45,7 @@ namespace RBX {
 		bool ok = movingHumanoidAssemblies.insert(a).second;
 		RBXASSERT(ok);
 	}
-	// STUB: PLAYER 0x0099af50
+	// FUNCTION: PLAYER 0x0099af50
 	// FUNCTION: STUDIO 0x00a5aaf0
 	void HumanoidStage::fromHumanoid(Assembly* a) {
 		int num = movingHumanoidAssemblies.erase(a);

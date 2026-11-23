@@ -25,8 +25,11 @@ namespace RBX {
 		return value;
 	}
 
+	// 2013 base: GlobalAdvancedSettingsItem<LuaSettings, sLuaSettings> (ctor PLAYER 0x0085e220), 0x64
+	// bytes. Deriving GlobalAdvancedSettings (a ServiceProvider) put every member 0x28 too high: the
+	// ScriptContext ctor 0x0068ad20 reads +0x78/+0x7c, clampWaitTimeout reads +0x70.
 	class LuaSettings
-		: public DescribedCreatable<LuaSettings, GlobalAdvancedSettings, sLuaSettings>
+		: public GlobalAdvancedSettingsItem<LuaSettings, sLuaSettings>
 	{
 	public:
 		// STUB: PLAYER 0x0085e360
@@ -65,10 +68,9 @@ namespace RBX {
 	int getUnknown116() const { return unknown116; }	// +0x7c: ScriptContext ctor 0x0068b100
 
 	private:
-		// 0x60: a byte the base ctor 0x0085e220 (GlobalAdvancedSettingsItem<LuaSettings,
-		// sLuaSettings>, not modelled yet) sets to 1; the 2013 ctor 0x0085e360 stores gcPause at
-		// +0x64, so everything below sits 4 bytes higher than in the Mach-O notes (size 0x88).
-		unsigned char m_unk0x60[4];
+		// 0x60: Service::isPublic, from the base (ctor 0x0085e220 stores 1); the 2013 ctor 0x0085e360
+		// stores gcPause at +0x64, so everything below sits 4 bytes higher than in the Mach-O notes
+		// (size 0x88).
 		int gcPause;        // +0x64 (C2 200).
 		int gcStepMul;      // +0x68 (C2 200).
 		// +104/+108 double (C2 bytes EB851EB8/3F9EB851 = ~0.03; role TODO).
@@ -84,3 +86,33 @@ namespace RBX {
 	};
 
 } // namespace RBX
+
+// The FactoryProduct base's out-of-line members. Their 2013 names spell the base
+// GlobalAdvancedSettings::Item (RTTI .?AVCreator@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@...).
+// clang-format off
+// 2013's copy pushes the "LuaSettings" literal (sLuaSettings folded, so it was instantiated where the
+// definition is visible); ours reads sLuaSettings. The kept COMDAT comes from LuaLibrary.obj.
+// STUB: PLAYER 0x0085e220
+// STUB: STUDIO 0x00948850
+// ??0?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@IAE@XZ
+
+// TEMPLATE: PLAYER 0x0085db70
+// TEMPLATE: STUDIO 0x009481a0
+// ?static_getCreator@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@KAABVCreator@12@XZ
+
+// TEMPLATE: PLAYER 0x0085dc20
+// TEMPLATE: STUDIO 0x00948250
+// ?getClassName@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@UBEABVName@2@XZ
+
+// The deleting-destructor thunk is GlobalAdvancedSettingsItem's: its destructor clears the singleton
+// slot (PLAYER 0x0085e310 stores 0 to 0x00de68a8 before the FactoryProduct vptrs).
+// SYNTHETIC: PLAYER 0x0085e300
+// SYNTHETIC: STUDIO 0x00948920
+// ??_E?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@OBM@AEPAXI@Z
+
+// The thunks above jump here: ~GlobalAdvancedSettingsItem (singleton slot cleared), then the
+// FactoryProduct vptrs and ~Instance.
+// SYNTHETIC: PLAYER 0x0085e310
+// SYNTHETIC: STUDIO 0x00948930
+// RBX::LuaSettings::`scalar deleting destructor'
+// clang-format on

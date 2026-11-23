@@ -1,0 +1,16 @@
+Threading Building Blocks 2.1, release tbb21_20080605oss (interface version 3011), headers only.
+
+This is the release the 2013 clients ship: bin/player/tbb.dll says "TBB: VERSION 2.1",
+"TBB: INTERFACE VERSION 3011", "BUILD_DATE Thu, 5 Jun 2008 08:04:14 UTC", FileVersion 2.1.2008.0605.
+
+Source: tbb21_20080605oss_src.tgz, originally
+  http://www.threadingbuildingblocks.org/uploads/77/111/2.1/tbb21_20080605oss_src.tgz
+fetched 2026-11-23 from the Internet Archive capture
+  http://web.archive.org/web/20100703044806id_/<the URL above>
+  sha256 c326c9f718d3fe45bd678e6cee4bafbf5194b1483e0f5697993060e4b6586927 (1,107,680 bytes)
+Only include/tbb/ (unmodified), COPYING and README are kept here.
+License: GPL v2 with the runtime exception (see COPYING and the header comments).
+
+Why 2.1 and not the 4.4 headers in _downloads: TBB 2.1's spin_mutex::scoped_lock keeps the byte
+__TBB_LockByte returned (uintptr my_unlock_value) and stores it back on unlock; 4.4 stores 0.
+PLAYER Body::getPV_Spin_Lock 0x007554e0 (`mov ebx,eax` after `call __TBB_LockByte`, then `mov [esi],bl`).

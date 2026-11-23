@@ -91,7 +91,7 @@ namespace RBX {
 		public:
 			Node():first(0) {}
 			~Node();
-			static boost::intrusive_ptr<Node> create(lua_State* thread);
+			static Node* create(lua_State* thread);
 			static Node* get(lua_State* thread);
 
 			// Clear all refs to thread and its children

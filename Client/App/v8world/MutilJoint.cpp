@@ -17,13 +17,28 @@ namespace RBX {
 		STUB(0x007b8eb0);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// D2 0x587A2A (+ Joint D2 via base). STUDIO emits it before putInKernel
 	// (0x009bf480); placed here for PLAYER's order, where putInKernel is folded onto Contact's copy.
-	// STUB: PLAYER 0x009741c0
-	// STUB: STUDIO 0x009bf3a0
+	// FUNCTION: PLAYER 0x009741c0
+	// FUNCTION: STUDIO 0x009bf3a0
 	MultiJoint::~MultiJoint()
 	{
-		RBXASSERT(connectors[0] == NULL);
+		RBXASSERT(connector[0] == NULL);
 		RBXASSERT(numConnector == 0);
 	}
 

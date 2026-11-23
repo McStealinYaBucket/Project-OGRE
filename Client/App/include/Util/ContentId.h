@@ -43,6 +43,10 @@ namespace RBX
 
 		std::string getAssetId() const;		// 0x1F8BB4
 
+		// The Name pointer at +0x1c, read inline by TextXmlWriter::serializeNode (PLAYER 0x00628a60)
+		// for the mime-type attribute. No 2013 symbol names this accessor.
+		const Name* getName() const { return name; }
+
 		bool isNull() const { return id.size()==0; }
 		bool isAsset() const { return id.compare(0, 11, "rbxasset://") == 0; }
 		bool isAssetId() const { return id.compare(0, 13, "rbxassetid://") == 0; }

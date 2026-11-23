@@ -73,7 +73,7 @@ address,type,size,symbol,name
 005c3050,library,62,?CopyData@BitStream@RakNet@@QBEIPAPAE@Z,public: unsigned int __thiscall RakNet::BitStream::CopyData(unsigned char **) const
 005c3090,library,10,?IgnoreBits@BitStream@RakNet@@QAEXI@Z,public: void __thiscall RakNet::BitStream::IgnoreBits(unsigned int)
 005c30a0,library,17,?IgnoreBytes@BitStream@RakNet@@QAEXI@Z,public: void __thiscall RakNet::BitStream::IgnoreBytes(unsigned int)
-005c30c0,library,9,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z
+005c30c0,library,9,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@H$0BA@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z,?store_with_release@?$atomic_impl@PAVscoped_lock@queuing_rw_mutex@tbb@@H$0BA@@internal@tbb@@IAEPAVscoped_lock@queuing_rw_mutex@3@PAV453@@Z
 005c30d0,library,50,?IsNetworkOrderInternal@BitStream@RakNet@@SA_NXZ,public: static bool __cdecl RakNet::BitStream::IsNetworkOrderInternal(void)
 005c3110,library,38,?ReverseBytes@BitStream@RakNet@@SAXPAE0I@Z,"public: static void __cdecl RakNet::BitStream::ReverseBytes(unsigned char *, unsigned char *, unsigned int)"
 005c3140,library,34,?WriteAlignedVar8@BitStream@RakNet@@QAEXPBD@Z,public: void __thiscall RakNet::BitStream::WriteAlignedVar8(char const *)

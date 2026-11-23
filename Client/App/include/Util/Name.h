@@ -17,6 +17,7 @@
 #include "rbx/atomic.h"
 #include "boost/utility.hpp"
 #include <boost/unordered_map.hpp>
+#include "boost/thread/once.hpp"
 
 namespace RBX {
 
@@ -30,13 +31,35 @@ namespace RBX {
 		// 2016-compat template declare: interned static Name per string literal.
 		// The 2013 binary inlines this pattern at use sites (typed_holder::construct_func
 		// and the Described classDescriptor singletons), so the semantics match.
-		// STUB: PLAYER 0x00480e90
+		// FUNCTION: PLAYER 0x00480e90
 		// STUB: STUDIO 0x0043f250
 		template<const char* const& sName>
 		static const Name& doDeclare()
 		{
 			static const Name* n = declare(sName);
 			return *n;
+		}
+
+		// 2013: a plain call_once target (callDoDeclare<sContentFilter> PLAYER 0x0062fc40 is a `jmp`
+		// to doDeclare 0x0062e040).
+		template<const char* const& sName>
+		static void callDoDeclare()
+		{
+			doDeclare<sName>();
+		}
+
+		// Inlined at every className() site in 2013 (Creator::getClassName 0x004c8040,
+		// NonFactoryProduct<Instance,sContentFilter>::isNullClassName 0x00632290): the NULL test,
+		// then boost::call_once(&callDoDeclare<sName>, flag) (0x0040c2c0), then doDeclare.
+		template<const char* const& sName>
+		static const Name& declare()
+		{
+			if (sName == NULL)
+				return getNullName();
+
+			static boost::once_flag flag = BOOST_ONCE_INIT;
+			boost::call_once(&callDoDeclare<sName>, flag);
+			return doDeclare<sName>();
 		}
 
 		// 2013 layout (ctor PLAYER 0x006136c0, setOrderIndex 0x00613530; operator new 0x20
@@ -70,7 +93,9 @@ namespace RBX {
 		int compare(const Name& other) const { return str.compare(other.str); }
 		std::string toString() const { return str; }
 		const char* c_str() const { return str.c_str(); }
-		bool empty() const { return str.empty(); }
+		// 2013: the null Name, compared by address (isNullClassName 0x00632290 compares className()
+		// with a second getNullName() call).
+		bool empty() const { return getNullName() == *this; }
 
 		~Name();										// public: ContentId stores Name by value
 

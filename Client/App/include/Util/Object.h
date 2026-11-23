@@ -221,7 +221,7 @@ namespace RBX
 			static int isConstructedTrue() {return 666;}
 			static int isConstructed;				// debugging - if constructed, == 666
 			const RBX::Name& getClassNameUnconstructed() const {
-				return RBX::Name::doDeclare<sClassName>();
+				return RBX::Name::declare<sClassName>();
 			}
 		public:
 			static bool wasConstructed() {return isConstructed == isConstructedTrue();}
@@ -234,7 +234,7 @@ namespace RBX
 
 			const RBX::Name& getClassName() const {
 				RBXASSERT(wasConstructed());
-				return RBX::Name::doDeclare<sClassName>();
+				return RBX::Name::declare<sClassName>();
 			}
 			// STUB: PLAYER 0x006f0aa0
 			// STUB: STUDIO 0x00805bf0
@@ -353,7 +353,7 @@ namespace RBX
 
 		static const RBX::Name& className() 
 		{ 
-			return RBX::Name::doDeclare<sClassName>();
+			return RBX::Name::declare<sClassName>();
 		};
 		
 		static bool isNullClassName() { 

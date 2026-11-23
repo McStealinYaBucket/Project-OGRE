@@ -68,12 +68,12 @@ namespace RBX {
 			return (currentStage && iStage && currentStage->getStageType() > iStage->getStageType());
 		}
 		// 2016 shape, inline in 2013 (Joint::setPrimitive 0x00820d30 inlines it).
-		World* findWorld() {
-			if (currentStage) {
-				IStage* stage = inKernel() ? currentStage->getUpstream() : currentStage;
-				return stage->getWorld();
-			}
-			return NULL;
+		World* findWorld() {	// null case first (Joint::setPrimitive 0x00820d60)
+			if (!currentStage)
+				return NULL;
+			IStage* stage = !inKernel() ? currentStage : currentStage->getUpstream();
+			return stage->getWorld();
+
 		}
 
 	private:

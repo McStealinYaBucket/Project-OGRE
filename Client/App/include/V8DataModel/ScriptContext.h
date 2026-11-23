@@ -255,9 +255,9 @@ namespace RBX {
 		// the 2016-carry decl was member).
 		static lua_State* getGlobalState(lua_State* thread);
 		// mac: 0x18EE84 (310B, batch314: ref dumps + extra-space ref wipe
-		// + lua_close + open-state counter decrement; returns the
-		// post-decrement count like the binary).
-		int closeState(lua_State* L);
+		// + lua_close + open-state counter decrement; void: 0x00672f54 discards
+		// the xadd result).
+		void closeState(lua_State* L);
 		// mac: 0x190A7A (35B, batch314: summed Shared.threadCount over
 		// both globalStates slots).
 		int getThreadCount() const;
@@ -267,7 +267,7 @@ namespace RBX {
 		static void sandboxThread(lua_State* thread);	// 2013: static (0x0066fd40 ends in ret, not ret 4)
 		// mac: 0x1909CE (171B, batch316: sandbox + identity/ script stash
 		// in the thread extra space + readback assert :1231).
-		void setThreadIdentity(lua_State* thread,
+		static void setThreadIdentity(lua_State* thread,	// 2013: static (0x006730a6 ret)
 			Security::Identities identity,
 			boost::shared_ptr<BaseScript> script);
 		// Identity readback for the assert (binary getThreadIdentity).

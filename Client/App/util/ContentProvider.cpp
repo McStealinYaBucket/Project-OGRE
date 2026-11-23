@@ -858,13 +858,14 @@ bool ContentProvider::isUrl(const std::string& s)
 
 // STUB: PLAYER 0x006676a0
 // STUB: STUDIO 0x00791be0
-void ContentProvider::readContent(const char* name, std::istream& stream, unsigned int size)
+std::string ContentProvider::readContent(const char* name, std::istream& stream, unsigned long size)
 {
 	// mac: 0x60D178 minimal (original TU: App/util/ContentProvider.cpp:1093 —
 	// consolidated here to avoid a duplicate ContentProvider.obj in the
 	// bring-up build): stream-position effect only; cache TODO (see header).
 	(void)name;
 	stream.ignore(size);
+	return std::string();
 }
 
 } // namespace RBX

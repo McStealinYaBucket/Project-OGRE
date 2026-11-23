@@ -67,8 +67,8 @@ namespace RBX {
 			return computeStandardSleepTime(stats, DataModel::throttleAt30Fps ? stepsPerSec : 1000.0);
 		}
 
-		// STUB: PLAYER 0x0072b740
-		// STUB: STUDIO 0x00799140
+		// FUNCTION: PLAYER 0x0072b740
+		// FUNCTION: STUDIO 0x00799140
 		virtual Job::Error error(const Stats& stats)
 		{
 			Job::Error result;

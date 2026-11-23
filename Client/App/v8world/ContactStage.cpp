@@ -35,8 +35,8 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x009aa880
-	// STUB: STUDIO 0x00a618d0
+	// FUNCTION: PLAYER 0x009aa880
+	// FUNCTION: STUDIO 0x00a618d0
 	void ContactStage::onEdgeAdded(Edge* e)
 	{
 		RBXASSERT(!e->inKernel());
@@ -45,7 +45,7 @@ namespace RBX {
 		if (e->getEdgeType() == Edge::CONTACT)
 		{
 			Primitive* p0 = e->getPrim0(); Primitive* p1 = e->getPrim1();
-			Joint* joint = p0->getJoint(p1, 0);
+			Joint* joint = Primitive::getJoint(p0, p1, 0);
 			if (joint == NULL || !joint->downstreamOfStage(this))
 			{
 				getDownstreamWS()->onEdgeAdded(e);

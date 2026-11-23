@@ -92,8 +92,8 @@ class HttpQueueStatsItem : public StatsItem
 	StatsItem* numSlowRequests;
 
 public:
-	// STUB: PLAYER 0x0086f270
-	// STUB: STUDIO 0x009bc430
+	// FUNCTION: PLAYER 0x0086f270
+	// FUNCTION: STUDIO 0x009bc430
 	HttpQueueStatsItem(AsyncHttpQueue* _httpQueue, Instance* httpQueueOwner) : httpQueue(_httpQueue)
 	{
 		setName("HttpQueue_" + httpQueueOwner->getName());

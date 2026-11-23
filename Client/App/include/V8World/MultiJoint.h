@@ -17,6 +17,7 @@
 
 #include "V8World/Joint.h"
 #include "Util/SurfaceType.h"
+#include "decomp.h"
 
 namespace RBX {
 
@@ -29,7 +30,7 @@ namespace RBX {
 			, maxConnector(maxConnectors)
 		{
 			for (int i = 0; i < 4; ++i)
-				connectors[i] = NULL;
+				connector[i] = NULL;
 		}
 		MultiJoint(Primitive* p0, Primitive* p1,
 			const G3D::CoordinateFrame& c0, const G3D::CoordinateFrame& c1,
@@ -39,7 +40,7 @@ namespace RBX {
 			, maxConnector(maxConnectors)
 		{
 			for (int i = 0; i < 4; ++i)
-				connectors[i] = NULL;
+				connector[i] = NULL;
 		}
 		// D2 0x587A2A: defined out of line in v8world/MutilJoint.cpp,
 		// which its asserts cite (MutilJoint.cpp:41-42); the markers
@@ -53,9 +54,10 @@ namespace RBX {
 		/*override*/ virtual bool isBroken() const;
 
 	protected:
-		int numConnector;      // +152
-		int maxConnector;      // +188
-		void* connectors[4];   // +192..207 (exact types at integration)
+		int numConnector;      // 0x94 (D2 0x009741c0 reads it; Mac +152)
+		undefined m_unk0x98[0xb8 - 0x98];  // Mac +156..+188, not yet identified
+		int maxConnector;      // 0xb8 (Mac +188)
+		void* connector[4];    // 0xbc (D2 0x009741c0: "connector[0] == NULL")
 	};
 
 	class RotateJoint : public MultiJoint

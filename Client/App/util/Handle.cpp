@@ -1,5 +1,5 @@
 /* App/util/Handle.cpp — October 2013 (bodies for Util/Handle.h).
-   InstanceHandle ctor/empty/linkTo follow March 2016 App/util/Handle.cpp verbatim.
+   InstanceHandle ctor/empty/linkTo: 2013 bodies (ctor PLAYER 0x006fa560 calls shared_from).
    operatorEqual/Less/Greater compare the shared_ptr targets (needed by
    MemoryBinder's std::map<InstanceHandle> in SerializerV2.cpp; 2016 leaves them
    to the linker — ours are defined here). */
@@ -17,6 +17,14 @@ namespace RBX {
 
 	InstanceHandle::InstanceHandle(Reflection::DescribedBase* target)
 		:target(shared_from(target))
+	{
+	}
+
+	// PLAYER 0x007a8a20, STUDIO 0x0091f4f0: no marker, the linker folds this body with
+	// boost::_bi::storage1<value<shared_ptr<T>>>'s ctor in both links, and the CSV pairing names
+	// that address after the storage1 instantiation.
+	InstanceHandle::InstanceHandle(Target t)
+		:target(t)
 	{
 	}
 

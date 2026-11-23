@@ -75,8 +75,8 @@ namespace RBX {
 	}
 	// mac: 0x3EC670 (42B, batch784): copies the FWInstance name string at
 	// fw()+24 (no NULL gate on fw(), like the binary).
-	// STUB: PLAYER 0x006c8c10
-	// STUB: STUDIO 0x007aa5c0
+	// FUNCTION: PLAYER 0x006c8c10
+	// FUNCTION: STUDIO 0x007aa5c0
 	std::string GuiItem::getTitle()
 	{
 		FWInstance* fwInstance = (FWInstance*)fw();

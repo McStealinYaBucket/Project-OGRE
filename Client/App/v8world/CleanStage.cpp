@@ -6,11 +6,11 @@
 #include "V8World/Joint.h"
 
 namespace RBX {
-
+	// STUB: PLAYER 0x008e62d0
+	// STUB: STUDIO 0x00a045d0
 	CleanStage::CleanStage(void* stageArg, World* worldArg)
 	{
-		// stageArg is NULL in every call site (World ctor).
-		(void)stageArg;
+		(void)stageArg;	// NULL at every call site (World ctor)
 		downstream = new JointStage(this, worldArg);
 		upstream = NULL;
 		world = worldArg;

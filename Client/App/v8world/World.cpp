@@ -1,13 +1,8 @@
-/* App/v8world/World.cpp -- October 2013 (edge lifecycle + world shell).
-   Bodies below are transcribed from the Studio symbolled binary; the line
-   numbers in the RBXASSERTs are the binary's own World.cpp lines.
-   TODO: full decompile (step/assemble/joinAll/auto-joint builders),
-   D2 0x5A8A28's ground teardown + :187-:193 asserts.
-   Self-audit (sendPhysics slice, batch776/778): fidelity ~99% for the
-     landed ctor/dtor/getSendPhysics/onAssemblyInSimluationStage shapes
-     (deleting order groundPrim -> sendPhysics -> stage -> contactManager,
-     +188/+192 hands, the getStageType walk); function: the class remains
-     under the TODO stack above (step/assemble drives era by era). */
+/* App/v8world/World.cpp -- October 2013.
+   ctor 0x0074ae30 and dtor 0x00749ae0 rebuilt from the 2013 bytes (World.h has the layout); the dtor's
+   asserts sit on their 2013 lines (187, 190-193).  The bodies after the dtor are still the earlier
+   Mac-based reconstruction: STUB until each is checked against PLAYER, and their asserts are not on
+   their 2013 lines yet (tools/assert_lines.py). */
 
 #include "stdafx.h"
 #include "decomp.h"
@@ -30,8 +25,196 @@
 #include <boost/bind.hpp>
 
 #include <set>
+#include <vector>
+
+// The 2013 flag macro registers only the flag (initializer PLAYER 0x00a658c0: no PlaceFilter string).
+namespace FFlag {
+	// GLOBAL: PLAYER 0x00d30efc
+	// GLOBAL: STUDIO 0x00ec17e8
+	bool ConsistentThrottlingIncrements = true;
+	int ConsistentThrottlingIncrementsIniter = FLog::RegisterFlag("ConsistentThrottlingIncrements", &ConsistentThrottlingIncrements, NULL, FASTVARTYPE_STATIC);
+}
 
 namespace RBX {
+
+	// GLOBAL: PLAYER 0x00df72a8
+	// GLOBAL: STUDIO 0x00f918d4
+	EThrottle::EThrottleType EThrottle::globalDebugEThrottle = EThrottle::ThrottleDefaultAuto;
+
+	// 0/8, 1/8, 1/4, 1/3, 1/2, 2/3, 3/4, 7/8, 15/16 of the steps throttled
+	// GLOBAL: PLAYER 0x00b52860
+	// GLOBAL: STUDIO 0x00c240f0
+	const int EThrottle::throttleSetting[] = {100000000, 8, 4, 3, 2, -3, -4, -8, -16};
+
+	// inline: World::World 0x0074ae30 carries this body and no out-of-line copy exists.
+	inline EThrottle::EThrottle()
+		: requestedSkip(1)
+		, throttleIndex(1)
+	{
+		if (FFlag::ConsistentThrottlingIncrements && globalDebugEThrottle == ThrottleDefaultAuto)
+			usedSkip = 100000000;
+		else
+			usedSkip = 1;
+	}
+
+	// FUNCTION: PLAYER 0x00745590
+	// FUNCTION: STUDIO 0x008863d0
+	bool EThrottle::increaseLoad(bool increase)
+	{
+		if (FFlag::ConsistentThrottlingIncrements && globalDebugEThrottle == ThrottleDefaultAuto)
+		{
+			if (increase)
+			{
+				if (throttleIndex > 0)
+				{
+					throttleIndex -= 1;
+					return true;
+				}
+			}
+			else
+			{
+				if (throttleIndex < 8)
+				{
+					throttleIndex += 1;
+					return true;
+				}
+			}
+		}
+		else
+		{
+			if (increase)
+			{
+				if (requestedSkip > 1)
+				{
+					requestedSkip /= 2;
+					return true;
+				}
+			}
+			else
+			{
+				if (requestedSkip < 16)
+				{
+					requestedSkip *= 2;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	// FUNCTION: PLAYER 0x00745600
+	// FUNCTION: STUDIO 0x00886440
+	bool EThrottle::computeThrottle(int step)
+	{
+		switch (globalDebugEThrottle)
+		{
+		case ThrottleDefaultAuto:
+			if (FFlag::ConsistentThrottlingIncrements)
+			{
+				usedSkip = throttleSetting[throttleIndex];
+				return (usedSkip > 0) == ((step % usedSkip) == 0);
+			}
+			else
+			{
+				usedSkip = requestedSkip;
+				return (step % usedSkip) != 0;
+			}
+		case Skip2:
+			usedSkip = 2;
+			return (step % 2) != 0;
+		case Skip4:
+			usedSkip = 4;
+			return (step % 4) != 0;
+		case Skip8:
+			usedSkip = 8;
+			return (step % 8) != 0;
+		case Skip16:
+			usedSkip = 16;
+			return (step % 16) != 0;
+		case ThrottleAlways:
+			usedSkip = 100000000;
+			return true;
+		case ThrottleDisabled:
+		default:
+			usedSkip = 1;
+			return false;
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00745720
+	// FUNCTION: STUDIO 0x00886560
+	float EThrottle::getEnvironmentSpeed() const
+	{
+		if (FFlag::ConsistentThrottlingIncrements && globalDebugEThrottle == ThrottleDefaultAuto)
+			return usedSkip > 0 ? (1.0f - (1.0f / usedSkip)) : -1.0f / usedSkip;
+		else
+			return 1.0f / usedSkip;
+	}
+
+	// FUNCTION: PLAYER 0x0074ae30
+	// STUB: STUDIO 0x0088b780
+	World::World()
+		: frmThrottle(1)
+		, inStepCode(false)
+		, inJointNotification(NULL)
+		, worldStepId(0)
+		, groundPrimitive(new Primitive(Primitive::GEOMETRY_BLOCK))
+		, numJoints(0)
+		, numContacts(0)
+		, numLinkCalls(0)
+		, profilingBreak(new Profiling::CodeProfiler("Break Time"))
+		, profilingAssembly(new Profiling::CodeProfiler("Assembler Time"))
+		, profilingFilter(new Profiling::CodeProfiler("Filter Time"))
+		, profilingWorldStep(new Profiling::CodeProfiler("World Step"))
+		, profilingUiStep(new Profiling::CodeProfiler("UI Step"))
+		, contactManager(new ContactManager(this))
+		, sendPhysics(new SendPhysics())
+		, cleanStage(new CleanStage(NULL, this))
+	{
+		groundPrimitive->setAnchoredProperty(true);
+		groundPrimitive->setWorld(this);
+		cleanStage->onPrimitiveAdded(groundPrimitive);
+
+		std::vector<Profiling::CodeProfiler*> worldProfilers;
+		loadProfilers(worldProfilers);
+	}
+
+	// FUNCTION: PLAYER 0x00749ae0
+	// FUNCTION: STUDIO 0x0088a430
+	World::~World()
+	{
+		cleanStage->onPrimitiveRemoving(groundPrimitive);
+		RBXASSERT(groundPrimitive->getNumEdges() == 0);
+		groundPrimitive->setWorld(NULL);
+
+		RBXASSERT(numJoints == 0);
+		RBXASSERT(numContacts == 0);
+		RBXASSERT(primitives.size() == 0);
+		RBXASSERT(breakableJoints.empty());
+
+		delete groundPrimitive;
+		delete sendPhysics;
+		delete cleanStage;
+		delete contactManager;
+	}
+
+	// FUNCTION: PLAYER 0x008bb760
+	SendPhysics* World::getSendPhysics()
+	{
+		return sendPhysics;
+	}
+
+	// FUNCTION: PLAYER 0x00745780
+	// FUNCTION: STUDIO 0x008865c0
+	Kernel* World::getKernel()
+	{
+		return cleanStage->getKernel();
+	}
+
+	const Kernel* World::getKernel() const
+	{
+		return cleanStage->getKernel();
+	}
 
 	// mac: 0x5ABFBD.
 	bool doNotIgnore(Primitive* p, const std::set<Primitive*>* ignore, const std::set<Primitive*>* include)
@@ -43,58 +226,26 @@ namespace RBX {
 		return true;
 	}
 
-	// STUB: PLAYER 0x00749ae0
-	// STUB: STUDIO 0x0088a430
-	World::~World()
+	// 2013 order (0x00747f20): Break, Assembly, Filter, UiStep, the ContactManager's Broadphase, then
+	// four SleepStage profilers (+0x13c..), StepJointsStage's and two Kernel ones, not ported yet.
+	// STUB: PLAYER 0x00747f20
+	// STUB: STUDIO 0x00888870
+	void World::loadProfilers(std::vector<Profiling::CodeProfiler*>& worldProfilers) const
 	{
-		// mac: 0x5A8A28 (batch778) deleting order: groundPrim ->
-		// sendPhysics -> stage -> contactManager. (The D2's
-		// CleanStage::onPrimitiveRemoving(groundPrimitive), its
-		// World.cpp:187-:193 empty-state asserts and the groundPrim
-		// field-clears queue with their own pass -- not modelled yet.)
-		delete megaClusterPrim;
-		megaClusterPrim = NULL;
-		delete sendPhysics;
-		sendPhysics = NULL;
-		delete stage;
-		stage = NULL;
-		delete contactManager;
-		contactManager = NULL;
-	}
-
-	// STUB: PLAYER 0x0074ae30
-	// STUB: STUDIO 0x0088b780
-	World::World()
-		: inStepCode(false)
-		, inJointNotification(NULL)
-		, uiStepWorldCounter(0)
-		, megaClusterPrim(new Primitive(Primitive::GEOMETRY_BLOCK))
-		, numJoints(0)
-		, numContacts(0)
-		, int128(0)
-		, contactManager(new ContactManager(this))   // +184 (C2 0x5A8230 order:
-		                                             // ContactManager first).
-		, sendPhysics(new SendPhysics())             // +188 (binary new(0x24))
-		, stage(new CleanStage(NULL, this))          // +192 (CleanStage last).
-	{
-		// mac: 0x5A8308: setAnchoredProperty(true) + the world backref at
-		// megaClusterPrim+World, then CleanStage::onPrimitiveAdded.
-		megaClusterPrim->setAnchoredProperty(true);
-		static_cast<CleanStage*>(stage)->onPrimitiveAdded(megaClusterPrim);
-	}
-
-	// STUB: PLAYER 0x008bb760
-	// (ICF-folded getter of +0xb0; mac 0x5A902E)
-	SendPhysics* World::getSendPhysics()
-	{
-		return sendPhysics;   // +188.
+		worldProfilers.push_back(profilingBreak.get());
+		worldProfilers.push_back(profilingAssembly.get());
+		worldProfilers.push_back(profilingFilter.get());
+		worldProfilers.push_back(profilingUiStep.get());
+		worldProfilers.push_back(contactManager->profiler.get());
 	}
 
 	// mac: 0x5A9998 (44B, batch776): the stage chain walk to the
 	// MovingAssemblyStage, then the grounded-assembly removal there.
+	// FUNCTION: PLAYER 0x00746270
+	// FUNCTION: STUDIO 0x00887090
 	int World::onAssemblyInSimluationStage(Assembly* a)
 	{
-		IStage* stageLink = stage;   // binary: [this+0xC0] (+192).
+		IStage* stageLink = cleanStage;   // binary: [this+0xC0] (+192).
 		while (stageLink->getStageType() != IStage::MOVING_ASSEMBLY_STAGE)
 		{
 			stageLink = stageLink->getDownstream();   // binary: [i+8].
@@ -103,26 +254,20 @@ namespace RBX {
 			static_cast<MovingAssemblyStage*>(stageLink)->removeMovingGroundedAssembly(a));
 	}
 
-	// mac: 0x5AC8D4 -- "!inStepCode file: include/V8World/World.h line: 142".
-	void World::assertNotInStep()
-	{
-		RBXASSERT(!inStepCode);
-	}
-
 	// mac: 0x5A9AB0 / 0x5A9ADA (42B each, batch219a): forward to the +192
 	// stage (Joint::setPrimitive world path).
-	// STUB: PLAYER 0x00745a00
-	// STUB: STUDIO 0x00886840
+	// FUNCTION: PLAYER 0x00745a00
+	// FUNCTION: STUDIO 0x00886840
 	void World::onJointPrimitiveNulling(Joint* joint, Primitive* prim)
 	{
-		static_cast<CleanStage*>(stage)->onJointPrimitiveNulling(joint, prim);
+		cleanStage->onJointPrimitiveNulling(joint, prim);
 	}
 
-	// STUB: PLAYER 0x00745a10
-	// STUB: STUDIO 0x00886850
+	// FUNCTION: PLAYER 0x00745a10
+	// FUNCTION: STUDIO 0x00886850
 	void World::onJointPrimitiveSet(Joint* joint, Primitive* prim)
 	{
-		static_cast<CleanStage*>(stage)->onJointPrimitiveSet(joint, prim);
+		cleanStage->onJointPrimitiveSet(joint, prim);
 	}
 
 	// mac: 0x5AAF40 -- RBXASSERT(num == 1) at World.cpp:746.
@@ -164,7 +309,7 @@ namespace RBX {
 			p0->getGeometryType() != Primitive::GEOMETRY_MEGACLUSTER &&
 			p1->getGeometryType() != Primitive::GEOMETRY_MEGACLUSTER)
 		{
-			Joint* other = p0->getJoint(p1, 0);
+			Joint* other = Primitive::getJoint(p0, p1, 0);
 			if (other != NULL &&
 				isKernelOrForeignEdge(other) && isKernelOrForeignEdge(joint) &&
 				isAutoFamilyOrForeignEdge(other) && isAutoFamilyOrForeignEdge(joint))
@@ -173,7 +318,7 @@ namespace RBX {
 			}
 		}
 
-		stage->onEdgeAdded(joint);                  // vtbl+0x10
+		cleanStage->onEdgeAdded(joint);                  // vtbl+0x10
 		++numJoints;                                 // +120
 
 		if (joint->isBreakable())
@@ -195,13 +340,13 @@ namespace RBX {
 	}
 
 	// mac: 0x5AAFD2.
-	// STUB: PLAYER 0x00747eb0
-	// STUB: STUDIO 0x00888800
+	// FUNCTION: PLAYER 0x00747eb0
+	// FUNCTION: STUDIO 0x00888800
 	void World::removeJoint(Joint* joint)
 	{
 		assertNotInStep();
 		removeFromBreakable(joint);
-		stage->onEdgeRemoving(joint);                // vtbl+0x14
+		cleanStage->onEdgeRemoving(joint);                // vtbl+0x14
 		--numJoints;
 	}
 
@@ -229,15 +374,15 @@ namespace RBX {
 	void World::destroyJoint(Joint* joint)
 	{
 		RBXASSERT(joint);
-		inJointNotification = joint;                 // +52
-		jointNotificationSignal(joint);              // signal at +4
+		inJointNotification = joint;
+		autoDestroySignal(joint);
 		inJointNotification = NULL;
 	}
 
 	// mac: 0x5AB290.
 	void World::insertContact(Contact* contact)
 	{
-		stage->onEdgeAdded(contact);                 // vtbl+0x10
+		cleanStage->onEdgeAdded(contact);                 // vtbl+0x10
 		++numContacts;                                // +124
 	}
 
@@ -246,14 +391,14 @@ namespace RBX {
 	// STUB: STUDIO 0x008868b0
 	void World::destroyContact(Contact* contact)
 	{
-		stage->onEdgeRemoving(contact);               // vtbl+0x14
+		cleanStage->onEdgeRemoving(contact);               // vtbl+0x14
 		--numContacts;
 	}
 
 	// mac: 0x5AA9F8 (32B).  Exactly one call: append to the +32 array.
 	void World::reportTouchInfo(const TouchInfo& info)
 	{
-		touchInfoQueue.append(info);
+		touchReporting.append(info);
 	}
 
 	// mac: 0x5AAA18 (batch259: prim+253 anchored check gates the +124
@@ -371,14 +516,11 @@ namespace RBX {
 		RBXASSERT(prim->getFirstEdge() == NULL);  // :859 "!p->getFirstEdge()"
 		RBXASSERT(prim->getNumEdges() == 0);  // :860 "!p->getNumEdges()"
 		RBXASSERT(prim->getWorld() == NULL);  // :861 "!p->getWorld()"
-		RBXASSERT(prim != NULL);  // IndexArray.h:60 "item"
-		RBXASSERT(prim->getWorldIndex() == -1);  // IndexArray.h:61 "indexOf(item) == -1"
-		prim->setWorldIndex((int)primitives.size());
-		primitives.append(prim);
+		primitives.fastAppend(prim);
 		prim->setWorld(this);
 		// IWorldStage lacks the hooks (see header note); same static_cast
 		// the harness uses.
-		static_cast<CleanStage*>(stage)->onPrimitiveAdded(prim);  contactManager->onPrimitiveAdded(prim);
+		cleanStage->onPrimitiveAdded(prim);  contactManager->onPrimitiveAdded(prim);
 		RBXASSERT(!inStepCode);  // :869 "!inStepCode" (World.cpp:869)
 	}
 
@@ -394,19 +536,8 @@ namespace RBX {
 		RBXASSERT(prim->getWorld() != NULL);  // :877 "p->getWorld()" (World.cpp:877)
 		destroyAutoJoints(prim, NULL, !keepJoints, !keepJoints);
 		contactManager->onPrimitiveRemoved(prim);
-		static_cast<CleanStage*>(stage)->onPrimitiveRemoving(prim);
-		// IndexArray::fastRemove(this+60, prim) equivalent.
-		RBXASSERT(prim->getWorldIndex() >= 0
-			&& prim->getWorldIndex() < (int)primitives.size());
-		RBXASSERT(primitives[prim->getWorldIndex()] == prim);
-		{
-			int idx = prim->getWorldIndex();
-			primitives[idx] = primitives.back();
-			primitives.pop_back();
-			if (idx < (int)primitives.size())
-				primitives[idx]->setWorldIndex(idx);
-			prim->setWorldIndex(-1);
-		}
+		cleanStage->onPrimitiveRemoving(prim);
+		primitives.fastRemove(prim);
 		prim->setWorld(NULL);
 		RBXASSERT(prim->getFirstEdge() == NULL);  // :888 (World.cpp:888)
 		RBXASSERT(prim->getNumEdges() == 0);  // :889 (World.cpp:889)
@@ -419,7 +550,7 @@ namespace RBX {
 	// mac: 0x5AA47E (29B).
 	int World::getUiStepId()
 	{
-		return uiStepWorldCounter / Constants::worldStepsPerUiStep();
+		return worldStepId / Constants::worldStepsPerUiStep();
 	}
 
 	// mac: 0x5AB4B2 -- createAutoJoints(p, NULL, NULL).  The 3-arg body (0x5AC2E0,
@@ -430,8 +561,8 @@ namespace RBX {
 		createAutoJoints(prim, NULL, NULL);
 	}
 
-	// mac: 0x5AC2E0 (335B).  assertNotInStep (World.cpp:999); ++int128;
-	// scratchPrimitives.resize(0, false); fill via the hash walk (flag 0 =
+	// mac: 0x5AC2E0 (335B).  assertNotInStep (World.cpp:999); ++numLinkCalls;
+	// tempPrimitives.resize(0, false); fill via the hash walk (flag 0 =
 	// unlimited); for each survivor: doNotIgnore(ignore, include) gate,
 	// skip when prim->getJoint(other, 0) already links them, else canJoin
 	// and on success insertJoint + the inJointNotification-bracketed signal
@@ -442,22 +573,22 @@ namespace RBX {
 		std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims)
 	{
 		assertNotInStep();  // World.cpp:999 "!inStepCode"
-		++int128;
-		scratchPrimitives.resize(0, false);
+		++numLinkCalls;
+		tempPrimitives.resize(0, false);
 		contactManager->getPrimitivesTouchingExtents(
-			prim->getFastFuzzyExtents(), prim, 0, scratchPrimitives);
-		for (int i = 0; i < scratchPrimitives.size(); ++i)
+			prim->getFastFuzzyExtents(), prim, 0, tempPrimitives);
+		for (int i = 0; i < tempPrimitives.size(); ++i)
 		{
-			Primitive* other = scratchPrimitives[i];
+			Primitive* other = tempPrimitives[i];
 			if (!doNotIgnore(other, ignorePrims, includePrims))
 				continue;
-			if (prim->getJoint(other, 0) != NULL)
+			if (Primitive::getJoint(prim, other, 0) != NULL)
 				continue;
 			if (Joint* joint = JointBuilder::canJoin(prim, other))
 			{
 				insertJoint(joint);
 				inJointNotification = joint;
-				jointNotificationSignal(joint);
+				autoJoinSignal(joint);
 				inJointNotification = NULL;
 			}
 		}
@@ -535,9 +666,8 @@ namespace RBX {
 		// wired chain (insertContact/insertJoint -> Clean -> ... ->
 		// EdgeStage::insertEdge links into the lists), arming the hash's
 		// getContact gate -- one live edge per pair, binary behavior.
-		for (int i = 0; i < (int)primitives.size(); ++i)
+		for (int i = 0; i < primitives.size(); ++i)
 		{
-			RBXASSERT(primitives[i]->getWorldIndex() == i);  // IndexArray.h:103 "indexOf(array[n]) == n"
 			Primitive* prim = primitives[i];
 			if (prim->getGeometryType() == Primitive::GEOMETRY_MEGACLUSTER)
 				continue;
@@ -552,7 +682,6 @@ namespace RBX {
 			}
 			if (!hasJoinable)
 				continue;
-			RBXASSERT(primitives[i]->getWorldIndex() == i);  // IndexArray.h:103 (dispatch gate)
 			createAutoJoints(prim, NULL, NULL);
 		}
 		assemble();
@@ -566,7 +695,7 @@ namespace RBX {
 		// ours is complete (CleanStage-wired), so the tripwire is dead but
 		// harmless. The assemble terminal queues behind cleanMechanism
 		// (Mechanism flow -- TreeStage::assemble would link it).
-		IStage* stageIt = stage;
+		IStage* stageIt = cleanStage;
 		while (stageIt != NULL && stageIt->getStageType() != IStage::TREE_STAGE)
 			stageIt = stageIt->getDownstream();
 		if (stageIt == NULL)
@@ -579,7 +708,7 @@ namespace RBX {
 	// mac: 0x5A9B32: walk to type 5, answer the tree's set-empty.
 	bool World::isAssembled()
 	{
-		IStage* stageIt = stage;
+		IStage* stageIt = cleanStage;
 		while (stageIt != NULL && stageIt->getStageType() != IStage::TREE_STAGE)
 			stageIt = stageIt->getDownstream();
 		if (stageIt == NULL)

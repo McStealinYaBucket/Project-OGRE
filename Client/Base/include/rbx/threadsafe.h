@@ -15,6 +15,7 @@
 #include "RbxPlatform.h"
 
 #include "boost/thread/mutex.hpp"
+#include "tbb/spin_mutex.h"
 
 using boost::shared_ptr;
 
@@ -167,49 +168,13 @@ namespace RBX
 namespace rbx
 {
 
-	class spin_mutex
+	// 2013 Windows: TBB 2.1's tbb::spin_mutex (3rdparty/tbb-2.1), as a class of its own: PLAYER's
+	// symbols spell `class rbx::spin_mutex` (boost::shared_ptr<rbx::spin_mutex> dtor 0x00405b50).
+	// One lock byte; scoped_lock keeps the byte __TBB_LockByte (PLAYER 0x00402240) returned and
+	// stores it back on release (ThreadPoolData::getNextTask's pop_if_present 0x0082bad0,
+	// WeakThreadRef ctor 0x00872425, Body::getPV_Spin_Lock 0x007554e0).
+	class spin_mutex : public tbb::spin_mutex
 	{
-        rbx::atomic<int> sl;
-
-	public:
-		spin_mutex()
-		{
-			// init			
-		}
-
-		~spin_mutex()
-		{
-			// destroy
-		}
-        
-        bool try_lock(){
-			return sl.compare_and_swap(1,0) == 0;
-        }
-		
-		void lock(){
-			while(sl.compare_and_swap(1,0)!=0){}
-		}
-        void unlock(){
-            sl.compare_and_swap(0,1);
-        }
-
-		class scoped_lock : boost::noncopyable
-		{
-		public:
-			scoped_lock(spin_mutex& m0) : m(m0)
-			{
-				for(;;){
-					if(m.try_lock()) break;
-				}
-			}
-
-			~scoped_lock()
-			{
-				m.unlock();
-			}
-		private:
-			spin_mutex& m;
-		};
 	};
 
 	// Use this queue when you want fast performance, low

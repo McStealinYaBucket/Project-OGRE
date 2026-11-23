@@ -75,12 +75,12 @@ namespace RBX {
 
 
 	// mac: 0x57BA16 (184B, batch216).
-	// STUB: PLAYER 0x009982a0
-	// STUB: STUDIO 0x00a58600
+	// FUNCTION: PLAYER 0x009982a0
+	// FUNCTION: STUDIO 0x00a58600
 	void JointStage::visitAddedPrimitive(Primitive* p, Joint* j, std::vector<Joint*>& out)
 	{
 		RBXASSERT(edgeHasPrimitiveHere(j, p));
-		Primitive* other = j->getPrim0() == p ? j->getPrim1() : j->getPrim0();
+		Primitive* other = j->otherPrimitive(p);
 		if (edgeHasPrimitiveHere(j, other))
 			out.push_back(j);
 	}

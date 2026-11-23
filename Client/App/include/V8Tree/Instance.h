@@ -206,9 +206,9 @@ protected:
 	virtual OnDemandInstance* initOnDemand();
 
 public:
-	// FUNCTION: PLAYER 0x006beaa0
-	// FUNCTION: STUDIO 0x006ede50
-	FWInstance* fw() const { return static_cast<FWInstance*>(fwBase.get()); }	// the slot always holds an FWInstance (or subclass)
+	// Out of line in 2013, defined in Instance.cpp (which inlines it): other TUs call it (PLAYER
+	// 0x006beaa0 from the DataModel ctor 0x0064ec50 and ScriptContext::removeScript 0x00684767).
+	FWInstance* fw() const;	// the slot always holds an FWInstance (or subclass)
 	// Live +68 slot as FWRef (layout-identical single shared_ptr): the FW
 	// machinery (registerFlyweight, FWValue::set redirect) must act on the
 	// LIVE slot, not a local copy -- binary passes +68 directly (clearTerrain
@@ -410,9 +410,9 @@ public:
 	// if the parent is successfully set the parent will stay locked
 	void setAndLockParent(Instance* instance);
 
-	const std::string& getName() const  // 0x545E5E: FWInstance +24 string
+	const std::string& getName() const  // 0x545E5E: FWInstance +24 string, through fw() (removeScript 0x00684767)
 	{
-		return static_cast<const FWInstance*>(fwBase.get())->name.value;
+		return fw()->name.value;
 	}
 	virtual void setName(const std::string& value);  // 0x5451F8
 

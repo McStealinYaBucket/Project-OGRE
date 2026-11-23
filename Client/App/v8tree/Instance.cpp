@@ -1172,6 +1172,16 @@ namespace RBX {
 RBX_REGISTER_CLASS(Instance);
 }
 
+namespace RBX {
+	// Not inline in 2013 (declared in Instance.h). No marker: the kept copy (PLAYER 0x006beaa0,
+	// STUDIO 0x006ede50) sits outside Instance.obj's range, folded with identical getters
+	// (GuiText.h), and this copy's line records do not survive the fold in our link either.
+	FWInstance* Instance::fw() const
+	{
+		return static_cast<FWInstance*>(fwBase.get());
+	}
+}
+
 // FFlag::NoThrowOnReparenting at file scope (global ::FFlag per the
 // FastFlags.h convention -- NOT inside namespace RBX).
 FASTFLAGVARIABLE(NoThrowOnReparenting, false)

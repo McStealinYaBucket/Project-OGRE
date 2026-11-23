@@ -3861,7 +3861,7 @@ struct __cppobj RBX::IStage
   void **__vftable;
   RBX::IStage *upstream;
   RBX::IStage *downstream;
-  void *world;                          ///< RBX::World *
+  RBX::World *world;
 };
 
 /* 471 */
@@ -4749,7 +4749,7 @@ struct __cppobj RBX::RunService : RBX::DescribedNonCreatable<RBX::RunService, RB
 };
 
 /* 576 */
-struct __cppobj RBX::GlobalAdvancedSettings::Item : RBX::Instance
+struct __cppobj RBX::GlobalAdvancedSettings::Item : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>
 {
 };
 
@@ -4768,11 +4768,7 @@ struct __cppobj RBX::DescribedCreatable<CRenderSettingsItem, RBX::GlobalAdvanced
 {
 };
 
-/* 580 */
-struct __cppobj RBX::GlobalAdvancedSettingsItem : RBX::DescribedCreatable<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, 27, 0>, RBX::Service
-{
-  unsigned __int8 gap_61[3];
-};
+/* WARNING: no name found for type 580 */
 
 /* 581 */
 struct __cppobj RBX::CRenderSettings
@@ -4803,7 +4799,7 @@ struct __cppobj RBX::CRenderSettings
 };
 
 /* 582 */
-struct __cppobj CRenderSettingsItem : RBX::GlobalAdvancedSettingsItem, RBX::CRenderSettings
+struct __cppobj CRenderSettingsItem : RBX::GlobalAdvancedSettingsItem<CRenderSettingsItem, char const *const sRenderSettings>, RBX::CRenderSettings
 {
   unsigned __int8 profileName[28];      ///< std::string
   unsigned __int8 currentDisplaySize[4]; ///< G3D::Vector2int16
@@ -5160,5 +5156,69 @@ struct __cppobj RBX::HeartbeatTask : RBX::DataModelJob
   unsigned __int8 runService[8];        ///< boost::weak_ptr<RBX::RunService>
   unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
   double fps;
+};
+
+/* 627 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem> : RBX::Instance
+{
+};
+
+/* 628 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<CRenderSettingsItem, char const *const sRenderSettings> : RBX::DescribedCreatable<CRenderSettingsItem, RBX::GlobalAdvancedSettings::Item, char const *const sRenderSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 629 */
+struct __cppobj RBX::World
+{
+  unsigned __int8 autoJoinSignal[4];    ///< rbx::signal<void __cdecl(RBX::Joint *)>
+  unsigned __int8 autoDestroySignal[4]; ///< rbx::signal<void __cdecl(RBX::Joint *)>
+  unsigned __int8 primitiveCollideSignal[4]; ///< rbx::signal<void __cdecl(std::pair<RBX::Primitive *,RBX::Primitive *>)>
+  unsigned __int8 m_unk0x0c[4];         ///< rbx::signal<void __cdecl(RBX::Primitive *)>
+  int frmThrottle;
+  unsigned __int8 eThrottle[12];        ///< RBX::EThrottle
+  unsigned __int8 touchReporting[16];   ///< G3D::Array<RBX::World::TouchInfo,10,32>
+  bool inStepCode;
+  unsigned __int8 gap_31[3];
+  void *inJointNotification;            ///< RBX::Joint *
+  int worldStepId;
+  unsigned __int8 primitives[16];       ///< RBX::IndexArray<RBX::Primitive, {public: int & __thiscall RBX::Primitive::worldIndexFunc(void), 0}>
+  void *groundPrimitive;                ///< RBX::Primitive *
+  unsigned __int8 movingPrimitives[16]; ///< G3D::Array<RBX::Primitive *,10,32>
+  unsigned __int8 breakableJoints[12];  ///< std::set<RBX::Joint *>
+  int numJoints;
+  int numContacts;
+  int numLinkCalls;
+  unsigned __int8 tempPrimitives[16];   ///< G3D::Array<RBX::Primitive *,10,32>
+  unsigned __int8 tempJoints[16];       ///< G3D::Array<boost::shared_ptr<RBX::JointInstance>,10,32>
+  unsigned __int8 profilingBreak[4];    ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingAssembly[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingFilter[4];   ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingWorldStep[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingUiStep[4];   ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  RBX::ContactManager *contactManager;
+  RBX::SendPhysics *sendPhysics;
+  void *cleanStage;                     ///< RBX::CleanStage *
+};
+
+/* 630 */
+struct __cppobj RBX::Voxel::CellChangeListener
+{
+  void **__vftable;
+};
+
+/* 631 */
+struct __cppobj RBX::ContactManager : RBX::Voxel::CellChangeListener
+{
+  unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
+  void *spatialHash;                    ///< RBX::ContactManagerSpatialHash *
+  void *myMegaClusterPrim;              ///< RBX::Primitive *
+  RBX::World *world;
+  unsigned __int8 scratch[24];          ///< boost::unordered::unordered_set<RBX::Primitive *,boost::hash<RBX::Primitive *>,std::equal_to<RBX::Primitive *>,std::allocator<RBX::Primitive *> >
+  unsigned __int8 byte52;
+  unsigned __int8 gap_4D[3];
+  unsigned __int8 updatedTerrainRegions[24]; ///< boost::unordered::unordered_set<RBX::SpatialRegion::Id,boost::hash<RBX::SpatialRegion::Id>,std::equal_to<RBX::SpatialRegion::Id>,std::allocator<RBX::SpatialRegion::Id> >
+  unsigned __int8 profiler[4];          ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
 };
 

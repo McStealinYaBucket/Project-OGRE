@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/LuaSettings.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sLuaSettings = "LuaSettings";
@@ -18,3 +19,5 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::LuaSettings);
 }
+
+DECOMP_SIZE_ASSERT(RBX::LuaSettings, 0x88);

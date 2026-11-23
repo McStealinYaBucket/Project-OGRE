@@ -394,8 +394,8 @@ namespace RBX {
 	// mac: 0x57823A (176B, batch219a): FastLog-gated world-notify relink.
 	// DELTA (return): binary returns a byte no in-tree caller uses; void
 	// here (overrides Edge::setPrimitive -- see its DELTA).
-	// STUB: PLAYER 0x00820d30
-	// STUB: STUDIO 0x009143e0
+	// FUNCTION: PLAYER 0x00820d30
+	// FUNCTION: STUDIO 0x009143e0
 	void Joint::setPrimitive(int i, Primitive* p)
 	{
 		FASTLOG3(FLog::JointLifetime, "Joint %p, setting primitive %u to %p", this, i, p);

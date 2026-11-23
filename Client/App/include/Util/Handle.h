@@ -27,7 +27,7 @@ class InstanceHandle
 public:
 	InstanceHandle() {}
 	InstanceHandle(Reflection::DescribedBase* target);
-	InstanceHandle(Target t) : target(t) {}
+	InstanceHandle(Target t);	// out of line in 2013 (PLAYER 0x007a8a20, called by MemoryBinder::processID)
 	InstanceHandle(const InstanceHandle& rhs) : target(rhs.target) {}
 
 	InstanceHandle& operator=(const InstanceHandle& rhs)

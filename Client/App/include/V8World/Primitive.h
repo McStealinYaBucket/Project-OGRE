@@ -26,7 +26,7 @@
 #include "V8World/Edge.h"
 #include "rbx/Debug.h"
 #include "V8World/IPipelined.h"
-#include "V8World/SpatialHashPrimitive.h"
+#include "V8World/BasicSpatialHashPrimitive.h"
 #include "Util/ConcurrencyValidator.h"
 #include "V8Kernel/BodyPvSetter.h"
 #include "decomp.h"
@@ -128,21 +128,21 @@ namespace RBX {
 		// PartInstance-facing live state (EAs in PartInstance.h header
 		// comment; offsets: specificGravity +256/friction +260/
 		// elasticity +264/anchored +253/dragging +252).
-		int getGeometryType() const { return geometryType; }
+		int getGeometryType() const;	// 0x00753cb0
 
 		// Primitive::getCollideType (called by ContactManager::createContact
 		// mac: 0x563ABE).  The binary forwards to its Geometry object (virtual
 		// per-kind: Ball 1, Block 2, Poly 3).  Our Primitive carries only
 		// the type int, so this mirrors newGeometry's switch exactly:
 		// 1->1 (Ball), 4..10->3 (Poly), everything else->2 (Block).
-		int getCollideType() const
-		{
-			if (geometryType == GEOMETRY_BALL)
-				return 1;
-			if (geometryType >= GEOMETRY_WEDGE && geometryType <= GEOMETRY_MEGACLUSTER)
-				return 3;
-			return 2;
-		}
+		int getCollideType() const;	// 0x00753d20
+
+
+
+
+
+
+
 		void setFriction(float value);  // 0x00753ff0
 		float getFriction() const { return friction; }
 		void setElasticity(float value);  // 0x00754030
@@ -197,7 +197,7 @@ namespace RBX {
 		// of that dispatch (the geometry kinds whose override is non-true).
 		bool isGeometryOrthogonal() const
 		{
-			switch (geometryType)
+			switch (getGeometryType())
 			{
 			case GEOMETRY_WEDGE:
 			case GEOMETRY_PRISM:
@@ -325,8 +325,8 @@ namespace RBX {
 		// Signature: the mangled 0x590916 is getJoint(Primitive*,Primitive*,int)
 		// counting `this`, i.e. p0->getJoint(p1, n) -- World calls it that way
 		// at 0x5AAD76.
-		Joint* getJoint(Primitive* p1, int n);
-		const G3D::Vector3& getSize() const { return partSize; }
+		static Joint* getJoint(Primitive* p0, Primitive* p1, int n);	// static: ContactStage::onEdgeAdded 0x009aa93c pushes p0
+		const G3D::Vector3& getSize() const;	// 0x00753d80
 		// mac: 0x5911DE (176B): per-component clamp to [0, 2048], then if the
 		// volume exceeds 4.096e15, y = floor(1e6 / (x*z)).  Pure (ignores
 		// this; non-const member per the mangling).  NaN flows through
@@ -342,7 +342,7 @@ namespace RBX {
 		// writes through here via PartInstance::setPhysics equivalent).
 		// 2013: out of line, the body's PV position (0x00755f00 tail-jumps to Body::getPV_Spin_Lock).
 		const G3D::CoordinateFrame& getCoordinateFrame() const;
-		void setCoordinateFrame(const G3D::CoordinateFrame& value) { coordinateFrame = value; ++bodyUpdateSerial; }
+		void setCoordinateFrame(const G3D::CoordinateFrame& value);	// through the body's PV (Primitive.cpp)
 
 		// mac: 0x591E02 / 0x59199E.  Both read the GRID size from *(this+0xEC)
 		// (floats at +4/+8/+0xC of that object; the +0 dword is never read --
@@ -390,7 +390,7 @@ namespace RBX {
 		// (not ported).  Here it is bumped by every mutation that would
 		// invalidate the cached fuzzy extents, which preserves the observable
 		// caching behaviour of getFastFuzzyExtents.
-		unsigned int getBodyUpdateSerial() const { return bodyUpdateSerial; }
+		unsigned int getBodyUpdateSerial() const;	// the body's state index (Body+0xa0)
 
 		// ---- World membership (insert/removePrimitive 0x5AB4E0/0x5AB856) ----
 		// Upper lattice (Clump/Assembly/Mechanism walks): the binary
@@ -402,8 +402,8 @@ namespace RBX {
 			return static_cast<IndexedMesh*>(static_cast<SpanningNode*>(this));
 		}
 		// PV hand-out for the velocity accessors (PartInstance 0x441A7C+).
-		PV* getPV() { return &pv; }
-		const PV* getPV() const { return &pv; }
+		PV* getPV();
+		const PV* getPV() const;
 		const IndexedMesh* getMesh() const {
 			return static_cast<const IndexedMesh*>(static_cast<const SpanningNode*>(this));
 		}
@@ -414,14 +414,14 @@ namespace RBX {
 		bool inPipeline() const { return IPipelined::inPipeline(); }
 		int getWorldIndex() const { return worldIndex; }
 		World* getWorld() const { return world; }
+		// World's IndexArray key (out of line in World.obj, PLAYER 0x00745580: lea eax,[ecx+0xe0]).
+		int& worldIndexFunc() { return worldIndex; }
 		// Writers: World insert/remove own world/worldIndex; the stage owns
-		// the inPipeline entry/exit effect (putInPipeline/removeFromPipeline
-		// in CleanStage).  Public like the EdgeList members above (binary
-		// has no access control at runtime).
+		// the inPipeline entry/exit effect (CleanStage).
 		void setWorldIndex(int value) { worldIndex = value; }
 		void setWorld(World* value) { world = value; }
 		// Edge counts for the :860/:889 asserts (contacts + joints).
-		int getNumEdges() const { return contacts.size() + joints.size(); }
+		int getNumEdges() const { return joints.size() + contacts.size(); }
 		// List counts (JointStage :116/:141 read the raw sizes; same sums).
 		int getNumContacts() const { return contacts.size(); }
 		int getNumJoints() const { return joints.size(); }
@@ -534,15 +534,6 @@ namespace RBX {
 		float jointK;                // 0x164
 		float (Primitive::*jointKCompute)();  // 0x168 (C2 &computeJointK; 8 bytes under MI)
 
-		// ---- Bring-up members (not in the 2013 layout) ----
-		int geometryType;
-		G3D::Vector3 partSize;
-		G3D::CoordinateFrame coordinateFrame;  // identity until placed
-		PV pv;
-		unsigned int bodyUpdateSerial;  // stands in for Body+0xa0
-	public:
-		float contactElasticity316;   // Contact::onPrimitiveContactParametersChanged
-		bool contactParamsDirty320;
 	};
 
 } // namespace RBX

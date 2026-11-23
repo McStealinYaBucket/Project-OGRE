@@ -117,14 +117,14 @@ TaskScheduler::Job::~Job()
 	FASTLOG1(FLog::TaskSchedulerInit, "Job Destroyed - this(%p)", this);
 	FASTLOGS(FLog::TaskSchedulerInit, "JobName(%s)", name);
 }
-// STUB: PLAYER 0x009b98b0
-// STUB: STUDIO 0x00a70870
+// FUNCTION: PLAYER 0x009b98b0
+// FUNCTION: STUDIO 0x00a70870
 TaskScheduler::Job::Error TaskScheduler::Job::computeStandardError(const Stats& stats, double desiredHz)
 {
 	return stats.timespanSinceLastStep.seconds() * desiredHz;
 }
 // STUB: PLAYER 0x009b9a90
-// STUB: STUDIO 0x00a70ab0
+// FUNCTION: STUDIO 0x00a70ab0
 Time::Interval TaskScheduler::Job::computeStandardSleepTime(const Stats& stats, double desiredHz)
 {
 	shared_ptr<Arbiter> ar(getArbiter());
@@ -148,11 +148,11 @@ Time::Interval TaskScheduler::Job::computeStandardSleepTime(const Stats& stats, 
 		return minTime;
 	return result;
 }
-// STUB: PLAYER 0x009b98d0
-// STUB: STUDIO 0x00a70890
+// FUNCTION: PLAYER 0x009b98d0
+// FUNCTION: STUDIO 0x00a70890
 TaskScheduler::Job::Stats::Stats(Job& job, Time now)
 {
-	timeNow = now;
+	// (2013 has no timeNow member; this line keeps the later asserts on their lines)
 	timespanSinceLastStep = now - job.timeofLastStep;
 	timespanOfLastStep = job.timespanOfLastStep;
 }
@@ -169,16 +169,16 @@ void TaskScheduler::Job::startSleeping()
 	state = Sleeping;
 	timeofLastSleep = Time::now<Time::Fast>();
 }
-// STUB: PLAYER 0x009b99b0
-// STUB: STUDIO 0x00a709d0
+// FUNCTION: PLAYER 0x009b99b0
+// FUNCTION: STUDIO 0x00a709d0
 void TaskScheduler::Job::updateWakeTime()
 {
 	Time now = Time::now<Time::Fast>();
 	Job::Stats stats(*this, now);
 	wakeTime = now + sleepTime(stats);
 }
-// STUB: PLAYER 0x009b9cd0
-// STUB: STUDIO 0x00a70cf0
+// FUNCTION: PLAYER 0x009b9cd0
+// FUNCTION: STUDIO 0x00a70cf0
 void TaskScheduler::Job::updateError(const Time& now)
 {
 	Job::Stats stats(*this, now);

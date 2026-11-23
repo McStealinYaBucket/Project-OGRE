@@ -1,5 +1,8 @@
 LUAI_EXTRASPACE = sizeof(RobloxExtraSpace) (44 bytes) and the luai_userstate* hooks construct,
-destroy and reset it (2016 shape, 2013 layout; stand-in class, see the comment in the patch).
+destroy and reset it. Two views of one layout: the Lua TUs (LUA_CORE/LUA_LIB) see opaque members
+and only declared constructors/destructor; every other TU (App) sees the typed 2013 members
+(Hook, shared_ptr<Shared>, intrusive_ptr<Node>, identity:5, bool yieldCaptured:1, weak_ptr,
+scoped_ptr) and their inline helpers, at the same offsets.
 
 Justification (PLAYER bytes): luaE_newthread 0x00876420 allocates 0xa4 = 0x78 + 0x2c and returns
 block+0x2c; lua_newstate 0x00876a00 allocates 0x1a4 and places the root extra space with an
@@ -8,24 +11,33 @@ out-of-line RobloxExtraSpace() 0x00876970 under an EH state (placement new); lua
 mislabels that one "lua_newthread"), which calls RobloxExtraSpace(RobloxExtraSpace*) 0x00874f40;
 luaE_freethread 0x00876830 and lua_close 0x008768a0 call ~RobloxExtraSpace 0x008766a0 on L-0x2c;
 lua_resume 0x008ab8e0 clears bit 0 of byte [L-0x10] (yieldCaptured, a 1-bit unit of its own at
-+0x1c; identity:5 is the low 5 bits of the dword at +0x18 per 0x00874f40, so 2013 used two
-allocation units where 2016 packs one, 44 vs 40 bytes). The ctor at 0x00874f40 asserts at
-luaconf.h:852 (push 0x354); the bodies are RBX code and are not reproduced here.
++0x1c). 0x00874f40 copies the parent's members at 0xc/0x14/0x18/0x20 (identity sign-extended with
+shl/sar 0x1b, so an enum bit-field), zeroes 0x28, increments Shared+0 and inserts this into
+Shared+8, and asserts at luaconf.h:852 (push 0x354); ~RobloxExtraSpace asserts at :862 (0x35e).
+App code reads the typed members at L-0x2c (spawn 0x00674850, Node::create 0x00872480).
+The constructor and destructor bodies are not reproduced here.
 
 --- a/luaconf.h
 +++ b/luaconf.h
-@@ -720,7 +720,55 @@
+@@ -720,7 +720,105 @@
  ** CHANGE (define) this if you really need that. This value must be
  ** a multiple of the maximum alignment required for your machine.
  */
 -#define LUAI_EXTRASPACE		0
-+/* ROBLOX: per-thread RBX state in front of every lua_State. Stand-in for the 2013
-+** class: the layout is PLAYER's (44 bytes, see RobloxExtraSpace(RobloxExtraSpace*)
-+** 0x00874f40) but the members are opaque and the constructors/destructor are only
-+** declared; PLAYER never inlines them into Lua code (the real ones carry
-+** RBXASSERTs at luaconf.h lines 852 and 862 and RBX::Intrusive::Set calls). */
++/* ROBLOX: per-thread RBX state in front of every lua_State, 44 bytes (PLAYER: luaE_newthread
++** 0x00876420 allocates 0x78 + 0x2c; App code reads it at L-0x2c, spawn 0x00674850).
++** Two views of one layout. The Lua core (LUA_CORE/LUA_LIB) sees opaque members, because its
++** TUs build against stand-in headers and only call the out-of-line constructors/destructor
++** (RobloxExtraSpace(RobloxExtraSpace*) 0x00874f40, asserts here at line 852;
++** ~RobloxExtraSpace 0x008766a0, line 862). App sees the typed members. Offsets and types are
++** PLAYER's, from 0x00874f40: Hook 0, shared_ptr<Shared> 0xc, intrusive_ptr<Node> 0x14,
++** identity:5 at 0x18 (signed: shl/sar 0x1b when copied, so the Identities enum), yieldCaptured
++** a bool unit of its own at 0x1c (and byte [+0x1c],0xfe), weak_ptr<BaseScript> 0x20,
++** scoped_ptr<Continuations> 0x28. Shared: threadCount 0, context 4, allThreads 8 (the child
++** ctor's `inc [shared]` and insert(this) on shared+8). */
 +#include <new>
 +struct lua_State;
++#if defined(LUA_CORE) || defined(LUA_LIB)
 +#pragma pack(push)
 +#pragma pack(8)
 +class RobloxExtraSpace
@@ -34,12 +46,55 @@ luaconf.h:852 (push 0x354); the bodies are RBX code and are not reproduced here.
 +	void *shared[2];        /* +0x0c boost::shared_ptr<Shared> */
 +	void *node;             /* +0x14 boost::intrusive_ptr<Node> */
 +public:
-+	unsigned int identity : 5;  /* +0x18 */
-+	bool yieldCaptured : 1;     /* +0x1c, a unit of its own (bit 0) */
++	int identity : 5;       /* +0x18 RBX::Security::Identities */
++	bool yieldCaptured : 1; /* +0x1c, a unit of its own (bit 0) */
 +private:
 +	void *script[2];        /* +0x20 boost::weak_ptr<RBX::BaseScript> */
 +	void *continuations;    /* +0x28 boost::scoped_ptr<Continuations> */
 +public:
++#else
++#include "boost/shared_ptr.hpp"
++#include "boost/weak_ptr.hpp"
++#include "boost/scoped_ptr.hpp"
++#include "boost/intrusive_ptr.hpp"
++#include "rbx/Intrusive/Set.h"
++#include "security/SecurityContext.h"
++#include "script/ThreadRef.h"
++namespace RBX
++{
++	class BaseScript;
++	class ScriptContext;
++	namespace Lua { class Continuations; }
++}
++#pragma pack(push)
++#pragma pack(8)
++class RobloxExtraSpace : public RBX::Intrusive::Set<RobloxExtraSpace>::Hook
++{
++	typedef RBX::Intrusive::Set<RobloxExtraSpace> AllThreads;
++	struct Shared
++	{
++		int threadCount;                /* +0x00 */
++		RBX::ScriptContext* context;    /* +0x04 */
++		AllThreads allThreads;          /* +0x08 */
++	};
++	const boost::shared_ptr<Shared> shared;     /* +0x0c */
++	typedef RBX::Lua::WeakThreadRef::Node Node;
++	boost::intrusive_ptr<Node> node;            /* +0x14 */
++public:
++	RBX::Security::Identities identity : 5;     /* +0x18 */
++	bool yieldCaptured : 1;                     /* +0x1c */
++	boost::weak_ptr<RBX::BaseScript> script;    /* +0x20 */
++	boost::scoped_ptr<RBX::Lua::Continuations> continuations;  /* +0x28 */
++
++	RBX::ScriptContext* context() const { return shared->context; }
++	size_t getThreadCount() const { return (size_t) shared->threadCount; }
++	void setContext(RBX::ScriptContext* context) { shared->context = context; }
++	Node* getNode() const { return node.get(); }
++	/* Inline in 2013 but never inlined: their only users call them out of line, so each is defined
++	** beside its user (ThreadRef.cpp, ScriptContext.cpp) with its address. */
++	void createNewNode();
++	void eraseRefsFromAllNodes();
++#endif
 +	static RobloxExtraSpace* get(struct lua_State *L)
 +	{
 +		return L ? reinterpret_cast<RobloxExtraSpace*>(((char*) L) - sizeof(RobloxExtraSpace)) : 0;
@@ -71,7 +126,7 @@ luaconf.h:852 (push 0x354); the bodies are RBX code and are not reproduced here.
  
  
  /*
-@@ -728,12 +776,29 @@
+@@ -728,12 +826,29 @@
  ** CHANGE them if you defined LUAI_EXTRASPACE and need to do something
  ** extra when a thread is created/deleted/resumed/yielded.
  */

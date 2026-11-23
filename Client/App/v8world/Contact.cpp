@@ -487,18 +487,16 @@ namespace RBX {
 		heapData->friction = calculateFriction(p0->getFriction(), p1->getFriction());
 		float minElastic = p0->getElasticity() < p1->getElasticity()
 			? p0->getElasticity() : p1->getElasticity();
-		float e0 = p0->contactElasticity316;
-		float e1 = p1->contactElasticity316;
-		if (p0->contactParamsDirty320)
-		{
-			// Callback-triple path (custom properties) -- queued; the
-			// flag is never set in-tree (see Primitive.h note).
-			RBXASSERT(false);
-		}
-		if (p1->contactParamsDirty320)
-		{
-			RBXASSERT(false);
-		}
+		// The Mac reads two more per-primitive fields here (Mac +316/+320); their 2013 Primitive
+		// counterparts are not identified (Primitive is 0x170 in 2013 and has no room left for
+		// the bring-up stand-ins), so the elasticities are used directly.
+		float e0 = p0->getElasticity();
+		float e1 = p1->getElasticity();
+
+
+
+
+
 		float combined = e0 < e1 ? e0 : e1;
 		heapData->elasticBase = combined;
 		heapData->elasticScaled = combined * Constants::getElasticMultiplier(minElastic);

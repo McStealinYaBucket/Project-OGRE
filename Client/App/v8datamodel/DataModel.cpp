@@ -1350,7 +1350,7 @@ namespace RBX {
 	// TODO(decompile): verify each body against its EA.
 	//////////////////////////////////////////////////////////////////////////////////
 
-	// STUB: PLAYER 0x0063ee60
+	// FUNCTION: PLAYER 0x0063ee60
 	DataModel::GenericJob::GenericJob(shared_ptr<DataModel> dataModel, const char* name, TaskType taskType)
 		:DataModelJob(name, taskType, false, dataModel, Time::Interval(0))
 		,dataModel(dataModel)

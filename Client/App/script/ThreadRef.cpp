@@ -26,24 +26,25 @@ using namespace RBX::Lua;
 LOGVARIABLE(WeakThreadRef, 0)
 LOGVARIABLE(ThreadRefCounts, 0)
 LOGVARIABLE(LuaBridge, 0)
-
+// GLOBAL: PLAYER 0x00e12d45
+// GLOBAL: STUDIO 0x00f8d529
 WeakThreadRef::Mutex WeakThreadRef::sync;
-
-// mac: 0x1AE368 (213B, batch448): node from L-20 + link + live ref.
-// STUB: PLAYER 0x008723d0
-// STUB: STUDIO 0x008288c0
+// FUNCTION: PLAYER 0x00872340
+// FUNCTION: STUDIO 0x00828830
+void RobloxExtraSpace::createNewNode() { node = new Node(); }	// luaconf.h inline, emitted here for Node::create
+// mac: 0x1AE368 (213B, batch448): node from the extra space (under the lock) + link + live ref.
+// FUNCTION: PLAYER 0x008723d0
+// FUNCTION: STUDIO 0x008288c0
 WeakThreadRef::WeakThreadRef(lua_State* thread)
-	: previous(NULL)
-	, next(NULL)
-	, node(*reinterpret_cast<Node**>(reinterpret_cast<char*>(thread) - 20))
+	: node(0), previous(0), next(0)
 {
 	Mutex::scoped_lock lock(sync);
+	node = RobloxExtraSpace::get(thread)->getNode();
 	addToNode();
 	addRef(thread);
 }
 
-// mac: 0x1AE590 (192B, batch448): shares the live ref, re-links under the
-// copied node scope (no addRef -- no new live thread is created).
+// mac: 0x1AE590 (192B, batch448): shares the live ref, re-links under the copied node scope (no addRef -- no new live thread is created).
 WeakThreadRef::WeakThreadRef(const WeakThreadRef& other)
 	: previous(NULL)
 	, next(NULL)
@@ -101,7 +102,6 @@ void WeakThreadRef::addToNode()
 WeakThreadRef::~WeakThreadRef()
 {
 	reset();
-
 }
 
 // mac: 0x1AE4A6 (224B, batch450): asserts no live ref yet, then news a LiveThreadRef.
@@ -122,8 +122,8 @@ void WeakThreadRef::addRef(lua_State* L)
 	}
 }
 
-// STUB: PLAYER 0x00871920
-// STUB: STUDIO 0x00827da0
+// FUNCTION: PLAYER 0x00871920
+// FUNCTION: STUDIO 0x00827da0
 void WeakThreadRef::reset()
 {
 	Mutex::scoped_lock lock(sync);
@@ -157,10 +157,8 @@ void WeakThreadRef::removeFromNode()
 }
 
 // mac: 0x1AE8C6 (114B, batch451): virtual-clear every ref, then clears first.
-// (Replaces the 2016 carry, which dropped the per-ref virtual removeRef
-// calls and zeroed ref->node instead of the +20 cache.)
-// STUB: PLAYER 0x00871990
-// STUB: STUDIO 0x00827e10
+// FUNCTION: PLAYER 0x00871990
+// FUNCTION: STUDIO 0x00827e10
 void WeakThreadRef::Node::eraseAllRefs()
 {
 	Mutex::scoped_lock lock(sync);
@@ -186,6 +184,16 @@ WeakThreadRef::Node::~Node()
 	eraseAllRefs();
 }
 
+// In ThreadRef.obj in 2013 (beside its TType ctor 0x008716b0), named "Function" (push 0x00b4ab90).
+// FUNCTION: PLAYER 0x00871a40
+// FUNCTION: STUDIO 0x00827ec0
+template<>
+const Reflection::Type& Reflection::Type::getSingleton<WeakFunctionRef>()
+{
+	static Reflection::TType<WeakFunctionRef> type("Function");
+	return type;
+}
+
 // mac: 0x1AE872 (84B, batch450): releases the live ref (logged).
 // FUNCTION: PLAYER 0x00871e50
 // FUNCTION: STUDIO 0x008282d0
@@ -201,19 +209,15 @@ void WeakThreadRef::removeRef()
 }
 
 // mac: 0x1AE980 (124B, batch450): owns a fresh Node into the L-20 slot.
-// STUB: PLAYER 0x00872480
-// STUB: STUDIO 0x00828970
-boost::intrusive_ptr<WeakThreadRef::Node> WeakThreadRef::Node::create(lua_State* thread)
+// 2013 returns the raw Node* (eax, plain ret) after RobloxExtraSpace::createNewNode 0x00872340.
+// FUNCTION: PLAYER 0x00872480
+// FUNCTION: STUDIO 0x00828970
+WeakThreadRef::Node* WeakThreadRef::Node::create(lua_State* thread)
 {
-	boost::intrusive_ptr<Node> created(new Node());
-	*reinterpret_cast<boost::intrusive_ptr<Node>*>(reinterpret_cast<char*>(thread) - 20) = created;
-	if (FLog::WeakThreadRef != 0)
-	{
-		FLog::FastLog(FLog::WeakThreadRef,
-			"WeakThreadRef::Node::create node %p",
-			reinterpret_cast<const void*>(created.get()));
-	}
-	return created;
+	RobloxExtraSpace* extra = RobloxExtraSpace::get(thread);
+	extra->createNewNode();
+	FASTLOG1(FLog::WeakThreadRef, "WeakThreadRef::Node::create node %p", extra->getNode());
+	return extra->getNode();
 }
 
 // mac: 0x1AEB2A (166B, batch448): base + vptr + function registry ref
@@ -235,8 +239,6 @@ WeakFunctionRef::WeakFunctionRef(lua_State* thread, int index)
 
 // mac: 0x1AF5A4 (232B, batch454): base copy (shares the live ref) + the
 // function VALUE re-registered under a fresh ref (ids are never shared).
-// Fetch/store states are the copier's own live thread (identical to the
-// source's by construction -- the live ref is shared).
 WeakFunctionRef::WeakFunctionRef(const WeakFunctionRef& other)
 	: WeakThreadRef(other)
 	, functionId(0)
@@ -272,8 +274,6 @@ ThreadRef::ThreadRef(lua_State* thread)
 }
 
 // mac: 0x1AF468 (145B, batch452): vptr + unref function (iff live) + base.
-// (No lock() here -- the binary reads the live thread straight through;
-// locking would perturb the diagnostics counts.)
 // STUB: PLAYER 0x00871e90
 // STUB: STUDIO 0x00828310
 WeakFunctionRef::~WeakFunctionRef()
@@ -558,7 +558,7 @@ shared_ptr<Reflection::Tuple> RBX::Lua::callCallback(WeakFunctionRef function,
 		// Fresh-child L-20 slot (same rule as delay/spawn/slots): the
 		// success path below wraps the exec thread in a WeakThreadRef,
 		// which reads it -- zero it here.
-		*(void**)((char*)newborn - 20) = NULL;
+
 		execPin = ThreadRef(newborn);
 		execThread = newborn;
 		if (FLog::Asserts != 0 && lua_type(fnThread, -1) != LUA_TTHREAD)
@@ -702,7 +702,7 @@ void FunctionScriptSlot::operator()(const Reflection::EventArguments& arguments)
 		lua_State* fresh = lua_newthread(fnThread);
 		// Fresh-child L-20 slot (same rule as delay/spawn): zero it --
 		// the refresh below wraps it in a WeakThreadRef immediately.
-		*(void**)((char*)fresh - 20) = NULL;
+
 		execPin = Lua::ThreadRef(fresh);
 		execThread = fresh;
 	}

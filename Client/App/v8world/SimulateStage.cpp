@@ -64,7 +64,7 @@ namespace RBX {
 
 
 	// mac: 0x59B91E (batch776).
-	// STUB: PLAYER 0x00998920
+	// FUNCTION: PLAYER 0x00998920
 	// FUNCTION: STUDIO 0x00a58ea0
 	void SimulateStage::putFirstMovingRootInSendPhysics(Assembly* a)
 	{
@@ -124,7 +124,7 @@ namespace RBX {
 	}
 
 	// mac: 0x59BBB6 (batch776/777) -- the refcount-map operator.
-	// STUB: PLAYER 0x009987f0
+	// FUNCTION: PLAYER 0x009987f0
 	// FUNCTION: STUDIO 0x00a58d70
 	bool SimulateStage::removeFromSendPhysics(Assembly* a)
 	{

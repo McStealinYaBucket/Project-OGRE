@@ -23,27 +23,30 @@ namespace RBX {
 
 	// mac: 0x563626 (C1 0x56361C is the 9-byte C1 thunk).
 	// STUB: PLAYER 0x007b63a0
+	// STUB: STUDIO 0x008d2550
 	ContactManager::ContactManager(World* world)
 		: spatialHash(new ContactManagerSpatialHash(world, this))
 		, myMegaClusterPrim(NULL)
 		, world(world)
 		, byte52(0)
-		, profiler(NULL)
+		, profiler(new Profiling::CodeProfiler("Broadphase"))
 	{
-		// scratch (11 buckets) + updatedTerrainRegions (11 buckets) default-
-		// construct empty; the binary sizes them at 11 up front (a pure
-		// capacity choice -- iteration order is address-hashed either way,
-		// so no test can observe the difference).
-		// The +80 profiler (new 0xA01C CodeProfiler, unported type) stays
-		// NULL -- nothing in any ported body reads it.
 	}
 
 	// mac: 0x563774: vptr reset (implicit), ~SpatialHash + delete spatialHash,
-	// profiler via vtab, delete both sets, ~ConcurrencyValidator.  Ours:
-	// members destroy themselves; the hash is explicitly deleted.
+	// profiler via vtab, delete both sets, ~ConcurrencyValidator.
+	// FUNCTION: PLAYER 0x007bb5e0
+	// FUNCTION: STUDIO 0x008d7f80
 	ContactManager::~ContactManager()
 	{
 		delete spatialHash;
+	}
+
+	// STUB: PLAYER 0x007bb6c0
+	// STUB: STUDIO 0x008d8060
+	void ContactManager::terrainCellChanged(const Voxel::CellChangeInfo& info)
+	{
+		STUB(0x007bb6c0);
 	}
 
 	// mac: 0x565536 (190B).  MEGACLUSTER prims (type 10) land in myMegaClusterPrim

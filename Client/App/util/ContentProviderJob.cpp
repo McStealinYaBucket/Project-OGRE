@@ -19,8 +19,8 @@ Time::Interval ContentProviderJob::sleepTime(const Stats& stats)
 	return computeStandardSleepTime(stats, 30);
 }
 
-// STUB: PLAYER 0x008ef6f0
-// STUB: STUDIO 0x00a0d4f0
+// FUNCTION: PLAYER 0x008ef6f0
+// FUNCTION: STUDIO 0x00a0d4f0
 TaskScheduler::Job::Error ContentProviderJob::error(const Stats& stats)
 {
 	Job::Error result;
@@ -58,8 +58,8 @@ TaskScheduler::StepResult ContentProviderJob::stepDataModelJob(const Stats& stat
 	return TaskScheduler::Stepped;
 }
 
-// STUB: PLAYER 0x008efdc0
-// STUB: STUDIO 0x00a0dbb0
+// FUNCTION: PLAYER 0x008efdc0
+// FUNCTION: STUDIO 0x00a0dbb0
 ContentProviderJob::ContentProviderJob(shared_ptr<DataModel> dataModel, const char* name,
 									   boost::function<TaskScheduler::StepResult(std::string, shared_ptr<const std::string>)> processFunc,
 									   boost::function<void(std::string)> errorFunc)

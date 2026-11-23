@@ -282,8 +282,8 @@ namespace RBX {
 	}
 
 	// mac: 0x5927EA (batch258).
-	// STUB: PLAYER 0x007554e0
-	// STUB: STUDIO 0x00894800
+	// FUNCTION: PLAYER 0x007554e0
+	// FUNCTION: STUDIO 0x00894800
 	PV* Body::getPV_Spin_Lock()
 	{
 		// OGRE vc9: was a hand-rolled _InterlockedCompareExchange8 spin; the PLAYER bytes are a

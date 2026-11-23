@@ -5,7 +5,10 @@
 
 names.txt: one C++ type name per line, spelled as import_types.py wrote it (its log's "type ..." lines).
 A type still used by another local type is kept (logged): deleting it would leave a dangling reference.
+A use is the whole name (not a prefix of a template instance: RBX::X is not used by RBX::X<A, B>).
 """
+import re
+
 import ida_auto, ida_loader, ida_typeinf, idc
 
 ida_auto.auto_wait()
@@ -21,7 +24,7 @@ def users():
         if t.get_numbered_type(til, ordinal):
             decl = t._print(None, ida_typeinf.PRTYPE_DEF | ida_typeinf.PRTYPE_MULTI) or ""
             own = t.get_type_name() or ""
-            out.update(n for n in names if n != own and n in decl)
+            out.update(n for n in names if n != own and re.search(r"(?<![\w:])" + re.escape(n) + r"(?![\w<])", decl))
     return out
 
 

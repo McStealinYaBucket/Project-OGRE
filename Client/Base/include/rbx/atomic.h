@@ -61,17 +61,17 @@ namespace rbx
 // timedout (atomic<int>(0)) with a bare `mov [esi+0x124], ebx`.
 
 
-
-
-
-
-
-
-
-
-
-
-
+namespace RBX
+{
+    // Out-of-line interlocked helpers (bodies in Base/rbx/atomic.cpp, PLAYER 0x009b8f00..0x009b8f40).
+    // rbx::atomic::swap goes through RbxInterlockedExchange (SimpleThrottlingArbiter::isThrottled
+    // 0x0064dfc0, Time::now<Fast> 0x009bb680); ++, -- and compare_and_swap stay intrinsics
+    // (intrusive_ptr_add_weak_ref 0x0040d2d0 `lock xadd`, intrusive_ptr_try_lock 0x006cbce0).
+    long RbxInterlockedIncrement(long volatile* value);
+    long RbxInterlockedDecrement(long volatile* value);
+    long RbxInterlockedExchange(long volatile* value, long exchange);
+    long RbxInterlockedCompareExchange(long volatile* value, long exchange, long comparand);
+} // namespace RBX
 
 
 
@@ -257,22 +257,11 @@ namespace rbx
         }
 
         T swap(T value) {
-            return BOOST_INTERLOCKED_EXCHANGE(&v, value);
+            return RBX::RbxInterlockedExchange(&v, value);
         }
     };
 } // namespace rbx
 
-namespace RBX
-{
-    // Out-of-line interlocked helpers (bodies in Base/rbx/atomic.cpp;
-    // EAs 0x153433/0x153415 batch452). The binary routes all Diagnostics
-    // counting through these -- never inline intrinsics -- so the ports
-    // call them too.
-    long RbxInterlockedIncrement(long volatile* value);
-    long RbxInterlockedDecrement(long volatile* value);
-    long RbxInterlockedExchange(long volatile* value, long exchange);
-    long RbxInterlockedCompareExchange(long volatile* value, long exchange, long comparand);
-} // namespace RBX
 #else // you are using the wrong atomic
 #error "not supported"
 #endif

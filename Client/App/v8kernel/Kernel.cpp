@@ -98,6 +98,24 @@ namespace RBX {
 		insertPoint(input);
 		return input;
 	}
+	// FUNCTION: PLAYER 0x00832370
+	int Kernel::insertConnector(Connector* connector)
+	{
+		RBXASSERT(!inStepCode);  // :104
+		return data->addConnector(connector);
+	}
+
+
+
+
+	// (batch222: :116 !inStepCode + delegate).
+	// FUNCTION: PLAYER 0x008323d0
+	// FUNCTION: STUDIO 0x009a4a30
+	void Kernel::removeConnector(Connector* connector)
+	{
+		RBXASSERT(!inStepCode);  // :116
+		data->removeConnector(connector);
+	}
 
 	// (batch244: post-dec equals 1 releases the last owner).
 	void Kernel::deletePoint(Point* point)
@@ -108,20 +126,6 @@ namespace RBX {
 			removePoint(point);
 			delete point;
 		}
-	}
-
-	// (batch222: :104 !inStepCode + delegate, returns the kind).
-	int Kernel::insertConnector(Connector* connector)
-	{
-		RBXASSERT(!inStepCode);  // :104
-		return data->addConnector(connector);
-	}
-
-	// (batch222: :116 !inStepCode + delegate).
-	void Kernel::removeConnector(Connector* connector)
-	{
-		RBXASSERT(!inStepCode);  // :116
-		data->removeConnector(connector);
 	}
 
 	// Array-size counters (batch222).

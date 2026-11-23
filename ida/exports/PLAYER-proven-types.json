@@ -3166,7 +3166,7 @@
    "virtual_bases": false,
    "bases": [
     {
-     "name": "RBX::GlobalAdvancedSettingsItem",
+     "name": "RBX::GlobalAdvancedSettingsItem<CRenderSettingsItem, char const *const sRenderSettings>",
      "offset": 0,
      "size": 100,
      "empty": false
@@ -4706,6 +4706,313 @@
    "base": false,
    "unique": "VHeartbeatTask@RBX@@"
   },
+  "RBX::World": {
+   "size": 184,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "autoJoinSignal",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Joint *)>",
+     "scalar": null
+    },
+    {
+     "name": "autoDestroySignal",
+     "offset": 4,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Joint *)>",
+     "scalar": null
+    },
+    {
+     "name": "primitiveCollideSignal",
+     "offset": 8,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(std::pair<RBX::Primitive *,RBX::Primitive *>)>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x0c",
+     "offset": 12,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Primitive *)>",
+     "scalar": null
+    },
+    {
+     "name": "frmThrottle",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "eThrottle",
+     "offset": 20,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::EThrottle",
+     "scalar": null
+    },
+    {
+     "name": "touchReporting",
+     "offset": 32,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Array<RBX::World::TouchInfo,10,32>",
+     "scalar": null
+    },
+    {
+     "name": "inStepCode",
+     "offset": 48,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "inJointNotification",
+     "offset": 52,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Joint",
+     "scalar": null
+    },
+    {
+     "name": "worldStepId",
+     "offset": 56,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "primitives",
+     "offset": 60,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::IndexArray<RBX::Primitive, {public: int & __thiscall RBX::Primitive::worldIndexFunc(void), 0}>",
+     "scalar": null
+    },
+    {
+     "name": "groundPrimitive",
+     "offset": 76,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Primitive",
+     "scalar": null
+    },
+    {
+     "name": "movingPrimitives",
+     "offset": 80,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Array<RBX::Primitive *,10,32>",
+     "scalar": null
+    },
+    {
+     "name": "breakableJoints",
+     "offset": 96,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Joint *,std::less<RBX::Joint *>,std::allocator<RBX::Joint *> >",
+     "scalar": null
+    },
+    {
+     "name": "numJoints",
+     "offset": 108,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numContacts",
+     "offset": 112,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numLinkCalls",
+     "offset": 116,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "tempPrimitives",
+     "offset": 120,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Array<RBX::Primitive *,10,32>",
+     "scalar": null
+    },
+    {
+     "name": "tempJoints",
+     "offset": 136,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Array<boost::shared_ptr<RBX::JointInstance>,10,32>",
+     "scalar": null
+    },
+    {
+     "name": "profilingBreak",
+     "offset": 152,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingAssembly",
+     "offset": 156,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingFilter",
+     "offset": 160,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingWorldStep",
+     "offset": 164,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingUiStep",
+     "offset": 168,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "contactManager",
+     "offset": 172,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContactManager",
+     "scalar": null
+    },
+    {
+     "name": "sendPhysics",
+     "offset": 176,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::SendPhysics",
+     "scalar": null
+    },
+    {
+     "name": "cleanStage",
+     "offset": 180,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::CleanStage",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VWorld@RBX@@"
+  },
+  "RBX::ContactManager": {
+   "size": 108,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Voxel::CellChangeListener",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "concurrencyValidator",
+     "offset": 4,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::ConcurrencyValidator",
+     "scalar": null
+    },
+    {
+     "name": "spatialHash",
+     "offset": 40,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContactManagerSpatialHash",
+     "scalar": null
+    },
+    {
+     "name": "myMegaClusterPrim",
+     "offset": 44,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Primitive",
+     "scalar": null
+    },
+    {
+     "name": "world",
+     "offset": 48,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::World",
+     "scalar": null
+    },
+    {
+     "name": "scratch",
+     "offset": 52,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_set<RBX::Primitive *,boost::hash<RBX::Primitive *>,std::equal_to<RBX::Primitive *>,std::allocator<RBX::Primitive *> >",
+     "scalar": null
+    },
+    {
+     "name": "byte52",
+     "offset": 76,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UCHAR"
+    },
+    {
+     "name": "updatedTerrainRegions",
+     "offset": 80,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_set<RBX::SpatialRegion::Id,boost::hash<RBX::SpatialRegion::Id>,std::equal_to<RBX::SpatialRegion::Id>,std::allocator<RBX::SpatialRegion::Id> >",
+     "scalar": null
+    },
+    {
+     "name": "profiler",
+     "offset": 104,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VContactManager@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -5714,7 +6021,7 @@
    "base": true,
    "unique": "V?$DescribedNonCreatable@VRunService@RBX@@VInstance@2@$E?sRunService@2@3QBDB$0BB@$0A@@RBX@@"
   },
-  "RBX::GlobalAdvancedSettingsItem": {
+  "RBX::GlobalAdvancedSettingsItem<CRenderSettingsItem, char const *const sRenderSettings>": {
    "size": 100,
    "vftable": false,
    "virtual_bases": false,
@@ -6099,6 +6406,15 @@
    "members": [],
    "base": true,
    "unique": "V?$DescribedCreatable@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Voxel::CellChangeListener": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VCellChangeListener@Voxel@RBX@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
@@ -7198,7 +7514,7 @@
    "virtual_bases": false,
    "bases": [
     {
-     "name": "RBX::Instance",
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>",
      "offset": 0,
      "size": 96,
      "empty": false
@@ -7207,6 +7523,22 @@
    "members": [],
    "base": true,
    "unique": "VItem@GlobalAdvancedSettings@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sSettingsItem@2@3QBDB@RBX@@"
   }
  },
  "missing": [],

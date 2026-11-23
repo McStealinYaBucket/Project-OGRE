@@ -58,12 +58,12 @@
 #include <stdexcept>
 #include <algorithm>
 
-// 2013 asserts with the line the PLAYER strings record ("<expr> file: <build path>/Client/App/
-// script/ScriptContext.cpp line: N"): RBX_LOG_ASSERT's shape, __FILE__ for the path.
-#define RBXASSERT_LINE(expr, line) \
-	((void) (FLog::Asserts && (!!(expr) || \
-	((RBX::_internal::_debugHook != NULL) && (RBX::_internal::_debugHook(#expr, __FILE__, line))) || \
-	(ReleaseAssert(FLog::Asserts, #expr " file: " __FILE__ " line: " #line), 0))))
+// Laid out on the 2013 assert lines (tools/assert_lines.py); every RBXASSERT sits on its 2013 line.
+
+
+
+
+
 
 LOGGROUP(UseLuaMemoryPool);
 LOGVARIABLE(ScriptContext, 0);
@@ -465,95 +465,105 @@ Reflection::BoundProp<int> ScriptContext::propLuaGcFrequency("GarbageCollectionF
 // hook (onChangedScriptEnabled = tail-call startPendingScripts 0x18A304).
 Reflection::BoundProp<bool> ScriptContext::propScriptsDisabled("ScriptsDisabled", category_Data, &ScriptContext::scriptsDisabled, &ScriptContext::onChangedScriptEnabled, Reflection::PropertyDescriptor::UI, Security::RobloxPlace);
 
+
+
+
+
+
+
+
+
+
+
+
 // Open-state counter (the binary's dword_FADA34, batch723/724): InitFunc_123
 // mac: 0x1AA72B writes the rest 0, openState 0x18B638 xadd +1 after
 // lua_newstate, closeState 0x18EEC8 xadd -1 after lua_close; closeStates
 // reads it for the leak-report gate below.
-static volatile LONG g_openLuaStates = 0;
-
-// mac: 0x18E9BC-0x18EE84 (batch722 FULL body; callers: SC detach arm 0x194FFD +
-// DataModel::clearContents 0x2CFD89).  Sets +247 outside the reset gate,
-// early-outs on resettingSimulation, then tears the Lua world down:
-// commandLineSandbox reset (+0x6C WeakThreadRef::reset); ScriptCount/
-// WaitingThreads logs on FLog::ScriptContextClose (0xF88531 default 1);
-// scripts tree erase-all (+0x84); the LeakedWaitingThreads log +
-// yieldEvent.reset() (+0xC4); waitingThreads.clear() (+0xC8); closeState
-// + NULL on both globalStates slots (+0x64/+0x68); allocator heap stats
-// (allocatorView +0x2E0) with the ScriptContextClose heap logs,
-// clearHeapMax and the "Script memory leaks" MESSAGE_ERROR when no other
-// state is open and the heap is non-empty.
-// DELTAs (loud): gcJob/waitingScriptsJob removeBlocking blocks
-// (members +0x2E4/+0x2EC unported -- scheduler era; nothing schedules
-// them, so the guarded blocks have no state to act on); the
-// FFlag::LuaDebugger branch shape (loop vs unrolled close -- both
-// variants close exactly the two slots, the port uses one loop).
-void ScriptContext::closeStates(bool resettingSimulation)
+static rbx::atomic<int> contextCount;	// ++/-- inline lock xadd (openState 0x006884b0, closeState 0x00672f54)
+// mac: 0x18B2C2 (57-line body; batch744:281-338 == batch747:538-595): the lua hook dispatcher (armed by startScript at mask 8 -- line-only -- or 11 = call+ret+line with FFlag::LuaProfilerHooks, so call/ret are the profiler surface and line is the timeout hand-off). event 3 (LUA_HOOKLINE): the owning ScriptContext arrives through the double-deref *( *(L-28) + 4 ) = extra->shared->context (the binary extra space is 40B: shared_ptr<Shared> at +12, and Shared.context = ScriptContext* at its +4 -- batch746's landed luaconf.h shapes). FASTLOG "ScriptContext::hook, timeout count %d" (@B2BE9D, batch749:13) with timedoutCount (+292), and when timedoutCount > 0, onHook(L, ar). event 1 (LUA_HOOKRET): if the profiler pointer is set, FASTLOGS(FLog::LuaProfiler, "LUARET" @B2DF41, NULL). event not in {0,1,3}: the 2013 build's line-506 guard (assert "false", batch744:319-331 -- "line: 506"). event 0 (LUA_HOOKCALL): if the profiler pointer is set, hookCall(L, ar) (real body landed TENTH ERA: lua_getinfo "nS" + stringCache.getCall + FastLogS, script\LuaProfiler.h comment). DELTA: the binary __cdecls an unsigned char up the FastLog gate results; the Lua dispatcher discards it -- landed void (the static declaration at ScriptContext.h predates the era).
+// STUB: PLAYER 0x0067e3a0
+// STUB: STUDIO 0x007e4320
+void ScriptContext::hook(lua_State* thread, lua_Debug* ar)
 {
-	contentClearing = true;              // +247 (first write, outside the gate)
-	if (resettingSimulation)
-		return;
-
-	commandLineSandbox.reset();          // +0x6C
-
-	if (FLog::ScriptContextClose != 0)
+	int event = ar->event;
+	if (event == 3)		// LUA_HOOKLINE
 	{
-		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- ScriptCount=%u", scripts.size());
-		if (yieldEvent != NULL)
-			FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- WaitingThreads=%u", yieldEvent->waiterCount());
+		ScriptContext* sc = RobloxExtraSpace::get(thread)->context();
+		if (FLog::ScriptContext)
+			FLog::FastLog(FLog::ScriptContext, "ScriptContext::hook, timeout count %d",
+				reinterpret_cast<const void*>((int)sc->timedoutCount));
+		if (sc->timedoutCount > 0)
+			sc->onHook(thread, ar);
 	}
-
-	scripts.clear();                     // +0x84 (_M_erase + head rebind + size 0)
-
-	if (yieldEvent != NULL)
-		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- LeakedWaitingThreads=%u", yieldEvent->waiterCount());
-	yieldEvent.reset();                  // +0xC4
-
-	// gcJob/waitingScriptsJob removeBlocking: DELTA (members unported).
-
-	waitingThreads.clear();              // +0xC8
-
-	for (size_t i = 0; i < 2; ++i)
+	else if (event == 1)	// LUA_HOOKRET
 	{
-		if (globalStates[i] != NULL)
-		{
-			closeState(globalStates[i]); // 0x18EE84 (both slots)
-			globalStates[i] = NULL;
-		}
+		if (LuaProfiler::instance != NULL)
+			FLog::FastLogS(FLog::LuaProfiler, "LUARET", NULL);
 	}
-
-	if (luaAllocator.get() != NULL)
+	else if (event != 0)
 	{
-		size_t heapSize, heapCount, maxHeapSize, maxHeapCount;
-		luaAllocator->getHeapStats(heapSize, heapCount, maxHeapSize, maxHeapCount);
-		if (FLog::ScriptContextClose != 0)
-		{
-			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- heapSize=%u heapCount=%u", heapSize, heapCount);
-			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- maxHeapSize=%u maxHeapCount=%u", maxHeapSize, maxHeapCount);
-		}
-		luaAllocator->clearHeapMax();
-		if (g_openLuaStates == 0 && (heapSize != 0 || heapCount != 0))
-			StandardOut::singleton()->printf(MESSAGE_ERROR, "Script memory leaks: %d bytes, %d blocks", (int)heapSize, (int)heapCount);
+		RBXASSERT(false);		// binary ScriptContext.cpp line 506
+	}
+	else	// event == 0: LUA_HOOKCALL
+	{
+		if (LuaProfiler::instance != NULL)
+			LuaProfiler::instance->hookCall(thread, ar);	// 0x197D28, real body (TENTH ERA)
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // mac: 0x18B4C2 (233B, batch313).
-// STUB: PLAYER 0x00670d20
-// STUB: STUDIO 0x007d8c80
+// FUNCTION: PLAYER 0x00670d20
+// FUNCTION: STUDIO 0x007d8c80
 lua_State* ScriptContext::getGlobalState(Security::Identities identity)
 {
-	lua_State** slot;
-	if (FFlag::SegregatedLuaEnvironments)
+	// The unsegregated arm is the fall-through (0x00670d2a), the assert texts are
+	// "globalStates[0]" (line 552) and "globalStates[vm_index]" (line 564).
+	if (!FFlag::SegregatedLuaEnvironments)
 	{
-		slot = &globalStates[Security::Context::isInRole(identity,
-			(Security::Permissions)4) ? 1 : 0];  // 4 = WritePlayer tier.
-		RBXASSERT(*slot != NULL);  // ScriptContext.cpp:564
+		RBXASSERT(globalStates[0]);
+		return globalStates[0];
 	}
 	else
 	{
-		slot = &globalStates[0];
-		RBXASSERT(*slot != NULL);  // ScriptContext.cpp:552
+
+
+
+		// Scripts with WritePlayer rights get their own VM (index 1).
+		int vm_index = 0;
+		if (Security::Context::isInRole(identity, Security::WritePlayer))
+			vm_index = 1;
+		RBXASSERT(globalStates[vm_index]);
+		return globalStates[vm_index];
 	}
-	return *slot;
 }
 
 // iOS name; the ctor connects it to camelCaseViolation. After 100 reports it disconnects.
@@ -574,6 +584,387 @@ void ScriptContext::onCamelCaseViolation(boost::shared_ptr<Instance> object, std
 	else
 		StandardOut::singleton()->printf(MESSAGE_WARNING, "\"%s.%s\" should be \"%s\"", object->getClassNameStr().c_str(), memberName.c_str(), trueName.c_str());
 }
+
+
+
+
+static void openScriptLibrary(lua_State* L, const char* libName, lua_CFunction open);
+static int scriptPanic(lua_State* L);
+// mac: 0x18B5AC core (batch320: allocator + newstate + atpanic + context link + 4 locked libs + string-metatable lock + _G table; returns the state for the caller to store. gc tuning, Bridges, globals and jobs queue in later parts).
+// STUB: PLAYER 0x00688370
+// STUB: STUDIO 0x007edad0
+lua_State* ScriptContext::openState()
+{
+	if (luaAllocator.get() == NULL)
+		luaAllocator.reset(new LuaAllocator(FLog::UseLuaMemoryPool != 0));
+	lua_State* L = lua_newstate(LuaAllocator::alloc, luaAllocator.get());
+	if (L == NULL)
+		throw std::runtime_error("Failed to create Lua state");
+	contextCount++;
+	lua_atpanic(L, scriptPanic);
+	lua_gc(L, LUA_GCSETSTEPMUL, LuaSettings::singleton().getGcStepMul());
+	lua_gc(L, LUA_GCSETPAUSE, LuaSettings::singleton().getGcPause());
+	RobloxExtraSpace::get(L)->setContext(this);
+	openScriptLibrary(L, "coroutine", luaopen_base);
+	openScriptLibrary(L, "string", luaopen_string);
+	{
+		lua_pushlstring(L, "", 0);
+		int i = lua_getmetatable(L, -1);
+		RBXASSERT(i==1);
+		lua_pushstring(L, "The metatable is locked");
+		lua_setfield(L, -2, "__metatable");
+		lua_settop(L, -3);
+	}
+	openScriptLibrary(L, "math", luaopen_math);
+	openScriptLibrary(L, "table", luaopen_table);
+	lua_createtable(L, 0, 0);
+	lua_setfield(L, LUA_GLOBALSINDEX, "_G");
+	// Bridge metatypes (batch320 EA order; 0x18B7EF block sits between _G (0x18B7BE) and the shared/print globals). Binary order 0x18B7EF- mac: 0x18BAAB: Library, AllEnumDescriptors, EnumDescriptor, Item, shared_ptr<Instance>, EventInstance, connection (shared_ptr still queues behind the Instance era), then the 17 atomic types, then WeakThreadRef::Node + 2 GenericFunctions (thread/yield eras).
+	Lua::Bridge<Lua::Library>::registerClass(L,
+		Lua::Bridge<Lua::Library>::on_index, Lua::Bridge<Lua::Library>::on_newindex);
+	Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::registerClass(L,
+		Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::on_index,
+		Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::on_newindex);
+	Lua::Bridge<Lua::EnumDescriptorPtr, true>::registerClass(L,
+		Lua::Bridge<Lua::EnumDescriptorPtr, true>::on_index,
+		Lua::Bridge<Lua::EnumDescriptorPtr, true>::on_newindex);
+	Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::registerClass(L,
+		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_index,
+		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_newindex);
+	// (shared_ptr<Instance> registerClass queues behind the Instance era, 0x18B85F.) shared_ptr<Instance> bridge (sections 258a-c; binary slot 0x18B85F).
+	Lua::Bridge<boost::shared_ptr<Instance>, false>::registerClass(L,
+		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_index,
+		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_newindex);
+	// EventInstance bridge (section 253; binary slot 0x18B87B).
+	Lua::Bridge<Lua::EventInstance>::registerClass(L,
+		Lua::Bridge<Lua::EventInstance>::on_index,
+		Lua::Bridge<Lua::EventInstance>::on_newindex);
+	// connection bridge (section 243; binary slot 0x18B897).
+	Lua::Bridge<rbx::signals::connection>::registerClass(L,
+		Lua::Bridge<rbx::signals::connection>::on_index,
+		Lua::Bridge<rbx::signals::connection>::on_newindex);
+	Lua::Bridge<G3D::CoordinateFrame>::registerClass(L,
+		Lua::Bridge<G3D::CoordinateFrame>::on_index, Lua::Bridge<G3D::CoordinateFrame>::on_newindex);
+	Lua::Bridge<RBX::Region3>::registerClass(L,
+		Lua::Bridge<RBX::Region3>::on_index, Lua::Bridge<RBX::Region3>::on_newindex);
+	Lua::Bridge<RBX::Region3int16>::registerClass(L,
+		Lua::Bridge<RBX::Region3int16>::on_index, Lua::Bridge<RBX::Region3int16>::on_newindex);
+	Lua::Bridge<G3D::Vector3int16>::registerClass(L,
+		Lua::Bridge<G3D::Vector3int16>::on_index, Lua::Bridge<G3D::Vector3int16>::on_newindex);
+	Lua::Bridge<G3D::Vector2int16>::registerClass(L,
+		Lua::Bridge<G3D::Vector2int16>::on_index, Lua::Bridge<G3D::Vector2int16>::on_newindex);
+	Lua::Bridge<G3D::Vector3>::registerClass(L,
+		Lua::Bridge<G3D::Vector3>::on_index, Lua::Bridge<G3D::Vector3>::on_newindex);
+	Lua::Bridge<G3D::Vector2>::registerClass(L,
+		Lua::Bridge<G3D::Vector2>::on_index, Lua::Bridge<G3D::Vector2>::on_newindex);
+	Lua::Bridge<RBX::RbxRay>::registerClass(L,
+		Lua::Bridge<RBX::RbxRay>::on_index, Lua::Bridge<RBX::RbxRay>::on_newindex);
+	Lua::Bridge<G3D::Color3>::registerClass(L,
+		Lua::Bridge<G3D::Color3>::on_index, Lua::Bridge<G3D::Color3>::on_newindex);
+	Lua::Bridge<RBX::BrickColor>::registerClass(L,
+		Lua::Bridge<RBX::BrickColor>::on_index, Lua::Bridge<RBX::BrickColor>::on_newindex);
+	Lua::Bridge<RBX::UDim>::registerClass(L,
+		Lua::Bridge<RBX::UDim>::on_index, Lua::Bridge<RBX::UDim>::on_newindex);
+	Lua::Bridge<RBX::UDim2>::registerClass(L,
+		Lua::Bridge<RBX::UDim2>::on_index, Lua::Bridge<RBX::UDim2>::on_newindex);
+	Lua::Bridge<RBX::Faces>::registerClass(L,
+		Lua::Bridge<RBX::Faces>::on_index, Lua::Bridge<RBX::Faces>::on_newindex);
+	Lua::Bridge<RBX::Axes>::registerClass(L,
+		Lua::Bridge<RBX::Axes>::on_index, Lua::Bridge<RBX::Axes>::on_newindex);
+	Lua::Bridge<RBX::CellID>::registerClass(L,
+		Lua::Bridge<RBX::CellID>::on_index, Lua::Bridge<RBX::CellID>::on_newindex);
+	Lua::Bridge<RBX::InputObject>::registerClass(L,
+		Lua::Bridge<RBX::InputObject>::on_index, Lua::Bridge<RBX::InputObject>::on_newindex);
+	// (WeakThreadRef::Node + 2 GenericFunction registerClasses queue behind thread/yield eras; 0x18BA73/0x18BA8F/0x18BAAB.) Node bridge (section 245; binary slot 0x18BA73).
+	Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::registerClass(L,
+		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_index,
+		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_newindex);
+	// Sync GenericFunction bridge (section 248; binary slot 0x18BA8F -- async twin at 0x18BAAB queues behind scheduleResume).
+	Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::registerClass(L,
+		Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::on_index,
+		Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::on_newindex);
+	// Async GenericAsyncFunction bridge (section 251; binary slot 0x18BAAB).
+	Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::registerClass(L,
+		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_index,
+		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_newindex);
+	// Class libraries batch 1 (section 236; binary order 0x18BAxx-0x18BB4B: the enum-gated tables -- Vector3 FromNormalId/FromAxis, Faces, Axes -- land with the EnumDescriptor::Item bridge era; CFrame/UDim/ UDim2/BrickColor/CellID/InputObject libraries queue behind their new* bodies, batch402 next). Enum singleton tables (section 239; binary slots 0x18BABB/0x18BAC3/ mac: 0x18BACB, ahead of the CFrame library) + Library table (section 241; binary slot 0x18BAB3, first of the block).
+	Lua::LibraryBridge::registerClassLibrary(L);
+	Lua::Enums::registerClassLibrary(L);
+	Lua::Enum::registerClassLibrary(L);
+	Lua::EnumItem::registerClassLibrary(L);
+	Lua::Region3Bridge::registerClassLibrary(L);
+	Lua::Region3int16Bridge::registerClassLibrary(L);
+	Lua::Vector3int16Bridge::registerClassLibrary(L);
+	Lua::Vector2int16Bridge::registerClassLibrary(L);
+	Lua::Vector3Bridge::registerClassLibrary(L);
+	Lua::Vector2Bridge::registerClassLibrary(L);
+	Lua::RbxRayBridge::registerClassLibrary(L);
+	Lua::Color3Bridge::registerClassLibrary(L);
+	Lua::BrickColorBridge::registerClassLibrary(L);
+	Lua::CoordinateFrameBridge::registerClassLibrary(L);
+	Lua::UDimBridge::registerClassLibrary(L);
+	Lua::UDim2Bridge::registerClassLibrary(L);
+	// Faces/Axes/CellID/InputObject libraries (section 240; binary slots mac: 0x18BB33/0x18BB3B/0x18BB43/0x18BB4B; SharedPtr<Instance> 0x18BB53 still queues behind the Instance era).
+	Lua::FacesBridge::registerClassLibrary(L);
+	Lua::AxesBridge::registerClassLibrary(L);
+	Lua::CellIDBridge::registerClassLibrary(L);
+	Lua::InputObjectBridge::registerClassLibrary(L);
+	// shared_ptr<Instance> reuse table (binary slot 0x18BB53, between the InputObject library and Node::create; the push weak-table lookup AVs without it -- stats() proved it live).
+	Lua::SharedPtrBridge<Instance>::registerClassLibrary(L);
+	// Instance global (binary slot 0x18BB5B, called from openState right after the SharedPtr library: luaL_register(L, "Instance")).
+	Lua::ObjectBridge::registerInstanceClassLibrary(L);
+	// Main-thread Node (binary slot 0x18BB63, batch477: sits between the InputObject library above and the game/app/Workspace globals + shared table below; the game/app/Workspace globals queue behind the DataModel era). closeState 0x18EE84 erases refs through every thread's node, so an openState'd state without one AVs on close (section 271 postmortem: intrusive_ptr px != 0 in eraseRefsFromAllNodes). Return discarded: the L-20 slot holds the ref, matching Node::create's contract.
+	Lua::WeakThreadRef::Node::create(L);
+	// game/Game/workspace/Workspace globals (0x18BB89-0x18BD7A, batches 632/668/669/671: +0x34 root-climb (getRootAncestor) pushed twice as the game/Game alias; Workspace pair via find<Workspace> (binary Instance overload -- climbs to the root provider, same call here). OverlayDataModel roots take the App-only arm instead -- queued with the overlay era. DELTA: binary pushes shared_from() unconditionally (throws/AVs for unmanaged roots); ours pushes nil when unresolvable so harness stack states stay green -- identical for heap states.
+	{
+		shared_ptr<Instance> rootSp;
+		try { rootSp = shared_from(Instance::getRootAncestor(this)); }
+		catch (const std::exception&) { }
+		if (rootSp != NULL && rootSp->isA<OverlayDataModel>())
+		{
+			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
+			lua_setfield(L, LUA_GLOBALSINDEX, "App");
+		}
+		else if (rootSp != NULL)
+		{
+			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
+			lua_setfield(L, LUA_GLOBALSINDEX, "game");
+			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
+			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
+		}
+		else
+		{
+			lua_pushnil(L);
+			lua_setfield(L, LUA_GLOBALSINDEX, "game");
+			lua_pushnil(L);
+			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
+		}
+		shared_ptr<Instance> wsSp;
+		try { wsSp = shared_from(ServiceProvider::find<Workspace>(static_cast<Instance*>(this))); }
+		catch (const std::exception&) { }
+		if (wsSp != NULL)
+		{
+			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
+			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
+			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
+			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
+		}
+		else
+		{
+			lua_pushnil(L);
+			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
+			lua_pushnil(L);
+			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
+		}
+	}
+	// Globals batch 1 (batch320 tail: shared table + print + gated crash__ + tick + time + ElapsedTime + printidentity; the rest queue behind yield/bridge/service eras).
+	lua_createtable(L, 0, 0);
+	lua_setfield(L, LUA_GLOBALSINDEX, "shared");
+	lua_pushcfunction(L, print);
+	lua_setfield(L, LUA_GLOBALSINDEX, "print");
+	if (FFlag::DebugCrashEnabled)
+	{
+		lua_pushcfunction(L, crash);
+		lua_setfield(L, LUA_GLOBALSINDEX, "crash__");
+	}
+	lua_pushcfunction(L, tick);
+	lua_setfield(L, LUA_GLOBALSINDEX, "tick");
+	// time global (binary slot 0x18BE7C, between tick and ElapsedTime; the +188/+116 DELTA above is resolved to live lookup).
+	lua_pushcfunction(L, time);
+	lua_setfield(L, LUA_GLOBALSINDEX, "time");
+	lua_pushcfunction(L, rbxTime);
+	lua_setfield(L, LUA_GLOBALSINDEX, "ElapsedTime");
+	// Globals batch 2 (section 249; binary order 0x18BED3-0x18C2BC: wait/Wait/delay/Delay/ypcall/Spawn/printidentity/dofile/loadfile/ load/settings/UserSettings/PluginManager/DebuggerManager/stats/ Stats/version/Version; LoadLibrary/LoadRobloxLibrary queue behind LibraryService -- the only unlanded batch-2 slots). DELTA: binary registers into the -10002 sandbox env; ours uses LUA_GLOBALSINDEX like batch 1 (sandbox env unlanded -- reconcile in the sandbox-era audit).
+	lua_pushcfunction(L, wait);
+	lua_setfield(L, LUA_GLOBALSINDEX, "wait");
+	lua_pushcfunction(L, wait);
+	lua_setfield(L, LUA_GLOBALSINDEX, "Wait");
+	lua_pushcfunction(L, delay);
+	lua_setfield(L, LUA_GLOBALSINDEX, "delay");
+	lua_pushcfunction(L, delay);
+	lua_setfield(L, LUA_GLOBALSINDEX, "Delay");
+	// ypcall (section 250; binary slot between Delay and Spawn in the batch477 order).
+	lua_pushcfunction(L, ypcall);
+	lua_setfield(L, LUA_GLOBALSINDEX, "ypcall");
+	lua_pushcfunction(L, spawn);
+	lua_setfield(L, LUA_GLOBALSINDEX, "Spawn");
+	// printidentity (batch637: binary slot between Spawn and dofile; the port moves it here from the batch-1 group -- registry writes only, order within the batch is not observable).
+	lua_pushcfunction(L, printidentity);
+	lua_setfield(L, LUA_GLOBALSINDEX, "printidentity");
+	// dofile/loadfile/load (batch637: pushcclosure 0x18C033/0x18C067/0x18C09B + setfield 0x18C038/0x18C081/0x18C0B5; fns dofile 0x18DC8C / loadfile 0x18DE94 / notImplemented 0x18E382).
+	lua_pushcfunction(L, dofile);
+	lua_setfield(L, LUA_GLOBALSINDEX, "dofile");
+	lua_pushcfunction(L, loadfile);
+	lua_setfield(L, LUA_GLOBALSINDEX, "loadfile");
+	lua_pushcfunction(L, load);
+	lua_setfield(L, LUA_GLOBALSINDEX, "load");
+	// settings-tree globals (0x18C0E9/0x18C11D/0x18C151/0x18C1F8).
+	lua_pushcfunction(L, settings);
+	lua_setfield(L, LUA_GLOBALSINDEX, "settings");
+	lua_pushcfunction(L, usersettings);
+	lua_setfield(L, LUA_GLOBALSINDEX, "UserSettings");
+	lua_pushcfunction(L, pluginmanager);
+	lua_setfield(L, LUA_GLOBALSINDEX, "PluginManager");
+	// Library globals (0x18C170/0x18C1A4: "LoadLibrary" then "LoadRobloxLibrary", between PluginManager and DebuggerManager).
+	lua_pushcfunction(L, loadLibrary);
+	lua_setfield(L, LUA_GLOBALSINDEX, "LoadLibrary");
+	lua_pushcfunction(L, loadRobloxLibrary);
+	lua_setfield(L, LUA_GLOBALSINDEX, "LoadRobloxLibrary");
+	lua_pushcfunction(L, debuggermanager);
+	lua_setfield(L, LUA_GLOBALSINDEX, "DebuggerManager");
+	// stats/Stats (section 250; binary order between Spawn and version/Version in the batch477 sequence).
+	lua_pushcfunction(L, stats);
+	lua_setfield(L, LUA_GLOBALSINDEX, "stats");
+	lua_pushcfunction(L, stats);
+	lua_setfield(L, LUA_GLOBALSINDEX, "Stats");
+	lua_pushcfunction(L, version);
+	lua_setfield(L, LUA_GLOBALSINDEX, "version");
+	lua_pushcfunction(L, version);
+	lua_setfield(L, LUA_GLOBALSINDEX, "Version");
+	// Enum global (section 239; binary slot 0x18C2C4, after the version/Version globals which queue behind their era).
+	Lua::Enums::declareAllEnums(L);
+	// Yielding waiters (section 249; binary 0x18C2C9: guarded singleton-construct into the yieldEvent member).
+	if (yieldEvent.get() == NULL)
+		yieldEvent.reset(new Lua::YieldingThreads(this));
+	return L;
+}
+// mac: 0x18E9BC-0x18EE84 (batch722 FULL body; callers: SC detach arm 0x194FFD +
+// DataModel::clearContents 0x2CFD89).  Sets +247 outside the reset gate,
+// early-outs on resettingSimulation, then tears the Lua world down:
+// commandLineSandbox reset (+0x6C WeakThreadRef::reset); ScriptCount/
+// WaitingThreads logs on FLog::ScriptContextClose (0xF88531 default 1);
+// scripts tree erase-all (+0x84); the LeakedWaitingThreads log + yieldEvent.reset() (+0xC4); waitingThreads.clear() (+0xC8); closeState + NULL on both globalStates slots (+0x64/+0x68); allocator heap stats (allocatorView +0x2E0) with the ScriptContextClose heap logs, clearHeapMax and the "Script memory leaks" MESSAGE_ERROR when no other state is open and the heap is non-empty. DELTAs (loud): gcJob/waitingScriptsJob removeBlocking blocks (members +0x2E4/+0x2EC unported -- scheduler era; nothing schedules them, so the guarded blocks have no state to act on); the FFlag::LuaDebugger branch shape (loop vs unrolled close -- both variants close exactly the two slots, the port uses one loop).
+void ScriptContext::closeStates(bool resettingSimulation)
+{
+	contentClearing = true;              // +247 (first write, outside the gate)
+	if (resettingSimulation)
+		return;
+	commandLineSandbox.reset();          // +0x6C
+	if (FLog::ScriptContextClose != 0)
+	{
+		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- ScriptCount=%u", scripts.size());
+		if (yieldEvent != NULL)
+			FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- WaitingThreads=%u", yieldEvent->waiterCount());
+	}
+	scripts.clear();                     // +0x84 (_M_erase + head rebind + size 0)
+	if (yieldEvent != NULL)
+		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- LeakedWaitingThreads=%u", yieldEvent->waiterCount());
+	yieldEvent.reset();                  // +0xC4
+	// gcJob/waitingScriptsJob removeBlocking: DELTA (members unported).
+	waitingThreads.clear();              // +0xC8
+	for (size_t i = 0; i < 2; ++i)
+	{
+		if (globalStates[i] != NULL)
+		{
+			closeState(globalStates[i]); // 0x18EE84 (both slots)
+			globalStates[i] = NULL;
+		}
+	}
+	if (luaAllocator.get() != NULL)
+	{
+		size_t heapSize, heapCount, maxHeapSize, maxHeapCount;
+		luaAllocator->getHeapStats(heapSize, heapCount, maxHeapSize, maxHeapCount);
+		if (FLog::ScriptContextClose != 0)
+		{
+			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- heapSize=%u heapCount=%u", heapSize, heapCount);
+			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- maxHeapSize=%u maxHeapCount=%u", maxHeapSize, maxHeapCount);
+		}
+		luaAllocator->clearHeapMax();
+		if (contextCount == 0 && (heapSize != 0 || heapCount != 0))
+			StandardOut::singleton()->printf(MESSAGE_ERROR, "Script memory leaks: %d bytes, %d blocks", (int)heapSize, (int)heapCount);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // namespace RBX
+// RobloxExtraSpace::eraseRefsFromAllNodes (luaconf.h inline), emitted here for closeState.
+// FUNCTION: PLAYER 0x00672d80
+// FUNCTION: STUDIO 0x007dac50
+void RobloxExtraSpace::eraseRefsFromAllNodes()
+{
+	for (AllThreads::Iterator iter = shared->allThreads.begin(); iter != shared->allThreads.end(); ++iter)
+		iter->node->eraseAllRefs();
+}
+namespace RBX {
+// mac: 0x18EE84 (310B, batch314: ref dumps + extra-space ref wipe + lua_close + counter decrement. The NULL-state call matches the binary (unconditional wipe call); never exercised with NULL in-tree).
+// FUNCTION: PLAYER 0x00672e60
+// FUNCTION: STUDIO 0x007dad30
+void ScriptContext::closeState(lua_State* L)
+{
+	try
+	{
+		RBX::Lua::dumpThreadRefCounts();
+		RobloxExtraSpace::get(L)->eraseRefsFromAllNodes();
+		RBX::Lua::dumpThreadRefCounts();
+	}
+	catch (std::exception& e)
+	{
+		StandardOut::singleton()->printf(MESSAGE_ERROR, "Exception thrown while erasing Lua refs: %s", e.what());
+		RBXASSERT(false);
+	}
+	RBX::Lua::dumpThreadRefCounts();
+	lua_close(L);
+	RBX::Lua::dumpThreadRefCounts();
+	contextCount--;
+}
+
 
 // mac: 0x190A9E (101B, batch313/455). Binary-pinned STATIC (called with no
 // instance); the context comes from the thread's own extra space
@@ -596,26 +987,6 @@ lua_State* ScriptContext::getGlobalState(lua_State* thread)
 	// behind the debugger-state member -- loud if the flags ever flip.
 	RBXASSERT(false && "getGlobalState(thread): debugger-state era");
 	return NULL;
-}
-
-// mac: 0x18EE84 (310B, batch314: ref dumps + extra-space ref wipe +
-// lua_close + counter decrement. The NULL-state call matches the binary
-// (unconditional wipe call); never exercised with NULL in-tree).
-// STUB: PLAYER 0x00672e60
-// STUB: STUDIO 0x007dad30
-int ScriptContext::closeState(lua_State* L)
-{
-	RBX::Lua::dumpThreadRefCounts();
-	RobloxExtraSpace* extra = (L != NULL)
-		? RobloxExtraSpace::get(L) : NULL;
-	if (extra != NULL)
-		extra->eraseRefsFromAllNodes();
-	RBX::Lua::dumpThreadRefCounts();
-	RBX::Lua::dumpThreadRefCounts();
-	if (L != NULL)
-		lua_close(L);
-	RBX::Lua::dumpThreadRefCounts();
-	return InterlockedDecrement(&g_openLuaStates);
 }
 
 // mac: 0x190A7A (35B, batch314: summed Shared.threadCount over both slots).
@@ -845,396 +1216,24 @@ void ScriptContext::sandboxThread(lua_State* thread)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // mac: 0x1909CE (171B, batch316: sandbox + identity/script stash in the
 // thread extra space + readback assert :1231).
-// STUB: PLAYER 0x00672f70
-// STUB: STUDIO 0x007dae40
+// FUNCTION: PLAYER 0x00672f70
+// FUNCTION: STUDIO 0x007dae40
 void ScriptContext::setThreadIdentity(lua_State* thread,
 	Security::Identities identity, boost::shared_ptr<BaseScript> script)
 {
 	sandboxThread(thread);
-	RobloxExtraSpace* extra = RobloxExtraSpace::get(thread);
-	// Low 5 bits take the identity, high 3 preserved (binary
-	// read-modify-write; the bitfield assignment compiles to the same).
-	extra->identity = (Security::Identities)(identity & 0x1F);
-	extra->script = script;
+	// Two get(thread) null tests in 2013 (0x00672f9c, 0x00672fb6); the bit-field store is the
+	// xor/and 0x1f/xor read-modify-write.
+	RobloxExtraSpace::get(thread)->identity = identity;
+	RobloxExtraSpace::get(thread)->script = script;
 	RBXASSERT(getThreadIdentity(thread)==identity);  // ScriptContext.cpp:1231
 }
-
 // Identity readback (binary getThreadIdentity helper).
 Security::Identities ScriptContext::getThreadIdentity(lua_State* thread)
 {
-	return (Security::Identities)(RobloxExtraSpace::get(thread)->identity & 0x1F);
+	return thread ? RobloxExtraSpace::get(thread)->identity : Security::Anonymous;	// 0x0067300d: 0 for no thread
 }
 
 // mac: 0x1978E9 (176B, batch321: throws runtime_error, caught by the
@@ -1249,6 +1248,7 @@ static int libraryWriteGuard(lua_State* L)
 }
 
 namespace Lua {
+
 	// 2013 sits here, between libraryWriteGuard 0x0066fa60 and openScriptLibrary 0x0066fb00,
 	// so the other TUs (LuaAtomicClasses registerClass 0x00880484) call it out of line.
 	// FUNCTION: PLAYER 0x0066fad0
@@ -1258,6 +1258,7 @@ namespace Lua {
 		lua_pushstring(thread, "The metatable is locked");
 		lua_setfield(thread, index - 1, "__metatable");
 	}
+
 }
 
 // mac: 0x18C76B (352B, batch320: call open + metatable lock + locked
@@ -1299,6 +1300,111 @@ static size_t pushNoArguments(lua_State* thread)
 	return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// mac: 0x1920D0 (243B, batches 497-498): assert non-empty, collect the stack values, invoke. All Asserts are log-continue (never branch).
+// onErrorHandler, mac: 0x1921C4 (437B, batches 497-498): message off the top (falling back to "An error occurred", 0xB2C6BE) + extractCallStack triple, then invoke.
+// STUB: PLAYER 0x006844f0
+// STUB: STUDIO 0x007e9f50
+void Lua::Continuations::onSuccessHandler(lua_State* thread,
+	Scripts::SuccessHandler handler)
+{
+	RBXASSERT(!handler.empty());
+	shared_ptr<const Reflection::Tuple> results = LuaArguments::getValues(thread);
+	handler(results);
+}
+// STUB: PLAYER 0x00677530
+// STUB: STUDIO 0x007df1f0
+void Lua::Continuations::onErrorHandler(lua_State* thread, Scripts::ErrorHandler handler)
+{
+	RBXASSERT(!handler.empty());
+	const char* message = lua_tolstring(thread, -1, NULL);
+	if (message == NULL || message[0] == '\0')
+		message = "An error occurred";
+	shared_ptr<BaseScript> script;
+	int line = 0;
+	std::string callStack = ScriptContext::extractCallStack(thread, script, line);
+	handler(message, callStack.c_str(), script, line);
+}
+
+// mac: 0x191F72 (350B, batch497): wrap the non-empty Scripts handlers in the (lua_State*) closures resume invokes (bound here; bodies above).
+// STUB: PLAYER 0x00685ce0
+// STUB: STUDIO 0x007eb640
+Lua::Continuations::Continuations(const Scripts::Continuations& eh)
+{
+	if (!eh.successHandler.empty())
+	{
+		success = boost::bind(&Continuations::onSuccessHandler,
+			boost::arg<1>(), eh.successHandler);
+	}
+	if (!eh.errorHandler.empty())
+	{
+		error = boost::bind(&Continuations::onErrorHandler,
+			boost::arg<1>(), eh.errorHandler);
+	}
+}
+
 // mac: 0x190DEE (426B, batch279/710): forwarder -- default pusher, no result
 // callback, empty continuations, no parent state.
 void ScriptContext::executeInNewThread(RBX::Security::Identities identity, const ProtectedString& script, const char* name)
@@ -1309,6 +1415,13 @@ void ScriptContext::executeInNewThread(RBX::Security::Identities identity, const
 		Scripts::Continuations(),
 		NULL);
 }
+
+
+
+
+
+
+
 
 // mac: 0x190F98 (batch279/708/709/710): identity-gated spawn. CmdLine_ runs
 // under the persistent commandLineSandbox member (+0x6C, live field
@@ -1360,7 +1473,7 @@ void ScriptContext::executeInNewThread(RBX::Security::Identities identity, Prote
 		}
 		{
 			Lua::ThreadRef safeCommandlineSandbox = commandLineSandbox.lock();
-			RBXASSERT_LINE(safeCommandlineSandbox, 1476);
+			RBXASSERT(safeCommandlineSandbox);
 			owner = safeCommandlineSandbox.get();
 			thread = Lua::WeakThreadRef(lua_newthread(owner));
 		}
@@ -1371,7 +1484,10 @@ void ScriptContext::executeInNewThread(RBX::Security::Identities identity, Prote
 		thread = Lua::WeakThreadRef(lua_newthread(owner));
 		{
 			Lua::ThreadRef safeThread = thread.lock();
-			RBXASSERT_LINE(safeThread, 1490);
+
+
+
+			RBXASSERT(safeThread);
 			setThreadIdentity(safeThread.get(), identity, shared_ptr<BaseScript>());
 		}
 	}
@@ -1396,7 +1512,9 @@ void ScriptContext::executeInNewThread(RBX::Security::Identities identity, Prote
 		throw std::runtime_error(err);
 	}
 
-	RBXASSERT_LINE(continuations.empty(), 1517);
+
+
+	RBXASSERT(continuations.empty());
 	RobloxExtraSpace::get(safeThread.get())->continuations.reset(new Lua::Continuations(continuations));
 
 	// "Check for somebody using CheatEngine to inject a direct call."
@@ -1443,6 +1561,225 @@ void ScriptContext::registerLibrary(std::string name, std::string url)
 	libraryService->registerLibrary(name, url, false);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// mac: 0x18D8A4 (499B, batch471/475): spawn = delay with arg-1 and timeout 0 ("Spawn function requires 1 argument", ... line: 1606).
+// FUNCTION: PLAYER 0x00674740
+// FUNCTION: STUDIO 0x007dc330
+int ScriptContext::spawn(lua_State* L)
+{
+	Lua::ThreadRef threadLock(L);
+	if (lua_gettop(L) < 1)	// 2013 0x00674778: cmp eax,1; jge
+		throw std::runtime_error("Spawn function requires 1 argument");
+	lua_State* child = lua_newthread(L);
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
+	Lua::WeakThreadRef functor(child);
+	Lua::ThreadRef safeFunctor = functor.lock();
+	RBXASSERT(safeFunctor);
+	lua_pushvalue(L, 1);
+	lua_xmove(L, safeFunctor.get(), 1);
+	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
+	if (yt != NULL)
+		yt->queueWaiter(safeFunctor.get(), 0);
+	lua_settop(L, -2);
+	return 0;
+}
+
+// sub_193123 (73B, batch472): floor a wait timeout at the LuaSettings wait setting (~0.03); NaN/Inf also clamp there. (2016's cleanTimeout is the same shape against defaultWaitTime.)
+static void clampWaitTimeout(double& timeout)
+{
+	// singleton() twice in 2013 (delay 0x0067a436, 0x0067a45a): the floor is re-read for the store.
+	if (timeout < LuaSettings::singleton().getDefaultWaitTime() || RBX::Math::isNanInf((float)timeout))
+		timeout = LuaSettings::singleton().getDefaultWaitTime();
+}
+
+// mac: 0x18CBD8 (98B, batch471): clamp + queue self + yield (caller resumes with (elapsed, now); see YieldingThreads::resume, section 250).
+int ScriptContext::wait(lua_State* L)
+{
+	double timeout = lua_tonumber(L, 1);
+	clampWaitTimeout(timeout);
+	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
+	if (yt != NULL)
+		yt->queueWaiter(L, timeout);
+	return lua_yield(L, 0);
+}
+
+
+// mac: 0x18CC3A (523B, batch471/475): new thread + move arg-2 + queue with timeout; returns immediately (0 values). Error texts pinned by batch475 disasm ("delay function requires 2 arguments") and batch476 rodata ("safeFunctor .../ScriptContext.cpp line: 1651").
+// STUB: PLAYER 0x0067a3b0
+// STUB: STUDIO 0x007e22d0
+int ScriptContext::delay(lua_State* L)
+{
+	Lua::ThreadRef threadLock(L);
+	if (lua_gettop(L) < 2)	// 2013 0x0067a3ee: cmp eax,2; jge
+		throw std::runtime_error("delay function requires 2 arguments");
+	double timeout = lua_tonumber(L, 1);
+	clampWaitTimeout(timeout);
+	lua_State* child = lua_newthread(L);
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
+	Lua::WeakThreadRef functor(child);
+	Lua::ThreadRef safeFunctor = functor.lock();
+	RBXASSERT(safeFunctor);
+	lua_pushvalue(L, 2);
+	lua_xmove(L, safeFunctor.get(), 1);
+	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
+	if (yt != NULL)
+		yt->queueWaiter(safeFunctor.get(), timeout);
+	lua_settop(L, -2);
+	return 0;
+}
+
+// mac: 0x193B70 (315B, batch484): push the Tuple, resume with its size, restore the top.
+void ScriptContext::resumeWithArgs(Lua::ThreadRef thread,
+	boost::shared_ptr<const Reflection::Tuple> args)
+{
+	lua_State* live = thread.get();
+	int top = lua_gettop(live);
+	int count = Lua::LuaArguments::pushTuple(*args, live);
+	Lua::ThreadRef pin(thread);
+	resume(pin, count);
+	lua_settop(live, top);
+}
+
+// mac: 0x18E942 (52B, batch471): pushes DebugSettings::robloxVersion.
+int ScriptContext::version(lua_State* L)
+{
+	lua_pushlstring(L, DebugSettings::robloxVersion.c_str(), DebugSettings::robloxVersion.size());
+	return 1;
+}
+
+// mac: 0x18E89C (batch599: ServiceProvider::create<StatsService> from the calling thread's ScriptContext (binary reads shared.px at L-28, context at +4 -- our context() accessor) + SharedPtrBridge push; returns 1. No null guard, binary-identical: openState always links the context).
+int ScriptContext::stats(lua_State* L)
+{
+	ScriptContext* sc = RobloxExtraSpace::get(L)->context();
+	Stats::StatsService* service = ServiceProvider::create<Stats::StatsService>(sc);
+	Lua::SharedPtrBridge<Instance>::push(L, shared_from(service));
+	return 1;
+}
+
+	// mac: 0x18A54C (352B, batch587: allocator counters into a 4-int Tuple (heapSize, heapCount, maxHeapSize, maxHeapCount); optional clearHeapMax. Variant(int) sets getSingleton<int> + value, exactly the binary type/operator=<int> pair per element. allocatorView must exist (openState creates it) -- no null guard, binary-identical). Reflection era (batch733/734): return type const-shared per the binary mangled signature (shared_ptr<Tuple const>); the other spelling had no getSingleton spec and broke the exe link.
+	shared_ptr<const Reflection::Tuple> ScriptContext::getHeapStats(bool clearHighwaterMark)
+	{
+		size_t a, b, c, d;
+		luaAllocator->getHeapStats(a, b, c, d);
+		shared_ptr<Reflection::Tuple> result(new Reflection::Tuple(4));
+		result->at(0) = Reflection::Variant((int)a);
+		result->at(1) = Reflection::Variant((int)b);
+		result->at(2) = Reflection::Variant((int)c);
+		result->at(3) = Reflection::Variant((int)d);
+		if (clearHighwaterMark)
+			luaAllocator->clearHeapMax();
+		return result;
+	}
+
+
+
+
+
+
+// mac: 0x18CF42 (2021B, batch472): run fn+args on a fresh thread via resume#2. Returns true+results (or false+error); yields the caller with a Continuations pair when the function yields.
+// STUB: PLAYER 0x006878c0
+// STUB: STUDIO 0x007ed020
+int ScriptContext::ypcall(lua_State* L)
+{
+	Lua::ThreadRef threadLock(L);
+	int top = lua_gettop(L);
+	if (top < 1)	// 2013 0x00687904: cmp ebp,1; jge
+		throw std::runtime_error("ypcall requires at least 1 argument");
+	if (lua_iscfunction(L, 1) != 0)
+		throw std::runtime_error("ypcall requires a resumable function as a first argument. Wrap your C function with a Lua function.");
+	lua_State* child = lua_newthread(L);
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
+	Lua::WeakThreadRef functor(child);
+	Lua::ThreadRef safeFunctor = functor.lock();
+	RBXASSERT(safeFunctor);
+	for (int i = 1; i <= top; ++i)
+		lua_pushvalue(L, i);
+	lua_xmove(L, safeFunctor.get(), top);
+	lua_settop(L, -2);
+	// 2013 is a switch on the resume status (0x00687a78: sub/je chain, default throws); the success
+	// case comes first in the source (its assert is on line 1747, the yield case's on 1768).
+	switch (RobloxExtraSpace::get(L)->context()->resume(safeFunctor, top - 1))
+	{
+	case 0:
+		{
+			lua_State* thread = L;	// the 2013 name in the assert text
+
+
+
+
+
+
+
+
+
+
+			RBXASSERT(top == lua_gettop(thread));
+			lua_pushboolean(L, true);
+			int nresults = lua_gettop(safeFunctor.get());
+			lua_xmove(safeFunctor.get(), L, nresults);
+			return nresults + 1;
+		}
+	case 1:
+		{
+			Lua::Continuations* cont = new Lua::Continuations();
+			ScriptContext* context = RobloxExtraSpace::get(L)->context();
+			cont->success = boost::bind(&ScriptContext::on_ypcall_success,
+				context, Lua::WeakThreadRef(child), boost::arg<1>());
+			cont->error = boost::bind(&ScriptContext::on_ypcall_failure,
+				context, Lua::WeakThreadRef(child), boost::arg<1>());
+
+
+
+
+
+
+
+			RBXASSERT(RobloxExtraSpace::get(safeFunctor)->continuations.get() == NULL);
+			RobloxExtraSpace::get(safeFunctor.get())->continuations.reset(cont);
+			RobloxExtraSpace::get(L)->yieldCaptured = true;
+			return lua_yield(L, 0);
+		}
+	case 2:
+		lua_pushboolean(L, false);
+		lua_pushstring(L, Lua::safe_lua_tostring(safeFunctor.get(), -1));
+		lua_settop(safeFunctor.get(), 0);
+		return 2;
+	default:
+		throw std::runtime_error("");	// 2013 throws an empty message (0x00bda1b8)
+	}
+}
+
 // mac: 0x189D7E wrapper: development-library registration + validation.
 // The middle of 0x189D7E is undumped (only its jnz ref in batch707); the
 // validation order (null / non-Script / running script / empty source) is
@@ -1478,39 +1815,6 @@ void ScriptContext::markLibrariesRegistered()
 	libraryService->markLibrariesLoaded();
 }
 
-// Heartbeat (0x19341A, batch769:216-235, 206B, binary-verbatim order):
-// 1. Library pump (member +728); 2. "Script context heartbeat start"
-// FLog log; 3. timeout deadline arm (+296 span > 0 -> +304 deadline);
-// 4. the timedout latch exchange (+312; a set latch decrements the
-// open-timeout count +292 -- swap(0) reads-and-clears); 5. pending
-// pump at the +156 deadline (startPendingScripts + 1.0s re-arm);
-// 6. "Script context heartbeat done" (aScriptContextH_0). Heartbeat
-// parameter unused (dead in the GCC encoding). The binary's remaining
-// tail (thread-scheduler internals at +0x9C/+0x124/...) has no driver
-// in the port yet -- loud DELTA; no heartbeat connection exists, so
-// this is currently reached only by direct calls/tests.
-// STUB: PLAYER 0x00689f00
-// STUB: STUDIO 0x007ef660
-void ScriptContext::onHeartbeat(const Heartbeat& heartbeat)
-{
-	(void)heartbeat;
-	if (libraryService)
-		libraryService->onHeartbeat();
-	if (FLog::ScriptContext)
-		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat start", 0);
-	if (timoutSpan.seconds() > 0.0)
-		timoutTime = Time::now<Time::Fast>() + timoutSpan;
-	if (timedout.swap(0) == 1)
-		--timedoutCount;
-	if (Time::now<Time::Fast>() >= nextPendingScripts)
-	{
-		startPendingScripts();
-		nextPendingScripts = Time::now<Time::Fast>() + Time::Interval(1.0);
-	}
-	if (FLog::ScriptContext)
-		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat done", 0);
-}
-
 // mac: 0x18E976: store + CoreScripts log 'srp: %u' (@B2C201, from 0x18E9A1,
 // batch721:27-28 -- the doorlog prints the bool as %u).
 // FUNCTION: PLAYER 0x0066fd10
@@ -1521,792 +1825,6 @@ void ScriptContext::setRobloxPlace(bool robloxPlace)
 	if (FLog::CoreScripts)
 		FLog::FastLog(FLog::CoreScripts, "srp: %u",
 			reinterpret_cast<const void*>(static_cast<unsigned>(robloxPlace)));
-}
-
-// ===================================================================
-// C1 script plumbing (batches 733-771). The 2013 binary's TU is
-// "Client/App/script/ScriptContext.cpp" (ReleaseAssert labels + the
-// IScriptFilter.h note); the port files the bodies here beside the
-// other ScriptContext methods. Assert texts recovered through the
-// string-era decodes carry their binary line numbers + @B2xxxx rodata
-// refs (# = unrecovered rests on the D1EAE1 skip only).
-// ===================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// mac: 0x195672 (removeScript, batch753:259-301): scripts.erase + the
-// "num == 1" RBXASSERT (binary line 2304) + ScriptContextRemove log +
-// disassociateState + first-match erase from both start queues.
-// STUB: PLAYER 0x00684700
-// STUB: STUDIO 0x007ea160
-void ScriptContext::removeScript(BaseScript* script)
-{
-	std::size_t num = scripts.erase(script);
-	RBXASSERT(num == 1);		// binary line 2304 ("num == 1")
-	if (FLog::ScriptContextRemove)
-		FLog::FastLogS(FLog::ScriptContextRemove, "RemoveScript %s", script->getName().c_str());
-	disassociateState(script);
-	eraseScript(pendingScripts, script);
-	eraseScript(loadingScripts, script);
 }
 
 // mac: 0x19553E (disassociateState, batch754:212-245): whole body inside the
@@ -2390,6 +1908,39 @@ void ScriptContext::startPendingScripts()
 	}
 }
 
+// Heartbeat (0x19341A, batch769:216-235, 206B, binary-verbatim order):
+// 1. Library pump (member +728); 2. "Script context heartbeat start"
+// FLog log; 3. timeout deadline arm (+296 span > 0 -> +304 deadline);
+// 4. the timedout latch exchange (+312; a set latch decrements the
+// open-timeout count +292 -- swap(0) reads-and-clears); 5. pending
+// pump at the +156 deadline (startPendingScripts + 1.0s re-arm);
+// 6. "Script context heartbeat done" (aScriptContextH_0). Heartbeat
+// parameter unused (dead in the GCC encoding). The binary's remaining
+// tail (thread-scheduler internals at +0x9C/+0x124/...) has no driver
+// in the port yet -- loud DELTA; no heartbeat connection exists, so
+// this is currently reached only by direct calls/tests.
+// STUB: PLAYER 0x00689f00
+// STUB: STUDIO 0x007ef660
+void ScriptContext::onHeartbeat(const Heartbeat& heartbeat)
+{
+	(void)heartbeat;
+	if (libraryService)
+		libraryService->onHeartbeat();
+	if (FLog::ScriptContext)
+		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat start", 0);
+	if (timoutSpan.seconds() > 0.0)
+		timoutTime = Time::now<Time::Fast>() + timoutSpan;
+	if (timedout.swap(0) == 1)
+		--timedoutCount;
+	if (Time::now<Time::Fast>() >= nextPendingScripts)
+	{
+		startPendingScripts();
+		nextPendingScripts = Time::now<Time::Fast>() + Time::Interval(1.0);
+	}
+	if (FLog::ScriptContext)
+		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat done", 0);
+}
+
 // mac: 0x19563A (eraseScript): erase the FIRST queue entry whose script px
 // matches (removeScript calls it on both queues; later duplicates stay).
 void ScriptContext::eraseScript(std::vector<ScriptStart>& queue, BaseScript* script)
@@ -2404,6 +1955,491 @@ void ScriptContext::eraseScript(std::vector<ScriptStart>& queue, BaseScript* scr
 	}
 }
 
+// mac: 0x189990 (AddStarterScript scriptable, batch733:28-85): 0 assetId throws (binary text verbatim); rbxassetid://%d create<StarterScript>; setParentInternal AT this; the closing CoreScripts log 'Added Starter Script, asset id: %u, script: %p' (@B2CEC5, batch743:11).
+// STUB: PLAYER 0x006776c0
+// STUB: STUDIO 0x007df380
+boost::shared_ptr<Instance> ScriptContext::addStarterScript(int assetId)
+{
+	if (assetId == 0)
+		throw std::runtime_error("AddStarterScript bad argument: assetId = 0");
+	boost::shared_ptr<Instance> script =
+		Creatable<Instance>::create<StarterScript>(ContentId(RBX::format("rbxassetid://%d", assetId)));
+	// (the binary's setParentInternal(parent, false) == the public setParent form)
+	script->setParent(this);
+	if (FLog::CoreScripts)
+		FLog::FastLog(FLog::CoreScripts, "Added Starter Script, asset id: %u, script: %p",
+			reinterpret_cast<const void*>(assetId),
+			reinterpret_cast<const void*>(script.get()), 0);
+	return script;
+}
+
+// mac: 0x18B3EC (16-line body, batch746:118-134, the hook era): the script- kill half of the line hook. If the timedout latch (+312, set by the heartbeat/consumer via onCheckTimeout's swap(1) arm) is live AND the current identity is one of the two game-script permissions (2 = GameScript_ / 4 = RobloxGameScript_, the same test as resume()'s contentClearing gate), raised luaL_error "Game script timout" on the thread. The binary returns the this-pointer as int; landed void (discarded by the dispatcher).
+// STUB: PLAYER 0x0067a150
+// STUB: STUDIO 0x007e2070
+void ScriptContext::onHook(lua_State* thread, lua_Debug* ar)
+{
+	(void)ar;
+	if (timedout != 0
+		&& (Security::Context::current().identity == Security::GameScript_
+			|| Security::Context::current().identity == Security::RobloxGameScript_))
+		luaL_error(thread, "Game script timout");
+}
+
+// mac: 0x1952EA (the IScriptFilter override). 2013 0x00682846: the null path is fastDynamicCast's own.
+// FUNCTION: PLAYER 0x00682810
+// FUNCTION: STUDIO 0x007e8660
+/*override*/ bool ScriptContext::scriptShouldRun(BaseScript* script)
+{
+	return Instance::fastDynamicCast<CoreScript>(script) != NULL;
+}
+
+// mac: 0x18A2F4 (the ScriptsDisabled prop onChanged): binary jumps to startPendingScripts when the prop byte is SET -- inverted vs the drain gate's '== 0' (batch742); the landed prop-descriptor signature is the binding contract and the binary decompiles the body as parameterless (batch742), so the parameter closes unused.
+// FUNCTION: PLAYER 0x006880c0
+// FUNCTION: STUDIO 0x007ed820
+void ScriptContext::onChangedScriptEnabled(const Reflection::PropertyDescriptor& descriptor)
+{
+	(void)descriptor;
+	if (scriptsDisabled != 0)
+		startPendingScripts();
+}
+
+// mac: 0x189E1A (AddCoreScript scriptable, batch744:341-500): name log, 0 assetId throws (binary text verbatim), parent defaults to this, rbxassetid://%d create<CoreScript>, setName when non-empty, setParentInternal(parent), addScript{identity 2} when not parented at this, the closing CoreScripts log, and the created script returned.
+// STUB: PLAYER 0x0068a1b0
+// STUB: STUDIO 0x007ef910
+boost::shared_ptr<Instance> ScriptContext::addCoreScript(int assetId, boost::shared_ptr<Instance> parent, std::string name)
+{
+	if (FLog::CoreScripts)
+		FLog::FastLogS(FLog::CoreScripts, "Adding core script name: %s", name.c_str());
+	if (assetId == 0)
+		throw std::runtime_error("AddCoreScript bad argument: assetId = 0");
+	if (parent == NULL)
+		parent = shared_from(this);
+	if (FLog::CoreScripts)
+		FLog::FastLogS(FLog::CoreScripts, "Parent name: %s", parent->getFullName().c_str());
+	boost::shared_ptr<CoreScript> script =
+		Creatable<Instance>::create<CoreScript>(ContentId(RBX::format("rbxassetid://%d", assetId)));
+	if (!name.empty())
+		script->setName(name);
+	// (the binary's setParentInternal(parent, false) == the public setParent form)
+	script->setParent(parent.get());
+	if (script->getParent() != this)
+	{
+		ScriptStartOptions options;
+		options.identity = 2;
+		addScript(script.get(), options);
+	}
+	if (FLog::CoreScripts)
+		FLog::FastLog(FLog::CoreScripts, "Added Core script, asset: %u, parent: %p, script: %p",
+			reinterpret_cast<const void*>(assetId),
+			reinterpret_cast<const void*>(parent.get()),
+			reinterpret_cast<const void*>(script.get()));
+	return script;
+}
+
+// mac: 0x18B230 (batch599: +276 store; enable creates the +280 holder via ServiceProvider::find<StatsService> -- NOT create, so with no service parented only the flag flips; re-enable with a live holder is a no-op ([+280] px check); disable releases the holder. Binary +280/+284 are the shared_ptr px/pn words (the audit's "+0x11C second holder" reading was wrong -- 0x18B28D loads and releases the pn word of the same shared_ptr).
+void ScriptContext::setCollectScriptStats(bool collect)
+{
+	collectStats = collect;
+	if (collect)
+	{
+		if (scriptStats.get() == NULL)
+		{
+			if (ServiceProvider::find<Stats::StatsService>(this) != NULL)
+				scriptStats.reset(new ScriptStats());
+		}
+	}
+	else
+		scriptStats.reset();
+}
+
+// mac: 0x18A6AC getScriptStatsNew (batch733: 282-line body; the visible prefix lands binary-verbatim -- the +280 holder gate with the "Script stats collection is not enabled" runtime_error, the make_shared<vector<Variant>> result sized by the internal meter map's node count (+20), and the per-script entry whose "Hash" fill is the unordered-map operator[] onto Variant(string), then the +756-map find keyed by the SAME hash string). The tail beyond the "Name" temp is unrecovered (batch733 dump cap at line 354): the key roster below ("Count","Activity","InvocationCount") is 2016-shaped (2016 getScriptStatsNew/getScriptStats), LOUD DELTAs: -- 2016's "Scripts" per-entry key carries shared_ptr<const Instances>; Oct2013 carries no Instances class (tree-wide absence), and the truncated region shows exactly one shared_ptr temp of unrecoverable type -- realized here as "Count" = runningScripts.size() (2016 getScriptStats' shell), payload shape unrecoverable byte-exact. -- the [Unknown] name-arm and the find-not-found -1 count are 2016 conventional (2013 fail-side shape unrecovered). Registered as func_GetScriptStats 0xFA6630: "GetScriptStats", security 4, arity-0 (batch757:704-716).
+// STUB: PLAYER 0x00685580
+// STUB: STUDIO 0x007eaee0
+boost::shared_ptr<const std::vector<Reflection::Variant> > ScriptContext::getScriptStatsNew()
+{
+	if (scriptStats.get() == NULL)
+		throw std::runtime_error("Script stats collection is not enabled");
+	const ScriptStats::ScriptActivityMeterMap& stats = scriptStats->getScriptActivityMap();
+	boost::shared_ptr<std::vector<Reflection::Variant> > result(
+		rbx::make_shared<std::vector<Reflection::Variant> >(
+			static_cast<unsigned long>(stats.size())));
+	int pos = 0;
+	for (ScriptStats::ScriptActivityMeterMap::const_iterator iter = stats.begin();
+		iter != stats.end(); ++iter)
+	{
+		std::string hash = iter->first;
+		boost::shared_ptr<Reflection::ValueTable> entry(
+			rbx::make_shared<Reflection::ValueTable>());
+		(*entry)["Hash"] = hash;
+		std::map<std::string, ScriptStatInformation>::const_iterator it =
+			scriptStatsMap.find(hash);
+		if (it != scriptStatsMap.end()) {
+			(*entry)["Name"] = (std::string)it->second.name;
+			(*entry)["Count"] = (int)it->second.runningScripts.size();
+		}
+		else {
+			(*entry)["Name"] = std::string("[Unknown]");
+			(*entry)["Count"] = (int)-1;
+		}
+		(*entry)["Activity"] = (double)iter->second.activity->averageValue() * 100;
+		(*entry)["InvocationCount"] =
+			(double)iter->second.invocations->getTotalValuePerSecond();
+		(*result)[pos++] = boost::shared_ptr<const Reflection::ValueTable>(entry);
+	}
+	return result;
+}
+
+// mac: 0x1902A8 getScriptStats: name listed (batch755:180) but the body is unrecovered (no decompile in C:\tmp; no descriptor binds it in the InitFunc_123 window). 2016 shell (the 1077-1106 Tuple of 5) with the null-holder early return; LOUD DELTA: conventional port, the 2013 return type is unrecorded (mangled names never carry it).
+boost::shared_ptr<const Reflection::Tuple> ScriptContext::getScriptStats()
+{
+	if (scriptStats.get() == NULL)
+		return boost::shared_ptr<const Reflection::Tuple>();
+	const ScriptStats::ScriptActivityMeterMap& stats = scriptStats->getScriptActivityMap();
+	boost::shared_ptr<Reflection::Tuple> result(
+		rbx::make_shared<Reflection::Tuple>(stats.size()));
+	int pos = 0;
+	for (ScriptStats::ScriptActivityMeterMap::const_iterator iter = stats.begin();
+		iter != stats.end(); ++iter)
+	{
+		std::string hash = iter->first;
+		boost::shared_ptr<Reflection::Tuple> entry(rbx::make_shared<Reflection::Tuple>(5));
+		entry->values[0] = hash;												//Hash
+		std::map<std::string, ScriptStatInformation>::const_iterator it =
+			scriptStatsMap.find(hash);
+		if (it != scriptStatsMap.end()) {
+			entry->values[1] = (std::string)it->second.name;					//Name
+			entry->values[2] = (int)it->second.runningScripts.size();			//Count
+		}
+		else {
+			entry->values[1] = std::string("[Unknown]");						//Name
+			entry->values[2] = (int)-1;											//Count
+		}
+		entry->values[3] = (double)iter->second.activity->averageValue() * 100;	//Activity
+		entry->values[4] =
+			(double)iter->second.invocations->getTotalValuePerSecond();			//InvocationCount
+		result->values[pos++] = boost::shared_ptr<const Reflection::Tuple>(entry);
+	}
+	return result;
+}
+
+// Panic handler for lua_atpanic (sub_18C6D5; 2016 shape carried minus the callstack print, which queues with printCallStack).
+static int scriptPanic(lua_State* L)
+{
+	StandardOut::singleton()->printf(MESSAGE_ERROR,
+		"Unprotected error in call to Lua API (%s)\n", lua_tostring(L, -1));
+	RBXCRASH();
+	return 0;
+}
+
+// mac: 0x18DB92 (250B, batch324).
+// STUB: PLAYER 0x0067a9b0
+// STUB: STUDIO 0x007e28d0
+int ScriptContext::printidentity(lua_State* L)
+{
+	if (lua_gettop(L) <= 0)
+	{
+		StandardOut::singleton()->printf(MESSAGE_OUTPUT, "Current identity is %d",
+			(int)Security::Context::current().identity);
+	}
+	else
+	{
+		const char* s = lua_tolstring(L, -1, NULL);
+		StandardOut::singleton()->printf(MESSAGE_OUTPUT, "%s %d", s,
+			(int)Security::Context::current().identity);
+	}
+	return 0;
+}
+
+// mac: 0x18C8CC (653B, batch324: tostring each arg joined with spaces to StandardOut; tostring-miss throws; spacing via fputs).
+int ScriptContext::print(lua_State* L)
+{
+	int top = lua_gettop(L);
+	std::string out;
+	lua_getfield(L, LUA_GLOBALSINDEX, "tostring");
+	if (top > 0)
+	{
+		for (int i = 1; i <= top; ++i)
+		{
+			if (i >= 2)
+			{
+				out.push_back(' ');
+				fputs(" ", stdout);
+			}
+			lua_pushvalue(L, -1);
+			lua_pushvalue(L, i);
+			lua_call(L, 1, 1);
+			const char* s = lua_tolstring(L, -1, NULL);
+			if (s == NULL)
+				throw std::runtime_error("tostring failed");  // DELTA: binary message bytes
+				                                              // at unk_9A0493 unrecovered.
+			out.append(s, strlen(s));
+			lua_settop(L, -2);
+		}
+	}
+	StandardOut::singleton()->print(MESSAGE_OUTPUT, out);
+	return 0;
+}
+
+// mac: 0x18B48A (56B, batch326).
+// FUNCTION: PLAYER 0x0067a190
+// FUNCTION: STUDIO 0x007e20b0
+int ScriptContext::crash(lua_State* L)
+{
+	(void)L;
+	Security::Context::current().requirePermission((Security::Permissions)2);
+	RBXCRASH("User-generated crash");
+	return 0;
+}
+
+// mac: 0x18CB5A (36B, batch324: pushes G3D wall time).
+int ScriptContext::tick(lua_State* L)
+{
+	lua_pushnumber(L, G3D::System::time());
+	return 1;
+}
+
+// mac: 0x18CBB0 (40B, batch324: pushes sampled epoch seconds).
+int ScriptContext::rbxTime(lua_State* L)
+{
+	lua_pushnumber(L, RBX::Time::now<(RBX::Time::SampleMethod)0>().timestampSeconds());
+	return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// mac: 0x195358 (addScript, batch744:341-500): scripts.insert + the RBXASSERT gate (binary text "ok", line 2256), the ScriptContextAdd log, the 60B ScriptStart field-copy build (each boost function assigns its own state), and startScript BY VALUE.
+// STUB: PLAYER 0x006880e0
+// STUB: STUDIO 0x007ed840
+void ScriptContext::addScript(BaseScript* script, ScriptStartOptions options)
+{
+	bool ok = scripts.insert(script).second;
+	RBXASSERT(ok);		// binary line 2256 ("ok")
+	if (FLog::ScriptContextAdd)
+		FLog::FastLogS(FLog::ScriptContextAdd, "ScriptContext::addScript -- %s",
+			script->getName().c_str());
+	ScriptStart start;
+	start.script = shared_from(script);
+	start.identity = options.identity;
+	start.continuation = options.continuation;
+	start.reportError = options.reportError;
+	start.sourceTransform = options.sourceTransform;
+	startScript(start);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ===================================================================
+// C1 script plumbing (batches 733-771). The 2013 binary's TU is
+// "Client/App/script/ScriptContext.cpp" (ReleaseAssert labels + the
+// IScriptFilter.h note); the port files the bodies here beside the
+// other ScriptContext methods. Assert texts recovered through the
+// string-era decodes carry their binary line numbers + @B2xxxx rodata
+// refs (# = unrecovered rests on the D1EAE1 skip only).
+// ===================================================================
+// mac: 0x195672 (removeScript, batch753:259-301): scripts.erase + the
+// "num == 1" RBXASSERT (binary line 2304) + ScriptContextRemove log +
+// disassociateState + first-match erase from both start queues.
+// FUNCTION: PLAYER 0x00684700
+// FUNCTION: STUDIO 0x007ea160
+void ScriptContext::removeScript(BaseScript* script)
+{
+	std::size_t num = scripts.erase(script);
+	RBXASSERT(num == 1);		// binary line 2304 ("num == 1")
+	if (FLog::ScriptContextRemove)
+		FLog::FastLogS(FLog::ScriptContextRemove, "RemoveScript %s", script->getName().c_str());
+	disassociateState(script);
+	eraseScript(pendingScripts, script);
+	eraseScript(loadingScripts, script);
+}
+
+// mac: 0x195764 (1346B, batch714-716): callstack printer.  Gate = the DebugSettings singleton byte (+0x5D; early return when 0).  Per frame (max 12 levels): "Script '%s', Line %d" or "... - %s %s" with namewhat/name when ar.name is set; each frame goes to StandardOut at MESSAGE_INFO and, when output != NULL, to the stream; a lowercase "stack end" trailer prints when frames remain and the cap was not reached; *output always receives the stream text last (binary-verbatim, including the double lua_getstack(L, 0) entry check).
+// STUB: PLAYER 0x0067abc0
+// STUB: STUDIO 0x007e2ae0
+void ScriptContext::printCallStack(lua_State* thread, std::string* output)
+{
+	if (!DebugSettings::singleton().getStackTracingEnabled())
+		return;
+	std::stringstream stream;
+	lua_Debug ar;
+	if (lua_getstack(thread, 0, &ar))
+	{
+		bool moreStack = false;
+		int level = 0;
+		const int maxLevel = 12;
+		while (level < maxLevel && lua_getstack(thread, level++, &ar))
+		{
+			if (lua_getinfo(thread, "nSlu", &ar))
+			{
+				if (ar.currentline >= 0)
+				{
+					moreStack = true;
+					char source[LUA_IDSIZE];
+					luaO_chunkid(source, ar.source, LUA_IDSIZE);
+					std::string messageLine;
+					if (ar.name)
+					{
+						messageLine = RBX::format("Script '%s', Line %d - %s %s",
+							source, ar.currentline, ar.namewhat, ar.name);
+					}
+					else
+					{
+						messageLine = RBX::format("Script '%s', Line %d",
+							source, ar.currentline);
+					}
+					StandardOut::singleton()->printf(MESSAGE_INFO, "%s",
+						messageLine.c_str());
+					if (output)
+						stream << messageLine << std::endl;
+				}
+			}
+		}
+		if (moreStack && level < maxLevel)
+		{
+			StandardOut::singleton()->printf(MESSAGE_INFO, "stack end");
+			if (output)
+				stream << "stack end";
+		}
+	}
+	if (output)
+		*output = stream.str();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// mac: 0x195CA6 (2669B, batch714-716): error pipeline.  message = tostring of the failing value (non-empty) else "An error occurred" + the 35-char "Error occurred, no output from Lua." fallback.  printCallStack runs with the exception stack only when DFInt::LuaExceptionPlaceFilter equals the DataModel placeID (dm+0xD80).  StatsService::report( "LuaExceptions", {PlaceId, CallStack, Error, PlaceVersion}) fires when a StatsService exists and the filter matched.  DFFlag:: LuaExceptionSignalEnabled fires the DataModel's void() signal (DM+0xAEC).  Then the errorSignal(errorMessage, callStackString, scriptPtr) fire (guarded by non-empty + RBXASSERT(scriptPtr == source) at ScriptContext.cpp:2437) and BaseScript::extraErrorReporting; scriptPtr comes from the thread's extra-space weak_ptr.
+// STUB: PLAYER 0x00685dd0
+// STUB: STUDIO 0x007eb730
+void ScriptContext::reportError(lua_State* thread)
+{
+	std::string errorMessage;
+	const char* message = lua_tolstring(thread, -1, NULL);
+	if (message != NULL && *message != 0)
+	{
+		StandardOut::singleton()->printf(MESSAGE_ERROR, "%s", message);
+		errorMessage.assign(message, strlen(message));
+	}
+	else
+	{
+		StandardOut::singleton()->print(MESSAGE_ERROR, "An error occurred");
+		errorMessage.assign("Error occurred, no output from Lua.", 0x23);
+	}
+	std::string exceptionStack;
+	DataModel* dm = DataModel::get(this);
+	bool reportingStack = false;
+	if (DFInt::LuaExceptionPlaceFilter != 0)
+		reportingStack = (DFInt::LuaExceptionPlaceFilter == dm->getPlaceID());
+	printCallStack(thread, reportingStack ? &exceptionStack : NULL);
+	if (dm != NULL)
+	{
+		Stats::StatsService* stats = ServiceProvider::find<Stats::StatsService>(dm);
+		if (stats != NULL && reportingStack)
+		{
+			shared_ptr<Reflection::ValueTable> entry(new Reflection::ValueTable());
+			(*entry)["PlaceId"] = dm->getPlaceID();
+			(*entry)["CallStack"] = exceptionStack;
+			(*entry)["Error"] = errorMessage;
+			(*entry)["PlaceVersion"] = dm->getPlaceVersion();
+			stats->report("LuaExceptions", entry,
+				DFInt::LuaExceptionThrottlingPercentage);
+		}
+	}
+	if (DFFlag::LuaExceptionSignalEnabled)
+		dm->luaExceptionSignal();
+	shared_ptr<BaseScript> scriptPtr(RobloxExtraSpace::get(thread)->script,
+		boost::detail::sp_nothrow_tag());
+	if (!errorSignal.empty())
+	{
+		shared_ptr<BaseScript> source;
+		int line;
+		std::string callStackString = extractCallStack(thread, source, line);
+		RBXASSERT(scriptPtr == source);
+		errorSignal(errorMessage, callStackString, scriptPtr);
+	}
+	if (scriptPtr != NULL)
+		scriptPtr->extraErrorReporting(thread);
+}
 // mac: 0x193E26 (startScript, batch741:45-435, 2,066B, binary-verbatim
 // order): the parent/membership assert gates (lines 2549/2550 -- texts
 // 'script->getRootAncestor() == getRootAncestor()' @B2D223 and
@@ -2433,42 +2469,6 @@ void ScriptContext::eraseScript(std::vector<ScriptStart>& queue, BaseScript* scr
 void ScriptContext::startScript(ScriptStart start)
 {
 	BaseScript* script = start.script.get();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2670,364 +2670,165 @@ void ScriptContext::startScript(ScriptStart start)
 	--reentrancy;
 	// (skipped, loud DELTA: the duplicated RbxInterlockedDecrement through the off_D1EAE1 pointer-table slot -- batch741:404 (the success arm, after resume) and batch741:424 (the common tail); the pointed global never resolved in the dumped material.)
 }
-// mac: 0x18B2C2 (57-line body; batch744:281-338 == batch747:538-595): the lua hook dispatcher (armed by startScript at mask 8 -- line-only -- or 11 = call+ret+line with FFlag::LuaProfilerHooks, so call/ret are the profiler surface and line is the timeout hand-off). event 3 (LUA_HOOKLINE): the owning ScriptContext arrives through the double-deref *( *(L-28) + 4 ) = extra->shared->context (the binary extra space is 40B: shared_ptr<Shared> at +12, and Shared.context = ScriptContext* at its +4 -- batch746's landed luaconf.h shapes). FASTLOG "ScriptContext::hook, timeout count %d" (@B2BE9D, batch749:13) with timedoutCount (+292), and when timedoutCount > 0, onHook(L, ar). event 1 (LUA_HOOKRET): if the profiler pointer is set, FASTLOGS(FLog::LuaProfiler, "LUARET" @B2DF41, NULL). event not in {0,1,3}: the 2013 build's line-506 guard (assert "false", batch744:319-331 -- "line: 506"). event 0 (LUA_HOOKCALL): if the profiler pointer is set, hookCall(L, ar) (real body landed TENTH ERA: lua_getinfo "nS" + stringCache.getCall + FastLogS, script\LuaProfiler.h comment). DELTA: the binary __cdecls an unsigned char up the FastLog gate results; the Lua dispatcher discards it -- landed void (the static declaration at ScriptContext.h predates the era).
-// STUB: PLAYER 0x0067e3a0
-// STUB: STUDIO 0x007e4320
-void ScriptContext::hook(lua_State* thread, lua_Debug* ar)
+
+// =================================================================== RuntimeScriptService (batches 730-771; the binary implements it in script/ScriptContext.cpp per IScriptFilter.h:17 -- filed here beside the ScriptContext methods instead; App/script/ScriptContext.cpp stays the empty placeholder). ===================================================================
+const char* const sRuntimeScriptService = "RuntimeScriptService";
+
+REFLECTION_BEGIN();
+
+REFLECTION_END();
+
+// Class registrar (see Instance.cpp/Service.cpp note).
+RBX_REGISTER_CLASS(RBX::RuntimeScriptService);
+
+// mac: 0x1848EC (batch770:1129-1161): zeroes pendingScripts/runningScripts/ isRunning (connection/sets default-construct; the binary's GCC zeroing of the set headers matches the member default state).
+RuntimeScriptService::RuntimeScriptService()
+	: isRunning(false)
 {
-	int event = ar->event;
-	if (event == 3)		// LUA_HOOKLINE
+}
+
+// mac: 0x196AC4 (batch770:502-636): old provider -> disconnect; new -> the RunService runState adopt (friend-read, private +112) + assign the transition connect into the scoped connection (per HeartbeatInstance.cpp:25 form; the binary compares, disconnects, assigns).
+// STUB: PLAYER 0x0068bd50
+// STUB: STUDIO 0x007f14b0
+void RuntimeScriptService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+{
+	if (oldProvider != NULL)
+		runTransitionConnection.disconnect();
+	if (newProvider != NULL)
 	{
-		ScriptContext* sc = RobloxExtraSpace::get(thread)->context();
-		if (FLog::ScriptContext)
-			FLog::FastLog(FLog::ScriptContext, "ScriptContext::hook, timeout count %d",
-				reinterpret_cast<const void*>((int)sc->timedoutCount));
-		if (sc->timedoutCount > 0)
-			sc->onHook(thread, ar);
+		RunService* runService = ServiceProvider::create<RunService>(newProvider);
+		onRunState(runService->runState);
+		runTransitionConnection = runService->runTransitionSignal.connect(
+			boost::bind(&RuntimeScriptService::onRunTransition, this, _1));
 	}
-	else if (event == 1)	// LUA_HOOKRET
+}
+
+// mac: 0x19ABCC (batch770:634-666): bridge to the run-state writer.
+// FUNCTION: PLAYER 0x0068bd40
+// FUNCTION: STUDIO 0x007f14a0
+void RuntimeScriptService::onRunTransition(RunTransition event)
+{
+	onRunState(event.newState);
+}
+
+// mac: 0x196B9C (batch770:668-830): the isRunning toggle moves the two script sets into/from the ScriptContext -- range-insert BEFORE the temp swap, per the decode; arm bodies over the moved sets.
+// STUB: PLAYER 0x0068b9d0
+// STUB: STUDIO 0x007f1130
+void RuntimeScriptService::onRunState(RunState state)
+{
+	if ((state != 0) != isRunning)
 	{
-		if (LuaProfiler::instance != NULL)
-			FLog::FastLogS(FLog::LuaProfiler, "LUARET", NULL);
-	}
-	else if (event != 0)
-	{
-		RBXASSERT(false);		// binary ScriptContext.cpp line 506
-	}
-	else	// event == 0: LUA_HOOKCALL
-	{
-		if (LuaProfiler::instance != NULL)
-			LuaProfiler::instance->hookCall(thread, ar);	// 0x197D28, real body (TENTH ERA)
-	}
-}
-// mac: 0x18B3EC (16-line body, batch746:118-134, the hook era): the script- kill half of the line hook. If the timedout latch (+312, set by the heartbeat/consumer via onCheckTimeout's swap(1) arm) is live AND the current identity is one of the two game-script permissions (2 = GameScript_ / 4 = RobloxGameScript_, the same test as resume()'s contentClearing gate), raised luaL_error "Game script timout" on the thread. The binary returns the this-pointer as int; landed void (discarded by the dispatcher).
-// STUB: PLAYER 0x0067a150
-// STUB: STUDIO 0x007e2070
-void ScriptContext::onHook(lua_State* thread, lua_Debug* ar)
-{
-	(void)ar;
-	if (timedout != 0
-		&& (Security::Context::current().identity == Security::GameScript_
-			|| Security::Context::current().identity == Security::RobloxGameScript_))
-		luaL_error(thread, "Game script timout");
-}
-// mac: 0x189990 (AddStarterScript scriptable, batch733:28-85): 0 assetId throws (binary text verbatim); rbxassetid://%d create<StarterScript>; setParentInternal AT this; the closing CoreScripts log 'Added Starter Script, asset id: %u, script: %p' (@B2CEC5, batch743:11).
-// STUB: PLAYER 0x006776c0
-// STUB: STUDIO 0x007df380
-boost::shared_ptr<Instance> ScriptContext::addStarterScript(int assetId)
-{
-	if (assetId == 0)
-		throw std::runtime_error("AddStarterScript bad argument: assetId = 0");
-	boost::shared_ptr<Instance> script =
-		Creatable<Instance>::create<StarterScript>(ContentId(RBX::format("rbxassetid://%d", assetId)));
-	// (the binary's setParentInternal(parent, false) == the public setParent form)
-	script->setParent(this);
-	if (FLog::CoreScripts)
-		FLog::FastLog(FLog::CoreScripts, "Added Starter Script, asset id: %u, script: %p",
-			reinterpret_cast<const void*>(assetId),
-			reinterpret_cast<const void*>(script.get()), 0);
-	return script;
-}
-// mac: 0x189E1A (AddCoreScript scriptable, batch744:341-500): name log, 0 assetId throws (binary text verbatim), parent defaults to this, rbxassetid://%d create<CoreScript>, setName when non-empty, setParentInternal(parent), addScript{identity 2} when not parented at this, the closing CoreScripts log, and the created script returned.
-// STUB: PLAYER 0x0068a1b0
-// STUB: STUDIO 0x007ef910
-boost::shared_ptr<Instance> ScriptContext::addCoreScript(int assetId, boost::shared_ptr<Instance> parent, std::string name)
-{
-	if (FLog::CoreScripts)
-		FLog::FastLogS(FLog::CoreScripts, "Adding core script name: %s", name.c_str());
-	if (assetId == 0)
-		throw std::runtime_error("AddCoreScript bad argument: assetId = 0");
-	if (parent == NULL)
-		parent = shared_from(this);
-	if (FLog::CoreScripts)
-		FLog::FastLogS(FLog::CoreScripts, "Parent name: %s", parent->getFullName().c_str());
-	boost::shared_ptr<CoreScript> script =
-		Creatable<Instance>::create<CoreScript>(ContentId(RBX::format("rbxassetid://%d", assetId)));
-	if (!name.empty())
-		script->setName(name);
-	// (the binary's setParentInternal(parent, false) == the public setParent form)
-	script->setParent(parent.get());
-	if (script->getParent() != this)
-	{
-		ScriptStartOptions options;
-		options.identity = 2;
-		addScript(script.get(), options);
-	}
-	if (FLog::CoreScripts)
-		FLog::FastLog(FLog::CoreScripts, "Added Core script, asset: %u, parent: %p, script: %p",
-			reinterpret_cast<const void*>(assetId),
-			reinterpret_cast<const void*>(parent.get()),
-			reinterpret_cast<const void*>(script.get()));
-	return script;
-}
-// mac: 0x195358 (addScript, batch744:341-500): scripts.insert + the RBXASSERT gate (binary text "ok", line 2256), the ScriptContextAdd log, the 60B ScriptStart field-copy build (each boost function assigns its own state), and startScript BY VALUE.
-// STUB: PLAYER 0x006880e0
-// STUB: STUDIO 0x007ed840
-void ScriptContext::addScript(BaseScript* script, ScriptStartOptions options)
-{
-	bool ok = scripts.insert(script).second;
-	RBXASSERT(ok);		// binary line 2256 ("ok")
-	if (FLog::ScriptContextAdd)
-		FLog::FastLogS(FLog::ScriptContextAdd, "ScriptContext::addScript -- %s",
-			script->getName().c_str());
-	ScriptStart start;
-	start.script = shared_from(script);
-	start.identity = options.identity;
-	start.continuation = options.continuation;
-	start.reportError = options.reportError;
-	start.sourceTransform = options.sourceTransform;
-	startScript(start);
-}
-// mac: 0x18A2F4 (the ScriptsDisabled prop onChanged): binary jumps to startPendingScripts when the prop byte is SET -- inverted vs the drain gate's '== 0' (batch742); the landed prop-descriptor signature is the binding contract and the binary decompiles the body as parameterless (batch742), so the parameter closes unused.
-// FUNCTION: PLAYER 0x006880c0
-// FUNCTION: STUDIO 0x007ed820
-void ScriptContext::onChangedScriptEnabled(const Reflection::PropertyDescriptor& descriptor)
-{
-	(void)descriptor;
-	if (scriptsDisabled != 0)
-		startPendingScripts();
-}
-// mac: 0x1952EA (the IScriptFilter override). 2013 0x00682846: the null path is fastDynamicCast's own.
-// FUNCTION: PLAYER 0x00682810
-// FUNCTION: STUDIO 0x007e8660
-/*override*/ bool ScriptContext::scriptShouldRun(BaseScript* script)
-{
-	return Instance::fastDynamicCast<CoreScript>(script) != NULL;
-}
-// mac: 0x18B230 (batch599: +276 store; enable creates the +280 holder via ServiceProvider::find<StatsService> -- NOT create, so with no service parented only the flag flips; re-enable with a live holder is a no-op ([+280] px check); disable releases the holder. Binary +280/+284 are the shared_ptr px/pn words (the audit's "+0x11C second holder" reading was wrong -- 0x18B28D loads and releases the pn word of the same shared_ptr).
-void ScriptContext::setCollectScriptStats(bool collect)
-{
-	collectStats = collect;
-	if (collect)
-	{
-		if (scriptStats.get() == NULL)
+		isRunning = (state != 0);
+		ScriptContext* scriptContext = ServiceProvider::create<ScriptContext>(this);
+		if (isRunning)
 		{
-			if (ServiceProvider::find<Stats::StatsService>(this) != NULL)
-				scriptStats.reset(new ScriptStats());
-		}
-	}
-	else
-		scriptStats.reset();
-}
-// mac: 0x18A6AC getScriptStatsNew (batch733: 282-line body; the visible prefix lands binary-verbatim -- the +280 holder gate with the "Script stats collection is not enabled" runtime_error, the make_shared<vector<Variant>> result sized by the internal meter map's node count (+20), and the per-script entry whose "Hash" fill is the unordered-map operator[] onto Variant(string), then the +756-map find keyed by the SAME hash string). The tail beyond the "Name" temp is unrecovered (batch733 dump cap at line 354): the key roster below ("Count","Activity","InvocationCount") is 2016-shaped (2016 getScriptStatsNew/getScriptStats), LOUD DELTAs: -- 2016's "Scripts" per-entry key carries shared_ptr<const Instances>; Oct2013 carries no Instances class (tree-wide absence), and the truncated region shows exactly one shared_ptr temp of unrecoverable type -- realized here as "Count" = runningScripts.size() (2016 getScriptStats' shell), payload shape unrecoverable byte-exact. -- the [Unknown] name-arm and the find-not-found -1 count are 2016 conventional (2013 fail-side shape unrecovered). Registered as func_GetScriptStats 0xFA6630: "GetScriptStats", security 4, arity-0 (batch757:704-716).
-// STUB: PLAYER 0x00685580
-// STUB: STUDIO 0x007eaee0
-boost::shared_ptr<const std::vector<Reflection::Variant> > ScriptContext::getScriptStatsNew()
-{
-	if (scriptStats.get() == NULL)
-		throw std::runtime_error("Script stats collection is not enabled");
-	const ScriptStats::ScriptActivityMeterMap& stats = scriptStats->getScriptActivityMap();
-	boost::shared_ptr<std::vector<Reflection::Variant> > result(
-		rbx::make_shared<std::vector<Reflection::Variant> >(
-			static_cast<unsigned long>(stats.size())));
-	int pos = 0;
-	for (ScriptStats::ScriptActivityMeterMap::const_iterator iter = stats.begin();
-		iter != stats.end(); ++iter)
-	{
-		std::string hash = iter->first;
-		boost::shared_ptr<Reflection::ValueTable> entry(
-			rbx::make_shared<Reflection::ValueTable>());
-		(*entry)["Hash"] = hash;
-		std::map<std::string, ScriptStatInformation>::const_iterator it =
-			scriptStatsMap.find(hash);
-		if (it != scriptStatsMap.end()) {
-			(*entry)["Name"] = (std::string)it->second.name;
-			(*entry)["Count"] = (int)it->second.runningScripts.size();
-		}
-		else {
-			(*entry)["Name"] = std::string("[Unknown]");
-			(*entry)["Count"] = (int)-1;
-		}
-		(*entry)["Activity"] = (double)iter->second.activity->averageValue() * 100;
-		(*entry)["InvocationCount"] =
-			(double)iter->second.invocations->getTotalValuePerSecond();
-		(*result)[pos++] = boost::shared_ptr<const Reflection::ValueTable>(entry);
-	}
-	return result;
-}
-// mac: 0x1902A8 getScriptStats: name listed (batch755:180) but the body is unrecovered (no decompile in C:\tmp; no descriptor binds it in the InitFunc_123 window). 2016 shell (the 1077-1106 Tuple of 5) with the null-holder early return; LOUD DELTA: conventional port, the 2013 return type is unrecorded (mangled names never carry it).
-boost::shared_ptr<const Reflection::Tuple> ScriptContext::getScriptStats()
-{
-	if (scriptStats.get() == NULL)
-		return boost::shared_ptr<const Reflection::Tuple>();
-	const ScriptStats::ScriptActivityMeterMap& stats = scriptStats->getScriptActivityMap();
-	boost::shared_ptr<Reflection::Tuple> result(
-		rbx::make_shared<Reflection::Tuple>(stats.size()));
-	int pos = 0;
-	for (ScriptStats::ScriptActivityMeterMap::const_iterator iter = stats.begin();
-		iter != stats.end(); ++iter)
-	{
-		std::string hash = iter->first;
-		boost::shared_ptr<Reflection::Tuple> entry(rbx::make_shared<Reflection::Tuple>(5));
-		entry->values[0] = hash;												//Hash
-		std::map<std::string, ScriptStatInformation>::const_iterator it =
-			scriptStatsMap.find(hash);
-		if (it != scriptStatsMap.end()) {
-			entry->values[1] = (std::string)it->second.name;					//Name
-			entry->values[2] = (int)it->second.runningScripts.size();			//Count
-		}
-		else {
-			entry->values[1] = std::string("[Unknown]");						//Name
-			entry->values[2] = (int)-1;											//Count
-		}
-		entry->values[3] = (double)iter->second.activity->averageValue() * 100;	//Activity
-		entry->values[4] =
-			(double)iter->second.invocations->getTotalValuePerSecond();			//InvocationCount
-		result->values[pos++] = boost::shared_ptr<const Reflection::Tuple>(entry);
-	}
-	return result;
-}
-// Panic handler for lua_atpanic (sub_18C6D5; 2016 shape carried minus the callstack print, which queues with printCallStack).
-static int scriptPanic(lua_State* L)
-{
-	StandardOut::singleton()->printf(MESSAGE_ERROR,
-		"Unprotected error in call to Lua API (%s)\n", lua_tostring(L, -1));
-	RBXCRASH();
-	return 0;
-}
-// mac: 0x18DB92 (250B, batch324).
-// STUB: PLAYER 0x0067a9b0
-// STUB: STUDIO 0x007e28d0
-int ScriptContext::printidentity(lua_State* L)
-{
-	if (lua_gettop(L) <= 0)
-	{
-		StandardOut::singleton()->printf(MESSAGE_OUTPUT, "Current identity is %d",
-			(int)Security::Context::current().identity);
-	}
-	else
-	{
-		const char* s = lua_tolstring(L, -1, NULL);
-		StandardOut::singleton()->printf(MESSAGE_OUTPUT, "%s %d", s,
-			(int)Security::Context::current().identity);
-	}
-	return 0;
-}
-// mac: 0x18C8CC (653B, batch324: tostring each arg joined with spaces to StandardOut; tostring-miss throws; spacing via fputs).
-int ScriptContext::print(lua_State* L)
-{
-	int top = lua_gettop(L);
-	std::string out;
-	lua_getfield(L, LUA_GLOBALSINDEX, "tostring");
-	if (top > 0)
-	{
-		for (int i = 1; i <= top; ++i)
-		{
-			if (i >= 2)
+			runningScripts.insert(pendingScripts.begin(), pendingScripts.end());
+			std::set<BaseScript*> temp;
+			temp.swap(pendingScripts);
+			for (std::set<BaseScript*>::iterator it = temp.begin(); it != temp.end(); ++it)
 			{
-				out.push_back(' ');
-				fputs(" ", stdout);
+				ScriptContext::ScriptStartOptions options;
+				options.identity = 2;
+				scriptContext->addScript(*it, options);
 			}
-			lua_pushvalue(L, -1);
-			lua_pushvalue(L, i);
-			lua_call(L, 1, 1);
-			const char* s = lua_tolstring(L, -1, NULL);
-			if (s == NULL)
-				throw std::runtime_error("tostring failed");  // DELTA: binary message bytes
-				                                              // at unk_9A0493 unrecovered.
-			out.append(s, strlen(s));
-			lua_settop(L, -2);
+		}
+		else
+		{
+			pendingScripts.insert(runningScripts.begin(), runningScripts.end());
+			std::set<BaseScript*> temp;
+			temp.swap(runningScripts);
+			for (std::set<BaseScript*>::iterator it = temp.begin(); it != temp.end(); ++it)
+				scriptContext->removeScript(*it);
 		}
 	}
-	StandardOut::singleton()->print(MESSAGE_OUTPUT, out);
-	return 0;
 }
-// mac: 0x18B48A (56B, batch326).
-// FUNCTION: PLAYER 0x0067a190
-// FUNCTION: STUDIO 0x007e20b0
-int ScriptContext::crash(lua_State* L)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// mac: 0x19705A (batch753:306-455): the assert contract (binary lines 2776/2780, texts verbatim in the checkpoint), ScriptContext create, the CoreScript arm (start now, identity 2), the backend/running gate (running set + start), else pend by pointer.
+// STUB: PLAYER 0x0068bbd0
+// STUB: STUDIO 0x007f1330
+void RuntimeScriptService::runScript(BaseScript* script)
 {
-	(void)L;
-	Security::Context::current().requirePermission((Security::Permissions)2);
-	RBXCRASH("User-generated crash");
-	return 0;
+	RBXASSERT(runningScripts.find(script) == runningScripts.end());		// binary line 2776
+	ScriptContext* scriptContext = ServiceProvider::create<ScriptContext>(this);
+
+
+	RBXASSERT(!scriptContext->hasScript(script));		// binary line 2780
+	if (RBX::Instance::fastDynamicCast<CoreScript>(script) != NULL)
+	{
+		ScriptContext::ScriptStartOptions options;
+		options.identity = 2;
+		scriptContext->addScript(script, options);
+		return;
+	}
+	if (!Network::Players::backendProcessing(this) || isRunning)
+	{
+		runningScripts.insert(script);
+		ScriptContext::ScriptStartOptions options;
+		options.identity = 2;
+		scriptContext->addScript(script, options);
+		return;
+	}
+	pendingScripts.insert(script);
 }
-// mac: 0x18CB5A (36B, batch324: pushes G3D wall time).
-int ScriptContext::tick(lua_State* L)
+// mac: 0x19745C (batch770): core scripts must be in none of the three sets; otherwise pending (num 1) or
+// running (num 0, handed to ScriptContext::removeScript). Asserts on 2013 lines 2809-2828.
+// STUB: PLAYER 0x00684800
+// STUB: STUDIO 0x007ea260
+void RuntimeScriptService::releaseScript(BaseScript* script)
 {
-	lua_pushnumber(L, G3D::System::time());
-	return 1;
+	ScriptContext* scriptContext = ServiceProvider::find<ScriptContext>(this);
+	if (!scriptContext)
+		return;
+	if (RBX::Instance::fastDynamicCast<CoreScript>(script) != NULL)
+	{
+		RBXASSERT(pendingScripts.find(script) == pendingScripts.end());		// binary line 2809 (@B2D6BE)
+		RBXASSERT(runningScripts.find(script) == runningScripts.end());		// binary line 2810 (@B2D54A)
+		RBXASSERT(!scriptContext->hasScript(script));						// binary line 2811 (@B2D616 / B2D822)
+		return;
+	}
+
+	std::size_t num = pendingScripts.erase(script);
+	RBXASSERT(num <= 1);		// binary line 2816 (@B2D8A8)
+
+	if (num == 0)
+	{
+		RBXASSERT(runningScripts.find(script) != runningScripts.end());		// binary line 2820 (@B2D91E)
+		runningScripts.erase(script);
+
+		RBXASSERT(scriptContext->hasScript(script));						// binary line 2823 (@B2D9EA)
+		scriptContext->removeScript(script);
+	}
+	else
+	{
+		RBXASSERT(!scriptContext->hasScript(script));						// binary line 2828 (@B2D616 / B2DA90)
+	}
 }
-// mac: 0x18CBB0 (40B, batch324: pushes sampled epoch seconds).
-int ScriptContext::rbxTime(lua_State* L)
-{
-	lua_pushnumber(L, RBX::Time::now<(RBX::Time::SampleMethod)0>().timestampSeconds());
-	return 1;
-}
-// sub_193123 (73B, batch472): floor a wait timeout at the LuaSettings wait setting (~0.03); NaN/Inf also clamp there. (2016's cleanTimeout is the same shape against defaultWaitTime.)
-static void clampWaitTimeout(double& timeout)
-{
-	double floor = LuaSettings::singleton().getDefaultWaitTime();
-	if (floor > timeout || RBX::Math::isNanInf((float)timeout))
-		timeout = floor;
-}
-// mac: 0x18CBD8 (98B, batch471): clamp + queue self + yield (caller resumes with (elapsed, now); see YieldingThreads::resume, section 250).
-int ScriptContext::wait(lua_State* L)
-{
-	double timeout = lua_tonumber(L, 1);
-	clampWaitTimeout(timeout);
-	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
-	if (yt != NULL)
-		yt->queueWaiter(L, timeout);
-	return lua_yield(L, 0);
-}
-// mac: 0x18D8A4 (499B, batch471/475): spawn = delay with arg-1 and timeout 0 ("Spawn function requires 1 argument", ... line: 1606).
-// STUB: PLAYER 0x00674740
-// STUB: STUDIO 0x007dc330
-int ScriptContext::spawn(lua_State* L)
-{
-	Lua::ThreadRef threadLock(L);
-	if (lua_gettop(L) < 1)	// 2013 0x00674778: cmp eax,1; jge
-		throw std::runtime_error("Spawn function requires 1 argument");
-	lua_State* child = lua_newthread(L);
-	// (no slot store here in 2013; the line pair is kept so later
-	// __LINE__-laid asserts stay on their 2013 lines)
-	Lua::WeakThreadRef functor(child);
-	Lua::ThreadRef safeFunctor = functor.lock();
-	RBXASSERT_LINE(safeFunctor, 1606);
-	lua_pushvalue(L, 1);
-	lua_xmove(L, safeFunctor.get(), 1);
-	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
-	if (yt != NULL)
-		yt->queueWaiter(safeFunctor.get(), 0);
-	lua_settop(L, -2);
-	return 0;
-}
-// mac: 0x18CC3A (523B, batch471/475): new thread + move arg-2 + queue with timeout; returns immediately (0 values). Error texts pinned by batch475 disasm ("delay function requires 2 arguments") and batch476 rodata ("safeFunctor .../ScriptContext.cpp line: 1651").
-// STUB: PLAYER 0x0067a3b0
-// STUB: STUDIO 0x007e22d0
-int ScriptContext::delay(lua_State* L)
-{
-	Lua::ThreadRef threadLock(L);
-	if (lua_gettop(L) < 2)	// 2013 0x0067a3ee: cmp eax,2; jge
-		throw std::runtime_error("delay function requires 2 arguments");
-	double timeout = lua_tonumber(L, 1);
-	clampWaitTimeout(timeout);
-	lua_State* child = lua_newthread(L);
-	// (no slot store here in 2013; the line pair is kept so later
-	// __LINE__-laid asserts stay on their 2013 lines)
-	Lua::WeakThreadRef functor(child);
-	Lua::ThreadRef safeFunctor = functor.lock();
-	RBXASSERT_LINE(safeFunctor, 1651);
-	lua_pushvalue(L, 2);
-	lua_xmove(L, safeFunctor.get(), 1);
-	Lua::YieldingThreads* yt = RobloxExtraSpace::get(L)->context()->yieldEvent.get();
-	if (yt != NULL)
-		yt->queueWaiter(safeFunctor.get(), timeout);
-	lua_settop(L, -2);
-	return 0;
-}
-// mac: 0x193B70 (315B, batch484): push the Tuple, resume with its size, restore the top.
-void ScriptContext::resumeWithArgs(Lua::ThreadRef thread,
-	boost::shared_ptr<const Reflection::Tuple> args)
-{
-	lua_State* live = thread.get();
-	int top = lua_gettop(live);
-	int count = Lua::LuaArguments::pushTuple(*args, live);
-	Lua::ThreadRef pin(thread);
-	resume(pin, count);
-	lua_settop(live, top);
-}
+
 // mac: 0x1937F8 (887B, batch484): drain up to a snapshot size of the resume queue through resumeWithArgs, then run due waiters. Stops past the expiration time. DELTAs (loud): the drain cap is a snapshot size (the binary computes an equivalent bound from queue member diffs); the two telemetry samples (+620/+676) are skipped; now/limit for the waiter pass are sampled fresh (the binary reads them off a +188 time object).
 // STUB: PLAYER 0x0068a000
 // STUB: STUDIO 0x007ef760
@@ -3054,36 +2855,10 @@ void ScriptContext::resumeWaitingScripts(RBX::Time expirationTime)
 	if (FLog::ScriptContext != 0)
 		FLog::FastLog(FLog::ScriptContext, "ScriptContext::resumeWaitingScripts finish", NULL);
 }
-// mac: 0x18E942 (52B, batch471): pushes DebugSettings::robloxVersion.
-int ScriptContext::version(lua_State* L)
-{
-	lua_pushlstring(L, DebugSettings::robloxVersion.c_str(), DebugSettings::robloxVersion.size());
-	return 1;
-}
-// mac: 0x18E89C (batch599: ServiceProvider::create<StatsService> from the calling thread's ScriptContext (binary reads shared.px at L-28, context at +4 -- our context() accessor) + SharedPtrBridge push; returns 1. No null guard, binary-identical: openState always links the context).
-int ScriptContext::stats(lua_State* L)
-{
-	ScriptContext* sc = RobloxExtraSpace::get(L)->context();
-	Stats::StatsService* service = ServiceProvider::create<Stats::StatsService>(sc);
-	Lua::SharedPtrBridge<Instance>::push(L, shared_from(service));
-	return 1;
-}
-	// mac: 0x18A54C (352B, batch587: allocator counters into a 4-int Tuple (heapSize, heapCount, maxHeapSize, maxHeapCount); optional clearHeapMax. Variant(int) sets getSingleton<int> + value, exactly the binary type/operator=<int> pair per element. allocatorView must exist (openState creates it) -- no null guard, binary-identical). Reflection era (batch733/734): return type const-shared per the binary mangled signature (shared_ptr<Tuple const>); the other spelling had no getSingleton spec and broke the exe link.
-	shared_ptr<const Reflection::Tuple> ScriptContext::getHeapStats(bool clearHighwaterMark)
-	{
-		size_t a, b, c, d;
-		luaAllocator->getHeapStats(a, b, c, d);
-		shared_ptr<Reflection::Tuple> result(new Reflection::Tuple(4));
-		result->at(0) = Reflection::Variant((int)a);
-		result->at(1) = Reflection::Variant((int)b);
-		result->at(2) = Reflection::Variant((int)c);
-		result->at(3) = Reflection::Variant((int)d);
-		if (clearHighwaterMark)
-			luaAllocator->clearHeapMax();
-		return result;
-	}
+
 // Exit-handler dispatch gate (resume#1/#2 read dword_D1B1CC: handlers fire only when set. BSS-false default; no setter is banked anywhere DB-wide, so production behavior with a fresh binary is off -- model exactly that. The scheduler tests (251) flip it if the drain side needs handlers live.)
 static bool g_fireExitHandlers = false;
+
 // (the old C-shell LuaProfilerShell struct was retired with the TENTH ERA: the real global-scope LuaProfiler is defined in include\script\LuaProfiler.h with its bodies above, and ScriptContext::resume constructs it directly.) mac: 0x192A50 (512B, batch471): ThreadRef + arg-pusher/results callbacks around resume#2. Used by WaitScriptSlot::operator()/callCallback (section 251); landed now so the shape is fixed. Judgment calls (loud): the null-live early return (binary blind-derefs into lua_gettop -- AV, unreachable from real callers); the count pair is net-zero (the decomp shows the Decrement; a matching Increment keeps the diagnostic count stable instead of draining it).
 int ScriptContext::resume(Lua::ThreadRef thread,
 	boost::function1<unsigned long, lua_State*> pushArguments,
@@ -3115,6 +2890,7 @@ int ScriptContext::resume(Lua::ThreadRef thread,
 	}
 	return status;
 }
+
 	// mac: 0x193CAC (394B, batch577: COUNT both globalStates, sample KB delta when non-negative, STEP full(100) iff threshold int < threshold double else single(1), sample interval + gc times. C1C900 multiplier is 1000.0 sec->ms (2016 .msec() correspondence for the same averages; byte-verification queued). Member roles per the +0xF8 family audit; all access by name.
 	void ScriptContext::stepGc()
 	{
@@ -3141,6 +2917,7 @@ int ScriptContext::resume(Lua::ThreadRef thread,
 		RBX::Time end = RBX::Time::now<RBX::Time::Fast>();
 		avgLuaGcTime.sample((end - now).seconds() * 1000.0);
 	}
+
 // mac: 0x192D02 (1057B, batch471/479): identity scope, plugin gate, stats hooks (landed this era per batch716:503-507/592-596), hook check, profiler gate, lua_resume, exit-handler dispatch, yield re-queue vs reportError. Returns 2 (blocked/error), 1 (yielded), 0 (finished). DELTA (loud, related era): the +620 running-average sample is skipped (pure telemetry); the plugin-gate member reuses contentClearing (binary +312 vs our +247 layout drift; 2016 calls the concept `timedout`).
 // STUB: PLAYER 0x006863a0
 // STUB: STUDIO 0x007ebd00
@@ -3228,6 +3005,7 @@ int ScriptContext::resume(Lua::ThreadRef thread, int nargs)
 	}
 	return result;
 }
+
 // mac: 0x196714 (346B, batch471): pin + share into the +200 resume queue (drained by resumeWaitingScripts, section 251).
 void ScriptContext::scheduleResume(Lua::ThreadRef thread,
 	boost::shared_ptr<const Reflection::Tuple> result)
@@ -3237,6 +3015,7 @@ void ScriptContext::scheduleResume(Lua::ThreadRef thread,
 	waiter.result = result;
 	waitingThreads.push(waiter);
 }
+
 // mac: 0x19316C (347B, batch472): push true + move functor results, resume the caller. Bound by ypcall for the success continuation.
 void ScriptContext::on_ypcall_success(Lua::WeakThreadRef caller, lua_State* functor)
 {
@@ -3249,6 +3028,7 @@ void ScriptContext::on_ypcall_success(Lua::WeakThreadRef caller, lua_State* func
 		resume(pin, 1 + nargs);
 	}
 }
+
 // mac: 0x1932C8 (337B, batch472): push false + error string, resume caller.
 void ScriptContext::on_ypcall_failure(Lua::WeakThreadRef caller, lua_State* functor)
 {
@@ -3261,6 +3041,7 @@ void ScriptContext::on_ypcall_failure(Lua::WeakThreadRef caller, lua_State* func
 		resume(pin, 2);
 	}
 }
+
 // mac: 0x18E432 (173B, batches 645/647): permission gate + singleton push.
 int ScriptContext::settings(lua_State* L)
 {
@@ -3269,6 +3050,7 @@ int ScriptContext::settings(lua_State* L)
 	Lua::SharedPtrBridge<Instance>::push(L, shared_from(s.get()));
 	return 1;
 }
+
 // mac: 0x18E4E0 (batches 645/647): permission gate + singleton push.
 int ScriptContext::usersettings(lua_State* L)
 {
@@ -3277,6 +3059,7 @@ int ScriptContext::usersettings(lua_State* L)
 	Lua::SharedPtrBridge<Instance>::push(L, shared_from(s.get()));
 	return 1;
 }
+
 // mac: 0x18E58E (batches 645/647): permission gate + singleton push.
 int ScriptContext::pluginmanager(lua_State* L)
 {
@@ -3285,9 +3068,12 @@ int ScriptContext::pluginmanager(lua_State* L)
 	Lua::SharedPtrBridge<Instance>::push(L, shared_from(s.get()));
 	return 1;
 }
+
 // Ctor moved out-of-line (was a header stub): the tail resets libraryService, and the header can only fwd-declare LibraryService -- including script/LuaLibrary.h there cycles back through lua/luaconf.h, which itself includes ScriptContext.h.
 bool ScriptContext::disabled = false;
+
 double ScriptContext::gcStepThreshold = 0.0;
+
 // STUB: PLAYER 0x0068ad20
 // STUB: STUDIO 0x007f0480
 ScriptContext::ScriptContext()
@@ -3308,18 +3094,21 @@ ScriptContext::ScriptContext()
 	gcFrequencyBase = LuaSettings::singleton().getUnknown116();
 	camelCaseViolationConnection = camelCaseViolation.connect(boost::bind(&ScriptContext::onCamelCaseViolation, this, _1, _2, _3));
 }
+
 // Member destruction only; FactoryProduct's vftables are stored before ~Instance (0x0068b5b9).
 // FUNCTION: PLAYER 0x0068b1a0
 // FUNCTION: STUDIO 0x007f0900
 ScriptContext::~ScriptContext()
 {
 }
+
 // mac: 0x18E63C (batches 645/647): arg tostring (no permission gate) + delayed request; the thread parks until the library era loads it.
 int ScriptContext::loadLibrary(lua_State* L)
 {
 	std::string library = lua_tostring(L, 1);
 	return getContext(L)->libraryService->requestLibrary(L, library, false);
 }
+
 // mac: 0x18E70A (batches 645/647): WritePlayer gate + immediate request.
 int ScriptContext::loadRobloxLibrary(lua_State* L)
 {
@@ -3327,6 +3116,7 @@ int ScriptContext::loadRobloxLibrary(lua_State* L)
 	std::string library = lua_tostring(L, 1);
 	return getContext(L)->libraryService->requestLibrary(L, library, true);
 }
+
 // mac: 0x18E7EE (batches 645/647): permission gate + singleton push.
 int ScriptContext::debuggermanager(lua_State* L)
 {
@@ -3335,6 +3125,7 @@ int ScriptContext::debuggermanager(lua_State* L)
 	Lua::SharedPtrBridge<Instance>::push(L, shared_from(s.get()));
 	return 1;
 }
+
 // mac: 0x18DE94 (1261B, batch640): loadfile -- cached-string fetch + signature gate + protected load. RobloxPlace gate; the verified body (verify returns it; throws when unsigned) feeds ProtectedString::fromTrustedSource and luaL_loadprotected. Empty verified body logs via Log::current() (Warning); FLog::FullScriptCode dumps content id + body. Load failure returns nil + error (2 results); success returns the chunk (1). Registration 0x18C067 pushcclosure / "loadfile" setfield (batch637).
 // STUB: PLAYER 0x00682350
 // STUB: STUDIO 0x007e81a0
@@ -3365,6 +3156,7 @@ int ScriptContext::loadfile(lua_State* L)
 	}
 	return result;
 }
+
 // mac: 0x18DC8C (520B, batch640): dofile -- cached-file fetch + luaL_loadfile. RobloxPlace gate; chunk errors go through lua_error (longjmp), otherwise lua_call(0, MULTRET) and the result-count delta is returned. Registration mac: 0x18C033 pushcclosure / 0x18C038 setfield "dofile" (batch637).
 // STUB: PLAYER 0x006826b0
 // STUB: STUDIO 0x007e8500
@@ -3381,12 +3173,14 @@ int ScriptContext::dofile(lua_State* L)
 	lua_call(L, 0, LUA_MULTRET);
 	return lua_gettop(L) - oldTop;
 }
+
 // mac: 0x18E382 (176B, batch650): unconditional not-implemented throw.
 int ScriptContext::load(lua_State* L)
 {
 	(void)L;
 	throw std::runtime_error("not implemented");
 }
+
 // mac: 0x18CB7E (50B, batches 639/663): RunService gameTime (+0x74 live clock, cf. updateDistributedGameTime@0x515A7E reading the same slot).
 int ScriptContext::time(lua_State* L)
 {
@@ -3396,70 +3190,13 @@ int ScriptContext::time(lua_State* L)
 	lua_pushnumber(L, rs->gameTime());
 	return 1;
 }
-// mac: 0x18CF42 (2021B, batch472): run fn+args on a fresh thread via resume#2. Returns true+results (or false+error); yields the caller with a Continuations pair when the function yields.
-// STUB: PLAYER 0x006878c0
-// STUB: STUDIO 0x007ed020
-int ScriptContext::ypcall(lua_State* L)
-{
-	Lua::ThreadRef threadLock(L);
-	int top = lua_gettop(L);
-	if (top < 1)	// 2013 0x00687904: cmp ebp,1; jge
-		throw std::runtime_error("ypcall requires at least 1 argument");
-	if (lua_iscfunction(L, 1) != 0)
-		throw std::runtime_error("ypcall requires a resumable function as a first argument. Wrap your C function with a Lua function.");
-	lua_State* child = lua_newthread(L);
-	// (no slot store here in 2013; the line pair is kept so later
-	// __LINE__-laid asserts stay on their 2013 lines)
-	Lua::WeakThreadRef functor(child);
-	Lua::ThreadRef safeFunctor = functor.lock();
-	RBXASSERT_LINE(safeFunctor, 1725);
-	for (int i = 1; i <= top; ++i)
-		lua_pushvalue(L, i);
-	lua_xmove(L, safeFunctor.get(), top);
-	lua_settop(L, -2);
-	// Nargs excludes the function itself (binary passes top-1).
-	int status = RobloxExtraSpace::get(L)->context()->resume(safeFunctor, top - 1);
-	if (status != 0)
-	{
-		if (status == 1)
-		{
-			Lua::Continuations* cont = new Lua::Continuations();
-			ScriptContext* context = RobloxExtraSpace::get(L)->context();
-			cont->success = boost::bind(&ScriptContext::on_ypcall_success,
-				context, Lua::WeakThreadRef(child), boost::arg<1>());
-			cont->error = boost::bind(&ScriptContext::on_ypcall_failure,
-				context, Lua::WeakThreadRef(child), boost::arg<1>());
-			RBXASSERT_LINE(RobloxExtraSpace::get(safeFunctor)->continuations.get() == NULL, 1768);
-			RobloxExtraSpace::get(safeFunctor.get())->continuations.reset(cont);
-			RobloxExtraSpace::get(L)->yieldCaptured = true;
-			// The caller resumes via the continuations (bound above); the bound temporaries die with this frame (binary clears them explicitly on the resume path back).
-			return lua_yield(L, 0);
-		}
-		// Defensive: lua_resume only returns 0/1/2 (2 = error pair below). Literal unrecovered (rodata ref used a second PIC base); loud DELTA.
-		if (status != 2)
-			throw std::runtime_error("Unexpected resume status");
-		lua_pushboolean(L, false);
-		const char* message = Lua::safe_lua_tostring(safeFunctor.get(), -1);
-		lua_pushstring(L, message);
-		lua_settop(safeFunctor.get(), 0);
-		return 2;
-	}
-	{
-		lua_State* thread = L;	// the 2013 name in the assert text
-		RBXASSERT_LINE(top == lua_gettop(thread), 1747);
-	}
-	lua_pushboolean(L, true);
-	{
-		int nresults = lua_gettop(safeFunctor.get());
-		lua_xmove(safeFunctor.get(), L, nresults);
-		return nresults + 1;
-	}
-}
+
 // mac: 0x18B3DE (14B, batch544): shared->context straight off the extra space. Spelled via the accessor (identical pointer; the binary reads L-28/Shared/+4 raw).
 ScriptContext* ScriptContext::getContext(lua_State* thread)
 {
 	return RobloxExtraSpace::get(thread)->context();
 }
+
 // Results collector for call#1 (sub_191EEC): fresh Tuple(count) + element-wise get (the binary's auto_ptr dance, RAII here).
 static void collectTupleResults(std::auto_ptr<Reflection::Tuple>& out,
 	lua_State* thread, unsigned long count)
@@ -3470,6 +3207,7 @@ static void collectTupleResults(std::auto_ptr<Reflection::Tuple>& out,
 	for (unsigned long i = 0; i < count; ++i)
 		Lua::LuaArguments::get(thread, (int)i + 1, out->at(i), true);
 }
+
 // mac: 0x190B94 (342B, batches 546-549): pin + pushfunction + resume#1 with the caller's closures. Returns void; resume#1 throws on error (the onResults arm is set) and runs onResults on success AND yield. ThreadRef pins + net-zero count pairs stand in for the manual addref/release dance. Throws "Cannot call a nil function" (0xB2C86C) on a dead function.
 // STUB: PLAYER 0x00689cb0
 // STUB: STUDIO 0x007ef410
@@ -3487,6 +3225,7 @@ void ScriptContext::call(Lua::WeakFunctionRef& function,
 	Lua::ThreadRef callPin(pin);
 	resume(callPin, pushArguments, onResults);
 }
+
 // mac: 0x191E3B (186B, batches 546/551): Tuple in, Tuple out -- binds pushTuple + the collector above around call#2. Errors throw out of resume#1; yields return whatever the collector gathered.
 boost::shared_ptr<const Reflection::Tuple> ScriptContext::call(
 	Lua::WeakFunctionRef& function,
@@ -3503,6 +3242,7 @@ boost::shared_ptr<const Reflection::Tuple> ScriptContext::call(
 	boost::shared_ptr<const Reflection::Tuple> result(out.release());
 	return result;
 }
+
 // mac: 0x19237A (927B, batches 499-503): up to 12 frames of "chunk, line N[ - namewhat name]" text; outs the level-0 script (the thread extra-space weak ref, promoted non-throwing -- same read the binary spells as L-12) and its current line (-1 with no frames). lua_Debug roles are layout-pinned (+4 name / +8 namewhat / +16 source / +20 currentline); null names fall back to the short line, null qualifiers set failbit (both binary-verbatim).
 // STUB: PLAYER 0x00673b60
 // STUB: STUDIO 0x007db850
@@ -3556,150 +3296,29 @@ std::string ScriptContext::extractCallStack(lua_State* thread,
 	}
 	return stream.str();
 }
-// mac: 0x1920D0 (243B, batches 497-498): assert non-empty, collect the stack values, invoke. All Asserts are log-continue (never branch).
-// STUB: PLAYER 0x006844f0
-// STUB: STUDIO 0x007e9f50
-void Lua::Continuations::onSuccessHandler(lua_State* thread,
-	Scripts::SuccessHandler handler)
+
+// mac: 0x18A30C-0x18A54B (batch719; 2016 ScriptContext.cpp:1192 matches modulo branch order).  The binary tests `timeoutThread != 0` first and kicks the running monitor (checkTimeout.Set); the spawn path is identical outright.
+// FUNCTION: PLAYER 0x0067eee0
+// FUNCTION: STUDIO 0x007e4db0
+void ScriptContext::setTimeout(double seconds)
 {
-	RBXASSERT_LINE(!handler.empty(), 1373);
-	shared_ptr<const Reflection::Tuple> results = LuaArguments::getValues(thread);
-	handler(results);
-}
-// mac: 0x1921C4 (437B, batches 497-498): message off the top (falling back to "An error occurred", 0xB2C6BE) + extractCallStack triple, then invoke.
-// STUB: PLAYER 0x00677530
-// STUB: STUDIO 0x007df1f0
-void Lua::Continuations::onErrorHandler(lua_State* thread,
-	Scripts::ErrorHandler handler)
-{
-	RBXASSERT_LINE(!handler.empty(), 1381);
-	const char* message = lua_tolstring(thread, -1, NULL);
-	if (message == NULL || message[0] == '\0')
-		message = "An error occurred";
-	shared_ptr<BaseScript> script;
-	int line = 0;
-	std::string callStack = ScriptContext::extractCallStack(thread, script, line);
-	handler(message, callStack.c_str(), script, line);
-}
-// mac: 0x191F72 (350B, batch497): wrap the non-empty Scripts handlers in the (lua_State*) closures resume invokes (bound here; bodies above).
-// STUB: PLAYER 0x00685ce0
-// STUB: STUDIO 0x007eb640
-Lua::Continuations::Continuations(const Scripts::Continuations& eh)
-{
-	if (!eh.successHandler.empty())
-	{
-		success = boost::bind(&Continuations::onSuccessHandler,
-			boost::arg<1>(), eh.successHandler);
-	}
-	if (!eh.errorHandler.empty())
-	{
-		error = boost::bind(&Continuations::onErrorHandler,
-			boost::arg<1>(), eh.errorHandler);
-	}
-}
-// mac: 0x195764 (1346B, batch714-716): callstack printer.  Gate = the DebugSettings singleton byte (+0x5D; early return when 0).  Per frame (max 12 levels): "Script '%s', Line %d" or "... - %s %s" with namewhat/name when ar.name is set; each frame goes to StandardOut at MESSAGE_INFO and, when output != NULL, to the stream; a lowercase "stack end" trailer prints when frames remain and the cap was not reached; *output always receives the stream text last (binary-verbatim, including the double lua_getstack(L, 0) entry check).
-// STUB: PLAYER 0x0067abc0
-// STUB: STUDIO 0x007e2ae0
-void ScriptContext::printCallStack(lua_State* thread, std::string* output)
-{
-	if (!DebugSettings::singleton().getStackTracingEnabled())
-		return;
-	std::stringstream stream;
-	lua_Debug ar;
-	if (lua_getstack(thread, 0, &ar))
-	{
-		bool moreStack = false;
-		int level = 0;
-		const int maxLevel = 12;
-		while (level < maxLevel && lua_getstack(thread, level++, &ar))
-		{
-			if (lua_getinfo(thread, "nSlu", &ar))
-			{
-				if (ar.currentline >= 0)
-				{
-					moreStack = true;
-					char source[LUA_IDSIZE];
-					luaO_chunkid(source, ar.source, LUA_IDSIZE);
-					std::string messageLine;
-					if (ar.name)
-					{
-						messageLine = RBX::format("Script '%s', Line %d - %s %s",
-							source, ar.currentline, ar.namewhat, ar.name);
-					}
-					else
-					{
-						messageLine = RBX::format("Script '%s', Line %d",
-							source, ar.currentline);
-					}
-					StandardOut::singleton()->printf(MESSAGE_INFO, "%s",
-						messageLine.c_str());
-					if (output)
-						stream << messageLine << std::endl;
-				}
-			}
-		}
-		if (moreStack && level < maxLevel)
-		{
-			StandardOut::singleton()->printf(MESSAGE_INFO, "stack end");
-			if (output)
-				stream << "stack end";
-		}
-	}
-	if (output)
-		*output = stream.str();
-}
-// mac: 0x195CA6 (2669B, batch714-716): error pipeline.  message = tostring of the failing value (non-empty) else "An error occurred" + the 35-char "Error occurred, no output from Lua." fallback.  printCallStack runs with the exception stack only when DFInt::LuaExceptionPlaceFilter equals the DataModel placeID (dm+0xD80).  StatsService::report( "LuaExceptions", {PlaceId, CallStack, Error, PlaceVersion}) fires when a StatsService exists and the filter matched.  DFFlag:: LuaExceptionSignalEnabled fires the DataModel's void() signal (DM+0xAEC).  Then the errorSignal(errorMessage, callStackString, scriptPtr) fire (guarded by non-empty + RBXASSERT(scriptPtr == source) at ScriptContext.cpp:2437) and BaseScript::extraErrorReporting; scriptPtr comes from the thread's extra-space weak_ptr.
-// STUB: PLAYER 0x00685dd0
-// STUB: STUDIO 0x007eb730
-void ScriptContext::reportError(lua_State* thread)
-{
-	std::string errorMessage;
-	const char* message = lua_tolstring(thread, -1, NULL);
-	if (message != NULL && *message != 0)
-	{
-		StandardOut::singleton()->printf(MESSAGE_ERROR, "%s", message);
-		errorMessage.assign(message, strlen(message));
-	}
+	boost::mutex::scoped_lock lock(timeoutMutex);
+	timoutSpan = Time::Interval(seconds);
+	if (timoutSpan.isZero())
+		timoutTime = Time();
 	else
 	{
-		StandardOut::singleton()->print(MESSAGE_ERROR, "An error occurred");
-		errorMessage.assign("Error occurred, no output from Lua.", 0x23);
+		FASTLOG1(FLog::ScriptContext, "Set lua time out: %d", (int)seconds);
+		timoutTime = Time::now<Time::Fast>() + timoutSpan;
+		if (!timeoutThread)
+			timeoutThread.reset(new boost::thread(RBX::thread_wrapper(
+				boost::bind(&ScriptContext::onCheckTimeout, shared_from(this)),
+				"ScriptContext Timeout")));
+		else
+			checkTimeout.Set();
 	}
-	std::string exceptionStack;
-	DataModel* dm = DataModel::get(this);
-	bool reportingStack = false;
-	if (DFInt::LuaExceptionPlaceFilter != 0)
-		reportingStack = (DFInt::LuaExceptionPlaceFilter == dm->getPlaceID());
-	printCallStack(thread, reportingStack ? &exceptionStack : NULL);
-	if (dm != NULL)
-	{
-		Stats::StatsService* stats = ServiceProvider::find<Stats::StatsService>(dm);
-		if (stats != NULL && reportingStack)
-		{
-			shared_ptr<Reflection::ValueTable> entry(new Reflection::ValueTable());
-			(*entry)["PlaceId"] = dm->getPlaceID();
-			(*entry)["CallStack"] = exceptionStack;
-			(*entry)["Error"] = errorMessage;
-			(*entry)["PlaceVersion"] = dm->getPlaceVersion();
-			stats->report("LuaExceptions", entry,
-				DFInt::LuaExceptionThrottlingPercentage);
-		}
-	}
-	if (DFFlag::LuaExceptionSignalEnabled)
-		dm->luaExceptionSignal();
-	shared_ptr<BaseScript> scriptPtr(RobloxExtraSpace::get(thread)->script,
-		boost::detail::sp_nothrow_tag());
-	if (!errorSignal.empty())
-	{
-		shared_ptr<BaseScript> source;
-		int line;
-		std::string callStackString = extractCallStack(thread, source, line);
-		RBXASSERT_LINE(scriptPtr == source, 2437);
-		errorSignal(errorMessage, callStackString, scriptPtr);
-	}
-	if (scriptPtr != NULL)
-		scriptPtr->extraErrorReporting(thread);
 }
+
 // mac: 0x194F84-0x1952E9 (batch713 full body): service attach/detach. Decoded flow: heartbeatConnection.disconnect() [0x194F99, +0x2DC]; old-provider arm [0x194FAD: endTimoutThread=1 + checkTimeout.Set + join the timeout thread + delete the LibraryService [+0x2D8] + closeStates(false)]; BOTH-arms stats resets [0x195002/0x19504A: statsItem [+0x10C] + scriptStats [+0x118]]; newProvider arm: stats = newProvider->create<Stats::StatsService>() [0x195089]; if (stats) LuaStatsItem create/parent, then the collectStats [+0x114] gate -> scriptStats.reset(new ScriptStats()) [0x1950F2-0x195136]; globalStates fill [0x19513B: Segregated- LuaEnvironments (off_EADED0 -- same flag as getGlobalState/ addLibrary, batch713 xrefs) -> openState into both slots; else slot 0 + NULL]; EADEC8-flag setTimeout arm [0x195173-0x195197]; LibraryService re-create [0x195197, old object deleted by the reset]; RunService create [0x1951CB, cached +0xBC + Heartbeat connect 0x1951DD-0x195279]. No Super call in the body (Instance's hook is empty). DELTAs (unported members, loud): heartbeatConnection disconnect [+0x2DC], statsItem create/reset [0x195002/0x19509C, LuaStatsItem parent wiring], RunService cache + Heartbeat connect tail (heartbeat era).  The detach trio [0x194FAD-0x194FD0], the closeStates(false) tail [0x194FFD] and the EADEC8 setTimeout arm [0x195173-0x195197] are LIVE (P2-503 + closeStates era).
 // STUB: PLAYER 0x0068b5f0
 // STUB: STUDIO 0x007f0d50
@@ -3743,27 +3362,7 @@ void ScriptContext::onServiceProvider(ServiceProvider* oldProvider, ServiceProvi
 	RunService* runService = newProvider->create<RunService>();
 	(void)runService;   // cache +0xBC / Heartbeat connect: heartbeat era DELTA
 }
-// mac: 0x18A30C-0x18A54B (batch719; 2016 ScriptContext.cpp:1192 matches modulo branch order).  The binary tests `timeoutThread != 0` first and kicks the running monitor (checkTimeout.Set); the spawn path is identical outright.
-// FUNCTION: PLAYER 0x0067eee0
-// FUNCTION: STUDIO 0x007e4db0
-void ScriptContext::setTimeout(double seconds)
-{
-	boost::mutex::scoped_lock lock(timeoutMutex);
-	timoutSpan = Time::Interval(seconds);
-	if (timoutSpan.isZero())
-		timoutTime = Time();
-	else
-	{
-		FASTLOG1(FLog::ScriptContext, "Set lua time out: %d", (int)seconds);
-		timoutTime = Time::now<Time::Fast>() + timoutSpan;
-		if (!timeoutThread)
-			timeoutThread.reset(new boost::thread(RBX::thread_wrapper(
-				boost::bind(&ScriptContext::onCheckTimeout, shared_from(this)),
-				"ScriptContext Timeout")));
-		else
-			checkTimeout.Set();
-	}
-}
+
 #ifndef _WIN32
 #define INFINITE            0xFFFFFFFF  // Infinite timeout
 #endif
@@ -3796,381 +3395,6 @@ void ScriptContext::onCheckTimeout()
 			else
 				sleepTimeInterval = Time::Interval(-1);	// disabled
 		}
-	}
-}
-// mac: 0x18B5AC core (batch320: allocator + newstate + atpanic + context link + 4 locked libs + string-metatable lock + _G table; returns the state for the caller to store. gc tuning, Bridges, globals and jobs queue in later parts).
-// STUB: PLAYER 0x00688370
-// STUB: STUDIO 0x007edad0
-lua_State* ScriptContext::openState()
-{
-	if (luaAllocator.get() == NULL)
-		luaAllocator.reset(new LuaAllocator(FLog::UseLuaMemoryPool != 0));
-	lua_State* L = lua_newstate(LuaAllocator::alloc, luaAllocator.get());
-	if (L == NULL)
-		throw std::runtime_error("Failed to create Lua state");
-	InterlockedIncrement(&g_openLuaStates);
-	lua_atpanic(L, scriptPanic);
-	lua_gc(L, LUA_GCSETSTEPMUL, LuaSettings::singleton().getGcStepMul());
-	lua_gc(L, LUA_GCSETPAUSE, LuaSettings::singleton().getGcPause());
-	RobloxExtraSpace::get(L)->setContext(this);
-	openScriptLibrary(L, "coroutine", luaopen_base);
-	openScriptLibrary(L, "string", luaopen_string);
-	{
-		lua_pushlstring(L, "", 0);
-		int hasMeta = lua_getmetatable(L, -1);
-		RBXASSERT(hasMeta == 1);  // ScriptContext.cpp:613 "i==1"
-		lua_pushstring(L, "The metatable is locked");
-		lua_setfield(L, -2, "__metatable");
-		lua_settop(L, -3);
-	}
-	openScriptLibrary(L, "math", luaopen_math);
-	openScriptLibrary(L, "table", luaopen_table);
-	lua_createtable(L, 0, 0);
-	lua_setfield(L, LUA_GLOBALSINDEX, "_G");
-	// Bridge metatypes (batch320 EA order; 0x18B7EF block sits between _G (0x18B7BE) and the shared/print globals). Binary order 0x18B7EF- mac: 0x18BAAB: Library, AllEnumDescriptors, EnumDescriptor, Item, shared_ptr<Instance>, EventInstance, connection (shared_ptr still queues behind the Instance era), then the 17 atomic types, then WeakThreadRef::Node + 2 GenericFunctions (thread/yield eras).
-	Lua::Bridge<Lua::Library>::registerClass(L,
-		Lua::Bridge<Lua::Library>::on_index, Lua::Bridge<Lua::Library>::on_newindex);
-	Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::registerClass(L,
-		Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::on_index,
-		Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::on_newindex);
-	Lua::Bridge<Lua::EnumDescriptorPtr, true>::registerClass(L,
-		Lua::Bridge<Lua::EnumDescriptorPtr, true>::on_index,
-		Lua::Bridge<Lua::EnumDescriptorPtr, true>::on_newindex);
-	Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::registerClass(L,
-		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_index,
-		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_newindex);
-	// (shared_ptr<Instance> registerClass queues behind the Instance era, 0x18B85F.) shared_ptr<Instance> bridge (sections 258a-c; binary slot 0x18B85F).
-	Lua::Bridge<boost::shared_ptr<Instance>, false>::registerClass(L,
-		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_index,
-		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_newindex);
-	// EventInstance bridge (section 253; binary slot 0x18B87B).
-	Lua::Bridge<Lua::EventInstance>::registerClass(L,
-		Lua::Bridge<Lua::EventInstance>::on_index,
-		Lua::Bridge<Lua::EventInstance>::on_newindex);
-	// connection bridge (section 243; binary slot 0x18B897).
-	Lua::Bridge<rbx::signals::connection>::registerClass(L,
-		Lua::Bridge<rbx::signals::connection>::on_index,
-		Lua::Bridge<rbx::signals::connection>::on_newindex);
-	Lua::Bridge<G3D::CoordinateFrame>::registerClass(L,
-		Lua::Bridge<G3D::CoordinateFrame>::on_index, Lua::Bridge<G3D::CoordinateFrame>::on_newindex);
-	Lua::Bridge<RBX::Region3>::registerClass(L,
-		Lua::Bridge<RBX::Region3>::on_index, Lua::Bridge<RBX::Region3>::on_newindex);
-	Lua::Bridge<RBX::Region3int16>::registerClass(L,
-		Lua::Bridge<RBX::Region3int16>::on_index, Lua::Bridge<RBX::Region3int16>::on_newindex);
-	Lua::Bridge<G3D::Vector3int16>::registerClass(L,
-		Lua::Bridge<G3D::Vector3int16>::on_index, Lua::Bridge<G3D::Vector3int16>::on_newindex);
-	Lua::Bridge<G3D::Vector2int16>::registerClass(L,
-		Lua::Bridge<G3D::Vector2int16>::on_index, Lua::Bridge<G3D::Vector2int16>::on_newindex);
-	Lua::Bridge<G3D::Vector3>::registerClass(L,
-		Lua::Bridge<G3D::Vector3>::on_index, Lua::Bridge<G3D::Vector3>::on_newindex);
-	Lua::Bridge<G3D::Vector2>::registerClass(L,
-		Lua::Bridge<G3D::Vector2>::on_index, Lua::Bridge<G3D::Vector2>::on_newindex);
-	Lua::Bridge<RBX::RbxRay>::registerClass(L,
-		Lua::Bridge<RBX::RbxRay>::on_index, Lua::Bridge<RBX::RbxRay>::on_newindex);
-	Lua::Bridge<G3D::Color3>::registerClass(L,
-		Lua::Bridge<G3D::Color3>::on_index, Lua::Bridge<G3D::Color3>::on_newindex);
-	Lua::Bridge<RBX::BrickColor>::registerClass(L,
-		Lua::Bridge<RBX::BrickColor>::on_index, Lua::Bridge<RBX::BrickColor>::on_newindex);
-	Lua::Bridge<RBX::UDim>::registerClass(L,
-		Lua::Bridge<RBX::UDim>::on_index, Lua::Bridge<RBX::UDim>::on_newindex);
-	Lua::Bridge<RBX::UDim2>::registerClass(L,
-		Lua::Bridge<RBX::UDim2>::on_index, Lua::Bridge<RBX::UDim2>::on_newindex);
-	Lua::Bridge<RBX::Faces>::registerClass(L,
-		Lua::Bridge<RBX::Faces>::on_index, Lua::Bridge<RBX::Faces>::on_newindex);
-	Lua::Bridge<RBX::Axes>::registerClass(L,
-		Lua::Bridge<RBX::Axes>::on_index, Lua::Bridge<RBX::Axes>::on_newindex);
-	Lua::Bridge<RBX::CellID>::registerClass(L,
-		Lua::Bridge<RBX::CellID>::on_index, Lua::Bridge<RBX::CellID>::on_newindex);
-	Lua::Bridge<RBX::InputObject>::registerClass(L,
-		Lua::Bridge<RBX::InputObject>::on_index, Lua::Bridge<RBX::InputObject>::on_newindex);
-	// (WeakThreadRef::Node + 2 GenericFunction registerClasses queue behind thread/yield eras; 0x18BA73/0x18BA8F/0x18BAAB.) Node bridge (section 245; binary slot 0x18BA73).
-	Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::registerClass(L,
-		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_index,
-		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_newindex);
-	// Sync GenericFunction bridge (section 248; binary slot 0x18BA8F -- async twin at 0x18BAAB queues behind scheduleResume).
-	Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::registerClass(L,
-		Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::on_index,
-		Lua::Bridge<boost::shared_ptr<Lua::GenericFunction>>::on_newindex);
-	// Async GenericAsyncFunction bridge (section 251; binary slot 0x18BAAB).
-	Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::registerClass(L,
-		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_index,
-		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_newindex);
-	// Class libraries batch 1 (section 236; binary order 0x18BAxx-0x18BB4B: the enum-gated tables -- Vector3 FromNormalId/FromAxis, Faces, Axes -- land with the EnumDescriptor::Item bridge era; CFrame/UDim/ UDim2/BrickColor/CellID/InputObject libraries queue behind their new* bodies, batch402 next). Enum singleton tables (section 239; binary slots 0x18BABB/0x18BAC3/ mac: 0x18BACB, ahead of the CFrame library) + Library table (section 241; binary slot 0x18BAB3, first of the block).
-	Lua::LibraryBridge::registerClassLibrary(L);
-	Lua::Enums::registerClassLibrary(L);
-	Lua::Enum::registerClassLibrary(L);
-	Lua::EnumItem::registerClassLibrary(L);
-	Lua::Region3Bridge::registerClassLibrary(L);
-	Lua::Region3int16Bridge::registerClassLibrary(L);
-	Lua::Vector3int16Bridge::registerClassLibrary(L);
-	Lua::Vector2int16Bridge::registerClassLibrary(L);
-	Lua::Vector3Bridge::registerClassLibrary(L);
-	Lua::Vector2Bridge::registerClassLibrary(L);
-	Lua::RbxRayBridge::registerClassLibrary(L);
-	Lua::Color3Bridge::registerClassLibrary(L);
-	Lua::BrickColorBridge::registerClassLibrary(L);
-	Lua::CoordinateFrameBridge::registerClassLibrary(L);
-	Lua::UDimBridge::registerClassLibrary(L);
-	Lua::UDim2Bridge::registerClassLibrary(L);
-	// Faces/Axes/CellID/InputObject libraries (section 240; binary slots mac: 0x18BB33/0x18BB3B/0x18BB43/0x18BB4B; SharedPtr<Instance> 0x18BB53 still queues behind the Instance era).
-	Lua::FacesBridge::registerClassLibrary(L);
-	Lua::AxesBridge::registerClassLibrary(L);
-	Lua::CellIDBridge::registerClassLibrary(L);
-	Lua::InputObjectBridge::registerClassLibrary(L);
-	// shared_ptr<Instance> reuse table (binary slot 0x18BB53, between the InputObject library and Node::create; the push weak-table lookup AVs without it -- stats() proved it live).
-	Lua::SharedPtrBridge<Instance>::registerClassLibrary(L);
-	// Instance global (binary slot 0x18BB5B, called from openState right after the SharedPtr library: luaL_register(L, "Instance")).
-	Lua::ObjectBridge::registerInstanceClassLibrary(L);
-	// Main-thread Node (binary slot 0x18BB63, batch477: sits between the InputObject library above and the game/app/Workspace globals + shared table below; the game/app/Workspace globals queue behind the DataModel era). closeState 0x18EE84 erases refs through every thread's node, so an openState'd state without one AVs on close (section 271 postmortem: intrusive_ptr px != 0 in eraseRefsFromAllNodes). Return discarded: the L-20 slot holds the ref, matching Node::create's contract.
-	Lua::WeakThreadRef::Node::create(L);
-	// game/Game/workspace/Workspace globals (0x18BB89-0x18BD7A, batches 632/668/669/671: +0x34 root-climb (getRootAncestor) pushed twice as the game/Game alias; Workspace pair via find<Workspace> (binary Instance overload -- climbs to the root provider, same call here). OverlayDataModel roots take the App-only arm instead -- queued with the overlay era. DELTA: binary pushes shared_from() unconditionally (throws/AVs for unmanaged roots); ours pushes nil when unresolvable so harness stack states stay green -- identical for heap states.
-	{
-		shared_ptr<Instance> rootSp;
-		try { rootSp = shared_from(Instance::getRootAncestor(this)); }
-		catch (const std::exception&) { }
-		if (rootSp != NULL && rootSp->isA<OverlayDataModel>())
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "App");
-		}
-		else if (rootSp != NULL)
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "game");
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
-		}
-		else
-		{
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "game");
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
-		}
-		shared_ptr<Instance> wsSp;
-		try { wsSp = shared_from(ServiceProvider::find<Workspace>(static_cast<Instance*>(this))); }
-		catch (const std::exception&) { }
-		if (wsSp != NULL)
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
-			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
-		}
-		else
-		{
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
-		}
-	}
-	// Globals batch 1 (batch320 tail: shared table + print + gated crash__ + tick + time + ElapsedTime + printidentity; the rest queue behind yield/bridge/service eras).
-	lua_createtable(L, 0, 0);
-	lua_setfield(L, LUA_GLOBALSINDEX, "shared");
-	lua_pushcfunction(L, print);
-	lua_setfield(L, LUA_GLOBALSINDEX, "print");
-	if (FFlag::DebugCrashEnabled)
-	{
-		lua_pushcfunction(L, crash);
-		lua_setfield(L, LUA_GLOBALSINDEX, "crash__");
-	}
-	lua_pushcfunction(L, tick);
-	lua_setfield(L, LUA_GLOBALSINDEX, "tick");
-	// time global (binary slot 0x18BE7C, between tick and ElapsedTime; the +188/+116 DELTA above is resolved to live lookup).
-	lua_pushcfunction(L, time);
-	lua_setfield(L, LUA_GLOBALSINDEX, "time");
-	lua_pushcfunction(L, rbxTime);
-	lua_setfield(L, LUA_GLOBALSINDEX, "ElapsedTime");
-	// Globals batch 2 (section 249; binary order 0x18BED3-0x18C2BC: wait/Wait/delay/Delay/ypcall/Spawn/printidentity/dofile/loadfile/ load/settings/UserSettings/PluginManager/DebuggerManager/stats/ Stats/version/Version; LoadLibrary/LoadRobloxLibrary queue behind LibraryService -- the only unlanded batch-2 slots). DELTA: binary registers into the -10002 sandbox env; ours uses LUA_GLOBALSINDEX like batch 1 (sandbox env unlanded -- reconcile in the sandbox-era audit).
-	lua_pushcfunction(L, wait);
-	lua_setfield(L, LUA_GLOBALSINDEX, "wait");
-	lua_pushcfunction(L, wait);
-	lua_setfield(L, LUA_GLOBALSINDEX, "Wait");
-	lua_pushcfunction(L, delay);
-	lua_setfield(L, LUA_GLOBALSINDEX, "delay");
-	lua_pushcfunction(L, delay);
-	lua_setfield(L, LUA_GLOBALSINDEX, "Delay");
-	// ypcall (section 250; binary slot between Delay and Spawn in the batch477 order).
-	lua_pushcfunction(L, ypcall);
-	lua_setfield(L, LUA_GLOBALSINDEX, "ypcall");
-	lua_pushcfunction(L, spawn);
-	lua_setfield(L, LUA_GLOBALSINDEX, "Spawn");
-	// printidentity (batch637: binary slot between Spawn and dofile; the port moves it here from the batch-1 group -- registry writes only, order within the batch is not observable).
-	lua_pushcfunction(L, printidentity);
-	lua_setfield(L, LUA_GLOBALSINDEX, "printidentity");
-	// dofile/loadfile/load (batch637: pushcclosure 0x18C033/0x18C067/0x18C09B + setfield 0x18C038/0x18C081/0x18C0B5; fns dofile 0x18DC8C / loadfile 0x18DE94 / notImplemented 0x18E382).
-	lua_pushcfunction(L, dofile);
-	lua_setfield(L, LUA_GLOBALSINDEX, "dofile");
-	lua_pushcfunction(L, loadfile);
-	lua_setfield(L, LUA_GLOBALSINDEX, "loadfile");
-	lua_pushcfunction(L, load);
-	lua_setfield(L, LUA_GLOBALSINDEX, "load");
-	// settings-tree globals (0x18C0E9/0x18C11D/0x18C151/0x18C1F8).
-	lua_pushcfunction(L, settings);
-	lua_setfield(L, LUA_GLOBALSINDEX, "settings");
-	lua_pushcfunction(L, usersettings);
-	lua_setfield(L, LUA_GLOBALSINDEX, "UserSettings");
-	lua_pushcfunction(L, pluginmanager);
-	lua_setfield(L, LUA_GLOBALSINDEX, "PluginManager");
-	// Library globals (0x18C170/0x18C1A4: "LoadLibrary" then "LoadRobloxLibrary", between PluginManager and DebuggerManager).
-	lua_pushcfunction(L, loadLibrary);
-	lua_setfield(L, LUA_GLOBALSINDEX, "LoadLibrary");
-	lua_pushcfunction(L, loadRobloxLibrary);
-	lua_setfield(L, LUA_GLOBALSINDEX, "LoadRobloxLibrary");
-	lua_pushcfunction(L, debuggermanager);
-	lua_setfield(L, LUA_GLOBALSINDEX, "DebuggerManager");
-	// stats/Stats (section 250; binary order between Spawn and version/Version in the batch477 sequence).
-	lua_pushcfunction(L, stats);
-	lua_setfield(L, LUA_GLOBALSINDEX, "stats");
-	lua_pushcfunction(L, stats);
-	lua_setfield(L, LUA_GLOBALSINDEX, "Stats");
-	lua_pushcfunction(L, version);
-	lua_setfield(L, LUA_GLOBALSINDEX, "version");
-	lua_pushcfunction(L, version);
-	lua_setfield(L, LUA_GLOBALSINDEX, "Version");
-	// Enum global (section 239; binary slot 0x18C2C4, after the version/Version globals which queue behind their era).
-	Lua::Enums::declareAllEnums(L);
-	// Yielding waiters (section 249; binary 0x18C2C9: guarded singleton-construct into the yieldEvent member).
-	if (yieldEvent.get() == NULL)
-		yieldEvent.reset(new Lua::YieldingThreads(this));
-	return L;
-}
-// =================================================================== RuntimeScriptService (batches 730-771; the binary implements it in script/ScriptContext.cpp per IScriptFilter.h:17 -- filed here beside the ScriptContext methods instead; App/script/ScriptContext.cpp stays the empty placeholder). ===================================================================
-const char* const sRuntimeScriptService = "RuntimeScriptService";
-REFLECTION_BEGIN();
-REFLECTION_END();
-// Class registrar (see Instance.cpp/Service.cpp note).
-RBX_REGISTER_CLASS(RBX::RuntimeScriptService);
-// mac: 0x1848EC (batch770:1129-1161): zeroes pendingScripts/runningScripts/ isRunning (connection/sets default-construct; the binary's GCC zeroing of the set headers matches the member default state).
-RuntimeScriptService::RuntimeScriptService()
-	: isRunning(false)
-{
-}
-// mac: 0x196AC4 (batch770:502-636): old provider -> disconnect; new -> the RunService runState adopt (friend-read, private +112) + assign the transition connect into the scoped connection (per HeartbeatInstance.cpp:25 form; the binary compares, disconnects, assigns).
-// STUB: PLAYER 0x0068bd50
-// STUB: STUDIO 0x007f14b0
-void RuntimeScriptService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
-{
-	if (oldProvider != NULL)
-		runTransitionConnection.disconnect();
-	if (newProvider != NULL)
-	{
-		RunService* runService = ServiceProvider::create<RunService>(newProvider);
-		onRunState(runService->runState);
-		runTransitionConnection = runService->runTransitionSignal.connect(
-			boost::bind(&RuntimeScriptService::onRunTransition, this, _1));
-	}
-}
-// mac: 0x19ABCC (batch770:634-666): bridge to the run-state writer.
-// FUNCTION: PLAYER 0x0068bd40
-// FUNCTION: STUDIO 0x007f14a0
-void RuntimeScriptService::onRunTransition(RunTransition event)
-{
-	onRunState(event.newState);
-}
-// mac: 0x196B9C (batch770:668-830): the isRunning toggle moves the two script sets into/from the ScriptContext -- range-insert BEFORE the temp swap, per the decode; arm bodies over the moved sets.
-// STUB: PLAYER 0x0068b9d0
-// STUB: STUDIO 0x007f1130
-void RuntimeScriptService::onRunState(RunState state)
-{
-	if ((state != 0) != isRunning)
-	{
-		isRunning = (state != 0);
-		ScriptContext* scriptContext = ServiceProvider::create<ScriptContext>(this);
-		if (isRunning)
-		{
-			runningScripts.insert(pendingScripts.begin(), pendingScripts.end());
-			std::set<BaseScript*> temp;
-			temp.swap(pendingScripts);
-			for (std::set<BaseScript*>::iterator it = temp.begin(); it != temp.end(); ++it)
-			{
-				ScriptContext::ScriptStartOptions options;
-				options.identity = 2;
-				scriptContext->addScript(*it, options);
-			}
-		}
-		else
-		{
-			pendingScripts.insert(runningScripts.begin(), runningScripts.end());
-			std::set<BaseScript*> temp;
-			temp.swap(runningScripts);
-			for (std::set<BaseScript*>::iterator it = temp.begin(); it != temp.end(); ++it)
-				scriptContext->removeScript(*it);
-		}
-	}
-}
-// mac: 0x19705A (batch753:306-455): the assert contract (binary lines 2776/2780, texts verbatim in the checkpoint), ScriptContext create, the CoreScript arm (start now, identity 2), the backend/running gate (running set + start), else pend by pointer.
-// STUB: PLAYER 0x0068bbd0
-// STUB: STUDIO 0x007f1330
-void RuntimeScriptService::runScript(BaseScript* script)
-{
-	RBXASSERT(runningScripts.find(script) == runningScripts.end());		// binary line 2776
-	ScriptContext* scriptContext = ServiceProvider::create<ScriptContext>(this);
-	RBXASSERT(!scriptContext->hasScript(script));		// binary line 2780
-	if (RBX::Instance::fastDynamicCast<CoreScript>(script) != NULL)
-	{
-		ScriptContext::ScriptStartOptions options;
-		options.identity = 2;
-		scriptContext->addScript(script, options);
-		return;
-	}
-	if (!Network::Players::backendProcessing(this) || isRunning)
-	{
-		runningScripts.insert(script);
-		ScriptContext::ScriptStartOptions options;
-		options.identity = 2;
-		scriptContext->addScript(script, options);
-		return;
-	}
-	pendingScripts.insert(script);
-}
-
-// mac: 0x19745C (batch770:794-1118 + batch771 STR list): find-or-bail, then
-// the CoreScript arm = the three membership asserts (2809/2810/2811 --
-// thunk texts @B2D6BE/B2D54A/B2D616) and RETURN, no mutation; the
-// non-core arm: num = pendingScripts.erase(script) with the "num <= 1"
-// assert (binary line 2816, @B2D8A8); num==0 (was running) asserts
-// runningScripts membership (2820, @B2D91E), erases it, asserts
-// scriptContext->hasScript (2823, @B2D9EA), hands to
-// ScriptContext::removeScript; num==1 (was pending) asserts
-// !hasScript (2828, @B2D616 short / @B2DA90 full) and STOPs -- no
-// removeScript on that arm.
-// STUB: PLAYER 0x00684800
-// STUB: STUDIO 0x007ea260
-void RuntimeScriptService::releaseScript(BaseScript* script)
-{
-	ScriptContext* scriptContext = ServiceProvider::find<ScriptContext>(this);
-	if (!scriptContext)
-		return;
-
-	if (RBX::Instance::fastDynamicCast<CoreScript>(script) != NULL)
-	{
-		// CoreScript arm, assert-only (batch770:858-969): a released core
-		// script must sit in none of the three sets. No writes follow.
-		RBXASSERT(pendingScripts.find(script) == pendingScripts.end());		// binary line 2809 (@B2D6BE)
-		RBXASSERT(runningScripts.find(script) == runningScripts.end());		// binary line 2810 (@B2D54A)
-		RBXASSERT(!scriptContext->hasScript(script));						// binary line 2811 (@B2D616 / B2D822)
-		return;
-	}
-
-	std::size_t num = pendingScripts.erase(script);
-	RBXASSERT(num <= 1);		// binary line 2816 (@B2D8A8)
-
-	if (num == 0)
-	{
-		// Was running (batch770:995-1079): must be in runningScripts;
-		// erase it, confirm the ScriptContext still holds it, remove.
-		RBXASSERT(runningScripts.find(script) != runningScripts.end());		// binary line 2820 (@B2D91E)
-		runningScripts.erase(script);
-		RBXASSERT(scriptContext->hasScript(script));						// binary line 2823 (@B2D9EA)
-		scriptContext->removeScript(script);
-	}
-	else
-	{
-		// Was pending (batch770:1081-1117): never registered with the
-		// ScriptContext -- assert and stop (no removeScript here).
-		RBXASSERT(!scriptContext->hasScript(script));						// binary line 2828 (@B2D616 / B2DA90)
 	}
 }
 

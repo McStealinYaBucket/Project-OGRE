@@ -33,6 +33,9 @@ namespace RBX {
 
 		virtual int getGeometryType() const = 0;
 		virtual int getCollideType() const = 0;
+		const G3D::Vector3& getSize() const { return size; }
+		// 2013 stores through a vftable slot (Primitive::setSize); not modelled yet.
+		void setSizeNonVirtual(const G3D::Vector3& value) { size = value; }
 		// Slot 17 (0x5886C0 base identity).
 		// FUNCTION: PLAYER 0x004901e0
 		// FUNCTION: STUDIO 0x0051fb70

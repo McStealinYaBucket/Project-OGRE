@@ -86,6 +86,13 @@ CLASSES = [
     # the tree), StarterGear (ctor 100%, no size assert), STUDIO ScreenGui/RunService (0.982, 0.937 / 0.899),
     # Workspace (0.19 / 0.45), TaskScheduler (0.978 / 0.995)
     "RBX::Lighting", "RBX::PhysicsJob", "RBX::HeartbeatTask",
+    # wave5 sync (sweep12, build/sweep12/P-final.json / S-final.json effective 100%; size = // SIZE = the PDB's),
+    # PLAYER / STUDIO: World (0xb8, world-5d.md) ctor 0x0074ae30 (STUDIO 0x0088b780 at 0.991), dtor 0x00749ae0 /
+    # 0x0088a430; ContactManager (0x6c) dtor 0x007bb5e0 / 0x008d7f80 (ctor 0x007b63a0 at 0.794: its
+    # ContactManagerSpatialHash member is 0xa4 against 2013's 0xdc, but it is held by pointer). Not yet: MultiJoint
+    # (dtor 0x009741c0 100%, no size assert), LuaSettings (0x88 asserted; ctor 0x0085e360 at 0.739), StarterGear
+    # (ctor 100%, no size assert), STUDIO ScreenGui/RunService, Workspace, TaskScheduler, SleepStage, Primitive
+    "RBX::World", "RBX::ContactManager",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 

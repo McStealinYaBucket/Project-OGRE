@@ -328,6 +328,21 @@ FACTS = [
      "reference argument; null -> call_once(initNullName 0x00613a70) and returns the null Name, else builds a "
      "std::string and calls the string lookup 0x00613ab0 (STUDIO 0x00703380); the last function before "
      "XmlElement.obj (5c-serialization.md)"),
+    # wave5 sync (notes/runs/2026-11-23-phase5-wave5: base-blockers.md "IDA owner"; sweep12). Checked 2026-11-23
+    # with capstone on both targets.
+    (0x00480e90, 0x0043f250, "keep", "", "ios:",
+     "doDeclare<Stats::sStatsItem> | the 100% body is ours, but our tree spells the template argument RBX::sStatsItem; "
+     "the 2013 RTTI spells it Stats (.?AV?$NonFactoryProduct@VInstance@RBX@@$E?sStatsItem@Stats@2@3QBDB@RBX@@), "
+     "so the iOS name stays"),
+    (0x00482680, 0x0043f240, "rename", "??$callDoDeclare@$E?sStatsItem@Stats@RBX@@3QBDB@Name@RBX@@SAXXZ", "match:",
+     "RBX::Name::callDoDeclare<RBX::Stats::sStatsItem>() | reccmp 100% vs our callDoDeclare<sStatsItem> (sweep12), "
+     "a `jmp` to doDeclare 0x00480e90 (STUDIO 0x0043f250); namespace Stats from the 2013 RTTI, as above"),
+    (0x0085e310, 0x00948930, "rename", "??_GLuaSettings@RBX@@UAEPAXI@Z", "match:",
+     "RBX::LuaSettings::`scalar deleting destructor' | reccmp 100% (sweep12) vs our 0x004b8b20, where our linker folds "
+     "it with GlobalAdvancedSettingsItem<LuaSettings>'s ??_G; clears the singleton slot 0x00de68a8 (STUDIO "
+     "0x00f89334), reached through the adjustor{28} thunk 0x0085e300 (sub ecx,0x1c; jmp) that slot 0 of both "
+     "the LuaSettings and the GlobalAdvancedSettingsItem<LuaSettings> vftables at +0x1c hold (0x00b7d008, "
+     "0x00b7cf70); base-blockers.md names it LuaSettings"),
 ]
 
 
@@ -556,8 +571,8 @@ def plan(target, json_path, exe):
         if a in updates and updates[a][0] == "rename" and act == "rename" and updates[a][1] != name:
             print(f"{target}: fact 0x{a:08x} {name} overrides the reccmp name {updates[a][1]}")
         if act == "keep":       # the oracle name stays over our 100% body's name (our name is an invented one)
-            base = updates[a][3] if a in updates else "p4 %s" % tag
-            updates[a] = ("comment", "", tag, base + "; " + ev + where)
+            line = updates[a][3] + "; " + ev if a in updates else f"p4 {tag} {ev}"  # "p4 ios:;" misparses
+            updates[a] = ("comment", "", tag, line + where)
             conflicts[:] = [c[:7] + ("oracle-kept (fact)", ev) if c[0] == f"0x{a:08x}" else c for c in conflicts]
         elif act == "comment" and a in updates:     # keep the reccmp line (and its source) and add the fact
             updates[a] = updates[a][:3] + (updates[a][3] + "; " + ev + where,)

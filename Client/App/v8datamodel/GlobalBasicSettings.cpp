@@ -5,7 +5,7 @@
 #include "V8DataModel/GlobalBasicSettings.h"
 
 namespace RBX {
-	const char* const sGlobalBasicSettings = "GlobalBasicSettings";
+	const char* const sGlobalBasicSettings = "UserSettings";	// 2013 string (PLAYER 0x00b31088 -> 0x00b31060)
 }
 
 using namespace RBX;

@@ -720,13 +720,20 @@ union luai_Cast { double l_d; long l_l; };
 ** CHANGE (define) this if you really need that. This value must be
 ** a multiple of the maximum alignment required for your machine.
 */
-/* ROBLOX: per-thread RBX state in front of every lua_State. Stand-in for the 2013
-** class: the layout is PLAYER's (44 bytes, see RobloxExtraSpace(RobloxExtraSpace*)
-** 0x00874f40) but the members are opaque and the constructors/destructor are only
-** declared; PLAYER never inlines them into Lua code (the real ones carry
-** RBXASSERTs at luaconf.h lines 852 and 862 and RBX::Intrusive::Set calls). */
+/* ROBLOX: per-thread RBX state in front of every lua_State, 44 bytes (PLAYER: luaE_newthread
+** 0x00876420 allocates 0x78 + 0x2c; App code reads it at L-0x2c, spawn 0x00674850).
+** Two views of one layout. The Lua core (LUA_CORE/LUA_LIB) sees opaque members, because its
+** TUs build against stand-in headers and only call the out-of-line constructors/destructor
+** (RobloxExtraSpace(RobloxExtraSpace*) 0x00874f40, asserts here at line 852;
+** ~RobloxExtraSpace 0x008766a0, line 862). App sees the typed members. Offsets and types are
+** PLAYER's, from 0x00874f40: Hook 0, shared_ptr<Shared> 0xc, intrusive_ptr<Node> 0x14,
+** identity:5 at 0x18 (signed: shl/sar 0x1b when copied, so the Identities enum), yieldCaptured
+** a bool unit of its own at 0x1c (and byte [+0x1c],0xfe), weak_ptr<BaseScript> 0x20,
+** scoped_ptr<Continuations> 0x28. Shared: threadCount 0, context 4, allThreads 8 (the child
+** ctor's `inc [shared]` and insert(this) on shared+8). */
 #include <new>
 struct lua_State;
+#if defined(LUA_CORE) || defined(LUA_LIB)
 #pragma pack(push)
 #pragma pack(8)
 class RobloxExtraSpace
@@ -735,12 +742,55 @@ class RobloxExtraSpace
 	void *shared[2];        /* +0x0c boost::shared_ptr<Shared> */
 	void *node;             /* +0x14 boost::intrusive_ptr<Node> */
 public:
-	unsigned int identity : 5;  /* +0x18 */
-	bool yieldCaptured : 1;     /* +0x1c, a unit of its own (bit 0) */
+	int identity : 5;       /* +0x18 RBX::Security::Identities */
+	bool yieldCaptured : 1; /* +0x1c, a unit of its own (bit 0) */
 private:
 	void *script[2];        /* +0x20 boost::weak_ptr<RBX::BaseScript> */
 	void *continuations;    /* +0x28 boost::scoped_ptr<Continuations> */
 public:
+#else
+#include "boost/shared_ptr.hpp"
+#include "boost/weak_ptr.hpp"
+#include "boost/scoped_ptr.hpp"
+#include "boost/intrusive_ptr.hpp"
+#include "rbx/Intrusive/Set.h"
+#include "security/SecurityContext.h"
+#include "script/ThreadRef.h"
+namespace RBX
+{
+	class BaseScript;
+	class ScriptContext;
+	namespace Lua { class Continuations; }
+}
+#pragma pack(push)
+#pragma pack(8)
+class RobloxExtraSpace : public RBX::Intrusive::Set<RobloxExtraSpace>::Hook
+{
+	typedef RBX::Intrusive::Set<RobloxExtraSpace> AllThreads;
+	struct Shared
+	{
+		int threadCount;                /* +0x00 */
+		RBX::ScriptContext* context;    /* +0x04 */
+		AllThreads allThreads;          /* +0x08 */
+	};
+	const boost::shared_ptr<Shared> shared;     /* +0x0c */
+	typedef RBX::Lua::WeakThreadRef::Node Node;
+	boost::intrusive_ptr<Node> node;            /* +0x14 */
+public:
+	RBX::Security::Identities identity : 5;     /* +0x18 */
+	bool yieldCaptured : 1;                     /* +0x1c */
+	boost::weak_ptr<RBX::BaseScript> script;    /* +0x20 */
+	boost::scoped_ptr<RBX::Lua::Continuations> continuations;  /* +0x28 */
+
+	RBX::ScriptContext* context() const { return shared->context; }
+	size_t getThreadCount() const { return (size_t) shared->threadCount; }
+	void setContext(RBX::ScriptContext* context) { shared->context = context; }
+	Node* getNode() const { return node.get(); }
+	/* Inline in 2013 but never inlined: their only users call them out of line, so each is defined
+	** beside its user (ThreadRef.cpp, ScriptContext.cpp) with its address. */
+	void createNewNode();
+	void eraseRefsFromAllNodes();
+#endif
 	static RobloxExtraSpace* get(struct lua_State *L)
 	{
 		return L ? reinterpret_cast<RobloxExtraSpace*>(((char*) L) - sizeof(RobloxExtraSpace)) : 0;

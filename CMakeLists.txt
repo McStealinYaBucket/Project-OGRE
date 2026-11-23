@@ -295,9 +295,9 @@ option(OGRE_FORCE_UNRESOLVED "Link despite unresolved externals (LNK4088)" ON)
 set(OGRE_LOG_FLAGS /O2 /Ob2 /Oi /Oy /GS /GL /GR /EHsc /D_SECURE_SCL=0 /DNDEBUG /DWIN32)
 
 # Third-party header roots for the prior tree. The prior harness used a 2016-era Contribs that is not
-# here. boost 1.53.0 is the pinned version. TBB: the 2013 tbb.dll is TBB 2.1 (interface 3011), which
-# has no official download any more; 4.4 is the oldest upstream tag, used only for headers
-# (queuing_rw_mutex). 3rdparty/vc9compat: headers VC9 lacks (stdint.h, cstdint). Lua: Client/App/Lua-5.1.4/src first (the 2013 Lua agent's home); the prior
+# here. boost 1.53.0 is the pinned version. TBB: the 2013 tbb.dll is TBB 2.1 (interface 3011,
+# tbb21_20080605oss); its headers are vendored in 3rdparty/tbb-2.1 (spin_mutex's scoped_lock stores
+# the byte __TBB_LockByte returned: Body::getPV_Spin_Lock 0x007554e0). 3rdparty/vc9compat: headers VC9 lacks (stdint.h, cstdint). Lua: Client/App/Lua-5.1.4/src first (the 2013 Lua agent's home); the prior
 # tree's own 2016-fork headers are the fallback until that agent's headers land there.
 set(OGRE_DL "${PROJECT_SOURCE_DIR}/3rdparty/_downloads")
 set(OGRE_PRIOR_LUA_FALLBACK "${PROJECT_SOURCE_DIR}/2013 55% App/App/Lua-5.1.4/src" CACHE PATH
@@ -306,7 +306,7 @@ set(OGRE_PRIOR_INCLUDES
     Client/App/include Client/App/Lua-5.1.4/src "${OGRE_PRIOR_LUA_FALLBACK}" Client/Base/include
     Client/Network/include Client/Rendering/g3d/include Client/Rendering/RbxG3D/include
     Client/Rendering/GfxBase/include Client/Log/include
-    "${OGRE_DL}/boost_1_53_0/boost_1_53_0" "${OGRE_DL}/tbb-4.4/oneTBB-4.4/include"
+    "${OGRE_DL}/boost_1_53_0/boost_1_53_0" 3rdparty/tbb-2.1/include
     "${OGRE_DL}/zlib-1.2.3/zlib-1.2.3" 3rdparty/vc9compat)
 list(TRANSFORM OGRE_PRIOR_INCLUDES PREPEND "${PROJECT_SOURCE_DIR}/" REGEX "^3rdparty/")
 list(TRANSFORM OGRE_PRIOR_INCLUDES PREPEND "${PROJECT_SOURCE_DIR}/" REGEX "^Client/")
@@ -366,14 +366,8 @@ if(OGRE_PRIOR_APP)
     #   APIs, Voxel/Cell.h is a 0-byte stub, Util/StreamingUtil.h does not exist.
     ogre_prior_sources(App GLOBS App/*.cpp App/*.c EXCLUDE "/App/Lua-5\\.1\\.4/"
         "/App/util/StreamRegion\\.cpp$")
-    # These three use RobloxExtraSpace's members (context(), getThreadCount(), script, continuations),
-    # which the 2013 Lua's luaconf.h keeps opaque (only the 44-byte layout PLAYER proves). They see the
-    # prior tree's full class (2016-fork Lua headers) instead: a source-level include directory comes
-    # before the target's. TODO: a 2013 luaconf.h that gives App the full class.
-    set_source_files_properties("${PROJECT_SOURCE_DIR}/Client/App/script/ScriptContext.cpp"
-        "${PROJECT_SOURCE_DIR}/Client/App/script/ThreadRef.cpp"
-        "${PROJECT_SOURCE_DIR}/Client/App/script/LuaInstanceBridge.cpp"
-        PROPERTIES INCLUDE_DIRECTORIES "${OGRE_PRIOR_LUA_FALLBACK}")
+    # ScriptContext.cpp, ThreadRef.cpp and LuaInstanceBridge.cpp use RobloxExtraSpace's typed members,
+    # which the 2013 luaconf.h gives every non-Lua TU (L-0x2c, LUA_IDSIZE 60: spawn 0x00674850).
     # lz4 upstream svn r94 (2013-04-26), the revision the 2016 tree's App/lz4 carries. PLAYER has the
     # decoder (SerializerBinary deserialize, "Malformed data (%d != %d)"); headers only for now.
     target_include_directories(App PRIVATE "${OGRE_DL}/lz4-r94/lz4-r94")
