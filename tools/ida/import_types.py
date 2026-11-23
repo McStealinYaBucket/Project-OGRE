@@ -78,6 +78,14 @@ CLASSES = [
     "CRenderSettingsItem", "RBX::BasePlayerGui", "RBX::PlayerGui", "RBX::CoreGuiService", "RBX::GuiButton",
     "RBX::GuiDrawImage", "RBX::GuiObject", "RBX::GuiService", "RBX::KernelData", "RBX::Limits::Counter::Activator",
     "RBX::Network::Client", "RBX::Network::Peer", "RBX::SendPhysics", "RBX::SimJob",
+    # wave4 sync (sweep11, build/sweep11/P-final.json / S-final.json effective 100%; size = // SIZE = the PDB's),
+    # PLAYER / STUDIO: Lighting ctor 0x00707ba0 / 0x007d39e0, dtor 0x00707e40 / 0x007d3c80 (0x1f0, datamodel-5b-4.md);
+    # PhysicsJob ctor 0x0072b5e0 / 0x00798fe0, dtor 0x0072b780 / 0x00799180 (0x228) and HeartbeatTask ctor
+    # 0x0072d040 / 0x0079acc0, dtor 0x0072d250 / 0x0079aed0 (0x230), both local to RunService.cpp. Not yet: the
+    # v8xml classes (XmlElement, XmlParser, XmlWriter, MemoryBinder, ArchiveBinder ctors at 100%, no size assert in
+    # the tree), StarterGear (ctor 100%, no size assert), STUDIO ScreenGui/RunService (0.982, 0.937 / 0.899),
+    # Workspace (0.19 / 0.45), TaskScheduler (0.978 / 0.995)
+    "RBX::Lighting", "RBX::PhysicsJob", "RBX::HeartbeatTask",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 

@@ -688,13 +688,6 @@ namespace RBX {
 		return Constants::getJointK(size, getGeometryType() == GEOMETRY_BALL);
 	}
 
-	// FUNCTION: PLAYER 0x00755f00
-	// FUNCTION: STUDIO 0x00895220
-	const G3D::CoordinateFrame& Primitive::getCoordinateFrame() const
-	{
-		return body->getPV_Spin_Lock()->position;
-	}
-
 	// FUNCTION: PLAYER 0x00753ed0
 	// FUNCTION: STUDIO 0x00893280
 	void Primitive::setEngineType(int value)
@@ -776,6 +769,13 @@ namespace RBX {
 	void Primitive::setAnchoredProperty(bool value)
 	{
 		setFixed(value, dragging);
+	}
+
+	// FUNCTION: PLAYER 0x00755f00
+	// FUNCTION: STUDIO 0x00895220
+	const G3D::CoordinateFrame& Primitive::getCoordinateFrame() const
+	{
+		return body->getPV_Spin_Lock()->position;
 	}
 
 } // namespace RBX

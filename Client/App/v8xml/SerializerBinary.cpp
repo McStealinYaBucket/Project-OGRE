@@ -22,7 +22,7 @@
    Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8xml/SerializerBinary.cpp */
 
 #include "stdafx.h"
-
+#include "RbxFormat.h"
 #include "V8Xml/Serializer.h"
 #include "V8Xml/SerializerBinary.h"
 #include "V8Tree/Service.h"
@@ -146,10 +146,12 @@ namespace RBX {
 		{}
 
 		// mac: 0x707954.
+		// FUNCTION: PLAYER 0x008cec50
+		// FUNCTION: STUDIO 0x00741440
 		void read(void* dst, size_t n)
 		{
 			if (offset + n > size)
-				throw std::runtime_error("Read offset is out of bounds while reading %d bytes");
+				throw RBX::runtime_error("Read offset is out of bounds while reading %d bytes", n);
 			memcpy(dst, data + offset, n);
 			offset += n;
 		}
@@ -195,15 +197,28 @@ namespace RBX {
 
 	// mac: 0x6FDBC1 — read one byte, throw "Unexpected format %d (expected %d)" unless
 	// it equals the expected BinaryPropertyFormat tag.
-	// STUB: PLAYER 0x008cef20
-	// STUB: STUDIO 0x00741910
-	void readFormatExpected(MemoryInputStream& in, unsigned char expectedFormat)
+	// iOS 10-29: RBX::readString(MemoryInputStream&, std::string&); static in PLAYER (in in edi).
+	// FUNCTION: PLAYER 0x008ced60
+	// FUNCTION: STUDIO 0x00741750
+	static void readString(MemoryInputStream& in, std::string& value)
 	{
-		unsigned char format = 0;
+		int size;
+		in.read(&size, sizeof(size));
+		value.resize(size);
+		if (size > 0)
+			in.read(&value[0], size);
+	}
+
+	// FUNCTION: PLAYER 0x008cef20
+	// FUNCTION: STUDIO 0x00741910
+	void readFormatExpected(MemoryInputStream& in, BinaryPropertyFormat expectedFormat)
+	{
+		char format;
 		in.read(&format, 1);
 		if (format != expectedFormat)
-			throw std::runtime_error("Unexpected format %d (expected %d)");
+			throw RBX::runtime_error("Unexpected format %d (expected %d)", format, expectedFormat);
 	}
+
 
 	// Zigzag: binary computes (v >> 31) ^ (2 * v) with arithmetic shift
 	// (0x703C27 passes). Bit-identical, without signed-overflow UB.
@@ -671,15 +686,6 @@ namespace RBX {
 		}
 	}
 
-	void readBinaryString(MemoryInputStream& in, std::string& value)
-	{
-		// Inverse of the string branch (2013 sub_700A92; 2016 readString).
-		unsigned int size = 0;
-		in.read(&size, sizeof(size));
-		value.resize(size);
-		if (size != 0)
-			in.read(&value[0], size);
-	}
 
 	// mac: 0x706425. Header layout verified against the 0x70520C reader
 	// (tag u32 switch, compressed/uncompressed lens, "Malformed data..."
@@ -756,7 +762,7 @@ namespace RBX {
 			for (size_t i = 0; i < instances.size(); ++i)
 			{
 				std::string value;
-				readBinaryString(in, value);
+				readString(in, value);
 				desc.setStringValue(instances[i], value);
 			}
 			return;
@@ -870,7 +876,7 @@ namespace RBX {
 			for (size_t i = 0; i < instances.size(); ++i)
 			{
 				std::string value;
-				readBinaryString(in, value);
+				readString(in, value);
 				desc.setStringValue(instances[i], value);
 			}
 			return;
@@ -1012,6 +1018,21 @@ namespace RBX {
 		}
 
 		// mac: 0x70520C (via 2016 deserializeImpl 0xA41140 cross-check).
+		// One PROP chunk: the property name, then its values for every instance of the class. Static,
+		// with the stream in ecx; no oracle name (inlined in the iOS build).
+		// FUNCTION: PLAYER 0x008d1310
+		// FUNCTION: STUDIO 0x007467e0
+		static void FUN_008d1310(MemoryInputStream& in, const Reflection::ClassDescriptor* desc,
+			const Instances& idMap, const std::vector<Instance*>& instances)
+		{
+			std::string name;
+			readString(in, name);
+			if (const Reflection::PropertyDescriptor* prop = desc->findPropertyDescriptor(name.c_str()))
+				readPropertyValues(in, *prop, instances, idMap);
+		}
+
+		// STUB: PLAYER 0x008d20b0
+		// STUB: STUDIO 0x00748780
 		static void deserializeImpl(std::istream& in, Instance* root, Instances* result)
 		{
 			// File header (32 bytes).
@@ -1085,7 +1106,7 @@ namespace RBX {
 					if (classes[classIdx] != NULL)
 						throw std::runtime_error("Duplicate type index");
 					std::string className;
-					readBinaryString(chunk, className);
+					readString(chunk, className);
 					unsigned char serviceByte = 0;
 					chunk.read(&serviceByte, sizeof(serviceByte));
 					if (serviceByte >= 2)
@@ -1138,26 +1159,7 @@ namespace RBX {
 						throw std::runtime_error("Type index out of range");
 					if (classes[classIdx] != NULL)
 					{
-						std::string fullName;
-						readBinaryString(chunk, fullName);
-						// Full "Class-Prop" match (2013 writer emits className +
-						// '-' + propName; separator byte 0x2D verified in IDA).
-						const Reflection::PropertyDescriptor* found = NULL;
-						std::string prefix = classes[classIdx]->name->str + "-";
-						typedef Reflection::MemberDescriptorContainer<Reflection::PropertyDescriptor> PropContainer;
-						const PropContainer* propsOf = classes[classIdx];
-						for (PropContainer::Collection::const_iterator
-							p = propsOf->descriptors_begin(); p != propsOf->descriptors_end(); ++p)
-						{
-							if (prefix + (*p)->name->str == fullName)
-							{
-								found = *p;
-								break;
-							}
-						}
-						// No canXmlRead gate in 2013 (2016 added one): null match only.
-						if (found != NULL)
-							readPropertyValues(chunk, *found, classInstances[classIdx], idMap);
+						FUN_008d1310(chunk, classes[classIdx], idMap, classInstances[classIdx]);
 					}
 				}
 				else if (memcmp(tag, kChunkParents, sizeof(tag)) == 0)
@@ -1403,6 +1405,8 @@ namespace RBX {
 			writeImpl(out, NULL, instances, flags);
 		}
 
+		// FUNCTION: PLAYER 0x008d2510
+		// FUNCTION: STUDIO 0x00748be0
 		void deserialize(std::istream& in, Instance* root)
 		{
 			// mac: 0x7051EF -> sub_70520C.

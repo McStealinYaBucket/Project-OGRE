@@ -1,68 +1,56 @@
-/* v8xml/TextXmlParser.h — October 2013 XML text parser (DOM builder).
-   Evidence: symbolled Studio 0.126 decompilation
-     (F:\2013Decompile\exports\decomp\BinderParser.cpp.txt)
-      - XmlParser::XmlParser(streambuf*) 0x5BC666: vftable + streambuf + XmlElement* deque.
-      - skipWhitespace 0x5BAD68, readFirstTag 0x5BADC4 (BOM-tolerant, "Expected '<'
-        but got EOF in Xml stream" / "tag expected after Byte-Order-Mark" /
-        "Expected '>' but got EOF in Xml stream"), readTag 0x5BB0B2 ("tag expected",
-        "EOF encountered while reading Tag start/Tag"), readText(bool) 0x5BBA28
-        (&-decode via decodeString), removeTag 0x5BC026 (asserts XmlSerializer.cpp
-        :291 contents[0]=='<' and :299 index>start), parseAttributes 0x5BC158
-        ("Unable to parse XML attributes. '=' not found"), parse 0x5BC6E8
-        ("TextXmlParser::parse empty file", "Got close tag %s without open tag",
-        "Not reading binary data"), decodeString 0x5BB385 (free function;
-        lt/gt/amp/quot/apos/nbsp entities + numeric refs).
-      - Lives in Client/App/v8xml/XmlSerializer.cpp per assert paths.
-   Internal (static-vs-member) conventions are reconstructed for behavior; the
-   observable contract (error strings, DOM output, asserts) matches the binary.
-   TODO(decompile): byte_FB8698 vs byte_9FC52F table addresses per function (both
-     ws/name scanning observed; port uses explicit isWhitespace/isNameChar helpers —
-     behaviorally identical on valid input; a strict single shared table as literally
-     decompiled would consume leading text in readText, impossible for a working
-     parser — verify table references in IDA).
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8xml/XmlSerializer.cpp */
+/* v8xml/TextXmlParser.h -- the October 2013 XML text parser.
+   Bodies are in Client/App/v8xml/XmlSerializer.cpp (its asserts cite that file: removeTag :291/:299,
+   findNextToken :310, decodeString :186).
+
+   Layout, from the 2013 binary (not the prior tree's guess of a vptr + deque + virtual dtor):
+   - XmlParser ctor PLAYER 0x00628980: vptr 0x00b2b7dc, the streambuf at +0x04, a std::stack (VC9
+     deque) at +0x08..+0x28. Its vftable has one slot, the pure parse(); no virtual destructor.
+     RTTI lists boost::noncopyable as a base.
+   - TextXmlParser ctor (inline, shell copy 0x00402c00): XmlParser(sb), vptr 0x00b2e040, then a
+     std::map<std::string, std::string> at +0x28 (node colour at +0x45 = a 0x38-byte pair).
+   - parse() returns the root through a hidden auto_ptr (SerializerV2::loadXML 0x006fcc00 releases it).
+   - removeTag 0x00628550 and parseAttributes 0x00628d10 are members that never read this (ret 0xc /
+     ret 4 with the hidden return pointer). */
 
 #pragma once
 
-#include <deque>
-#include <iosfwd>
+#include <map>
+#include <memory>
+#include <stack>
+#include <streambuf>
 #include <string>
+
+#include <boost/noncopyable.hpp>
 
 class XmlElement;
 
-class XmlParser
+class XmlParser : public boost::noncopyable
 {
-public:
-	explicit XmlParser(std::streambuf* sb);  // 0x5BC666
-	virtual ~XmlParser() {}
-
 protected:
-	std::streambuf* streambuf;				// +4 (underflow=vtable+36, uflow=+40)
-	std::deque<XmlElement*> elements;		// +8
+	std::streambuf* buffer;					// 0x04
+	std::stack<XmlElement*> elements;		// 0x08
+	XmlParser(std::streambuf* buffer);
+public:
+	virtual std::auto_ptr<XmlElement> parse() = 0;	// vtable+0x00
 };
 
 class TextXmlParser : public XmlParser
 {
+	std::map<std::string, std::string> legacyHashes;	// 0x28
 public:
-	explicit TextXmlParser(std::streambuf* sb) : XmlParser(sb) {}
-
-	XmlElement* parse();  // 0x5BC6E8: stream -> XmlElement DOM root (throws on error)
+	TextXmlParser(std::streambuf* buffer)
+		: XmlParser(buffer)
+	{
+	}
+	virtual std::auto_ptr<XmlElement> parse();	// vtable+0x00, PLAYER 0x00628f70
 
 private:
-	// -1 on EOF, else the char (peeked for skip, consumed elsewhere)
-	int peekChar();
-	int getChar();
-	void ungetChar();
-
-	int skipWhitespace();						// 0x5BAD68
-	void readFirstTag(std::string& out);		// 0x5BADC4
-	void readTag(std::string& out);				// 0x5BB0B2: full "<...>" text
-	void readText(std::string& out, bool decode);	// 0x5BBA28
-	// mac: 0x5BC026: contents[pos] must be '<'; returns tag name, sets index past name+ws
-	std::string removeTag(const std::string& contents, int pos, int& index);
-	XmlElement* parseAttributes(const std::string& tag);	// 0x5BC158
-	void readContentIdValue(XmlElement* element);
+	void skipWhitespace();
+	std::string readFirstTag();
+	std::string readTag();
+	std::string readText(bool decode);
+	std::string removeTag(const std::string& contents, int& index);
+	XmlElement* parseAttributes(const std::string& currentTag);
 };
 
-// mac: 0x5BB385: XML entity decoder (&lt; &gt; &amp; &quot; &apos; &nbsp; &#NNN;).
-void decodeString(std::string& out, const std::string& in);
+std::string decodeString(const std::string& text);

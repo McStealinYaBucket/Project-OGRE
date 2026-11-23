@@ -16,7 +16,11 @@ namespace RBX {
 		: public DescribedCreatable<StarterGear, Instance, sStarterGear>
 	{
 	public:
-		StarterGear() {}
+		StarterGear();
 	};
 
 } // namespace RBX
+
+// TEMPLATE: PLAYER 0x006ca3f0
+// TEMPLATE: STUDIO 0x007b25e0
+// ??0?$Described@VStarterGear@RBX@@$E?sStarterGear@2@3QBDBV?$FactoryProduct@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ

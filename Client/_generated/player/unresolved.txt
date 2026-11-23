@@ -1,5 +1,4 @@
 # PLAYER: unresolved externals with no stub (reason, decorated, demangled). Generated.
-claimed	?parse@TextXmlParser@@UAE?AV?$auto_ptr@VXmlElement@@@std@@XZ	public: virtual class std::auto_ptr<class XmlElement> __thiscall TextXmlParser::parse(void)
 data	?GfxClustersFull@FLog@@3EA	unsigned char FLog::GfxClustersFull
 data	?JointLifetime@FLog@@3EA	unsigned char FLog::JointLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
@@ -14,7 +13,6 @@ unknown	??$convert@V?$shared_ptr@$$CBV?$map@V?$basic_string@DU?$char_traits@D@st
 unknown	??$convert@VVector2int16@G3D@@@Variant@Reflection@RBX@@QAEAAVVector2int16@G3D@@XZ	public: class G3D::Vector2int16 & __thiscall RBX::Reflection::Variant::convert<class G3D::Vector2int16>(void)
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
 unknown	??0RobloxExtraSpace@@AAE@XZ	private: __thiscall RobloxExtraSpace::RobloxExtraSpace(void)
-unknown	??0XmlParser@@IAE@PAV?$basic_streambuf@DU?$char_traits@D@std@@@std@@@Z	protected: __thiscall XmlParser::XmlParser(class std::basic_streambuf<char, struct std::char_traits<char>> *)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
 unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void __thiscall RakNet::TCPInterface::DeallocatePacket(struct RakNet::Packet *)
@@ -28,6 +26,7 @@ unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned
 unknown	?getDataSize@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBEHPBVDescribedBase@23@@Z	public: virtual int __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getDataSize(class RBX::Reflection::DescribedBase const *) const
 unknown	?getSalt@ProtectedString@RBX@@QBEPBDXZ	public: char const * __thiscall RBX::ProtectedString::getSalt(void) const
 unknown	?hasStringValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBE_NXZ	public: virtual bool __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::hasStringValue(void) const
+unknown	?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z	public: void __thiscall G3D::Log::println(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
 unparsed	?slot_exception_handler@signals@rbx@@3V?$function@$$A6AXAAVexception@std@@@Z@boost@@A	class boost::function<void __cdecl(class std::exception &)> rbx::signals::slot_exception_handler
 unparsed	_LZ4_compressHC_limitedOutput	
 unparsed	_LZ4_compress_limitedOutput	

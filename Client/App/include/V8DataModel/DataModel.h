@@ -339,8 +339,12 @@ public:
 	std::string getScreenshotSEOInfo();
 	std::string getUpdatedMessageBoxText();
 
-	// Physics
-	void physicsStep();
+	// Physics (iOS: physicsStep(float, double, double, int); PhysicsJob::stepDataModelJob
+	// 0x0072b95a discards the result). Body 0x00642850 not written yet.
+	void physicsStep(float uiDt, double dt, double dutyDt, int allotedConcurrency);
+	// Gates PhysicsJob::sleepTime's step rate (0x0072b700); initialized true. The 2016 name;
+	// 2013 reads it as a plain bool (accessors 0x0085cf40/0x0085cf50 in a settings class).
+	static bool throttleAt30Fps;
 
 	// HTTP (shapes from mangled names in studio_function_list.txt:
 	// httpGetAsync 0x2CDF06, httpPostAsync 0x2CE086, httpGet 0x2CE20E, httpPost 0x2CE4F2,

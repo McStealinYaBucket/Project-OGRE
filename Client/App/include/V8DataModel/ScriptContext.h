@@ -60,8 +60,13 @@ namespace RBX {
 	class RunService;
 
 	// SIZE 0x288
+	// 2013 RTTI (PLAYER COL of vftable 0x00b369fc) names DescribedCreatable<ScriptContext, Instance,
+	// sScriptContext, 1, 0> and FactoryProduct<..., Instance>: creatable, unlike 2016. The dtor 0x0068b1a0
+	// stores FactoryProduct's vftables (0x00b3422c...) before ~Instance, which only a FactoryProduct base gives.
+	// Functionality 1 (INTERNAL_LOCAL), not 2016's RUNTIME_LOCAL: the RTTI name, and classDescriptor()
+	// 0x0067f453 stores 1 into the descriptor attributes.
 	class ScriptContext
-		: public DescribedNonCreatable<ScriptContext, Instance, sScriptContext, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<ScriptContext, Instance, sScriptContext, Reflection::ClassDescriptor::INTERNAL_LOCAL>
 		, public Service
 		, public IScriptFilter
 	{

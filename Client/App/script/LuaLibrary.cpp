@@ -78,35 +78,12 @@ namespace Lua {
 	static const char* kLuaLibraryPath =
 		"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaLibrary.cpp";
 
-	static void libraryNilGate(lua_State* L, int line)
-	{
-		if (FLog::Asserts != 0
-			&& lua_type(L, -1) == LUA_TNIL
-			&& (RBX::_internal::_debugHook == 0
-				|| RBX::_internal::_debugHook("!lua_isnil( L, -1 )", kLuaLibraryPath, line) == 0))
-		{
-			char msg[256];
-			_snprintf(msg, sizeof(msg),
-				"!lua_isnil( L, -1 ) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaLibrary.cpp line: %d", line);
-			msg[sizeof(msg) - 1] = 0;
-			ReleaseAssert(FLog::Asserts, msg);
-		}
-	}
-
-	static void libraryTableGate(lua_State* L, int line)
-	{
-		if (FLog::Asserts != 0
-			&& lua_type(L, -1) != LUA_TTABLE
-			&& (RBX::_internal::_debugHook == 0
-				|| RBX::_internal::_debugHook("lua_istable( L, -1 )", kLuaLibraryPath, line) == 0))
-		{
-			char msg[256];
-			_snprintf(msg, sizeof(msg),
-				"lua_istable( L, -1 ) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaLibrary.cpp line: %d", line);
-			msg[sizeof(msg) - 1] = 0;
-			ReleaseAssert(FLog::Asserts, msg);
-		}
-	}
+	// RBXASSERT at a 2013 line this file is not laid out for yet (stopgap, as in ScriptContext.cpp):
+	// the asserts below carry their 2013 LuaLibrary.cpp lines (44, 49, 50, 96, 101, 102, 146, 171, 194, 239).
+#define RBXASSERT_LINE(expr, line) \
+	((void) (FLog::Asserts && (!!(expr) || \
+	((RBX::_internal::_debugHook != NULL) && (RBX::_internal::_debugHook(#expr, __FILE__, line))) || \
+	(ReleaseAssert(FLog::Asserts, #expr " file: " __FILE__ " line: " #line), 0))))
 
 	// mac: 0x171D12 (394B, batch433): index/newindex/gc/eq/tostring + readonly.
 	// FUNCTION: PLAYER 0x00880e60
@@ -136,65 +113,15 @@ namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// sub_62E62B (881B, batch434): GetApi -- the library table's string
-	// keys as a 1-based array.
-	int LibraryBridge::getApi(lua_State* L)
-	{
-		std::list<std::string> api;
-		{
-			const Library& self = Bridge<Library>::getObject(L, 1);
-			lua_pushlightuserdata(L, (void*)&registerLibraryTable);
-			lua_rawget(L, LUA_REGISTRYINDEX);
-			libraryNilGate(L, 44);
-			{
-				const std::string& s = self.getLibraryName();
-				lua_pushlstring(L, s.c_str(), s.size());
-			}
-			lua_gettable(L, -2);
-			libraryNilGate(L, 49);
-			libraryTableGate(L, 50);
-			int tableIndex = lua_gettop(L);
-			lua_pushnil(L);
-			while (lua_next(L, tableIndex) != 0)
-			{
-				if (lua_isstring(L, -2))
-				{
-					std::string key = safe_lua_tostring(L, -2);
-					if (!key.empty())
-						api.push_back(key);
-				}
-				lua_pop(L, 1);
-			}
-			lua_pop(L, 2);
-		}
-		lua_createtable(L, (int)api.size(), 0);
-		int i = 1;
-		for (std::list<std::string>::iterator iter = api.begin(); iter != api.end(); ++iter, ++i)
-		{
-			lua_pushnumber(L, i);
-			lua_pushlstring(L, iter->c_str(), iter->size());
-			lua_settable(L, -3);
-		}
-		return 1;
-	}
-
-	// mac: 0x62E9EC (102B, batch433): always throws, with the name.
-	template<>
-	void Bridge<Library, true>::on_newindex(Library& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
 	// mac: 0x62EE82 (430B, batch428): string-keyed singleton push (the table
 	// key is the library NAME, not the pointer -- unlike SharedPtrBridge).
-	// STUB: PLAYER 0x00889630
-	// STUB: STUDIO 0x009e5ed0
+	// FUNCTION: PLAYER 0x00889630
+	// FUNCTION: STUDIO 0x009e5ed0
 	void LibraryBridge::push(lua_State* L, const Library& item)
 	{
 		lua_pushlightuserdata(L, (void*)&push);
 		lua_rawget(L, LUA_REGISTRYINDEX);
-		libraryNilGate(L, 239);
+		RBXASSERT_LINE(!lua_isnil( L, -1 ), 239);
 		{
 			const std::string& s = item.getLibraryName();
 			lua_pushlstring(L, s.c_str(), s.size());
@@ -212,6 +139,25 @@ namespace Lua {
 			lua_rawset(L, -4);
 		}
 		lua_remove(L, -2);
+	}
+
+	// mac: 0x62E9EC (102B, batch433): always throws, with the name.
+	template<>
+	void Bridge<Library, true>::on_newindex(Library& object,
+		const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("%s cannot be assigned to", name);
+	}
+
+	// mac: 0x62F17A (84B, batch428): push-table + result-table.
+	// FUNCTION: PLAYER 0x00889730
+	// FUNCTION: STUDIO 0x009e5fd0
+	void LibraryBridge::registerClassLibrary(lua_State* L)
+	{
+		lua_pushlightuserdata(L, (void*)&push);
+		lua_newtable(L);
+		lua_rawset(L, LUA_REGISTRYINDEX);
+		registerLibraryTable(L);
 	}
 
 
@@ -251,17 +197,6 @@ namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x62F17A (84B, batch428): push-table + result-table.
-	// FUNCTION: PLAYER 0x00889730
-	// FUNCTION: STUDIO 0x009e5fd0
-	void LibraryBridge::registerClassLibrary(lua_State* L)
-	{
-		lua_pushlightuserdata(L, (void*)&push);
-		lua_newtable(L);
-		lua_rawset(L, LUA_REGISTRYINDEX);
-		registerLibraryTable(L);
-	}
-
 	// mac: 0x62EA52 (1071B, batch428): validate the loader result (exactly 1
 	// table with a Help function) and file it under both registry tables.
 	// STUB: PLAYER 0x00889a90
@@ -286,7 +221,7 @@ namespace Lua {
 			exception = "Libraries should return exactly 1 result, and shouldn't wait";
 		lua_pushlightuserdata(L, (void*)&registerLibraryTable);
 		lua_rawget(L, LUA_REGISTRYINDEX);
-		libraryNilGate(L, 146);
+		RBXASSERT_LINE(!lua_isnil( L, -1 ), 146);
 		if (!exception.empty())
 		{
 			lua_pushlstring(L, libraryName.c_str(), libraryName.size());
@@ -303,7 +238,7 @@ namespace Lua {
 		{
 			lua_pushlightuserdata(L, (void*)&push);
 			lua_rawget(L, LUA_REGISTRYINDEX);
-			libraryNilGate(L, 171);
+			RBXASSERT_LINE(!lua_isnil( L, -1 ), 171);
 			lua_pushlstring(L, libraryName.c_str(), libraryName.size());
 			lua_pushlstring(L, exception.c_str(), exception.size());
 			lua_rawset(L, -3);
@@ -318,13 +253,13 @@ namespace Lua {
 
 	// mac: 0x62F030 (330B, batch428): 0 = absent, 2 = stored error string
 	// (pushed nil + message), 1 = the library userdata.
-	// STUB: PLAYER 0x00889d60
-	// STUB: STUDIO 0x009e6600
+	// FUNCTION: PLAYER 0x00889d60
+	// FUNCTION: STUDIO 0x009e6600
 	int LibraryBridge::find(lua_State* L, const std::string& libraryName)
 	{
 		lua_pushlightuserdata(L, (void*)&push);
 		lua_rawget(L, LUA_REGISTRYINDEX);
-		libraryNilGate(L, 194);
+		RBXASSERT_LINE(!lua_isnil( L, -1 ), 194);
 		lua_pushlstring(L, libraryName.c_str(), libraryName.size());
 		lua_rawget(L, -2);
 		if (lua_type(L, -1) == LUA_TNIL)
@@ -343,6 +278,48 @@ namespace Lua {
 		return 1;
 	}
 
+	// FUNCTION: PLAYER 0x0088c3c0
+	// FUNCTION: STUDIO 0x009e8f60
+	int getApi(lua_State* L)
+	{
+		std::list<std::string> api;
+		{
+			const Library& self = Bridge<Library>::getObject(L, 1);
+			lua_pushlightuserdata(L, (void*)&LibraryBridge::registerLibraryTable);
+			lua_rawget(L, LUA_REGISTRYINDEX);
+			RBXASSERT_LINE(!lua_isnil( L, -1 ), 44);
+			{
+				const std::string& s = self.getLibraryName();
+				lua_pushlstring(L, s.c_str(), s.size());
+			}
+			lua_gettable(L, -2);
+			RBXASSERT_LINE(!lua_isnil( L, -1 ), 49);
+			RBXASSERT_LINE(lua_istable( L, -1 ), 50);
+			int tableIndex = lua_gettop(L);
+			lua_pushnil(L);
+			while (lua_next(L, tableIndex) != 0)
+			{
+				if (lua_isstring(L, -2))
+				{
+					std::string key = safe_lua_tostring(L, -2);
+					if (!key.empty())
+						api.push_back(key);
+				}
+				lua_pop(L, 1);
+			}
+			lua_pop(L, 2);
+		}
+		lua_createtable(L, (int)api.size(), 0);
+		int i = 1;
+		for (std::list<std::string>::iterator iter = api.begin(); iter != api.end(); ++iter, ++i)
+		{
+			lua_pushnumber(L, i);
+			lua_pushlstring(L, iter->c_str(), iter->size());
+			lua_settable(L, -3);
+		}
+		return 1;
+	}
+
 	// sub_62E99C (80B, batch429): the library-result table.
 	void LibraryBridge::registerLibraryTable(lua_State* L)
 	{
@@ -353,15 +330,15 @@ namespace Lua {
 
 	// mac: 0x62E3FA (561B, batch433): GetApi closure / Name string / registry-
 	// table member lookup.
-	// STUB: PLAYER 0x0088c6a0
-	// STUB: STUDIO 0x009e9240
+	// FUNCTION: PLAYER 0x0088c6a0
+	// FUNCTION: STUDIO 0x009e9240
 	template<>
 	int Bridge<Library, true>::on_index(const Library& object,
 		const char* name, lua_State* L)
 	{
 		if (strcmp(name, "GetApi") == 0)
 		{
-			lua_pushcfunction(L, LibraryBridge::getApi);
+			lua_pushcfunction(L, getApi);
 			return 1;
 		}
 		if (strcmp(name, "Name") == 0)
@@ -372,14 +349,14 @@ namespace Lua {
 		}
 		lua_pushlightuserdata(L, (void*)&LibraryBridge::registerLibraryTable);
 		lua_rawget(L, LUA_REGISTRYINDEX);
-		libraryNilGate(L, 96);
+		RBXASSERT_LINE(!lua_isnil( L, -1 ), 96);
 		{
 			const std::string& s = object.getLibraryName();
 			lua_pushlstring(L, s.c_str(), s.size());
 		}
 		lua_gettable(L, -2);
-		libraryNilGate(L, 101);
-		libraryTableGate(L, 102);
+		RBXASSERT_LINE(!lua_isnil( L, -1 ), 101);
+		RBXASSERT_LINE(lua_istable( L, -1 ), 102);
 		lua_pushstring(L, name);
 		lua_gettable(L, -2);
 		lua_remove(L, -2);

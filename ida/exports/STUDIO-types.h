@@ -2363,20 +2363,11 @@ struct __cppobj RBX::IFWHolder
   RBX::IFWHolder_vtbl *__vftable;
 };
 
-/* 388 */
-struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext> : RBX::Instance
-{
-};
+/* WARNING: no name found for type 388 */
 
-/* 389 */
-struct __cppobj RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>
-{
-};
+/* WARNING: no name found for type 389 */
 
-/* 390 */
-struct __cppobj RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0> : RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>
-{
-};
+/* WARNING: no name found for type 390 */
 
 /* 391 */
 struct __cppobj RBX::IScriptFilter
@@ -2391,7 +2382,7 @@ struct __cppobj RBX::Service
 };
 
 /* 393 */
-struct __cppobj RBX::ScriptContext : RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>, RBX::IScriptFilter, RBX::Service
+struct __cppobj RBX::ScriptContext : RBX::DescribedCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 1, 0>, RBX::IScriptFilter, RBX::Service
 {
   unsigned __int8 gap_65[3];
   unsigned __int8 globalStates[8];      ///< array
@@ -2567,10 +2558,10 @@ struct __cppobj RBX::RunningAverage<double,double>
 {
   unsigned __int8 buffer[8];            ///< boost::shared_ptr<boost::circular_buffer<double,std::allocator<double> > >
   double lerp;
-  double lastSampleValue;
-  double averageValue;
-  double averageVariance;
-  bool firstTime;
+  double lastValue;
+  double mean;
+  double meanSquareDev;
+  bool unsampled;
   unsigned __int8 gap_29[7];
 };
 
@@ -3459,5 +3450,77 @@ struct __cppobj RBX::SimJob : boost::intrusive::list_base_hook<boost::intrusive:
   unsigned __int8 trackers[16];         ///< std::vector<RBX::SimJobTracker *>
   void *assembly;                       ///< RBX::Assembly *
   int useCount;
+};
+
+/* 517 */
+struct __cppobj RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 518 */
+struct __cppobj RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>, 1, 0> : RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>
+{
+};
+
+/* 519 */
+struct __cppobj RBX::DescribedCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 1, 0> : RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>, 1, 0>
+{
+};
+
+/* 520 */
+struct __cppobj RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 521 */
+struct __cppobj RBX::Reflection::Described<RBX::Lighting, char const *const RBX::sLighting, RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>
+{
+};
+
+/* 522 */
+struct __cppobj RBX::DescribedCreatable<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, 27, 0> : RBX::Reflection::Described<RBX::Lighting, char const *const RBX::sLighting, RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>, 27, 0>
+{
+};
+
+/* 523 */
+struct __cppobj RBX::Lighting : RBX::DescribedCreatable<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[7];
+  unsigned __int8 skyParameters[248];   ///< RBX::SkyParameters2013
+  bool hasSky;
+  unsigned __int8 gap_161[3];
+  unsigned __int8 clearColor[16];       ///< G3D::Color4
+  unsigned __int8 shadowColor[16];      ///< G3D::Color4
+  unsigned __int8 fogColor[16];         ///< G3D::Color4
+  float fogStart;
+  float fogEnd;
+  unsigned __int8 gap_19C[4];
+  unsigned __int8 timeOfDay[8];         ///< boost::posix_time::time_duration
+  unsigned __int8 topColorShift[12];    ///< G3D::Color3
+  unsigned __int8 bottomColorShift[12]; ///< G3D::Color3
+  float globalBrightness;
+  unsigned __int8 globalAmbient[12];    ///< G3D::Color3
+  unsigned __int8 globalOutdoorAmbient[12]; ///< G3D::Color3
+  bool globalShadows;
+  bool outlines;
+  unsigned __int8 gap_1DE[2];
+  unsigned __int8 lightingChangedSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  unsigned __int8 sky[8];               ///< boost::shared_ptr<RBX::Sky>
+  unsigned __int8 gap_1EC[4];
+};
+
+/* 524 */
+struct __cppobj RBX::PhysicsJob : RBX::DataModelJob
+{
+  double stepsPerSec;
+  unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
+};
+
+/* 525 */
+struct __cppobj RBX::HeartbeatTask : RBX::DataModelJob
+{
+  unsigned __int8 runService[8];        ///< boost::weak_ptr<RBX::RunService>
+  unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
+  double fps;
 };
 

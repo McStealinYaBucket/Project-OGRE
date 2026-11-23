@@ -3,6 +3,14 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: static class G3D::Log * __cdecl G3D::Log::common(void)
+// STUB: STUDIO 0x006aa930
+extern "C" void ogre_stub_006aa930()
+{
+	STUB(0x006aa930);
+}
+#pragma comment(linker, "/alternatename:?common@Log@G3D@@SAPAV12@XZ=_ogre_stub_006aa930")
+
 // public: __thiscall RBX::CRenderSettings::CRenderSettings(void)
 // STUB: STUDIO 0x006c20b0
 extern "C" void ogre_stub_006c20b0()
@@ -42,6 +50,14 @@ extern "C" void ogre_stub_0070e050()
 	STUB(0x0070e050);
 }
 #pragma comment(linker, "/alternatename:?writeValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@EBEXPBVDescribedBase@23@PAVXmlElement@@@Z=_ogre_stub_0070e050")
+
+// public: void __thiscall RBX::DataModel::physicsStep(float, double, double, int)
+// STUB: STUDIO 0x007600d0
+extern "C" void ogre_stub_007600d0()
+{
+	STUB(0x007600d0);
+}
+#pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
 
 // void __cdecl RBX::registerNewLightAPI(void)
 // STUB: STUDIO 0x007d7380

@@ -1,33 +1,11 @@
-/* App/v8xml/SerializerV2.cpp — reconstructed for October 2013.
-   Evidence: symbolled Studio 0.126 decompilation
-     (F:\2013Decompile\exports\decomp\SerializerV2_full.cpp.txt 16/16 fns,
-      BinderParser.cpp.txt binder EAs)
-      - newRootElement() 0x5AF136 -> newRootElement("").
-      - newRootElement(string const&) 0x5AF1DA: static xmlns:xmime Name; root
-        tag_roblox + attrs xmlns:xmime="http://www.w3.org/2005/05/xmlmime" (PE-verified),
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" (literal in decompile),
-        xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" (PE-verified),
-        version=4; optional assettype=type; External children with IDREF null+nil.
-      - loadInstance 0x5AEB9E: class attr -> factory create -> read(); unknown class
-        -> StandardOut 'Unknown object class "%s" while reading XML'.
-      - loadInstances 0x5AEE84: root must be tag_roblox + version attr >= 4 else
-        G3D::Log::println "Version 1.0 - 3.0 model files not supported..."; Item loop
-        via loadInstance; binder.resolveRefs().
-      - loadInstancesFromText 0x5AECFC: ArchiveBinder + loadInstances + resolveRefs.
-      - loadInstancesFromMemory 0x5AF018: MemoryBinder + loadInstances.
-      - load(XmlElement*, DataModel*) 0x5ADDDA: readChildren + ArchiveBinder resolveRefs.
-      - loadXML 0x5AE83E: parse -> tag_roblox check ("ill-formed XML. No Roblox tag")
-        -> version attr ("no version number", "schemaVersionLoading<4") -> load(root)
-        -> DataModel vtable+140 call (TODO: identify method) -> cleanup.
-      - ArchiveBinder::processID 0x5B10C4 (Super + idMap/setXmlId, asserts foundString
-        SerializerV2.cpp:116); processIDREF 0x5B122C; resolveRefs 0x5AF506.
-      - MemoryBinder::processID 0x5B0332 (InstanceHandle remap at +4); processIDREF
-        0x5B0448; resolveRefs 0x5B0232.
-      - load(istream&) 0x5ADF6C is a compound-file reader (header magic + version +
-        contentPos + 4 reads; error strings "can't read header/old fileFormatVersion/
-        fileFormatVersion!=1/can't read contentPos/error reading compound file (1-4)").
-        Ported below (binary/XML dispatch + old-format compound loop).
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8xml/SerializerV2.cpp */
+/* App/v8xml/SerializerV2.cpp -- October 2013, written from the PLAYER bytes.
+   The binders are classes local to this file, as in 2013 (their inline bodies carry this file's
+   assert lines). Layouts from their out-of-line ctors/dtors:
+   - MemoryBinder (ctor 0x006fb6e0, dtor 0x006fc8d0): map<InstanceHandle, InstanceHandle> at +0x04,
+     vector<IDREFItem> at +0x10; size 0x20. It defers every IDREF and remaps it in resolveRefs.
+   - ArchiveBinder : MergeBinder (ctor 0x006faeb0, dtor 0x006fb460): MergeBinder's vector at +0x04,
+     map<std::string, InstanceHandle> at +0x14, list<IDREFBinding> at +0x20; size 0x2c.
+   Both vftables (0x00b46db4, 0x00b46e64): announceID, announceIDREF, resolveRefs, dtor, processID, processIDREF. */
 
 #include "stdafx.h"
 
@@ -39,204 +17,251 @@
 #include "rbx/Debug.h"
 #include "util/standardout.h"
 
-#include <cstring>
-#include <map>
-#include <sstream>
+#include <algorithm>
+#include <functional>
+#include <list>
 
 using namespace RBX;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// An implementation of IReferenceBinder
-// FUNCTION: PLAYER 0x006fb300
-// FUNCTION: STUDIO 0x00749890
-bool ArchiveBinder::processID(const XmlNameValuePair* valueID, RBX::Reflection::DescribedBase* source)
+// The assert text in resolveIDREF is "value_IDREF_nil!=s" (2013 compared the tag Name with the
+// string directly); this keeps that spelling with this tree's pointer-typed tags.
+static inline bool operator!=(const Name* name, const std::string& s) { return name->str != s; }
+// IReferenceBinder for in-memory copies (copy/paste, undo): handles are remapped, not looked up by name.
+class MemoryBinder : public IReferenceBinder
 {
-	if (Super::processID(valueID, source))
-		return true;
-	std::string s;
-	bool foundString = valueID->getValue(s);
-	RBXASSERT(foundString);  // SerializerV2.cpp:116
-	idMap[s].linkTo(shared_from(source));
-	return true;
-}
+	std::map<InstanceHandle, InstanceHandle> idMap;	// 0x04: original handle -> new instance
+	struct IDREFItem {
+		const IIDREF* idref;
+		Reflection::DescribedBase* propertyOwner;
+		InstanceHandle value;
+	};
+	std::vector<IDREFItem> deferredIDREFItems;		// 0x10
 
-// STUB: PLAYER 0x006fb3f0
-// STUB: STUDIO 0x00749980
-bool ArchiveBinder::processIDREF(const XmlNameValuePair* valueIDREF, RBX::Reflection::DescribedBase* propertyOwner, const RBX::IIDREF* idref)
-{
-	// TODO(decompile): verify against 0x5B122C (follows the MergeBinder shape).
-	return MergeBinder::processIDREF(valueIDREF, propertyOwner, idref);
-}
-
-// STUB: PLAYER 0x006fadd0
-// STUB: STUDIO 0x007494e0
-bool ArchiveBinder::resolveRefs()
-{
-	// TODO(decompile): verify against 0x5AF506 (MergeBinder drain + idMap clear?).
-	bool ok = MergeBinder::resolveRefs();
-	idMap.clear();
-	return ok;
-}
-
-void MemoryBinder::announceID(const XmlNameValuePair* valueID, RBX::Reflection::DescribedBase* source)
-{
-	processID(valueID, source);
-}
-
-void MemoryBinder::announceIDREF(const XmlNameValuePair* valueIDREF, RBX::Reflection::DescribedBase* propertyOwner, const RBX::IIDREF* idref)
-{
-	processIDREF(valueIDREF, propertyOwner, idref);
-}
-
-// STUB: PLAYER 0x006fb520
-// STUB: STUDIO 0x00749ab0
-shared_ptr<RBX::Instance> SerializerV2::loadInstance(const XmlElement* itemElement, RBX::IReferenceBinder& binder, RBX::CreatorRole creatorRole)  // 0x5AEB9E
-{
-	const RBX::Name* className = NULL;
-	if (itemElement->findAttributeValue(*tag_class, className) && className)
+public:
+	virtual void announceID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
 	{
-		if (shared_ptr<RBX::Instance> inst = RBX::Creatable<RBX::Instance>::createByName(*className, creatorRole))
+		processID(valueID, source);
+	}
+	// FUNCTION: PLAYER 0x006fb750
+	// FUNCTION: STUDIO 0x00749ce0
+	virtual void announceIDREF(const XmlNameValuePair* valueIDREF, Reflection::DescribedBase* propertyOwner, const IIDREF* idref)
+	{
+		bool processedIDREF = processIDREF(valueIDREF, propertyOwner, idref);
+		RBXASSERT(processedIDREF);
+	}
+	// STUB: PLAYER 0x006fc420
+	// STUB: STUDIO 0x0074a9b0
+	virtual bool resolveRefs()
+	{
+		for (std::vector<IDREFItem>::iterator iter = deferredIDREFItems.begin(); iter != deferredIDREFItems.end(); ++iter)
 		{
-			inst->read(itemElement, binder, creatorRole);
-			return inst;
+			std::map<InstanceHandle, InstanceHandle>::iterator mapped = idMap.find(iter->value);
+			if (mapped != idMap.end())
+				assign(iter->idref, iter->propertyOwner, mapped->second);
+			else
+				assign(iter->idref, iter->propertyOwner, iter->value);
 		}
-		RBX::StandardOut::singleton()->print(RBX::MESSAGE_WARNING,
-			std::string("Unknown object class \"") + className->c_str() + "\" while reading XML");
-	}
-	return shared_ptr<RBX::Instance>();
-}
-
-// STUB: PLAYER 0x006fc420
-// STUB: STUDIO 0x0074a9b0
-bool MemoryBinder::resolveRefs()
-{
-	// TODO(decompile): verify against 0x5B0232.
-	for (std::vector<IDREFItem>::iterator iter = deferredIDREFItems.begin(); iter != deferredIDREFItems.end(); ++iter)
-		assign(iter->idref, iter->propertyOwner, iter->value);
-	deferredIDREFItems.clear();
-	return true;
-}
-
-// STUB: PLAYER 0x006fc500
-// STUB: STUDIO 0x0074aa90
-bool MemoryBinder::processID(const XmlNameValuePair* valueID, RBX::Reflection::DescribedBase* source)
-{
-	RBX::InstanceHandle h;
-	if (valueID->getValue(h))
-	{
-		idMap[h].linkTo(shared_from(source));
+		deferredIDREFItems.clear();
 		return true;
 	}
-	else if (valueID->isValueEqual(&value_IDREF_nil))
-		return true;
-	return false;
-}
-
-// STUB: PLAYER 0x006fc720
-// STUB: STUDIO 0x0074acb0
-bool MemoryBinder::processIDREF(const XmlNameValuePair* valueIDREF, RBX::Reflection::DescribedBase* propertyOwner, const RBX::IIDREF* idref)
-{
-	// TODO(decompile): verify against 0x5B0448 (follows the MergeBinder shape).
-	RBX::InstanceHandle value;
-	if (valueIDREF->getValue(value))
+protected:
+	// STUB: PLAYER 0x006fc500
+	// STUB: STUDIO 0x0074aa90
+	virtual bool processID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
 	{
-		if (!value.empty())
-			assign(idref, propertyOwner, value);
-		else
+		InstanceHandle h;
+		if (valueID->getValue(h))
+		{
+			idMap[h] = InstanceHandle(shared_from(source));
+			return true;
+		}
+		else if (valueID->isValueEqual(value_IDREF_nil))
+			return true;
+		return false;
+	}
+	// FUNCTION: PLAYER 0x006fc720
+	// FUNCTION: STUDIO 0x0074acb0
+	virtual bool processIDREF(const XmlNameValuePair* valueIDREF, Reflection::DescribedBase* propertyOwner, const IIDREF* idref)
+	{
+		InstanceHandle value;
+		if (valueIDREF->getValue(value))
 		{
 			IDREFItem item = {idref, propertyOwner, value};
 			deferredIDREFItems.push_back(item);
+			return true;
+		}
+		else if (valueIDREF->isValueEqual(value_IDREF_nil))
+			return true;
+		else
+			return false;
+	}
+};
+// IReferenceBinder for archive loads: string referents; unresolved IDREFs are bound by name at the end.
+class ArchiveBinder : public MergeBinder
+{
+	typedef MergeBinder Super;
+	std::map<std::string, InstanceHandle> idMap;		// 0x14
+	struct IDREFBinding { const XmlNameValuePair* valueIDREF; Reflection::DescribedBase* propertyOwner; const IIDREF* idref; };
+
+	std::list<IDREFBinding> idrefBindings;			// 0x20
+public:
+	// FUNCTION: PLAYER 0x006fb300
+	// FUNCTION: STUDIO 0x00749890
+	virtual bool processID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
+	{
+		if (Super::processID(valueID, source))
+			return true;
+		std::string s;
+		bool foundString = valueID->getValue(s);
+		RBXASSERT(foundString);
+		idMap[s].linkTo(shared_from(source));
+		return true;
+	}
+	// FUNCTION: PLAYER 0x006fb3f0
+	// FUNCTION: STUDIO 0x00749980
+	virtual bool processIDREF(const XmlNameValuePair* valueIDREF, Reflection::DescribedBase* propertyOwner, const IIDREF* idref)
+	{
+		if (!Super::processIDREF(valueIDREF, propertyOwner, idref))
+		{
+			IDREFBinding binding = {valueIDREF, propertyOwner, idref};
+			idrefBindings.push_back(binding);
 		}
 		return true;
 	}
-	else if (valueIDREF->isValueEqual(&value_IDREF_nil))
-		return true;
-	return false;
+	// FUNCTION: PLAYER 0x006fa6e0
+	// FUNCTION: STUDIO 0x00748df0
+	bool resolveIDREF(IDREFBinding binding)
+	{
+		std::string s;
+		bool foundString = binding.valueIDREF->getValue(s);
+		RBXASSERT(foundString);
+
+		// nil, null and "" were all handled by processIDREF
+		RBXASSERT(value_IDREF_nil!=s);
+		RBXASSERT(value_IDREF_null!=s);
+		RBXASSERT(s!="");
+
+		std::map<std::string, InstanceHandle>::iterator found = idMap.find(s);
+		if (found != idMap.end())
+		{
+			assign(binding.idref, binding.propertyOwner, found->second);
+			return true;
+		}
+		assign(binding.idref, binding.propertyOwner, InstanceHandle(NULL));
+		return false;
+	}
+
+	// FUNCTION: PLAYER 0x006fadd0
+	// FUNCTION: STUDIO 0x007494e0
+	virtual bool resolveRefs()
+	{
+		int resolved = 0;
+		resolved += std::count_if(idrefBindings.begin(), idrefBindings.end(),
+			std::bind1st(std::mem_fun1(&ArchiveBinder::resolveIDREF), this));
+		return Super::resolveRefs() && resolved == idrefBindings.size();
+	}
+};
+
+// FUNCTION: PLAYER 0x006fb520
+// FUNCTION: STUDIO 0x00749ab0
+shared_ptr<Instance> SerializerV2::loadInstance(const XmlElement* itemElement, IReferenceBinder& binder, CreatorRole creatorRole)
+{
+	const Name* className = NULL;
+	if (itemElement->findAttributeValue(*tag_class, className))
+	{
+		shared_ptr<Instance> instance = Creatable<Instance>::createByName(*className, SerializationCreator);
+		if (instance)
+		{
+			instance->read(itemElement, binder, creatorRole);
+			return instance;
+		}
+		StandardOut::singleton()->printf(MESSAGE_WARNING, "Unknown object class \"%s\" while reading XML",
+			className ? className->c_str() : "");
+	}
+	return shared_ptr<Instance>();
+}
+
+// G3D 8.00's Log (PLAYER Log::common 0x009d5c60, println 0x009d5da0). The G3D fork in
+// Client/Rendering has no G3D/Log.h yet, so the two members used here are declared locally.
+namespace G3D {
+	class Log {
+	public:
+		static Log* common();
+		void println(const std::string& s);
+	};
 }
 
 // STUB: PLAYER 0x006fc990
 // STUB: STUDIO 0x0074af20
-void SerializerV2::loadInstances(const XmlElement* root, RBX::Instances& result, RBX::IReferenceBinder& binder, RBX::CreatorRole creatorRole)  // 0x5AEE84
+void SerializerV2::loadInstances(const XmlElement* root, Instances& result, IReferenceBinder& binder, CreatorRole creatorRole)
 {
-	int version = 0;
-	const XmlAttribute* versionAttr = root->findAttribute(*tag_version);
-	if (root->getTag() == *tag_roblox && versionAttr != NULL
-		&& versionAttr->getValue(version) && version >= 4)
+	if (root->getTag() == *tag_roblox)
 	{
-		for (const XmlElement* item = root->findFirstChildByTag(*tag_Item);
-			item != NULL;
-			item = root->findNextChildWithSameTag(item))
+		const XmlAttribute* version = root->findAttribute(*tag_version);
+		if (version && version->getValue(schemaVersionLoading) && schemaVersionLoading >= 4)
 		{
-			if (shared_ptr<RBX::Instance> inst = loadInstance(item, binder, creatorRole))
-				result.push_back(inst);
+			for (const XmlElement* item = root->findFirstChildByTag(*tag_Item); item; item = root->findNextChildWithSameTag(item))
+			{
+				shared_ptr<Instance> instance = loadInstance(item, binder, creatorRole);
+				if (instance)
+					result.push_back(instance);
+			}
+			binder.resolveRefs();
+			return;
 		}
-		binder.resolveRefs();
+	}
+	G3D::Log::common()->println("Version 1.0 - 3.0 model files not supported - all future version will be supported");
+}
+
+// FUNCTION: PLAYER 0x006fcb70
+// FUNCTION: STUDIO 0x0074b100
+void SerializerV2::load(XmlElement* root, DataModel* dataModel)
+{
+	ArchiveBinder binder;
+	dataModel->readChildren(root, binder, SerializationCreator);
+	binder.resolveRefs();
+}
+
+// FUNCTION: PLAYER 0x006fcc00
+// FUNCTION: STUDIO 0x0074b190
+void SerializerV2::loadXML(std::istream& stream, DataModel* dataModel)
+{
+	TextXmlParser machine(stream.rdbuf());
+	std::auto_ptr<XmlElement> root(machine.parse());
+	if (root->getTag() == *tag_roblox)
+	{
+		if (const XmlAttribute* version = root->findAttribute(*tag_version))
+		{
+			if (!version || !version->getValue(schemaVersionLoading))
+				throw std::runtime_error("SerializerV2::loadXML no version number");
+			else if (schemaVersionLoading < 4)
+				throw std::runtime_error("SerializerV2::loadXML schemaVersionLoading<4");
+			else
+				load(root.get(), dataModel);
+		}
 	}
 	else
 	{
-		// 2013 emits via G3D::Log::println; our vendored (2016-fork) G3D has no Log
-		// API (TODO: G3D version archaeology). StandardOut stand-in.
-		RBX::StandardOut::singleton()->print(RBX::MESSAGE_WARNING,
-			"Version 1.0 - 3.0 model files not supported - all future version will be supported");
+		schemaVersionLoading = 1;
+		throw std::runtime_error("SerializerV2::loadXML ill-formed XML. No Roblox tag");
 	}
+	dataModel->setDirty(false);
+}
+
+// FUNCTION: PLAYER 0x006fcde0
+// FUNCTION: STUDIO 0x0074b370
+void SerializerV2::loadInstancesFromText(const XmlElement* root, Instances& result)
+{
+	ArchiveBinder binder;
+	loadInstances(root, result, binder, SerializationCreator);
+}
+
+// FUNCTION: PLAYER 0x006fce50
+// FUNCTION: STUDIO 0x0074b3e0
+void SerializerV2::loadInstancesFromMemory(const XmlElement* root, Instances& result, CreatorRole creatorRole)
+{
+	MemoryBinder binder;
+	loadInstances(root, result, binder, creatorRole);
 }
 
 // FUNCTION: PLAYER 0x006fcec0
@@ -254,56 +279,6 @@ XmlElement* SerializerV2::newRootElement(const std::string& type)  // 0x5AF1DA
 	root->addChild(new XmlElement(*tag_External, value_IDREF_null));
 	root->addChild(new XmlElement(*tag_External, value_IDREF_nil));
 	return root;
-}
-
-// FUNCTION: PLAYER 0x006fd510
-// FUNCTION: STUDIO 0x0074baa0
-XmlElement* SerializerV2::newRootElement()  // 0x5AF136
-{
-	return newRootElement("");
-}
-
-void SerializerV2::loadInstancesFromText(const XmlElement* root, RBX::Instances& result)  // 0x5AECFC
-{
-	ArchiveBinder binder;
-	loadInstances(root, result, binder, RBX::EngineCreator);
-	binder.resolveRefs();
-}
-
-void SerializerV2::loadInstancesFromMemory(const XmlElement* root, RBX::Instances& result, RBX::CreatorRole creatorRole)  // 0x5AF018
-{
-	MemoryBinder binder;
-	loadInstances(root, result, binder, creatorRole);
-}
-
-void SerializerV2::load(XmlElement* root, RBX::DataModel* dataModel)  // 0x5ADDDA
-{
-	ArchiveBinder binder;
-	dataModel->readChildren(root, binder, RBX::EngineCreator);
-	binder.resolveRefs();
-}
-
-// STUB: PLAYER 0x006fcc00
-// STUB: STUDIO 0x0074b190
-void SerializerV2::loadXML(std::istream& stream, RBX::DataModel* dataModel)  // 0x5AE83E
-{
-	TextXmlParser parser(stream.rdbuf());
-	std::auto_ptr<XmlElement> root(parser.parse());
-	if (root->getTag() != *tag_roblox)
-	{
-		schemaVersionLoading = 1;
-		throw std::runtime_error("SerializerV2::loadXML ill-formed XML. No Roblox tag");
-	}
-	const XmlAttribute* versionAttr = root->findAttribute(*tag_version);
-	if (versionAttr != NULL)
-	{
-		if (!versionAttr->getValue(schemaVersionLoading))
-			throw std::runtime_error("SerializerV2::loadXML no version number");
-		if (schemaVersionLoading <= 3)
-			throw std::runtime_error("SerializerV2::loadXML schemaVersionLoading<4");
-		load(root.get(), dataModel);
-	}
-	// TODO(decompile): DataModel vtable+140 call with 0 after load (0x5AE83E tail).
 }
 
 // STUB: PLAYER 0x006fd070
@@ -382,3 +357,26 @@ void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)  // 0x5
 	}
 	RBX::SerializerBinary::deserialize(stream, dataModel);
 }
+
+// FUNCTION: PLAYER 0x006fd510
+// FUNCTION: STUDIO 0x0074baa0
+XmlElement* SerializerV2::newRootElement()  // 0x5AF136
+{
+	return newRootElement("");
+}
+
+/* Marker notes (2026-11-23). Every STUB above except load(istream&) is byte-identical to PLAYER
+   under tools/probe_compare.py; reccmp scores them below 100% only because a callee pairs with
+   a different original copy:
+   - MemoryBinder::resolveRefs: InstanceHandle::operator< (0x006fa4c0) folds with
+     std::_String_const_iterator::operator< in our link; the IDREFItem vector helpers fold with
+     MergeBinder's, whose originals live in the LTCG client shell (0x0044xxxx).
+   - MemoryBinder::processID: InstanceHandle::operator= pairs with the shell's shared_ptr copy
+     (0x00469520) in the original, a boost::program_options twin in ours.
+   - loadInstance / load(XmlElement*) / loadInstances: Instance::read (0x006215e0),
+     Instance::readChildren (0x00621590) and vector<shared_ptr<Instance> >::push_back are not
+     paired yet (Instance.cpp); loadInstances also calls G3D::Log, which the Rendering fork lacks.
+   - loadXML: the TextXmlParser ctor/dtor and ~XmlElement it calls are client-shell copies in the
+     original (0x00402c00, 0x00404e10, 0x00402350).
+   load(istream&) itself still needs ContentProvider::readContent's 2013 signature (it returns a
+   value the caller discards) and the "RBX_" header compare. */

@@ -2,7 +2,7 @@
 # Library rows skipped for all libraries: not identical 202, not a kept function 33.
 # Resolved against build-studio/RobloxStudioBeta.exe (map + PDB) for all libraries: public symbol 1308, static name 332, not in our link 20, folded in our link 0.
 address,type,size,symbol,name
-00403d80,library,90,??1?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@QAE@XZ,??1?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@QAE@XZ
+00403d80,library,90,??1?$char_separator@DU?$char_traits@D@std@@@boost@@QAE@XZ,"public: __thiscall boost::char_separator<char, struct std::char_traits<char>>::~char_separator<char, struct std::char_traits<char>>(void)"
 00404370,library,48,?release@sp_counted_base@detail@boost@@QAEXXZ,public: void __thiscall boost::detail::sp_counted_base::release(void)
 004043a0,library,52,??1shared_count@detail@boost@@QAE@XZ,public: __thiscall boost::detail::shared_count::~shared_count(void)
 0040cea0,library,67,??$enable_error_info@Vlock_error@boost@@@boost@@YA?AU?$error_info_injector@Vlock_error@boost@@@exception_detail@0@ABVlock_error@0@@Z,struct boost::exception_detail::error_info_injector<class boost::lock_error> __cdecl boost::enable_error_info<class boost::lock_error>(class boost::lock_error const &)
@@ -350,7 +350,7 @@ address,type,size,symbol,name
 00a741e0,library,95,??$?0PA_W@path@filesystem@boost@@QAE@ABQA_WPAX@Z,"public: __thiscall boost::filesystem::path::path<wchar_t *>(wchar_t *const &, void *)"
 00a74240,library,767,?make_permissions@?A0xc48e565b@@YA?AW4perms@filesystem@boost@@ABVpath@34@K@Z,?make_permissions@?A0xc48e565b@@YA?AW4perms@filesystem@boost@@ABVpath@34@K@Z
 00a74540,library,225,?is_reparse_point_a_symlink@?A0xc48e565b@@YA_NABVpath@filesystem@boost@@@Z,?is_reparse_point_a_symlink@?A0xc48e565b@@YA_NABVpath@filesystem@boost@@@Z
-00a74630,library,83,?reset@?$shared_ptr@VRunService@RBX@@@boost@@QAEXXZ,?reset@?$shared_ptr@VRunService@RBX@@@boost@@QAEXXZ
+00a74630,library,83,?reset@?$shared_ptr@VPhysicsJob@RBX@@@boost@@QAEXXZ,?reset@?$shared_ptr@VPhysicsJob@RBX@@@boost@@QAEXXZ
 00a74690,library,27,??$checked_delete@Um_imp@filesystem_error@filesystem@boost@@@boost@@YAXPAUm_imp@filesystem_error@filesystem@0@@Z,void __cdecl boost::checked_delete<struct boost::filesystem::filesystem_error::m_imp>(struct boost::filesystem::filesystem_error::m_imp *)
 00a746b0,library,142,??$?0Um_imp@filesystem_error@filesystem@boost@@@shared_count@detail@boost@@QAE@PAUm_imp@filesystem_error@filesystem@2@@Z,public: __thiscall boost::detail::shared_count::shared_count<struct boost::filesystem::filesystem_error::m_imp>(struct boost::filesystem::filesystem_error::m_imp *)
 00a74740,library,26,?dispose@?$sp_counted_impl_p@Um_imp@filesystem_error@filesystem@boost@@@detail@boost@@UAEXXZ,public: virtual void __thiscall boost::detail::sp_counted_impl_p<struct boost::filesystem::filesystem_error::m_imp>::dispose(void)

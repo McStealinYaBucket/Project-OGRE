@@ -321,6 +321,13 @@ FACTS = [
     (0x00706190, 0x007d1d30, "rename", "_ZNK3RBX8Lighting10getTimeStrEv", "ios:",
      "RBX::Lighting::getTimeStr() const | iOS 1029 symbol; reads this+0x1a0/+0x1a4 (the time-of-day "
      "time_duration) and calls to_simple_string_type<char>; the name sat on to_simple_string 0x00706150 before"),
+    # wave4 sync (notes/runs/2026-11-23-phase5-wave4/5c-serialization.md "Util/Name.cpp"). Checked 2026-11-23 with
+    # capstone on both targets.
+    (0x00613be0, 0x007034b0, "rename", "_ZN3RBX4Name6lookupERKPKc", "ios:",
+     "RBX::Name::lookup(char const* const&) | iOS 1029 symbol; static (cdecl): loads the pointer through its "
+     "reference argument; null -> call_once(initNullName 0x00613a70) and returns the null Name, else builds a "
+     "std::string and calls the string lookup 0x00613ab0 (STUDIO 0x00703380); the last function before "
+     "XmlElement.obj (5c-serialization.md)"),
 ]
 
 

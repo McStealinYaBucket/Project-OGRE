@@ -60,8 +60,9 @@ namespace RBX { namespace Lua {
 		static void saveLibraryResult(lua_State* L, int results, std::string libraryName);
 	private:
 		static void registerLibraryTable(lua_State* L);
-		static int getApi(lua_State* L);
+		friend int getApi(lua_State* L);	// iOS: RBX::Lua::getApi(lua_State*), a free function
 	};
+	int getApi(lua_State* L);
 
 	// Explicit-specialization declarations for the Library instantiation
 	// (definitions in script/LuaLibrary.cpp; same convention as

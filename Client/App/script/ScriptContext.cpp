@@ -322,7 +322,7 @@ LuaProfiler::LuaProfiler(lua_State* L, int level)
 	LuaProfiler::instance = this;
 	const std::string position = getResumePosition(L, level);
 	FLog::FastLogS(FLog::LuaProfiler, stringCache.getBegin(position), NULL);
-	if (position.compare("(resume)") == 0)
+	if (position == "(resume)")	// 2013 0x00677f7f: the imported operator==(string, const char*)
 	{
 		std::vector<const char*> frames;
 		lua_Debug debug;
@@ -2787,10 +2787,12 @@ void ScriptContext::onChangedScriptEnabled(const Reflection::PropertyDescriptor&
 	if (scriptsDisabled != 0)
 		startPendingScripts();
 }
-// mac: 0x1952EA (the IScriptFilter override; batch743:379-397 full decompile): live script -> CoreScript's descriptor -> isA gate -> true, else false. The return arm renders as '(RBX::BaseScript*)((char*)a2 + 36) != (RBX::BaseScript*)36' = pointer-truth on the argument (the session-133 askSetParent mac: 0x444E5A artifact family: true for any non-null post-gate) -- conventional shape confirmed by the 2016 tree (:2781-2784 'return Instance::fastDynamicCast<CoreScript>(script) != NULL', crosscheck only, binary wins). The old "+36-byte walk unrecovered" DELTA is retired -- there is no member read at +36.
+// mac: 0x1952EA (the IScriptFilter override). 2013 0x00682846: the null path is fastDynamicCast's own.
+// FUNCTION: PLAYER 0x00682810
+// FUNCTION: STUDIO 0x007e8660
 /*override*/ bool ScriptContext::scriptShouldRun(BaseScript* script)
 {
-	return script != NULL && RBX::Instance::fastDynamicCast<CoreScript>(script) != NULL;
+	return Instance::fastDynamicCast<CoreScript>(script) != NULL;
 }
 // mac: 0x18B230 (batch599: +276 store; enable creates the +280 holder via ServiceProvider::find<StatsService> -- NOT create, so with no service parented only the flag flips; re-enable with a live holder is a no-op ([+280] px check); disable releases the holder. Binary +280/+284 are the shared_ptr px/pn words (the audit's "+0x11C second holder" reading was wrong -- 0x18B28D loads and releases the pn word of the same shared_ptr).
 void ScriptContext::setCollectScriptStats(bool collect)
@@ -2975,11 +2977,11 @@ int ScriptContext::wait(lua_State* L)
 int ScriptContext::spawn(lua_State* L)
 {
 	Lua::ThreadRef threadLock(L);
-	if (lua_gettop(L) <= 0)
+	if (lua_gettop(L) < 1)	// 2013 0x00674778: cmp eax,1; jge
 		throw std::runtime_error("Spawn function requires 1 argument");
 	lua_State* child = lua_newthread(L);
-	// Fresh-child L-20 slot: see delay() -- same zeroing.
-	*(void**)((char*)child - 20) = NULL;
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
 	Lua::WeakThreadRef functor(child);
 	Lua::ThreadRef safeFunctor = functor.lock();
 	RBXASSERT_LINE(safeFunctor, 1606);
@@ -2997,13 +2999,13 @@ int ScriptContext::spawn(lua_State* L)
 int ScriptContext::delay(lua_State* L)
 {
 	Lua::ThreadRef threadLock(L);
-	if (lua_gettop(L) <= 1)
+	if (lua_gettop(L) < 2)	// 2013 0x0067a3ee: cmp eax,2; jge
 		throw std::runtime_error("delay function requires 2 arguments");
 	double timeout = lua_tonumber(L, 1);
 	clampWaitTimeout(timeout);
 	lua_State* child = lua_newthread(L);
-	// Defensive: the fresh child's L-20 slot must read NULL before any WeakThreadRef touches it (the binary's states arrive NULL-slotted on fresh pages; recycled pages can carry garbage). The slot IS the fork node member (section 257 audit: 40B extra space), and the store is a no-op when construction already nulled it.
-	*(void**)((char*)child - 20) = NULL;
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
 	Lua::WeakThreadRef functor(child);
 	Lua::ThreadRef safeFunctor = functor.lock();
 	RBXASSERT_LINE(safeFunctor, 1651);
@@ -3306,6 +3308,9 @@ ScriptContext::ScriptContext()
 	gcFrequencyBase = LuaSettings::singleton().getUnknown116();
 	camelCaseViolationConnection = camelCaseViolation.connect(boost::bind(&ScriptContext::onCamelCaseViolation, this, _1, _2, _3));
 }
+// Member destruction only; FactoryProduct's vftables are stored before ~Instance (0x0068b5b9).
+// FUNCTION: PLAYER 0x0068b1a0
+// FUNCTION: STUDIO 0x007f0900
 ScriptContext::~ScriptContext()
 {
 }
@@ -3398,13 +3403,13 @@ int ScriptContext::ypcall(lua_State* L)
 {
 	Lua::ThreadRef threadLock(L);
 	int top = lua_gettop(L);
-	if (top <= 0)
+	if (top < 1)	// 2013 0x00687904: cmp ebp,1; jge
 		throw std::runtime_error("ypcall requires at least 1 argument");
 	if (lua_iscfunction(L, 1) != 0)
 		throw std::runtime_error("ypcall requires a resumable function as a first argument. Wrap your C function with a Lua function.");
 	lua_State* child = lua_newthread(L);
-	// Fresh-child L-20 slot: see delay() -- same zeroing.
-	*(void**)((char*)child - 20) = NULL;
+	// (no slot store here in 2013; the line pair is kept so later
+	// __LINE__-laid asserts stay on their 2013 lines)
 	Lua::WeakThreadRef functor(child);
 	Lua::ThreadRef safeFunctor = functor.lock();
 	RBXASSERT_LINE(safeFunctor, 1725);

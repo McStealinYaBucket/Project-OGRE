@@ -3,7 +3,8 @@
     python3 -P tools/row_coverage.py P.json [--row 5a|5b|5d|5h] [--files Client/App/util/Math.cpp ...] [--csv out.csv]
 
 With no --files it measures --row (default 5a: math and G3D helpers in Client/App/util + include/Util;
-5f: the Roblox code of the Network project;
+5f: the Roblox code of the Network project; 5c: serialization (v8xml: XML DOM, text parser/writer,
+SerializerV2 binders, the binary deserializer, WebParser/WebSerializer);
 5b: DataModel and the core services; 5h: GUI, the Gui folder and the v8datamodel Gui classes; 5k: the client shell's LTCG block).
 For 5h a function also counts as a file's own when it stores one of the class's vftables (ctors) or
 sits only in the class's vftables (ida/exports/PLAYER-evidence/vtables.jsonl): most Gui classes have
@@ -238,14 +239,31 @@ ROW_5D = {f"Client/App/{k}": v for k, v in {
 # included): 0x00401000 up to the linker's import thunks for LTCG code at 0x00480418; RbxOgre follows.
 # LTCG codegen does not keep .obj order, so the row is the block, not per-file ranges.
 ROW_5K = {"Client/WindowsClient": []}
-ROWS = {"5a": ROW_5A, "5b": ROW_5B, "5h": ROW_5H, "5f": ROW_5F, "5d": ROW_5D, "5k": ROW_5K}
+# 5c: serialization. .obj ranges from the 2013 __FILE__ strings (XmlElement.cpp 328/437,
+# XmlSerializer.cpp 186-310, SerializerV2.cpp 50-142) and the binary deserializer's strings
+# ("Malformed data (%d != %d)" 0x008cf720, "Unexpected end of file" 0x008d20b0).
+ROW_5C = {
+    "Client/App/v8xml/XmlElement.cpp": ["XmlElement::", "XmlNameValuePair::", "XmlAttribute::"],
+    "Client/App/v8xml/XmlSerializer.cpp": ["TextXmlParser::", "TextXmlWriter::", "decodeString"],
+    "Client/App/v8xml/SerializerV2.cpp": ["SerializerV2::", "ArchiveBinder::", "MemoryBinder::"],
+    "Client/App/v8xml/SerializerBinary.cpp": ["RBX::readFormatExpected", "RBX::readPropertyValues", "RBX::MemoryInputStream::"],
+    "Client/App/v8xml/WebParser.cpp": ["RBX::WebParser::"],
+    "Client/App/v8xml/WebSerializer.cpp": ["RBX::WebSerializer::"],
+}
+ROWS = {"5a": ROW_5A, "5c": ROW_5C, "5b": ROW_5B, "5h": ROW_5H, "5f": ROW_5F, "5d": ROW_5D, "5k": ROW_5K}
 # Largest gap between two markers of one .obj. DataModel.obj spans 0x0062d1e0-0x00652800 with
 # 0x9000-byte runs of template code between its own functions.
-SPAN = {"5a": 0x2000, "5b": 0xa000, "5h": 0x4000, "5f": 0x4000, "5d": 0x4000, "5k": 0x80000}
+SPAN = {"5a": 0x2000, "5c": 0x2000, "5b": 0xa000, "5h": 0x4000, "5f": 0x4000, "5d": 0x4000, "5k": 0x80000}
 VT_OWN = {"5h"}
 # File -> (first, last) PLAYER function address, for files whose .obj range is known from the binary
 # but whose markers sit in a header (template bodies) or have no oracle names (rows register these).
-FIXED = {"Client/WindowsClient": (0x00401000, 0x004803b0)}
+FIXED = {"Client/WindowsClient": (0x00401000, 0x004803b0),
+         "Client/App/v8xml/XmlElement.cpp": (0x00613c70, 0x00614a30),
+         "Client/App/v8xml/XmlSerializer.cpp": (0x00627b80, 0x00629630),
+         "Client/App/v8xml/SerializerV2.cpp": (0x006fa580, 0x006fd510),
+         "Client/App/v8xml/SerializerBinary.cpp": (0x008cec50, 0x008d2510),
+         "Client/App/v8xml/WebParser.cpp": (0x008b0f20, 0x008b1500),
+         "Client/App/v8xml/WebSerializer.cpp": (0x0081f410, 0x0081f410)}
 
 
 def vtable_owned():
@@ -343,7 +361,7 @@ def main():
             k += s == "100"
         tot += n
         ok += k
-        out = [m for m in marks if m not in seeds]
+        out = [m for m in marks if not starts[lo] <= m <= starts[hi]]
         if out:
             print(f"  {f}: markers outside the .obj cluster: " + " ".join(f"0x{m:08x}" for m in out))
         print(f"{f}: 0x{starts[lo]:08x}-0x{starts[hi]:08x}  {k}/{n} at 100%, {len(marks)} markers")

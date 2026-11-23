@@ -876,7 +876,7 @@
    "virtual_bases": false,
    "bases": [
     {
-     "name": "RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>",
+     "name": "RBX::DescribedCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 1, 0>",
      "offset": 0,
      "size": 96,
      "empty": false
@@ -1903,7 +1903,7 @@
      "scalar": "T_REAL64"
     },
     {
-     "name": "lastSampleValue",
+     "name": "lastValue",
      "offset": 16,
      "size": 8,
      "kind": "scalar",
@@ -1911,7 +1911,7 @@
      "scalar": "T_REAL64"
     },
     {
-     "name": "averageValue",
+     "name": "mean",
      "offset": 24,
      "size": 8,
      "kind": "scalar",
@@ -1919,7 +1919,7 @@
      "scalar": "T_REAL64"
     },
     {
-     "name": "averageVariance",
+     "name": "meanSquareDev",
      "offset": 32,
      "size": 8,
      "kind": "scalar",
@@ -1927,7 +1927,7 @@
      "scalar": "T_REAL64"
     },
     {
-     "name": "firstTime",
+     "name": "unsampled",
      "offset": 40,
      "size": 1,
      "kind": "scalar",
@@ -4267,6 +4267,239 @@
    "base": false,
    "unique": "VSimJob@RBX@@"
   },
+  "RBX::Lighting": {
+   "size": 496,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "skyParameters",
+     "offset": 104,
+     "size": 248,
+     "kind": "class",
+     "type": "RBX::SkyParameters2013",
+     "scalar": null
+    },
+    {
+     "name": "hasSky",
+     "offset": 352,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "clearColor",
+     "offset": 356,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Color4",
+     "scalar": null
+    },
+    {
+     "name": "shadowColor",
+     "offset": 372,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Color4",
+     "scalar": null
+    },
+    {
+     "name": "fogColor",
+     "offset": 388,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Color4",
+     "scalar": null
+    },
+    {
+     "name": "fogStart",
+     "offset": 404,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "fogEnd",
+     "offset": 408,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "timeOfDay",
+     "offset": 416,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::posix_time::time_duration",
+     "scalar": null
+    },
+    {
+     "name": "topColorShift",
+     "offset": 424,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "bottomColorShift",
+     "offset": 436,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "globalBrightness",
+     "offset": 448,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "globalAmbient",
+     "offset": 452,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "globalOutdoorAmbient",
+     "offset": 464,
+     "size": 12,
+     "kind": "class",
+     "type": "G3D::Color3",
+     "scalar": null
+    },
+    {
+     "name": "globalShadows",
+     "offset": 476,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "outlines",
+     "offset": 477,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "lightingChangedSignal",
+     "offset": 480,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "sky",
+     "offset": 484,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Sky>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLighting@RBX@@"
+  },
+  "RBX::PhysicsJob": {
+   "size": 552,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "stepsPerSec",
+     "offset": 536,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "dataModel",
+     "offset": 544,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPhysicsJob@RBX@@"
+  },
+  "RBX::HeartbeatTask": {
+   "size": 560,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "runService",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::RunService>",
+     "scalar": null
+    },
+    {
+     "name": "dataModel",
+     "offset": 544,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "fps",
+     "offset": 552,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    }
+   ],
+   "base": false,
+   "unique": "VHeartbeatTask@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -4869,13 +5102,13 @@
    "base": true,
    "unique": "V?$Allocator@VFWInstance@RBX@@@RBX@@"
   },
-  "RBX::DescribedNonCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 17, 0>": {
+  "RBX::DescribedCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 1, 0>": {
    "size": 96,
    "vftable": false,
    "virtual_bases": false,
    "bases": [
     {
-     "name": "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>",
+     "name": "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>, 1, 0>",
      "offset": 0,
      "size": 96,
      "empty": false
@@ -4883,7 +5116,7 @@
    ],
    "members": [],
    "base": true,
-   "unique": "V?$DescribedNonCreatable@VScriptContext@RBX@@VInstance@2@$E?sScriptContext@2@3QBDB$0BB@$0A@@RBX@@"
+   "unique": "V?$DescribedCreatable@VScriptContext@RBX@@VInstance@2@$E?sScriptContext@2@3QBDB$00$0A@@RBX@@"
   },
   "RBX::Service": {
    "size": 1,
@@ -5595,6 +5828,22 @@
    "base": true,
    "unique": "V?$list_base_hook@U?$tag@VSimJob@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
   },
+  "RBX::DescribedCreatable<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Lighting, char const *const RBX::sLighting, RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -5738,13 +5987,13 @@
    "base": true,
    "unique": "VArbiter@TaskScheduler@RBX@@"
   },
-  "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>, 17, 0>": {
+  "RBX::Reflection::Described<RBX::ScriptContext, char const *const RBX::sScriptContext, RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>, 1, 0>": {
    "size": 96,
    "vftable": false,
    "virtual_bases": false,
    "bases": [
     {
-     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>",
+     "name": "RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>",
      "offset": 0,
      "size": 96,
      "empty": false
@@ -5752,7 +6001,7 @@
    ],
    "members": [],
    "base": true,
-   "unique": "V?$Described@VScriptContext@RBX@@$E?sScriptContext@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sScriptContext@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@"
+   "unique": "V?$Described@VScriptContext@RBX@@$E?sScriptContext@2@3QBDBV?$FactoryProduct@VScriptContext@RBX@@VInstance@2@$E?sScriptContext@2@3QBDBV32@@2@$00$0A@@Reflection@RBX@@"
   },
   "RBX::Reflection::Described<RBX::DataModel, char const *const RBX::sDataModel, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>, 27, 0>": {
    "size": 140,
@@ -6096,6 +6345,22 @@
    "base": true,
    "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@VSimJob@RBX@@$00$00@detail@intrusive@boost@@"
   },
+  "RBX::Reflection::Described<RBX::Lighting, char const *const RBX::sLighting, RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VLighting@RBX@@$E?sLighting@2@3QBDBV?$FactoryProduct@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -6156,7 +6421,7 @@
    "base": true,
    "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@UWaitingTag@TaskScheduler@RBX@@$00$00@detail@intrusive@boost@@"
   },
-  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sScriptContext>": {
+  "RBX::FactoryProduct<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, RBX::Instance>": {
    "size": 96,
    "vftable": false,
    "virtual_bases": false,
@@ -6170,7 +6435,7 @@
    ],
    "members": [],
    "base": true,
-   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sScriptContext@2@3QBDB@RBX@@"
+   "unique": "V?$FactoryProduct@VScriptContext@RBX@@VInstance@2@$E?sScriptContext@2@3QBDBV32@@RBX@@"
   },
   "RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sDataModel>": {
    "size": 140,
@@ -6516,6 +6781,22 @@
    "members": [],
    "base": true,
    "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@VSimJob@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "RBX::FactoryProduct<RBX::Lighting, RBX::Instance, char const *const RBX::sLighting, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDBV32@@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,

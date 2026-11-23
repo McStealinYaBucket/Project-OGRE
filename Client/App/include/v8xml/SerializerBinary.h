@@ -37,8 +37,6 @@ namespace RBX
 	void readFloatArray(MemoryInputStream& in, std::vector<float>& values, size_t count);
 	// Inverse of writeDeltaValues: zigzag-decode then cumulative sum (0x700E10).
 	void readIdArray(MemoryInputStream& in, std::vector<int>& values, size_t count);
-	// Length-prefixed string (inverse of the string branch; 2016 readString).
-	void readBinaryString(MemoryInputStream& in, std::string& value);
 	// mac: 0x706425 — chunk framing (resolved call convention: out, chunk, tag,
 	// flags). 16-byte header: tag[4] + u32 compressedLen + u32 uncompressedLen
 	// + u32 reserved(0); payload raw iff flags & sfNoCompression (END always
@@ -110,3 +108,17 @@ namespace RBX
 		void deserialize(std::istream& in, Instances& result);
 	};
 }
+
+// std::vector<std::vector<Instance*> > bodies SerializerBinary.obj emits for the deserializer's
+// per-class instance lists (byte-identical to PLAYER under tools/probe_compare.py).
+// clang-format off
+
+// TEMPLATE: PLAYER 0x008cf4f0
+// ?destroy@?$allocator@V?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@std@@@std@@QAEXPAV?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@2@@Z
+
+// TEMPLATE: PLAYER 0x008cf650
+// ??$_Destroy_range@V?$allocator@V?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@std@@@std@@@std@@YAXPAV?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@0@0AAV?$allocator@V?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@std@@@0@U_Nonscalar_ptr_iterator_tag@0@@Z
+
+// TEMPLATE: PLAYER 0x008d13d0
+// ?_Ufill@?$vector@V?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@std@@V?$allocator@V?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@std@@@2@@std@@IAEPAV?$vector@PAVInstance@RBX@@V?$allocator@PAVInstance@RBX@@@std@@@2@PAV32@IABV32@@Z
+// clang-format on

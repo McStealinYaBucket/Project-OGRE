@@ -3,6 +3,14 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: void __thiscall RBX::DataModel::physicsStep(float, double, double, int)
+// STUB: PLAYER 0x00642850
+extern "C" void ogre_stub_00642850()
+{
+	STUB(0x00642850);
+}
+#pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_00642850")
+
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: PLAYER 0x006fffc0
 extern "C" void ogre_stub_006fffc0()
@@ -82,3 +90,11 @@ extern "C" void ogre_stub_009c5ce0()
 	STUB(0x009c5ce0);
 }
 #pragma comment(linker, "/alternatename:??0CRenderSettings@RBX@@QAE@XZ=_ogre_stub_009c5ce0")
+
+// public: static class G3D::Log * __cdecl G3D::Log::common(void)
+// STUB: PLAYER 0x009d5c60
+extern "C" void ogre_stub_009d5c60()
+{
+	STUB(0x009d5c60);
+}
+#pragma comment(linker, "/alternatename:?common@Log@G3D@@SAPAV12@XZ=_ogre_stub_009d5c60")

@@ -50,14 +50,14 @@ namespace RBX {
 	private:
 		typedef DescribedNonCreatable<RunService, Instance, sRunService, Reflection::ClassDescriptor::RUNTIME_LOCAL> Super;
 
-		// Held as TaskScheduler::Job (2016: shared_ptr<PhysicsJob>/<HeartbeatTask>); the 2013 bytes
-		// do not tell them apart, and the typed resets in stopTasks add names to our linker's one
-		// folded shared_ptr<T>::reset body, after which its pairing with 0x00652fe0 breaks
-		// (GuiItem::onDescendantRemoving 0x00768d00 and two others leave 100%, measured 2026-11-13).
+		// Typed, as 2013 (iOS 10-29 has shared_ptr<PhysicsJob>::operator= and
+		// shared_ptr<HeartbeatTask>::operator=): with Job-typed members RunService::start 0x0072d300
+		// keeps two temporaries in two stack slots where the original reuses one; typed, start and
+		// stopTasks are both identical. PhysicsJob and HeartbeatTask are defined in RunService.cpp.
 		friend class PhysicsJob;
-		shared_ptr<TaskScheduler::Job> physicsJob;		// 0x64
+		shared_ptr<PhysicsJob> physicsJob;		// 0x64
 		friend class HeartbeatTask;
-		shared_ptr<TaskScheduler::Job> heartbeatTask;	// 0x6c
+		shared_ptr<HeartbeatTask> heartbeatTask;	// 0x6c
 
 		RunState runState;							// 0x74
 		double totalGameTime;						// 0x78
@@ -89,6 +89,10 @@ namespace RBX {
 		void setRunState(int state);
 
 		void stopTasks();
+
+		// PhysicsJob::getDesiredConcurrencyCount 0x0072b760 returns 1024 when set (the 2016
+		// name; a settings class exposes it as "ParallelPhysics", initializer 0x00a81880).
+		static bool parallelPhysicsUserEnabled;
 
 		RunState getRunState() const		{return runState;}
 		double wallTime() const {return totalWallTime;}

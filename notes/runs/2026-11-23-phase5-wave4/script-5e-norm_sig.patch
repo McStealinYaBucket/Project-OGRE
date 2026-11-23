@@ -1,0 +1,16 @@
+--- tools/ida/gen_reccmp_csv.py	2026-11-13 16:29:55.235384571 -0500
++++ tools/ida/gen_reccmp_csv.py	2026-11-23 08:19:41.932018939 -0500
+@@ -293,6 +293,13 @@
+     s = re.sub(r"std::basic_(\w+)<char,std::char_traits<char>,std::allocator<char>>", r"std::\1 ", s)
+     s = re.sub(r"std::basic_(\w+)<char,std::char_traits<char>>", r"std::\1 ", s)
+     s = re.sub(r" ?([*&,<>()\[\]]) ?", r"\1", s).strip()
++    # a bool template argument: Itanium prints true/false, llvm-undname 1/0 (Bridge<G3D::Vector3,1>)
++    s = re.sub(r"(?<=[<,])true(?=[,>])", "1", s)
++    s = re.sub(r"(?<=[<,])false(?=[,>])", "0", s)
++    # an enum template argument: Itanium prints (Enum)1, llvm-undname 1
++    s = re.sub(r"(?<=[<,])\([\w:]+\)(?=-?\d+[,>])", "", s)
++    # a reference non-type template argument: llvm-undname prints its type (char const*const RBX::sX)
++    s = re.sub(r"(?<=[<,])[\w: ]+?\*const (?=[\w:]+[,>])", "", s)
+     s = s.replace("unsigned __int64", "unsigned long long").replace("__int64", "long long")
+     s = re.sub(r"\blong long\b", "LL", s)
+     s = re.sub(r"\blong\b", "int", s).replace("LL", "long long")
