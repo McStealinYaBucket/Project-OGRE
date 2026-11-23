@@ -59,6 +59,14 @@ extern "C" void ogre_stub_008766a0()
 }
 #pragma comment(linker, "/alternatename:??1RobloxExtraSpace@@AAE@XZ=_ogre_stub_008766a0")
 
+// unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
+// STUB: PLAYER 0x009b59b0
+extern "C" void ogre_stub_009b59b0()
+{
+	STUB(0x009b59b0);
+}
+#pragma comment(linker, "/alternatename:?getVideoMemory@SystemUtil@RBX@@YAIXZ=_ogre_stub_009b59b0")
+
 // public: void __thiscall RBX::Limits::Counter::add(class RBX::Limits::Countable *)
 // STUB: PLAYER 0x009b90a0
 extern "C" void ogre_stub_009b90a0()
@@ -66,3 +74,11 @@ extern "C" void ogre_stub_009b90a0()
 	STUB(0x009b90a0);
 }
 #pragma comment(linker, "/alternatename:?add@Counter@Limits@RBX@@QAEXPAVCountable@23@@Z=_ogre_stub_009b90a0")
+
+// public: __thiscall RBX::CRenderSettings::CRenderSettings(void)
+// STUB: PLAYER 0x009c5ce0
+extern "C" void ogre_stub_009c5ce0()
+{
+	STUB(0x009c5ce0);
+}
+#pragma comment(linker, "/alternatename:??0CRenderSettings@RBX@@QAE@XZ=_ogre_stub_009c5ce0")

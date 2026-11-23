@@ -3,6 +3,14 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: __thiscall RBX::CRenderSettings::CRenderSettings(void)
+// STUB: STUDIO 0x006c20b0
+extern "C" void ogre_stub_006c20b0()
+{
+	STUB(0x006c20b0);
+}
+#pragma comment(linker, "/alternatename:??0CRenderSettings@RBX@@QAE@XZ=_ogre_stub_006c20b0")
+
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: STUDIO 0x00709250
 extern "C" void ogre_stub_00709250()
@@ -58,6 +66,14 @@ extern "C" void ogre_stub_00926390()
 	STUB(0x00926390);
 }
 #pragma comment(linker, "/alternatename:??1RobloxExtraSpace@@AAE@XZ=_ogre_stub_00926390")
+
+// unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
+// STUB: STUDIO 0x00a68be0
+extern "C" void ogre_stub_00a68be0()
+{
+	STUB(0x00a68be0);
+}
+#pragma comment(linker, "/alternatename:?getVideoMemory@SystemUtil@RBX@@YAIXZ=_ogre_stub_00a68be0")
 
 // public: void __thiscall RBX::Limits::Counter::add(class RBX::Limits::Countable *)
 // STUB: STUDIO 0x00a6afd0

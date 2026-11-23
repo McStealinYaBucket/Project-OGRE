@@ -1,7 +1,7 @@
 # Generated from ida/exports/PLAYER-names.csv. Do not edit.
 # symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on both sides; a static carries our proc name instead.
-# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 10, folded name: address claimed twice 27, kept over a twin-colliding position pair 1, name present, signature differs 16, not defined in our build 4165, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 59, paired by signature 835, paired by static name 1.
-# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 3021, not in our link 5, paired 6, symbol paired elsewhere 4.
+# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 10, folded name: address claimed twice 27, kept over a twin-colliding position pair 1, name present, signature differs 16, not defined in our build 4164, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 59, paired by signature 835, paired by static name 1.
+# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 3695, not in our link 5, paired 6, symbol paired elsewhere 4.
 address,name,symbol,type
 00402240,unsigned char __cdecl __TBB_LockByte(unsigned char &),?__TBB_LockByte@@YAEAAE@Z,library
 00402540,RBX::Reflection::ClassDescriptor::~ClassDescriptor(),??1ClassDescriptor@Reflection@RBX@@UAE@XZ,
@@ -1160,7 +1160,6 @@ address,name,symbol,type
 005b9560,RBX::Network::PacketReceiveJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
 005b9960,RBX::Network::Peer::askAddChild(RBX::Instance const*) const,,
 005b9bb0,RBX::Network::PeerStatsItem::PeerStatsItem(RBX::Network::Peer*),,
-005b9c70,RBX::RunningAverageTimeInterval<(RBX::Time::SampleMethod)1>::rate() const,,
 005b9e40,"RBX::NonFactoryProduct<RBX::Instance, RBX::sPhysicsService>::isNullClassName()",,
 005ba060,RBX::Network::PeerStatsItem::update(),,
 005ba1d0,"RBX::Network::Peer::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",,

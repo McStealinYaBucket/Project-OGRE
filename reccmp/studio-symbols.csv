@@ -1,7 +1,7 @@
 # Generated from ida/exports/STUDIO-names.csv. Do not edit.
 # symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on both sides; a static carries our proc name instead.
-# Signature pairing: ambiguous signature 4, ambiguous static name 1, dropped: a position pair contradicts it 16, folded name: address claimed twice 33, kept over a twin-colliding position pair 0, name present, signature differs 21, not defined in our build 4240, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 58, paired by signature 863, paired by static name 1.
-# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 2988, not in our link 5, paired 8, symbol paired elsewhere 2.
+# Signature pairing: ambiguous signature 4, ambiguous static name 1, dropped: a position pair contradicts it 16, folded name: address claimed twice 33, kept over a twin-colliding position pair 0, name present, signature differs 21, not defined in our build 4239, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 58, paired by signature 863, paired by static name 1.
+# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 3606, not in our link 5, paired 8, symbol paired elsewhere 2.
 address,name,symbol,type
 00403be0,"std::length_error::~length_error() [D0, deleting: the MSVC scalar deleting destructor]",??_Eout_of_range@std@@UAEPAXI@Z,
 00407790,"RBX::Reflection::EnumPropDescriptor<CRenderSettingsItem, RBX::CRenderSettings::ShadowMode>::getVariant(RBX::Reflection::DescribedBase const*, RBX::Reflection::Variant&) const",?getVariant@?$EnumPropDescriptor@VCRenderSettingsItem@@W4ResolutionPreset@CRenderSettings@RBX@@@Reflection@RBX@@UBEXPBVDescribedBase@23@AAVVariant@23@@Z,
@@ -1242,7 +1242,6 @@ address,name,symbol,type
 0064b2d0,RBX::Network::PacketReceiveJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
 0064b5b0,RBX::Network::Peer::askAddChild(RBX::Instance const*) const,,
 0064b800,RBX::Network::PeerStatsItem::PeerStatsItem(RBX::Network::Peer*),,
-0064b8c0,RBX::RunningAverageTimeInterval<(RBX::Time::SampleMethod)1>::rate() const,,
 0064baa0,"RBX::NonFactoryProduct<RBX::Instance, RBX::sPhysicsService>::isNullClassName()",,
 0064bcc0,RBX::Network::PeerStatsItem::update(),,
 0064bdb0,"boost::shared_ptr<RBX::Network::PeerStatsItem> RBX::Creatable<RBX::Instance>::create<RBX::Network::PeerStatsItem, RBX::Network::Peer*>(RBX::Network::Peer*)",,
