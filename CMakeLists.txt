@@ -288,8 +288,8 @@ target_link_options(boost PRIVATE /DEBUG /INCREMENTAL:NO)
 
 # Sources the client projects compile themselves, once per client with that client's flags.
 set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/ClientBase/ReflectionMetadata.cpp
-    Client/Win/placeholder.cpp)
-ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
+    Client/Win/LogManager.cpp Client/Win/placeholder.cpp)
+ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp Client/WindowsClient/GameVerbs.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
 ogre_library(studio_client SOURCES Client/RobloxStudio/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     Client/ClientShared/placeholder.cpp FLAGS ${OGRE_STUDIO_FLAGS})
