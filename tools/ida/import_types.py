@@ -125,8 +125,17 @@ CLASSES = [
     # SpatialHash (no size assertion), AssemblyHistory (ctor 0.08)
     "RBX::TimerService", "RBX::PhysicsSettings", "RBX::StarterGuiService", "RBX::Network::ItemQueue",
     "RBX::Stats::Item",
+    # wave9 sync (sweep16, build/sweep16/P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT =
+    # the PDB's), PLAYER / STUDIO: Kernel (0x30, world-5d.md wave9: World ctor new(0x30)) ctor 0x00831590 /
+    # 0x009a3bf0, dtor 0x0082f670 / 0x009a1c20; ContactManagerSpatialHash (0xdc, adds nothing to its base
+    # SpatialHash<Primitive,Contact,ContactManager,4>) ctor 0x008ef090 / 0x00a0ce10 (the SpatialHash ctor
+    # 0x008eef80 / 0x00a0cd00 is 100% too); BlockBlockContact (0x30, base Contact over Edge 0x1c) ctor
+    # 0x00853750 / 0x009ab400. Stats::Item is now proven in STUDIO too (ctor 0x0043e560 100%, shell-base.md).
+    # Not yet: BallBall/BallBlock (ctor 0.857 / 0.825), BallPoly/PolyPoly, JointInstance (dtor 0.22, no size),
+    # Reflection::Type (ctors 0.80-0.97, no size), TaskScheduler (no size assertion)
+    "RBX::Kernel", "RBX::ContactManagerSpatialHash", "RBX::BlockBlockContact",
 ]
-PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::Stats::Item"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

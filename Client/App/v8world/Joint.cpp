@@ -128,19 +128,19 @@ namespace RBX {
 	}
 	// FUNCTION: PLAYER 0x0081fae0
 	// FUNCTION: STUDIO 0x00913180
-	void Joint::setJointOwner(JointInstance* value)
+	void Joint::setJointOwner(IJointOwner* value)
 	{
 		RBXASSERT((value == NULL) != (jointOwner == NULL));
 		jointOwner = value;
 	}
-
-
+	// FUNCTION: PLAYER 0x00501530
+	// FUNCTION: STUDIO 0x009131f0
+	IJointOwner* Joint::getJointOwner() const { return jointOwner; }
 	// FUNCTION: PLAYER 0x0081fd10
 	// FUNCTION: STUDIO 0x009133c0
 	SpanningNode* Joint::getNode(int i)
 	{
 		return getPrimitive(i);
-
 
 
 	}

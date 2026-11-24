@@ -10,11 +10,13 @@
  * (path inferred). */
 
 #include "stdafx.h"
-
+#include "decomp.h"
 #include "V8World/ContactManagerSpatialHash.h"
 
 namespace RBX {
 
+	// FUNCTION: PLAYER 0x008ef090
+	// FUNCTION: STUDIO 0x00a0ce10
 	ContactManagerSpatialHash::ContactManagerSpatialHash(World* world,
 		ContactManager* contactManager)
 		: SpatialHash<Primitive, Contact, ContactManager,
@@ -23,3 +25,5 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::ContactManagerSpatialHash, 0xdc);

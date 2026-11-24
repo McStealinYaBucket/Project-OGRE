@@ -47,9 +47,10 @@ namespace Stats {
 		: public DescribedNonCreatable<Item, Instance, sStatsItem>
 	{
 	public:
-		// fldz into +0x60, then the +0x68 string (STUDIO's older revision differs).
+		// fldz into +0x60, then the +0x68 string. STUDIO 0x0043e560 is the shell LTCG copy (/GS), which
+		// Client/ClientShared/placeholder.cpp reproduces.
 		// FUNCTION: PLAYER 0x0048e470
-		// STUB: STUDIO 0x0043e560
+		// FUNCTION: STUDIO 0x0043e560
 		Item()
 			: statValue(0.0)
 		{}
@@ -81,7 +82,14 @@ namespace Stats {
 		// unsigned long.
 		template<class T>
 		void formatValue(const T& value);
-		// formatMem 0x4A2D80: Log::formatMem into +0x68 (no +0x60 store).
+		// Inline in 2013: the +0x60 store, then basic_string::operator=(const string&) (formatMem
+		// 0x0073b300 and formatValue(double, fmt, ...) 0x0073b380 store between their temp and the
+		// assignment).
+		void setValue(double value, const std::string& s)
+		{
+			statValue = value;
+			displayString = s;
+		}
 		void formatMem(unsigned int bytes);
 		void formatRate(const RunningAverageTimeInterval<>& average);
 

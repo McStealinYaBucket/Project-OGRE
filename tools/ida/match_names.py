@@ -351,6 +351,12 @@ FACTS = [
      "boost::program_options::detail::utf8_codecvt_facet::`vector deleting destructor' | slot 0 of the vftable "
      "0x00be64d0 whose COL 0x00c75d38 names .?AUutf8_codecvt_facet@detail@program_options@boost@@ (its slots 2 and "
      "6 are the program_options do_max_length/do_unshift); the windows_file_codecvt name moves to 0x009befb0"),
+    # wave9 sync: sweep16 pairs vector<shared_ptr<Instance>>::push_back with 0x00564bc0 at 100%; the Thread.obj
+    # copy that held the name since an earlier sweep has no row now (shell-base.md, wave9).
+    (0x009b7020, None, "unname", "", "match:",
+     "not vector<shared_ptr<Instance>>::push_back (that name is reccmp 100% at 0x00564bc0 in sweep16): the "
+     "Thread.obj push_back chain next to 0x009b6af0 (vector<shared_ptr<boost::thread>>), element type unproven "
+     "(shell-base.md, wave9)"),
 ]
 
 

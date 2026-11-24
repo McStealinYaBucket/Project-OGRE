@@ -192,8 +192,8 @@ namespace RBX {
 	// mac: 0x1AA362 (batch575: weak lock, DataModel::get, FLog start/finish,
 	// scoped_write_request, stepGc, frequency refresh, Stepped). Same
 	// direct-parent DELTA as WaitingScriptsJob above.
-	// STUB: PLAYER 0x00679e60
-	// STUB: STUDIO 0x007e1d80
+	// FUNCTION: PLAYER 0x00679e60
+	// FUNCTION: STUDIO 0x007e1d80
 	TaskScheduler::StepResult GcJob::stepDataModelJob(const Stats& stats)
 	{
 		(void)stats;
@@ -254,8 +254,8 @@ namespace RBX {
 	// binary casts the DIRECT parent -- identical whenever services hang
 	// directly under the DataModel (the production shape); diverges only
 	// for deeper service nesting, which 2013 never builds.
-	// STUB: PLAYER 0x0068a4e0
-	// STUB: STUDIO 0x007efc40
+	// FUNCTION: PLAYER 0x0068a4e0
+	// FUNCTION: STUDIO 0x007efc40
 	TaskScheduler::StepResult WaitingScriptsJob::stepDataModelJob(const Stats& stats)
 	{
 		(void)stats;

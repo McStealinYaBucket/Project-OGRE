@@ -431,3 +431,5 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::Kernel, 0x30);

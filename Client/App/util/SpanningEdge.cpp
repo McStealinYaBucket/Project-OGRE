@@ -55,16 +55,18 @@ namespace RBX {
 		child->setIndexedTreeParent(newParent);
 	}
 
-	// mac: 0x24E5DE (9B): const forward.
+	// FUNCTION: PLAYER 0x008ee900
+	// FUNCTION: STUDIO 0x009c3860
 	SpanningNode* SpanningEdge::getChildSpanningNode()
 	{
 		return const_cast<SpanningNode*>(getConstChildSpanningNode());
 	}
-	// mac: 0x24E5E8 (36B, batch221a).
+	// FUNCTION: PLAYER 0x008ee9a0
+	// FUNCTION: STUDIO 0x009c3900
 	SpanningNode* SpanningEdge::getParentSpanningNode()
 	{
-		return const_cast<SpanningNode*>(
-			otherConstNode(getConstChildSpanningNode()));
+		const SpanningNode* child = getConstChildSpanningNode();
+		return const_cast<SpanningNode*>(otherConstNode(child));
 	}
 	// mac: 0x24E83C (54B, batch221a).
 	bool SpanningEdge::inSpanningTree() const

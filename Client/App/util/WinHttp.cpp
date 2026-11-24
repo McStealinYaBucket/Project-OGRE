@@ -104,7 +104,7 @@ namespace RBX
 			http->onWinHttpRedirect(dwInternetStatus, (LPCTSTR) s);
 	}
 
-	// FUNCTION: PLAYER 0x00826990
+	// STUB: PLAYER 0x00826990
 	// FUNCTION: STUDIO 0x0091cd80
 	void Http::httpGetPostWinHttp(bool isPost, std::istream& data, bool compressData, const std::map<std::string, std::string>& additionalHeaders, bool externalRequest, std::string& response)
 	{

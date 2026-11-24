@@ -89,8 +89,8 @@ namespace RBX
 		serviceArray.clear();
 		serviceMap.clear();
 	}
-	// STUB: PLAYER 0x006a9770
-	// STUB: STUDIO 0x0076f7b0
+	// FUNCTION: PLAYER 0x006a9770
+	// FUNCTION: STUDIO 0x0076f7b0
 	void ServiceProvider::onChildAdded(Instance* instance)
 	{
 		RBXASSERT(Instance::fastDynamicCast<ServiceProvider>(instance)==NULL);

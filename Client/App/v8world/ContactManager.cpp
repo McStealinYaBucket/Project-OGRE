@@ -527,17 +527,17 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x007b9120
+	// FUNCTION: PLAYER 0x007b9120
 	// STUB: STUDIO 0x008d5ac0
 	Contact* ContactManager::createContact(Primitive* p0, Primitive* p1)
 	{
 		RBXASSERT(p0->getGeometryType() != Geometry::GEOMETRY_MEGACLUSTER && p1->getGeometryType() != Geometry::GEOMETRY_MEGACLUSTER);
-		if (p0->getCollideType() > p1->getCollideType())
-			std::swap(p0, p1);
-		switch (p0->getCollideType())
-		{
+		if (p0->getCollideType() > p1->getCollideType()) std::swap(p0, p1);
+		int t0 = p0->getCollideType();
+		int t1 = p1->getCollideType();
+		switch (t0) {
 		case 1:
-			switch (p1->getCollideType())
+			switch (t1)
 			{
 			case 1:
 				return new BallBallContact(p0, p1);
@@ -559,7 +559,7 @@ namespace RBX {
 				return NULL;
 			}
 		case 2:
-			switch (p1->getCollideType())
+			switch (t1)
 			{
 			case 2:
 				return new BlockBlockContact(p0, p1);
@@ -654,3 +654,10 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+// Pool sizes pushed to each Allocator<T>::operator new in createContact (0x007b9120).
+DECOMP_SIZE_ASSERT(RBX::BallBallContact, 0x30);
+DECOMP_SIZE_ASSERT(RBX::BallBlockContact, 0x30);
+DECOMP_SIZE_ASSERT(RBX::BlockBlockContact, 0x30);
+DECOMP_SIZE_ASSERT(RBX::BallPolyContact, 0xd0);
+DECOMP_SIZE_ASSERT(RBX::PolyPolyContact, 0xd4);

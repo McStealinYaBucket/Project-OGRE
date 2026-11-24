@@ -107,7 +107,7 @@ namespace RBX
 		size_t threadPoolSize() const { return threads.size(); }
 		double schedulerRate() const { return schedulerDutyCycle.rate(); }
 		double getSchedulerDutyCyclePerThread() const;
-		rbx::atomic<int> taskCount;
+		rbx::atomic_unk0x005ba6f0<int> taskCount; // +0x08, the atomic.h:182 class (ctor 0x005ba6f0)
 		// NOTE (2013): printDiagnostics/printJobs (2016 diagnostics with printf format
 		// strings like "Arbiter:TaskName") are absent from the Oct 2013 binaries.
 		void setJobsExtendedStatsWindow(double seconds); // set seconds to 0.0 to disable.

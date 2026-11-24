@@ -99,8 +99,8 @@ namespace RBX {
 		}
 		const G3D::Matrix3& getInverseInertiaInWorld() const { return momentRecipWorld; }
 		// 2016 shapes (symmetric-contact gating for the impulse solver).
-		// 2013: a header inline emitted in Kernel.obj (PLAYER 0x0082e000) gated on FFlag::SymmetricContact (0x00d30f08,
-		// not declared in Util/FastFlags.h yet); stubbed in SimBody.cpp until the flag exists.
+		// 2013: out of line (PLAYER 0x0082e000, in Kernel.obj's range), gated on FFlag::SymmetricContact (0x00d30f08);
+		// defined in SimBody.cpp.
 		bool updateSymmetricContactState();
 		bool isSymmetricContact() const { return symmetricContact; }
 		bool isVerticalContact() const { return verticalContact; }

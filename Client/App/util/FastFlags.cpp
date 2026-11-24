@@ -29,10 +29,13 @@ bool CheckMouseOverWithClipping = true;
 // 2013 shipped behavior; 60Hz mode postdates this build).
 bool Physics60HZ = false;
 
-// KernelData::addBodyToNewList reads these.  Defaults false (BSS-zero
-// in the binary image; server-delivered at run time there).
-bool FreeFallOptimization = false;
-bool ImpulseSolverForContact = false;
+// KernelData::addBodyToNewList reads these.  Default true: .data bytes 1 at
+// PLAYER 0x00d30efe / 0x00d30eff (server-delivered at run time there).
+bool FreeFallOptimization = true;
+bool ImpulseSolverForContact = true;
+// SimBody::updateSymmetricContactState 0x0082e000 reads this.  Default true:
+// .data byte 1 at PLAYER 0x00d30f08 (registered "SymmetricContact" at 0x00a65a80).
+bool SymmetricContact = true;
 bool SkipBroadPhaseWhenThrottling = false;
 bool BlockBlockNarrowPhaseRefactor = false;
 bool SegregatedLuaEnvironments = false;

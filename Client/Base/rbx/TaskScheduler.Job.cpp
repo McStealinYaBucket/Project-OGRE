@@ -48,7 +48,7 @@ double TaskScheduler::Job::averageError() const
 {
 	return runningAverageError.value();
 }
-// STUB: STUDIO 0x00a71210
+// FUNCTION: STUDIO 0x00a71210
 void TaskScheduler::Job::removeCoordinator(class boost::shared_ptr<class RBX::Tasks::Coordinator> coordinator)
 {
 	coordinator->onRemoved(this);
@@ -57,7 +57,7 @@ void TaskScheduler::Job::removeCoordinator(class boost::shared_ptr<class RBX::Ta
 		coordinators.erase(std::find(coordinators.begin(), coordinators.end(), coordinator));
 	}
 }
-// STUB: PLAYER 0x009baa80
+// FUNCTION: PLAYER 0x009baa80
 // STUB: STUDIO 0x00a718d0
 void TaskScheduler::Job::addCoordinator(class boost::shared_ptr<class RBX::Tasks::Coordinator> coordinator)
 {
@@ -103,8 +103,8 @@ TaskScheduler::Job::Job(const char* name, shared_ptr<TaskScheduler::Arbiter> arb
 	FASTLOG2(FLog::TaskSchedulerInit, "Job Created - this(%p) arbiter(%p)", this, arbiter.get());
 	FASTLOGS(FLog::TaskSchedulerInit, "JobName(%s)", name);
 }
-// STUB: PLAYER 0x009ba1f0
-// STUB: STUDIO 0x00a71310
+// FUNCTION: PLAYER 0x009ba1f0
+// FUNCTION: STUDIO 0x00a71310
 TaskScheduler::Job::~Job()
 {
 	RBXASSERT(!TaskScheduler::SleepingHook::is_linked());
@@ -123,8 +123,8 @@ TaskScheduler::Job::Error TaskScheduler::Job::computeStandardError(const Stats& 
 {
 	return stats.timespanSinceLastStep.seconds() * desiredHz;
 }
-// STUB: PLAYER 0x009b9a90
-// FUNCTION: STUDIO 0x00a70ab0
+// FUNCTION: PLAYER 0x009b9a90
+// STUB: STUDIO 0x00a70ab0
 Time::Interval TaskScheduler::Job::computeStandardSleepTime(const Stats& stats, double desiredHz)
 {
 	shared_ptr<Arbiter> ar(getArbiter());

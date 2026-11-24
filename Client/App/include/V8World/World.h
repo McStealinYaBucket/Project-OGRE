@@ -172,6 +172,10 @@ namespace RBX {
 		void onPrimitiveCollided(Primitive* p0, Primitive* p1);
 		void ticklePrimitive(Primitive* prim, bool recursive);
 		void onAssemblyExtentsChanged(Assembly* assembly);
+		void sendClumpChangedMessage(Primitive* childPrim);
+		void notifyMoved(Primitive* p);
+		void jointCoordsChanged(Joint* j);
+		void computeFallen(G3D::Array<Primitive*>& fallen) const;
 	};
 
 	// The member templates World.obj carries out of line (PLAYER order):

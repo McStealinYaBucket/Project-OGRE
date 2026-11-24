@@ -338,8 +338,8 @@ namespace RBX {
 		dirtyMechanisms.insert(m);
 	}
 
-	// Binary shape (batch271: prim+244 owner slot-2 call + joints-list
-	// rigid recursion; 2016 text).
+	// FUNCTION: PLAYER 0x008ebb60
+	// FUNCTION: STUDIO 0x00a09df0
 	void TreeStage::sendClumpChangedMessage(Primitive* childPrim)
 	{
 		if (childPrim->getOwner() != NULL) {
@@ -471,6 +471,5 @@ namespace RBX {
 		p->removeFromStage(this);
 		RBXASSERT(p->getNumEdges() == 0);
 	}
-
 
 } // namespace RBX

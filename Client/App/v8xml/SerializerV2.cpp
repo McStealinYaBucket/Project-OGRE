@@ -65,8 +65,8 @@ public:
 		return true;
 	}
 protected:
-	// STUB: PLAYER 0x006fc500
-	// STUB: STUDIO 0x0074aa90
+	// FUNCTION: PLAYER 0x006fc500
+	// FUNCTION: STUDIO 0x0074aa90
 	virtual bool processID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
 	{
 		InstanceHandle h;
@@ -105,8 +105,8 @@ class ArchiveBinder : public MergeBinder
 
 	std::list<IDREFBinding> idrefBindings;			// 0x20
 public:
-	// FUNCTION: PLAYER 0x006fb300
-	// FUNCTION: STUDIO 0x00749890
+	// STUB: PLAYER 0x006fb300
+	// STUB: STUDIO 0x00749890
 	virtual bool processID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
 	{
 		if (Super::processID(valueID, source))

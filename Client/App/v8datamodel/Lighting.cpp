@@ -214,8 +214,8 @@ namespace RBX {
 
 	// Byte-identical in a probe compile; PLAYER scores 98.5% because shared_from<Sky> folds into
 	// our shared_from<GuiItem> and that call pairs with another original twin.
-	// STUB: PLAYER 0x00707510
-	// STUB: STUDIO 0x007d32c0
+	// FUNCTION: PLAYER 0x00707510
+	// FUNCTION: STUDIO 0x007d32c0
 	void Lighting::onChildAdded(Instance* child)
 	{
 		Super::onChildAdded(child);

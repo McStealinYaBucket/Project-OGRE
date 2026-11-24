@@ -49,11 +49,12 @@ extern bool CheckMouseOverWithClipping;
 // server-value DELTA as above.
 extern bool Physics60HZ;
 
-// KernelData::addBodyToNewList.  OFF -> joint-list routing (freeFall
-// fast path disabled); BSS-zero shipped defaults.  Same server-value
-// DELTA as above.
+// KernelData::addBodyToNewList.  Shipped defaults ON (.data bytes 1 at
+// PLAYER 0x00d30efe / 0x00d30eff).  Same server-value DELTA as above.
 extern bool FreeFallOptimization;
 extern bool ImpulseSolverForContact;
+// SimBody::updateSymmetricContactState (PLAYER 0x0082e000); ON (0x00d30f08).
+extern bool SymmetricContact;
 extern bool SkipBroadPhaseWhenThrottling;
 // BlockBlockContact find/load FFlag variants (0x55EE0E etc., batch308).
 // BSS-zero shipped default (OFF -> legacy paths); server-value DELTA

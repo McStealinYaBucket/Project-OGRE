@@ -4,16 +4,16 @@
      0x1B0348 + get 0x161BDA (batches 460-464). 2013 asserts in this header (PLAYER strings,
      "include\script/LuaArguments.h"): "0" line 114 (withVariantValue), "success" line 146
      (getValues), "luaIndex>0" line 178 (getVariant), "count == 1" line 213 (pushArray).
-     getValues and getVariant sit on their lines; withVariantValue (defined last, after the
-     class) and pushArray still carry the Mac-form literals.
+     getValues and getVariant sit on their lines; withVariantValue (defined last, after the class) and pushArray still carry the Mac-form literals.
    2013-vs-2016 DELTAs: the withVariantValue SET is 2013-pinned (no Rect2D/PhysicalProperties/
      sequences/Instances/connection; +InputObject +PropertyDescriptor const*); dual
-     typeinfo-pointer/GCC-name checks; 3 template params (value, L); only shared/alias types
-     dispatch through F. */
-
+     typeinfo-pointer/GCC-name checks; 3 template params (value, L); only shared/alias types dispatch through F. */
 #pragma once
-
-#include "Reflection/Type.h"
+#ifdef OGRE_TARGET_PLAYER	// the kept Type::operator!= copy: PLAYER spells Type.h, STUDIO type.h
+#include "reflection/Type.h"
+#else
+#include "reflection/type.h"
+#endif
 #include "reflection/enumconverter.h"
 #include "reflection/Function.h"
 #include "Util/ProtectedString.h"
@@ -218,7 +218,7 @@ namespace RBX {
 	R withVariantValue(const Reflection::Variant& value, T L)
 	{
 		F f(L);
-		const std::type_info* ti = value.type().typeInfo;
+		const std::type_info* ti = &value.type().type;
 		if (ti == &typeid(void) || !strcmp(ti->name(), "v"))
 			return 0;
 		if (ti == &typeid(bool) || !strcmp(ti->name(), "b"))

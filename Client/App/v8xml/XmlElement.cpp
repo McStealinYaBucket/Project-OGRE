@@ -367,8 +367,8 @@ bool XmlElement::isXsiNil() const {
 	return xnil!=NULL && xnil->getValue(isNil) && isNil;
 }
 
-// STUB: PLAYER 0x00614270
-// STUB: STUDIO 0x006dad80
+// FUNCTION: PLAYER 0x00614270
+// FUNCTION: STUDIO 0x006dad80
 bool XmlNameValuePair::getValue(RBX::InstanceHandle &value) const {
 	
 	if (valueType==NAME && *nameValue==*value_IDREF_null) {

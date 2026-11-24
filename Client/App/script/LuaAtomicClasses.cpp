@@ -63,7 +63,7 @@ namespace RBX { namespace Lua {
 		const std::type_info& ti, const char* gccName)
 	{
 		// Windows: pointer test, then type_info::operator== (0x00884027/0x00884034)
-		return item->owner.typeInfo == &ti || ti == *item->owner.typeInfo;
+		return &item->owner.type == &ti || ti == item->owner.type;
 	}
 
 	// mac: 0x19855C (96B, batch352): lua_CFunction wrapper. DELTA vs the

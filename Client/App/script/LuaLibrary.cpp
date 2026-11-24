@@ -556,8 +556,8 @@ namespace Lua {
 
 	// mac: 0x62F89C: weak-lock the context and forward the fetch completion
 	// (binary passes response.px; no libraryService null check).
-	// STUB: PLAYER 0x0088edf0
-	// STUB: STUDIO 0x009eb910
+	// FUNCTION: PLAYER 0x0088edf0
+	// FUNCTION: STUDIO 0x009eb910
 	void LibraryService::ContentReadyHelper(boost::weak_ptr<ScriptContext> context,
 		std::string library, std::string url,
 		AsyncHttpQueue::RequestResult result, std::istream* stream,

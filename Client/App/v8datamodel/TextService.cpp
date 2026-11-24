@@ -138,8 +138,8 @@ namespace RBX {
 	// mac: 0x5F9C4C: operator new[](0x2C) = the 4-byte count header + 5 zero {px, ctrl} pairs; the
 	// +0x60 pointer swaps first, then the old base is delete[]d.
 	// Byte-identical but for the eh vector iterator's shared_ptr<Typesetter> dtor operand 0x007e4e40, a folded twin.
-	// STUB: PLAYER 0x0073a960
-	// STUB: STUDIO 0x008850a0
+	// FUNCTION: PLAYER 0x0073a960
+	// FUNCTION: STUDIO 0x008850a0
 	void TextService::clearTypesetters()
 	{
 		typesetters.reset(new boost::shared_ptr<Typesetter>[FONT_LAST]);

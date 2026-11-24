@@ -4,7 +4,7 @@
    fns: stepper flow, deferred. */
 
 #include "stdafx.h"
-
+#include "Util/FastFlags.h"
 #include "V8Kernel/SimBody.h"
 #include "V8Kernel/Body.h"
 #include "V8Kernel/Constants.h"
@@ -435,10 +435,21 @@ namespace RBX {
 		}
 		body->advanceStateIndex();
 	}
-	// STUB: PLAYER 0x0082e000
-	// STUB: STUDIO 0x009a05d0
+	// FUNCTION: PLAYER 0x0082e000
+	// FUNCTION: STUDIO 0x009a05d0
 	bool SimBody::updateSymmetricContactState()
 	{
+		if (FFlag::SymmetricContact)
+		{
+			symmetricContact = (penetrationTorque.squaredLength() < Constants::impulseSolverSymStateTorqueBound());
+			verticalContact = ((fabs(penetrationForce.x) < Constants::impulseSolverSymStateForceBound()) &&
+				(fabs(penetrationForce.z) < Constants::impulseSolverSymStateForceBound()));
+		}
+		else
+		{
+			symmetricContact = false;
+			verticalContact = false;
+		}
 		return symmetricContact;
 	}
 

@@ -56,6 +56,9 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
   - Twins: a reccmp --json body pair at 100% counts as 1000 votes; ties go to a signature or match: name,
     then to the lowest address. A match: name (a pairing a reccmp run proved at 100%) beats a position or
     signature pair that contradicts it, unless that pair names an identical twin of the proven body.
+    The 1000 votes lapse when another body of ours has more call-site votes for that original, and a
+    match: name yields when a position row gives it to an identical twin (shell/native twins, 2026-11-24).
+    OGRE_VOTES=hex,hex prints the votes of those addresses (ours or original) to stderr.
   - match:/lib:/rtti:/str: names (our own MSVC names) pair through <t>-symbols.csv (symbol column, or the
     name alone for a C function or static); <t>-symbols.csv has a type column for them.
   - <t>-libdata.csv keeps every row of the previous file that still resolves and nothing contradicts.
@@ -461,6 +464,7 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
                  if x.Name.rstrip(b"\0") == b".text")
 
     votes = {}
+    body = set()  # (ours, original) pairs a reccmp run scored at 100% (the 1000-vote above)
     reals = {}
     for n, ra in read_map(exe[:-4] + ".map")[0].items():
         if n.startswith("__real@"):
@@ -476,6 +480,7 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
         if len(p) > 3 and p[3] == "100" and r in view and isfunc(r):
             # the reccmp run paired these two whole bodies at 100%: stronger than any number of call sites
             note(r, o, 1000)
+            body.add((r, o))
         if len(p) > 3 and p[3] != "100":  # (o, r, n, our next function): ours must end where the original's does
             if p[3] is None or p[3] < r + n or any(b not in (0xCC, 0x90) for b in rimg[r + n - rbase:p[3] - rbase]):
                 continue
@@ -532,6 +537,28 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
             if sr not in view or not isfunc(sr) or (i and node + 4 * i in view):
                 break
             note(sr, orig.u32(o + 4 * i))
+    # A 100% body pair proves two identical bodies, not which twin is which (2026-11-24). The /GL client
+    # shell keeps its own copy of every template it instantiates (CLAUDE.md, Gotchas), so the original has a
+    # shell copy and a native copy of ~shared_ptr<T> (0x00405b50 / 0x007e4e40) and of _Destroy_range
+    # (0x00427f30 / 0x00829d90). Once a run pairs the shell original with our native body (the previous
+    # CSV said so), the 1000 votes would keep it there for ever, against the call sites. So the body vote
+    # is dropped when another body of ours has more call-site votes for that original than this one has.
+    calls = lambda n, oa: votes.get((n, oa), 0) - 1000 * ((n, oa) in body)
+    voters = collections.defaultdict(set)
+    for node, origs in seen.items():
+        for oa in origs:
+            voters[oa].add(node)
+    for r, o in sorted(body):
+        if any(calls(n, o) > calls(r, o) for n in voters[o] if n != r):
+            votes[r, o] -= 1000
+            votes[r] -= 1000
+            body.discard((r, o))
+    dbg = {int(x, 16) for x in os.environ.get("OGRE_VOTES", "").split(",") if x}
+    for node, origs in sorted(seen.items()):  # OGRE_VOTES=hex,hex: the votes a node of ours or an original got
+        hits = [oa for oa in origs if oa in dbg]
+        if node in dbg or hits:
+            print(f"  votes {node:08x} {view[node][1] or view[node][2]}: " +
+                  ", ".join(f"{oa:08x}={votes[node, oa]}" for oa in sorted(origs)), file=sys.stderr)
     claimed = {}
     for node, origs in seen.items():
         origs = origs - set(drop)  # twins a library row yielded (gen): never a candidate, whatever their votes
@@ -1150,8 +1177,14 @@ def gen(target, build=BUILD, json_path=None):
             proven.setdefault(d, a)
     proven_at = {a: d for d, a in proven.items()}
     # ... unless the position pair names an identical twin of the proven body: then the callers' votes decide.
+    # ... and the same both ways: when a position row gives the proven symbol to an identical twin of this
+    # original, the twins swapped (2026-11-24: match: ~shared_ptr<spin_mutex> on the shell copy 0x00405b50,
+    # which the call sites give the shell body of ours, while the native twin 0x007e4e40 takes that symbol).
+    posby = {r[3]: int(r[0], 16) for r in datarows if r[1] in ("library", "") and r[3]}
+    swapped = lambda oa: proven_at[oa] in posby and posby[proven_at[oa]] != oa and \
+        same_body(im, oa, posby[proven_at[oa]], size_of)
     beaten = lambda oa, sym: sym in proven and proven[sym] != oa and not same_body(im, oa, proven[sym], size_of) \
-        or oa in proven_at and sym != proven_at[oa]
+        or oa in proven_at and sym != proven_at[oa] and not swapped(oa)
     datarows = [r for r in datarows if r[1] not in ("library", "") or not beaten(int(r[0], 16), r[3])]
     named = {a: v for a, v in named.items() if not beaten(a, v[0])}
     names["symbols"] = [(a, n, named[int(a, 16)][0] if int(a, 16) in named else "") for a, n in names["symbols"]]

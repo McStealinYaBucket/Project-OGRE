@@ -30,7 +30,7 @@ namespace RBX {
 	typedef boost::intrusive::list_base_hook< boost::intrusive::tag<StepJointsStage> > StepJointsStageHook;
 	typedef boost::intrusive::list_base_hook< boost::intrusive::tag<MovingAssemblyStage> > MovingAssemblyStageHook;
 	class IMoving;
-	class JointInstance;
+	class IJointOwner {};	// 2013: empty, no vftable; JointInstance derives it at +0x78 (ctor 0x007fccd0)
 	class Link;
 
 	class Joint : public Edge, public SpanningEdge, public StepJointsStageHook, public MovingAssemblyStageHook
@@ -58,8 +58,8 @@ namespace RBX {
 		virtual ~Joint();
 
 		// mac: 0x57822E / 0x5781A0.
-		JointInstance* getJointOwner() const { return jointOwner; }
-		void setJointOwner(JointInstance* owner);
+		IJointOwner* getJointOwner() const;	// out of line (World::destroyAutoJoints 0x00749340 calls 0x00501530)
+		void setJointOwner(IJointOwner* owner);
 		// mac: 0x57823A (176B, batch218): FastLog-gated world-notify relink.
 		// Overrides Edge::setPrimitive (void here -- binary returns a byte
 		// no in-tree caller uses; see Edge.h DELTA).
@@ -84,10 +84,10 @@ namespace RBX {
 			int jt = getJointType(e);
 			return jt == FREE_JOINT || jt == ANCHOR_JOINT;
 		}
+		// FUNCTION: PLAYER 0x0071b640
+		// FUNCTION: STUDIO 0x007b7100
 		static bool isRigidJoint(const Edge* e) {
-			int jt = getJointType(e);
-			return jt == WELD_JOINT || jt == SNAP_JOINT || jt == MANUAL_WELD_JOINT;
-		}
+			int jt = getJointType(e); return jt == WELD_JOINT || jt == SNAP_JOINT || jt == MANUAL_WELD_JOINT; }
 		static bool isKinematicJoint(const Edge* e) {
 			int jt = getJointType(e);
 			return jt >= WELD_JOINT && jt <= MOTOR_6D_JOINT;
@@ -126,10 +126,10 @@ namespace RBX {
 			int jt = getJointType(e);
 			return (jt >= ROTATE_JOINT && jt <= GLUE_JOINT) || jt == MANUAL_GLUE_JOINT;
 		}
+		// FUNCTION: PLAYER 0x0071b6c0
+		// FUNCTION: STUDIO 0x007b7140
 		static bool isMotorJoint(const Edge* e) {
-			int jt = getJointType(e);
-			return jt >= MOTOR_1D_JOINT && jt <= MOTOR_6D_JOINT;
-		}
+			int jt = getJointType(e); return jt >= MOTOR_1D_JOINT && jt <= MOTOR_6D_JOINT; }
 		// FUNCTION: PLAYER 0x00745c70
 		// FUNCTION: STUDIO 0x00886a90
 		static bool isKernelJoint(const Edge* e) {
@@ -214,7 +214,7 @@ namespace RBX {
 		}
 
 	private:
-		JointInstance* jointOwner;             // 0x30 (NULL init; Joint ctor 0x00821622)
+		IJointOwner* jointOwner;               // 0x30 (NULL init; Joint ctor 0x00821622)
 		G3D::CoordinateFrame jointCoord0;      // 0x34
 		G3D::CoordinateFrame jointCoord1;      // 0x64
 

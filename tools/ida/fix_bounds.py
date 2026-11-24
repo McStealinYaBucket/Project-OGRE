@@ -10,6 +10,8 @@
    over them (PLAYER 25, STUDIO 25 on 2026-11-13; e.g. 0x00670170 0x28 -> 0x30).
 2. Functions IDA never created (ADD): STUDIO 0x00a0e170 IndexedMesh::isUpperRoot (math-5a.md; the same bytes
    as PLAYER 0x008f90b0, a function there).
+3. Functions made only of int3 padding (all bytes 0xcc) are deleted: auto-analysis can start one right after a
+   call it took for noreturn (STUDIO 0x005fed30, 1 byte, appeared during the wave9 sync).
 Log lines start with `fix_bounds:`.
 """
 import ida_auto, ida_bytes, ida_funcs, ida_loader, ida_ua, idaapi, idc
@@ -60,6 +62,11 @@ for ea in ADD.get(TARGET, []):
     ida_auto.auto_wait()
     f = ida_funcs.get_func(ea)
     say("add 0x%08x: %s, size 0x%x" % (ea, ok, f.size() if f else 0))
+for ea in list(__import__("idautils").Functions()):
+    f = ida_funcs.get_func(ea)
+    if set(ida_bytes.get_bytes(ea, f.size()) or b"") == {0xcc}:
+        say("deleted int3-only function 0x%08x %s, size 0x%x: %s" % (ea, idc.get_func_name(ea), f.size(),
+                                                                     ida_funcs.del_func(ea)))
 if SAVE:
     ida_loader.save_database(idc.get_idb_path(), ida_loader.DBFL_COMP)
     say("saved packed")

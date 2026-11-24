@@ -117,7 +117,7 @@ namespace RBX {
 		friend class SleepStage;
 		int contactFlagA;    // +32 (-2).
 		int steppingIndex;   // +36 (-1).
-		int numTouchCycles;  // +40 (0).
+		short numTouchCycles;  // 0x24, 16-bit (Contact ctor 0x008507e4 mov word; changeContactState cmp word)
 		ContactData* heapData;  // +44 (news on generateData; D2 frees).
 	};
 
@@ -148,9 +148,10 @@ namespace RBX {
 
 	// mac: 0x56BF20 (95B) / 0x56BD48 (95B): Contact(p0,p1) + ptr@+48 = NULL.
 	// Total 52B (52B CHECK pinned).
-	class BallBallContact : public Contact
+	class BallBallContact : public Contact, public Allocator<BallBallContact>
 	{
 	public:
+		// STUB: PLAYER 0x007b8e40
 		BallBallContact(Primitive* p0, Primitive* p1)
 			: Contact(p0, p1)
 			, connector48(NULL)
@@ -175,9 +176,10 @@ namespace RBX {
 		GeoPairConnector* connector48;  // +48 (NULL).
 	};
 
-	class BallBlockContact : public Contact
+	class BallBlockContact : public Contact, public Allocator<BallBlockContact>
 	{
 	public:
+		// STUB: PLAYER 0x007b8fe0
 		BallBlockContact(Primitive* p0, Primitive* p1)
 			: Contact(p0, p1)
 			, connector48(NULL)
@@ -205,9 +207,11 @@ namespace RBX {
 	// five words (+32=-2, +36=-1, +40w=0, +44=0, +48=0) are EXACTLY our
 	// Contact ctor inits plus connector48 -- same net state through our chain.
 	// Total 52B.
-	class BlockBlockContact : public Contact
+	class BlockBlockContact : public Contact, public Allocator<BlockBlockContact>
 	{
 	public:
+		// FUNCTION: PLAYER 0x00853750
+		// FUNCTION: STUDIO 0x009ab400
 		BlockBlockContact(Primitive* p0, Primitive* p1)
 			: Contact(p0, p1)
 			, solverData(NULL)
@@ -265,7 +269,7 @@ namespace RBX {
 	// +48 FixedArray<PolyConnector*,40> + count at +208); PolyConnector
 	// is unmapped (geometry faces era), so this inherits the base 0/NULL
 	// defaults -- Poly era queues the intermediate base + overrides.
-	class BallPolyContact : public Contact
+	class BallPolyContact : public Contact, public Allocator<BallPolyContact>
 	{
 	public:
 		// STUB: PLAYER 0x00968390
@@ -286,9 +290,11 @@ namespace RBX {
 
 	// mac: 0x58C194 (116B): Contact(p0,p1) + int@+208 = 0 + int@+212 = 0.
 	// Total 216B, same pad caveat as BallPoly (same Poly-era queue).
-	class PolyPolyContact : public Contact
+	class PolyPolyContact : public Contact, public Allocator<PolyPolyContact>
 	{
 	public:
+		// STUB: PLAYER 0x00969bc0
+		// STUB: STUDIO 0x00a2e220
 		PolyPolyContact(Primitive* p0, Primitive* p1)
 			: Contact(p0, p1)
 			, int208(0)
@@ -304,5 +310,28 @@ namespace RBX {
 		int int208;    // +208 (0).
 		int int212;    // +212 (0).
 	};
+
+	// Each contact class's pool operator new, called by ContactManager::createContact (PLAYER 0x007b9120).
+
+	// TEMPLATE: PLAYER 0x007b7170
+	// ??2?$Allocator@VBallBallContact@RBX@@@RBX@@SAPAXI@Z
+
+	// TEMPLATE: PLAYER 0x007b71f0
+	// ??2?$Allocator@VBallBlockContact@RBX@@@RBX@@SAPAXI@Z
+
+	// TEMPLATE: PLAYER 0x007b7270
+	// ??2?$Allocator@VBlockBlockContact@RBX@@@RBX@@SAPAXI@Z
+
+	// TEMPLATE: PLAYER 0x007b72f0
+	// ??2?$Allocator@VBallPolyContact@RBX@@@RBX@@SAPAXI@Z
+
+	// TEMPLATE: PLAYER 0x007b7370
+	// ??2?$Allocator@VPolyPolyContact@RBX@@@RBX@@SAPAXI@Z
+
+	// TEMPLATE: PLAYER 0x007b89e0
+	// ??0?$Allocator@VBallBallContact@RBX@@@RBX@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x007b8ac0
+	// ??0?$Allocator@VBallBlockContact@RBX@@@RBX@@QAE@XZ
 
 } // namespace RBX

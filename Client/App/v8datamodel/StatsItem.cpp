@@ -11,6 +11,7 @@
 #include "rbx/Log.h"
 
 #include "RbxFormat.h"
+#include "G3D/format.h"
 
 #include <cstdarg>
 
@@ -65,23 +66,22 @@ namespace RBX {
 		return displayString;
 	}
 
-	// formatMem 0x4A2D80: Log::formatMem into the display (no value store).
-	// STUB: PLAYER 0x0073b300
-	// STUB: STUDIO 0x007c39a0
+	// formatMem: setValue(bytes, Log::formatMem(bytes)) (the +0x60 store is the unsigned fild).
+	// FUNCTION: PLAYER 0x0073b300
+	// FUNCTION: STUDIO 0x007c39a0
 	void StatsItem::formatMem(unsigned int bytes)
 	{
-		displayString.assign(RBX::Log::formatMem(bytes));
+		setValue(bytes, RBX::Log::formatMem(bytes));
 	}
 
-	// formatValue(double,fmt,...) 0x4A2EA8: store +0x60, vformat into +0x68.
-	// STUB: PLAYER 0x0073b380
-	// STUB: STUDIO 0x007c3a20
+	// formatValue(double, fmt, ...): setValue with G3D::vformat (not RBX::vformat).
+	// FUNCTION: PLAYER 0x0073b380
+	// FUNCTION: STUDIO 0x007c3a20
 	void StatsItem::formatValue(double value, const char* fmt, ...)
 	{
-		statValue = value;
 		va_list args;
 		va_start(args, fmt);
-		displayString.assign(RBX::vformat(fmt, args));
+		setValue(value, G3D::vformat(fmt, args));
 		va_end(args);
 	}
 
@@ -140,26 +140,24 @@ namespace RBX {
 
 	// formatValue<bool> 0x4A31F0: true/false display + 1.0/0.0 store
 	// (does NOT route through the core).
-	// STUB: PLAYER 0x0073b510
-	// STUB: STUDIO 0x007c3bb0
+	// FUNCTION: PLAYER 0x0073b510
+	// FUNCTION: STUDIO 0x007c3bb0
 	template<>
 	void StatsItem::formatValue<bool>(const bool& value)
 	{
-		displayString.assign(value ? "true" : "false");
-		statValue = value ? 1.0 : 0.0;
+		displayString = value ? "true" : "false";
+		statValue = value ? 1 : 0;
 	}
 
 	// formatRate 0x4A2E40: rate + CV math + "%.1f/s (%.0f%%CV)".
 	// The CV reads assume [+0x2C]=variance/mean pair (i.e. our
 	// coefficient_of_variation); C26EB8=100.0 VERIFIED by batch621
 	// rodata read (percent scaling).
-	// STUB: PLAYER 0x0073c670
-	// STUB: STUDIO 0x007c4ba0
+	// FUNCTION: PLAYER 0x0073c670
+	// FUNCTION: STUDIO 0x007c4ba0
 	void StatsItem::formatRate(const RunningAverageTimeInterval<>& average)
 	{
-		double rate = average.rate();
-		double cv = average.coefficient_of_variation() * 100.0;
-		formatValue(rate, "%.1f/s (%.0f%%CV)", rate, cv);
+		formatValue(average.rate(), "%.1f/s (%.0f%%CV)", average.rate(), 100.0 * average.coefficient_of_variation());
 	}
 
 	// Item::update: refresh the parent item, if it is one.

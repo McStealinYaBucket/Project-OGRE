@@ -15,7 +15,7 @@ namespace RBX {
 	const char* const sTimerService = "TimerService";
 
 	// The list stays sorted: the new item goes in front of the first later one, else at the end.
-	// STUB: PLAYER 0x007a6a30
+	// FUNCTION: PLAYER 0x007a6a30
 	// FUNCTION: STUDIO 0x008bb150
 	void TimerService::delay(boost::function0<void> func, double seconds)
 	{

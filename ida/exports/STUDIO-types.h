@@ -3572,7 +3572,7 @@ struct __cppobj RBX::Voxel::CellChangeListener
 struct __cppobj RBX::ContactManager : RBX::Voxel::CellChangeListener
 {
   unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
-  void *spatialHash;                    ///< RBX::ContactManagerSpatialHash *
+  RBX::ContactManagerSpatialHash *spatialHash;
   RBX::Primitive *myMegaClusterPrim;
   RBX::World *world;
   unsigned __int8 scratch[24];          ///< boost::unordered::unordered_set<RBX::Primitive *,boost::hash<RBX::Primitive *>,std::equal_to<RBX::Primitive *>,std::allocator<RBX::Primitive *> >
@@ -3699,7 +3699,7 @@ struct __cppobj RBX::SpanningEdge
 /* 539 */
 struct __cppobj RBX::Joint : RBX::Edge, RBX::SpanningEdge, boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none>, boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none>
 {
-  void *jointOwner;                     ///< RBX::JointInstance *
+  void *jointOwner;                     ///< RBX::IJointOwner *
   unsigned __int8 jointCoord0[48];      ///< G3D::CoordinateFrame
   unsigned __int8 jointCoord1[48];      ///< G3D::CoordinateFrame
 };
@@ -4240,4 +4240,89 @@ struct __cppobj RBX::Network::ItemQueue
   unsigned __int8 itemList[12];         ///< boost::intrusive::list<RBX::Network::Item,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::Network::ItemTag>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>
   int inCode;
 };
+
+/* 611 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Stats::sStatsItem> : RBX::Instance
+{
+};
+
+/* 612 */
+struct __cppobj RBX::Reflection::Described<RBX::Stats::Item, char const *const RBX::Stats::sStatsItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Stats::sStatsItem>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Stats::sStatsItem>
+{
+};
+
+/* 613 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Stats::Item, RBX::Instance, char const *const RBX::Stats::sStatsItem, 27, 0> : RBX::Reflection::Described<RBX::Stats::Item, char const *const RBX::Stats::sStatsItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Stats::sStatsItem>, 27, 0>
+{
+};
+
+/* 614 */
+struct __cppobj RBX::Stats::Item : RBX::DescribedNonCreatable<RBX::Stats::Item, RBX::Instance, char const *const RBX::Stats::sStatsItem, 27, 0>
+{
+  double statValue;
+  unsigned __int8 displayString[28];    ///< std::string
+  unsigned __int8 gap_84[4];
+};
+
+/* 615 */
+struct __cppobj RBX::Kernel : RBX::IStage
+{
+  int maxBodies;
+  bool inStepCode;
+  unsigned __int8 gap_11[3];
+  int numLastIterations;
+  int numOfMaxIterations;
+  float error;
+  float maxError;
+  RBX::KernelData *data;
+  unsigned __int8 profilingKernelBodies[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingKernelConnectors[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+};
+
+/* 616 */
+struct __cppobj RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>
+{
+  unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
+  int maxNodes;
+  int treeNodeCount;
+  RBX::World *world;
+  RBX::ContactManager *manager;
+  unsigned __int8 buckets[64];          ///< array
+  int nodesOut;
+  int int80;
+  unsigned __int8 array84[16];          ///< G3D::Array<RBX::Primitive *,10,32>
+  unsigned __int8 listeners[16];        ///< std::vector<RBX::SpatialHashListener *>
+  unsigned __int8 treeNodePool[32];     ///< RBX::object_pool<RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode,RBX::roblox_allocator>
+  unsigned __int8 nodePool[32];         ///< RBX::object_pool<RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::SpatialNode,RBX::roblox_allocator>
+};
+
+/* 617 */
+struct __cppobj RBX::ContactManagerSpatialHash : RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>
+{
+};
+
+/* 618 */
+struct __cppobj RBX::Contact : RBX::Edge
+{
+  int contactFlagA;
+  int steppingIndex;
+  __int16 numTouchCycles;
+  unsigned __int8 gap_26[2];
+  void *heapData;                       ///< RBX::ContactData *
+};
+
+/* 619 */
+struct __cppobj RBX::Allocator<RBX::BlockBlockContact>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 620 */
+struct __cppobj RBX::BlockBlockContact : RBX::Contact
+{
+  void *solverData;                     ///< ? *
+};
+
+/* 621 */
+typedef unsigned __int64 InstanceHandle;
 

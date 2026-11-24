@@ -186,15 +186,19 @@ namespace RBX {
 			}
 		}
 
-		// STUB: PLAYER 0x00745150
-		// STUB: STUDIO 0x007d79b0
+		// FUNCTION: PLAYER 0x00745150
+		// FUNCTION: STUDIO 0x007d79b0
 		Mark::~Mark()
 		{
 			if (enabled)
 			{
 				TlsSetValue(markTlsIndex, enclosingMark);
-				Time::Interval elapsed = Time::now<Time::Benchmark>() - startTime;
-				section.log(frameTick, logInclusive ? elapsed.seconds() : (elapsed - childrenElapsed).seconds());
+				Time now = Time::now<Time::Benchmark>();	// called before &startTime is formed
+				Time::Interval elapsed = now - startTime;
+				double seconds = elapsed.seconds();	// kept on the x87 stack (fld st(0))
+				if (!logInclusive)
+					seconds = elapsed.seconds() - childrenElapsed.seconds();
+				section.log(frameTick, seconds);
 				if (enclosingMark)
 					enclosingMark->childrenElapsed += elapsed;
 			}

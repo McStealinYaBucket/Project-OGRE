@@ -32,7 +32,7 @@ namespace RBX {
 		// The 2013 binary inlines this pattern at use sites (typed_holder::construct_func
 		// and the Described classDescriptor singletons), so the semantics match.
 		// FUNCTION: PLAYER 0x00480e90
-		// STUB: STUDIO 0x0043f250
+		// FUNCTION: STUDIO 0x0043f250
 		template<const char* const& sName>
 		static const Name& doDeclare()
 		{

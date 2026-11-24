@@ -134,7 +134,7 @@ namespace RBX {
 	// Per-level tables are std::vector<HashBucket> (12B: begin/end/capacity
 	// at +28/+32/+36 of the level base this+12*L -- setup() resizes each to
 	// numBuckets, and findNode asserts size == numBuckets).
-
+	// SIZE 0xdc (ContactManager ctor: new(0xdc) at 0x007b63d8 for ContactManagerSpatialHash, which adds nothing)
 	template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 	class SpatialHash
 	{

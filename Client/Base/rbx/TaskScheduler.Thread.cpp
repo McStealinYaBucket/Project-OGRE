@@ -193,8 +193,8 @@ bool TaskScheduler::shouldDropThread() const
 	RBXASSERT(desiredThreadCount <= threads.size());
 	return desiredThreadCount < threads.size();
 }
-// STUB: PLAYER 0x009b6a70
-// STUB: STUDIO 0x00a6ef50
+// FUNCTION: PLAYER 0x009b6a70
+// FUNCTION: STUDIO 0x00a6ef50
 void TaskScheduler::dropThread(Thread* thread)
 {
 	thread->end();
@@ -203,7 +203,7 @@ void TaskScheduler::dropThread(Thread* thread)
 	}
 }
 // STUB: PLAYER 0x009b7140
-// FUNCTION: STUDIO 0x00a6f8f0
+// STUB: STUDIO 0x00a6f8f0
 void TaskScheduler::disableThreads(int count, Threads& threads)
 {
 	for (Threads::const_iterator iter = this->threads.begin(); count>0 && iter != this->threads.end(); ++iter)
@@ -217,8 +217,8 @@ void TaskScheduler::disableThreads(int count, Threads& threads)
 		count--;
 	}
 }
-// STUB: PLAYER 0x009b6df0
-// STUB: STUDIO 0x00a6f5a0
+// FUNCTION: PLAYER 0x009b6df0
+// FUNCTION: STUDIO 0x00a6f5a0
 void TaskScheduler::enableThreads(Threads& threads)
 {
 	for (Threads::const_iterator iter = threads.begin(); iter != threads.end(); ++iter)

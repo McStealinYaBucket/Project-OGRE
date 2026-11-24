@@ -55,8 +55,8 @@ namespace rbx
 // 2013 layout: the parameterless ctor's assert is atomic.h line 224 in both targets
 // ("(((long)(&(this->v))) & 0x3) == 0", PLAYER rbx::atomic<int>::atomic() 0x004022d0, out of line,
 // 26 callers). A second copy of that assert sits at line 182 (PLAYER 0x005ba6f0, called once, by
-// TaskScheduler::TaskScheduler 0x009b55e0 for its member at +8); its class is not identified, so
-// the lines before the class below are padding that puts our assert on line 224.
+// TaskScheduler::TaskScheduler 0x009b55e0 for its member at +8): atomic_unk0x005ba6f0 below. The
+// blank lines around it put both asserts on their 2013 lines.
 // atomic(T) has no assert in 2013: ScriptContext's ctor 0x0068ad20 stores timedoutCount and
 // timedout (atomic<int>(0)) with a bare `mov [esi+0x124], ebx`.
 
@@ -140,6 +140,9 @@ namespace RBX
 
 
 
+// TEMPLATE: PLAYER 0x005ba6f0
+// TEMPLATE: STUDIO 0x0065e110
+// ??0?$atomic_unk0x005ba6f0@H@rbx@@QAE@XZ
 
 
 
@@ -160,47 +163,44 @@ namespace RBX
 
 
 
+namespace rbx
+{
+    // The second Windows atomic class of 2013 atomic.h. Its parameterless ctor (PLAYER 0x005ba6f0,
+    // out of line, one caller: TaskScheduler::TaskScheduler 0x009b55e0 for taskCount at +8) asserts
+    // at line 182 with the same text as rbx::atomic's line-224 assert, but stores v = 0 before it
+    // tests FLog::Asserts: the member is volatile. ++ is `lock xadd` (Thread::runJob 0x009b6933).
+    // No symbol names it (Mac, iOS and the 2016 tree have one class only); the name is a placeholder.
+    template <typename T>
+    class atomic_unk0x005ba6f0
+    {
+        BOOST_STATIC_ASSERT(sizeof(T) == sizeof(long));
+        volatile long v;
 
+    public:
+        atomic_unk0x005ba6f0() : v(0)
+        {
+            RBXASSERT((((long)(&(this->v))) & 0x3) == 0);
+        }
 
+        operator T() const { return v; }
 
+        T operator++() {
+            return BOOST_INTERLOCKED_INCREMENT(&v);
+        }
 
+        T operator--() {
+            return BOOST_INTERLOCKED_DECREMENT(&v);
+        }
 
+        T operator++(int) {
+            return BOOST_INTERLOCKED_INCREMENT(&v)-1;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        T operator--(int) {
+            return BOOST_INTERLOCKED_DECREMENT(&v)+1;
+        }
+    };
+} // namespace rbx
 
 
 

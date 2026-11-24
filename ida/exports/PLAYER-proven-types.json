@@ -6930,6 +6930,142 @@
    "base": false,
    "unique": "VItem@Stats@RBX@@"
   },
+  "RBX::Kernel": {
+   "size": 48,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IStage",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "maxBodies",
+     "offset": 12,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "inStepCode",
+     "offset": 16,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "numLastIterations",
+     "offset": 20,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numOfMaxIterations",
+     "offset": 24,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "error",
+     "offset": 28,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "maxError",
+     "offset": 32,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "data",
+     "offset": 36,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::KernelData",
+     "scalar": null
+    },
+    {
+     "name": "profilingKernelBodies",
+     "offset": 40,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingKernelConnectors",
+     "offset": 44,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VKernel@RBX@@"
+  },
+  "RBX::ContactManagerSpatialHash": {
+   "size": 220,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>",
+     "offset": 0,
+     "size": 220,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VContactManagerSpatialHash@RBX@@"
+  },
+  "RBX::BlockBlockContact": {
+   "size": 48,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Contact",
+     "offset": 0,
+     "size": 44,
+     "empty": false
+    },
+    {
+     "name": "RBX::Allocator<RBX::BlockBlockContact>",
+     "offset": 44,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "solverData",
+     "offset": 44,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VBlockBlockContact@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -8438,7 +8574,7 @@
      "offset": 48,
      "size": 4,
      "kind": "ptr",
-     "type": "RBX::JointInstance",
+     "type": "RBX::IJointOwner",
      "scalar": null
     },
     {
@@ -8942,6 +9078,196 @@
    "base": true,
    "unique": "V?$DescribedNonCreatable@VItem@Stats@RBX@@VInstance@3@$E?sStatsItem@23@3QBDB$0BL@$0A@@RBX@@"
   },
+  "RBX::IStage": {
+   "size": 12,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "upstream",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IStage",
+     "scalar": null
+    },
+    {
+     "name": "downstream",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IStage",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIStage@RBX@@"
+  },
+  "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>": {
+   "size": 220,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "concurrencyValidator",
+     "offset": 0,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::ConcurrencyValidator",
+     "scalar": null
+    },
+    {
+     "name": "maxNodes",
+     "offset": 36,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "treeNodeCount",
+     "offset": 40,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "world",
+     "offset": 44,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::World",
+     "scalar": null
+    },
+    {
+     "name": "manager",
+     "offset": 48,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContactManager",
+     "scalar": null
+    },
+    {
+     "name": "buckets",
+     "offset": 52,
+     "size": 64,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "nodesOut",
+     "offset": 116,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "int80",
+     "offset": 120,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "array84",
+     "offset": 124,
+     "size": 16,
+     "kind": "class",
+     "type": "G3D::Array<RBX::Primitive *,10,32>",
+     "scalar": null
+    },
+    {
+     "name": "listeners",
+     "offset": 140,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::SpatialHashListener *,std::allocator<RBX::SpatialHashListener *> >",
+     "scalar": null
+    },
+    {
+     "name": "treeNodePool",
+     "offset": 156,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::object_pool<RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode,RBX::roblox_allocator>",
+     "scalar": null
+    },
+    {
+     "name": "nodePool",
+     "offset": 188,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::object_pool<RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::SpatialNode,RBX::roblox_allocator>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@"
+  },
+  "RBX::Contact": {
+   "size": 44,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Edge",
+     "offset": 0,
+     "size": 28,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "contactFlagA",
+     "offset": 28,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "steppingIndex",
+     "offset": 32,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numTouchCycles",
+     "offset": 36,
+     "size": 2,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_SHORT"
+    },
+    {
+     "name": "heapData",
+     "offset": 40,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContactData",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VContact@RBX@@"
+  },
+  "RBX::Allocator<RBX::BlockBlockContact>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Allocator@VBlockBlockContact@RBX@@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -9032,32 +9358,6 @@
    "members": [],
    "base": true,
    "unique": "V?$list_base_hook@U?$tag@UWaitingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
-  },
-  "RBX::IStage": {
-   "size": 12,
-   "vftable": true,
-   "virtual_bases": false,
-   "bases": [],
-   "members": [
-    {
-     "name": "upstream",
-     "offset": 4,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::IStage",
-     "scalar": null
-    },
-    {
-     "name": "downstream",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::IStage",
-     "scalar": null
-    }
-   ],
-   "base": true,
-   "unique": "VIStage@RBX@@"
   },
   "RBX::TaskScheduler::Arbiter": {
    "size": 2088,

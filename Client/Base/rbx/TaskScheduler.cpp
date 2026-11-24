@@ -201,8 +201,8 @@ TaskScheduler::TaskScheduler()
 {
 	runningJobCounterThread.reset(new boost::thread(RBX::thread_wrapper(boost::bind(&TaskScheduler::sampleRunningJobCount, this), "Roblox sampleRunningJobCount")));
 }
-// STUB: PLAYER 0x009b4e00
-// STUB: STUDIO 0x00a6cbf0
+// FUNCTION: PLAYER 0x009b4e00
+// FUNCTION: STUDIO 0x00a6cbf0
 TaskScheduler::~TaskScheduler()
 {
 	FASTLOG(FLog::TaskSchedulerInit, "Destroying TaskScheduler");
@@ -355,6 +355,12 @@ void TaskScheduler::decrementThreadCount()
 	--threadCount;
 }
 
+// FUNCTION: PLAYER 0x009b36f0
+// FUNCTION: STUDIO 0x00a6b850
+Time::Interval TaskScheduler::getShortestSleepTime() const
+{
+	return nextWakeTime - Time::now<Time::Fast>();
+}
 // FUNCTION: PLAYER 0x009b3880
 // FUNCTION: STUDIO 0x00a6b9e0
 bool TaskScheduler::areExclusive(TaskScheduler::Job* task1, TaskScheduler::Job* task2, const shared_ptr<Arbiter>& arbiterHint)
@@ -367,7 +373,8 @@ bool TaskScheduler::areExclusive(TaskScheduler::Job* task1, TaskScheduler::Job* 
 
 	return arbiterHint->areExclusive(task1, task2);
 }
-
+// STUB: PLAYER 0x009b3ff0
+// STUB: STUDIO 0x00a6bea0
 void TaskScheduler::sampleRunningJobCount()
 {
 	while (!sampleRunningJobCountEvent.Wait(71))
@@ -387,13 +394,6 @@ void TaskScheduler::enqueueWaitingJob(Job& job)
 
 	// NOTE (2013): no cyclic assert.
 	waitingJobs.push_back(job);
-}
-
-// FUNCTION: PLAYER 0x009b36f0
-// FUNCTION: STUDIO 0x00a6b850
-Time::Interval TaskScheduler::getShortestSleepTime() const
-{
-	return nextWakeTime - Time::now<Time::Fast>();
 }
 
 // STUB: PLAYER 0x009b41c0

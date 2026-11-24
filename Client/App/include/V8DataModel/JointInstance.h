@@ -7,6 +7,8 @@
 #pragma once
 
 #include "V8Tree/Instance.h"
+#include "V8World/Joint.h"
+#include "GfxBase/IAdornable.h"
 #include "Util/Object.h"
 #include "boost/weak_ptr.hpp"
 
@@ -19,6 +21,10 @@ namespace RBX {
 
 	class JointInstance
 		: public DescribedNonCreatable<JointInstance, Instance, sJointInstance>
+		, public IAdornable		// +0x60 (ctor 0x007fccd0 stores its vftable 0x00b6c90c there)
+		, public IJointOwner	// +0x78 in 2013 (RTTI BCD mdisp 0x78; World::destroyAutoJoints 0x00749340
+								// casts back with add eax,-0x78). Here +0x74 until IAdornable has its
+								// 2013 float at +0x14 (JointInstance ctor stores 0 at +0x74, PartInstance at +0x88).
 	{
 	public:
 		JointInstance() : joint(NULL) {}

@@ -186,8 +186,8 @@ namespace RBX {
 	// scheduler.add both. Byte-identical to 0x0072d300 in a probe compile; PLAYER scores 99.4%
 	// because our linker folds shared_from<RunService> into shared_from<GuiItem> and the call
 	// pairs with the GuiItem copy (STUDIO pairs it and is at 100%).
-	// STUB: PLAYER 0x0072d300
-	// FUNCTION: STUDIO 0x0079af80
+	// FUNCTION: PLAYER 0x0072d300
+	// STUB: STUDIO 0x0079af80
 	void RunService::start()
 	{
 		physicsJob = shared_ptr<PhysicsJob>(new PhysicsJob(shared_from_dynamic_cast<DataModel>(getParent())));
@@ -213,8 +213,8 @@ namespace RBX {
 	}
 
 	// 2013 has no cyclic-executive branch: the heartbeat is raised once per step.
-	// STUB: PLAYER 0x0072dc30
-	// STUB: STUDIO 0x0079b850
+	// FUNCTION: PLAYER 0x0072dc30
+	// FUNCTION: STUDIO 0x0079b850
 	TaskScheduler::StepResult HeartbeatTask::stepDataModelJob(const Stats& stats)
 	{
 		shared_ptr<DataModel> d(dataModel.lock());

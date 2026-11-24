@@ -26,7 +26,7 @@ namespace RBX {
 	class Point;
 	class Body;
 	class Connector;
-
+	// SIZE 0x30 (World ctor: new(0x30) at 0x00998e2d, then Kernel(IStage*) 0x00831590)
 	class Kernel : public IStage
 	{
 	public:

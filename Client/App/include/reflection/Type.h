@@ -1,18 +1,8 @@
-/* reflection/Type.h — reconstructed for October 2013.
-   Evidence: symbolled Studio 0.126 decompilation (F:\2013Decompile\exports\decomp\Refl_Type.cpp.txt)
-     - Type(const char* name, const char* tag, const std::type_info&, bool a5, bool a6) 0x15D260
-       stores type_info* at +16 and Name* tag at +20, bools at +24 (a6) and +25 (a5)
-     - Type<void>(name, void*) 0x15F0D8: typeinfo for'void, Name::lookup, all bools zero,
-       assert "!this->tag.empty()" at include/reflection/type.h:66
-     - generic ctor asserts at include/reflection/Type.h:98
-     - addToAllTypes 0x15E964, getAllTypes 0x15E9FE (global std::vector<const Type*>)
-   2013 divergences from 2016:
-     - keeps a const std::type_info* member (2016 removed it)
-     - tag is const Name* (2016: const Name&)
-     - bool order in memory: isFloat at +24, isNumber at +25 (per ctor arg mapping a6->+24, a5->+25);
-       isEnum bool lives in the Type(bool,bool,bool) full ctor used by enums
-     - isReplicable/isOutdated do NOT exist (2016-only) */
-
+/* reflection/Type.h -- October 2013. Its asserts pin the layout: operator== (line 41) and
+   operator!= (45) are out of line (PLAYER 0x00447390, 0x00876ba0; 200 calls to ==), and the three
+   constructors assert on 66 (name, T*), 77 (name, tag, T*) and 98 (name, tag, type_info, ...).
+   Members (Type<bool> ctor 0x006fdf30): type_info& +0x10, tag +0x14, isFloat +0x18 (is_float),
+   isNumber +0x19 (is_arithmetic). No 2013 ctor stores +0x1a: 2016's isEnum does not exist. */
 #pragma once
 
 #include "reflection/Descriptor.h"
@@ -20,116 +10,92 @@
 #include "rbx/boost.hpp"
 #include <boost/any.hpp>
 #include <boost/static_assert.hpp>
-#include <typeinfo>
-
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_float.hpp>
 #include <boost/unordered_map.hpp>
 #include <list>
 #include <map>
 #include <vector>
 #include <string>
+#include <typeinfo>
 
 namespace RBX
 {
 	namespace Reflection
 	{
 		template<typename T> class TypeRegistrar;
-		// Types supported by the Reflection framework
 		class Type : public Descriptor
 		{
-			template<class T>
-			friend class TypeRegistrar;
-
-			template<typename T>
-			friend class TType;
-
+			template<class T> friend class TypeRegistrar; template<typename T> friend class TType;
 		public:
 			// must be implemented (specialized) for each type used
-			template<class T>
-			static const Type& getSingleton();
-
+			template<class T> static const Type& getSingleton();
 		private:
-			void addToAllTypes();					// 0x15E964
-
+			void addToAllTypes();
 		public:
-			const std::type_info* const typeInfo;	// +16 (2013-only; removed by 2016)
-			const Name* const tag;					// +20
-			const bool isFloat;						// +24
-			const bool isNumber;					// +25
-			const bool isEnum;						// +26
-
-			static const std::vector<const Type*>& getAllTypes();	// 0x15E9FE
-
+			const std::type_info& type;	// +0x10
+			const Name* const tag;		// +0x14
+			// FUNCTION: PLAYER 0x00447390
+			// FUNCTION: STUDIO 0x00435eb0
+			bool operator==(const Type& right) const {
+				RBXASSERT((type==right.type) == (this==&right));
+				return this==&right; }
+			// FUNCTION: PLAYER 0x00876ba0
+			// FUNCTION: STUDIO 0x009278d0
+			bool operator!=(const Type& right) const { RBXASSERT((type!=right.type) == (this!=&right));
+				return this!=&right; }
+			const bool isFloat;			// +0x18
+			const bool isNumber;		// +0x19
+			static const std::vector<const Type*>& getAllTypes();
 			template<class T>
-			static inline const Type& singleton()
-			{
-				return getSingleton<T>();
-			}
-
-			bool operator==(const Type& right) const { return this == &right; }	// inlined in binary
-			// STUB: PLAYER 0x00876ba0
-			// STUB: STUDIO 0x009278d0
-			bool operator!=(const Type& right) const { return this != &right; }	// 0x162994
-
+			static inline const Type& singleton() { return getSingleton<T>(); }
 			template<class T>
-			bool isType() const {
-				return this == &getSingleton<T>();
-			}
+			bool isType() const { return this == &getSingleton<T>(); }
 
 		protected:
-			// mac: 0x15F0D8 pattern: (name, T* dummy) -> lookup tag, type_info of T, all bools false
 			// STUB: PLAYER 0x0079fc70
 			// STUB: STUDIO 0x0073e490
 			template<class T>
 			Type(const char* name, T* dummy)
 				:Descriptor(name, Descriptor::Attributes())
-				,typeInfo(&typeid(T))
+				,type(typeid(T))
 				,tag(Name::lookup(name))
-				,isFloat(false)
-				,isNumber(false)
-				,isEnum(false)
+				,isFloat(boost::is_float<T>::value)
+				,isNumber(boost::is_arithmetic<T>::value)
 			{
-				RBXASSERT(!this->tag->str.empty());
+				RBXASSERT(!this->tag->empty());
 				addToAllTypes();
 			}
-
-			// 2016-compat: (name, tag, T* dummy) — used by RefType etc.
-			Type(const char* name, const char* tag, void* dummy)
+			template<class T>
+			Type(const char* name, const char* tag, T* dummy)
 				:Descriptor(name, Descriptor::Attributes())
-				,typeInfo(&typeid(void))
+				,type(typeid(T))
 				,tag(Name::declare(tag))
-				,isFloat(false)
-				,isNumber(false)
-				,isEnum(false)
+				,isFloat(boost::is_float<T>::value)
+				,isNumber(boost::is_arithmetic<T>::value)
 			{
-				RBXASSERT(!this->tag->str.empty());
+				RBXASSERT(!this->tag->empty());
 				addToAllTypes();
 			}
 
-			// mac: 0x15D260 pattern: (name, tag, type_info, isNumber, isFloat)
+
+			// (name, tag, type_info, isNumber, isFloat) is defined here and emitted out of line
+			// next to its only caller: EnumDescriptor's constructor (0x006fa1a0) passes its own
+			// type_info, "token" and two falses. The bool order is the signature's, the store
+			// order the members' (arg 5 to +0x18, arg 4 to +0x19 at 0x006f9848).
+			//
+			//
+			//
 			// STUB: PLAYER 0x006f97e0
 			// STUB: STUDIO 0x006db8a0
-			Type(const char* name, const char* tag, const std::type_info& info, bool isNumber, bool isFloat)
+			Type(const char* name, const char* tag, const std::type_info& type, bool isNumber, bool isFloat)
 				:Descriptor(name, Descriptor::Attributes())
-				,typeInfo(&info)
+				,type(type)
 				,tag(Name::declare(tag))
 				,isFloat(isFloat)
 				,isNumber(isNumber)
-				,isEnum(false)
 			{
-				RBXASSERT(!this->tag->str.empty());
-				addToAllTypes();
-			}
-
-			// enum types: (name, tag, type_info, isNumber=false, isFloat=false, isEnum=true)
-			Type(const char* name, const char* tag, const std::type_info& info, bool isNumber, bool isFloat, bool isEnum)
-				:Descriptor(name, Descriptor::Attributes())
-				,typeInfo(&info)
-				,tag(Name::declare(tag))
-				,isFloat(isFloat)
-				,isNumber(isNumber)
-				,isEnum(isEnum)
-			{
-				RBXASSERT(!this->tag->str.empty());
+				RBXASSERT(!this->tag->empty());
 				addToAllTypes();
 			}
 		};
@@ -171,7 +137,7 @@ namespace RBX
 			{
 			}
 			TType(const char* name, const char* tag)
-				:Type(name, tag, typeid(T), false, false)
+				:Type(name, tag, (T*)NULL)
 			{
 			}
 		};

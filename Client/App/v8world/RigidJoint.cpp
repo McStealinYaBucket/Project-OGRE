@@ -25,7 +25,8 @@ namespace RBX {
 		return (pStay->getCoordinateFrame() * cStay) * cMove.inverse();
 	}
 
-	// mac: 0x597CEA (batch271; 2016-verbatim, binary-identical).
+	// FUNCTION: PLAYER 0x008ee7b0
+	// FUNCTION: STUDIO 0x009bfeb0
 	G3D::CoordinateFrame RigidJoint::getChildInParent(Primitive* parent, Primitive* child)
 	{
 		const G3D::CoordinateFrame& cParent = (parent == getPrimitive(0)) ? getJointCoord0() : getJointCoord1();

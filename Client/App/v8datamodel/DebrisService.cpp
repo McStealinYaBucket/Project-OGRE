@@ -26,8 +26,8 @@ static Reflection::PropDescriptor<DebrisService, int> prop_MaxItems("MaxItems", 
 REFLECTION_END();
 
 // 2013 calls Instance::remove() (2016: destroy()).
-// STUB: PLAYER 0x008446f0
-// STUB: STUDIO 0x0098a220
+// FUNCTION: PLAYER 0x008446f0
+// FUNCTION: STUDIO 0x0098a220
 static void cleanup(weak_ptr<Instance> item)
 {
 	if (shared_ptr<Instance> i = item.lock())
@@ -89,8 +89,8 @@ namespace RBX {
 	}
 
 	// Instance::onServiceProvider is empty and inline, so nothing calls Super here.
-	// STUB: PLAYER 0x00845380
-	// STUB: STUDIO 0x0098ad50
+	// FUNCTION: PLAYER 0x00845380
+	// FUNCTION: STUDIO 0x0098ad50
 	void DebrisService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
 	{
 		while ((int)queue.size() > 0)

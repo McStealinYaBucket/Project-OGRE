@@ -72,6 +72,7 @@ namespace RBX {
 		void wakeEdge(Edge* e);	// PLAYER 0x008e9030
 		void stepJoints();
 		void onExternalTickleAssembly(Assembly* assembly, bool recursive);
+		const AssemblySet& getAwakeAssemblies() const { return awake; }
 
 	private:
 		typedef IndexArray<Contact, &Contact::steppingIndexFunc> ContactList;

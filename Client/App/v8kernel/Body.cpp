@@ -1,7 +1,7 @@
-/* App/v8kernel/Body.cpp -- October 2013 (rigid body node). Laid out on the 2013 asserts: ~Body :35-38 and
-   :48-49 (D1 0x008ee400). Pooled through Allocator<T> (rbx/memory.h). */
+/* App/v8kernel/Body.cpp -- October 2013 (rigid body node). Laid out on the 2013 asserts: ~Body :35-38 and :48-49 (D1 0x008ee400). Pooled through Allocator<T> (rbx/memory.h). */
 #include "stdafx.h"
 #include "V8Kernel/Body.h"
+#include "V8Kernel/Link.h"
 #include "V8Kernel/SimBody.h"
 #include "V8Kernel/BodyPvSetter.h"
 #include "Util/Velocity.h"
@@ -225,44 +225,44 @@ namespace RBX {
 
 
 
+	// STUB: PLAYER 0x008ed160
+	// STUB: STUDIO 0x00a0b350
+	void Body::setMeInParent(const G3D::CoordinateFrame& _meInParent)
+	{
+		if (link)
+		{
+			RBXASSERT(0);
+			link->setBody(NULL);
+			link = NULL;
+		}
 
+		if (getParent()) {
+			meInParent = _meInParent;
+			makeCofmDirty();
+			makeStateDirty();
+		}
+		else
+			RBXASSERT(0);
+	}
+	// STUB: PLAYER 0x008ed250
+	// STUB: STUDIO 0x00a0b440
+	void Body::setMeInParent(Link* _link)
+	{
+		RBXASSERT(_link);
 
+		if (link && (link != _link)) {
+			link->setBody(NULL);
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// mac: 0x524B7E (batch268).
+		if (getParent()) {
+			link = _link;
+			link->setBody(this);
+			makeCofmDirty();
+			makeStateDirty();
+		}
+		else
+			RBXASSERT(0);
+	}
 	// STUB: PLAYER 0x008ed320
 	// STUB: STUDIO 0x00a0b510
 	void Body::setPv(const PV& pv, const BodyPvSetter& setter)

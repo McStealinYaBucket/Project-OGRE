@@ -87,7 +87,7 @@ namespace RBX {
 	}
 
 	// 2013 passes two bools to publicInsertRaw and requires permission 2 (2016: Plugin).
-	// FUNCTION: PLAYER 0x007d6a20
+	// STUB: PLAYER 0x007d6a20
 	void InsertService::insert(shared_ptr<Instance> instance)
 	{
 		if (DataModel* dataModel = (DataModel*)getParent())

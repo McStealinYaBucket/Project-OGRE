@@ -314,14 +314,15 @@ std::string LuaProfiler::getResumePosition(lua_State* L, int level)
 // FastLogS(FLog::LuaProfiler, frame, NULL) @1A8368; the vector buffer is
 // operator delete'd after the logs (973DDA @1A8385-8C -- the port's
 // vector destructor reaches the same end state).
-// STUB: PLAYER 0x00677ec0
-// STUB: STUDIO 0x007dfde0
+// FUNCTION: PLAYER 0x00677ec0
+// FUNCTION: STUDIO 0x007dfde0
 LuaProfiler::LuaProfiler(lua_State* L, int level)
 {
 	RBXASSERT(instance == NULL);	// binary line 321 (@B2DC75)
 	LuaProfiler::instance = this;
 	const std::string position = getResumePosition(L, level);
-	FLog::FastLogS(FLog::LuaProfiler, stringCache.getBegin(position), NULL);
+	const char* begin = stringCache.getBegin(position);	// 2013 0x00677f61: the call precedes the pushes
+	FLog::FastLogS(FLog::LuaProfiler, begin, NULL);
 	if (position == "(resume)")	// 2013 0x00677f7f: the imported operator==(string, const char*)
 	{
 		std::vector<const char*> frames;
@@ -333,13 +334,12 @@ LuaProfiler::LuaProfiler(lua_State* L, int level)
 				debug.name,
 				debug.namewhat,
 				debug.source,
-				debug.linedefined));
+				debug.currentline));	// lua_Debug+0x14 (2013 0x00677fd1), not linedefined
 		}
-		for (std::size_t j = frames.size(); j != 0; --j)	// reverse: last frame logs first
+		for (std::size_t j = frames.size(); j > 0; --j)	// reverse: last frame logs first (2013 jbe/ja)
 			FLog::FastLogS(FLog::LuaProfiler, frames[j - 1], NULL);
 	}
 }
-
 
 
 
@@ -832,8 +832,8 @@ lua_State* ScriptContext::openState()
 // early-outs on resettingSimulation, then tears the Lua world down:
 // commandLineSandbox reset (+0x6C WeakThreadRef::reset); ScriptCount/
 // WaitingThreads logs on FLog::ScriptContextClose (0xF88531 default 1);
-// STUB: PLAYER 0x00685060
-// STUB: STUDIO 0x007ea9c0
+// FUNCTION: PLAYER 0x00685060
+// FUNCTION: STUDIO 0x007ea9c0
 void ScriptContext::closeStates(bool resettingSimulation)
 {
 	contentClearing = true;
@@ -903,8 +903,8 @@ void ScriptContext::closeStates(bool resettingSimulation)
 	waitingThreads.clear();
 	if (!FFlag::LuaDebugger)
 	{
-		GlobalStates states = {{NULL, NULL}};
-		std::swap(states, globalStates);
+		GlobalStates states; states.assign(NULL);	// 2013 0x0068540c: xor eax,eax; mov ecx,eax; mov edx,eax
+		std::swap(globalStates, states);
 		for (GlobalStates::iterator iter = states.begin(); iter != states.end(); ++iter)
 			if (*iter)
 				closeState(*iter);
@@ -1614,10 +1614,12 @@ int ScriptContext::spawn(lua_State* L)
 }
 
 // sub_193123 (73B, batch472): floor a wait timeout at the LuaSettings wait setting (~0.03); NaN/Inf also clamp there. (2016's cleanTimeout is the same shape against defaultWaitTime.)
+// singleton() twice in 2013 (delay 0x0067a436, 0x0067a45a); the two equal stores are tail-merged.
 static void clampWaitTimeout(double& timeout)
 {
-	// singleton() twice in 2013 (delay 0x0067a436, 0x0067a45a): the floor is re-read for the store.
-	if (timeout < LuaSettings::singleton().getDefaultWaitTime() || RBX::Math::isNanInf((float)timeout))
+	if (timeout < LuaSettings::singleton().getDefaultWaitTime())
+		timeout = LuaSettings::singleton().getDefaultWaitTime();
+	else if (RBX::Math::isNanInf((float)timeout))
 		timeout = LuaSettings::singleton().getDefaultWaitTime();
 }
 
@@ -1631,11 +1633,9 @@ int ScriptContext::wait(lua_State* L)
 		yt->queueWaiter(L, timeout);
 	return lua_yield(L, 0);
 }
-
-
 // mac: 0x18CC3A (523B, batch471/475): new thread + move arg-2 + queue with timeout; returns immediately (0 values). Error texts pinned by batch475 disasm ("delay function requires 2 arguments") and batch476 rodata ("safeFunctor .../ScriptContext.cpp line: 1651").
-// STUB: PLAYER 0x0067a3b0
-// STUB: STUDIO 0x007e22d0
+// FUNCTION: PLAYER 0x0067a3b0
+// FUNCTION: STUDIO 0x007e22d0
 int ScriptContext::delay(lua_State* L)
 {
 	Lua::ThreadRef threadLock(L);
@@ -2468,7 +2468,7 @@ void ScriptContext::reportError(lua_State* thread)
 // STUB: STUDIO 0x007ec1d0
 void ScriptContext::startScript(ScriptStart start)
 {
-	BaseScript* script = start.script.get();
+	shared_ptr<BaseScript> script = start.script;
 
 
 
@@ -2547,12 +2547,12 @@ void ScriptContext::startScript(ScriptStart start)
 
 	// (assert texts recovered: batch743:32-35)
 	RBXASSERT(script->getRootAncestor() == getRootAncestor());	// binary line 2549 (@B2D223)
-	RBXASSERT(scripts.find(script) != scripts.end());			// binary line 2550 (@B2D2E5)
+	RBXASSERT(scripts.find(script.get()) != scripts.end());	// binary line 2550 (@B2D2E5)
 
 	// Binary logic inverted: with the prop SET, non-core scripts pend
 	// instead of starting.
 	if (scriptsDisabled != 0 &&
-		(script == NULL || Instance::fastDynamicCast<CoreScript>(script) == NULL))
+		(script == NULL || Instance::fastDynamicCast<CoreScript>(script.get()) == NULL))
 	{
 		pendingScripts.push_back(start);
 		return;
@@ -3298,8 +3298,8 @@ std::string ScriptContext::extractCallStack(lua_State* thread,
 }
 
 // mac: 0x18A30C-0x18A54B (batch719; 2016 ScriptContext.cpp:1192 matches modulo branch order).  The binary tests `timeoutThread != 0` first and kicks the running monitor (checkTimeout.Set); the spawn path is identical outright.
-// FUNCTION: PLAYER 0x0067eee0
-// FUNCTION: STUDIO 0x007e4db0
+// STUB: PLAYER 0x0067eee0
+// STUB: STUDIO 0x007e4db0
 void ScriptContext::setTimeout(double seconds)
 {
 	boost::mutex::scoped_lock lock(timeoutMutex);

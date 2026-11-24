@@ -1,6 +1,4 @@
-/* App/v8world/World.cpp -- October 2013. ctor 0x0074ae30 and dtor 0x00749ae0 from the 2013 bytes (World.h has the
-   layout); the bodies after the dtor are being rebuilt in 2013 order, asserts on their 2013 lines (assert_lines.py). */
-
+/* App/v8world/World.cpp -- October 2013. ctor 0x0074ae30 and dtor 0x00749ae0 from the 2013 bytes (World.h has the layout); the bodies after the dtor are being rebuilt in 2013 order, asserts on their 2013 lines (assert_lines.py). */
 
 #include "stdafx.h"
 #include "decomp.h"
@@ -22,7 +20,9 @@
 #include "V8World/Primitive.h"
 #include "V8DataModel/JointInstance.h"
 #include "V8Kernel/Constants.h"
-
+#include "V8World/IMoving.h"
+#include "V8World/RigidJoint.h"
+#include "V8Kernel/Body.h"
 #include <boost/bind.hpp>
 #include <set>
 #include <vector>
@@ -272,6 +272,13 @@ namespace RBX {
 			static_cast<MovingAssemblyStage*>(stageLink)->removeMovingGroundedAssembly(a));
 	}
 
+	// FUNCTION: PLAYER 0x007462e0
+	// FUNCTION: STUDIO 0x00887100
+	void World::sendClumpChangedMessage(Primitive* childPrim)
+	{
+		rbx_static_cast<TreeStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::TREE_STAGE)))->sendClumpChangedMessage(childPrim);
+	}
+
 	// mac: 0x5A9AB0 / 0x5A9ADA (42B each, batch219a): forward to the +192
 	// stage (Joint::setPrimitive world path).
 	// FUNCTION: PLAYER 0x00745a00
@@ -287,13 +294,6 @@ namespace RBX {
 	{
 		cleanStage->onJointPrimitiveSet(joint, prim);
 	}
-
-
-
-
-
-
-
 
 
 
@@ -453,8 +453,8 @@ namespace RBX {
 		touchReporting.append(info);
 	}
 
-	// mac: 0x5AAA18 (batch259: prim+253 anchored check gates the +124
-	// low-nibble bump (high nibble preserved); then the +8 signal).
+	// FUNCTION: PLAYER 0x00749270
+	// FUNCTION: STUDIO 0x00889bc0
 	void World::onPrimitiveCollided(Primitive* p0, Primitive* p1)
 	{
 		if (!p0->getAnchoredProperty())
@@ -670,25 +670,25 @@ namespace RBX {
 
 
 
+	// FUNCTION: PLAYER 0x007471e0
+	// FUNCTION: STUDIO 0x00887ca0
+	void AppendFallen(Primitive* p, G3D::Array<Primitive*>* fallen) { fallen->append(p); }
 
+	// FUNCTION: PLAYER 0x00747ca0
+	// FUNCTION: STUDIO 0x008885f0
+	void World::computeFallen(G3D::Array<Primitive*>& fallen) const
+	{
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		RBXASSERT(fallen.size() == 0);
+		const SleepStage::AssemblySet& awake = getSleepStage()->getAwakeAssemblies();
+		for (SleepStage::AssemblySet::const_iterator cIt = awake.begin(); cIt != awake.end(); ++cIt)
+		{
+			Assembly* assembly = *cIt;
+			G3D::Vector3 pos = assembly->getAssemblyPrimitive()->getCoordinateFrame().translation;
+			if ((pos.y < -500.0f) || Math::isNanInfVector3(pos))
+				assembly->visitPrimitives(boost::bind(&AppendFallen, _1, &fallen));
+		}
+	}
 
 
 
@@ -697,8 +697,8 @@ namespace RBX {
 
 
 	// mac: 0x5AACA8.
-	// STUB: PLAYER 0x0074a5d0
-	// STUB: STUDIO 0x0088af20
+	// FUNCTION: PLAYER 0x0074a5d0
+	// FUNCTION: STUDIO 0x0088af20
 	void World::insertJoint(Joint* joint)
 	{
 		assertNotInStep();
@@ -725,7 +725,7 @@ namespace RBX {
 		if (joint->isBreakable())
 		{
 			// DELTA: 2013 guards this with vtbl slot 2; isBreakable() keeps it symmetric with removeFromBreakable.
-			bool ok = breakableJoints.insert(joint).second;
+			int ok = breakableJoints.insert(joint).second;	// widened: movzx eax + test eax (0x0074a71c)
 
 
 
@@ -758,43 +758,43 @@ namespace RBX {
 		--numJoints;
 	}
 
-	// mac: 0x5AA022 -- walk the breakable set and destroy every joint that is
-	// broken AND currently in the joint-simulation stage.  The iterator is
-	// advanced BEFORE the destroy (disasm 0x5AA04C calls _Rb_tree_increment
-	// ahead of the 0x5AA061 inStage / 0x5AA06F isBroken pair), so erasing the
-	// current node inside destroyJoint -> removeFromBreakable is safe.
 	void World::doBreakJoints()
 	{
-		std::set<Joint*>::iterator it = breakableJoints.begin();
-		while (it != breakableJoints.end())
-		{
-			Joint* joint = *it;
-			++it;                                       // 0x5AA04C
-			if (joint->inStage(IStage::KERNEL_STAGE) &&  // 0x5AA061 (binary passes literal 15)
-				joint->isBroken())                     // 0x5AA06F vtbl+0x24
-			{
-				destroyJoint(joint);                   // 0x5AA040
-			}
+		for (std::set<Joint*>::iterator it = breakableJoints.begin(); it != breakableJoints.end();) {
+			Joint* joint = *it++; if (joint->inStage(IStage::KERNEL_STAGE) && joint->isBroken()) destroyJoint(joint);
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// FUNCTION: PLAYER 0x00746b40
+	// FUNCTION: STUDIO 0x00887600
+	void World::notifyMoved(Primitive* p)
+	{
+		if (p == NULL) return;
+		p->getOwner()->notifyMoved();
+		for (int i = 0; i < p->numChildren(); ++i) { Primitive* child = p->getTypedChild<Primitive>(i); if (!Assembly::isAssemblyRootPrimitive(child)) notifyMoved(child); }
+	}
+	// FUNCTION: PLAYER 0x00746ba0
+	// FUNCTION: STUDIO 0x00887660
+	void World::jointCoordsChanged(Joint* j)
+	{
+		Primitive* parent = rbx_static_cast<Primitive*>(j->getParentSpanningNode());
+		Primitive* child = rbx_static_cast<Primitive*>(j->getChildSpanningNode());
+		RBXASSERT(!Joint::isKinematicJoint(j) || (parent && child && parent != child));
+		if (parent && child && (parent != child))
+		{
+			if (Joint::isRigidJoint(j))
+			{
+				RigidJoint* r = rbx_static_cast<RigidJoint*>(j);
+				child->getBody()->setMeInParent(r->getChildInParent(parent, child));
+				notifyMoved(parent);
+			}
+			else if (Joint::isMotorJoint(j))
+			{
+				child->getBody()->setMeInParent(j->resetLink());
+				notifyMoved(parent);
+			}
+			sendClumpChangedMessage(child);
+		}
+	}
 
 
 
@@ -920,10 +920,10 @@ namespace RBX {
 			RBXASSERT(destroyJ);
 			if (destroyJ && ((autoJoints && Joint::isAutoJoint(destroyJ)) || (manualJoints && Joint::isManualJoint(destroyJ))))
 			{
-				JointInstance* jointOwner = destroyJ->getJointOwner();
+				IJointOwner* jointOwner = destroyJ->getJointOwner();
 				RBXASSERT(jointOwner);
 				if (jointOwner) {
-					tempJoints.append(shared_from(jointOwner));
+					tempJoints.append(shared_from(static_cast<JointInstance*>(jointOwner)));
 				}
 			}
 		}
@@ -935,14 +935,14 @@ namespace RBX {
 			Joint* destroyJ = tempJoints[i]->getJoint();
 			RBXASSERT(destroyJ);
 			RBXASSERT(destroyJ->links(p));
-			if (doNotIgnore(destroyJ->otherPrimitive(p), ignorePrims, NULL)) {
+			Primitive* other = destroyJ->otherPrimitive(p); if (doNotIgnore(other, ignorePrims, NULL)) {
 				destroyJoint(destroyJ);
 			}
 		}
 
 
 
-		if (tempJoints.size() - startIndex > 0) {
+		if ((tempJoints.size() - startIndex) != 0) {
 			tempJoints.remove(tempJoints.begin() + startIndex, tempJoints.size() - startIndex);
 		}
 		RBXASSERT(startIndex == tempJoints.size());

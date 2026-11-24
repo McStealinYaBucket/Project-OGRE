@@ -62,7 +62,7 @@ EnumDescriptor::EnumDescriptor(const char* typeName, const std::type_info& info)
 {
 	allEnums().push_back(this);
 	allEnumsNameLookup()[name] = this;
-	allEnumsTypeLookup()[typeInfo] = this;
+	allEnumsTypeLookup()[&type] = this;
 	count++;
 }
 
@@ -99,7 +99,7 @@ PropertyDescriptor::PropertyDescriptor(ClassDescriptor& classDescriptor, const T
     ,bIsEditable(1)
 	,bIsEnum(isEnum)
 {
-	RBXASSERT(!type.tag->str.empty());
+	RBXASSERT(!type.tag->empty());
 	RBXASSERT(!type.name->str.empty());
 
 	// TODO: This could be moved up into MemberDescriptor if it were templated...

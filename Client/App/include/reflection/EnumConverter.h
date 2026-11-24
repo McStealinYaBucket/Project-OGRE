@@ -103,11 +103,11 @@ namespace RBX {
 				else
 					return NULL;
 			}
-			static const EnumDescriptor* lookupDescriptor(const Type& type) {
-				if (type.isEnum)
-					return static_cast<const EnumDescriptor*>(&type);
-				else
-					return NULL;
+			static const EnumDescriptor* lookupDescriptor(const Type& type) {	// 2013 Type has no isEnum: look up its type_info
+				EnumTypeTable::const_iterator iter = allEnumsTypeLookup().find(&type.type);
+				if (iter!=allEnumsTypeLookup().end())
+					return iter->second;
+				return NULL;
 			}
 
 			bool isValue(int intValue) const {

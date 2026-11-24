@@ -22,6 +22,7 @@
 #include "Util/FastFlags.h"
 #include "RbxAssert.h"
 #include "luaconf.h"
+#include "lua/lua.hpp"
 #include "script/LuaArguments.h"
 #include "reflection/YieldFunction.h"
 #include "V8DataModel/DataModel.h"
@@ -50,33 +51,6 @@ namespace RBX { namespace Lua {
 		lua_pushlstring(L, "__mode", 6);
 		lua_pushstring(L, mode);
 		lua_settable(L, -3);
-	}
-	// mac: 0x1718CE (334B, batch515): index/newindex/gc/tostring + readonly.
-	// NO __eq (the false param shows: no __eq entry, unlike the true
-	// bridges). Queued use: openState 0x18B85F passes the L-form
-	// on_index/on_newindex (258b/c).
-	// FUNCTION: PLAYER 0x00880f40
-	// FUNCTION: STUDIO 0x009e55c0
-	template<>
-	void Bridge<boost::shared_ptr<Instance>, false>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
-	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
 	}
 	// mac: 0x171A1C (65B, batch515): releases the userdata's shared copy
 	// (spelled .reset() per the GenericFunction-bridge precedent; the
@@ -116,6 +90,35 @@ namespace RBX { namespace Lua {
 	{
 		(void)L;
 		return 0;
+	}
+	// mac: 0x1756D3 (425B, batch522-523/Hexrays): legacy "size" -> "Size"
+	// alias. Fires the legacy-read signal (binary Context+724) with
+	// (instance, "size", L-12 script) on the alias path only.
+	// STUB: PLAYER 0x0087ab20
+	// STUB: STUDIO 0x009df1a0
+	static const char* resolveLegacyMemberName(
+		const boost::shared_ptr<Instance>& object,
+		const char* name, lua_State* L)
+	{
+		if (name[0] == 's' && strcmp(name, "size") == 0)
+		{
+			// Binary calls ScriptContext::getContext(L) (0x18B3DE); the
+			// in-tree equivalent is the extra-space accessor (all green
+			// paths pass non-null L, same as the slots).
+			ScriptContext* context = RobloxExtraSpace::get(L)->context();
+			boost::shared_ptr<BaseScript> script;
+			if (L != NULL)
+			{
+				script = boost::shared_ptr<BaseScript>(
+					RobloxExtraSpace::get(L)->script, boost::detail::sp_nothrow_tag());
+			}
+			// Stats/debug era: renamed/retyped camelCaseViolation (binary
+			// EventDesc types the third slot shared_ptr<Instance>); the
+			// BaseScript here converts up on the call.
+			context->camelCaseViolation(object, std::string(name), script);
+			return "Size";
+		}
+		return name;
 	}
 	// mac: 0x173774 (526B, batch516): Instance.new(className[, parent]).
 	// STUB: PLAYER 0x0087af00
@@ -165,35 +168,6 @@ namespace RBX { namespace Lua {
 		luaL_register(L, "Instance", classLibrary);
 		lua_setreadonly(L, -1, 1);
 		lua_pop(L, 1);
-	}
-	// mac: 0x1756D3 (425B, batch522-523/Hexrays): legacy "size" -> "Size"
-	// alias. Fires the legacy-read signal (binary Context+724) with
-	// (instance, "size", L-12 script) on the alias path only.
-	// STUB: PLAYER 0x0087ab20
-	// STUB: STUDIO 0x009df1a0
-	static const char* resolveLegacyMemberName(
-		const boost::shared_ptr<Instance>& object,
-		const char* name, lua_State* L)
-	{
-		if (name[0] == 's' && strcmp(name, "size") == 0)
-		{
-			// Binary calls ScriptContext::getContext(L) (0x18B3DE); the
-			// in-tree equivalent is the extra-space accessor (all green
-			// paths pass non-null L, same as the slots).
-			ScriptContext* context = RobloxExtraSpace::get(L)->context();
-			boost::shared_ptr<BaseScript> script;
-			if (L != NULL)
-			{
-				script = boost::shared_ptr<BaseScript>(
-					RobloxExtraSpace::get(L)->script, boost::detail::sp_nothrow_tag());
-			}
-			// Stats/debug era: renamed/retyped camelCaseViolation (binary
-			// EventDesc types the third slot shared_ptr<Instance>); the
-			// BaseScript here converts up on the call.
-			context->camelCaseViolation(object, std::string(name), script);
-			return "Size";
-		}
-		return name;
 	}
 	// isValueType<V> recheck (include/reflection/property.h:289, batch524).
 	// Spelled manually: the binary's FLog-gated ReleaseAssert is
@@ -836,6 +810,51 @@ namespace RBX { namespace Lua {
 		on_newindex(getObject(L, 1), name, L);
 		return 0;
 	}
+
+
+
+
+
+	// mac: 0x175B4A (720B, batches 735/736): callMemberFunction -- the plain
+	// closure.  Same prologue (its own assert line 829 + throw text), then
+	// the descriptor executes against a LuaArguments starting at arg 1 (the
+	// binary builds the 2013 base inline: Arguments vptr, void return type,
+	// then the LuaArguments vptr + offset/L) and the return value is pushed
+	// as the call result through the static pusher (0x162624).
+	// STUB: PLAYER 0x0087a5c0
+	// STUB: STUDIO 0x009dec40
+	int ObjectBridge::callMemberFunction(lua_State* L)
+	{
+		// 2013 line 829: callMemberFunction follows on_newindex in the 2013 file
+		RBXASSERT(lua_islightuserdata(L, lua_upvalueindex(1)));
+		const Reflection::FunctionDescriptor* desc =
+			reinterpret_cast<const Reflection::FunctionDescriptor*>(
+				lua_touserdata(L, lua_upvalueindex(1)));
+		if (desc->security != Security::None)
+			Security::Context::current().requirePermission(desc->security);
+		boost::shared_ptr<Instance> instance;
+		if (!SharedPtrBridge<Instance>::getPtr(L, 1, instance) || instance.get() == NULL)
+		{
+			throw RBX::runtime_error("Expected ':' not '.' calling member function %s",
+				desc->name->str.c_str());
+		}
+		Security::Context& context = Security::Context::current();
+		instance->securityCheck(context);
+		// 2013 0x0087a6d3: a RobloxLocked instance needs permission 2 for the call
+		if (instance->getRobloxLocked())
+			context.requirePermission((Security::Permissions)2, desc->name->c_str());
+		const Reflection::DescribedBase* described =
+			static_cast<const Reflection::DescribedBase*>(instance.get());
+		if (!desc->isMemberOf(described))
+		{
+			throw RBX::runtime_error("The function %s is not a member of \"%s\"",
+				desc->name->str.c_str(),
+				instance->getDescriptor().name->str.c_str());
+		}
+		LuaArguments args(L, 1);
+		desc->execute(instance.get(), args);
+		return LuaArguments::push(args.returnValue, args.L);
+	}
 } }
 // VS2012 odr-use holder (the L-form newindex wrapper is named cross-TU
 // by tests; the obj-form above keeps it emitted in-TU).
@@ -875,7 +894,7 @@ protected:
 			{
 				if (continuations->error)
 				{
-					lua_pushlstring(thread, message.data(), message.size());
+					Lua::lua_pushstring(thread, message);	// out of line in 2013 (0x0066f9f0)
 					(continuations->error)(thread);
 					return;
 				}
@@ -883,7 +902,7 @@ protected:
 			int savedTop = lua_gettop(thread);
 			StandardOut::singleton()->printf(MESSAGE_ERROR, "%s", message.c_str());
 			ScriptContext::printCallStack(thread, NULL);
-			lua_pushlstring(thread, message.data(), message.size());
+			Lua::lua_pushstring(thread, message);
 			ScriptContext::getContext(thread)->resume(thread, 1);
 			lua_settop(thread, savedTop);
 		}
@@ -899,6 +918,7 @@ public:
 	volatile int immediateResults;
 	bool reentrancyCheck;	// for debugging
 	static const int YIELD = -1;
+	int execute();
 	// mac: 0x17B758 (batch725 + batch726 disasm: the WeakThreadRef(lua_State*)
 	// arg is real -- `mov [esp+4], esi` with esi = L before the ctor call).
 	// Binary stores: base 0-7, thread +8, dm +12/0 (then assigned in body),
@@ -915,31 +935,11 @@ public:
 	{
 		dm = shared_from(DataModel::get(ScriptContext::getContext(L)));
 	}
-	// mac: 0x178C06 (batch725): mark executing, remember the native thread, run
-	// the descriptor with our two continuations, then either return the
-	// immediate result or capture the yield.
-	// STUB: PLAYER 0x0087c580
-	// STUB: STUDIO 0x009e0c00
-	int execute()
-	{
-		isExecuting = true;
-		// Binary calls pthread_self() (GCC-flavored build); the 2016 Windows
-		// source uses GetCurrentThreadId() -- 32-bit current-thread value, same comparison semantics.
-		this->callingThreadId = GetCurrentThreadId();
-		LuaArguments args(L, 1);	// skip the first argument, since it is "self"
-		desc->execute(
-			instance.get(), args,
-			boost::bind(&YieldFunctionStateObject::onReturnResult, shared_from(this), _1),
-			boost::bind(&YieldFunctionStateObject::onRaiseException, shared_from(this), _1)
-			);
-		isExecuting = false;
-		instance.reset();		// we're done with this pointer
-		if (immediateResults != YIELD)
-			return immediateResults;	// the return already happened
-		//Capture the yield. The callbacks will handle it
-		RobloxExtraSpace::get(L)->yieldCaptured = true;
-		return lua_yield(L, 0);
-	}
+
+
+
+
+
 private:
 	// mac: 0x179768 (batch725): one-shot guard, then either stash the result for the executing thread (immediate mode) or schedule a 1-value Tuple resume on the parked thread.
 	void onReturnResult(Reflection::Variant value)
@@ -967,39 +967,21 @@ private:
 		RBXASSERT(!reentrancyCheck);
 		reentrancyCheck = true;
 
+
 		if (FFlag::ImmediateYieldResultsEnabled && isExecuting)
 		{
 			if (callingThreadId == GetCurrentThreadId())
-				// This unwinds the stack back to execute()
-				throw std::runtime_error(message);
+				throw std::runtime_error(message);	// unwinds the stack back to execute()
 		}
-
 		if (boost::shared_ptr<DataModel> dataModel = dm.lock())
 			dataModel->submitTask(boost::bind(&YieldFunctionStateObject::resumeThreadWithException, thread, message), DataModelJob::Write);
 	}
 };
-
-// mac: 0x17587C (717B, batches 735/736): callMemberYieldFunction -- the
-// yield-closure body.  Upvalue 1 is the YieldFunctionDescriptor; the
-// prologue is shared with callMemberFunction (assert lua_islightuserdata,
-// descriptor security, instance fetch + ':' throw, securityCheck, fw
-// gate, membership), then a heap YieldFunctionStateObject (0x34 bytes)
-// runs the descriptor against its continuations -- execute returns the
-// immediate result or captures the yield.
-// STUB: PLAYER 0x0087c710
-// STUB: STUDIO 0x009e0d90
+// FUNCTION: PLAYER 0x0087c710
+// FUNCTION: STUDIO 0x009e0d90
 int ObjectBridge::callMemberYieldFunction(lua_State* L)
 {
-	if (FLog::Asserts != 0 && !lua_islightuserdata(L, lua_upvalueindex(1)))
-	{
-		if (RBX::_internal::_debugHook == 0
-			|| RBX::_internal::_debugHook("lua_islightuserdata(L, lua_upvalueindex(1))",
-				"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp", 984) == 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"lua_islightuserdata(L, lua_upvalueindex(1)) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp line: 984");
-		}
-	}
+	RBXASSERT(lua_islightuserdata(L, lua_upvalueindex(1)));
 	const Reflection::YieldFunctionDescriptor* desc =
 		reinterpret_cast<const Reflection::YieldFunctionDescriptor*>(
 			lua_touserdata(L, lua_upvalueindex(1)));
@@ -1012,11 +994,12 @@ int ObjectBridge::callMemberYieldFunction(lua_State* L)
 			"Did you forget a colon? The first argument of member function %s must be an Object",
 			desc->name->str.c_str());
 	}
-	Security::Context context = Security::Context::current();
+	Security::Context& context = Security::Context::current();
 	instance->securityCheck(context);
-	// DELTA (fw()+22, binary-verbatim position): per-instance
-	// permission-request flag, identity unmapped (same unknown as
-	// newInstance's parent check). Deterministic-false + queued FW audit.
+	// 2013 0x0087c817: a RobloxLocked instance needs permission 2 for the call
+	if (instance->getRobloxLocked())
+		context.requirePermission((Security::Permissions)2, desc->name->c_str());
+
 	const Reflection::DescribedBase* described =
 		static_cast<const Reflection::DescribedBase*>(instance.get());
 	if (!desc->isMemberOf(described))
@@ -1030,50 +1013,62 @@ int ObjectBridge::callMemberYieldFunction(lua_State* L)
 	return functionObject->execute();
 }
 
-// mac: 0x175B4A (720B, batches 735/736): callMemberFunction -- the plain
-// closure.  Same prologue (its own assert line 829 + throw text), then
-// the descriptor executes against a LuaArguments starting at arg 1 (the
-// binary builds the 2013 base inline: Arguments vptr, void return type,
-// then the LuaArguments vptr + offset/L) and the return value is pushed
-// as the call result through the static pusher (0x162624).
-// STUB: PLAYER 0x0087a5c0
-// STUB: STUDIO 0x009dec40
-int ObjectBridge::callMemberFunction(lua_State* L)
+// mac: 0x17587C callMemberYieldFunction (717B, batches 735/736): the callMemberFunction prologue, then a heap
+// YieldFunctionStateObject (0x34 bytes) whose execute returns the immediate result or captures the yield.
+// execute sits after callMemberYieldFunction so that function's assert lands on its 2013 line
+// (984); by address it comes first (0x0087c580 < 0x0087c710).
+// mac: 0x178C06 (batch725): mark executing, remember the native thread, run
+// the descriptor with our two continuations, then either return the
+// immediate result or capture the yield.
+// STUB: PLAYER 0x0087c580
+// STUB: STUDIO 0x009e0c00
+int YieldFunctionStateObject::execute()
 {
-	if (FLog::Asserts != 0 && !lua_islightuserdata(L, lua_upvalueindex(1)))
-	{
-		if (RBX::_internal::_debugHook == 0
-			|| RBX::_internal::_debugHook("lua_islightuserdata(L, lua_upvalueindex(1))",
-				"/Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp", 829) == 0)
-		{
-			ReleaseAssert(FLog::Asserts,
-				"lua_islightuserdata(L, lua_upvalueindex(1)) file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/script/LuaInstanceBridge.cpp line: 829");
-		}
-	}
-	const Reflection::FunctionDescriptor* desc =
-		reinterpret_cast<const Reflection::FunctionDescriptor*>(
-			lua_touserdata(L, lua_upvalueindex(1)));
-	if (desc->security != Security::None)
-		Security::Context::current().requirePermission(desc->security);
-	boost::shared_ptr<Instance> instance;
-	if (!SharedPtrBridge<Instance>::getPtr(L, 1, instance) || instance.get() == NULL)
-	{
-		throw RBX::runtime_error("Expected ':' not '.' calling member function %s",
-			desc->name->str.c_str());
-	}
-	Security::Context context = Security::Context::current();
-	instance->securityCheck(context);
-	// DELTA (fw()+22, binary-verbatim position): same unmapped flag as
-	// callMemberYieldFunction above (also the 258b arms + newInstance).
-	const Reflection::DescribedBase* described =
-		static_cast<const Reflection::DescribedBase*>(instance.get());
-	if (!desc->isMemberOf(described))
-	{
-		throw RBX::runtime_error("The function %s is not a member of \"%s\"",
-			desc->name->str.c_str(),
-			instance->getDescriptor().name->str.c_str());
-	}
-	LuaArguments args(L, 1);
-	desc->execute(instance.get(), args);
-	return LuaArguments::push(args.returnValue, L);
+	isExecuting = true;
+	// Binary calls pthread_self() (GCC-flavored build); the 2016 Windows
+	// source uses GetCurrentThreadId() -- 32-bit current-thread value, same comparison semantics.
+	this->callingThreadId = GetCurrentThreadId();
+	LuaArguments args(L, 1);	// skip the first argument, since it is "self"
+	desc->execute(
+		instance.get(), args,
+		boost::bind(&YieldFunctionStateObject::onReturnResult, shared_from(this), _1),
+		boost::bind(&YieldFunctionStateObject::onRaiseException, shared_from(this), _1)
+		);
+	isExecuting = false;
+	instance.reset();		// we're done with this pointer
+	if (immediateResults != YIELD)
+		return immediateResults;	// the return already happened
+	//Capture the yield. The callbacks will handle it
+	RobloxExtraSpace::get(L)->yieldCaptured = true;
+	return lua_yield(L, 0);
 }
+
+namespace RBX { namespace Lua {
+	// mac: 0x1718CE (334B, batch515): index/newindex/gc/tostring + readonly.
+	// NO __eq (the false param shows: no __eq entry, unlike the true
+	// bridges). Queued use: openState 0x18B85F passes the L-form
+	// on_index/on_newindex (258b/c).
+	// FUNCTION: PLAYER 0x00880f40
+	// FUNCTION: STUDIO 0x009e55c0
+	template<>
+	void Bridge<boost::shared_ptr<Instance>, false>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+} }

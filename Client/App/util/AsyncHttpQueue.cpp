@@ -552,8 +552,8 @@ bool AsyncHttpQueue::syncRequest(const std::string& id)
 	}
 	return false;
 }
-// STUB: PLAYER 0x00870430
-// STUB: STUDIO 0x009bd5c0
+// FUNCTION: PLAYER 0x00870430
+// FUNCTION: STUDIO 0x009bd5c0
 void AsyncHttpQueue::asyncRequest(const std::string& id, float priority, RequestCallback* callback, ResultJob jobType, bool ignoreBadRequests)
 {
 	if (ignoreBadRequests || !isUrlBad(id)) {

@@ -168,9 +168,9 @@ namespace RBX {
 			return meInParent;
 		}
 		// 2016 shape (plain store; the Link* overload queues with Link).
-		void setMeInParent(const G3D::CoordinateFrame& value) { meInParent = value; }
+		void setMeInParent(const G3D::CoordinateFrame& _meInParent);	// out of line, Body.cpp :234/:245
 		// 2016 shape (Link* store for motor-joint bodies).
-		void setMeInParent(Link* value) { link = value; }
+		void setMeInParent(Link* _link);	// out of line, Body.cpp :251/:264
 		// mac: 0x455320 (batch258: recursive parent refresh with worldFrame/
 		// linVel/angVel rebuild + serial sync; :119/:128 asserts).
 		// Return-value DELTA: binary returns char (recomputed flag) --
