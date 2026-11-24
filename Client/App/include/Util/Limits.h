@@ -30,7 +30,7 @@ namespace RBX { namespace Limits {
 		static int countLimit;	// BSS-zero: canAdd short-circuits true
 		static bool globallyEnforcedLimit;
 
-		static bool canAdd(int n);
+		static int canAdd(int n);	// int: newInstance 0x0087af41 tests eax, canAdd 0x009b9680 returns mov eax,1
 		static int getCurrentCount();
 		static boost::shared_ptr<Counter> current();
 

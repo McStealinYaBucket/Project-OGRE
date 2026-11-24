@@ -90,7 +90,7 @@ namespace RBX
 			}
 
 			inline const RBX::Name& getName() const { 
-				return *descriptor->name; 
+				return descriptor->name; 
 			}
 
 			inline const FunctionDescriptor* getDescriptor() const { 

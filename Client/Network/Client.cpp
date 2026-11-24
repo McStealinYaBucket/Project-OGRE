@@ -40,7 +40,7 @@ namespace Network {
 	Client::Client()
 		: userId(-1), networkSettings(&NetworkSettings::singleton())
 	{
-		RBX::Security::Context::current().requirePermission(RBX::Security::RobloxPlace, "create a NetworkClient");
+		RBX::Security::Context::current().requirePermission(RBX::Security::LocalUser, "create a NetworkClient");
 		setName(sClient);
 
 		FASTLOG(FLog::Network, "NetworkClient:Create");

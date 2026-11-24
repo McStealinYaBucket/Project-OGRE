@@ -151,10 +151,10 @@ namespace RBX {
 	static Reflection::BoundFuncDesc<DataModel, std::string(std::string, bool)> httpGetFunction(&DataModel::httpGet, "HttpGet", "url", "synchronous", false, Security::RobloxScript);
 	static Reflection::BoundFuncDesc<DataModel, std::string(std::string, std::string, bool)> httpPostFunction(&DataModel::httpPost, "HttpPost", "url", "data", "synchronous", false, Security::RobloxScript);
 
-	static Reflection::BoundFuncDesc<DataModel, shared_ptr<const Reflection::ValueArray>()> getJobsInfo(&DataModel::getJobsInfo, "GetJobsInfo", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, shared_ptr<const Reflection::ValueArray>()> getJobsExtendedStats(&DataModel::getJobsExtendedStats, "GetJobsExtendedStats", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, double(std::string, double)> getJobTimePeakFraction(&DataModel::getJobTimePeakFraction, "GetJobTimePeakFraction", "jobname", "greaterThan", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, double(std::string, double)> getJobIntervalPeakFraction(&DataModel::getJobIntervalPeakFraction, "GetJobIntervalPeakFraction", "jobname", "greaterThan", Security::Plugin);
+	static Reflection::BoundFuncDesc<DataModel, shared_ptr<const Reflection::ValueArray>()> getJobsInfo(&DataModel::getJobsInfo, "GetJobsInfo", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, shared_ptr<const Reflection::ValueArray>()> getJobsExtendedStats(&DataModel::getJobsExtendedStats, "GetJobsExtendedStats", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, double(std::string, double)> getJobTimePeakFraction(&DataModel::getJobTimePeakFraction, "GetJobTimePeakFraction", "jobname", "greaterThan", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, double(std::string, double)> getJobIntervalPeakFraction(&DataModel::getJobIntervalPeakFraction, "GetJobIntervalPeakFraction", "jobname", "greaterThan", Security::LocalUser);
 	static Reflection::BoundFuncDesc<DataModel, void(double)> setJobsExtendedStatsWindow(&DataModel::setJobsExtendedStatsWindow, "SetJobsExtendedStatsWindow", "seconds", Security::LocalUser);
 
 	static Reflection::PropDescriptor<DataModel, bool> prop_isPersonalServer("IsPersonalServer", category_State, &DataModel::getIsPersonalServer, &DataModel::setIsPersonalServer, Reflection::PropertyDescriptor::SCRIPTING, Security::RobloxScript);
@@ -164,13 +164,13 @@ namespace RBX {
 	static Reflection::BoundFuncDesc<DataModel, void()> func_ClearUIMessage(&DataModel::clearUiMessage, "ClearMessage", Security::LocalUser);
 	static Reflection::BoundFuncDesc<DataModel, void()> func_SetUIMessageBrickCount(&DataModel::setUiMessageBrickCount, "SetMessageBrickCount", Security::LocalUser);
 
-	static Reflection::BoundFuncDesc<DataModel, void(int)> setPlaceVersion(&DataModel::setPlaceVersion, "SetPlaceVersion", "placeId", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(int, bool)> setPlaceId(&DataModel::setPlaceID, "SetPlaceId", "placeId", "robloxPlace", false, Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(int, bool)> setPlaceIdDeprecated(&DataModel::setPlaceID, "SetPlaceID", "placeID", "robloxPlace", false, Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(int, DataModel::CreatorType)> setCreatorId(&DataModel::setCreatorID, "SetCreatorId", "creatorId", "creatorType", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(int, DataModel::CreatorType)> setCreatorIdDeprecated(&DataModel::setCreatorID, "SetCreatorID", "creatorID", "creatorType", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(DataModel::Genre)> func_setGenre(&DataModel::setGenre, "SetGenre", "genre", Security::Plugin);
-	static Reflection::BoundFuncDesc<DataModel, void(DataModel::GearGenreSetting, int)> func_setGear(&DataModel::setGear, "SetGearSettings", "genreRestriction", "allowedGenres", Security::Plugin);
+	static Reflection::BoundFuncDesc<DataModel, void(int)> setPlaceVersion(&DataModel::setPlaceVersion, "SetPlaceVersion", "placeId", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(int, bool)> setPlaceId(&DataModel::setPlaceID, "SetPlaceId", "placeId", "robloxPlace", false, Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(int, bool)> setPlaceIdDeprecated(&DataModel::setPlaceID, "SetPlaceID", "placeID", "robloxPlace", false, Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(int, DataModel::CreatorType)> setCreatorId(&DataModel::setCreatorID, "SetCreatorId", "creatorId", "creatorType", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(int, DataModel::CreatorType)> setCreatorIdDeprecated(&DataModel::setCreatorID, "SetCreatorID", "creatorID", "creatorType", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(DataModel::Genre)> func_setGenre(&DataModel::setGenre, "SetGenre", "genre", Security::LocalUser);
+	static Reflection::BoundFuncDesc<DataModel, void(DataModel::GearGenreSetting, int)> func_setGear(&DataModel::setGear, "SetGearSettings", "genreRestriction", "allowedGenres", Security::LocalUser);
 
 	static Reflection::PropDescriptor<DataModel, int> prop_placeId("PlaceId", category_State, &DataModel::getPlaceID, NULL, Reflection::PropertyDescriptor::UI);
 	static Reflection::PropDescriptor<DataModel, int> prop_placeVersion("PlaceVersion", category_State, &DataModel::getPlaceVersion, NULL, Reflection::PropertyDescriptor::UI);

@@ -121,7 +121,7 @@ namespace RBX { namespace Lua {
 	{
 		if (strcmp(name, "Name") == 0)
 		{
-			const std::string& s = object->name->str;
+			const std::string& s = object->name.str;
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}
@@ -151,7 +151,7 @@ namespace RBX { namespace Lua {
 		const EnumDescriptorItemPtr& object, lua_State* L)
 	{
 		std::string s = RBX::format("Enum.%s.%s",
-			object->owner.name->str.c_str(), object->name->str.c_str());
+			object->owner.name.str.c_str(), object->name.str.c_str());
 		::lua_pushstring(L, s.c_str());
 		return 1;
 	}
@@ -208,7 +208,7 @@ namespace RBX { namespace Lua {
 	int Bridge<EnumDescriptorPtr, true>::on_tostring(
 		const EnumDescriptorPtr& object, lua_State* L)
 	{
-		const std::string& s = object->name->str;
+		const std::string& s = object->name.str;
 		lua_pushlstring(L, s.c_str(), s.size());
 		return 1;
 	}

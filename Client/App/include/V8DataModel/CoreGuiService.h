@@ -24,7 +24,7 @@ namespace RBX {
 	// VTABLE: STUDIO 0x00bfd8ec RBX::Debugable
 	// SIZE 0x90
 	class CoreGuiService
-		: public DescribedNonCreatable<CoreGuiService, BasePlayerGui, sCoreGuiService, Reflection::ClassDescriptor::INTERNAL_LOCAL, Security::RobloxPlace>
+		: public DescribedNonCreatable<CoreGuiService, BasePlayerGui, sCoreGuiService, Reflection::ClassDescriptor::INTERNAL_LOCAL, Security::LocalUser>
 		, public Service
 	{
 	public:

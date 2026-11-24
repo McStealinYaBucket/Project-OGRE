@@ -7,7 +7,8 @@
 
 #include "Util/ProtectedString.h"
 #include "util/MD5Hasher.h"
-#include "Reflection/Type.h"
+#include "reflection/Type.h"
+#include "Util/Utilities.h"	// StringConverter, for genericConvert<ProtectedString>
 
 namespace RBX {
 namespace Reflection
@@ -130,6 +131,20 @@ namespace Reflection
 			result ^= static_cast<unsigned char>(*it) + (result >> 2) + (result << 6) - 1640531527u;
 		}
 		return result;
+	}
+
+	// 2013 (PLAYER 0x0066f960, after genericConvert<ProtectedString> 0x0066f7f0): a string source is
+	// stored as the string itself (placement_any::operator=<std::string> 0x0044c6c0) under the
+	// ProtectedString type, then genericConvert.
+	template<>
+	ProtectedString& Reflection::Variant::convert<ProtectedString>(void)
+	{
+		if (isType<std::string>())
+		{
+			value = rbx::any_cast<std::string>(value);
+			_type = &Reflection::Type::singleton<ProtectedString>();
+		}
+		return genericConvert<ProtectedString>();
 	}
 
 }

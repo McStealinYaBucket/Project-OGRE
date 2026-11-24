@@ -384,7 +384,7 @@ namespace RBX {
 	// FUNCTION: STUDIO 0x008de920
 	void GuiObject::setZIndex(int value)
 	{
-		if (Security::Context::current().hasPermission(Security::WritePlayer))
+		if (Security::Context::current().hasPermission(Security::RobloxScript))
 		{
 			if (value < minZIndex())
 				value = minZIndex();

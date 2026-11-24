@@ -3,6 +3,14 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: __thiscall G3D::Log::Log(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int)
+// STUB: STUDIO 0x006aa840
+extern "C" void ogre_stub_006aa840()
+{
+	STUB(0x006aa840);
+}
+#pragma comment(linker, "/alternatename:??0Log@G3D@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z=_ogre_stub_006aa840")
+
 // public: static class G3D::Log * __cdecl G3D::Log::common(void)
 // STUB: STUDIO 0x006aa930
 extern "C" void ogre_stub_006aa930()
@@ -58,6 +66,14 @@ extern "C" void ogre_stub_007600d0()
 	STUB(0x007600d0);
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
+
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::FileSystem::getUserDirectory(bool, enum RBX::FileSystemDir, char const *)
+// STUB: STUDIO 0x00772800
+extern "C" void ogre_stub_00772800()
+{
+	STUB(0x00772800);
+}
+#pragma comment(linker, "/alternatename:?getUserDirectory@FileSystem@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_NW4FileSystemDir@2@PBD@Z=_ogre_stub_00772800")
 
 // public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
 // STUB: STUDIO 0x00789030

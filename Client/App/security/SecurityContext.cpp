@@ -4,6 +4,8 @@
 #include "rbx/Debug.h"
 namespace RBX {
 	namespace Security {
+		// FUNCTION: PLAYER 0x0079f650
+		// FUNCTION: STUDIO 0x008b5c60
 		bool Context::isInRole(Identities identity, Permissions p)
 		{
 			if (p == None)
@@ -13,22 +15,20 @@ namespace RBX {
 			case Anonymous:
 			case GameScript_:
 				return false;
-#if defined(RBX_STUDIO_BUILD)
-            case StudioPlugin:
-                return p == Plugin;
-#endif
 			case GameScriptInRobloxPlace_:
 				return                p == RobloxPlace;
 			case RobloxGameScript_:
-				return p == Plugin || p == RobloxPlace || p == LocalUser ||                      p == RobloxScript;
+				return p == RobloxPlace || p == LocalUser || p == RobloxScript;
 			case LocalGUI_:
 			case CmdLine_:
-				return p == Plugin || p == RobloxPlace || p == LocalUser;
+			case StudioPlugin:
+				return p == RobloxPlace || p == LocalUser;
 			case Replicator_:
 				return                p == RobloxPlace ||                   p == WritePlayer  || p == RobloxScript;
 			case COM:
 			case WebService:
 				return true;
+			// any other identity is a bug (assert on 2013 line 33)
 			default:
 				RBXASSERT(false);
 				return false;

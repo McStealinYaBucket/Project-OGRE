@@ -34,6 +34,10 @@ namespace RBX { namespace Reflection {
 		static TType<shared_ptr<const ValueTable> > type("Dictionary");
 		return type;
 	}
+	// FUNCTION: PLAYER 0x0079fe90
+	// FUNCTION: STUDIO 0x0073e6b0
+	template<>
+	const Type& Type::getSingleton<shared_ptr<const ValueMap> >() { static TType<shared_ptr<const ValueMap> > type("Map"); return type; }
 	// FUNCTION: PLAYER 0x007a01d0
 	// STUB: STUDIO 0x0073eac0
 	template<>
@@ -104,17 +108,13 @@ namespace RBX { namespace Reflection {
 		allTypes = &types;
 		types.push_back(this);
 	}
-	const std::vector<const Type*>& Type::getAllTypes()
-	{
-		return *allTypes;
-	}
+	const std::vector<const Type*>& Type::getAllTypes() { return *allTypes; }
 	// FUNCTION: PLAYER 0x0079ff70
 	// FUNCTION: STUDIO 0x0073e790
 	SignatureDescriptor::SignatureDescriptor()
 		: resultType(&Type::getSingleton<void>())
 	{
 	}
-
 	// FUNCTION: PLAYER 0x0079f820
 	// FUNCTION: STUDIO 0x0073e060
 	SignatureDescriptor::Item::Item(const RBX::Name* name, const Type* type, const Variant& defaultValue)
@@ -153,7 +153,12 @@ namespace RBX { namespace Reflection {
 
 	std::ostream& operator<<(std::ostream& os, const Type& type)
 	{
-		return os << "Type::" << type.name->str;
+		return os << "Type::" << type.name.str;
 	}
 
 } } // namespace RBX::Reflection
+
+#include "decomp.h"
+// Sizes from the 100% constructors (ida-sync-13): Type ctor 0x006f97e0, Item ctors 0x0079f820/0x0079ffa0.
+DECOMP_SIZE_ASSERT(RBX::Reflection::Type, 0x1c);
+DECOMP_SIZE_ASSERT(RBX::Reflection::SignatureDescriptor::Item, 0x4c);

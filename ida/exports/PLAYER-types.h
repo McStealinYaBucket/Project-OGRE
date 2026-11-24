@@ -4218,8 +4218,8 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *canClientCreate;
-  void *AASamples____0_;
+  void *is_composing;
+  void *_Destroy;
   void *createChild;
   void *writeXml;
   void *verifySetParent;
@@ -5981,5 +5981,165 @@ struct __cppobj RBX::Reflection::SignatureDescriptor::Item
   RBX::Name *name;
   RBX::Reflection::Type *type;
   unsigned __int8 defaultValue[68];     ///< RBX::Reflection::Variant
+};
+
+/* 725 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem> : RBX::Instance
+{
+};
+
+/* 726 */
+struct __cppobj RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>
+{
+};
+
+/* 727 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0> : RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0>
+{
+};
+
+/* 728 */
+struct __cppobj RBX::Reflection::Metadata::Item : RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0>
+{
+  bool browsable;
+  bool deprecated;
+  bool backend;
+  unsigned __int8 gap_63[1];
+  unsigned __int8 description[28];      ///< std::string
+};
+
+/* 729 */
+struct __cppobj RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance> : RBX::Reflection::Metadata::Item
+{
+};
+
+/* 730 */
+struct __cppobj RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>
+{
+};
+
+/* 731 */
+struct __cppobj RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0> : RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0>
+{
+};
+
+/* 732 */
+struct __cppobj RBX::Reflection::Metadata::Class : RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0>
+{
+  int explorerOrder;
+  int explorerImageIndex;
+  unsigned __int8 preferredParent[28];  ///< std::string
+};
+
+/* 733 */
+struct __cppobj RBX::Sibling<XmlAttribute>
+{
+  XmlAttribute *next;
+};
+
+/* 734 */
+struct __cppobj RBX::Allocator<XmlAttribute>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 735 */
+struct __cppobj XmlAttribute : RBX::Sibling<XmlAttribute>, XmlNameValuePair
+{
+  unsigned __int8 gap_4[4];
+};
+
+/* 736 */
+struct __cppobj RBX::ToggleFullscreenVerb : RBX::Verb
+{
+  void *videoControl;                   ///< RBX::VideoControl *
+  void *view;                           ///< RBX::View *
+};
+
+/* 737 */
+struct __cppobj RBX::FactoryProduct<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 738 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Player, char const *const RBX::Network::sPlayer, RBX::FactoryProduct<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, RBX::Instance>, 19, 0> : RBX::FactoryProduct<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, RBX::Instance>
+{
+};
+
+/* 739 */
+struct __cppobj RBX::DescribedCreatable<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, 19, 0> : RBX::Reflection::Described<RBX::Network::Player, char const *const RBX::Network::sPlayer, RBX::FactoryProduct<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, RBX::Instance>, 19, 0>
+{
+};
+
+/* 740 */
+struct __cppobj RBX::Diagnostics::Countable<RBX::Network::Player>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 741 */
+struct __cppobj RBX::Network::Player : RBX::DescribedCreatable<RBX::Network::Player, RBX::Instance, char const *const RBX::Network::sPlayer, 19, 0>
+{
+  unsigned __int8 character[8];         ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 teamColor[4];         ///< RBX::BrickColor
+  bool neutral;
+  unsigned __int8 gap_6D[3];
+  unsigned int m_unk0x70;
+  int dataComplexityLimit;
+  bool m_unk0x78;
+  unsigned __int8 gap_79[3];
+  unsigned __int8 m_unk0x7c[4];         ///< rbx::signals::scoped_connection
+  unsigned __int8 backendDiedSignalConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 m_unk0x84[4];         ///< rbx::signals::scoped_connection
+  unsigned __int8 teamStatusChangedCallback[32]; ///< boost::function<void __cdecl(void)>
+  unsigned __int8 characterAppearance[28]; ///< std::string
+  bool canLoadCharacterAppearance;
+  bool superSafeChat;
+  bool under13;
+  unsigned __int8 gap_C7[1];
+  int userId;
+  float simulationRadius;
+  float maxSimulationRadius;
+  unsigned __int8 osPlatform[28];       ///< std::string
+  bool hasGroupBuildTools;
+  unsigned __int8 gap_F1[3];
+  int personalServerRank;
+  unsigned int m_unk0xf8;
+  bool appearanceDidLoad;
+  unsigned __int8 gap_FD[3];
+  unsigned int m_unk0x100;
+  unsigned __int16 m_unk0x104;
+  unsigned __int16 m_unk0x106;
+  bool forceEarlySpawnLocationCalculation;
+  bool m_unk0x109;
+  unsigned __int8 gap_10A[2];
+  unsigned __int8 m_unk0x10c[28];       ///< std::string
+  unsigned __int8 m_unk0x128[4];        ///< boost::scoped_ptr<unsigned int>
+  unsigned __int8 m_unk0x12c[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 m_unk0x134[12];       ///< std::list<boost::function<void __cdecl(void)>>
+  unsigned __int8 m_unk0x140[8];        ///< RBX::Time
+  unsigned __int8 scriptSecurityErrorSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,std::string,std::string)>
+  unsigned __int8 remoteInsertSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,G3D::Vector3)>
+  unsigned __int8 connectDiedSignalBackend[8]; ///< rbx::remote_signal<void __cdecl(void)>
+  unsigned __int8 remoteFriendServiceSignal[8]; ///< rbx::remote_signal<void __cdecl(bool,int)>
+  unsigned __int8 m_unk0x168[8];        ///< rbx::remote_signal<void __cdecl(void)>
+  unsigned __int8 statsAvailableSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string)>
+  unsigned __int8 m_unk0x178[4];        ///< rbx::signals::scoped_connection
+  unsigned __int8 chattedSignal[4];     ///< rbx::signals::signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 characterAddedSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 characterRemovingSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 m_unk0x188[4];        ///< rbx::signals::signal<void __cdecl(G3D::Vector3)>
+  unsigned __int8 idledSignal[4];       ///< rbx::signals::signal<void __cdecl(double)>
+  unsigned __int8 friendStatusChangedSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,int)>
+  unsigned __int8 gap_194[4];
+  unsigned __int8 lastActivityTime[8];  ///< RBX::Time
+  int membershipType;                   ///< enum RBX::Network::Player::MembershipType
+  int accountAge;
+  bool m_unk0x1a8;
+  unsigned __int8 gap_1A9[3];
+  unsigned int m_unk0x1ac;
+  unsigned __int8 m_unk0x1b0[28];       ///< std::string
+  unsigned __int8 m_unk0x1cc[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned int m_unk0x1d4;
 };
 

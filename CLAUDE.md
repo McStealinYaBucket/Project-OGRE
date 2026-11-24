@@ -289,6 +289,15 @@ These carry over from OpenRBX unchanged:
   - `Util/Object.h`'s `shared_ptr<T> (*thisFunction)() = &create;` address-takes stop the shell's `create<T>` getting the original's register convention (result in edi); about 60 shell `Creator::create` copies wait on removing them (probe only, not in the tree yet).
   - 2013 `Security::Permissions` is None 0, RobloxPlace 1, LocalUser 2, WritePlayer 3, RobloxScript 4, Roblox 5, with no Plugin (jump table 0x00448034).
   - The prime_list `value+end` address coincides with whatever data follows the COMDAT in our link (a `1.0f` constant, an assert string): 7 ctors per target flip on it. It is layout luck, not code.
+- **Patterns proven 2026-11-24 by Phase 5 wave 11** (`notes/runs/2026-11-23-phase5-wave11/`):
+  - Removing `Util/Object.h`'s eight `&create` address-takes gives the shell's `create<T>` its 2013 convention (`create<CRenderSettingsItem>` 0x0040d4f0, `create<Reflection>` 0x0040d7b0).
+  - `Descriptor::name` is a `const Name&` (assert at Descriptor.h:58; ctor 0x00455710). `Name::toString` returns `const std::string&`; `operator<<(ostream&, const Name&)` 0x006131f0 inserts `c_str()`.
+  - `StudioPlugin` is an identity in both targets, not only Studio: both `isInRole` jump tables have 10 slots (0x0079f650).
+  - The member form `inst->fastDynamicCast<T>()` and the static `Instance::fastDynamicCast<T>(inst)` compile differently (`Player::verifySetParent` 0x00541ea0 vs `Players::askAddChild` 0x0070a240).
+  - A `scoped_ptr` member to a type with a trivial destructor emits no ctor code but takes an EH state (Player ctor 0x00550d40, member +0x128).
+  - VC9 inlines a `STUB(addr)` body into callers in the same TU; `__declspec(noinline)` on the stub is a stand-in until the real body lands (`Player::removeCharacter` 0x00553b40).
+  - An LTCG shell virtual keeps `__thiscall` in our link only once its class's ctor is compiled (it emits the vftable): `LogManager::logEvent` 0x0043f710 36% → 100% with the RobloxCrashReporter ctor.
+  - VC9 puts a byte index table after an in-function jump table; function-size rows must extend over both (`LogManager::ReportEvent` 0x00440a70). The generator now pairs the unnamed `/GS` `__ehhandler$` stubs, LTCG ones included.
 - **Boost.Thread and Boost.System are called through `dllimport`**: all 18 boost.dll imports (IAT 0x00aa2d00–0x00aa2d44) are `call [imp]` at 146 sites, with no thunk. Every engine library is built with `BOOST_THREAD_DYN_LINK` and `BOOST_SYSTEM_DYN_LINK` (`Security::Context::current` 0x0053ac40 89.7% → 100%).
 - **HTTP is WinHttp and WinInet, not libcurl** (no `curl_easy`/`CURLOPT` string; WINHTTP.dll 12 imports, WININET.dll 15). The WinHttp code sits at 0x008239b0–0x00826990, the WinInet code at 0x00827540–0x00828250 (user agent "Roblox/WinInet"): 2016's `App/util/WinHttp.cpp` and `WinInet.cpp`.
 - **STL: `_SECURE_SCL=0`**, proven by `Poly::getNumSurfaces` (PLAYER 0x00754610, STUDIO 0x008939c0), which stops matching under `_SECURE_SCL=1`; `_invalid_parameter_noinfo` is imported nowhere. `sizeof(std::vector<T>)` = 0x10, `sizeof(std::string)` = 0x1c (StatsService ctor).

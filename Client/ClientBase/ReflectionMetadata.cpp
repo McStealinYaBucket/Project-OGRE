@@ -127,7 +127,7 @@ Metadata::Class* Metadata::Reflection::get(const ClassDescriptor& descriptor, bo
 
 Metadata::Class* Metadata::Classes::get(const ClassDescriptor& descriptor, bool findBestMatch)
 {
-	Metadata::Class* c = boost::polymorphic_downcast<Metadata::Class*>(findFirstChildByName(descriptor.name->str));
+	Metadata::Class* c = boost::polymorphic_downcast<Metadata::Class*>(findFirstChildByName(descriptor.name.str));
 	if (c)
 		return c;
 	if (!findBestMatch)
@@ -149,21 +149,21 @@ Metadata::Member* Metadata::Reflection::get(const PropertyDescriptor& descriptor
 {
 	Metadata::Class* c = get(descriptor.owner, false);
 	const Metadata::Properties* members = c ? c->findFirstChildOfType<Metadata::Properties>() : 0;
-	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name->str)) : 0;
+	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name.str)) : 0;
 }
 
 Metadata::Member* Metadata::Reflection::get(const FunctionDescriptor& descriptor) const
 {
 	Metadata::Class* c = get(descriptor.owner, false);
 	const Metadata::Functions* members = c ? c->findFirstChildOfType<Metadata::Functions>() : 0;
-	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name->str)) : 0;
+	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name.str)) : 0;
 }
 
 Metadata::Member* Metadata::Reflection::get(const YieldFunctionDescriptor& descriptor) const
 {
 	Metadata::Class* c = get(descriptor.owner, false);
 	const Metadata::YieldFunctions* members = c ? c->findFirstChildOfType<Metadata::YieldFunctions>() : 0;
-	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name->str)) : 0;
+	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name.str)) : 0;
 }
 
 // FUNCTION: PLAYER 0x00447f00
@@ -171,14 +171,14 @@ Metadata::Member* Metadata::Reflection::get(const EventDescriptor& descriptor) c
 {
 	Metadata::Class* c = get(descriptor.owner, false);
 	const Metadata::Events* members = c ? c->findFirstChildOfType<Metadata::Events>() : 0;
-	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name->str)) : 0;
+	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name.str)) : 0;
 }
 
 Metadata::Member* Metadata::Reflection::get(const CallbackDescriptor& descriptor) const
 {
 	Metadata::Class* c = get(descriptor.owner, false);
 	const Metadata::Callbacks* members = c ? c->findFirstChildOfType<Metadata::Callbacks>() : 0;
-	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name->str)) : 0;
+	return members ? boost::polymorphic_downcast<Metadata::Member*>(members->findFirstChildByNameDangerous(descriptor.name.str)) : 0;
 }
 
 // The API dump. 2013 has no conflict report, no " [noyield]", no enum metadata and no Plugin
@@ -238,7 +238,7 @@ public:
 			return;
 		if (!d->isScriptable())
 			return;
-		stream << "\tProperty " << d->type.name->c_str() << ' ' << d->owner.name->c_str() << '.' << d->name->c_str();
+		stream << "\tProperty " << d->type.name.c_str() << ' ' << d->owner.name.c_str() << '.' << d->name.c_str();
 		writeMetadata(Metadata::Reflection::singleton()->get(*d), *d);
 		if (!d->isPublic())
 			stream << " [hidden]";
@@ -258,7 +258,7 @@ public:
 		else
 			stream << ", ";
 
-		stream << arg.type->name->c_str() << ' ' << arg.name->c_str();
+		stream << arg.type->name.c_str() << ' ' << arg.name->c_str();
 		if (arg.hasDefaultValue())
 		{
 			stream << " = ";
@@ -278,7 +278,7 @@ public:
 	{
 		if (d->owner != *c)
 			return;
-		stream << "\tFunction " << d->getSignature().resultType->name->c_str() << ' ' << d->owner.name->c_str() << ':' << d->name->c_str() << '(';
+		stream << "\tFunction " << d->getSignature().resultType->name.c_str() << ' ' << d->owner.name.c_str() << ':' << d->name.c_str() << '(';
 		writeArgs(d->getSignature());
 		stream << ')';
 		writeMetadata(Metadata::Reflection::singleton()->get(*d), *d);
@@ -291,7 +291,7 @@ public:
 	{
 		if (d->owner != *c)
 			return;
-		stream << "\tYieldFunction " << d->getSignature().resultType->name->c_str() << ' ' << d->owner.name->c_str() << ':' << d->name->c_str() << '(';
+		stream << "\tYieldFunction " << d->getSignature().resultType->name.c_str() << ' ' << d->owner.name.c_str() << ':' << d->name.c_str() << '(';
 		writeArgs(d->getSignature());
 		stream << ')';
 		writeMetadata(Metadata::Reflection::singleton()->get(*d), *d);
@@ -306,7 +306,7 @@ public:
 			return;
 		if (!d->isScriptable())
 			return;
-		stream << "\tEvent " << d->owner.name->c_str() << '.' << d->name->c_str() << '(';
+		stream << "\tEvent " << d->owner.name.c_str() << '.' << d->name.c_str() << '(';
 		writeArgs(d->getSignature());
 		stream << ')';
 		writeMetadata(Metadata::Reflection::singleton()->get(*d), *d);
@@ -319,7 +319,7 @@ public:
 	{
 		if (d->owner != *c)
 			return;
-		stream << "\tCallback " << d->getSignature().resultType->name->c_str() << ' ' << d->owner.name->c_str() << '.' << d->name->c_str() << '(';
+		stream << "\tCallback " << d->getSignature().resultType->name.c_str() << ' ' << d->owner.name.c_str() << '.' << d->name.c_str() << '(';
 		writeArgs(d->getSignature());
 		stream << ')';
 		writeMetadata(Metadata::Reflection::singleton()->get(*d), *d);
@@ -334,9 +334,9 @@ public:
 	{
 		if (*d != ClassDescriptor::rootDescriptor())
 		{
-			stream << "Class " << d->name->c_str();
+			stream << "Class " << d->name.c_str();
 			if (d->getBase() && *d->getBase() != ClassDescriptor::rootDescriptor())
-				stream << " : " << d->getBase()->name->c_str();
+				stream << " : " << d->getBase()->name.c_str();
 
 			writeMetadata(Metadata::Reflection::singleton()->get(*d, false), *d);
 			if (!d->isScriptCreatable())
@@ -356,14 +356,14 @@ public:
 	// FUNCTION: PLAYER 0x00448d10
 	void writeEnum(const EnumDescriptor* d)
 	{
-		stream << "Enum " << d->name->c_str() << '\n';
+		stream << "Enum " << d->name.c_str() << '\n';
 		std::for_each(d->begin(), d->end(), boost::bind(&Writer::writeEnumItem, this, _1));
 	}
 
 	// FUNCTION: PLAYER 0x00448d80
 	void writeEnumItem(const EnumDescriptor::Item* d)
 	{
-		stream << "\tEnumItem " << *d->owner.name << '.' << *d->name << " : " << d->value << '\n';
+		stream << "\tEnumItem " << d->owner.name << '.' << d->name << " : " << d->value << '\n';
 	}
 
 	// STUB: PLAYER 0x00448df0

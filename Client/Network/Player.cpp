@@ -7,6 +7,7 @@
 #include "Network/Players.h"
 #include "FastLog.h"
 #include "decomp.h"
+#include <boost/bind.hpp>
 
 DECOMP_SIZE_ASSERT(RBX::Network::Player, 0x1d8);
 
@@ -23,13 +24,13 @@ namespace Network {
 	// Descriptors in the order of their 2013 dynamic initializers (only those this file's functions
 	// use so far): 0x00a5f430 HasBuildTools (SCRIPTING, WritePlayer), 0x00a5ff10
 	// CanLoadCharacterAppearance (SCRIPTING), then the ones below.
-	static Reflection::PropDescriptor<Player, bool> prop_HasBuildTools("HasBuildTools", category_Data, &Player::getHasGroupBuildTools, &Player::setHasGroupBuildTools, Reflection::PropertyDescriptor::SCRIPTING, Security::WritePlayer);
+	static Reflection::PropDescriptor<Player, bool> prop_HasBuildTools("HasBuildTools", category_Data, &Player::getHasGroupBuildTools, &Player::setHasGroupBuildTools, Reflection::PropertyDescriptor::SCRIPTING, Security::RobloxScript);
 	static Reflection::PropDescriptor<Player, bool> prop_CanLoadCharacterAppearance("CanLoadCharacterAppearance", category_Behavior, &Player::getCanLoadCharacterAppearance, &Player::setCanLoadCharacterAppearance, Reflection::PropertyDescriptor::SCRIPTING);
 
 	// Dynamic initializers 0x00a602e0 / 0x00a60320 (BoundProp<float> ctor 0x005409d0): flags 0x13
 	// (SCRIPTING) and 0x15 (UI), security 2 (RobloxPlace).
-	Reflection::BoundProp<float> Player::prop_SimulationRadius("SimulationRadius", category_Data, &Player::simulationRadius, Reflection::PropertyDescriptor::SCRIPTING, Security::RobloxPlace);
-	Reflection::BoundProp<float> Player::prop_MaxSimulationRadius("MaximumSimulationRadius", category_Data, &Player::maxSimulationRadius, Reflection::PropertyDescriptor::UI, Security::RobloxPlace);
+	Reflection::BoundProp<float> Player::prop_SimulationRadius("SimulationRadius", category_Data, &Player::simulationRadius, Reflection::PropertyDescriptor::SCRIPTING, Security::LocalUser);
+	Reflection::BoundProp<float> Player::prop_MaxSimulationRadius("MaximumSimulationRadius", category_Data, &Player::maxSimulationRadius, Reflection::PropertyDescriptor::UI, Security::LocalUser);
 
 	// Dynamic initializers 0x00a60430 / 0x00a60490: flags 0x1f (STANDARD), security 0.
 	static Reflection::PropDescriptor<Player, BrickColor> prop_teamColor("TeamColor", category_Team, &Player::getTeamColor, &Player::setTeamColor);
@@ -220,7 +221,7 @@ namespace Network {
 	// FUNCTION: STUDIO 0x005e9d00
 	void Player::setName(const std::string& value)
 	{
-		Security::Context::current().requirePermission(Security::LocalUser);
+		Security::Context::current().requirePermission(Security::WritePlayer);
 		Instance::setName(value);
 	}
 }
@@ -291,21 +292,115 @@ template<> TypeRegistrar<Network::Player::ChatMode> TypeRegistrar<Network::Playe
 namespace RBX {
 namespace Network {
 
+	// FUNCTION: PLAYER 0x00541ea0
+	// FUNCTION: STUDIO 0x005f0980
+	void Player::verifySetParent(const Instance* newParent) const
+	{
+		if (newParent != NULL && newParent->fastDynamicCast<Players>() == NULL)
+			throw RBX::runtime_error("Parent of Player can not be changed");
+	}
+
+	// Callees of onServiceProvider, not written yet; __declspec(noinline) is a stand-in (see setCharacter).
+	// STUB: PLAYER 0x00549ab0
+	__declspec(noinline) void Player::onCharacterDied()
+	{
+		STUB(0x00549ab0);
+	}
+
+	// STUB: PLAYER 0x00549bb0
+	__declspec(noinline) void Player::doPeriodicIdleCheck()
+	{
+		STUB(0x00549bb0);
+	}
+
+	// STUB: PLAYER 0x0054a5e0
+	__declspec(noinline) void Player::onCharacterChangedFrontend()
+	{
+		STUB(0x0054a5e0);
+	}
+
+	// FUNCTION: PLAYER 0x00550d40
+	Player::Player()
+		: teamColor(BrickColor::brick_1)
+		, neutral(true)
+		, m_unk0x70(0)
+		, dataComplexityLimit(45000)
+		, m_unk0x78(false)
+		, canLoadCharacterAppearance(true)
+		, superSafeChat(false)
+		, under13(true)
+		, userId(0)
+		, simulationRadius(10.0f)
+		, maxSimulationRadius(1000.0f)
+		, hasGroupBuildTools(false)
+		, personalServerRank(0)
+		, m_unk0xf8(0)
+		, appearanceDidLoad(false)
+		, m_unk0x100(-1)
+		, m_unk0x104(0xffff)
+		, forceEarlySpawnLocationCalculation(false)
+		, m_unk0x109(false)
+		, m_unk0x140(Time::now<Time::Fast>())
+		, membershipType(MEMBERSHIP_NONE)
+		, accountAge(0)
+		, m_unk0x1a8(false)
+		, m_unk0x1ac(0)
+		, m_unk0x1b0("")
+		, m_unk0x1d4(0)
+	{
+		Security::Context::current().requirePermission(Security::WritePlayer);
+		setName(sPlayer);
+	}
+
+	// 765 bytes in 2013 (FastLogF, Humanoid::modelIsCharacter, rebuildBackpack/rebuildGui, the died
+	// connection); not written yet. __declspec(noinline) is a stand-in, not 2013 code: it keeps VC9
+	// from inlining this short stub into removeCharacter and onServiceProvider, as the real body is not.
 	// STUB: PLAYER 0x00553710
 	// STUB: STUDIO 0x005ff990
-	void Player::setCharacter(ModelInstance* value)
+	__declspec(noinline) void Player::setCharacter(ModelInstance* value)
 	{
 		STUB(0x00553710);
 	}
 
-	// STUB: PLAYER 0x00553b40
-	// STUB: STUDIO 0x005ffdc0
+	// FUNCTION: PLAYER 0x00553a10
+	void Player::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		if (oldProvider && Players::backendProcessing(oldProvider))
+		{
+			setCharacter(NULL);
+			backendDiedSignalConnection.disconnect();
+		}
+
+		if (newProvider)
+		{
+			if (Players::frontendProcessing(newProvider))
+				onCharacterChangedFrontend();
+
+			if (Players::backendProcessing(newProvider))
+				backendDiedSignalConnection = connectDiedSignalBackend.connect(boost::bind(&Player::onCharacterDied, this));
+		}
+
+		if (oldProvider == NULL && Players::frontendProcessing(newProvider))
+		{
+			registerLocalPlayerNotIdle();
+			doPeriodicIdleCheck();
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00553b40
+	// FUNCTION: STUDIO 0x005ffdc0
 	void Player::removeCharacter()
 	{
 		if (!Players::backendProcessing(this))
 			throw std::runtime_error("RemoveCharacter can only be called by the backend server");
 
 		FASTLOG(FLog::Network, "Player:removeCharacter");
+		setCharacter(NULL);
+	}
+
+	// STUB: PLAYER 0x00553fa0
+	Player::~Player()
+	{
 		setCharacter(NULL);
 	}
 
@@ -341,3 +436,408 @@ template RBX::PhysicsService* RBX::ServiceProvider::find<RBX::PhysicsService>() 
 template RBX::ScriptService* RBX::ServiceProvider::find<RBX::ScriptService>() const;
 template RBX::MarketplaceService* RBX::ServiceProvider::create<RBX::MarketplaceService>() const;
 template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
+
+// 2013's assert in registerLocalPlayerNotIdle sits on Player.cpp line 838 (string PLAYER 0x00b12158);
+// the blank lines hold it there until the functions between are written.
+namespace RBX {
+namespace Network {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x005276b0
+	void Player::registerLocalPlayerNotIdle()
+	{
+		RBXASSERT(Players::frontendProcessing(this));
+		lastActivityTime = Time::now<Time::Fast>();
+	}
+
+} // namespace Network
+} // namespace RBX

@@ -61,23 +61,23 @@ template<>
 bool& Variant::convert<bool>(void)
 {
 	// Convert int to bool
-	if (_type->isType<int>())
+	if (isType<int>())
 	{
-		value = (bool) (cast<int>()!=0);
+		value = (bool) (rbx::any_cast<int>(value)!=0);
 		_type = &Type::singleton<bool>();
 	}
 
 	// Convert float to bool
-	else if (_type->isType<float>())
+	else if (isType<float>())
 	{
-		value = (bool) (cast<float>()!=0.0f);
+		value = (bool) (rbx::any_cast<float>(value)!=0.0f);
 		_type = &Type::singleton<bool>();
 	}
 
 	// Convert double to bool
-	else if (_type->isType<double>())
+	else if (isType<double>())
 	{
-		value = (bool) (cast<double>()!=0.0);
+		value = (bool) (rbx::any_cast<double>(value)!=0.0);
 		_type = &Type::singleton<bool>();
 	}
 
@@ -101,27 +101,27 @@ const Type& Type::getSingleton<long>()
 template<>
 int& Variant::convert<int>(void)
 {
-	// Convert double to int
-	if (_type->isType<double>())
+	// 2013 (0x00703dc0): an int is returned in place; double, float and bool convert to int.
+	if (isType<int>())
+		return *rbx::any_cast<int>(&value);
+	if (isType<double>())
 	{
-		value = G3D::iRound(cast<double>());
+		value = G3D::iRound(rbx::any_cast<double>(value));
 		_type = &Type::singleton<int>();
+		return *rbx::any_cast<int>(&value);
 	}
-
-	// Convert float to int
-	if (_type->isType<float>())
+	if (isType<float>())
 	{
-		value = G3D::iRound(cast<float>());
+		value = G3D::iRound(rbx::any_cast<float>(value));
 		_type = &Type::singleton<int>();
+		return *rbx::any_cast<int>(&value);
 	}
-
-	// Convert bool to int
-	if (_type->isType<bool>())
+	if (isType<bool>())
 	{
-		value = (cast<bool>() ? 1 : 0);
+		value = rbx::any_cast<bool>(value) ? 1 : 0;
 		_type = &Type::singleton<int>();
+		return *rbx::any_cast<int>(&value);
 	}
-
 	return genericConvert<int>();
 }
 
@@ -136,23 +136,23 @@ template<>
 float& Variant::convert<float>(void)
 {
 	// Convert double to float
-	if (_type->isType<double>())
+	if (isType<double>())
 	{
-		value = (float) cast<double>();
+		value = (float) rbx::any_cast<double>(value);
 		_type = &Type::singleton<float>();
 	}
 
 	// Convert int to float
-	else if (_type->isType<int>())
+	else if (isType<int>())
 	{
-		value = (float) cast<int>();
+		value = (float) rbx::any_cast<int>(value);
 		_type = &Type::singleton<float>();
 	}
 
 	// Convert bool to float
-	else if (_type->isType<bool>())
+	else if (isType<bool>())
 	{
-		value = (float) (cast<bool>() ? 1 : 0);
+		value = (float) (rbx::any_cast<bool>(value) ? 1 : 0);
 		_type = &Type::singleton<float>();
 	}
 
@@ -170,23 +170,23 @@ template<>
 double& Variant::convert<double>(void)
 {
 	// Convert int to double
-	if (_type->isType<int>())
+	if (isType<int>())
 	{
-		value = (double) cast<int>();
+		value = (double) rbx::any_cast<int>(value);
 		_type = &Type::singleton<double>();
 	}
 
 	// Convert bool to double
-	else if (_type->isType<bool>())
+	else if (isType<bool>())
 	{
-		value = (double) (cast<bool>() ? 1 : 0);
+		value = (double) (rbx::any_cast<bool>(value) ? 1 : 0);
 		_type = &Type::singleton<double>();
 	}
 
 	// Convert float to double
-	else if (_type->isType<float>())
+	else if (isType<float>())
 	{
-		value = (double) cast<float>();
+		value = (double) rbx::any_cast<float>(value);
 		_type = &Type::singleton<double>();
 	}
 
@@ -203,17 +203,13 @@ const Type& Type::getSingleton<std::string>()
 template<>
 RBX::ContentId& Variant::convert<RBX::ContentId>(void)
 {
-	// TODO: full conversion matrix (0x234EB6/0x2353A2); identity + string source for now.
-	if (!isType<RBX::ContentId>())
+	// 2013 (0x00702b60): only a string converts; the rest is genericConvert.
+	if (isType<std::string>())
 	{
-		if (isType<std::string>())
-			value = RBX::ContentId(cast<std::string>());
+		value = RBX::ContentId(rbx::any_cast<std::string>(value));
 		_type = &Type::singleton<RBX::ContentId>();
 	}
-	RBX::ContentId* id = tryCast<RBX::ContentId>();
-	if (id == NULL)
-		throw std::runtime_error("Unable to cast value to ContentId");
-	return *id;
+	return genericConvert<RBX::ContentId>();
 }
 
 template<>
@@ -222,27 +218,27 @@ std::string& Variant::convert<std::string>(void)
 	// TODO: This should be made compact somehow!!!
 	if (isType<bool>())
 	{
-		value = StringConverter<bool>::convertToString(cast<bool>());
+		value = StringConverter<bool>::convertToString(rbx::any_cast<bool>(value));
 		_type = &Type::singleton<std::string>();
 	}
 	else if (isType<int>())
 	{
-		value = StringConverter<int>::convertToString(cast<int>());
+		value = StringConverter<int>::convertToString(rbx::any_cast<int>(value));
 		_type = &Type::singleton<std::string>();
 	}
 	else if (isType<long>())
 	{
-		value = StringConverter<long>::convertToString(cast<long>());
+		value = StringConverter<long>::convertToString(rbx::any_cast<long>(value));
 		_type = &Type::singleton<std::string>();
 	}
 	else if (isType<float>())
 	{
-		value = StringConverter<float>::convertToString(cast<float>());
+		value = StringConverter<float>::convertToString(rbx::any_cast<float>(value));
 		_type = &Type::singleton<std::string>();
 	}
 	else if (isType<double>())
 	{
-		value = StringConverter<double>::convertToString(cast<double>());
+		value = StringConverter<double>::convertToString(rbx::any_cast<double>(value));
 		_type = &Type::singleton<std::string>();
 	}
 	// TODO: Lua::WeakFunctionRef branch (Lua module pending).
@@ -250,7 +246,7 @@ std::string& Variant::convert<std::string>(void)
 	{
 		const shared_ptr<Instance>& v = cast<shared_ptr<Instance> >();
 		if (v)
-			value = std::string(Type::singleton< shared_ptr<Instance> >().name->c_str());
+			value = std::string(Type::singleton< shared_ptr<Instance> >().name.c_str());
 		else
 			value = std::string("nil");
 		_type = &Type::singleton<std::string>();
@@ -318,12 +314,12 @@ const Type& Type::getSingleton<shared_ptr<const Reflection::Tuple> >()
 	return type;
 }
 
-template<>
-const Type& Type::getSingleton<shared_ptr<const Reflection::ValueMap> >()
-{
-	static TType<shared_ptr<const Reflection::ValueMap> > type("ValueMap");
-	return type;
-}
+// getSingleton<shared_ptr<const ValueMap> > ("Map") lives in reflection/type.cpp, as in 2013
+// (PLAYER 0x0079fe90, among type.cpp's singletons; its Type ctor 0x0079fba0 asserts reflection/type.h).
+
+
+
+
 
 // getSingleton<Lua::WeakFunctionRef> ("Function") is in script/ThreadRef.cpp, as in 2013.
 
@@ -434,9 +430,17 @@ shared_ptr<Instance>& Variant::convert<shared_ptr<Instance> >(void)
 	}
 	else if (isType<shared_ptr<Reflection::DescribedBase> >())
 	{
-		const shared_ptr<Reflection::DescribedBase>& v = cast<shared_ptr<Reflection::DescribedBase> >();
-
-		value = shared_dynamic_cast<Instance>(v);
+		// 2013 (0x007041a0): a DescribedBase that is not an Instance throws; no shared_dynamic_cast.
+		shared_ptr<Reflection::DescribedBase>* v = rbx::any_cast<shared_ptr<Reflection::DescribedBase> >(&value);
+		if (v)
+		{
+			Instance* instance = dynamic_cast<Instance*>(v->get());
+			if (!instance)
+				throw std::runtime_error("Unable to cast value to Object");
+			value = shared_from(instance);
+		}
+		else
+			value = shared_ptr<Instance>();
 		_type = &Type::singleton<shared_ptr<Instance> >();
 	}
 
@@ -458,8 +462,11 @@ shared_ptr<Reflection::DescribedBase>& Variant::convert<shared_ptr<Reflection::D
 
 	else if (isType<shared_ptr<Instance> >())
 	{
-		const shared_ptr<Instance>& v = cast<shared_ptr<Instance> >();
-		value = shared_static_cast<Reflection::DescribedBase>(v);
+		shared_ptr<Instance>* v = rbx::any_cast<shared_ptr<Instance> >(&value);	// 2013 0x00701890
+		if (v)
+			value = shared_static_cast<Reflection::DescribedBase>(*v);
+		else
+			value = shared_ptr<Reflection::DescribedBase>();
 		_type = &Type::singleton<shared_ptr<Reflection::DescribedBase> >();
 	}
 
@@ -1647,21 +1654,7 @@ void RBX::Reflection::TypedPropertyDescriptor<G3D::Vector2>::writeValue(const De
 // (Type::getSingleton<ProtectedString> + its TypeRegistrar are defined in
 // util/ProtectedString.cpp -- section 258b, binary 0x234BAC -- NOT here.)
 
-template<>
-RBX::ProtectedString& RBX::Reflection::Variant::convert<RBX::ProtectedString>(void)
-{
-	// TODO: full conversion matrix (0x234EB6/0x2353A2); identity + string source for now.
-	if (!isType<RBX::ProtectedString>())
-	{
-		if (isType<std::string>())
-			value = RBX::ProtectedString::fromTrustedSource(cast<std::string>());
-		_type = &Type::singleton<RBX::ProtectedString>();
-	}
-	RBX::ProtectedString* ps = tryCast<RBX::ProtectedString>();
-	if (ps == NULL)
-		throw std::runtime_error("Unable to cast value to ProtectedString");
-	return *ps;
-}
+// Variant::convert<ProtectedString> is in util/ProtectedString.cpp, as in 2013 (PLAYER 0x0066f960).
 
 template<>
 int RBX::Reflection::TypedPropertyDescriptor<RBX::ProtectedString>::getDataSize(const DescribedBase* instance) const

@@ -43,7 +43,7 @@ static Reflection::BoundFuncDesc<Instance, std::string()> func_GetFullName(&Inst
 static Reflection::BoundFuncDesc<Instance, bool(shared_ptr<Instance>)> func_isDescendantOf(&Instance::isDescendantOf2, "IsDescendantOf", "ancestor", Security::None);
 static Reflection::BoundFuncDesc<Instance, bool(shared_ptr<Instance>)> dep_isDescendantOf(&Instance::isDescendantOf2, "isDescendantOf", "ancestor", Security::None, Reflection::PropertyDescriptor::Attributes::deprecated(func_isDescendantOf));
 static Reflection::BoundFuncDesc<Instance, bool(shared_ptr<Instance>)> func_isAncestorOf(&Instance::isAncestorOf2, "IsAncestorOf", "descendant", Security::None);
-static Reflection::BoundFuncDesc<Instance, std::string(int)> func_GetReadableId(&Instance::getReadableDebugId, "GetDebugId", "scopeLength", 4, Security::Plugin);
+static Reflection::BoundFuncDesc<Instance, std::string(int)> func_GetReadableId(&Instance::getReadableDebugId, "GetDebugId", "scopeLength", 4, Security::LocalUser);
 static Reflection::PropDescriptor<Instance, std::string> prop_className("ClassName", category_Data, &Instance::getClassNameStr, NULL, Reflection::PropertyDescriptor::UI);
 static Reflection::PropDescriptor<Instance, std::string> prop_classNameDeprecated("className", category_Data, &Instance::getClassNameStr, NULL, Reflection::PropertyDescriptor::Attributes::deprecated(prop_className));
 static Reflection::PropDescriptor<Instance, int> prop_dataCost("DataCost", category_Data, &Instance::getPersistentDataCost, NULL, Reflection::PropertyDescriptor::UI, Security::RobloxPlace);
@@ -52,7 +52,7 @@ static Reflection::BoundYieldFuncDesc<Instance, shared_ptr<Instance>(std::string
 
 const Reflection::PropDescriptor<Instance, std::string> Instance::desc_Name("Name", category_Data, &Instance::getName, &Instance::setName);
 const Reflection::RefPropDescriptor<Instance, Instance> Instance::propParent("Parent", category_Data, &Instance::getParentDangerous, &Instance::setParent, Reflection::PropertyDescriptor::UI);
-const Reflection::PropDescriptor<Instance, bool> Instance::propRobloxLocked("RobloxLocked", category_Data, &Instance::getRobloxLocked, &Instance::setRobloxLocked, Reflection::PropertyDescriptor::SCRIPTING, Security::Plugin);
+const Reflection::PropDescriptor<Instance, bool> Instance::propRobloxLocked("RobloxLocked", category_Data, &Instance::getRobloxLocked, &Instance::setRobloxLocked, Reflection::PropertyDescriptor::SCRIPTING, Security::LocalUser);
 
 Reflection::EventDesc<
 	Instance, 
@@ -708,7 +708,7 @@ private:
 			return shared_ptr<Instance>();
 		if (!instance->getIsArchivable())
 			return shared_ptr<Instance>();
-		shared_ptr<Instance> copy = Creatable<Instance>::createByName(*instance->getDescriptor().name, creatorRole);
+		shared_ptr<Instance> copy = Creatable<Instance>::createByName(instance->getDescriptor().name, creatorRole);
 		if (!copy)
 			throw std::runtime_error(RBX::format("%s cannot be cloned", instance->getFullName().c_str()));
 		RBXASSERT(map.find(instance.get()) == map.end());

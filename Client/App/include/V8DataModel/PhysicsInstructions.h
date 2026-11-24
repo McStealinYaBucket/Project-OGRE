@@ -12,6 +12,7 @@
 #include "Util/Average.h"
 
 namespace RBX {
+	namespace Network { class Player; }
 
 	// SIZE 0x60
 	class PhysicsInstructions
@@ -29,6 +30,9 @@ namespace RBX {
 		double networkBufferHealth;			// 0x58
 
 		PhysicsInstructions();
+
+		void changeSimulationRadius(Network::Player* dPhysPlayer, float change);
+		void changeMaxSimulationRadius(Network::Player* dPhysPlayer, float change);
 	};
 
 } // namespace RBX

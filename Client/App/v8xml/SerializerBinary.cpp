@@ -1229,7 +1229,7 @@ namespace RBX {
 		{
 			bool operator()(const Reflection::ClassDescriptor* a, const Reflection::ClassDescriptor* b) const
 			{
-				return a->name->str < b->name->str;
+				return a->name.str < b->name.str;
 			}
 		};
 
@@ -1237,7 +1237,7 @@ namespace RBX {
 		{
 			bool operator()(const Reflection::PropertyDescriptor* a, const Reflection::PropertyDescriptor* b) const
 			{
-				return a->name->str < b->name->str;
+				return a->name.str < b->name.str;
 			}
 		};
 
@@ -1301,7 +1301,7 @@ namespace RBX {
 					const std::vector<const Instance*>& members = it->second;
 					MemoryOutputStream chunk;
 					chunk.write(&classIndex, sizeof(classIndex));
-					std::string className = it->first->name->str;
+					std::string className = it->first->name.str;
 					unsigned int nameLen = static_cast<unsigned int>(className.size());
 					chunk.write(&nameLen, sizeof(nameLen));
 					if (!className.empty())
@@ -1348,7 +1348,7 @@ namespace RBX {
 					{
 						MemoryOutputStream chunk;
 						chunk.write(&classIndex, sizeof(classIndex));
-						std::string propName = it->first->name->str + "-" + props[k]->name->str;
+						std::string propName = it->first->name.str + "-" + props[k]->name.str;
 						unsigned int nameLen = static_cast<unsigned int>(propName.size());
 						chunk.write(&nameLen, sizeof(nameLen));
 						if (!propName.empty())

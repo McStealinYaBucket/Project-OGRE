@@ -22,7 +22,7 @@ namespace RBX { namespace Reflection {
 	// this static comparator compare2.
 	static bool compare2(const ClassDescriptor* a, const ClassDescriptor* b)
 	{
-		return *a->name < *b->name;
+		return a->name < b->name;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ namespace RBX { namespace Reflection {
 	{
 		// TODO(decompile): name-based lookup path (allEnumsNameLookup-style map in the binary)
 		for (ClassDescriptors::const_iterator iter = allClasses().begin(); iter != allClasses().end(); ++iter) {
-			if ((*iter)->name->str == childName)
+			if ((*iter)->name.str == childName)
 				return isBaseOf(**iter);
 		}
 		return false;
@@ -115,7 +115,7 @@ namespace RBX { namespace Reflection {
 	bool ClassDescriptor::isA(const char* testName) const
 	{
 		for (ClassDescriptors::const_iterator iter = allClasses().begin(); iter != allClasses().end(); ++iter) {
-			if ((*iter)->name->str == testName)
+			if ((*iter)->name.str == testName)
 				return isA(**iter);
 		}
 		return false;

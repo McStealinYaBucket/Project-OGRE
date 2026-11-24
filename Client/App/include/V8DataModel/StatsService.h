@@ -23,7 +23,7 @@ namespace Stats {
 	extern const char* const sStats;
 
 	class StatsService
-		: public DescribedNonCreatable<StatsService, Instance, sStats, Reflection::ClassDescriptor::INTERNAL_LOCAL, Security::RobloxPlace>
+		: public DescribedNonCreatable<StatsService, Instance, sStats, Reflection::ClassDescriptor::INTERNAL_LOCAL, Security::LocalUser>
 		, public Service
 	{
 	public:

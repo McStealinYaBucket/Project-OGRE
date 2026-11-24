@@ -16,6 +16,7 @@
 #include <boost/thread.hpp>
 #include <vector>
 #include <algorithm>
+#include <ostream>
 
 // getNullName's call_once state (file statics outside RBX: the PDB names them unqualified).
 // GLOBAL: PLAYER 0x00de2810
@@ -54,6 +55,12 @@ namespace RBX {
 	//////////////////////////////////////////////////////////////////////////////////
 	// Name
 	//////////////////////////////////////////////////////////////////////////////////
+	// FUNCTION: PLAYER 0x006131f0
+	std::ostream& operator<<(std::ostream& stream, const Name& name)
+	{
+		return stream << name.c_str();	// 2013: the const char* inserter (c_str test inline)
+	}
+
 	// FUNCTION: PLAYER 0x006136c0
 	// FUNCTION: STUDIO 0x00702f90
 	Name::Name(const char* const& name)

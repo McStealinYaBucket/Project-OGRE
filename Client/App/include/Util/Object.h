@@ -114,56 +114,56 @@ namespace RBX
 		static shared_ptr<T> create()
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(), Deleter());
-            shared_ptr<T> (*thisFunction)() = &create;
+
 			return obj;
 		}
 		template<class T, typename P1>
 		static shared_ptr<T> create(P1 p1)
 		{		
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1), Deleter());
-            shared_ptr<T> (*thisFunction)(P1) = &create;
+
 			return obj;			
 		}
 		template<class T, typename P1, typename P2>
 		static shared_ptr<T> create(P1 p1, P2 p2)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2), Deleter());
-            shared_ptr<T> (*thisFunction)(P1, P2) = &create;
+
 			return obj;
 		}
 		template<class T, typename P1, typename P2, typename P3>
 		static shared_ptr<T> create(P1 p1, P2 p2, P3 p3)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2, p3), Deleter());
-            shared_ptr<T> (*thisFunction)(P1, P2, P3) = &create;
+
 			return obj;
 		}
 		template<class T, typename P1, typename P2, typename P3, typename P4>
 		static shared_ptr<T> create(P1 p1, P2 p2, P3 p3, P4 p4)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2, p3, p4), Deleter());
-            shared_ptr<T> (*thisFunction)(P1, P2, P3, P4) = &create;
+
 			return obj;
 		}
 		template<class T, typename P1, typename P2, typename P3, typename P4, typename P5>
 		static shared_ptr<T> create(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2, p3, p4, p5), Deleter());
-            shared_ptr<T> (*thisFunction)(P1, P2, P3, P4, P5) = &create;
+
 			return obj;
 		}
 		template<class T, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
 		static shared_ptr<T> create(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2, p3, p4, p5, p6), Deleter());
-            shared_ptr<T> (*thisFunction)(P1, P2, P3, P4, P5, P6) = &create;
+
 			return obj;
 		}
 		template<class T, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
 		static shared_ptr<T> create(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
 		{
 			shared_ptr<T> obj = shared_ptr<T>(new T(p1, p2, p3, p4, p5, p6, p7), Deleter());
-			shared_ptr<T> (*thisFunction)(P1, P2, P3, P4, P5, P6, P7) = &create;
+
 			return obj;
 		}
 		static std::map<const Name*, const ICreator*>& getCreators()

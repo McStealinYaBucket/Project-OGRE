@@ -265,7 +265,7 @@ namespace RBX {
 		{
 			const Reflection::EnumDescriptor::Item* item = desc->lookup(value);
 			if (item == NULL)
-				throw RBX::runtime_error("Invalid value for enum %s", desc->name->str.c_str());
+				throw RBX::runtime_error("Invalid value for enum %s", desc->name.str.c_str());
 			Lua::EnumItem::push(L, item);
 			return 1;
 		}
@@ -401,7 +401,7 @@ namespace RBX {
 			|| !strcmp(ti->name(), "PKN3RBX10Reflection18PropertyDescriptorE"))
 		{
 			const std::string& s = (*rbx::any_cast<const RBX::Reflection::PropertyDescriptor* const, RBX::Region3>(
-				value.value))->name->str;
+				value.value))->name.str;
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}

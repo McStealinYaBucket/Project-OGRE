@@ -297,8 +297,8 @@ namespace RBX
 			SignatureDescriptor();
 		};
 
-		// STUB: PLAYER 0x0066f7f0
-		// STUB: STUDIO 0x00780350
+		// FUNCTION: PLAYER 0x0066f7f0
+		// FUNCTION: STUDIO 0x00780350
 		template<class ValueType>
 		ValueType& RBX::Reflection::Variant::genericConvert()
 		{

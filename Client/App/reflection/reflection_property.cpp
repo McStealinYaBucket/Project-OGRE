@@ -51,7 +51,7 @@ EnumDescriptor::EnumDescriptor(const char* typeName, const std::type_info& info)
 	,enumCountMSB(0)
 {
 	allEnums().push_back(this);
-	allEnumsNameLookup()[&*name] = this;	// 2013 name is a const Name&: the key is a temporary (0x006fa23a)
+	allEnumsNameLookup()[&name] = this;	// 2013: name is a const Name&, the key a temporary (0x006fa23a)
 	allEnumsTypeLookup()[&type] = this;
 	count++;
 }
@@ -89,7 +89,7 @@ PropertyDescriptor::PropertyDescriptor(ClassDescriptor& classDescriptor, const T
 	,bIsEnum(isEnum)
 {
 	RBXASSERT(!type.tag.empty());
-	RBXASSERT(!type.name->str.empty());
+	RBXASSERT(!type.name.empty());
 
 	// TODO: This could be moved up into MemberDescriptor if it were templated...
 	classDescriptor.MemberDescriptorContainer<PropertyDescriptor>::declare(this);
@@ -126,3 +126,7 @@ void PropertyDescriptor::read(DescribedBase* instance, const XmlElement* element
 }
 
 }}//namespace
+
+#include "decomp.h"
+// EnumDescriptor ctor 0x006fa1a0, dtor 0x006f9e40 (ida-sync-13).
+DECOMP_SIZE_ASSERT(RBX::Reflection::EnumDescriptor, 0x34);

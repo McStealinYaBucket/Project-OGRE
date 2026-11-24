@@ -836,20 +836,20 @@ namespace RBX { namespace Lua {
 		if (!SharedPtrBridge<Instance>::getPtr(L, 1, instance) || instance.get() == NULL)
 		{
 			throw RBX::runtime_error("Expected ':' not '.' calling member function %s",
-				desc->name->str.c_str());
+				desc->name.str.c_str());
 		}
 		Security::Context& context = Security::Context::current();
 		instance->securityCheck(context);
 		// 2013 0x0087a6d3: a RobloxLocked instance needs permission 2 for the call
 		if (instance->getRobloxLocked())
-			context.requirePermission((Security::Permissions)2, desc->name->c_str());
+			context.requirePermission((Security::Permissions)2, desc->name.c_str());
 		const Reflection::DescribedBase* described =
 			static_cast<const Reflection::DescribedBase*>(instance.get());
 		if (!desc->isMemberOf(described))
 		{
 			throw RBX::runtime_error("The function %s is not a member of \"%s\"",
-				desc->name->str.c_str(),
-				instance->getDescriptor().name->str.c_str());
+				desc->name.str.c_str(),
+				instance->getDescriptor().name.str.c_str());
 		}
 		LuaArguments args(L, 1);
 		desc->execute(instance.get(), args);
@@ -992,21 +992,21 @@ int ObjectBridge::callMemberYieldFunction(lua_State* L)
 	{
 		throw RBX::runtime_error(
 			"Did you forget a colon? The first argument of member function %s must be an Object",
-			desc->name->str.c_str());
+			desc->name.str.c_str());
 	}
 	Security::Context& context = Security::Context::current();
 	instance->securityCheck(context);
 	// 2013 0x0087c817: a RobloxLocked instance needs permission 2 for the call
 	if (instance->getRobloxLocked())
-		context.requirePermission((Security::Permissions)2, desc->name->c_str());
+		context.requirePermission((Security::Permissions)2, desc->name.c_str());
 
 	const Reflection::DescribedBase* described =
 		static_cast<const Reflection::DescribedBase*>(instance.get());
 	if (!desc->isMemberOf(described))
 	{
 		throw RBX::runtime_error("The function %s is not a member of \"%s\"",
-			desc->name->str.c_str(),
-			instance->getDescriptor().name->str.c_str());
+			desc->name.str.c_str(),
+			instance->getDescriptor().name.str.c_str());
 	}
 	boost::shared_ptr<YieldFunctionStateObject> functionObject(
 		new YieldFunctionStateObject(desc, instance, L));

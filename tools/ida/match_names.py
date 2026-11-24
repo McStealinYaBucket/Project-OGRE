@@ -405,6 +405,55 @@ FACTS = [
      "info_injector@Vbad_alloc@std@@@20@@Z", "rtti:",
      "boost::enable_current_exception<error_info_injector<std::bad_alloc>> | called from throw_exception<bad_alloc> "
      "0x0041fdb0"),
+    # wave11 sync: shell callees shell-5k-2.md calls with no definition yet (integrate.md wave 11); named with the
+    # decorated names our tree declares so tools/gen_link_stubs.py binds them. Checked from the exe bytes;
+    # STUDIO addresses from STUDIO-PLAYER-bodymatch.csv pairs or the bytes (hook setters).
+    (0x00520070, None, "rename", "??0CrashReporter@@QAE@XZ", "rtti:",
+     "CrashReporter::CrashReporter() | stores ??_7CrashReporter@@6B@ 0x00b119e0 (COL .?AVCrashReporter@@), called "
+     "by the RobloxCrashReporter ctor 0x0043f570"),
+    (0x005200f0, None, "rename", "??1CrashReporter@@QAE@XZ", "rtti:",
+     "CrashReporter::~CrashReporter() | stores ??_7CrashReporter@@6B@ 0x00b119e0, FastLog 'Closing crashreporter "
+     "thread on destroy', thread::join; non-virtual (slot 0 of the vftable is a folded `ret 4`)"),
+    (0x0051fcb0, None, "rename", "?ProcessException@CrashReporter@@UAEJPAU_EXCEPTION_POINTERS@@_N@Z", "rtti:",
+     "CrashReporter::ProcessException(_EXCEPTION_POINTERS*, bool) | slot 1 of ??_7CrashReporter@@6B@ 0x00b119e0 "
+     "(RobloxCrashReporter overrides it with 0x0043f660); MiniDumpWriteDump, 'MiniDumpWriteDump() failed with hr'"),
+    (0x005205a0, None, "rename", "?Start@CrashReporter@@QAEXXZ", "src2016:",
+     "CrashReporter::Start() | SetUnhandledExceptionFilter, new boost::thread over bind(mf0<void,CrashReporter>) "
+     "(thread_data vftable 0x00b1191c); called once, from the MainLogManager ctor path"),
+    (0x0051fad0, None, "rename", "?GenerateDmpFileName@CrashReporter@@QAEJPADH_N1@Z", "src2016:",
+     "CrashReporter::GenerateDmpFileName(char*, int, bool, bool) | its two callers are ProcessException 0x0051fcb0 "
+     "(vftable slot 1) and CreateFakeCrashDump 0x0043f8c0"),
+    (0x009d5d10, None, "rename",
+     "?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ", "src2016:",
+     "G3D::Log::getCommonLogFilename() (G3D 8.00 Log.cpp) | 36 bytes: calls Log::common 0x009d5c60 (ios:) and "
+     "copy-constructs its filename string, right after common() in Log.obj"),
+    (0x009d63b0, 0x006ab080, "rename",
+     "?setAssertionHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z",
+     "src2016:",
+     "G3D::setAssertionHook (G3D 8.00 debugAssert.cpp) | stores its argument to 0x00db54b0 (STUDIO 0x00eaadd8), "
+     "whose initial value is 0x009d6510 ('Assertion Failure': _handleDebugAssert_); MainLogManager ctor passes "
+     "handleDebugAssert"),
+    (0x009d63c0, 0x006ab090, "rename",
+     "?setFailureHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z",
+     "src2016:",
+     "G3D::setFailureHook (G3D 8.00 debugAssert.cpp) | stores its argument to 0x00db54b4 (STUDIO 0x00eaaddc), "
+     "whose initial value is _handleErrorCheck_ 0x009d6780 (ios:)"),
+    (0x0046a2e0, None, "rename", "?IsVistaPlus@@YA_NXZ", "src2016:",
+     "IsVistaPlus() | GetVersionExA, returns dwPlatformId == 2 && dwMajorVersion >= 6"),
+    (0x00435f10, None, "rename", "?UploadCrashEventFile@DumpErrorUploader@@SAXPAU_EXCEPTION_POINTERS@@@Z", "str:",
+     "DumpErrorUploader::UploadCrashEventFile(_EXCEPTION_POINTERS*) | 'Crash Event post', 'Crash Event posted, "
+     "response: %s', 'Exception during upload crash event'; called by ProcessException 0x0043f660 after "
+     "'Uploading .crashevent...'"),
+    (0x00463f50, None, "rename", "?Load@CVersionInfo@@QAEHPAUHINSTANCE__@@@Z", "src2016:",
+     "CVersionInfo::Load(HINSTANCE) | GetModuleFileNameW + GetShortPathNameW, then the version-resource reader "
+     "0x00464050"),
+    (0x00464370, None, "rename",
+     "?GetFileVersionAsString@CVersionInfo@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ",
+     "str:", "CVersionInfo::GetFileVersionAsString() | queries the 'FileVersion' value through 0x00464200"),
+    (0x00467880, None, "rename", "?SetFullscreen@View@RBX@@QAEX_N@Z", "str:",
+     "RBX::View::SetFullscreen(bool) | compares the flag at +0x45, then calls View::changeResolution 0x00467ae0 "
+     "('Done View::changeResolution') after GetWindowLongA(GWL_STYLE), or View::restoreResolution 0x004676a0 "
+     "('Start View::restoreResolution'); PLAYER only"),
 ]
 
 

@@ -4352,3 +4352,69 @@ struct __cppobj RBX::Reflection::SignatureDescriptor::Item
   unsigned __int8 defaultValue[68];     ///< RBX::Reflection::Variant
 };
 
+/* 625 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem> : RBX::Instance
+{
+};
+
+/* 626 */
+struct __cppobj RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>
+{
+};
+
+/* 627 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0> : RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0>
+{
+};
+
+/* 628 */
+struct __cppobj RBX::Reflection::Metadata::Item : RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0>
+{
+  bool browsable;
+  bool deprecated;
+  bool backend;
+  unsigned __int8 gap_63[1];
+  unsigned __int8 description[28];      ///< std::string
+};
+
+/* 629 */
+struct __cppobj RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance> : RBX::Reflection::Metadata::Item
+{
+};
+
+/* 630 */
+struct __cppobj RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>
+{
+};
+
+/* 631 */
+struct __cppobj RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0> : RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0>
+{
+};
+
+/* 632 */
+struct __cppobj RBX::Reflection::Metadata::Class : RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0>
+{
+  int explorerOrder;
+  int explorerImageIndex;
+  unsigned __int8 preferredParent[28];  ///< std::string
+};
+
+/* 633 */
+struct __cppobj RBX::Sibling<XmlAttribute>
+{
+  XmlAttribute *next;
+};
+
+/* 634 */
+struct __cppobj RBX::Allocator<XmlAttribute>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 635 */
+struct __cppobj XmlAttribute : RBX::Sibling<XmlAttribute>, XmlNameValuePair
+{
+  unsigned __int8 gap_4[4];
+};
+

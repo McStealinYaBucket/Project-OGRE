@@ -24,13 +24,14 @@
    rounds each): PLAYER +51/-24, STUDIO +59/-32; every loss is a twin callee pairing.
    Removed 2026-11-24: shared_ptr<DescribedBase>::operator= and enable_shared_from_this<DescribedBase>::
    shared_from_this, which ClientBase/ReflectionMetadata.cpp (the real 2013 shell code) now instantiates
-   (both resolve to its object in the PLAYER map). */
+   (both resolve to its object in the PLAYER map).
+   Removed 2026-11-24 (wave 11): ~shared_ptr<StandardOut>, which Win/LogManager.cpp (ReportEvent) now
+   instantiates. */
 
 #include "V8Tree/Instance.h"
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/RunService.h"
 #include "V8DataModel/Script.h"
-#include "Util/standardout.h"
 #include "rbx/Tasks/Coordinator.h"
 
 #include <new>
@@ -42,7 +43,6 @@ namespace OgreShellStandIn {
 	{
 		boost::shared_ptr<RBX::Instance> instance;              // ~ 73/0 0x00488850 -> 0x00405b50; = 40/0 -> 0x00469520
 		std::vector<boost::shared_ptr<RBX::Instance> > instances; // resize 34/0 -> 0x004226f0; _Destroy_range 5/0 -> 0x00427f30; erase 1/0 -> 0x00426170
-		boost::shared_ptr<RBX::StandardOut> standardOut;        // ~ 7/0 0x00628a60 -> 0x00405b50
 		boost::weak_ptr<RBX::DataModel> dataModel;              // lock 6/0 0x0063f330 -> 0x00439eb0
 		boost::function0<void> function;                        // assign_to_own 3/0 0x007a68d0 -> 0x00437a90
 		boost::shared_ptr<RBX::RunService> runService;          // shared_from 2/0, = 1/0 0x0064f210
@@ -58,7 +58,6 @@ namespace OgreShellStandIn {
 		u.instance = v.instance;
 		u.instances.resize(v.instances.size());
 		u.instances.erase(u.instances.begin());
-		u.standardOut.reset();
 		u.dataModel.lock();
 		new (raw) boost::function0<void>(v.function);          // copy ctor only: function0::operator= is native-owned (0/1)
 		u.runService = RBX::shared_from(r);

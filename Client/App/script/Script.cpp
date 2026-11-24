@@ -49,7 +49,7 @@ namespace {
 } // anonymous namespace
 
 REFLECTION_BEGIN();
-const Reflection::PropDescriptor<Script, ProtectedString> Script::prop_EmbeddedSourceCode("Source", category_Data, &Script::getEmbeddedCodeSafe, &Script::setEmbeddedCode, Reflection::PropertyDescriptor::STANDARD, Security::RobloxPlace);
+const Reflection::PropDescriptor<Script, ProtectedString> Script::prop_EmbeddedSourceCode("Source", category_Data, &Script::getEmbeddedCodeSafe, &Script::setEmbeddedCode, Reflection::PropertyDescriptor::STANDARD, Security::LocalUser);
 REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).

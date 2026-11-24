@@ -42,6 +42,7 @@ EXP = os.path.join(ROOT, "ida", "exports")
 LIBS = ("lua", "raknet", "g3d", "boost")
 TARGETS = ("PLAYER", "STUDIO")
 WEAK = ("callgraph", "callgraph-guess", "body-match", "body-match-guess")
+FACT_TAGS = ("rtti:", "str:", "src2016:")    # hand-checked facts (tools/ida/match_names.py FACTS)
 CC = re.compile(r"\b__(?:thiscall|cdecl|stdcall|fastcall|clrcall)\s+")
 
 
@@ -182,16 +183,18 @@ def resolve(target, rows, names, starts, extents):
                     note.append(f"oracle disagrees ({kind}): {n['source']} {n['demangled'][:120]}")
                     rep[f"oracle disagrees, {kind} name, status {status}"] += 1
                     notes["dis-" + kind].append((a, pick["demangled"] or pick["name"], n["demangled"], status))
-        elif n and n["source"] == "rtti:" and status in ("identical", "located") and extents.get(a, 0) > 8 \
+        elif n and n["source"] in FACT_TAGS and status in ("identical", "located") and extents.get(a, 0) > 8 \
                 and n["name"] not in {r["name"] for r in rs} \
                 and not any(agree(r["demangled"] or r["name"], n["demangled"]) == "exact" for r in rs):
             # a vftable-slot / throw-info fact (tools/ida/match_names.py, rtti:) names another instance of the
             # same body: e.g. PLAYER 0x0044d400 throws bad_placement_any_cast, not the boost-iostreams
             # throw_exception<std::exception> it is byte-identical to apart from addresses (wave10). Bodies of 8
-            # bytes or less are /OPT:ICF folds (0x0066ee10 `ret 0Ch`: raiseEventInvocation + a RakNet body): kept
+            # bytes or less are /OPT:ICF folds (0x0066ee10 `ret 0Ch`: raiseEventInvocation + a RakNet body): kept.
+            # wave11: str:/src2016: facts too (STUDIO 0x006ab080 is G3D::setAssertionHook, a 10-byte global store,
+            # not the "located" Vector3(const Vector3int32&))
             status = "conflict"
-            note.append(f"rtti fact disagrees: {n['demangled'][:120]}")
-            rep["rtti fact disagrees"] += 1
+            note.append(f"{n['source'][:-1]} fact disagrees: {n['demangled'][:120]}")
+            rep[n["source"][:-1] + " fact disagrees"] += 1
         rep["status " + status] += 1
         out.append({"address": "0x%08x" % a, "status": status, "library": pick["library"],
                     "version": pick["version"], "name": pick["name"], "demangled": pick["demangled"],

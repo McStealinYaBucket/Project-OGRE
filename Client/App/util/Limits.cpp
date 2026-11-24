@@ -33,27 +33,6 @@ namespace RBX { namespace Limits {
 		}
 	}
 
-	// mac: 0x149848 (54B, batch542): no limit (<= 0) admits everything.
-	bool Counter::canAdd(int n)
-	{
-		if (countLimit <= 0)
-			return true;
-		return getCurrentCount() + n <= countLimit;
-	}
-
-	// getCurrentCount 0x1497E4 (100B, batch542): once-guarded
-	// thread-specific counter value, 0 when unset.
-	boost::shared_ptr<Counter> Counter::current()
-	{
-		return safeCurrentValue();
-	}
-
-	int Counter::getCurrentCount()
-	{
-		boost::shared_ptr<Counter> current = Counter::current();
-		return current.get() != NULL ? current->count : 0;
-	}
-
 	// FUNCTION: PLAYER 0x009b9160
 	// FUNCTION: STUDIO 0x00a6b090
 	Countable::~Countable()
@@ -69,6 +48,29 @@ namespace RBX { namespace Limits {
 		counter = Counter::current();
 		if (counter)
 			counter->add(this);
+	}
+
+	// getCurrentCount 0x1497E4 (100B, batch542): once-guarded
+	// thread-specific counter value, 0 when unset.
+	boost::shared_ptr<Counter> Counter::current()
+	{
+		return safeCurrentValue();
+	}
+
+	int Counter::getCurrentCount()
+	{
+		boost::shared_ptr<Counter> current = Counter::current();
+		return current.get() != NULL ? current->count : 0;
+	}
+
+	// mac: 0x149848 (54B, batch542): no limit (<= 0) admits everything.
+	// FUNCTION: PLAYER 0x009b9680
+	// FUNCTION: STUDIO 0x00a6b5d0
+	int Counter::canAdd(int n)
+	{
+		if (countLimit > 0 && getCurrentCount() + n > countLimit)
+			return 0;
+		return 1;
 	}
 
 	// STUB: PLAYER 0x009b96b0

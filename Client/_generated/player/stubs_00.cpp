@@ -11,6 +11,14 @@ extern "C" void ogre_stub_00642850()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_00642850")
 
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::FileSystem::getUserDirectory(bool, enum RBX::FileSystemDir, char const *)
+// STUB: PLAYER 0x006ea4c0
+extern "C" void ogre_stub_006ea4c0()
+{
+	STUB(0x006ea4c0);
+}
+#pragma comment(linker, "/alternatename:?getUserDirectory@FileSystem@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_NW4FileSystemDir@2@PBD@Z=_ogre_stub_006ea4c0")
+
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: PLAYER 0x006fffc0
 extern "C" void ogre_stub_006fffc0()
@@ -82,6 +90,14 @@ extern "C" void ogre_stub_009c5ce0()
 	STUB(0x009c5ce0);
 }
 #pragma comment(linker, "/alternatename:??0CRenderSettings@RBX@@QAE@XZ=_ogre_stub_009c5ce0")
+
+// public: __thiscall G3D::Log::Log(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int)
+// STUB: PLAYER 0x009d5b70
+extern "C" void ogre_stub_009d5b70()
+{
+	STUB(0x009d5b70);
+}
+#pragma comment(linker, "/alternatename:??0Log@G3D@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z=_ogre_stub_009d5b70")
 
 // public: static class G3D::Log * __cdecl G3D::Log::common(void)
 // STUB: PLAYER 0x009d5c60

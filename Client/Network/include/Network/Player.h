@@ -19,6 +19,7 @@
 #include "rbx/rbxtime.h"
 #include "decomp.h"
 #include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace RBX {
@@ -30,11 +31,9 @@ namespace Network {
 
 	// SIZE 0x1d8
 	class Player
-		// 2013 RTTI says functionality 19 (RUNTIME: DescribedCreatable<...$0BD@...>). Switching to it
-		// renames the ??_E/??_G template bodies the CSVs pair by name, and FactoryProduct<Player>'s
-		// vftable and ??_G 0x00529050 leave 100% (measured 2026-11-13); kept at the default until
-		// the CSVs are regenerated with it.
-		: public DescribedCreatable<Player, Instance, sPlayer>
+		// 2013 RTTI: functionality 19 (RUNTIME, DescribedCreatable<...$0BD@...>).
+		: public DescribedCreatable<Player, Instance, sPlayer, Reflection::ClassDescriptor::RUNTIME>
+		, public Diagnostics::Countable<Player> // ctor 0x00550d40 increments 0x00dd9e08 after the base
 	{
 	public:
 		enum ChatMode
@@ -51,7 +50,8 @@ namespace Network {
 			MEMBERSHIP_OUTRAGEOUS_BUILDERS_CLUB = 3,
 		};
 
-		Player() {}
+		Player();
+		~Player();
 
 		shared_ptr<Instance> character;     // 0x60  dtor releases +0x64; PlayerChatLine and
 			// Teams::updateTeamColor read it. 2013 type unproven (setCharacter takes ModelInstance*).
@@ -61,7 +61,8 @@ namespace Network {
 		int dataComplexityLimit;            // 0x74  ctor 45000; getDataComplexityLimit 0x00527390
 		bool m_unk0x78;                     // 0x78  ctor false
 		rbx::signals::scoped_connection m_unk0x7c; // 0x7c  dtor 0x00483de0
-		rbx::signals::scoped_connection m_unk0x80; // 0x80  dtor 0x00483de0
+		rbx::signals::scoped_connection backendDiedSignalConnection; // 0x80  src2016:, onServiceProvider 0x00553a10 stores the
+			// connection of connectDiedSignalBackend to onCharacterDied here
 		rbx::signals::scoped_connection m_unk0x84; // 0x84  dtor 0x00483de0
 		boost::function<void()> teamStatusChangedCallback; // 0x88  src2016:, confirmed by setTeamColor 0x00535090
 			// (`if (f) f()` through function0<void>::operator() 0x00434c20)
@@ -83,13 +84,14 @@ namespace Network {
 		bool forceEarlySpawnLocationCalculation; // 0x108 ctor false; src2016:, confirmed by 0x00527890/0x005278a0
 		bool m_unk0x109;                    // 0x109 ctor false
 		std::string m_unk0x10c;             // 0x10c
-		undefined4 m_unk0x128;              // 0x128 ctor 0; the dtor operator-deletes it (scoped_ptr of a trivial type)
+		boost::scoped_ptr<undefined4> m_unk0x128; // 0x128 the dtor operator-deletes it and the ctor gives it an EH state
+			// (scoped_ptr of a trivially destructible type; pointee unproven)
 		shared_ptr<Instance> m_unk0x12c;    // 0x12c dtor releases +0x130; pointee type unproven
 		std::list<boost::function<void()> > m_unk0x134; // 0x134 _Buynode 0x00694940, clear 0x005352c0
 		Time m_unk0x140;                    // 0x140 ctor Time::now<0> 0x009bb680
 		rbx::remote_signal<void(std::string, std::string, std::string)> scriptSecurityErrorSignal; // 0x148
 		rbx::remote_signal<void(std::string, G3D::Vector3)> remoteInsertSignal;  // 0x150
-		rbx::remote_signal<void()> m_unk0x158;                                    // 0x158
+		rbx::remote_signal<void()> connectDiedSignalBackend;                      // 0x158 src2016:, onServiceProvider 0x00553a10
 		rbx::remote_signal<void(bool, int)> remoteFriendServiceSignal;            // 0x160
 		rbx::remote_signal<void()> m_unk0x168;                                    // 0x168
 		rbx::remote_signal<void(std::string)> statsAvailableSignal;               // 0x170
@@ -104,7 +106,7 @@ namespace Network {
 		// FactoryProduct<FriendService>::Creator with Network's include\Util/Object.h spelling, and
 		// PLAYER 0x004200e0/0x00422ee0 (include\util/object.h) drop to 92% (measured 2026-11-24).
 		rbx::signals::signal<void(shared_ptr<Instance>, int)> friendStatusChangedSignal; // 0x190
-		double m_unk0x198;                  // 0x198 ctor fldz/fstp qword (8-aligned)
+		Time lastActivityTime;              // 0x198 ctor fldz/fstp qword; src2016:, registerLocalPlayerNotIdle 0x005276b0 stores Time::now<0>
 		MembershipType membershipType;      // 0x1a0 ctor 0; get 0x00527440, set 0x00527800
 		int accountAge;                     // 0x1a4 ctor 0; setAccountAge 0x00527830
 		bool m_unk0x1a8;                    // 0x1a8 ctor false
@@ -142,6 +144,15 @@ namespace Network {
 		void setHasGroupBuildTools(bool value);
 
 		/*override*/ virtual void setName(const std::string& value); // vtable+0x14
+		/*override*/ virtual bool canClientCreate() { return true; }  // vtable+0x1c
+		/*override*/ virtual void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // vtable+0x20
+		/*override*/ virtual void verifySetParent(const Instance* newParent) const; // vtable+0x2c
+		/*override*/ virtual bool askAddChild(const Instance* instance) const { return true; } // vtable+0x3c
+
+		void onCharacterDied();
+		void doPeriodicIdleCheck();
+		void onCharacterChangedFrontend();
+		void registerLocalPlayerNotIdle();
 
 		void setForceEarlySpawnLocationCalculation();
 		bool calculatesSpawnLocationEarly() const;

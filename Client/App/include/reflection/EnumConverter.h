@@ -217,7 +217,7 @@ template<typename Enum> class EnumRegistrar;
 
 				if (enumToName.size()<=(size_t)value)
 					enumToName.resize(value+1, &RBX::Name::getNullName());
-				enumToName[value] = item->name;  // 2013: Descriptor::name is const Name* (no &}
+				enumToName[value] = &item->name;
 
 				if (enumToString.size()<=(size_t)value)
 					enumToString.resize(value+1);
@@ -227,7 +227,7 @@ template<typename Enum> class EnumRegistrar;
 					enumToItem.resize(value+1);
 				enumToItem[value] = item;
 
-				nameToEnum[item->name] = value;  // 2013: Descriptor::name is const Name* (no &}
+				nameToEnum[&item->name] = value;
 
 				enumCount++;
 				enumCountMSB = Math::computeMSB(enumCount);

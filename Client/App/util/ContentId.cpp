@@ -4,7 +4,7 @@
 
 #include "Util/ContentId.h"
 #include "Util/LegacyContentTable.h"
-#include "Reflection/Type.h"
+#include "reflection/Type.h"
 #include <boost/functional/hash.hpp>
 #include <algorithm>
 #include <cctype>

@@ -1,11 +1,7 @@
-/* reflection/Descriptor.h — reconstructed for October 2013.
-   Evidence: symbolled Studio 0.126 decompilation (F:\2013Decompile\exports\decomp\Refl_Descriptor.cpp.txt)
-     - ctor 0x15F1B0: layout { vftable, bool isDeprecated(+4), const Descriptor* preferred(+8),
-       const Name* name(+12) }; RBXCRASH() on lockedDown; RBXASSERT(!name.empty())
-     - dtor 0x44D670
-   2013 divergence from 2016: deprecated flag/preferred pointer are direct members
-   (2016 wraps them in an Attributes struct and adds scoped_ptr<bool> isReplicable/isOutdated,
-   which do NOT exist in the 2013 binary). */
+/* reflection/Descriptor.h -- October 2013. Layout { vftable, bool isDeprecated(+4), const Descriptor* preferred(+8),
+   const Name& name(+12) } (ctor 0x15F1B0 Mac, dtor 0x44D670). 2016 wraps the first two in Attributes and adds
+   scoped_ptr<bool> isReplicable/isOutdated, which 2013 lacks. 2013 asserts !this->name.empty() at line 58,
+   and reflection_property.cpp:92 !type.name.empty(): name is a reference to an interned Name. */
 
 #pragma once
 
@@ -21,9 +17,7 @@ namespace RBX
 		{
 			static void checkLockedDown()
 			{
-				// If this following assertion fails then you need to put your class
-				// into FactoryRegistrator::FactoryRegistrator() or somewhere else.
-				// Failure of this test is so severe that we want to catch it in production, too.
+				// Fails when a class is not registered in FactoryRegistrator; severe enough to crash in production.
 				if (lockedDown)
 					RBXCRASH();
 			}
@@ -39,16 +33,11 @@ namespace RBX
 				{}
 				static Attributes deprecated(const Descriptor& preferred)
 				{
-					Attributes result;
-					result.isDeprecated = true;
-					result.preferred = &preferred;
-					return result;
+					Attributes result; result.isDeprecated = true; result.preferred = &preferred; return result;
 				}
 				static Attributes deprecated()
 				{
-					Attributes result;
-					result.isDeprecated = true;
-					return result;
+					Attributes result; result.isDeprecated = true; return result;
 				}
 			};
 
@@ -56,26 +45,17 @@ namespace RBX
 
 			const bool isDeprecated;				// +4 (flattened Attributes member in the binary)
 			const Descriptor* const preferred;		// +8
-			const RBX::Name* name;					// +12 (binary stores Name*, not a reference)
+			const RBX::Name& name;					// +12
 
-			// STUB: PLAYER 0x00455710
-			// STUB: STUDIO 0x004113e0
+			// FUNCTION: PLAYER 0x00455710
+			// FUNCTION: STUDIO 0x004113e0
 			Descriptor(const char* name, Attributes attributes)
 				:isDeprecated(attributes.isDeprecated)
 				,preferred(attributes.preferred)
-				,name(RBX::Name::declare(name))
+				,name(*RBX::Name::declare(name))
 			{
 				checkLockedDown();
-				RBXASSERT(!this->name->str.empty());
-			}
-
-			Descriptor(const RBX::Name* name)
-				:isDeprecated(false)
-				,preferred(NULL)
-				,name(name)
-			{
-				checkLockedDown();
-				RBXASSERT(!this->name->str.empty());
+				RBXASSERT(!this->name.empty());
 			}
 
 			// STUB: PLAYER 0x00455810

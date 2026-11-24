@@ -64,7 +64,6 @@
 
 
 
-
 LOGGROUP(UseLuaMemoryPool);
 LOGVARIABLE(ScriptContext, 0);
 LOGVARIABLE(LuaProfiler, 0);
@@ -79,6 +78,7 @@ LOGVARIABLE(FullScriptCode, 255)
 // provider attach (the arm gates on != 0 and passes the byte value as
 // the span).
 LOGVARIABLE(LuaScriptTimeoutSeconds, 255)
+LOGVARIABLE(Network, 1)	// PLAYER byte 0x00d30f1b = 1; initializer 0x00a66090, after LuaScriptTimeoutSeconds's, before HttpQueue's
 // 0xFA9AFC/0xFA9B04 bytes = 0xFF in the 2013 PE (batch723/724; Initer
 // slots 0xFA9B00/0xFA9B08, registration InitFunc_480): attach/detach
 // script logging; declared byte-faithful for the provider-connection era.
@@ -393,23 +393,23 @@ REFLECTION_BEGIN();
 // mac: 0x1AA664 -- EventDesc "CamelCaseViolation": member offset 724, args
 // "object"/"member"/"script", security 4 (WritePlayer); the third signal
 // slot is shared_ptr<Instance> per the mangled EventDesc instantiation.
-static Reflection::EventDesc<ScriptContext, void(boost::shared_ptr<Instance>, std::string, boost::shared_ptr<Instance>)> event_CamelCaseViolation(&ScriptContext::camelCaseViolation, "CamelCaseViolation", "object", "member", "script", Security::WritePlayer);
+static Reflection::EventDesc<ScriptContext, void(boost::shared_ptr<Instance>, std::string, boost::shared_ptr<Instance>)> event_CamelCaseViolation(&ScriptContext::camelCaseViolation, "CamelCaseViolation", "object", "member", "script", Security::RobloxScript);
 // 0xFA6454 -- func_AddStarterScript wrapping addStarterScript 0x189990
 // (C1 landed): "assetId" int arg; security 4 (WritePlayer).
-static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<Instance>(int)> func_AddStarterScript(&ScriptContext::addStarterScript, "AddStarterScript", "assetId", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<Instance>(int)> func_AddStarterScript(&ScriptContext::addStarterScript, "AddStarterScript", "assetId", Security::LocalUser);
 
 // mac: 0x189BD8 -- func_RegisterRobloxLibrary: LibraryService::registerLibrary
 // (... /*force=*/true); security 4 (WritePlayer).
-static Reflection::BoundFuncDesc<ScriptContext, void(std::string, std::string)> func_RegisterRobloxLibrary(&ScriptContext::registerRobloxLibrary, "RegisterRobloxLibrary", "libraryName", "assetId", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, void(std::string, std::string)> func_RegisterRobloxLibrary(&ScriptContext::registerRobloxLibrary, "RegisterRobloxLibrary", "libraryName", "assetId", Security::RobloxScript);
 // mac: 0x189C0A -- func_RegisterLibrary: force = false (batch734); security 4.
-static Reflection::BoundFuncDesc<ScriptContext, void(std::string, std::string)> func_RegisterLibrary(&ScriptContext::registerLibrary, "RegisterLibrary", "libraryName", "assetId", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, void(std::string, std::string)> func_RegisterLibrary(&ScriptContext::registerLibrary, "RegisterLibrary", "libraryName", "assetId", Security::RobloxScript);
 // mac: 0x189C3C -- func_RegisterDevelopmentLibrary; security 4.
-static Reflection::BoundFuncDesc<ScriptContext, void(std::string, boost::shared_ptr<Instance>)> func_RegisterDevelopmentLibrary(&ScriptContext::registerDevelopmentLibrary, "RegisterDevelopmentLibrary", "libraryName", "scriptInstance", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, void(std::string, boost::shared_ptr<Instance>)> func_RegisterDevelopmentLibrary(&ScriptContext::registerDevelopmentLibrary, "RegisterDevelopmentLibrary", "libraryName", "scriptInstance", Security::RobloxScript);
 // member markLibrariesRegistered 0x189DFE (LibraryService::markLibrariesLoaded); security 4.
-static Reflection::BoundFuncDesc<ScriptContext, void()> func_MarkLibrariesRegistered(&ScriptContext::markLibrariesRegistered, "LibraryRegistrationComplete", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, void()> func_MarkLibrariesRegistered(&ScriptContext::markLibrariesRegistered, "LibraryRegistrationComplete", Security::RobloxScript);
 // 0xFA6560 -- func_AddCoreScript wrapping addCoreScript 0x189E1A
 // (C1 landed): assetId int, parent Object, name string; security 4.
-static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<Instance>(int, boost::shared_ptr<Instance>, std::string)> func_AddCoreScript(&ScriptContext::addCoreScript, "AddCoreScript", "assetId", "parent", "name", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<Instance>(int, boost::shared_ptr<Instance>, std::string)> func_AddCoreScript(&ScriptContext::addCoreScript, "AddCoreScript", "assetId", "parent", "name", Security::RobloxScript);
 // 0xFA659C -- propScriptsDisabled "ScriptsDisabled" (bound to the +246
 // bool; onChangedScriptEnabled = startPendingScripts, 0x18A304). Class
 // static; definition sits next to the GC props below (the binary's UI
@@ -418,27 +418,27 @@ static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<Instance>(int,
 
 // mac: 0x1AAB0F -- func_SetTimeout ("seconds"; wrapper 0xFA65C8).  Security 2
 // = RobloxPlace (2016 moved it to Plugin -- binary is authority).
-static Reflection::BoundFuncDesc<ScriptContext, void(double)> func_SetTimeout(&ScriptContext::setTimeout, "SetTimeout", "seconds", Security::RobloxPlace);
+static Reflection::BoundFuncDesc<ScriptContext, void(double)> func_SetTimeout(&ScriptContext::setTimeout, "SetTimeout", "seconds", Security::LocalUser);
 // func_GetHeapStats 0xFA65FC: "clearHighwaterMark" default true (binary
 // passes 1), security 4 (2016: RobloxScript -- binary is authority).
 // Result type is shared_ptr<const Tuple> per the binary's mangled
 // signature (the getSingleton spec lives at v8tree/EnumProperty.cpp:309).
-static Reflection::BoundFuncDesc<ScriptContext, shared_ptr<const Reflection::Tuple>(bool)> func_GetHeapStats(&ScriptContext::getHeapStats, "GetHeapStats", "clearHighwaterMark", true, Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, shared_ptr<const Reflection::Tuple>(bool)> func_GetHeapStats(&ScriptContext::getHeapStats, "GetHeapStats", "clearHighwaterMark", true, Security::RobloxScript);
 // func_GetScriptStats 0xFA6630 (batch757:704-716): arity-0 member
 // getScriptStatsNew 0x18A6AC, name string verbatim, security 4
 // (WritePlayer), descriptors templated <..., 0>; Statistics return
 // shared_ptr<const vector<Variant>> per the mangled ctor args.
-static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<const std::vector<Reflection::Variant> >()> func_GetScriptStats(&ScriptContext::getScriptStatsNew, "GetScriptStats", Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, boost::shared_ptr<const std::vector<Reflection::Variant> >()> func_GetScriptStats(&ScriptContext::getScriptStatsNew, "GetScriptStats", Security::RobloxScript);
 
 // (propLuaGcLimit/propLuaGcFrequency are class statics -- definitions in
 // the namespace section below, next to the class registrar.)
 // func_CollectScriptStats 0xFA66B8: "enable" default false, security 4.
-static Reflection::BoundFuncDesc<ScriptContext, void(bool)> func_CollectScriptStats(&ScriptContext::setCollectScriptStats, "SetCollectScriptStats", "enable", false, Security::WritePlayer);
+static Reflection::BoundFuncDesc<ScriptContext, void(bool)> func_CollectScriptStats(&ScriptContext::setCollectScriptStats, "SetCollectScriptStats", "enable", false, Security::RobloxScript);
 
 // mac: 0x1AAE44 -- EventDesc "Error": member offset 720, args
 // "message"/"stackTrace"/"script", security 1 (Plugin; 2016 carries None
 // -- 2013 binary is authority).
-static Reflection::EventDesc<ScriptContext, void(std::string, std::string, boost::shared_ptr<Instance>)> event_Error(&ScriptContext::errorSignal, "Error", "message", "stackTrace", "script", Security::Plugin);
+static Reflection::EventDesc<ScriptContext, void(std::string, std::string, boost::shared_ptr<Instance>)> event_Error(&ScriptContext::errorSignal, "Error", "message", "stackTrace", "script", Security::RobloxPlace);
 REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
@@ -453,8 +453,8 @@ namespace RBX {
 // BoundProp<int, READWRITE> bound to the +0xF8/+0xFC ints (InitFunc_123
 // member offsets 248/252, batch733).  Category string "Performance"
 // verbatim; flags 21 = PropertyDescriptor::UI; security 4 (WritePlayer).
-Reflection::BoundProp<int> ScriptContext::propLuaGcLimit("GarbageCollectionLimit", "Performance", &ScriptContext::gcFullStepThreshold, Reflection::PropertyDescriptor::UI, Security::WritePlayer);
-Reflection::BoundProp<int> ScriptContext::propLuaGcFrequency("GarbageCollectionFrequency", "Performance", &ScriptContext::gcFrequencyBase, Reflection::PropertyDescriptor::UI, Security::WritePlayer);
+Reflection::BoundProp<int> ScriptContext::propLuaGcLimit("GarbageCollectionLimit", "Performance", &ScriptContext::gcFullStepThreshold, Reflection::PropertyDescriptor::UI, Security::RobloxScript);
+Reflection::BoundProp<int> ScriptContext::propLuaGcFrequency("GarbageCollectionFrequency", "Performance", &ScriptContext::gcFrequencyBase, Reflection::PropertyDescriptor::UI, Security::RobloxScript);
 
 // propScriptsDisabled 0xFA659C ("ScriptsDisabled", C1 landed): binary UI
 // flags byte = 21 (the same value the GC props' "Flags are 21" note
@@ -463,7 +463,7 @@ Reflection::BoundProp<int> ScriptContext::propLuaGcFrequency("GarbageCollectionF
 // not captured in the batch733/734 prop entries -- category_Data stands
 // in (deterministic, cosmetic-only). The 4th ctor arg is the onChanged
 // hook (onChangedScriptEnabled = tail-call startPendingScripts 0x18A304).
-Reflection::BoundProp<bool> ScriptContext::propScriptsDisabled("ScriptsDisabled", category_Data, &ScriptContext::scriptsDisabled, &ScriptContext::onChangedScriptEnabled, Reflection::PropertyDescriptor::UI, Security::RobloxPlace);
+Reflection::BoundProp<bool> ScriptContext::propScriptsDisabled("ScriptsDisabled", category_Data, &ScriptContext::scriptsDisabled, &ScriptContext::onChangedScriptEnabled, Reflection::PropertyDescriptor::UI, Security::LocalUser);
 
 
 
@@ -559,7 +559,7 @@ lua_State* ScriptContext::getGlobalState(Security::Identities identity)
 
 		// Scripts with WritePlayer rights get their own VM (index 1).
 		int vm_index = 0;
-		if (Security::Context::isInRole(identity, Security::WritePlayer))
+		if (Security::Context::isInRole(identity, Security::RobloxScript))
 			vm_index = 1;
 		RBXASSERT(globalStates[vm_index]);
 		return globalStates[vm_index];

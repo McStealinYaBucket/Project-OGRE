@@ -505,7 +505,8 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
         for k in relocs[bisect.bisect_left(relocs, r):bisect.bisect_left(relocs, r + n - 3)]:
             vr = struct.unpack_from("<I", rimg, k - rbase)[0]
             vo = struct.unpack_from("<I", ob, k - r)[0]
-            if vr not in view and rtext[0] <= vr < rtext[1] and orig.in_text(vo) and vo not in kept:
+            if view.get(vr, (0, None, None))[1:] == (None, None) and rtext[0] <= vr < rtext[1] and orig.in_text(vo) \
+                    and vo not in kept:  # no PDB entity, or a nameless one (an LTCG __ehhandler$)
                 if len(p) > 3 or not o <= vo < o + p[2]:  # not a library function's own jump table (`jmp [table+eax*4]`)
                     anon_code.add(vo)  # e.g. a /GS __ehhandler$ stub: code with no PDB symbol (see below)
                 continue
@@ -524,6 +525,9 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
                 continue
             note(node, vo - off)
     for node, oas in (extra or {}).items():  # aligned_refs
+        if node is None:  # unnamed /GS __ehhandler$ stubs both sides push (aligned_refs)
+            anon_code.update(oa for oa in oas if orig.in_text(oa) and oa not in kept)
+            continue
         for oa in oas:
             note(node, oa)
     # vftable slots (RTTI class + slot index): a vftable paired above pairs its slot functions, up to
@@ -619,6 +623,11 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
     return sorted(rows)
 
 
+# mov edx,[esp+8]; lea eax,[edx+N]: the head of a /GS __ehhandler$ stub (shell near misses, wave 11:
+# 0x0040c2c0 call_once pushes 0x00a52069)
+EH_STUB = bytes.fromhex("8b5424088d42")
+
+
 def aligned_refs(orig, exe, json_path, view):
     """{our node: [original address, ...]} from the reference lines a reccmp --json run shows as changed:
     in a replaced block with as many original as recompiled lines, a line pair counts only when both
@@ -669,6 +678,9 @@ def aligned_refs(orig, exe, json_path, view):
                     for vo, vr in zip(absops(oi), absops(ri)):
                         if vo is None or vr is None or vo == vr:
                             continue
+                        if view.get(vr, (0, None, None))[1:] == (None, None) and rimg[vr - rbase:vr - rbase + 6] == EH_STUB == orig.b(vo, 6):
+                            refs.setdefault(None, []).append(vo)  # an unnamed __ehhandler$ stub on both sides
+                            continue
                         j = bisect.bisect_right(starts, vr) - 1
                         if j < 0:
                             continue
@@ -714,8 +726,8 @@ def funcinfo_targets(im):
 def true_size(im, a, size, nxt):
     """IDA's extent of the function at a, extended to what the original's .obj holds (bounded by nxt, the
     next IDA function start): (1) over the in-function jump table right after it (4-aligned dwords that
-    point into the function; IDA stops before the table, e.g. Math::matrixTiltQuadrant 0x00758320 245 ->
-    264); (2) over the fall-through tail IDA cut off after a call it took for noreturn (the bytes up to
+    point into the function, then any byte index table; IDA stops before the table, e.g.
+    Math::matrixTiltQuadrant 0x00758320 245 -> 264); (2) over the fall-through tail IDA cut off after a call it took for noreturn (the bytes up to
     nxt, minus int3 padding, decode to code ending in ret; e.g. Bridge<T>::on_newindex 0x00670170, cut
     at its call to the thrower, really 0x30)."""
     import capstone
@@ -725,6 +737,11 @@ def true_size(im, a, size, nxt):
     while q + 4 <= nxt and a <= im.u32(q) < end:
         q += 4
     if q > p:
+        # and the byte index table VC9 puts after it (indices below the dword count, up to the int3
+        # padding: LogManager::ReportEvent 0x00440a70, 0x00440bb8-0x00440bd0)
+        nd = (q - p) // 4
+        while q < nxt and im.b(q, 1)[0] < nd:
+            q += 1
         return q - a
     tail = im.b(end, max(nxt - end, 0)).rstrip(b"\xcc")
     if a & 15 or not tail or len(tail) > 64 or b"\xcc" in tail:  # int3 inside: padding before code IDA did not define

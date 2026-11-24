@@ -141,9 +141,22 @@ CLASSES = [
     # 0x006f9e40 / 0x006dc260; SignatureDescriptor::Item ctors 0x0079f820 / 0x0073e060 and 0x0079ffa0 / 0x0073e7c0.
     # Not yet: ReflectionMetadata's shell classes (vftables 100%, but no ctor/dtor row: the ctors are inlined
     # into Creator::create, 0.899), Network::Player/Players (SIZE asserted, ctor/dtor unpaired; network-5f.md)
+    # (wave11: the tree now asserts all three, DECOMP_SIZE_ASSERT in type.cpp / reflection_property.cpp, so they
+    # meet the usual bar)
     "RBX::Reflection::Type", "RBX::Reflection::EnumDescriptor", "RBX::Reflection::SignatureDescriptor::Item",
+    # wave11 sync (sweep18, build/sweep18/P-final.json / S-final.json 100%), PLAYER / STUDIO: Reflection::Descriptor
+    # ctor 0x00455710 / 0x004113e0 (was a base of Type only); the shell's Reflection::Metadata::Item (// SIZE 0x80)
+    # ctor 0x00402d10 / 0x00474000 and Metadata::Class (// SIZE 0xa4) ctor 0x00402e20 / 0x00474110 (shell-5k-2);
+    # XmlAttribute (DECOMP_SIZE_ASSERT 0x18) ctors 0x00566f00 / 0x0061d2e0 / 0x006289c0, STUDIO 0x005ca900 /
+    # 0x006dce90 / 0x007495c0. PLAYER only: ToggleFullscreenVerb (// SIZE 0x14, ctor 0x00439750; the STUDIO shell
+    # has no GameVerbs) and Network::Player (DECOMP_SIZE_ASSERT 0x1d8, ctor 0x00550d40; STUDIO ctor below 100%).
+    # Not yet: LogManager (dtor 0x00440780 100%, no size annotation), MainLogManager (ctor 84.7),
+    # Network::Players / Server (SIZE asserted, ctor/dtor below 100%; network-5f-2)
+    "RBX::Reflection::Descriptor", "RBX::Reflection::Metadata::Item", "RBX::Reflection::Metadata::Class",
+    "XmlAttribute", "RBX::ToggleFullscreenVerb", "RBX::Network::Player",
 ]
-PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
+# proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb", "RBX::Network::Player"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

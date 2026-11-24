@@ -14,6 +14,7 @@
 #pragma once
 
 #include <string>
+#include <iosfwd>
 #include "rbx/atomic.h"
 #include "boost/utility.hpp"
 #include <boost/unordered_map.hpp>
@@ -91,7 +92,7 @@ namespace RBX {
 		bool operator<(const Name& other) const { return str < other.str; }
 		int compare(const std::string& other) const { return str.compare(other); }
 		int compare(const Name& other) const { return str.compare(other.str); }
-		std::string toString() const { return str; }
+		const std::string& toString() const { return str; }	// 2013: by reference (ReflectionMetadata lookups pass &name->str, no copy)
 		const char* c_str() const { return str.c_str(); }
 		// 2013: the null Name, compared by address (isNullClassName 0x00632290 compares className()
 		// with a second getNullName() call).
@@ -104,5 +105,8 @@ namespace RBX {
 
 		void setOrderIndex();							// 0x231AF4
 	};
+
+	// PLAYER 0x006131f0 (tail jump to operator<<(ostream&, const string&)). Defined in Name.cpp.
+	std::ostream& operator<<(std::ostream& stream, const Name& name);
 
 } // namespace RBX

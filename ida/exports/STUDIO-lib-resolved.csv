@@ -831,7 +831,7 @@ address,status,library,version,name,demangled,names,note
 0x006aad50,span,G3D,8.00-roblox,_ZN3G3D9_internalL18createErrorMessageEPKcRKSsS2_iRSsS5_,"G3D::_internal::createErrorMessage(char const*, std::string const&, char const*, int, std::string&, std::string&)",_ZN3G3D9_internalL18createErrorMessageEPKcRKSsS2_iRSsS5_,
 0x006aafb0,span,G3D,8.00-roblox,sub_6AAFB0,,sub_6AAFB0,
 0x006ab020,span,G3D,8.00-roblox,sub_6AB020,,sub_6AB020,
-0x006ab080,located,G3D,8.00-roblox,??0Vector3@G3D@@QAE@ABVVector3int32@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int32 const &),??0Vector3@G3D@@QAE@ABVVector3int32@1@@Z,
+0x006ab080,conflict,G3D,8.00-roblox,??0Vector3@G3D@@QAE@ABVVector3int32@1@@Z,public: __thiscall G3D::Vector3::Vector3(class G3D::Vector3int32 const &),??0Vector3@G3D@@QAE@ABVVector3int32@1@@Z,"src2016 fact disagrees: void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *,class std::basic_string<char,struct std::char_traits<ch"
 0x006ab090,span,G3D,8.00-roblox,sub_6AB090,,sub_6AB090,
 0x006ab0a0,span,G3D,8.00-roblox,sub_6AB0A0,,sub_6AB0A0,
 0x006ab160,span,G3D,8.00-roblox,sub_6AB160,,sub_6AB160,

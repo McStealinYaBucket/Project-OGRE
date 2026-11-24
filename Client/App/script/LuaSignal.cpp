@@ -64,7 +64,7 @@ namespace RBX { namespace Lua {
 		lua_State* L)
 	{
 		std::string s = "Signal ";
-		s += object.event->name->str;
+		s += object.event->name.str;
 		lua_pushlstring(L, s.c_str(), s.size());
 		return 1;
 	}
@@ -258,7 +258,7 @@ namespace RBX { namespace Lua {
 		if (strcmp(name, "connectFirst") == 0)
 		{
 			RBX::Security::Context::current().requirePermission(
-				RBX::Security::RobloxPlace, NULL);
+				RBX::Security::LocalUser, NULL);
 			StandardOut::singleton()->print(MESSAGE_WARNING,
 				"connectFirst is deprecated");
 			lua_pushcfunction(L, EventBridge::connect);
@@ -267,7 +267,7 @@ namespace RBX { namespace Lua {
 		if (strcmp(name, "connectLast") == 0)
 		{
 			RBX::Security::Context::current().requirePermission(
-				RBX::Security::RobloxPlace, "connectLast");
+				RBX::Security::LocalUser, "connectLast");
 			StandardOut::singleton()->print(MESSAGE_WARNING,
 				"connectLast is deprecated");
 			lua_pushcfunction(L, EventBridge::connect);

@@ -9,6 +9,8 @@ namespace RBX
 {
 	namespace Security
 	{
+		// 2013: 10 identities in both targets, StudioPlugin unconditional (isInRole PLAYER 0x0079f650 and
+		// STUDIO 0x008b5c60: cmp identity,9; slot 6 shares LocalGUI_/CmdLine_'s arm).
 		typedef enum { 
 			Anonymous = 0, 
 			LocalGUI_,					// Any action initiated by Roblox Studio or the mouse 
@@ -16,24 +18,22 @@ namespace RBX
 			GameScriptInRobloxPlace_,	// Execution of a BaseScript object inside any DataModel, if the place was authored by Roblox
 			RobloxGameScript_,			// Execution of a BaseScript object written by Roblox inside any DataModel
 			CmdLine_,					// Any script executed from the Studio command line
-#if defined(RBX_STUDIO_BUILD)
 			StudioPlugin,				// Any Studio plug-in script
-#endif
 			COM,						// Scripts executed via the COM API (usually comes from roblox.com)
 			WebService,					// Scripts executed via the Web Service API (usually comes from roblox.com)
 			Replicator_,				// Receiving data via replication
 			COUNT_Identities            // Not a true identity. Used for enumeration
 		} Identities;
 
+		// 2013 values (isInRole 0x0079f650 jump table; ReflectionMetadata writer 0x00448034): no Plugin.
 		typedef enum { 
 			None				=0,     // Any identity can access this feature, including in-game scripts
-            Plugin              =1,     // Second-lowest access level, just above in-game script
-			RobloxPlace			=2,     // A Roblox place that we own. Therefore scripts are more trusted and we allow
+			RobloxPlace			=1,     // A Roblox place that we own. Therefore scripts are more trusted and we allow
 										// preliminary features
-			LocalUser			=3,     // non-game permission. Usually for IDE
-			WritePlayer			=4,		// Permissions for changing player name, userId, etc.
-			RobloxScript		=5,     // A script, such as a CoreScript, that we run inside a game
-			Roblox				=6,     // Highest level of permission
+			LocalUser			=2,     // non-game permission. Usually for IDE
+			WritePlayer			=3,		// Permissions for changing player name, userId, etc.
+			RobloxScript		=4,     // A script, such as a CoreScript, that we run inside a game
+			Roblox				=5,     // Highest level of permission
 
 #ifdef RBX_TEST_BUILD
 			TestLocalUser       =None,  //For exposing Lua functions to the ReleaseTest build

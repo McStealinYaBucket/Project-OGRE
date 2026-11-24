@@ -69,7 +69,7 @@ namespace Network {
 
 	// SIZE 0x1f8
 	class Players
-		: public DescribedCreatable<Players, Instance, sPlayers>
+		: public DescribedNonCreatable<Players, Instance, sPlayers> // 2013 RTTI: NonFactoryProduct, 27
 		, public Service
 	{
 	public:

@@ -200,7 +200,7 @@ namespace RBX
 					if (iter == descriptors.end())
 					{
 						descriptors.insert(iter, descriptor);
-						descriptorLookup[descriptor->name->c_str()] = descriptor;
+						descriptorLookup[descriptor->name.c_str()] = descriptor;
 					}
 					else
 					{
@@ -210,12 +210,12 @@ namespace RBX
 						{
 							// Replace it
 							*iter = descriptor;
-							descriptorLookup[descriptor->name->c_str()] = descriptor;
+							descriptorLookup[descriptor->name.c_str()] = descriptor;
 						}
 						else if ((*iter)->name != descriptor->name)
 						{
 							descriptors.insert(iter, descriptor);
-							descriptorLookup[descriptor->name->c_str()] = descriptor;
+							descriptorLookup[descriptor->name.c_str()] = descriptor;
 						}
 						else
 						{
@@ -242,7 +242,7 @@ namespace RBX
 					{
 						// add a new one
 						descriptors.insert(iter, descriptor);
-						descriptorLookup[descriptor->name->c_str()] = descriptor;
+						descriptorLookup[descriptor->name.c_str()] = descriptor;
 					}
 					else if (*iter == descriptor) 
 					{
@@ -253,7 +253,7 @@ namespace RBX
 					{
 						// add a new one
 						descriptors.insert(iter, descriptor);
-						descriptorLookup[descriptor->name->c_str()] = descriptor;
+						descriptorLookup[descriptor->name.c_str()] = descriptor;
 					}
 					else
 					{
@@ -262,7 +262,7 @@ namespace RBX
 						//       required for some legacy things, like BoolValue
 						replaceable = *iter;
 						*iter = descriptor;
-						descriptorLookup[descriptor->name->c_str()] = descriptor;
+						descriptorLookup[descriptor->name.c_str()] = descriptor;
 						if (MemberDescriptor::memberHidingHook)
 							(*MemberDescriptor::memberHidingHook)(descriptor, replaceable);
 					}
@@ -280,13 +280,13 @@ namespace RBX
 						MemberDescriptorType* desc = *iter;
 						if (desc==descriptor)
 							goto SKIP;
-						int compare = descriptor->name->compare(*desc->name);
+						int compare = descriptor->name.compare(desc->name);
 						if (compare<0)
 							break;
 						if (compare==0)
 						{
 							// This descriptor name already exists in a different class
-							compare = descriptor->owner.name->compare(*desc->owner.name);
+							compare = descriptor->owner.name.compare(desc->owner.name);
 							// Enforce order using class name
 							if (compare<0)
 								break;

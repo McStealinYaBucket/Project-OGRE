@@ -497,7 +497,7 @@ namespace Lua {
 	void LibraryService::registerLibrary(const std::string& name, const std::string& url, bool force)
 	{
 		if (name.find("Rbx") == 0)
-			Security::Context::current().requirePermission(Security::WritePlayer);
+			Security::Context::current().requirePermission(Security::RobloxScript);
 
 		std::map<std::string, LibraryDefinition>::iterator found = definitions.find(name);
 		if (found != definitions.end()

@@ -1,31 +1,47 @@
 # PLAYER: unresolved externals with no stub (reason, decorated, demangled). Generated.
-claimed	??6RBX@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AAV12@ABVName@0@@Z	class std::basic_ostream<char, struct std::char_traits<char>> & __cdecl RBX::operator<<(class std::basic_ostream<char, struct std::char_traits<char>> &, class RBX::Name const &)
+data	?CrashReporterInit@FLog@@3EA	unsigned char FLog::CrashReporterInit
 data	?GfxClustersFull@FLog@@3EA	unsigned char FLog::GfxClustersFull
 data	?JointLifetime@FLog@@3EA	unsigned char FLog::JointLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
 data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
-data	?Network@FLog@@3EA	unsigned char FLog::Network
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
+data	?Verbs@FLog@@3EA	unsigned char FLog::Verbs
 data	?aaSamples@CRenderSettings@RBX@@1W4AASamples@12@A	protected: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
 unknown	??$convert@VVector2int16@G3D@@@Variant@Reflection@RBX@@QAEAAVVector2int16@G3D@@XZ	public: class G3D::Vector2int16 & __thiscall RBX::Reflection::Variant::convert<class G3D::Vector2int16>(void)
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
+unknown	??0CrashReporter@@QAE@XZ	public: __thiscall CrashReporter::CrashReporter(void)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
+unknown	??1CrashReporter@@QAE@XZ	public: __thiscall CrashReporter::~CrashReporter(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
 unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void __thiscall RakNet::TCPInterface::DeallocatePacket(struct RakNet::Packet *)
 unknown	?Final@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Final(void)
+unknown	?GenerateDmpFileName@CrashReporter@@QAEJPADH_N1@Z	public: long __thiscall CrashReporter::GenerateDmpFileName(char *, int, bool, bool)
+unknown	?GetFileVersionAsString@CVersionInfo@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ	public: class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall CVersionInfo::GetFileVersionAsString(void)
 unknown	?GetHash@CSHA1@@QBEPAEXZ	public: unsigned char * __thiscall CSHA1::GetHash(void) const
+unknown	?IsVistaPlus@@YA_NXZ	bool __cdecl IsVistaPlus(void)
+unknown	?Load@CVersionInfo@@QAEHPAUHINSTANCE__@@@Z	public: int __thiscall CVersionInfo::Load(struct HINSTANCE__*)
+unknown	?ProcessException@CrashReporter@@UAEJPAU_EXCEPTION_POINTERS@@_N@Z	public: virtual long __thiscall CrashReporter::ProcessException(struct _EXCEPTION_POINTERS *, bool)
 unknown	?RegisterFlag@FLog@@YAHPBDPA_NPAPA_NW4FastVarType@1@@Z	int __cdecl FLog::RegisterFlag(char const *, bool *, bool **, enum FLog::FastVarType)
 unknown	?Reset@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Reset(void)
 unknown	?Send@PacketizedTCP@RakNet@@QAEXPBDIABUSystemAddress@2@_N@Z	public: void __thiscall RakNet::PacketizedTCP::Send(char const *, unsigned int, struct RakNet::SystemAddress const &, bool)
 unknown	?SendList@PacketizedTCP@RakNet@@QAE_NPAPBDPBHHABUSystemAddress@2@_N@Z	public: bool __thiscall RakNet::PacketizedTCP::SendList(char const **, int const *, int, struct RakNet::SystemAddress const &, bool)
+unknown	?SetFullscreen@View@RBX@@QAEX_N@Z	public: void __thiscall RBX::View::SetFullscreen(bool)
+unknown	?Start@CrashReporter@@QAEXXZ	public: void __thiscall CrashReporter::Start(void)
 unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned char *, unsigned int)
+unknown	?UploadCrashEventFile@DumpErrorUploader@@SAXPAU_EXCEPTION_POINTERS@@@Z	public: static void __cdecl DumpErrorUploader::UploadCrashEventFile(struct _EXCEPTION_POINTERS *)
+unknown	?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z	public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
+unknown	?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z	public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
+unknown	?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ	public: static class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::Log::getCommonLogFilename(void)
 unknown	?getDataSize@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBEHPBVDescribedBase@23@@Z	public: virtual int __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getDataSize(class RBX::Reflection::DescribedBase const *) const
 unknown	?getSalt@ProtectedString@RBX@@QBEPBDXZ	public: char const * __thiscall RBX::ProtectedString::getSalt(void) const
 unknown	?hasStringValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBE_NXZ	public: virtual bool __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::hasStringValue(void) const
 unknown	?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z	public: void __thiscall G3D::Log::println(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
+unknown	?setAssertionHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z	void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+unknown	?setFailureHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z	void __cdecl G3D::setFailureHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+unknown	?setLogProvider@Log@RBX@@SAXPAVILogProvider@2@@Z	public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
 unparsed	?slot_exception_handler@signals@rbx@@3V?$function@$$A6AXAAVexception@std@@@Z@boost@@A	class boost::function<void __cdecl(class std::exception &)> rbx::signals::slot_exception_handler
 unparsed	_LZ4_compressHC_limitedOutput	
 unparsed	_LZ4_compress_limitedOutput	

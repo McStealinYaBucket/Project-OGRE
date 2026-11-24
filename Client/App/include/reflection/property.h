@@ -286,7 +286,7 @@ namespace RBX
 			}
 
 			inline const RBX::Name& getName() const { 
-				return *descriptor->name; 
+				return descriptor->name; 
 			}
 
 			template<typename V>
@@ -429,7 +429,7 @@ namespace RBX
             static bool isRefPropertyDescriptor(const Reflection::Type& type)
             {
                 static const RBX::Name* name = RBX::Name::lookup("Object");
-                return (type.name == name);
+                return (&type.name == name);
             }
 
 			static bool isRefPropertyDescriptor(const PropertyDescriptor& descriptor)

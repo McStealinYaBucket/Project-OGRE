@@ -6984,6 +6984,165 @@
    "base": false,
    "unique": "UItem@SignatureDescriptor@Reflection@RBX@@"
   },
+  "RBX::Reflection::Descriptor": {
+   "size": 16,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 4,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "isDeprecated",
+     "offset": 4,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "preferred",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::Descriptor",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDescriptor@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Metadata::Item": {
+   "size": 128,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "browsable",
+     "offset": 96,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "deprecated",
+     "offset": 97,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "backend",
+     "offset": 98,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "description",
+     "offset": 100,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VItem@Metadata@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Metadata::Class": {
+   "size": 164,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0>",
+     "offset": 0,
+     "size": 128,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "explorerOrder",
+     "offset": 128,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "explorerImageIndex",
+     "offset": 132,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "preferredParent",
+     "offset": 136,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VClass@Metadata@Reflection@RBX@@"
+  },
+  "XmlAttribute": {
+   "size": 24,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Sibling<XmlAttribute>",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "XmlNameValuePair",
+     "offset": 8,
+     "size": 16,
+     "empty": false
+    },
+    {
+     "name": "RBX::Allocator<XmlAttribute>",
+     "offset": 24,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VXmlAttribute@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -7067,47 +7226,6 @@
    "members": [],
    "base": true,
    "unique": "V?$DescribedNonCreatable@VServiceProvider@RBX@@VInstance@2@$E?sServiceProvider@2@3QBDB$0BL@$0A@@RBX@@"
-  },
-  "RBX::Reflection::Descriptor": {
-   "size": 16,
-   "vftable": true,
-   "virtual_bases": false,
-   "bases": [
-    {
-     "name": "boost::noncopyable_::noncopyable",
-     "offset": 4,
-     "size": 1,
-     "empty": true
-    }
-   ],
-   "members": [
-    {
-     "name": "isDeprecated",
-     "offset": 4,
-     "size": 1,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_BOOL08"
-    },
-    {
-     "name": "preferred",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Reflection::Descriptor",
-     "scalar": null
-    },
-    {
-     "name": "name",
-     "offset": 12,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Name",
-     "scalar": null
-    }
-   ],
-   "base": true,
-   "unique": "VDescriptor@Reflection@RBX@@"
   },
   "RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::EventDescriptor>": {
    "size": 96,
@@ -9154,6 +9272,65 @@
    "base": true,
    "unique": "V?$Allocator@VBlockBlockContact@RBX@@@RBX@@"
   },
+  "RBX::DescribedNonCreatable<RBX::Reflection::Metadata::Item, RBX::Instance, char const *const RBX::Reflection::Metadata::sItem, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VItem@Metadata@Reflection@RBX@@VInstance@4@$E?sItem@234@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, 27, 0>": {
+   "size": 128,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 128,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VClass@Metadata@Reflection@RBX@@VItem@234@$E?sClass@234@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Sibling<XmlAttribute>": {
+   "size": 4,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "next",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "XmlAttribute",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$Sibling@VXmlAttribute@@@RBX@@"
+  },
+  "RBX::Allocator<XmlAttribute>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Allocator@VXmlAttribute@@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -9895,6 +10072,38 @@
    "base": true,
    "unique": "V?$Described@VItem@Stats@RBX@@$E?sStatsItem@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sStatsItem@Stats@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sItem, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VItem@Metadata@Reflection@RBX@@$E?sItem@234@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sItem@Metadata@Reflection@2@3QBDB@4@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Reflection::Metadata::Class, char const *const RBX::Reflection::Metadata::sClass, RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>, 27, 0>": {
+   "size": 128,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>",
+     "offset": 0,
+     "size": 128,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VClass@Metadata@Reflection@RBX@@$E?sClass@234@3QBDBV?$FactoryProduct@VClass@Metadata@Reflection@RBX@@VItem@234@$E?sClass@234@3QBDBVInstance@4@@4@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -10585,6 +10794,38 @@
    "members": [],
    "base": true,
    "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sStatsItem@Stats@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Reflection::Metadata::sItem>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sItem@Metadata@Reflection@2@3QBDB@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::Reflection::Metadata::Class, RBX::Reflection::Metadata::Item, char const *const RBX::Reflection::Metadata::sClass, RBX::Instance>": {
+   "size": 128,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Metadata::Item",
+     "offset": 0,
+     "size": 128,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VClass@Metadata@Reflection@RBX@@VItem@234@$E?sClass@234@3QBDBVInstance@4@@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
