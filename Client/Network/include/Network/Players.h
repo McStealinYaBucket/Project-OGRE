@@ -13,6 +13,10 @@
 #include "V8Tree/Service.h"
 #include "Network/Player.h"
 #include "Util/Guid.h"
+#include "Util/utilities.h"
+#include "decomp.h"
+#include <list>
+#include <map>
 #include <string>
 
 namespace RBX {
@@ -63,7 +67,8 @@ namespace Network {
 
 	extern const char* const sPlayers;
 
-class Players
+	// SIZE 0x1f8
+	class Players
 		: public DescribedCreatable<Players, Instance, sPlayers>
 		, public Service
 	{
@@ -116,23 +121,60 @@ class Players
 
 		// Sound era (0x244B9A): local-player detection stub.
 		static const Instance* findConstLocalPlayer(const Instance* context);
+		static Player* findLocalPlayer(const Instance* context);
 
-		// Players+188 = the local player (px; rc@+192): the ChatOutput
-		// own-line chains read *(players+188) -- onPlayerChatMessage
-		// mac: 0x5C2B69 compares message.player.px == *(players+188);
-		// onGameChatMessage 0x5C2DF1-2 compares origin.px against
-		// *( *(players+188) + 92 ) = localPlayer->character.px (the
-		// landed Player::character seat).  Landed name DELTA:
-		// behavior-pinned (name unresolved in dbq24).
-		shared_ptr<Player> localPlayer;        // +188
+		std::string getLoadDataUrl(int userId) const;
+		std::string getSaveDataUrl(int userId) const;
+		std::string getSaveLeaderboardDataUrl(int userId) const;
 
-		// onServiceProvider 0x5C2866-0x5C2875 (ChatOutput): the mf1 bind
-		// of ChatOutput::onPlayerChatMessage lands on this signal; its
-		// storage sits at +248 (0xF8) in the mac build, after the +188
-		// localPlayer.  DELTA: name ours -- the storage mangles as
-		// signal<void ()(RBX::Network::ChatMessage const&)> (rarc28 raw
-		// mac: 0x5C2875); no nameable accessor in dbq24.
-		rbx::signal<void(const ChatMessage&)> messageReceivedSignal;
+		// 2013 layout from the constructor PLAYER 0x00570980 (operator new(0x1f8) in 0x0058eb00) and
+		// destructor 0x005705c0, both not yet matched. Instance is 0x60; Service's bool sits at 0x60.
+		// Event names from the descriptors that push the offset (initializers 0x00a60e6a..0x00a612cb).
+		std::string saveDataUrl;                     // 0x64 getSaveDataUrl 0x00559450
+		std::string loadDataUrl;                     // 0x80 getLoadDataUrl 0x005593b0
+		std::string saveLeaderboardDataUrl;          // 0x9c getSaveLeaderboardDataUrl 0x005594e0
+		// 0xb8: boost::unordered_set<std::string> (delete_nodes 0x0055e890; ctor bucket count from the
+		// prime list, mlf 1.0f). Placeholder bytes for now: declaring it makes the first Network TU
+		// (API.obj) emit prime_list_template<unsigned>::value with a 1.0f constant right after it, and
+		// every unordered ctor that pushes value+end then reads as "push 1.0" (PLAYER DataModel ctor
+		// 0x0064ec50, StarterGuiService 0x0070c150, ContactManager 0x007b63a0, ... dropped, measured
+		// 2026-11-24). Restore the type with Players' ctor, when the link order supplies it as 2013 did.
+		undefined m_unk0xb8[0xd0 - 0xb8];            // 0xb8
+		std::string m_unk0xd0;                       // 0xd0
+		std::string m_unk0xec;                       // 0xec
+		std::string m_unk0x108;                      // 0x108 ctor ""
+		std::string m_unk0x124;                      // 0x124
+		std::string m_unk0x140;                      // 0x140
+		std::string m_unk0x15c;                      // 0x15c
+		bool m_unk0x178;                             // 0x178 ctor false
+		bool m_unk0x179;                             // 0x179 ctor true
+		undefined4 m_unk0x17c;                       // 0x17c dtor: ~T 0x0055b8b0 then operator delete (scoped_ptr)
+		shared_ptr<Instance> m_unk0x180;             // 0x180 dtor releases +0x184; pointee unproven
+		std::list<shared_ptr<Instance> > m_unk0x188; // 0x188 element type unproven (_Buynode 0x0079f910 is folded)
+		copy_on_write_ptr<Instances> m_unk0x194;     // 0x194 ctor 0x00567c30
+		shared_ptr<Player> localPlayer;              // 0x19c ChatOutput reads it (mac +188)
+		undefined4 m_unk0x1a4;                       // 0x1a4 ctor 0; the dtor clears it first
+		shared_ptr<Instance> m_unk0x1a8;             // 0x1a8 dtor releases +0x1ac; pointee unproven
+		undefined4 m_unk0x1b0;                       // 0x1b0 ctor 12
+		undefined4 m_unk0x1b4;                       // 0x1b4 ctor 0
+		undefined4 m_unk0x1b8;                       // 0x1b8 ctor 0
+		undefined4 m_unk0x1bc;                       // 0x1bc ctor 0
+		// 0x1c0 "FriendRequestEvent": iOS says (..., FriendService::FriendEventType); int here for the
+		// include reason given at Player::friendStatusChangedSignal.
+		rbx::signal<void(shared_ptr<Instance>, shared_ptr<Instance>, int)> friendRequestEventSignal; // 0x1c0
+		rbx::signal<void(shared_ptr<Instance>)> playerAddedEarlySignal;    // 0x1c4 "PlayerAddedEarly"
+		rbx::signal<void(shared_ptr<Instance>)> playerAddedSignal;         // 0x1c8 "PlayerAdded"
+		rbx::signal<void(shared_ptr<Instance>)> playerRemovingSignal;      // 0x1cc "PlayerRemoving"
+		rbx::signal<void(shared_ptr<Instance>)> playerRemovingLateSignal;  // 0x1d0 "PlayerRemovingLate"
+		rbx::signal<void(bool)> m_unk0x1d4;                                // 0x1d4 ctor 0x0055ca50
+		// ChatOutput::onServiceProvider PLAYER 0x00973f9e connects here (mac +0xf8). The mac build
+		// mangles it signal<void(ChatMessage const&)>; the name is ours.
+		rbx::signal<void(const ChatMessage&)> messageReceivedSignal;      // 0x1d8
+		rbx::signal<void(const ChatMessage&)> m_unk0x1dc;                  // 0x1dc signature unproven
+		rbx::signal<void(const ChatMessage&)> m_unk0x1e0;                  // 0x1e0 signature unproven
+		rbx::signal<void(PlayerChatType, shared_ptr<Instance>, std::string, shared_ptr<Instance>)> playerChattedSignal; // 0x1e4 "PlayerChatted"
+		rbx::signal<void(std::string)> gameAnnounceSignal;                 // 0x1e8 "GameAnnounce"
+		std::map<const void*, int> m_unk0x1ec;      // 0x1ec a _Tree with 16-byte values; key/value unproven
 	};
 
 } // namespace Network

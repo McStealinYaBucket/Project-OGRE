@@ -34,7 +34,7 @@ namespace RBX
 			void addToAllTypes();
 		public:
 			const std::type_info& type;	// +0x10
-			const Name* const tag;		// +0x14
+			const Name& tag;			// +0x14 (2013 asserts read this->tag.empty(): Type.h 66/77/98)
 			// FUNCTION: PLAYER 0x00447390
 			// FUNCTION: STUDIO 0x00435eb0
 			bool operator==(const Type& right) const {
@@ -53,28 +53,28 @@ namespace RBX
 			bool isType() const { return this == &getSingleton<T>(); }
 
 		protected:
-			// STUB: PLAYER 0x0079fc70
-			// STUB: STUDIO 0x0073e490
+			// FUNCTION: PLAYER 0x0079fc70
+			// FUNCTION: STUDIO 0x0073e490
 			template<class T>
 			Type(const char* name, T* dummy)
 				:Descriptor(name, Descriptor::Attributes())
 				,type(typeid(T))
-				,tag(Name::lookup(name))
+				,tag(*Name::lookup(name))
 				,isFloat(boost::is_float<T>::value)
 				,isNumber(boost::is_arithmetic<T>::value)
 			{
-				RBXASSERT(!this->tag->empty());
+				RBXASSERT(!this->tag.empty());
 				addToAllTypes();
 			}
 			template<class T>
 			Type(const char* name, const char* tag, T* dummy)
 				:Descriptor(name, Descriptor::Attributes())
 				,type(typeid(T))
-				,tag(Name::declare(tag))
+				,tag(*Name::declare(tag))
 				,isFloat(boost::is_float<T>::value)
 				,isNumber(boost::is_arithmetic<T>::value)
 			{
-				RBXASSERT(!this->tag->empty());
+				RBXASSERT(!this->tag.empty());
 				addToAllTypes();
 			}
 
@@ -86,16 +86,16 @@ namespace RBX
 			//
 			//
 			//
-			// STUB: PLAYER 0x006f97e0
-			// STUB: STUDIO 0x006db8a0
+			// FUNCTION: PLAYER 0x006f97e0
+			// FUNCTION: STUDIO 0x006db8a0
 			Type(const char* name, const char* tag, const std::type_info& type, bool isNumber, bool isFloat)
 				:Descriptor(name, Descriptor::Attributes())
 				,type(type)
-				,tag(Name::declare(tag))
+				,tag(*Name::declare(tag))
 				,isFloat(isFloat)
 				,isNumber(isNumber)
 			{
-				RBXASSERT(!this->tag->empty());
+				RBXASSERT(!this->tag.empty());
 				addToAllTypes();
 			}
 		};
@@ -198,9 +198,11 @@ namespace RBX
 			inline bool isNumber() const { return type().isNumber; }
 			inline bool isString() const { return isType<std::string>(); }
 
+			// 2013 compares type_info (Variant::get<ValueMap> PLAYER 0x005bb850: address test, then
+			// typeid(T).operator==(_type->type)).
 			template<class ValueType>
 			inline bool isType() const {
-				return _type->isType<ValueType>();
+				return &_type->type == &typeid(ValueType) || typeid(ValueType) == _type->type;
 			}
 
 			// throws an exception if unable to convert
@@ -221,32 +223,26 @@ namespace RBX
 				}
 			}
 
+			// 2013 casts go through rbx::any_cast on the placement_any (its type_info, not _type):
+			// get<ValueMap> 0x005bb850 calls the throwing any_cast<const ValueMap&> 0x0058ef20.
 			template<typename T>
 			inline const T& cast() const {
-				if (!isType<T>())
-					throw std::runtime_error("Variant cast failed");
-				return *reinterpret_cast<const T*>(value.getData());
+				return rbx::any_cast<const T&>(const_cast<rbx::placement_any<RBX::Region3>&>(value));
 			}
 
 			template<typename T>
 			inline T& cast() {
-				if (!isType<T>())
-					throw std::runtime_error("Variant cast failed");
-				return *reinterpret_cast<T*>(value.getData());
+				return rbx::any_cast<T&>(value);
 			}
 
 			template<typename T>
 			inline const T* tryCast() const {
-				if (!isType<T>())
-					return NULL;
-				return reinterpret_cast<const T*>(value.getData());
+				return rbx::any_cast<T>(&value);
 			}
 
 			template<typename T>
 			inline T* tryCast() {
-				if (!isType<T>())
-					return NULL;
-				return reinterpret_cast<T*>(value.getData());
+				return rbx::any_cast<T>(&value);
 			}
 
 		private:
@@ -310,10 +306,10 @@ namespace RBX
 			if (id != NULL)
 				return *id;
 
-			if (_type->isType<std::string>())
+			if (isType<std::string>())
 			{
 				ValueType v;
-				if (StringConverter<ValueType>::convertToValue(cast<std::string>(), v))
+				if (StringConverter<ValueType>::convertToValue(rbx::any_cast<std::string>(value), v))
 				{
 					value = v;
 					_type = &Type::singleton<ValueType>();
@@ -321,7 +317,7 @@ namespace RBX
 				}
 			}
 
-			throw RBX::runtime_error("Unable to cast %s to %s", _type->tag->str.c_str(), Type::singleton<ValueType>().tag->str.c_str());
+			throw RBX::runtime_error("Unable to cast %s to %s", _type->tag.str.c_str(), Type::singleton<ValueType>().tag.str.c_str());
 		}
 	}
 }

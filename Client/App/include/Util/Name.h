@@ -75,7 +75,7 @@ namespace RBX {
 
 		// Declaration and Query
 		static const Name& getNullName();				// 0x231DBC
-		static const Name* lookup(const char* name);	// 0x231CF8
+		static const Name* lookup(const char* const& name);	// PLAYER 0x00613be0 (by reference, like declare)
 		static const Name* lookup(const std::string& name);	// 0x231DEE
 		static const Name* declare(const char* const& name);	// 0x23206A (by reference: iOS name; getNullName's init 0x00613a70 passes &ptr)
 

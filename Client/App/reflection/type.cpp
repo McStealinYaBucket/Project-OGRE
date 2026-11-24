@@ -1,6 +1,6 @@
 // type.cpp -- October 2013. Asserts 125, 134, 135 and 140 pin the SignatureDescriptor lines.
 #include "stdafx.h"
-#include "reflection/Type.h"
+#include "reflection/type.h"	// 2013 spelling: the Type<T> ctors here assert in include\reflection/type.h
 #include "reflection/member.h"
 #include <boost/functional/hash.hpp>
 #include <ostream>
@@ -34,30 +34,30 @@ namespace RBX { namespace Reflection {
 		static TType<shared_ptr<const ValueTable> > type("Dictionary");
 		return type;
 	}
-	// STUB: PLAYER 0x007a01d0
+	// FUNCTION: PLAYER 0x007a01d0
 	// STUB: STUDIO 0x0073eac0
 	template<>
 	shared_ptr<const ValueArray>& Variant::convert<shared_ptr<const ValueArray> >(void)
 	{
-		shared_ptr<const ValueArray>* v = tryCast<shared_ptr<const ValueArray> >();
+		shared_ptr<const ValueArray>* v = rbx::any_cast<shared_ptr<const ValueArray> >(&value);
 		if (v)
 			return *v;
-		shared_ptr<const ValueTable>* t = tryCast<shared_ptr<const ValueTable> >();
+		shared_ptr<const ValueTable>* t = rbx::any_cast<shared_ptr<const ValueTable> >(&value);
 		if (t)
 		{
 			// an empty Lua table could be either, so an empty table converts to an empty array
 			if ((*t)->size() == 0)
 			{
 				value = shared_ptr<const ValueArray>(new ValueArray());
-				_type = &Type::getSingleton<shared_ptr<const ValueArray> >();
-				return cast<shared_ptr<const ValueArray> >();
+				// 2013 leaves _type alone here (0x007a01d0 stores only the value)
+				return *rbx::any_cast<shared_ptr<const ValueArray> >(&value);
 			}
 		}
 		throw std::runtime_error("Unable to cast to Array");
 	}
 	template<> TypeRegistrar<shared_ptr<const ValueTable> > TypeRegistrar<shared_ptr<const ValueTable> >::registrar(0);	// prior tree: pre-lockdown touch
-	// STUB: PLAYER 0x0079f780
-	// STUB: STUDIO 0x0073dfc0
+	// FUNCTION: PLAYER 0x0079f780
+	// FUNCTION: STUDIO 0x0073dfc0
 	template<>
 	shared_ptr<const ValueMap>& Variant::convert<shared_ptr<const ValueMap> >(void)
 	{
@@ -74,23 +74,23 @@ namespace RBX { namespace Reflection {
 		static TType<void> type("void");
 		return type;
 	}
-	// STUB: PLAYER 0x007a03b0
+	// FUNCTION: PLAYER 0x007a03b0
 	// STUB: STUDIO 0x0073eca0
 	template<>
 	shared_ptr<const ValueTable>& Variant::convert<shared_ptr<const ValueTable> >(void)
 	{
-		shared_ptr<const ValueTable>* v = tryCast<shared_ptr<const ValueTable> >();
+		shared_ptr<const ValueTable>* v = rbx::any_cast<shared_ptr<const ValueTable> >(&value);
 		if (v)
 			return *v;
-		shared_ptr<const ValueArray>* a = tryCast<shared_ptr<const ValueArray> >();
+		shared_ptr<const ValueArray>* a = rbx::any_cast<shared_ptr<const ValueArray> >(&value);
 		if (a)
 		{
 			// and an empty array converts to an empty table
 			if ((*a)->size() == 0)
 			{
 				value = shared_ptr<const ValueTable>(new ValueTable());
-				_type = &Type::getSingleton<shared_ptr<const ValueTable> >();
-				return cast<shared_ptr<const ValueTable> >();
+				// 2013 leaves _type alone here (0x007a03b0 stores only the value)
+				return *rbx::any_cast<shared_ptr<const ValueTable> >(&value);
 			}
 		}
 		throw std::runtime_error("Unable to cast to Dictionary");
@@ -115,8 +115,8 @@ namespace RBX { namespace Reflection {
 	{
 	}
 
-	// STUB: PLAYER 0x0079f820
-	// STUB: STUDIO 0x0073e060
+	// FUNCTION: PLAYER 0x0079f820
+	// FUNCTION: STUDIO 0x0073e060
 	SignatureDescriptor::Item::Item(const RBX::Name* name, const Type* type, const Variant& defaultValue)
 		: name(name)
 		, type(type)

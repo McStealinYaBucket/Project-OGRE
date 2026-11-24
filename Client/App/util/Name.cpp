@@ -95,24 +95,6 @@ namespace RBX {
 		m.ordered.insert(m.ordered.begin() + index, this);
 	}
 
-	const Name* Name::lookup(const char* name)	// 0x231CF8
-	{
-		if (name)
-			return lookup(std::string(name));
-		return &getNullName();
-	}
-
-	const Name* Name::lookup(const std::string& name)	// 0x231DEE
-	{
-		NameMap& m = map();
-		tbb::queuing_rw_mutex::scoped_lock lock(m.mutex, false);	// reader
-
-		NameMap::StringToName::const_iterator it = m.hash.find(name);
-		if (it != m.hash.end())
-			return it->second;
-		return &getNullName();
-	}
-
 	// STUB: PLAYER 0x006138c0
 	// STUB: STUDIO 0x00703190
 	const Name* Name::declare(const char* const& name)	// 0x23206A
@@ -149,6 +131,26 @@ namespace RBX {
 	{
 		boost::call_once(&initNullName, nullNameFlag);
 		return *nullName;
+	}
+
+	const Name* Name::lookup(const std::string& name)	// 0x231DEE
+	{
+		NameMap& m = map();
+		tbb::queuing_rw_mutex::scoped_lock lock(m.mutex, false);	// reader
+
+		NameMap::StringToName::const_iterator it = m.hash.find(name);
+		if (it != m.hash.end())
+			return it->second;
+		return &getNullName();
+	}
+
+	// FUNCTION: PLAYER 0x00613be0
+	// FUNCTION: STUDIO 0x007034b0
+	const Name* Name::lookup(const char* const& name)	// by reference: iOS name; 79 PLAYER callers pass &ptr
+	{
+		if (name == NULL)
+			return &getNullName();
+		return lookup(std::string(name));
 	}
 
 	size_t Name::size()	// 0x232020

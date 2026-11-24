@@ -206,8 +206,8 @@ namespace Reflection {
 		setName("PlayerGui");
 	}
 
-	// FUNCTION: PLAYER 0x0070c150
-	// FUNCTION: STUDIO 0x00798860
+	// STUB: PLAYER 0x0070c150
+	// STUB: STUDIO 0x00798860
 	StarterGuiService::StarterGuiService()
 		: showGui(true)
 		, resetPlayerGui(true)

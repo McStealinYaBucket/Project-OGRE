@@ -25,8 +25,8 @@ namespace RBX {
 		G3D::Array<Primitive*, 10, 32>& out);
 
 	// mac: 0x563626 (C1 0x56361C is the 9-byte C1 thunk).
-	// FUNCTION: PLAYER 0x007b63a0
-	// FUNCTION: STUDIO 0x008d2550
+	// STUB: PLAYER 0x007b63a0
+	// STUB: STUDIO 0x008d2550
 	ContactManager::ContactManager(World* world)
 		: spatialHash(new ContactManagerSpatialHash(world, this))
 		, myMegaClusterPrim(NULL)

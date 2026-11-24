@@ -24,6 +24,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
 #include <new>
+#include <typeinfo>
 
 using boost::shared_ptr;
 using boost::scoped_ptr;
@@ -60,9 +61,13 @@ namespace rbx
 		
 	namespace implementation
 	{
+		// 2013: { type, destruct, construct } (12 bytes). typed_holder<bool>::singleton, inlined in
+		// placement_any::operator=<bool> PLAYER 0x0044c630, stores +0 typeid, +8 construct, +4 destruct;
+		// Item ctor 0x0079f820 copies through [holder+8], addArgument 0x007a00d0 destroys through [holder+4].
 		class type_holder : boost::noncopyable
         {
 		public: // operations
+			const std::type_info* type;
 			void (*destruct)(char* dest);
 			void (*construct)(const char* src, char* dest);
         };
@@ -72,6 +77,7 @@ namespace rbx
         {
 			typed_holder()
             {
+				type = &typeid(ValueType);
 				construct = &construct_func;
 				destruct = &destruct_func;
 			}
@@ -202,6 +208,12 @@ namespace rbx
             return holder == 0;
         }
 
+		// 2013: typeid(void) when empty (Variant::convert<ValueMap> 0x0079f780 loads 0x00dc6cb0).
+		const std::type_info& type() const
+		{
+			return holder ? *holder->type : typeid(void);
+		}
+
         const char* getData() const
         {
 			return holder ? data : NULL;
@@ -212,7 +224,7 @@ namespace rbx
 			return holder ? data : NULL;
         }
 
-    private: // representation
+    public: // representation (read by the any_cast functions below)
 
 		const implementation::type_holder* holder;
 		char data[sizeof(SizeType)];
@@ -236,6 +248,44 @@ namespace rbx
 		if (operand.holder != implementation::typed_holder<Stripped>::singleton())
 			throw boost::bad_any_cast();
 		return reinterpret_cast<const Stripped*>(operand.data);
+	}
+
+	// 2013 boost::any_cast-style pointer cast: the type_info address is compared first, then
+	// type_info::operator== (out of line: PLAYER 0x0079f730 for ValueTable, 0x006fdad0 for ValueArray;
+	// inlined into Variant::convert<ValueMap> 0x0079f780).
+	template<typename ValueType, typename SizeType>
+	ValueType* any_cast(placement_any<SizeType>* operand)
+	{
+		return operand && (&operand->type() == &typeid(ValueType) || operand->type() == typeid(ValueType))
+			? reinterpret_cast<ValueType*>(operand->data)
+			: 0;
+	}
+
+	template<typename ValueType, typename SizeType>
+	const ValueType* any_cast(const placement_any<SizeType>* operand)
+	{
+		return any_cast<ValueType>(const_cast<placement_any<SizeType>*>(operand));
+	}
+
+	// RTTI .?AVbad_placement_any_cast@rbx@@, vftable PLAYER 0x00b11c5c, what() 0x00447380.
+	class bad_placement_any_cast : public std::bad_cast
+	{
+	public:
+		virtual const char* what() const throw()
+		{
+			return "rbx::bad_placement_any_cast: failed conversion using rbx::placement_cast";
+		}
+	};
+
+	// 2013 reference cast (any_cast<bool&> PLAYER 0x00701140, any_cast<ValueMap const&> 0x0058ef20):
+	// the address test, then type_info::operator!=, then boost::throw_exception.
+	template<typename ValueType, typename SizeType>
+	ValueType any_cast(placement_any<SizeType>& operand)
+	{
+		typedef typename boost::remove_reference<ValueType>::type nonref;
+		if (&operand.type() != &typeid(nonref) && operand.type() != typeid(nonref))
+			boost::throw_exception(bad_placement_any_cast());
+		return *reinterpret_cast<nonref*>(operand.data);
 	}
 }
 

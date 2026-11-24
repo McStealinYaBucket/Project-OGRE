@@ -67,8 +67,8 @@ namespace RBX {
 		mMap[url] = contentId;
 	}
 
-	// FUNCTION: PLAYER 0x008f08a0
-	// FUNCTION: STUDIO 0x009add30
+	// STUB: PLAYER 0x008f08a0
+	// STUB: STUDIO 0x009add30
 	LegacyContentTable::LegacyContentTable()
 	{
 		AddEntry("rbxasset://textures/A_Key_dn.png", "12222317");

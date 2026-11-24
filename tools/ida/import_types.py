@@ -134,6 +134,14 @@ CLASSES = [
     # Not yet: BallBall/BallBlock (ctor 0.857 / 0.825), BallPoly/PolyPoly, JointInstance (dtor 0.22, no size),
     # Reflection::Type (ctors 0.80-0.97, no size), TaskScheduler (no size assertion)
     "RBX::Kernel", "RBX::ContactManagerSpatialHash", "RBX::BlockBlockContact",
+    # wave10 sync (sweep17, build/sweep17/P-final.json / S-final.json 100%), PLAYER / STUDIO. No tree size
+    # assertion: the size is the PDB's, and every member is written by the 100% ctor (const members, so the ctor
+    # must initialise each one) and destroyed by the 100% dtor (script-5e-6.md): Reflection::Type (0x1c, base
+    # Descriptor) ctor 0x006f97e0 / 0x006db8a0; EnumDescriptor (base Type) ctor 0x006fa1a0 / 0x006dcae0, dtor
+    # 0x006f9e40 / 0x006dc260; SignatureDescriptor::Item ctors 0x0079f820 / 0x0073e060 and 0x0079ffa0 / 0x0073e7c0.
+    # Not yet: ReflectionMetadata's shell classes (vftables 100%, but no ctor/dtor row: the ctors are inlined
+    # into Creator::create, 0.899), Network::Player/Players (SIZE asserted, ctor/dtor unpaired; network-5f.md)
+    "RBX::Reflection::Type", "RBX::Reflection::EnumDescriptor", "RBX::Reflection::SignatureDescriptor::Item",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 

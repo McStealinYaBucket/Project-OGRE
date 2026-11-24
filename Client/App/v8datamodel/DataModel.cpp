@@ -398,7 +398,7 @@ namespace RBX {
 			RbxDbgInfo::RemovePlace(placeID);
 	}
 
-	// FUNCTION: PLAYER 0x0064ec50
+	// STUB: PLAYER 0x0064ec50
 	// STUB: STUDIO 0x0076b720
 	DataModel::DataModel(Verb* lockVerb, DataModel* parentDM)
 		:DescribedNonCreatable<DataModel, ServiceProvider, sDataModel>()
@@ -677,7 +677,7 @@ namespace RBX {
 	}
 
 	/* mac: 0x2D0548 — TODO(decompile): verify body */
-	// STUB: PLAYER 0x0064c180
+	// FUNCTION: PLAYER 0x0064c180
 	// STUB: STUDIO 0x00768d70
 	shared_ptr<const Reflection::ValueArray> DataModel::getJobsExtendedStats()
 	{

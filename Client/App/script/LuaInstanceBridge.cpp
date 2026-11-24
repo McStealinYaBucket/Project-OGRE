@@ -401,7 +401,7 @@ namespace RBX { namespace Lua {
 				return 1;
 			}
 			throw RBX::runtime_error("Unable to get property %s, type %s",
-				memberName, prop->type.tag->str.c_str());
+				memberName, prop->type.tag.str.c_str());
 		}
 		// Method closures (0x1739AE arms, batch737): yield descriptors
 		// first (0x173C36), then plain functions (0x173E52).  Each arm
@@ -799,7 +799,7 @@ namespace RBX { namespace Lua {
 				}
 			}
 			throw RBX::runtime_error("Unable to set property %s, type %s",
-				name, prop->type.tag->str.c_str());
+				name, prop->type.tag.str.c_str());
 		}
 	}
 	// Standard luaL_checklstring wrapper (0x1A288C banked).
@@ -821,8 +821,8 @@ namespace RBX { namespace Lua {
 	// binary builds the 2013 base inline: Arguments vptr, void return type,
 	// then the LuaArguments vptr + offset/L) and the return value is pushed
 	// as the call result through the static pusher (0x162624).
-	// STUB: PLAYER 0x0087a5c0
-	// STUB: STUDIO 0x009dec40
+	// FUNCTION: PLAYER 0x0087a5c0
+	// FUNCTION: STUDIO 0x009dec40
 	int ObjectBridge::callMemberFunction(lua_State* L)
 	{
 		// 2013 line 829: callMemberFunction follows on_newindex in the 2013 file
@@ -1020,7 +1020,7 @@ int ObjectBridge::callMemberYieldFunction(lua_State* L)
 // mac: 0x178C06 (batch725): mark executing, remember the native thread, run
 // the descriptor with our two continuations, then either return the
 // immediate result or capture the yield.
-// STUB: PLAYER 0x0087c580
+// FUNCTION: PLAYER 0x0087c580
 // STUB: STUDIO 0x009e0c00
 int YieldFunctionStateObject::execute()
 {

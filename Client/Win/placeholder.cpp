@@ -21,7 +21,10 @@
    rbx::signal<void(bool)>::operator() (9/0) is left out: its shell copy 0x00439b20 has a second
    shell twin 0x00456d20 (PropertyDescriptor), ours folds the two, and the Lighting setters lost 7.
    Measured 2026-11-24 on identical objects with and without this TU's stand-in (two regeneration
-   rounds each): PLAYER +51/-24, STUDIO +59/-32; every loss is a twin callee pairing. */
+   rounds each): PLAYER +51/-24, STUDIO +59/-32; every loss is a twin callee pairing.
+   Removed 2026-11-24: shared_ptr<DescribedBase>::operator= and enable_shared_from_this<DescribedBase>::
+   shared_from_this, which ClientBase/ReflectionMetadata.cpp (the real 2013 shell code) now instantiates
+   (both resolve to its object in the PLAYER map). */
 
 #include "V8Tree/Instance.h"
 #include "V8DataModel/DataModel.h"
@@ -41,7 +44,6 @@ namespace OgreShellStandIn {
 		std::vector<boost::shared_ptr<RBX::Instance> > instances; // resize 34/0 -> 0x004226f0; _Destroy_range 5/0 -> 0x00427f30; erase 1/0 -> 0x00426170
 		boost::shared_ptr<RBX::StandardOut> standardOut;        // ~ 7/0 0x00628a60 -> 0x00405b50
 		boost::weak_ptr<RBX::DataModel> dataModel;              // lock 6/0 0x0063f330 -> 0x00439eb0
-		boost::shared_ptr<RBX::Reflection::DescribedBase> described; // = 4/0 0x00540660 -> 0x00469520
 		boost::function0<void> function;                        // assign_to_own 3/0 0x007a68d0 -> 0x00437a90
 		boost::shared_ptr<RBX::RunService> runService;          // shared_from 2/0, = 1/0 0x0064f210
 		boost::shared_ptr<RBX::Script> script;                  // ~ 1/0 0x0088cce0 -> 0x00405b50
@@ -51,14 +53,13 @@ namespace OgreShellStandIn {
 		boost::shared_ptr<RBX::Tasks::Coordinator> coordinator;
 	};
 
-	extern "C" void ogreShellStandInUse(Uses& u, Uses& v, RBX::Reflection::DescribedBase* d, RBX::RunService* r, void* raw)
+	extern "C" void ogreShellStandInUse(Uses& u, Uses& v, RBX::RunService* r, void* raw)
 	{
 		u.instance = v.instance;
 		u.instances.resize(v.instances.size());
 		u.instances.erase(u.instances.begin());
 		u.standardOut.reset();
 		u.dataModel.lock();
-		u.described = d->shared_from_this();
 		new (raw) boost::function0<void>(v.function);          // copy ctor only: function0::operator= is native-owned (0/1)
 		u.runService = RBX::shared_from(r);
 		u.script.reset();

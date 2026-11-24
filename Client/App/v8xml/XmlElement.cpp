@@ -396,8 +396,8 @@ bool XmlNameValuePair::getValue(RBX::InstanceHandle &value) const {
 
 
 
-// STUB: PLAYER 0x00614a30
-// STUB: STUDIO 0x006db540
+// FUNCTION: PLAYER 0x00614a30
+// FUNCTION: STUDIO 0x006db540
 std::string XmlNameValuePair::toString(XmlWriter* writer) const
 {
 	switch (valueType)

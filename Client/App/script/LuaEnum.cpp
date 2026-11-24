@@ -237,8 +237,8 @@ namespace RBX { namespace Lua {
 	// mac: 0x172F0E (158B, batch409): Name::lookup + lookupDescriptor(Name),
 	// pushed via SingletonBridge<EnumDescriptor>; NULL -> "%s is not a
 	// valid EnumItem".
-	// STUB: PLAYER 0x0087d3f0
-	// STUB: STUDIO 0x009e1a70
+	// FUNCTION: PLAYER 0x0087d3f0
+	// FUNCTION: STUDIO 0x009e1a70
 	template<>
 	int Bridge<AllEnumDescriptorsPtr, true>::on_index(
 		const AllEnumDescriptorsPtr& object, const char* name, lua_State* L)

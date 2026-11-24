@@ -1,4 +1,5 @@
 # STUDIO: unresolved externals with no stub (reason, decorated, demangled). Generated.
+claimed	??6RBX@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AAV12@ABVName@0@@Z	class std::basic_ostream<char, struct std::char_traits<char>> & __cdecl RBX::operator<<(class std::basic_ostream<char, struct std::char_traits<char>> &, class RBX::Name const &)
 data	?GfxClustersFull@FLog@@3EA	unsigned char FLog::GfxClustersFull
 data	?JointLifetime@FLog@@3EA	unsigned char FLog::JointLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool

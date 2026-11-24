@@ -49,8 +49,8 @@ public:
 		bool processedIDREF = processIDREF(valueIDREF, propertyOwner, idref);
 		RBXASSERT(processedIDREF);
 	}
-	// STUB: PLAYER 0x006fc420
-	// STUB: STUDIO 0x0074a9b0
+	// FUNCTION: PLAYER 0x006fc420
+	// FUNCTION: STUDIO 0x0074a9b0
 	virtual bool resolveRefs()
 	{
 		for (std::vector<IDREFItem>::iterator iter = deferredIDREFItems.begin(); iter != deferredIDREFItems.end(); ++iter)
@@ -105,8 +105,8 @@ class ArchiveBinder : public MergeBinder
 
 	std::list<IDREFBinding> idrefBindings;			// 0x20
 public:
-	// STUB: PLAYER 0x006fb300
-	// STUB: STUDIO 0x00749890
+	// FUNCTION: PLAYER 0x006fb300
+	// FUNCTION: STUDIO 0x00749890
 	virtual bool processID(const XmlNameValuePair* valueID, Reflection::DescribedBase* source)
 	{
 		if (Super::processID(valueID, source))

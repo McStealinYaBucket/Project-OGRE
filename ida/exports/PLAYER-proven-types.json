@@ -7066,6 +7066,130 @@
    "base": false,
    "unique": "VBlockBlockContact@RBX@@"
   },
+  "RBX::Reflection::Type": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Descriptor",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "type",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "type_info",
+     "scalar": null
+    },
+    {
+     "name": "tag",
+     "offset": 20,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "isFloat",
+     "offset": 24,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isNumber",
+     "offset": 25,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VType@Reflection@RBX@@"
+  },
+  "RBX::Reflection::EnumDescriptor": {
+   "size": 52,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Type",
+     "offset": 0,
+     "size": 28,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "allItems",
+     "offset": 28,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Reflection::EnumDescriptor::Item const *,std::allocator<RBX::Reflection::EnumDescriptor::Item const *> >",
+     "scalar": null
+    },
+    {
+     "name": "enumCount",
+     "offset": 44,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "enumCountMSB",
+     "offset": 48,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    }
+   ],
+   "base": false,
+   "unique": "VEnumDescriptor@Reflection@RBX@@"
+  },
+  "RBX::Reflection::SignatureDescriptor::Item": {
+   "size": 76,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "name",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "type",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Reflection::Type",
+     "scalar": null
+    },
+    {
+     "name": "defaultValue",
+     "offset": 8,
+     "size": 68,
+     "kind": "class",
+     "type": "RBX::Reflection::Variant",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "UItem@SignatureDescriptor@Reflection@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,

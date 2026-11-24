@@ -357,6 +357,54 @@ FACTS = [
      "not vector<shared_ptr<Instance>>::push_back (that name is reccmp 100% at 0x00564bc0 in sweep16): the "
      "Thread.obj push_back chain next to 0x009b6af0 (vector<shared_ptr<boost::thread>>), element type unproven "
      "(shell-base.md, wave9)"),
+    # wave10 sync (integrate.md, wave10): the boost::throw_exception chain at PLAYER 0x0044d400..0x0044db50 is the
+    # rbx::bad_placement_any_cast instance. lib-resolved matched its bodies "identical" to boost-iostreams'
+    # std::exception copies (the bodies differ only in vftable and throw-info addresses), so they carried
+    # std::exception names. Checked 2026-11-24 from the exe bytes: the throw info and the RTTI COL of every
+    # vftable each function stores. STUDIO's chain is 0x004108f0..0x00411090 (0x00411090 is already the iOS name).
+    (0x0044d400, 0x00411090, "rename",
+     "??$throw_exception@Vbad_placement_any_cast@rbx@@@boost@@YAXABVbad_placement_any_cast@rbx@@@Z", "rtti:",
+     "boost::throw_exception<rbx::bad_placement_any_cast> | throws _TI 0x00cd6854 (STUDIO 0x00e295f0) whose "
+     "catchable types start .?AV?$clone_impl@U?$error_info_injector@Vbad_placement_any_cast@rbx@@...; not "
+     "throw_exception<std::exception> (lib-resolved boost-iostreams body match; wave10 integrate.md)"),
+    (0x0044d950, 0x004109f0, "rename",
+     "??$enable_error_info@Vbad_placement_any_cast@rbx@@@boost@@YA?AU?$error_info_injector@Vbad_placement_any_cast"
+     "@rbx@@@exception_detail@0@ABVbad_placement_any_cast@rbx@@@Z", "rtti:",
+     "boost::enable_error_info<rbx::bad_placement_any_cast> | stores the error_info_injector<bad_placement_any_cast> "
+     "vftables 0x00b11c70 / 0x00b11c68 (STUDIO 0x00bc97e0), called from throw_exception 0x0044d400"),
+    (0x0044d9a0, 0x004109c0, "rename",
+     "??$enable_current_exception@U?$error_info_injector@Vbad_placement_any_cast@rbx@@@exception_detail@boost@@@"
+     "boost@@YA?AV?$clone_impl@U?$error_info_injector@Vbad_placement_any_cast@rbx@@@exception_detail@boost@@@"
+     "exception_detail@0@ABU?$error_info_injector@Vbad_placement_any_cast@rbx@@@20@@Z", "rtti:",
+     "boost::enable_current_exception<error_info_injector<rbx::bad_placement_any_cast>> | called from "
+     "throw_exception 0x0044d400, calls the clone_impl ctor 0x0044da20 (STUDIO 0x004108f0)"),
+    (0x0044da20, 0x004108f0, "rename",
+     "??0?$clone_impl@U?$error_info_injector@Vbad_placement_any_cast@rbx@@@exception_detail@boost@@@exception_"
+     "detail@boost@@QAE@ABU?$error_info_injector@Vbad_placement_any_cast@rbx@@@12@@Z", "rtti:",
+     "clone_impl<error_info_injector<rbx::bad_placement_any_cast>>::clone_impl(const error_info_injector&) | "
+     "stores the clone_impl<...bad_placement_any_cast> vftables 0x00b11c94 / 0x00b11c8c / 0x00b11c7c (STUDIO "
+     "0x00bc9804 / 0x00bc97f4)"),
+    (0x0044db50, 0x00410f30, "rename",
+     "??_E?$error_info_injector@Vbad_placement_any_cast@rbx@@@exception_detail@boost@@WM@AEPAXI@Z", "rtti:",
+     "error_info_injector<rbx::bad_placement_any_cast>::`vector deleting destructor'`adjustor{12}' | slot 0 of "
+     "the vftable 0x00b11c68 (STUDIO 0x00bc97e0, {for boost::exception}), `sub ecx,0xc; jmp` to the D0 0x0044d6c0"),
+    # STUDIO only: the same lib-resolved mistake on the std::bad_alloc chain (throws _TI 0x00e296c4, catchable
+    # types .?AV?$clone_impl@U?$error_info_injector@Vbad_alloc@std@@...; 0x0041f8d0 stores the
+    # error_info_injector<bad_alloc> vftables 0x00bbd6cc / 0x00bbd6c4). PLAYER's bad_alloc chain is named.
+    (None, 0x0041fdb0, "rename", "??$throw_exception@Vbad_alloc@std@@@boost@@YAXABVbad_alloc@std@@@Z", "rtti:",
+     "boost::throw_exception<std::bad_alloc> | throws _TI 0x00e296c4 (clone_impl<error_info_injector<bad_alloc>>); "
+     "not throw_exception<std::exception>"),
+    (None, 0x0041f8d0, "rename",
+     "??$enable_error_info@Vbad_alloc@std@@@boost@@YA?AU?$error_info_injector@Vbad_alloc@std@@@exception_detail@0@"
+     "ABVbad_alloc@std@@@Z", "rtti:",
+     "boost::enable_error_info<std::bad_alloc> | stores the error_info_injector<bad_alloc> vftables 0x00bbd6cc / "
+     "0x00bbd6c4; called from throw_exception<bad_alloc> 0x0041fdb0"),
+    (None, 0x0041f8a0, "rename",
+     "??$enable_current_exception@U?$error_info_injector@Vbad_alloc@std@@@exception_detail@boost@@@boost@@YA?AV?$"
+     "clone_impl@U?$error_info_injector@Vbad_alloc@std@@@exception_detail@boost@@@exception_detail@0@ABU?$error_"
+     "info_injector@Vbad_alloc@std@@@20@@Z", "rtti:",
+     "boost::enable_current_exception<error_info_injector<std::bad_alloc>> | called from throw_exception<bad_alloc> "
+     "0x0041fdb0"),
 ]
 
 
@@ -573,6 +621,8 @@ def plan(target, json_path, exe):
         stat["slot rename (rtti:)"] += 1
 
     for pa, sa, act, name, tag, ev in FACTS:
+        if pa is None and target == "PLAYER":     # a STUDIO-only fact
+            continue
         a = pa if target == "PLAYER" else (sa or studio_of(pa))
         if a is None:
             stat["fact: no STUDIO address"] += 1
@@ -581,7 +631,7 @@ def plan(target, json_path, exe):
         if tag == "prior:" and a in updates and updates[a][3].startswith("p4 match: reccmp"):
             stat["fact prior: left to reccmp 100%"] += 1
             continue
-        where = "" if target == "PLAYER" else f" [STUDIO: body-identical to PLAYER 0x{pa:08x}]"
+        where = "" if target == "PLAYER" or pa is None else f" [STUDIO: body-identical to PLAYER 0x{pa:08x}]"
         if a in updates and updates[a][0] == "rename" and act == "rename" and updates[a][1] != name:
             print(f"{target}: fact 0x{a:08x} {name} overrides the reccmp name {updates[a][1]}")
         if act == "keep":       # the oracle name stays over our 100% body's name (our name is an invented one)

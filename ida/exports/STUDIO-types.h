@@ -2647,7 +2647,7 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *canClientCreate;
+  void *isReadOnly;
   void *AASamples____0_;
   void *createChild;
   void *writeXml;
@@ -4325,4 +4325,30 @@ struct __cppobj RBX::BlockBlockContact : RBX::Contact
 
 /* 621 */
 typedef unsigned __int64 InstanceHandle;
+
+/* 622 */
+struct __cppobj RBX::Reflection::Type : RBX::Reflection::Descriptor
+{
+  void *type;                           ///< type_info *
+  RBX::Name *tag;
+  bool isFloat;
+  bool isNumber;
+  unsigned __int8 gap_1A[2];
+};
+
+/* 623 */
+struct __cppobj RBX::Reflection::EnumDescriptor : RBX::Reflection::Type
+{
+  unsigned __int8 allItems[16];         ///< std::vector<RBX::Reflection::EnumDescriptor::Item const *>
+  unsigned int enumCount;
+  unsigned int enumCountMSB;
+};
+
+/* 624 */
+struct __cppobj RBX::Reflection::SignatureDescriptor::Item
+{
+  RBX::Name *name;
+  RBX::Reflection::Type *type;
+  unsigned __int8 defaultValue[68];     ///< RBX::Reflection::Variant
+};
 

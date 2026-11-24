@@ -2,39 +2,32 @@
    TODO: full decompile. */
 
 #include "stdafx.h"
-
 #include "Network/Players.h"
 #include "Network/Client.h"
 #include "Network/Server.h"
 #include <sstream>
-
+DECOMP_SIZE_ASSERT(RBX::Network::Players, 0x1f8);
 namespace RBX {
 namespace Network {
 	const char* const sPlayers = "Players";
 }
 }
-
 using namespace RBX;
 using namespace RBX::Network;
-
 REFLECTION_BEGIN();
 REFLECTION_END();
-
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
 // Players is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }
-
 namespace RBX {
 namespace Network {
-
 	void Players::chat(std::string message)
 	{
 		(void)message;
 		// DELTA: network unported (RakNet::BitStream, getGuidRegistry,
 		// ConcurrentRakPeer::Send, ChatMessage).  Stub no-ops.
 	}
-
 	int Players::getNumPlayers() const
 	{
 		// OGRE vc9: was a C++11 lambda counting visitChildren calls. Mac 0x008a3c66 (37 bytes) calls
@@ -43,27 +36,16 @@ namespace Network {
 		// Instance::children (Players.h says so) is not yet proven by a Windows ctor.
 		return (int)numChildren();
 	}
-
 	// Players::clientIsPresent is in Client.cpp (2013: PLAYER 0x005adc70, after Client::findClient).
-
-
-
-
-
-
-
-
 	bool Players::serverIsPresent(const Instance* context, bool testInDatamodel)
 	{
 		return Server::serverIsPresent(context, testInDatamodel);
 	}
-
 	int Players::playerFromCharacter(const shared_ptr<Instance>& character)
 	{
 		(void)character;
 		return 0;
 	}
-
 	// Network::ChatMessage value-ctor family (0x89BBD2 / 0x89BC8E /
 	// mac: 0x89BD10).  Binary member order: guid string default (empty COW
 	// slot at +0) -> text -> ChatType (+8) -> player px/rc (+12/+16) ->
@@ -86,7 +68,6 @@ namespace Network {
 		this->player = player;
 		Guid::generateStandardGUID(guid);
 	}
-
 	ChatMessage::ChatMessage(const ChatMessage& other, const std::string& message)
 	{
 		guid = other.guid;
@@ -95,7 +76,6 @@ namespace Network {
 		player = other.player;
 		receiver = other.receiver;
 	}
-
 	ChatMessage::ChatMessage(const char* message, ChatType type, const shared_ptr<Player>& player,
 		const shared_ptr<Player>& receiver)
 	{
@@ -105,7 +85,6 @@ namespace Network {
 		this->receiver = receiver;
 		Guid::generateStandardGUID(guid);
 	}
-
 	// mac: 0x89BDD6 (104B; mangle
 	// __ZNK3RBX7Network11ChatMessage17isVisibleToPlayerEN5boost10shared_ptrINS0_6PlayerEEE).
 	// Switch on chatType (full 0..3 jmp table at 0x89BE79): 0/3 ->
@@ -142,7 +121,30 @@ namespace Network {
 				return false;
 		}
 	}
-
+	// FUNCTION: PLAYER 0x005593b0
+	// FUNCTION: STUDIO 0x005b7e70
+	std::string Players::getLoadDataUrl(int userId) const
+	{
+		if (loadDataUrl.empty())
+			throw std::runtime_error("No LoadData url set");
+		return format(loadDataUrl.c_str(), userId);
+	}
+	// FUNCTION: PLAYER 0x00559450
+	// FUNCTION: STUDIO 0x005b7f10
+	std::string Players::getSaveDataUrl(int userId) const
+	{
+		if (saveDataUrl.empty())
+			throw std::runtime_error("No SaveData url set");
+		return format(saveDataUrl.c_str(), userId);
+	}
+	// FUNCTION: PLAYER 0x005594e0
+	// FUNCTION: STUDIO 0x005b7fa0
+	std::string Players::getSaveLeaderboardDataUrl(int userId) const
+	{
+		if (saveLeaderboardDataUrl.empty())
+			throw std::runtime_error("No SaveLeaderboardData url set");
+		return format(saveLeaderboardDataUrl.c_str(), userId);
+	}
 	// mac: 0x89BE50 (340B): switch on chatType (TEAM "[[team]]", WHISPER ostringstream "[[to " +
 	// receiver name or "???" + "]]", GAME "[[game]]", default copy) + message.
 	// The receiver name walks fw(receiver.px)+24, as Instance::getName() does.
@@ -172,8 +174,6 @@ namespace Network {
 				return message;
 		}
 	}
-
-
 	// FUNCTION: PLAYER 0x00568900
 	// FUNCTION: STUDIO 0x005ccb00
 	bool Players::frontendProcessing(const Instance* context, bool testInDatamodel)
@@ -195,6 +195,15 @@ namespace Network {
 	bool Players::isNetworkClient(const Instance* instance)
 	{
 		return Instance::fastDynamicCast<Client>(instance) != NULL;
+	}
+
+	// FUNCTION: PLAYER 0x0056baa0
+	// FUNCTION: STUDIO 0x005d0f50
+	Player* Players::findLocalPlayer(const Instance* context)
+	{
+		if (Players* players = ServiceProvider::find<Players>(context))
+			return players->localPlayer.get();
+		return NULL;
 	}
 
 } // namespace Network

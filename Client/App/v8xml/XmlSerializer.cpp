@@ -534,7 +534,7 @@ std::auto_ptr<XmlElement> TextXmlParser::parse()
 		{
 			XmlElement* element = parseAttributes(tag);
 			elements.push(element);
-			if (element->getTag() == *RBX::Reflection::Type::getSingleton<RBX::ContentId>().tag)
+			if (element->getTag() == RBX::Reflection::Type::getSingleton<RBX::ContentId>().tag)
 			{
 				const XmlAttribute* nilAttribute = element->findAttribute(*name_xsinil);
 				bool isNil;

@@ -2592,81 +2592,87 @@ void ScriptContext::startScript(ScriptStart start)
 	if (FLog::StartScriptSourceDump != 0)
 		StandardOut::singleton()->printf(MESSAGE_INFO, "Full script code:\n %s",
 			code.script.getStringForImmediateUse().c_str());
-	int identity = start.identity;
-	if (identity == 2)
+	try
 	{
-		identity = 4;
-		if (!script->isRobloxScript() && !m_unk0xf0)
-			identity = (robloxPlace != 0) | 2;
-	}
-	lua_State* globalState = getGlobalState((RBX::Security::Identities)identity);
-	lua_State* thread = lua_newthread(globalState);
-	if (thread == NULL)
-		throw RBX::runtime_error("Unable to create a new thread for %s",
-			script->getFullName().c_str());
-	// (RbxFormat.h:44: RBX::runtime_error is the printf-style
-	// std::runtime_error factory; the binary's ctor call carried the
-	// fmt + the getFullName result.)
-	int hookMask = 11;
-	if (FLog::LuaProfiler == 0)
-		hookMask = 3 * (FFlag::LuaProfilerHooks != 0) + 8;
-	// setHook log arg, resolved (batch771:1-5 / batch716:907): the binary
-	// reads Instance::fw(script) (0x544AF8 = *(this+68)) then that
-	// object's +24 c_str -- the instance name string; landed
-	// getName().c_str().
-	if (FLog::ScriptContext)
-		FLog::FastLogS(FLog::ScriptContext, "lua_sethook %s", script->getName().c_str());
-	lua_sethook(thread, &ScriptContext::hook, hookMask, 1000);
-	setThreadIdentity(thread, (RBX::Security::Identities)identity, start.script);
-	RBXASSERT(!script->threadNode);		// binary line 2621
-	script->threadNode = Lua::WeakThreadRef::Node::create(thread);
+		int identity = start.identity;
+		if (identity == 2)
+		{
+			identity = 4;
+			if (!script->isRobloxScript() && !m_unk0xf0)
+				identity = (robloxPlace != 0) | 2;
+		}
+		lua_State* globalState = getGlobalState((RBX::Security::Identities)identity);
+		lua_State* thread = lua_newthread(globalState);
+		if (thread == NULL)
+			throw RBX::runtime_error("Unable to create a new thread for %s",
+				script->getFullName().c_str());
+		// (RBX::runtime_error is RbxFormat.h's printf-style std::runtime_error factory.)
+		int hookMask = 11;
+		if (FLog::LuaProfiler == 0)
+			hookMask = 3 * (FFlag::LuaProfilerHooks != 0) + 8;
+		// setHook log arg, resolved (batch771:1-5 / batch716:907): the binary
+		// reads Instance::fw(script) (0x544AF8 = *(this+68)) then that
+		// object's +24 c_str -- the instance name string; landed
+		// getName().c_str().
+		if (FLog::ScriptContext)
+			FLog::FastLogS(FLog::ScriptContext, "lua_sethook %s", script->getName().c_str());
+		lua_sethook(thread, &ScriptContext::hook, hookMask, 1000);
+		setThreadIdentity(thread, (RBX::Security::Identities)identity, start.script);
+		RBXASSERT(!script->threadNode);		// binary line 2621
+		script->threadNode = Lua::WeakThreadRef::Node::create(thread);
 
-	std::string fullName = script->getFullName();
-	if (!fullName.empty())
-	{
-		ScriptStatInformation& info = scriptStatsMap[fullName];
-		info.name = script->getName();
-		info.runningScripts.push_back(start.script);
-	}
+		std::string fullName = script->getFullName();
+		if (!fullName.empty())
+		{
+			ScriptStatInformation& info = scriptStatsMap[fullName];
+			info.name = script->getName();
+			info.runningScripts.push_back(start.script);
+		}
 
-	{
-		Lua::ThreadRef safeThread(thread);
-		RBXASSERT(lua_gettop(thread)==0);		// binary line 2634
-		Lua::SharedPtrBridge<Instance>::push(thread, start.script);
-		// setfield key resolved @B1C1DE (unk_9883A7 + 0x193E37, batch743:51 / batch753:21) = the Roblox running-script global "script" -- landed literal correct.
-		lua_setfield(thread, LUA_GLOBALSINDEX, "script");
-		// Chunkname prefix resolved @B247A3 (unk_99096C + 0x193E37, batch744:3 / batch753:22) = the standard Lua "=" prefix -- landed literal correct. The binary makes its own second getFullName call here.
-		std::string chunkname = std::string("=") + script->getFullName();
-		ProtectedString source;
-		if (!start.sourceTransform.empty() && FLog::StartScriptSourceTransform != 0)
-			source = ProtectedString::fromTrustedSource(
-				start.sourceTransform(code.script.getStringForImmediateUse()));
-		else
-			source = code.script;
-		// Continuations bag only when either handler is set (the ctor clones the start's two-function block, batch741:360-368).
-		if (!start.continuation.empty() || !start.reportError.empty())
 		{
-			Scripts::Continuations conts;
-			conts.successHandler = start.continuation;
-			conts.errorHandler = start.reportError;
-			RobloxExtraSpace::get(thread)->continuations.reset(new Lua::Continuations(conts));
+			Lua::ThreadRef safeThread(thread);
+			RBXASSERT(lua_gettop(thread)==0);		// binary line 2634
+			Lua::SharedPtrBridge<Instance>::push(thread, start.script);
+			// setfield key resolved @B1C1DE (unk_9883A7 + 0x193E37, batch743:51 / batch753:21) = the Roblox running-script global "script" -- landed literal correct.
+			lua_setfield(thread, LUA_GLOBALSINDEX, "script");
+			// Chunkname prefix resolved @B247A3 (unk_99096C + 0x193E37, batch744:3 / batch753:22) = the standard Lua "=" prefix -- landed literal correct. The binary makes its own second getFullName call here.
+			std::string chunkname = std::string("=") + script->getFullName();
+			ProtectedString source;
+			if (!start.sourceTransform.empty() && FLog::StartScriptSourceTransform != 0)
+				source = ProtectedString::fromTrustedSource(
+					start.sourceTransform(code.script.getStringForImmediateUse()));
+			else
+				source = code.script;
+			// Continuations bag only when either handler is set (the ctor clones the start's two-function block, batch741:360-368).
+			if (!start.continuation.empty() || !start.reportError.empty())
+			{
+				Scripts::Continuations conts;
+				conts.successHandler = start.continuation;
+				conts.errorHandler = start.reportError;
+				RobloxExtraSpace::get(thread)->continuations.reset(new Lua::Continuations(conts));
+			}
+			if (luaL_loadprotected(thread, source, chunkname.c_str()) != 0)
+			{
+				reportError(thread);
+				Lua::Continuations* c = RobloxExtraSpace::get(thread)->continuations.get();
+				if (c != NULL && !c->error.empty() && FLog::StartScriptErrorContinuation != 0)
+					c->error(thread);
+				lua_settop(thread, -2);
+			}
+			else
+			{
+				script->starting(thread);
+				resume(safeThread, 0);
+			}
+			lua_settop(thread, 0);
 		}
-		if (luaL_loadprotected(thread, source, chunkname.c_str()) != 0)
-		{
-			reportError(thread);
-			Lua::Continuations* c = RobloxExtraSpace::get(thread)->continuations.get();
-			if (c != NULL && !c->error.empty() && FLog::StartScriptErrorContinuation != 0)
-				c->error(thread);
-			lua_settop(thread, -2);
-		}
-		else
-		{
-			script->starting(thread);
-			resume(safeThread, 0);
-		}
-		lua_settop(thread, 0);
+		lua_settop(globalState, -2);
 	}
-	lua_settop(globalState, -2);
+	catch (...)
+	{
+		--reentrancy;
+		throw;
+	}
 	--reentrancy;
 	// (skipped, loud DELTA: the duplicated RbxInterlockedDecrement through the off_D1EAE1 pointer-table slot -- batch741:404 (the success arm, after resume) and batch741:424 (the common tail); the pointed global never resolved in the dumped material.)
 }
@@ -2742,12 +2748,6 @@ void RuntimeScriptService::onRunState(RunState state)
 		}
 	}
 }
-
-
-
-
-
-
 
 
 
