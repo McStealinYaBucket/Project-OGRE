@@ -21,6 +21,9 @@
 
 namespace RBX {
 
+	// RotateJoint::surfaceTypeToJoint 0x00974d90 news 0xcc for a RotateJoint (no members of its own)
+	// and 0xd8 for RotatePJoint/RotateVJoint.
+	// SIZE 0xcc
 	class MultiJoint : public Joint
 	{
 	public:

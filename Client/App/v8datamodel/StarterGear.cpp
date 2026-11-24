@@ -26,3 +26,7 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::StarterGear);
 }
+
+// Instance-sized: Creatable<Instance>::create<StarterGear> 0x00421ee0 allocates 0x60.
+#include "decomp.h"
+DECOMP_SIZE_ASSERT(RBX::StarterGear, 0x60);

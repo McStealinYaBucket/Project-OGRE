@@ -403,49 +403,40 @@ void TextXmlWriter::serializeNode(const XmlElement* xmlNode, int depth)
 	{
 		RBX::ContentId contentId;
 		xmlNode->getValue(contentId);
-		// Mime-attr branch: the binary compares a Name carried by the value
-		// against nullName (TODO: exact source — likely the ContentId name
-		// field; getValue<const Name*> leaves nullName for CONTENTID pairs).
-		const RBX::Name* mimeName = &RBX::Name::getNullName();
-		xmlNode->getValue(mimeName);
-		if (mimeName == &RBX::Name::getNullName())
+		// The mime type is the ContentId's own Name (+0x1c), compared with nullName.
+		if (contentId.getName() == &RBX::Name::getNullName())
 		{
 			writeOpenTag(xmlNode, depth, NULL);
 		}
 		else
 		{
-			XmlAttribute mimeAttr(*tag_mimeType, mimeName->c_str());
+			XmlAttribute mimeAttr(*tag_mimeType, contentId.getName()->c_str());
 			writeOpenTag(xmlNode, depth, &mimeAttr);
 		}
-		if (xmlNode->findAttribute(*name_xsinil) == NULL)
+		if (xmlNode->findAttribute(*name_xsinil) != NULL)
+			return;
+		if (contentId.isNull())
 		{
-			const std::string& id = contentId.toString();
-			if (!id.empty())
-			{
-				if (id.compare(0, 11, "rbxasset://") == 0
-					|| id.compare(0, 4, "http") == 0)
-				{
-					stream << "<url>";
-					encodedWrite(stream, id.c_str(), (unsigned long)id.size());
-					stream << "</url>";
-				}
-				else
-				{
-					RBX::StandardOut::singleton()->printf(RBX::MESSAGE_WARNING,
-						"Not writing binary data");
-					stream << "<null></null>";
-				}
-			}
-			else
-			{
-				stream << "<null></null>";
-			}
+			stream << "<null></null>";
+		}
+		else if (!contentId.isAsset() && !contentId.isHttp())
+		{
+			RBX::StandardOut::singleton()->printf(RBX::MESSAGE_WARNING,
+				"Not writing binary data");
+			stream << "<null></null>";
+		}
+		else
+		{
+			// 2013 passes 0 for the length here (encodedWrite then scans to the NUL).
+			stream << "<url>";
+			encodedWrite(stream, contentId.c_str(), 0);
+			stream << "</url>";
 		}
 	}
 	else
 	{
 		writeOpenTag(xmlNode, depth, NULL);
-		encodedWrite(stream, xmlNode->toString(this).c_str(), 0);
+		encodedWrite(stream, xmlNode->toString(this));
 	}
 }
 
@@ -607,3 +598,7 @@ void TextXmlWriter::serialize(const XmlElement* xmlNode)
 {
 	serialize(xmlNode, 0);
 }
+
+// XmlWriter: map<InstanceHandle,int> +4, ostream& +0x10 (ctor 0x00628a20, 100%).
+#include "decomp.h"
+DECOMP_SIZE_ASSERT(XmlWriter, 0x14);

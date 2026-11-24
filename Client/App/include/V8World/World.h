@@ -32,8 +32,8 @@ namespace RBX {
 	class JointInstance;
 	class SendPhysics;
 	class Assembly;
-	// Profiling::CodeProfiler is declared in V8World/ContactManager.h.
-
+	class SleepStage;
+	class StepJointsStage;
 
 
 
@@ -145,6 +145,7 @@ namespace RBX {
 		IWorldStage* getStage() { return cleanStage; }
 		Kernel* getKernel();
 		const Kernel* getKernel() const;
+		const SleepStage* getSleepStage() const; const StepJointsStage* getStepJointsStage() const;
 		void reportTouchInfo(const TouchInfo& info);
 		void onPrimitiveExtentsChanged(Primitive* prim);
 		void onPrimitiveContactParametersChanged(Primitive* p);
@@ -160,7 +161,6 @@ namespace RBX {
 		void destroyAutoJoints(Primitive* prim,
 			std::set<Primitive*>* ignorePrims,
 			bool manualJoints, bool autoJoints);
-
 		// FUNCTION: PLAYER 0x0070d390
 		// FUNCTION: STUDIO 0x0082a960
 		void reset() { RBXASSERT(!inStepCode); worldStepId = 0; }
@@ -190,6 +190,10 @@ namespace RBX {
 	// TEMPLATE: PLAYER 0x00746d80
 	// TEMPLATE: STUDIO 0x00887840
 	// ??0?$signal@$$A6AXPAVPrimitive@RBX@@@Z@signals@rbx@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x00746f40
+	// TEMPLATE: STUDIO 0x00887a00
+	// ?fastRemove@?$IndexArray@VPrimitive@RBX@@$H?worldIndexFunc@12@QAEAAHXZA@@RBX@@QAEXPAVPrimitive@2@@Z
 
 	// TEMPLATE: PLAYER 0x00749000
 	// TEMPLATE: STUDIO 0x00889950

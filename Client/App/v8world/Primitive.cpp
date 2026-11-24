@@ -13,6 +13,7 @@
 #include "V8World/Contact.h"
 #include "V8World/IMoving.h"
 #include "V8Kernel/Body.h"
+#include "Network/NetworkOwner.h"
 #include "V8Kernel/Constants.h"
 #include "Util/Velocity.h"
 #include "Util/SpanningEdge.h"
@@ -33,8 +34,8 @@ namespace RBX {
 	// STUB: PLAYER 0x00756a40
 	// STUB: STUDIO 0x00895d10
 	Primitive::Primitive(int geometryType)
-		: m_unk0x7c(false)
-		, networkOwner()
+		: networkOwner(Network::NetworkOwner::Unassigned())
+		, m_unk0x7c(false)
 		, guidSetExternally(false)
 		, sizeMultiplier(SIZE_MULTIPLIER_0)
 		, sortSize(0)
@@ -43,7 +44,6 @@ namespace RBX {
 		, joints(this)
 		, worldIndex(-1)
 		, world(NULL)
-		, fuzzyExtents(G3D::Vector3::maxFinite(), -G3D::Vector3::maxFinite())
 		, fuzzyExtentsStateId(static_cast<unsigned int>(-2))
 		, geometry(newGeometry(geometryType))
 		, body(new Body())
@@ -52,25 +52,25 @@ namespace RBX {
 		, dragging(false)
 		, anchoredProperty(false)
 		, preventCollide(false)
-		, networkIsSleeping(false)
-		, specificGravity(0.0f)
 		, friction(defaultFriction())
 		, elasticity(defaultElasticity())
-		, jointKDirty(true)
-		, jointKOwner(this)
-		, jointK(0.0f)
-		, jointKCompute(&Primitive::computeJointK)
+		, jointK(this, &Primitive::computeJointK)
 	{
+		FASTLOG1(FLog::PrimitiveLifetime, "Primitive %p created", this);
 		for (int i = 0; i < 6; ++i) {
 			surfaces[i] = NO_SURFACE;
 			surfaceData[i] = NULL;
 		}
 	}
 
+
+
+
+
 	// The 2013 dtor asserts the primitive left its world and still owns its geometry and body,
 	// then releases them and the six surface records (PLAYER 0x00755540).
-	// STUB: PLAYER 0x00755540
-	// STUB: STUDIO 0x00894860
+	// FUNCTION: PLAYER 0x00755540
+	// FUNCTION: STUDIO 0x00894860
 	Primitive::~Primitive()
 	{
 		RBXASSERT(!world);
@@ -78,8 +78,8 @@ namespace RBX {
 		RBXASSERT(body);
 
 		delete geometry;
-		geometry = NULL;
 		delete body;
+		geometry = NULL;
 		body = NULL;
 		for (int i = 0; i < 6; ++i)
 		{
@@ -482,7 +482,6 @@ namespace RBX {
 		}
 		return NULL;
 	}
-
 	// mac: 0x590808.
 	Contact* Primitive::getFirstContact()
 	{
@@ -490,12 +489,13 @@ namespace RBX {
 			return NULL;
 		return static_cast<Contact*>(contacts.getEdge(0));
 	}
-
 	// mac: 0x590826.
 	Contact* Primitive::getNextContact(Contact* c)
 	{
 		return static_cast<Contact*>(contacts.getNext(this, c));
 	}
+	// STUB: PLAYER 0x00755970
+	// STUB: STUDIO 0x00894c90
 	Geometry* Primitive::newGeometry(int type)
 	{
 		switch (type)
@@ -819,3 +819,5 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::Primitive, 0x170);

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/DebugSettings.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sDebugSettings = "DebugSettings";
@@ -19,6 +20,8 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::DebugSettings);
 }
+
+
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
 // at the end of the file so no 2013 assert line above them moves.
@@ -138,3 +141,25 @@ template<> TypeRegistrar<Time::SampleMethod> TypeRegistrar<Time::SampleMethod>::
 
 } // namespace Reflection
 } // namespace RBX
+
+namespace RBX {
+
+// FUNCTION: PLAYER 0x0065fa10
+// FUNCTION: STUDIO 0x00778980
+DebugSettings::DebugSettings()
+	: stackTracingEnabled(true)
+	, m_unk0x68(0)
+	, m_unk0x6c(0)
+	, m_unk0x70(false)
+	, m_unk0x71(false)
+	, isFmodProfilingEnabled(false)
+	, m_unk0x73(false)
+	, m_unk0x74(2)
+	, m_unk0x78(false)
+{
+	Instance::setName("Diagnostics");
+}
+
+} // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::DebugSettings, 0x7c);

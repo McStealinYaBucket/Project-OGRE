@@ -17,30 +17,22 @@
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::SpatialHash(
 	World* world, ManagerT* manager, int maxNodes)
-	: int0(0)
-	, name("")
-	, int8(0)
-	, maxNodes(maxNodes)
+	: maxNodes(maxNodes)
 	, treeNodeCount(0)
 	, world(world)
 	, manager(manager)
 	, nodeCount(0)
 	, int80(0)
 {
-	// mac: 0x56CB78: the +28..+75 loop zeroes the four level tables; setup()
-	// sizes them.  (Pool-adjacent members omitted -- see header.)
+	// setup() sizes the four level tables (2013 ctor 0x008eef80 calls it last).
 	setup();
 }
 
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::~SpatialHash()
 {
-	// Binary D2 walks its pools; ours tracks everything explicitly.
+	// The pools release every node (their destructors run the trivial node destructors).
 	// Prims are NOT owned (never deleted here).
-	for (size_t i = 0; i < allNodes.size(); ++i)
-		delete allNodes[i];
-	for (size_t i = 0; i < allTrees.size(); ++i)
-		delete allTrees[i];
 }
 
 // mac: 0x56B900 (97B).  Per level: buckets.resize(numBuckets) (std::vector,
@@ -170,14 +162,13 @@ typename SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::SpatialNode*
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::newNode(
 	int level, int hash, const Vector3int32& cell)
 {
-	SpatialNode* node = new SpatialNode();
+	SpatialNode* node = nodePool.malloc();
 	node->level = (short)level;
 	node->hash = hash;
 	node->cell = cell;
 	node->prim = NULL;
 	node->next = NULL;
 	node->treeNode = NULL;
-	allNodes.push_back(node);
 	if (level == 0)
 		return node;
 	TreeNode* treeNode = findTreeNode(level, hash, cell);
@@ -211,7 +202,7 @@ typename SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::TreeNode*
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::createTreeNode(
 	int level, int hash, const Vector3int32& cell)
 {
-	TreeNode* treeNode = new TreeNode();
+	TreeNode* treeNode = treeNodePool.malloc();
 	// TreeNode::TreeNode 0x56A9EC inits (see header): level -1, hash -1,
 	// cell 0, children[8] -1, hasChild 0, count 0, +44 0.  The level/hash/
 	// cell/treeNext are overwritten below; children/hasChild/count must
@@ -224,7 +215,6 @@ SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::createTreeNode(
 	treeNode->level = (short)level;
 	treeNode->hash = hash;
 	treeNode->cell = cell;
-	allTrees.push_back(treeNode);
 	++treeNodeCount;
 	HashBucket& bucket = buckets[level][hash];
 	treeNode->treeNext = bucket.treeHead;
@@ -578,16 +568,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::returnNode(
 	node->next = NULL;
 	node->level = -2;
 	node->hash = -2;
-	for (size_t i = 0; i < allNodes.size(); ++i)
-	{
-		if (allNodes[i] == node)
-		{
-			allNodes[i] = allNodes.back();
-			allNodes.pop_back();
-			break;
-		}
-	}
-	delete node;
+	nodePool.free(node);
 }
 
 // mac: 0x569E98 (82B): --count; if 0 && no children: _retire +
@@ -621,16 +602,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::_retireTreeNode(
 		link = &(*link)->treeNext;
 	*link = treeNode->treeNext;
 	treeNode->treeNext = NULL;
-	for (size_t i = 0; i < allTrees.size(); ++i)
-	{
-		if (allTrees[i] == treeNode)
-		{
-			allTrees[i] = allTrees.back();
-			allTrees.pop_back();
-			break;
-		}
-	}
-	delete treeNode;
+	treeNodePool.free(treeNode);
 	--treeNodeCount;
 }
 

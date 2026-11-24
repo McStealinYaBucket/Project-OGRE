@@ -17,6 +17,21 @@ namespace RBX {
 	{
 	public:
 		Settings() {}
+
+	protected:
+		// 0x8c..0xac: GlobalAdvancedSettings' mutex sits at +0xac (ctor PLAYER 0x00658580), so Settings
+		// is 0xac. The Settings ctors take a std::string by value (PLAYER 0x00658480 chain).
+		std::string settingsFile;	// 0x8c  src2016 name
+		bool settingsErased;		// 0xa8  src2016 name
 	};
 
 } // namespace RBX
+
+// Slot 0 of the ServiceProvider, DataModel and Settings vftables (PLAYER 0x00b2eb90, 0x00b3008c,
+// 0x00b311f4) is one folded thunk into ~ServiceProvider. Since Settings gained its string member,
+// GlobalBasicSettings' own thunk is no longer that twin, so the pairing is pinned here.
+// clang-format off
+// SYNTHETIC: PLAYER 0x00644360
+// SYNTHETIC: STUDIO 0x0073fce0
+// ??_E?$DescribedNonCreatable@VDataModel@RBX@@VServiceProvider@2@$E?sDataModel@2@3QBDB$0BL@$0A@@RBX@@WBM@AEPAXI@Z
+// clang-format on

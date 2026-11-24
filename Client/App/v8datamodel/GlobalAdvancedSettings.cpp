@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/GlobalAdvancedSettings.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sGlobalAdvancedSettings = "GlobalSettings";	// 2013 string (PLAYER 0x00b31084 -> 0x00b31070)
@@ -47,3 +48,5 @@ boost::shared_ptr<GlobalAdvancedSettings> GlobalAdvancedSettings::singleton()
 	return globaladvancedsettingsStatic();
 }
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::GlobalAdvancedSettings, 0xb4);

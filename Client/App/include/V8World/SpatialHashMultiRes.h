@@ -21,23 +21,20 @@
  *   TreeNode pool: boost::object_pool<TreeNode, 48u>; SpatialNode pool:
  *   object_pool<SpatialNode, 32u> (batch122 sweep).
  *
- * MODEL-RELATIVE LAYOUT (binary C2 offsets in comments; our model packs the
- * same members in the same ORDER but without the pool objects and registries
- * we don't need -- sizes differ, names and behavior don't):
- *   +0 int 0 / +4 name"" / +8 int 0 / +12 maxNodes / +16 treeNodeCount /
- *   +20 World* / +24 Manager* / +28..75 four LevelTables (12B each) /
- *   +76 nodeCount / +80 int80 / +84 Array<Primitive*> /
- *   +100/+104 listener begin/end (+108..+120 pool-adjacent -- omitted) /
- *   +124..164 pool params (48/32/32 -- omitted, constants live in code) /
- *   +136..168 pool objects (omitted -- plain new/delete, see below).
+ * LAYOUT: the 2013 Windows ctor (PLAYER 0x008eef80; ContactManager's ctor 0x007b63a0 news 0xdc)
+ * fixes it; see the member comments:
+ *   0x00 ConcurrencyValidator (0x24), 0x24 maxNodes, 0x28 treeNodeCount, 0x2c World*,
+ *   0x30 manager, 0x34 four bucket vectors (`eh vector constructor iterator'), 0x74 nodeCount,
+ *   0x78 int80, 0x7c G3D::Array<Primitive*>, 0x8c listener vector, 0x9c TreeNode pool,
+ *   0xbc SpatialNode pool.
+ * The pools are RBX::object_pool over RBX::roblox_allocator (iOS 10-29 symbols): each is a
+ * boost::object_pool (0x1c) plus its CallDestructor byte, 0x20; the ctor stores requested size
+ * 0x30/0x20, next and start size 0x20, max size 0 (boost 1.53 pool defaults).
+ * Nodes come from malloc() and go back through free(); the
+ * DFFlag::UseSpatialHashUnorderedPool branch (RBX::Allocator) is not modelled.
  *
- * POOLS-AS-NEW DELTA: the binary allocates TreeNodes (48B) and SpatialNodes
- * (32B) from boost::object_pool (or RBX::Allocator when
- * DFFlag::UseSpatialHashUnorderedPool is set -- the manual-init path, whose
- * byte values this port uses verbatim).  Allocation strategy is unobservable
- * from any reader (buckets, counts, links are identical), so this port uses
- * plain new/delete and skips the flag.  All nodes are additionally tracked
- * for the destructor (the binary pools never free until teardown either).
+ * The bodies in the .inl are still the Mac reconstruction (STUB); safeExtents below is laid
+ * out on its 2013 assert lines (105/107).
  *
  * Original files: .../Client/App/v8world/SpatialHashMultiRes.cpp (statics,
  * getHash :72-73, computeMinMax :79) and
@@ -57,6 +54,9 @@
 #include "Util/ExtentsInt32.h"
 #include "Util/Vector3int32.h"
 #include "G3D/Array.h"
+#include "Util/ConcurrencyValidator.h"
+#include "rbx/object_pool.h"
+#include "rbx/memory.h"
 
 namespace RBX {
 
@@ -308,27 +308,20 @@ namespace RBX {
 		SpatialHash(const SpatialHash&);
 		SpatialHash& operator=(const SpatialHash&);
 
-		int int0;                        // +0 (0)
-		const char* name;                // +4 ("")
-		int int8;                        // +8 (0)
-		int maxNodes;                    // +12 (100 via C1)
-		int treeNodeCount;               // +16 (++ in createTreeNode)
-		World* world;                    // +20
-		ManagerT* manager;               // +24
-		int nodeCount;                   // +76 (++ in addNode)
-		int int80;                       // +80 (max coarser-depth stat)
-		G3D::Array<PrimitiveT*> array84; // +84
-		G3D::Array<SpatialHashListener*> listeners; // +100/+104
-		// +108..+172: pool objects/params + registries (omitted -- plain
-		// new/delete need no storage; see the header note).
-
-		// Per-level bucket vectors (the binary's 12B level tables).
-		std::vector<HashBucket> buckets[MaxLevels];
-
-		// All live nodes/trees (binary pools never free until teardown;
-		// this frees them in ~SpatialHash -- same lifetime, no leak).
-		std::vector<SpatialNode*> allNodes;
-		std::vector<TreeNode*> allTrees;
+		// 2013 layout from the ctor (PLAYER 0x008eef80; ContactManager news 0xdc). Same order as the
+		// Mac model; the pools are RBX::object_pool (0x20 each with its CallDestructor byte).
+		ConcurrencyValidator concurrencyValidator;		// 0x00
+		int maxNodes;									// 0x24 (100 from ContactManagerSpatialHash)
+		int treeNodeCount;								// 0x28
+		World* world;									// 0x2c
+		ManagerT* manager;								// 0x30
+		std::vector<HashBucket> buckets[MaxLevels];		// 0x34
+		int nodeCount;									// 0x74
+		int int80;										// 0x78 (max coarser-depth stat)
+		G3D::Array<PrimitiveT*> array84;				// 0x7c
+		std::vector<SpatialHashListener*> listeners;	// 0x8c
+		RBX::object_pool<TreeNode, RBX::roblox_allocator> treeNodePool;		// 0x9c (requested size 0x30)
+		RBX::object_pool<SpatialNode, RBX::roblox_allocator> nodePool;		// 0xbc (requested size 0x20)
 	};
 
 #include "V8World/SpatialHashMultiRes.inl"

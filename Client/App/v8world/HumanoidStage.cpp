@@ -9,8 +9,8 @@
 
 namespace RBX {
 
-	// STUB: PLAYER 0x0099b050
-	// STUB: STUDIO 0x00a5abf0
+	// FUNCTION: PLAYER 0x0099b050
+	// FUNCTION: STUDIO 0x00a5abf0
 	HumanoidStage::HumanoidStage(IStage* upstream, World* world)
 		: IWorldStage(upstream, new SleepStage(this, world), world)
 	{

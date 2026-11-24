@@ -30,6 +30,7 @@
 #include "G3D/Array.h"
 #include "Util/ConcurrencyValidator.h"
 #include "Util/Profiling.h"
+#include "Voxel/CellChangeListener.h"
 #include "decomp.h"
 #include <boost/scoped_ptr.hpp>
 
@@ -39,30 +40,6 @@ namespace RBX {
 	class Primitive;
 	class Contact;
 	class ContactManagerSpatialHash;
-
-	namespace Profiling {
-		// Belongs in Util/Profiling.h (not this directory's owner): only what World and ContactManager need.
-		// 2013 size 0xc040 (World ctor news 0xc040), Profiler vftable 0x00b526d4, CodeProfiler 0x00b52790.
-		class CodeProfiler
-		{
-		public:
-			CodeProfiler(const char* name);
-			virtual ~CodeProfiler() {}
-		private:
-			undefined m_unk0x04[0xc040 - 0x04];
-		};
-	}
-
-	namespace Voxel {
-		struct CellChangeInfo;
-		// Belongs with the voxel headers (not this directory): only what ContactManager needs.
-		// One vftable slot, no virtual destructor (ContactManager vftable 0x00b64cc4).
-		class CellChangeListener
-		{
-		public:
-			virtual void terrainCellChanged(const CellChangeInfo& info) = 0;
-		};
-	}
 
 	// 2013 layout from the ctor 0x007b63a0 (World news 0x6c): CellChangeListener vptr 0x00,
 	// ConcurrencyValidator 0x04, spatialHash 0x28 (new 0xdc), myMegaClusterPrim 0x2c, world 0x30,

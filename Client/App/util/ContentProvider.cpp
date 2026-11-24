@@ -858,14 +858,15 @@ bool ContentProvider::isUrl(const std::string& s)
 
 // STUB: PLAYER 0x006676a0
 // STUB: STUDIO 0x00791be0
-std::string ContentProvider::readContent(const char* name, std::istream& stream, unsigned long size)
+ContentId ContentProvider::readContent(const char* name, std::istream& stream, unsigned long size)
 {
-	// mac: 0x60D178 minimal (original TU: App/util/ContentProvider.cpp:1093 —
-	// consolidated here to avoid a duplicate ContentProvider.obj in the
-	// bring-up build): stream-position effect only; cache TODO (see header).
-	(void)name;
+	// 2013 (PLAYER 0x006676a0): ContentId id(name); if isContentLoaded(id), skip the bytes
+	// (clear, seekg(size, cur)); otherwise copy them into a file under a cache path (0x00661a30,
+	// unnamed) with RBXASSERT(content.good()) at ContentProvider.cpp:1093 per byte. Only the skip
+	// is written here.
+	ContentId id(name);
 	stream.ignore(size);
-	return std::string();
+	return id;
 }
 
 } // namespace RBX

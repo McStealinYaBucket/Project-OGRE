@@ -3,21 +3,10 @@
 #include "stdafx.h"
 
 #include "V8Kernel/Constants.h"
-#include "V8World/ContactManager.h"
 #include "Util/FastFlags.h"
 #include "decomp.h"
 
 namespace RBX {
-
-	// Profiling::CodeProfiler(const char*) lives in 2013's Profiling.cpp (util/, another owner); it is
-	// defined here, outside World.obj and ContactManager.obj, only so that their calls pair and the
-	// callers keep the new-expression cleanup states a call into another .obj gets.
-	// STUB: PLAYER 0x00745230
-	// STUB: STUDIO 0x007d7a90
-	Profiling::CodeProfiler::CodeProfiler(const char* name)
-	{
-		STUB(0x00745230);
-	}
 
 	// mac: 0x52701A (33B).
 	int Constants::worldStepsPerUiStep()

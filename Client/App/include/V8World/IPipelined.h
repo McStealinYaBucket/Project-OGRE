@@ -5,7 +5,7 @@
    downstreamOfStage's `mov eax,1 / xor eax,eax` tail is the && chain below. */
 #pragma once
 
-#include "V8Kernel/IStage.h"
+#include "V8World/IWorldStage.h"	// and V8Kernel/IStage.h
 
 namespace RBX {
 
@@ -72,7 +72,7 @@ namespace RBX {
 			if (!currentStage)
 				return NULL;
 			IStage* stage = !inKernel() ? currentStage : currentStage->getUpstream();
-			return stage->getWorld();
+			return static_cast<IWorldStage*>(stage)->getWorld();
 
 		}
 

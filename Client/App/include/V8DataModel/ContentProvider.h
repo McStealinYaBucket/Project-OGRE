@@ -128,7 +128,7 @@ public:
 	void setCacheSize(int size);
 
 	// ---- kept 2013 surface ----
-	std::string readContent(const char* name, std::istream& stream, unsigned long size);	// 0x60D178; 2013 returns a std::string (PLAYER 0x006676a0 ret 0x10; SerializerV2::load 0x006fd2d9 destroys it)
+	ContentId readContent(const char* name, std::istream& stream, unsigned long size);	// 0x60D178; 2013 returns the ContentId (PLAYER 0x006676a0 builds ContentId(name) 0x004c4720 in the return slot, ret 0x10; SerializerV2::load 0x006fd2d9 destroys it)
 	// mac: 0x609AC4 (static: the loadfile call site pushes both args at [esp]/
 	// [esp+4] as cdecl with no ecx this-setup, batch640).
 	static const char* verifyScriptSignature(const char* script, bool required);

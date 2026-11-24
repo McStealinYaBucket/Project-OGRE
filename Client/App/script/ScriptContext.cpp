@@ -828,111 +828,111 @@ lua_State* ScriptContext::openState()
 		yieldEvent.reset(new Lua::YieldingThreads(this));
 	return L;
 }
-// mac: 0x18E9BC-0x18EE84 (batch722 FULL body; callers: SC detach arm 0x194FFD +
-// DataModel::clearContents 0x2CFD89).  Sets +247 outside the reset gate,
+// mac: 0x18E9BC-0x18EE84 (batch722 FULL body; callers: SC detach arm 0x194FFD + DataModel::clearContents 0x2CFD89). 2013 adds the try/catch, the job removal and the LuaDebugger arms.  Sets +247 outside the reset gate,
 // early-outs on resettingSimulation, then tears the Lua world down:
 // commandLineSandbox reset (+0x6C WeakThreadRef::reset); ScriptCount/
 // WaitingThreads logs on FLog::ScriptContextClose (0xF88531 default 1);
-// scripts tree erase-all (+0x84); the LeakedWaitingThreads log + yieldEvent.reset() (+0xC4); waitingThreads.clear() (+0xC8); closeState + NULL on both globalStates slots (+0x64/+0x68); allocator heap stats (allocatorView +0x2E0) with the ScriptContextClose heap logs, clearHeapMax and the "Script memory leaks" MESSAGE_ERROR when no other state is open and the heap is non-empty. DELTAs (loud): gcJob/waitingScriptsJob removeBlocking blocks (members +0x2E4/+0x2EC unported -- scheduler era; nothing schedules them, so the guarded blocks have no state to act on); the FFlag::LuaDebugger branch shape (loop vs unrolled close -- both variants close exactly the two slots, the port uses one loop).
+// STUB: PLAYER 0x00685060
+// STUB: STUDIO 0x007ea9c0
 void ScriptContext::closeStates(bool resettingSimulation)
 {
-	contentClearing = true;              // +247 (first write, outside the gate)
+	contentClearing = true;
 	if (resettingSimulation)
 		return;
-	commandLineSandbox.reset();          // +0x6C
-	if (FLog::ScriptContextClose != 0)
+
+	commandLineSandbox.reset();
+
+	try
 	{
 		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- ScriptCount=%u", scripts.size());
-		if (yieldEvent != NULL)
+		if (yieldEvent)
 			FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- WaitingThreads=%u", yieldEvent->waiterCount());
+
+		scripts.clear();
+
+		if (yieldEvent)
+			FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- LeakedWaitingThreads=%u", yieldEvent->waiterCount());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		yieldEvent.reset();
 	}
-	scripts.clear();                     // +0x84 (_M_erase + head rebind + size 0)
-	if (yieldEvent != NULL)
-		FASTLOG1(FLog::ScriptContextClose, "ScriptContext::closeState -- LeakedWaitingThreads=%u", yieldEvent->waiterCount());
-	yieldEvent.reset();                  // +0xC4
-	// gcJob/waitingScriptsJob removeBlocking: DELTA (members unported).
-	waitingThreads.clear();              // +0xC8
-	for (size_t i = 0; i < 2; ++i)
+	catch (RBX::base_exception& e)
 	{
-		if (globalStates[i] != NULL)
-		{
-			closeState(globalStates[i]); // 0x18EE84 (both slots)
-			globalStates[i] = NULL;
-		}
+		StandardOut::singleton()->printf(MESSAGE_ERROR, "Exception thrown while cleaning up Lua: %s", e.what());
+		RBXASSERT(false);
 	}
-	if (luaAllocator.get() != NULL)
+	if (gcJob)
 	{
-		size_t heapSize, heapCount, maxHeapSize, maxHeapCount;
+		TaskScheduler::singleton().removeBlocking(gcJob);
+		gcJob.reset();
+	}
+	if (waitingScriptsJob)
+	{
+		TaskScheduler::singleton().removeBlocking(waitingScriptsJob);
+		waitingScriptsJob.reset();
+	}
+	waitingThreads.clear();
+	if (!FFlag::LuaDebugger)
+	{
+		GlobalStates states = {{NULL, NULL}};
+		std::swap(states, globalStates);
+		for (GlobalStates::iterator iter = states.begin(); iter != states.end(); ++iter)
+			if (*iter)
+				closeState(*iter);
+	}
+	else
+	{
+		for (GlobalStates::iterator iter = globalStates.begin(); iter != globalStates.end(); ++iter)
+			if (*iter)
+			{
+				closeState(*iter);
+				*iter = NULL;
+			}
+	}
+	if (luaAllocator)
+	{
+		size_t heapSize;
+		size_t heapCount;
+		size_t maxHeapSize;
+		size_t maxHeapCount;
 		luaAllocator->getHeapStats(heapSize, heapCount, maxHeapSize, maxHeapCount);
-		if (FLog::ScriptContextClose != 0)
-		{
-			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- heapSize=%u heapCount=%u", heapSize, heapCount);
-			FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- maxHeapSize=%u maxHeapCount=%u", maxHeapSize, maxHeapCount);
-		}
+		FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- heapSize=%u heapCount=%u", heapSize, heapCount);
+		FASTLOG2(FLog::ScriptContextClose, "ScriptContext::closeState -- maxHeapSize=%u maxHeapCount=%u", maxHeapSize, maxHeapCount);
 		luaAllocator->clearHeapMax();
-		if (contextCount == 0 && (heapSize != 0 || heapCount != 0))
-			StandardOut::singleton()->printf(MESSAGE_ERROR, "Script memory leaks: %d bytes, %d blocks", (int)heapSize, (int)heapCount);
+		if (contextCount == 0)
+			if (heapSize > 0 || heapCount > 0)
+				StandardOut::singleton()->printf(MESSAGE_ERROR, "Script memory leaks: %d bytes, %d blocks", (int)heapSize, (int)heapCount);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 } // namespace RBX
 // RobloxExtraSpace::eraseRefsFromAllNodes (luaconf.h inline), emitted here for closeState.
 // FUNCTION: PLAYER 0x00672d80
@@ -1707,33 +1707,33 @@ int ScriptContext::stats(lua_State* L)
 
 
 // mac: 0x18CF42 (2021B, batch472): run fn+args on a fresh thread via resume#2. Returns true+results (or false+error); yields the caller with a Continuations pair when the function yields.
-// STUB: PLAYER 0x006878c0
+// FUNCTION: PLAYER 0x006878c0
 // STUB: STUDIO 0x007ed020
-int ScriptContext::ypcall(lua_State* L)
+int ScriptContext::ypcall(lua_State* thread)
 {
-	Lua::ThreadRef threadLock(L);
-	int top = lua_gettop(L);
+	Lua::ThreadRef threadLock(thread);
+	int top = lua_gettop(thread);
 	if (top < 1)	// 2013 0x00687904: cmp ebp,1; jge
 		throw std::runtime_error("ypcall requires at least 1 argument");
-	if (lua_iscfunction(L, 1) != 0)
+	if (lua_iscfunction(thread, 1) != 0)
 		throw std::runtime_error("ypcall requires a resumable function as a first argument. Wrap your C function with a Lua function.");
-	lua_State* child = lua_newthread(L);
-	// (no slot store here in 2013; the line pair is kept so later
-	// __LINE__-laid asserts stay on their 2013 lines)
-	Lua::WeakThreadRef functor(child);
+	// 2013: the child thread goes straight into a WeakThreadRef (0x00687980), and the
+	// continuations bind the caller's own thread, not the child. The frame holds a
+	// Continuations pair (0xb0).
+	Lua::WeakThreadRef functor(lua_newthread(thread));
 	Lua::ThreadRef safeFunctor = functor.lock();
 	RBXASSERT(safeFunctor);
 	for (int i = 1; i <= top; ++i)
-		lua_pushvalue(L, i);
-	lua_xmove(L, safeFunctor.get(), top);
-	lua_settop(L, -2);
+		lua_pushvalue(thread, i);
+	lua_xmove(thread, safeFunctor, top);
+	lua_settop(thread, -2);
+	ScriptContext* context = RobloxExtraSpace::get(thread)->context();
 	// 2013 is a switch on the resume status (0x00687a78: sub/je chain, default throws); the success
 	// case comes first in the source (its assert is on line 1747, the yield case's on 1768).
-	switch (RobloxExtraSpace::get(L)->context()->resume(safeFunctor, top - 1))
+	switch (context->resume(safeFunctor, top - 1))
 	{
 	case 0:
 		{
-			lua_State* thread = L;	// the 2013 name in the assert text
 
 
 
@@ -1745,20 +1745,20 @@ int ScriptContext::ypcall(lua_State* L)
 
 
 			RBXASSERT(top == lua_gettop(thread));
-			lua_pushboolean(L, true);
-			int nresults = lua_gettop(safeFunctor.get());
-			lua_xmove(safeFunctor.get(), L, nresults);
+			lua_pushboolean(thread, true);
+			int nresults = lua_gettop(safeFunctor);
+			lua_xmove(safeFunctor, thread, nresults);
 			return nresults + 1;
 		}
+	default:	// before case 1 in 2013: its EH state (6) precedes case 1's (7, 8)
+		throw std::runtime_error("");	// 2013 throws an empty message (0x00bda1b8)
 	case 1:
 		{
-			Lua::Continuations* cont = new Lua::Continuations();
-			ScriptContext* context = RobloxExtraSpace::get(L)->context();
-			cont->success = boost::bind(&ScriptContext::on_ypcall_success,
-				context, Lua::WeakThreadRef(child), boost::arg<1>());
-			cont->error = boost::bind(&ScriptContext::on_ypcall_failure,
-				context, Lua::WeakThreadRef(child), boost::arg<1>());
-
+			Lua::Continuations continuations;
+			continuations.success = boost::bind(&ScriptContext::on_ypcall_success,
+				context, Lua::WeakThreadRef(thread), _1);
+			continuations.error = boost::bind(&ScriptContext::on_ypcall_failure,
+				context, Lua::WeakThreadRef(thread), _1);
 
 
 
@@ -1766,19 +1766,19 @@ int ScriptContext::ypcall(lua_State* L)
 
 
 			RBXASSERT(RobloxExtraSpace::get(safeFunctor)->continuations.get() == NULL);
-			RobloxExtraSpace::get(safeFunctor.get())->continuations.reset(cont);
-			RobloxExtraSpace::get(L)->yieldCaptured = true;
-			return lua_yield(L, 0);
+			RobloxExtraSpace::get(safeFunctor)->continuations.reset(new Lua::Continuations(continuations));
+			RobloxExtraSpace::get(thread)->yieldCaptured = true;
+			return lua_yield(thread, 0);
 		}
 	case 2:
-		lua_pushboolean(L, false);
-		lua_pushstring(L, Lua::safe_lua_tostring(safeFunctor.get(), -1));
-		lua_settop(safeFunctor.get(), 0);
+		lua_pushboolean(thread, false);
+		lua_pushstring(thread, Lua::safe_lua_tostring(safeFunctor, -1));
+		lua_settop(safeFunctor, 0);
 		return 2;
-	default:
-		throw std::runtime_error("");	// 2013 throws an empty message (0x00bda1b8)
 	}
 }
+
+
 
 // mac: 0x189D7E wrapper: development-library registration + validation.
 // The middle of 0x189D7E is undumped (only its jnz ref in batch707); the
@@ -1919,8 +1919,8 @@ void ScriptContext::startPendingScripts()
 // tail (thread-scheduler internals at +0x9C/+0x124/...) has no driver
 // in the port yet -- loud DELTA; no heartbeat connection exists, so
 // this is currently reached only by direct calls/tests.
-// STUB: PLAYER 0x00689f00
-// STUB: STUDIO 0x007ef660
+// FUNCTION: PLAYER 0x00689f00
+// FUNCTION: STUDIO 0x007ef660
 void ScriptContext::onHeartbeat(const Heartbeat& heartbeat)
 {
 	(void)heartbeat;
@@ -1931,14 +1931,14 @@ void ScriptContext::onHeartbeat(const Heartbeat& heartbeat)
 	if (timoutSpan.seconds() > 0.0)
 		timoutTime = Time::now<Time::Fast>() + timoutSpan;
 	if (timedout.swap(0) == 1)
-		--timedoutCount;
+		RbxInterlockedDecrement(&timedoutCount);
 	if (Time::now<Time::Fast>() >= nextPendingScripts)
 	{
 		startPendingScripts();
 		nextPendingScripts = Time::now<Time::Fast>() + Time::Interval(1.0);
 	}
 	if (FLog::ScriptContext)
-		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat done", 0);
+		FLog::FastLog(FLog::ScriptContext, "Script context heartbeat finish", 0);
 }
 
 // mac: 0x19563A (eraseScript): erase the FIRST queue entry whose script px
@@ -2310,8 +2310,8 @@ void ScriptContext::removeScript(BaseScript* script)
 }
 
 // mac: 0x195764 (1346B, batch714-716): callstack printer.  Gate = the DebugSettings singleton byte (+0x5D; early return when 0).  Per frame (max 12 levels): "Script '%s', Line %d" or "... - %s %s" with namewhat/name when ar.name is set; each frame goes to StandardOut at MESSAGE_INFO and, when output != NULL, to the stream; a lowercase "stack end" trailer prints when frames remain and the cap was not reached; *output always receives the stream text last (binary-verbatim, including the double lua_getstack(L, 0) entry check).
-// STUB: PLAYER 0x0067abc0
-// STUB: STUDIO 0x007e2ae0
+// FUNCTION: PLAYER 0x0067abc0
+// FUNCTION: STUDIO 0x007e2ae0
 void ScriptContext::printCallStack(lua_State* thread, std::string* output)
 {
 	if (!DebugSettings::singleton().getStackTracingEnabled())
@@ -3367,6 +3367,7 @@ void ScriptContext::onServiceProvider(ServiceProvider* oldProvider, ServiceProvi
 #define INFINITE            0xFFFFFFFF  // Infinite timeout
 #endif
 // mac: 0x190786-0x190900 (batch720; control flow binary-identical to 2016): the monitor.  Sleeps on checkTimeout, exits when the detach arm sets endTimoutThread, and parks at -1 while the span is zero (disabled). On expiry it re-arms the chunk to the span and latches timedout; the counter bumps only on the 0->1 transition.
+// FUNCTION: PLAYER 0x0067a1e0
 void ScriptContext::onCheckTimeout()
 {
 	Time::Interval sleepTimeInterval = timoutSpan;
@@ -3389,7 +3390,7 @@ void ScriptContext::onCheckTimeout()
 					// We've timed out!
 					sleepTimeInterval = timoutSpan;
 					if (timedout.swap(1) == 0)
-						++timedoutCount;
+						RbxInterlockedIncrement(&timedoutCount);
 				}
 			}
 			else

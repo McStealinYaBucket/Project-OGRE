@@ -58,3 +58,5 @@ namespace RBX {
 	}
 
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::MultiJoint, 0xcc);

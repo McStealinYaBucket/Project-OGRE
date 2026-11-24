@@ -26,8 +26,7 @@ namespace RBX {
 		: numJoints(0)
 		, listHead(NULL)
 		, listTail(NULL)
-		, profiler(NULL)  // DELTA: binary news 0xA01C CodeProfiler("Joint
-		                  // Update"); profiler module absent, always NULL.
+		, profilingJointUpdate(new Profiling::CodeProfiler("Joint Update"))
 	{
 		downstream = new HumanoidStage(this, worldArg);
 		upstream = upstreamArg;

@@ -67,22 +67,6 @@ extern "C" void ogre_stub_007d7380()
 }
 #pragma comment(linker, "/alternatename:?registerNewLightAPI@RBX@@YAXXZ=_ogre_stub_007d7380")
 
-// private: __thiscall RobloxExtraSpace::RobloxExtraSpace(class RobloxExtraSpace *)
-// STUB: STUDIO 0x00924c30
-extern "C" void ogre_stub_00924c30()
-{
-	STUB(0x00924c30);
-}
-#pragma comment(linker, "/alternatename:??0RobloxExtraSpace@@AAE@PAV0@@Z=_ogre_stub_00924c30")
-
-// private: __thiscall RobloxExtraSpace::~RobloxExtraSpace(void)
-// STUB: STUDIO 0x00926390
-extern "C" void ogre_stub_00926390()
-{
-	STUB(0x00926390);
-}
-#pragma comment(linker, "/alternatename:??1RobloxExtraSpace@@AAE@XZ=_ogre_stub_00926390")
-
 // unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
 // STUB: STUDIO 0x00a68be0
 extern "C" void ogre_stub_00a68be0()

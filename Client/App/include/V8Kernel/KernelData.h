@@ -12,7 +12,6 @@
 #include "Util/FastFlags.h"
 namespace RBX {
 	class SimBody; class Body; class Point; class Connector;
-
 	// SIZE 0xb0
 	class KernelData
 	{
@@ -29,8 +28,9 @@ namespace RBX {
 		G3D::Array<Connector*> jointConnectors;       // 0x90
 		G3D::Array<Connector*> contactConnectors;     // 0xa0
 
+		// FUNCTION: PLAYER 0x008310b0
+		// FUNCTION: STUDIO 0x009a3710
 		KernelData() {}
-
 		// FUNCTION: PLAYER 0x0082f240
 		// FUNCTION: STUDIO 0x009a1780
 		~KernelData()

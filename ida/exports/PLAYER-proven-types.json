@@ -899,8 +899,8 @@
      "name": "globalStates",
      "offset": 104,
      "size": 8,
-     "kind": "array",
-     "type": null,
+     "kind": "class",
+     "type": "boost::array<lua_State *,2>",
      "scalar": null
     },
     {
@@ -1067,9 +1067,9 @@
      "name": "timedoutCount",
      "offset": 292,
      "size": 4,
-     "kind": "class",
-     "type": "rbx::atomic<int>",
-     "scalar": null
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
     },
     {
      "name": "timoutSpan",
@@ -5013,6 +5013,1048 @@
    "base": false,
    "unique": "VContactManager@RBX@@"
   },
+  "RBX::SleepStage": {
+   "size": 332,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IWorldStage",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "toDeep",
+     "offset": 16,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Assembly *,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "toWake",
+     "offset": 32,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Assembly *,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "toSleepingChecking",
+     "offset": 48,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Assembly *,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "toSleeping",
+     "offset": 64,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Contact *,std::allocator<RBX::Contact *> >",
+     "scalar": null
+    },
+    {
+     "name": "toStepping",
+     "offset": 80,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Contact *,std::allocator<RBX::Contact *> >",
+     "scalar": null
+    },
+    {
+     "name": "toContacting",
+     "offset": 96,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Contact *,std::allocator<RBX::Contact *> >",
+     "scalar": null
+    },
+    {
+     "name": "toContactingSleeping",
+     "offset": 112,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Contact *,std::allocator<RBX::Contact *> >",
+     "scalar": null
+    },
+    {
+     "name": "toSleepingJoint",
+     "offset": 128,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Joint *,std::allocator<RBX::Joint *> >",
+     "scalar": null
+    },
+    {
+     "name": "numContactsInStage",
+     "offset": 144,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "numContactsInKernel",
+     "offset": 148,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "throttling",
+     "offset": 152,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "debugReentrant",
+     "offset": 153,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "longStepId",
+     "offset": 156,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "recursiveWakePending",
+     "offset": 160,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "wakePending",
+     "offset": 172,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "awake",
+     "offset": 184,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "sleepingChecking",
+     "offset": 196,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "sleepingDeeply",
+     "offset": 208,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "removing",
+     "offset": 220,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Assembly *,std::less<RBX::Assembly *>,std::allocator<RBX::Assembly *> >",
+     "scalar": null
+    },
+    {
+     "name": "steppingContacts",
+     "offset": 232,
+     "size": 32,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "touchingContacts",
+     "offset": 264,
+     "size": 32,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "steppingJoints",
+     "offset": 296,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<RBX::Joint *,std::less<RBX::Joint *>,std::allocator<RBX::Joint *> >",
+     "scalar": null
+    },
+    {
+     "name": "recursivePassId",
+     "offset": 308,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "externalRecursiveWake",
+     "offset": 312,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "profilingCollision",
+     "offset": 316,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingJointSleep",
+     "offset": 320,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingWake",
+     "offset": 324,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    },
+    {
+     "name": "profilingSleep",
+     "offset": 328,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VSleepStage@RBX@@"
+  },
+  "RBX::Primitive": {
+   "size": 368,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IPipelined",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "RBX::SpanningNode",
+     "offset": 8,
+     "size": 44,
+     "empty": false
+    },
+    {
+     "name": "RBX::BodyPvSetter",
+     "offset": 52,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "RBX::BasicSpatialHashPrimitive",
+     "offset": 52,
+     "size": 28,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "concurrencyValidator",
+     "offset": 80,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::ConcurrencyValidator",
+     "scalar": null
+    },
+    {
+     "name": "networkOwner",
+     "offset": 116,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::SystemAddress",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x7c",
+     "offset": 124,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "guid",
+     "offset": 128,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Guid",
+     "scalar": null
+    },
+    {
+     "name": "guidSetExternally",
+     "offset": 136,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "sizeMultiplier",
+     "offset": 140,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::Primitive::SizeMultiplier",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "sortSize",
+     "offset": 144,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "collideCount",
+     "offset": 148,
+     "size": 1,
+     "kind": "bitfield",
+     "type": null,
+     "scalar": "T_UCHAR",
+     "bits": [
+      "collideCount:4@0"
+     ]
+    },
+    {
+     "name": "contacts",
+     "offset": 152,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::EdgeList",
+     "scalar": null
+    },
+    {
+     "name": "joints",
+     "offset": 188,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::EdgeList",
+     "scalar": null
+    },
+    {
+     "name": "worldIndex",
+     "offset": 224,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "world",
+     "offset": 228,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::World",
+     "scalar": null
+    },
+    {
+     "name": "fuzzyExtents",
+     "offset": 232,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::Extents",
+     "scalar": null
+    },
+    {
+     "name": "fuzzyExtentsStateId",
+     "offset": 256,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "geometry",
+     "offset": 260,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Geometry",
+     "scalar": null
+    },
+    {
+     "name": "body",
+     "offset": 264,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Body",
+     "scalar": null
+    },
+    {
+     "name": "myOwner",
+     "offset": 268,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IMoving",
+     "scalar": null
+    },
+    {
+     "name": "engineType",
+     "offset": 272,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "dragging",
+     "offset": 276,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "anchoredProperty",
+     "offset": 277,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "preventCollide",
+     "offset": 278,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "networkIsSleeping",
+     "offset": 279,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "specificGravity",
+     "offset": 280,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "friction",
+     "offset": 284,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "elasticity",
+     "offset": 288,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "surfaces",
+     "offset": 292,
+     "size": 24,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "surfaceData",
+     "offset": 316,
+     "size": 24,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x154",
+     "offset": 340,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "jointK",
+     "offset": 344,
+     "size": 24,
+     "kind": "structure",
+     "type": "RBX::Primitive::JointKProp",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPrimitive@RBX@@"
+  },
+  "RBX::MultiJoint": {
+   "size": 204,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Joint",
+     "offset": 0,
+     "size": 148,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "numConnector",
+     "offset": 148,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x98",
+     "offset": 152,
+     "size": 32,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "maxConnector",
+     "offset": 184,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "connector",
+     "offset": 188,
+     "size": 16,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VMultiJoint@RBX@@"
+  },
+  "RBX::DebugSettings": {
+   "size": 124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::DebugSettings, char const *const RBX::sDebugSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "stackTracingEnabled",
+     "offset": 100,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x68",
+     "offset": 104,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0x6c",
+     "offset": 108,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0x70",
+     "offset": 112,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x71",
+     "offset": 113,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isFmodProfilingEnabled",
+     "offset": 114,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x73",
+     "offset": 115,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x74",
+     "offset": 116,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x78",
+     "offset": 120,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VDebugSettings@RBX@@"
+  },
+  "RBX::GameSettings": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::GameSettings, char const *const RBX::sGameSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "chatHistory",
+     "offset": 100,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "reportAbuseChatHistory",
+     "offset": 104,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "chatLinesShown",
+     "offset": 108,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "soundEnabled",
+     "offset": 112,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "highQualitySound",
+     "offset": 113,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "collisionSoundEnabled",
+     "offset": 114,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "collisionSoundVolume",
+     "offset": 116,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "maxCollisionSounds",
+     "offset": 120,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "chatLinesMax",
+     "offset": 124,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "bubbleChatLifetime",
+     "offset": 128,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "videoRecordingSignal",
+     "offset": 132,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "hardwareMouse",
+     "offset": 136,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "videoCaptureEnabled",
+     "offset": 137,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "videoQuality",
+     "offset": 140,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GameSettings::VideoQuality",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "postImageSetting",
+     "offset": 144,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GameSettings::UploadSetting",
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VGameSettings@RBX@@"
+  },
+  "RBX::TaskSchedulerSettings": {
+   "size": 104,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x64",
+     "offset": 100,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    }
+   ],
+   "base": false,
+   "unique": "VTaskSchedulerSettings@RBX@@"
+  },
+  "RBX::LuaSettings": {
+   "size": 136,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::LuaSettings, char const *const RBX::sLuaSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "gcPause",
+     "offset": 100,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "gcStepMul",
+     "offset": 104,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "unknown104",
+     "offset": 112,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "unknown112",
+     "offset": 120,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "unknown116",
+     "offset": 124,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "unknown120",
+     "offset": 128,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "waitingThreadsBudget",
+     "offset": 132,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    }
+   ],
+   "base": false,
+   "unique": "VLuaSettings@RBX@@"
+  },
+  "RBX::StarterGear": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VStarterGear@RBX@@"
+  },
+  "MemoryBinder": {
+   "size": 32,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IReferenceBinder",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "idMap",
+     "offset": 4,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::InstanceHandle,RBX::InstanceHandle,std::less<RBX::InstanceHandle>,std::allocator<std::pair<RBX::InstanceHandle const,RBX::InstanceHandle> > >",
+     "scalar": null
+    },
+    {
+     "name": "deferredIDREFItems",
+     "offset": 16,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<MemoryBinder::IDREFItem,std::allocator<MemoryBinder::IDREFItem> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VMemoryBinder@@"
+  },
+  "ArchiveBinder": {
+   "size": 44,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::MergeBinder",
+     "offset": 0,
+     "size": 20,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "idMap",
+     "offset": 20,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::InstanceHandle,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,RBX::InstanceHandle> > >",
+     "scalar": null
+    },
+    {
+     "name": "idrefBindings",
+     "offset": 32,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<ArchiveBinder::IDREFBinding,std::allocator<ArchiveBinder::IDREFBinding> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VArchiveBinder@@"
+  },
+  "XmlWriter": {
+   "size": 20,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 4,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "handles",
+     "offset": 4,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::InstanceHandle,int,std::less<RBX::InstanceHandle>,std::allocator<std::pair<RBX::InstanceHandle const,int> > >",
+     "scalar": null
+    },
+    {
+     "name": "stream",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "std::basic_ostream<char,std::char_traits<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VXmlWriter@@"
+  },
+  "XmlElement": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Sibling<XmlElement>",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::Parent<XmlElement>",
+     "offset": 4,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "XmlNameValuePair",
+     "offset": 16,
+     "size": 16,
+     "empty": false
+    },
+    {
+     "name": "RBX::Allocator<XmlElement>",
+     "offset": 32,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "attributes",
+     "offset": 32,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Parent<XmlAttribute>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VXmlElement@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -5547,11 +6589,20 @@
     {
      "name": "RBX::IStage",
      "offset": 0,
-     "size": 16,
+     "size": 12,
      "empty": false
     }
    ],
-   "members": [],
+   "members": [
+    {
+     "name": "world",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::World",
+     "scalar": null
+    }
+   ],
    "base": true,
    "unique": "VIWorldStage@RBX@@"
   },
@@ -6416,6 +7467,402 @@
    "base": true,
    "unique": "VCellChangeListener@Voxel@RBX@@"
   },
+  "RBX::SpanningNode": {
+   "size": 44,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IndexedMesh",
+     "offset": 0,
+     "size": 40,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "edgeToParent",
+     "offset": 40,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::SpanningEdge",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VSpanningNode@RBX@@"
+  },
+  "RBX::BodyPvSetter": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VBodyPvSetter@RBX@@"
+  },
+  "RBX::BasicSpatialHashPrimitive": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "spatialExtents",
+     "offset": 0,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::ExtentsInt32",
+     "scalar": null
+    },
+    {
+     "name": "spatialNodeLevel",
+     "offset": 24,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": true,
+   "unique": "UBasicSpatialHashPrimitive@RBX@@"
+  },
+  "RBX::Joint": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Edge",
+     "offset": 0,
+     "size": 28,
+     "empty": false
+    },
+    {
+     "name": "RBX::SpanningEdge",
+     "offset": 28,
+     "size": 20,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "jointOwner",
+     "offset": 48,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::JointInstance",
+     "scalar": null
+    },
+    {
+     "name": "jointCoord0",
+     "offset": 52,
+     "size": 48,
+     "kind": "class",
+     "type": "G3D::CoordinateFrame",
+     "scalar": null
+    },
+    {
+     "name": "jointCoord1",
+     "offset": 100,
+     "size": 48,
+     "kind": "class",
+     "type": "G3D::CoordinateFrame",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VJoint@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::DebugSettings, char const *const RBX::sDebugSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VDebugSettings@RBX@@$E?sDebugSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::GameSettings, char const *const RBX::sGameSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VGameSettings@RBX@@$E?sGameSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VTaskSchedulerSettings@RBX@@$E?sTaskSchedulerSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::LuaSettings, char const *const RBX::sLuaSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::StarterGear, char const *const RBX::sStarterGear, RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::IReferenceBinder": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VIReferenceBinder@RBX@@"
+  },
+  "RBX::MergeBinder": {
+   "size": 20,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IReferenceBinder",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "deferredIDREFItems",
+     "offset": 4,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::MergeBinder::IDREFItem,std::allocator<RBX::MergeBinder::IDREFItem> >",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VMergeBinder@RBX@@"
+  },
+  "RBX::Sibling<XmlElement>": {
+   "size": 4,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "next",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "XmlElement",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$Sibling@VXmlElement@@@RBX@@"
+  },
+  "RBX::Parent<XmlElement>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "first",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "XmlElement",
+     "scalar": null
+    },
+    {
+     "name": "last",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "XmlElement",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$Parent@VXmlElement@@@RBX@@"
+  },
+  "XmlNameValuePair": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "tag",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "valueType",
+     "offset": 4,
+     "size": 4,
+     "kind": "enum",
+     "type": "XmlNameValuePair::ValueType",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "stringValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "contentIdValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContentId",
+     "scalar": null
+    },
+    {
+     "name": "boolValue",
+     "offset": 8,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "intValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "uintValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "floatValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "doubleValue",
+     "offset": 8,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "nameValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "handleValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::InstanceHandle",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VXmlNameValuePair@@"
+  },
+  "RBX::Allocator<XmlElement>": {
+   "size": 1,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "V?$Allocator@VXmlElement@@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -6508,7 +7955,7 @@
    "unique": "V?$list_base_hook@U?$tag@UWaitingTag@TaskScheduler@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
   },
   "RBX::IStage": {
-   "size": 16,
+   "size": 12,
    "vftable": true,
    "virtual_bases": false,
    "bases": [],
@@ -6527,14 +7974,6 @@
      "size": 4,
      "kind": "ptr",
      "type": "RBX::IStage",
-     "scalar": null
-    },
-    {
-     "name": "world",
-     "offset": 12,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::World",
      "scalar": null
     }
    ],
@@ -6964,6 +8403,169 @@
    "members": [],
    "base": true,
    "unique": "V?$Described@VLighting@RBX@@$E?sLighting@2@3QBDBV?$FactoryProduct@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::IndexedMesh": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IndexedTree",
+     "offset": 0,
+     "size": 28,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "upper",
+     "offset": 28,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IndexedMesh",
+     "scalar": null
+    },
+    {
+     "name": "lower",
+     "offset": 32,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IndexedMesh",
+     "scalar": null
+    },
+    {
+     "name": "computedUpper",
+     "offset": 36,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IndexedMesh",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIndexedMesh@RBX@@"
+  },
+  "RBX::SpanningEdge": {
+   "size": 20,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "stepNext",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Edge",
+     "scalar": null
+    },
+    {
+     "name": "stepPrev",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Edge",
+     "scalar": null
+    },
+    {
+     "name": "moveNext",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Edge",
+     "scalar": null
+    },
+    {
+     "name": "movePrev",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Edge",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VSpanningEdge@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::DebugSettings, char const *const RBX::sDebugSettings, RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VDebugSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sDebugSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GameSettings, char const *const RBX::sGameSettings, RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings, RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VTaskSchedulerSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sTaskSchedulerSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::LuaSettings, char const *const RBX::sLuaSettings, RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::StarterGear, char const *const RBX::sStarterGear, RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VStarterGear@RBX@@$E?sStarterGear@2@3QBDBV?$FactoryProduct@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@"
   },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
@@ -7434,6 +9036,120 @@
    "base": true,
    "unique": "V?$FactoryProduct@VLighting@RBX@@VInstance@2@$E?sLighting@2@3QBDBV32@@RBX@@"
   },
+  "RBX::IndexedTree": {
+   "size": 28,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "parent",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::IndexedTree",
+     "scalar": null
+    },
+    {
+     "name": "index",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "children",
+     "offset": 12,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::IndexArray<RBX::IndexedTree, &private: int & __thiscall RBX::IndexedTree::getIndex(void)>",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VIndexedTree@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::DebugSettings, char const *const RBX::sDebugSettings, RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VDebugSettings@RBX@@$E?sDebugSettings@2@3QBDBV?$FactoryProduct@VDebugSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sDebugSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::GameSettings, char const *const RBX::sGameSettings, RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGameSettings@RBX@@$E?sGameSettings@2@3QBDBV?$FactoryProduct@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings, RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VTaskSchedulerSettings@RBX@@$E?sTaskSchedulerSettings@2@3QBDBV?$FactoryProduct@VTaskSchedulerSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sTaskSchedulerSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::LuaSettings, char const *const RBX::sLuaSettings, RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDBV?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDBV32@@RBX@@"
+  },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
    "vftable": false,
@@ -7507,6 +9223,70 @@
    ],
    "base": true,
    "unique": "U?$list_node@PAX@intrusive@boost@@"
+  },
+  "RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VDebugSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sDebugSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VTaskSchedulerSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sTaskSchedulerSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@"
   },
   "RBX::GlobalAdvancedSettings::Item": {
    "size": 96,

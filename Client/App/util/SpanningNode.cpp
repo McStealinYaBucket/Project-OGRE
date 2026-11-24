@@ -28,11 +28,4 @@ void SpanningNode::setEdgeToParent(SpanningEdge* edge)
 	edgeToParent = edge;
 }
 
-// mac: 0x592D02 / 0x592D0C - calls IndexedMesh::~IndexedMesh only
-// STUB: PLAYER 0x00753900
-// STUB: STUDIO 0x00892ca0
-SpanningNode::~SpanningNode()
-{
-}
-
 } // namespace

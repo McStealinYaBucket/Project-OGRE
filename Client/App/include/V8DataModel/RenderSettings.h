@@ -12,8 +12,12 @@ namespace RBX {
 
 	extern const char* const sRenderSettings;
 
+	// No 2013 class: the 2013 RenderSettings item is the shell's CRenderSettingsItem. Kept for
+	// GfxBase/RenderSettings.cpp's registrar. It derives the item template (no ServiceProvider/Settings
+	// chain), so that /Od TU no longer emits ~ServiceProvider or the Settings descriptors, which
+	// STUDIO links ahead of App's copies (2013 keeps ~ServiceProvider from DataModel.obj).
 	class RenderSettings
-		: public DescribedCreatable<RenderSettings, GlobalAdvancedSettings, sRenderSettings>
+		: public GlobalAdvancedSettingsItem<RenderSettings, sRenderSettings>
 	{
 	public:
 		RenderSettings() {}

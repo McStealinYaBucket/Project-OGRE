@@ -247,8 +247,10 @@ FACTS = [
     (0x0040b010, 0x00477e20, "comment", "", "rtti:",
      "the client-shell (LTCG) copy of Instance D0 (same bytes as 0x007bc3e0 / STUDIO 0x00884ef0, which carry the "
      "name); its adjustor thunks are STUDIO 0x00481830 (-0x1c) and 0x0043fc00 (-0x18)"),
-    (0x00402240, 0x00443510, "rename", "?__TBB_LockByte@@YAEAAE@Z", "lib:",
-     "__TBB_LockByte(unsigned char&) (TBB 2.1 header, COMDAT) | loop: tbb.dll __TBB_machine_trylockbyte thunk "
+    (0x00402240, 0x00443510, "rename", "?__TBB_LockByte@@YAIAAE@Z", "lib:",
+     "uintptr_t __TBB_LockByte(unsigned char&) (TBB 2.1 header, COMDAT; returns uintptr_t, not 4.x's unsigned char: "
+     "the callers keep `mov ebx,eax ... mov [esi],bl`, Body::getPV_Spin_Lock 0x007554e0; reccmp 100% vs our "
+     "?__TBB_LockByte@@YAIAAE@Z in sweep13, settings-serialization.md wave6) | loop: tbb.dll __TBB_machine_trylockbyte thunk "
      "0x009eeea0, pause backoff to 16, then SwitchToThread (IAT 0x00aa1240); the safe_queue lock of "
      "rbx::spin_mutex = tbb::spin_mutex (core-close.md)"),
     (0x00e0c9dc, 0x00f83380, "data4", "_ZN3RBX10Reflection14ClassRegistrarINS_8InstanceEE9registrarE",
@@ -343,6 +345,13 @@ FACTS = [
      "0x00f89334), reached through the adjustor{28} thunk 0x0085e300 (sub ecx,0x1c; jmp) that slot 0 of both "
      "the LuaSettings and the GlobalAdvancedSettingsItem<LuaSettings> vftables at +0x1c hold (0x00b7d008, "
      "0x00b7cf70); base-blockers.md names it LuaSettings"),
+    # wave6 sync (notes/runs/2026-11-23-phase5-wave6/settings-serialization.md "IDA owner"; sweep13). Checked
+    # 2026-11-23 with capstone on both targets.
+    (0x004c4720, 0x004885a0, "rename", "??0ContentId@RBX@@QAE@PBD@Z", "ios:",
+     "RBX::ContentId::ContentId(char const*) | iOS 1029 _ZN3RBX9ContentIdC2EPKc; the twin of ContentId(std::string "
+     "const&) 0x004c4780 (match:) except for the import it calls: basic_string(const char*) [0x00aa130c] (STUDIO "
+     "[0x00b4e520], shell /GS copy) against basic_string(const string&) [0x00aa12f4]; then Name lookup 0x00613a90 "
+     "into +0x1c; ContentProvider::readContent builds it in the return slot (settings-serialization.md)"),
 ]
 
 
@@ -486,8 +495,8 @@ def plan(target, json_path, exe):
             stat["no recompiled name"] += 1
             continue
         flat = lambda x: re.sub(r"\b(?:class|struct|enum|union) |\s", "", x or "")
-        named = [x for x in sorted(at[r]) if x.startswith("?") and
-                 flat(sig.get(x)).replace("operator#36", "operator=").startswith(flat(e["name"]) + "(")]
+        named = [x for x in sorted(at[r]) if x.startswith("?") and (x == e["name"] or     # reccmp reports a decorated name
+                 flat(sig.get(x)).replace("operator#36", "operator=").startswith(flat(e["name"]) + "("))]
         if d and len(at[r]) > 1 and named and d not in named:
             want = d = named[0]     # our linker folded several names at R: take the one reccmp reports
         ours = ({d} if d else set()) | at[r] | ({nm} if nm else set())

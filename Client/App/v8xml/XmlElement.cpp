@@ -686,3 +686,9 @@ const XmlTag* const tag_WebType = Name::declare("Type");
 // GLOBAL: PLAYER 0x00de28c0
 // GLOBAL: STUDIO 0x00f67578
 const XmlTag* const tag_xsinoNamespaceSchemaLocation = Name::declare("xsi:noNamespaceSchemaLocation");
+
+// Sizes proven by the 100% getValue family, findAttribute, isValueEqual and writeOpenTag.
+#include "decomp.h"
+DECOMP_SIZE_ASSERT(XmlNameValuePair, 0x10);
+DECOMP_SIZE_ASSERT(XmlAttribute, 0x18);
+DECOMP_SIZE_ASSERT(XmlElement, 0x28);

@@ -13,6 +13,8 @@
 #pragma once
 
 #include "V8World/IWorldStage.h"
+#include "Util/Profiling.h"
+#include "boost/scoped_ptr.hpp"
 
 namespace RBX {
 
@@ -45,7 +47,9 @@ namespace RBX {
 		Joint* listHead;      // +20 (binary Edge* + edge+36 links; ours
 		Joint* listTail;      // +24 Joint-typed -- hook links live on the
 		                      // SpanningEdge secondary, Joint-only by gating).
-		void* profiler;       // +28 (always NULL -- see header note).
+		boost::scoped_ptr<Profiling::CodeProfiler> profilingJointUpdate;	// +28 ("Joint Update")
+
+		friend class World;	// World::loadProfilers reads the profiler
 	};
 
 } // namespace RBX

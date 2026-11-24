@@ -33,12 +33,12 @@ namespace RBX {
 namespace Network {
 
 	// The 2013 ctor stores GlobalAdvancedSettingsItem<NetworkSettings, sNetworkSettings>::singleton()
-	// (PLAYER 0x00521d60) in networkSettings. App's NetworkSettings.h has no GlobalAdvancedSettingsItem
-	// yet, so the store is left out and this stays a STUB until it does.
-	// STUB: PLAYER 0x005b0880
-	// STUB: STUDIO 0x0060f190
+	// (PLAYER 0x00521d60) in networkSettings, between userId and the three signals
+	// (NetworkSettings derives GlobalAdvancedSettingsItem since wave 6).
+	// FUNCTION: PLAYER 0x005b0880
+	// FUNCTION: STUDIO 0x0060f190
 	Client::Client()
-		: userId(-1), networkSettings(NULL)
+		: userId(-1), networkSettings(&NetworkSettings::singleton())
 	{
 		RBX::Security::Context::current().requirePermission(RBX::Security::RobloxPlace, "create a NetworkClient");
 		setName(sClient);

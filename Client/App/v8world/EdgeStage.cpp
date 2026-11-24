@@ -19,7 +19,7 @@ namespace RBX {
 	{
 		downstream = new ContactStage(this, world);
 		IStage::upstream = upstream;
-		IStage::world = world;
+		IWorldStage::world = world;
 	}
 
 	// D0 0x009995e0 (SYNTHETIC in EdgeStage.h)

@@ -1,5 +1,5 @@
 /* V8Kernel/IStage.h -- October 2013 (pipeline stage node shell; getKernel's assert is IStage.h:69).
-   Uniform 16B stage nodes [vptr][+4 upstream][+8 downstream][+12 world] (CleanStage C2 0x55CBAE,
+   12B base [vptr][+4 upstream][+8 downstream]; IWorldStage adds [+12 world], Kernel its maxBodies (CleanStage C2 0x55CBAE,
      JointStage 0x57B4CC, EdgeStage 0x573442, GroundStage 0x574E3C, ContactStage 0x56F48C, TreeStage
      0x5A46E4); IPipelined reads +4/+8 directly, downstream forwards hit vtbl+16/+20.
    Slots (batch225): IStage [2]D1 [3]D0 [4]getStageType (pure) [5]getKernel (body 0x55D050, never
@@ -45,7 +45,7 @@ namespace RBX {
 		IStage()
 			: upstream(NULL)
 			, downstream(NULL)
-			, world(NULL)
+			// world lives in IWorldStage: Kernel's ctor 0x00831590 stores its own +0x0c after the vptr
 		{}
 		virtual ~IStage() { if (downstream) delete downstream; }
 
@@ -73,14 +73,19 @@ namespace RBX {
 		// Inline accessors (binary reads the members directly).
 		IStage* getUpstream() const { return upstream; }
 		IStage* getDownstream() const { return downstream; }
-		// SimulateStage C2 0x00998e10 stores +4/+8/+12 straight from its base-init arguments.
-		IStage(IStage* upstream, IStage* downstream, World* world)
+		// Walks downstream to the first stage of the given type (inline in World::loadProfilers
+		// 0x00747f20: getStageType through vtbl+4, then [stage+8], no null check).
+		const IStage* findStage(StageType stageType) const
+		{
+			const IStage* answer = this;
+			while (answer->getStageType() != stageType)
+				answer = answer->downstream;
+			return answer;
+		}
+		IStage(IStage* upstream, IStage* downstream)
 			: upstream(upstream)
 			, downstream(downstream)
-			, world(world)
 		{}
-		// +12 (binary findWorld 0x57A224 reads it off any stage).
-		World* getWorld() const { return world; }
 
 		// Written directly by every stage C2 and read directly by
 		// IPipelined methods (see header note). Public: the binary has no
@@ -93,9 +98,6 @@ namespace RBX {
 		// through IStage::getKernel (Kernel terminal override).
 		IStage* upstream;            // +4
 		IStage* downstream;          // +8
-		World* world;        // +12 (findWorld 0x57A224; every stage C2 stores
-		                     // its World* here -- section 120 moves it up from
-		                     // CleanStage, matching the binary uniformity).
 	};
 
 } // namespace RBX

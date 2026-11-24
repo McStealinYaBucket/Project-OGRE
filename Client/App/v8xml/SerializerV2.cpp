@@ -281,81 +281,69 @@ XmlElement* SerializerV2::newRootElement(const std::string& type)  // 0x5AF1DA
 	return root;
 }
 
-// STUB: PLAYER 0x006fd070
-// STUB: STUDIO 0x0074b600
+// FUNCTION: PLAYER 0x006fd070
+// FUNCTION: STUDIO 0x0074b600
 void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)  // 0x5ADF6C
 {
-	// Compound/binary/XML dispatcher. Evidence: 0x5ADF6C decompile (see header
-	// comment block). Error literals below are binary-verbatim (including the
-	// missing space in "canfileFormatVersion!=1").
+	// Compound/binary/XML dispatcher. Error literals are binary-verbatim (including the missing
+	// space in "canfileFormatVersion!=1"). Each read is checked with good() (2013 compares the
+	// whole rdstate with 0).
 	char header[8];
-	stream.read(header, sizeof(header));
-	if (stream.fail())
+	if (!stream.read(header, sizeof(header)).good())
 		throw std::runtime_error("SerializerV2::load can't read header");
-	unsigned int magic = 0;
-	memcpy(&magic, header, sizeof(magic));
-	stream.clear();
-	if (magic == 1599619666u)  // old "RBX_" compound format (bytes 52 42 58 5F)
+	if (*reinterpret_cast<unsigned int*>(header) == 0x5f584252)  // "RBX_": the old compound format
 	{
+		stream.clear();
 		stream.seekg(4, std::ios::beg);
-		unsigned int fileFormatVersion = 0;
-		stream.read(reinterpret_cast<char*>(&fileFormatVersion), sizeof(fileFormatVersion));
-		if (stream.fail())
+		unsigned int fileFormatVersion;
+		if (!stream.read(reinterpret_cast<char*>(&fileFormatVersion), sizeof(fileFormatVersion)).good())
 			throw std::runtime_error("SerializerV2::load can't read old fileFormatVersion");
 		if (fileFormatVersion != 1)
 			throw std::runtime_error("SerializerV2::load canfileFormatVersion!=1");
 		unsigned int contentPos = 0;
-		stream.read(reinterpret_cast<char*>(&contentPos), sizeof(contentPos));
-		if (stream.fail())
+		if (!stream.read(reinterpret_cast<char*>(&contentPos), sizeof(contentPos)).good())
 			throw std::runtime_error("SerializerV2::load can't read contentPos");
 		if (contentPos != 0)
 		{
-			std::streampos savedPos = stream.tellg();
+			std::streamoff savedPos = stream.tellg();
 			stream.clear();
 			stream.seekg(contentPos, std::ios::beg);
-			while (stream.peek() != 0)
+			while (stream.peek())
 			{
-				char name[32];
-				stream.read(name, sizeof(name));
-				if (stream.fail())
+				char name[33];
+				name[32] = 0;
+				if (!stream.read(name, 32).good())
 					throw std::runtime_error("SerializerV2::load error reading compound file (1)");
-				unsigned int size = 0;
-				stream.read(reinterpret_cast<char*>(&size), sizeof(size));
-				if (stream.fail())
+				unsigned int size;
+				if (!stream.read(reinterpret_cast<char*>(&size), sizeof(size)).good())
 					throw std::runtime_error("SerializerV2::load error reading compound file (2)");
-				char flag = 0;
-				stream.read(&flag, sizeof(flag));
-				if (stream.fail())
+				char flag;
+				if (!stream.read(&flag, sizeof(flag)).good())
 					throw std::runtime_error("SerializerV2::load error reading compound file (3)");
 				if (flag != 0)
 					throw std::runtime_error("SerializerV2::load error reading compound file (4)");
-				ContentProvider* provider = NULL;
-				if (dataModel != NULL)
-					provider = dataModel->find<ContentProvider>();
-				if (provider != NULL)
-					provider->readContent(name, stream, size);
-				else
-					stream.ignore(size);
+				// readContent returns a std::string that is discarded here (0x006fd2d9).
+				ServiceProvider::create<ContentProvider>(dataModel)->readContent(name, stream, size);
 			}
 			stream.clear();
-			stream.seekg(savedPos);
+			stream.seekg(savedPos, std::ios::beg);
 		}
-		char sentinel = 0;
-		stream.read(&sentinel, sizeof(sentinel));
-		if (stream.fail())
+		char sentinel;
+		if (!stream.read(&sentinel, sizeof(sentinel)).good())
 			throw std::runtime_error("SerializerV2::load error reading compound file (5)");
 		if (sentinel != 0)
 			throw std::runtime_error("SerializerV2::load error reading compound file (6)");
 		loadXML(stream, dataModel);
-		return;
 	}
-	stream.seekg(0, std::ios::beg);
-	if (memcmp(header, "<roblox!", 8) != 0)
+	else
 	{
-		loadXML(stream, dataModel);
-		return;
+		stream.clear();
+		stream.seekg(0, std::ios::beg);
+		if (memcmp(header, "<roblox!", 8) == 0)
+			RBX::SerializerBinary::deserialize(stream, dataModel);
+		else
+			loadXML(stream, dataModel);
 	}
-	RBX::SerializerBinary::deserialize(stream, dataModel);
 }
 
 // FUNCTION: PLAYER 0x006fd510
@@ -380,3 +368,8 @@ XmlElement* SerializerV2::newRootElement()  // 0x5AF136
      original (0x00402c00, 0x00404e10, 0x00402350).
    load(istream&) itself still needs ContentProvider::readContent's 2013 signature (it returns a
    value the caller discards) and the "RBX_" header compare. */
+
+// MemoryBinder ctor 0x006fb6e0 and ArchiveBinder's bodies (100%).
+#include "decomp.h"
+DECOMP_SIZE_ASSERT(MemoryBinder, 0x20);
+DECOMP_SIZE_ASSERT(ArchiveBinder, 0x2c);

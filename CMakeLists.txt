@@ -196,6 +196,11 @@ set(OGRE_LUA_TUS lapi lauxlib lbaselib lcode ldebug ldo ldump lfunc lgc llex lma
 list(TRANSFORM OGRE_LUA_TUS REPLACE "(.+)" "Client/App/Lua-5.1.4/src/\\1.c" OUTPUT_VARIABLE OGRE_LUA_SOURCES)
 set_source_files_properties(${OGRE_LUA_SOURCES} PROPERTIES LANGUAGE CXX
     INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/Client/App/Lua-5.1.4/standin;${OGRE_BOOST_INCLUDE}")
+# lapi.c and lstate.c compile the typed RobloxExtraSpace (luaconf.h; its ctors/dtor live in lapi.obj
+# and lstate.obj) and so reach the real Base/Log headers through RBX/Intrusive/Set.h -> RBX/Debug.h,
+# whose "FastLog.h" must be Log's, not the stand-in. Neither TU includes a stand-in itself.
+set_source_files_properties(Client/App/Lua-5.1.4/src/lapi.c Client/App/Lua-5.1.4/src/lstate.c
+    PROPERTIES INCLUDE_DIRECTORIES "${OGRE_BOOST_INCLUDE}")
 
 # RakNet 4.036 + Roblox 2013 edits: the 26 TUs of Client/Network/raknet/Source (25 linked in PLAYER,
 # plus RakMemoryOverride, whose __FILE__ is in PLAYER).

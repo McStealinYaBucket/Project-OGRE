@@ -1,7 +1,5 @@
-/* App/v8kernel/Kernel.cpp -- October 2013 (pipeline terminal bodies).
-   Bodies: C2 0x52A20E / D2 (batch221b) / getKernel 0x52E95A (batch218).
-   getStageType header-inline. numKernels static++/--. */
-
+/* App/v8kernel/Kernel.cpp -- October 2013.
+   The ctor, dtor (:41) and insert/removeConnector (:104/:116) sit on their 2013 lines. */
 #include "stdafx.h"
 
 #include "V8Kernel/Kernel.h"
@@ -16,68 +14,123 @@
 
 namespace RBX {
 
+	// GLOBAL: PLAYER 0x00e118c0
+	// GLOBAL: STUDIO 0x00f9b690
 	int Kernel::numKernels = 0;
-
-	// mac: 0x52A20E (296B, batch221b).
-	// STUB: PLAYER 0x00831590
-	// STUB: STUDIO 0x009a3bf0
+	// FUNCTION: PLAYER 0x00831590
+	// FUNCTION: STUDIO 0x009a3bf0
 	Kernel::Kernel(IStage* upstreamArg)
-		: inStepCode(false)
+		: IStage(upstreamArg, NULL)
+		, maxBodies(0), inStepCode(false)
 		, numLastIterations(0)
 		, numOfMaxIterations(0)
 		, error(0.0f)
 		, maxError(0.0f)
 		, data(new KernelData())
-		, profilerBodies(NULL)      // DELTA: binary news 0xA01C CodeProfiler
-		, profilerConnectors(NULL)  // ("Kernel Bodies"/"Kernel Connectors").
+		, profilingKernelBodies(new Profiling::CodeProfiler("Kernel Bodies"))
+		, profilingKernelConnectors(new Profiling::CodeProfiler("Kernel Connectors"))
 	{
-		upstream = upstreamArg;
-		downstream = NULL;  // terminal.
-		world = NULL;       // binary +12 0.
 		++numKernels;
 	}
 
-	// D2 (batch221b: :41 !inStepCode + delete data + profiler deletes +
-	// delete +8[NULL]).
+	// FUNCTION: PLAYER 0x0082f670
+	// FUNCTION: STUDIO 0x009a1c20
 	Kernel::~Kernel()
 	{
 		--numKernels;
-		RBXASSERT(!inStepCode);  // :41
+		RBXASSERT(!inStepCode);
 		delete data;
-		// Profilers always NULL (see header) -- deletes skipped.
-		// downstream NULL (terminal) -- delete skipped.
 	}
 
-	// mac: 0x52A7F4 (batch244).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// STUB: PLAYER 0x008322d0
+	// STUB: STUDIO 0x009a4930
+	void Kernel::insertBody(Body* b)
+	{
+		RBXASSERT(b->getRootSimBody()->getDt() == 0.0f);
+		data->insertBody(b);	// 2013 also keeps maxBodies (+0x0c) up to date here
+	}
+
+
+
+
+	// FUNCTION: PLAYER 0x00831690
+	// FUNCTION: STUDIO 0x009a3cf0
+	void Kernel::removeBody(Body* b)
+	{
+		RBXASSERT(!inStepCode);
+		RBXASSERT((!b->getRootSimBody()->isContactBody() && !b->getRootSimBody()->isFreeFallBody())
+			|| Math::fuzzyEq(b->getRootSimBody()->getDt(), Constants::freeFallDt(), 1e-6f));
+		RBXASSERT((b->getRootSimBody()->isContactBody() || b->getRootSimBody()->isFreeFallBody())
+			|| Math::fuzzyEq(b->getRootSimBody()->getDt(), Constants::kernelDt(), 1e-6f));
+		data->removeBody(b);
+	}
 	// STUB: PLAYER 0x008309d0
-	// STUB: STUDIO 0x009a3030
 	void Kernel::insertPoint(Point* point)
 	{
-		RBXASSERT(!inStepCode);  // :98
-		RBXASSERT(point != NULL);  // IndexArray.h:60 "item"
-		RBXASSERT(point->indexInKernel() == false);  // :61 (index -1)
-		point->kernelIndex = (int)data->points.size();
-		data->points.append(point);
+		RBXASSERT(!inStepCode);
+		point->kernelIndex = (int)data->points.size(); data->points.append(point);	// 2013: an IndexArray fastAppend
 	}
-
-	// mac: 0x52A9AE (133B, batch249).
+	// FUNCTION: PLAYER 0x00832370
+	int Kernel::insertConnector(Connector* connector)
+	{
+		RBXASSERT(!inStepCode);
+		return data->addConnector(connector);
+	}
 	// STUB: PLAYER 0x00830970
-	// STUB: STUDIO 0x009a2fd0
 	void Kernel::removePoint(Point* point)
 	{
-		RBXASSERT(!inStepCode);  // :110
-		// IndexArray::fastRemove(data->points, point) equivalent
-		// (back-swap + moved-occupant fix + index reset -- World::
-		// removePrimitive precedent for the spelling).
-		int idx = point->kernelIndex;
-		RBXASSERT(idx >= 0 && idx < (int)data->points.size());
-		RBXASSERT(data->points[idx] == point);
-		data->points[idx] = data->points.back();
-		data->points.pop_back();
-		if (idx < (int)data->points.size())
-			data->points[idx]->kernelIndex = idx;
-		point->kernelIndex = -1;
+		RBXASSERT(!inStepCode); int idx = point->kernelIndex;	// 2013: an IndexArray fastRemove on one line
+		data->points[idx] = data->points.back(); data->points.pop_back(); if (idx < (int)data->points.size()) data->points[idx]->kernelIndex = idx; point->kernelIndex = -1; }
+	// FUNCTION: PLAYER 0x008323d0
+	// FUNCTION: STUDIO 0x009a4a30
+	void Kernel::removeConnector(Connector* connector)
+	{
+		RBXASSERT(!inStepCode);
+		data->removeConnector(connector);
 	}
+
+	// Array-size counters (batch222).
+	int Kernel::numFreeFallBodies() const { return data->freeFallBodies.size(); }
+	int Kernel::numRealTimeBodies() const { return data->realTimeBodies.size(); }
+	int Kernel::numJointBodies() const { return data->jointBodies.size(); }
+	int Kernel::numContactBodies() const { return data->contactBodies.size(); }
+	int Kernel::numLeafBodies() const { return data->leafBodies.size(); }
+	int Kernel::numConnectors() const
+	{
+		return data->secondPassConnectors.size()
+			+ data->realTimeConnectors.size()
+			+ data->jointConnectors.size()
+			+ data->contactConnectors.size();
+	}
+	int Kernel::numJointConnectors() const { return data->jointConnectors.size(); }
 
 	// mac: 0x52AB7E (488B, batch249).
 	Point* Kernel::searchForDuplicatePoint(Point* input)
@@ -98,57 +151,30 @@ namespace RBX {
 		insertPoint(input);
 		return input;
 	}
-	// FUNCTION: PLAYER 0x00832370
-	int Kernel::insertConnector(Connector* connector)
-	{
-		RBXASSERT(!inStepCode);  // :104
-		return data->addConnector(connector);
-	}
 
 
 
 
-	// (batch222: :116 !inStepCode + delegate).
-	// FUNCTION: PLAYER 0x008323d0
-	// FUNCTION: STUDIO 0x009a4a30
-	void Kernel::removeConnector(Connector* connector)
-	{
-		RBXASSERT(!inStepCode);  // :116
-		data->removeConnector(connector);
-	}
 
-	// (batch244: post-dec equals 1 releases the last owner).
+
+
+
+
+
+
+
+
+
+	// STUB: PLAYER 0x00830ab0
+	// STUB: STUDIO 0x009a3110
 	void Kernel::deletePoint(Point* point)
 	{
-		RBXASSERT(!inStepCode);  // :172
+		RBXASSERT(!inStepCode);
 		if (point != NULL && point->numOwners-- == 1)
 		{
 			removePoint(point);
 			delete point;
 		}
-	}
-
-	// Array-size counters (batch222).
-	int Kernel::numFreeFallBodies() const { return data->freeFallBodies.size(); }
-	int Kernel::numRealTimeBodies() const { return data->realTimeBodies.size(); }
-	int Kernel::numJointBodies() const { return data->jointBodies.size(); }
-	int Kernel::numContactBodies() const { return data->contactBodies.size(); }
-	int Kernel::numLeafBodies() const { return data->leafBodies.size(); }
-	int Kernel::numConnectors() const
-	{
-		return data->secondPassConnectors.size()
-			+ data->realTimeConnectors.size()
-			+ data->jointConnectors.size()
-			+ data->contactConnectors.size();
-	}
-	int Kernel::numJointConnectors() const { return data->jointConnectors.size(); }
-
-	// 0x52Axxx (batch222: :77 root-sim dt assert + KernelData insert;
-	// +12 count maintenance skipped -- see header DELTA).
-	void Kernel::insertBody(Body* body)
-	{
-		RBXASSERT(body->getRootSimBody()->getDt() == 0.0f);  // :77
-		data->insertBody(body);
 	}
 
 	// 2016 shapes (first-party; stepWorldThrottled validates each
@@ -325,21 +351,5 @@ namespace RBX {
 		}
 	}
 
-	// (batch222: :88 !inStepCode + :90 dt-consistency arms + remove).
-	void Kernel::removeBody(Body* body)
-	{
-		RBXASSERT(!inStepCode);  // :88
-		{
-			SimBody* rootSim = body->getRootSimBody();
-			bool throttled = !rootSim->isContactBody() && !rootSim->isFreeFallBody();
-			RBXASSERT(throttled || Math::fuzzyEq(rootSim->getDt(), Constants::freeFallDt(), 1e-6f));  // :90
-		}
-		{
-			SimBody* rootSim = body->getRootSimBody();
-			bool streaming = rootSim->isContactBody() || rootSim->isFreeFallBody();
-			RBXASSERT(!streaming || Math::fuzzyEq(rootSim->getDt(), Constants::kernelDt(), 1e-6f));
-		}
-		data->removeBody(body);
-	}
 
 } // namespace RBX

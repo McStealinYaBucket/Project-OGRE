@@ -32,12 +32,12 @@
 #include "decomp.h"
 
 namespace RBX {
-
-	class Primitive;
-	// EdgeList, October 2013: parallel G3D::Array<T,10,32> edges +4 / others +20 (36 B); out-of-line members in v8world/Primitive.cpp.
+	class Primitive;	// EdgeList, October 2013: parallel G3D::Array<T,10,32> edges +4 / others +20 (36 B); out-of-line members in v8world/Primitive.cpp.
 	class EdgeList
 	{
 	public:
+		// FUNCTION: PLAYER 0x007563a0
+		// FUNCTION: STUDIO 0x008956c0
 		explicit EdgeList(Primitive* owner) : owner(owner) {}
 		// FUNCTION: PLAYER 0x00755400
 		// FUNCTION: STUDIO 0x00894720
@@ -528,12 +528,26 @@ namespace RBX {
 		SurfaceType surfaces[6];     // 0x124 (setter 0x007542a0)
 		void* surfaceData[6];        // 0x13c (D2 deletes each; setSurfaceData 0x00754170)
 		undefined4 m_unk0x154;       // 0x154
-		undefined4 m_unk0x158;       // 0x158
-		bool jointKDirty;            // 0x15c (C2 true; setMassInertia sets it)
-		Primitive* jointKOwner;      // 0x160 (C2 this)
-		float jointK;                // 0x164
-		float (Primitive::*jointKCompute)();  // 0x168 (C2 &computeJointK; 8 bytes under MI)
+		// 2016's ComputeProp<float, Primitive> {val, dirty, object, getFunc} (Util/ComputeProp.h there):
+		// the C2 stores dirty +0x15c, object +0x160 and getFunc +0x168 (8-aligned, so +0x164 is padding),
+		// loading &computeJointK first because the ctor takes it as an argument (0x00756bf0).
+		typedef float (Primitive::*JointKFunc)();	// 8 bytes: typedef'd in Primitive's own scope (MI model)
+		struct JointKProp
+		{
+			float val;							// 0x158
+			bool dirty;							// 0x15c (C2 true)
+			Primitive* object;					// 0x160 (C2 this)
+			JointKFunc getFunc;					// 0x168
+			JointKProp(Primitive* object, JointKFunc getFunc)
+				: dirty(true), object(object), getFunc(getFunc)
+			{}
+		} jointK;							// 0x158
 
 	};
+
+	// Out-of-line template copies Primitive.obj carries (the pool allocator Body derives from):
+	// TEMPLATE: PLAYER 0x007569c0
+	// TEMPLATE: STUDIO 0x00895c90
+	// ??2?$Allocator@VBody@RBX@@@RBX@@SAPAXI@Z
 
 } // namespace RBX

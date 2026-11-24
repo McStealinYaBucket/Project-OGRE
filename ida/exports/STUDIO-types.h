@@ -2291,20 +2291,20 @@ struct __cppobj RBX::IStage
   void **__vftable;
   RBX::IStage *upstream;
   RBX::IStage *downstream;
-  RBX::World *world;
 };
 
 /* 379 */
 struct __cppobj RBX::IWorldStage : RBX::IStage
 {
+  RBX::World *world;
 };
 
 /* 380 */
 struct __cppobj RBX::MovingAssemblyStage : RBX::IWorldStage
 {
   int numJoints;
-  void *listHead;                       ///< RBX::Joint *
-  void *listTail;                       ///< RBX::Joint *
+  RBX::Joint *listHead;
+  RBX::Joint *listTail;
   unsigned __int8 uiStepJoints[12];     ///< std::set<RBX::Assembly *>
 };
 
@@ -2385,7 +2385,7 @@ struct __cppobj RBX::Service
 struct __cppobj RBX::ScriptContext : RBX::DescribedCreatable<RBX::ScriptContext, RBX::Instance, char const *const RBX::sScriptContext, 1, 0>, RBX::IScriptFilter, RBX::Service
 {
   unsigned __int8 gap_65[3];
-  unsigned __int8 globalStates[8];      ///< array
+  unsigned __int8 globalStates[8];      ///< boost::array<lua_State *,2>
   unsigned __int8 commandLineSandbox[28]; ///< RBX::Lua::WeakThreadRef
   unsigned __int8 scripts[12];          ///< std::set<RBX::BaseScript *>
   unsigned __int8 nextPendingScripts[8]; ///< RBX::Time
@@ -2408,7 +2408,7 @@ struct __cppobj RBX::ScriptContext : RBX::DescribedCreatable<RBX::ScriptContext,
   unsigned __int8 gap_115[3];
   unsigned __int8 scriptStats[8];       ///< boost::shared_ptr<RBX::ScriptStats>
   int reentrancy;
-  unsigned __int8 timedoutCount[4];     ///< rbx::atomic<int>
+  int timedoutCount;
   unsigned __int8 timoutSpan[8];        ///< RBX::Time::Interval
   unsigned __int8 timoutTime[8];        ///< RBX::Time
   unsigned __int8 timedout[4];          ///< rbx::atomic<int>
@@ -2597,8 +2597,8 @@ struct __cppobj RBX::Edge : RBX::IPipelined
   unsigned __int8 edgeState;            ///< enum RBX::Sim::EdgeState
   unsigned __int8 throttleType;         ///< enum RBX::Sim::ThrottleType
   unsigned __int8 gap_A[2];
-  void *prim0;                          ///< RBX::Primitive *
-  void *prim1;                          ///< RBX::Primitive *
+  RBX::Primitive *prim0;
+  RBX::Primitive *prim1;
   int index0;
   int index1;
 };
@@ -3543,10 +3543,10 @@ struct __cppobj RBX::World
   unsigned __int8 touchReporting[16];   ///< G3D::Array<RBX::World::TouchInfo,10,32>
   bool inStepCode;
   unsigned __int8 gap_31[3];
-  void *inJointNotification;            ///< RBX::Joint *
+  RBX::Joint *inJointNotification;
   int worldStepId;
   unsigned __int8 primitives[16];       ///< RBX::IndexArray<RBX::Primitive, {public: int & __thiscall RBX::Primitive::worldIndexFunc(void), 0}>
-  void *groundPrimitive;                ///< RBX::Primitive *
+  RBX::Primitive *groundPrimitive;
   unsigned __int8 movingPrimitives[16]; ///< G3D::Array<RBX::Primitive *,10,32>
   unsigned __int8 breakableJoints[12];  ///< std::set<RBX::Joint *>
   int numJoints;
@@ -3575,12 +3575,378 @@ struct __cppobj RBX::ContactManager : RBX::Voxel::CellChangeListener
 {
   unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
   void *spatialHash;                    ///< RBX::ContactManagerSpatialHash *
-  void *myMegaClusterPrim;              ///< RBX::Primitive *
+  RBX::Primitive *myMegaClusterPrim;
   RBX::World *world;
   unsigned __int8 scratch[24];          ///< boost::unordered::unordered_set<RBX::Primitive *,boost::hash<RBX::Primitive *>,std::equal_to<RBX::Primitive *>,std::allocator<RBX::Primitive *> >
   unsigned __int8 byte52;
   unsigned __int8 gap_4D[3];
   unsigned __int8 updatedTerrainRegions[24]; ///< boost::unordered::unordered_set<RBX::SpatialRegion::Id,boost::hash<RBX::SpatialRegion::Id>,std::equal_to<RBX::SpatialRegion::Id>,std::allocator<RBX::SpatialRegion::Id> >
   unsigned __int8 profiler[4];          ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+};
+
+/* 531 */
+struct __cppobj RBX::SleepStage : RBX::IWorldStage
+{
+  unsigned __int8 toDeep[16];           ///< std::vector<RBX::Assembly *>
+  unsigned __int8 toWake[16];           ///< std::vector<RBX::Assembly *>
+  unsigned __int8 toSleepingChecking[16]; ///< std::vector<RBX::Assembly *>
+  unsigned __int8 toSleeping[16];       ///< std::vector<RBX::Contact *>
+  unsigned __int8 toStepping[16];       ///< std::vector<RBX::Contact *>
+  unsigned __int8 toContacting[16];     ///< std::vector<RBX::Contact *>
+  unsigned __int8 toContactingSleeping[16]; ///< std::vector<RBX::Contact *>
+  unsigned __int8 toSleepingJoint[16];  ///< std::vector<RBX::Joint *>
+  int numContactsInStage;
+  int numContactsInKernel;
+  bool throttling;
+  bool debugReentrant;
+  unsigned __int8 gap_9A[2];
+  int longStepId;
+  unsigned __int8 recursiveWakePending[12]; ///< std::set<RBX::Assembly *>
+  unsigned __int8 wakePending[12];      ///< std::set<RBX::Assembly *>
+  unsigned __int8 awake[12];            ///< std::set<RBX::Assembly *>
+  unsigned __int8 sleepingChecking[12]; ///< std::set<RBX::Assembly *>
+  unsigned __int8 sleepingDeeply[12];   ///< std::set<RBX::Assembly *>
+  unsigned __int8 removing[12];         ///< std::set<RBX::Assembly *>
+  unsigned __int8 steppingContacts[32]; ///< array
+  unsigned __int8 touchingContacts[32]; ///< array
+  unsigned __int8 steppingJoints[12];   ///< std::set<RBX::Joint *>
+  int recursivePassId;
+  bool externalRecursiveWake;
+  unsigned __int8 gap_139[3];
+  unsigned __int8 profilingCollision[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingJointSleep[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingWake[4];     ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+  unsigned __int8 profilingSleep[4];    ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+};
+
+/* 532 */
+struct __cppobj RBX::IndexedTree
+{
+  void **__vftable;
+  RBX::IndexedTree *parent;
+  int index;
+  unsigned __int8 children[16];         ///< RBX::IndexArray<RBX::IndexedTree, &private: int & __thiscall RBX::IndexedTree::getIndex(void)>
+};
+
+/* 533 */
+struct __cppobj RBX::IndexedMesh : RBX::IndexedTree
+{
+  RBX::IndexedMesh *upper;
+  RBX::IndexedMesh *lower;
+  RBX::IndexedMesh *computedUpper;
+};
+
+/* 534 */
+struct __cppobj RBX::SpanningNode : RBX::IndexedMesh
+{
+  RBX::SpanningEdge *edgeToParent;
+};
+
+/* 535 */
+struct __cppobj RBX::BodyPvSetter
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 536 */
+struct __cppobj RBX::BasicSpatialHashPrimitive
+{
+  unsigned __int8 spatialExtents[24];   ///< RBX::ExtentsInt32
+  int spatialNodeLevel;
+};
+
+/* 537 */
+struct __cppobj RBX::Primitive : RBX::IPipelined, RBX::SpanningNode, RBX::BasicSpatialHashPrimitive
+{
+  unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
+  unsigned __int8 networkOwner[8];      ///< RBX::SystemAddress
+  bool m_unk0x7c;
+  unsigned __int8 gap_7D[3];
+  unsigned __int8 guid[8];              ///< RBX::Guid
+  bool guidSetExternally;
+  unsigned __int8 gap_89[3];
+  int sizeMultiplier;                   ///< enum RBX::Primitive::SizeMultiplier
+  unsigned int sortSize;
+  unsigned __int8 collideCount;         ///< bitfields collideCount:4@0
+  unsigned __int8 gap_95[3];
+  unsigned __int8 contacts[36];         ///< RBX::EdgeList
+  unsigned __int8 joints[36];           ///< RBX::EdgeList
+  int worldIndex;
+  RBX::World *world;
+  unsigned __int8 fuzzyExtents[24];     ///< RBX::Extents
+  unsigned int fuzzyExtentsStateId;
+  void *geometry;                       ///< RBX::Geometry *
+  void *body;                           ///< RBX::Body *
+  RBX::IMoving *myOwner;
+  int engineType;
+  bool dragging;
+  bool anchoredProperty;
+  bool preventCollide;
+  bool networkIsSleeping;
+  float specificGravity;
+  float friction;
+  float elasticity;
+  unsigned __int8 surfaces[24];         ///< array
+  unsigned __int8 surfaceData[24];      ///< array
+  unsigned int m_unk0x154;
+  unsigned __int8 jointK[24];           ///< RBX::Primitive::JointKProp
+};
+
+/* 538 */
+struct __cppobj RBX::SpanningEdge
+{
+  void **__vftable;
+  RBX::Edge *stepNext;
+  RBX::Edge *stepPrev;
+  RBX::Edge *moveNext;
+  RBX::Edge *movePrev;
+};
+
+/* 539 */
+struct __cppobj RBX::Joint : RBX::Edge, RBX::SpanningEdge
+{
+  void *jointOwner;                     ///< RBX::JointInstance *
+  unsigned __int8 jointCoord0[48];      ///< G3D::CoordinateFrame
+  unsigned __int8 jointCoord1[48];      ///< G3D::CoordinateFrame
+};
+
+/* 540 */
+struct __cppobj RBX::MultiJoint : RBX::Joint
+{
+  int numConnector;
+  unsigned __int8 m_unk0x98[32];        ///< array
+  int maxConnector;
+  unsigned __int8 connector[16];        ///< array
+};
+
+/* 541 */
+struct __cppobj RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 542 */
+struct __cppobj RBX::Reflection::Described<RBX::DebugSettings, char const *const RBX::sDebugSettings, RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>
+{
+};
+
+/* 543 */
+struct __cppobj RBX::DescribedCreatable<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, 27, 0> : RBX::Reflection::Described<RBX::DebugSettings, char const *const RBX::sDebugSettings, RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 544 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::DebugSettings, char const *const RBX::sDebugSettings> : RBX::DescribedCreatable<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 545 */
+struct __cppobj RBX::DebugSettings : RBX::GlobalAdvancedSettingsItem<RBX::DebugSettings, char const *const RBX::sDebugSettings>
+{
+  bool stackTracingEnabled;
+  unsigned __int8 gap_65[3];
+  float m_unk0x68;
+  float m_unk0x6c;
+  bool m_unk0x70;
+  bool m_unk0x71;
+  bool isFmodProfilingEnabled;
+  bool m_unk0x73;
+  int m_unk0x74;
+  bool m_unk0x78;
+  unsigned __int8 gap_79[3];
+};
+
+/* 546 */
+struct __cppobj RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 547 */
+struct __cppobj RBX::Reflection::Described<RBX::GameSettings, char const *const RBX::sGameSettings, RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>
+{
+};
+
+/* 548 */
+struct __cppobj RBX::DescribedCreatable<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, 27, 0> : RBX::Reflection::Described<RBX::GameSettings, char const *const RBX::sGameSettings, RBX::FactoryProduct<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 549 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::GameSettings, char const *const RBX::sGameSettings> : RBX::DescribedCreatable<RBX::GameSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sGameSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 550 */
+struct __cppobj RBX::GameSettings : RBX::GlobalAdvancedSettingsItem<RBX::GameSettings, char const *const RBX::sGameSettings>
+{
+  int chatHistory;
+  int reportAbuseChatHistory;
+  int chatLinesShown;
+  bool soundEnabled;
+  bool highQualitySound;
+  bool collisionSoundEnabled;
+  unsigned __int8 gap_73[1];
+  float collisionSoundVolume;
+  int maxCollisionSounds;
+  int chatLinesMax;
+  float bubbleChatLifetime;
+  unsigned __int8 videoRecordingSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  bool hardwareMouse;
+  bool videoCaptureEnabled;
+  unsigned __int8 gap_8A[2];
+  int videoQuality;                     ///< enum RBX::GameSettings::VideoQuality
+  int postImageSetting;                 ///< enum RBX::GameSettings::UploadSetting
+};
+
+/* 551 */
+struct __cppobj RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 552 */
+struct __cppobj RBX::Reflection::Described<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings, RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>
+{
+};
+
+/* 553 */
+struct __cppobj RBX::DescribedCreatable<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, 27, 0> : RBX::Reflection::Described<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings, RBX::FactoryProduct<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 554 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings> : RBX::DescribedCreatable<RBX::TaskSchedulerSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sTaskSchedulerSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 555 */
+struct __cppobj RBX::TaskSchedulerSettings : RBX::GlobalAdvancedSettingsItem<RBX::TaskSchedulerSettings, char const *const RBX::sTaskSchedulerSettings>
+{
+  unsigned int m_unk0x64;
+};
+
+/* 556 */
+struct __cppobj RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 557 */
+struct __cppobj RBX::Reflection::Described<RBX::LuaSettings, char const *const RBX::sLuaSettings, RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>
+{
+};
+
+/* 558 */
+struct __cppobj RBX::DescribedCreatable<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, 27, 0> : RBX::Reflection::Described<RBX::LuaSettings, char const *const RBX::sLuaSettings, RBX::FactoryProduct<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 559 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::LuaSettings, char const *const RBX::sLuaSettings> : RBX::DescribedCreatable<RBX::LuaSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sLuaSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 560 */
+struct __cppobj RBX::LuaSettings : RBX::GlobalAdvancedSettingsItem<RBX::LuaSettings, char const *const RBX::sLuaSettings>
+{
+  int gcPause;
+  int gcStepMul;
+  unsigned __int8 gap_6C[4];
+  double unknown104;
+  int unknown112;
+  int unknown116;
+  bool unknown120;
+  unsigned __int8 gap_81[3];
+  float waitingThreadsBudget;
+};
+
+/* 561 */
+struct __cppobj RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 562 */
+struct __cppobj RBX::Reflection::Described<RBX::StarterGear, char const *const RBX::sStarterGear, RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>
+{
+};
+
+/* 563 */
+struct __cppobj RBX::DescribedCreatable<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, 27, 0> : RBX::Reflection::Described<RBX::StarterGear, char const *const RBX::sStarterGear, RBX::FactoryProduct<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, RBX::Instance>, 27, 0>
+{
+};
+
+/* 564 */
+struct __cppobj RBX::StarterGear : RBX::DescribedCreatable<RBX::StarterGear, RBX::Instance, char const *const RBX::sStarterGear, 27, 0>
+{
+};
+
+/* 565 */
+struct __cppobj RBX::IReferenceBinder
+{
+  void **__vftable;
+};
+
+/* 566 */
+struct __cppobj MemoryBinder : RBX::IReferenceBinder
+{
+  unsigned __int8 idMap[12];            ///< std::map<RBX::InstanceHandle,RBX::InstanceHandle>
+  unsigned __int8 deferredIDREFItems[16]; ///< std::vector<MemoryBinder::IDREFItem>
+};
+
+/* 567 */
+struct __cppobj RBX::MergeBinder : RBX::IReferenceBinder
+{
+  unsigned __int8 deferredIDREFItems[16]; ///< std::vector<RBX::MergeBinder::IDREFItem>
+};
+
+/* 568 */
+struct __cppobj ArchiveBinder : RBX::MergeBinder
+{
+  unsigned __int8 idMap[12];            ///< std::map<std::string,RBX::InstanceHandle>
+  unsigned __int8 idrefBindings[12];    ///< std::list<ArchiveBinder::IDREFBinding>
+};
+
+/* 569 */
+struct __cppobj XmlWriter
+{
+  void **__vftable;
+  unsigned __int8 handles[12];          ///< std::map<RBX::InstanceHandle,int>
+  void *stream;                         ///< std::ostream *
+};
+
+/* 570 */
+struct __cppobj RBX::Sibling<XmlElement>
+{
+  XmlElement *next;
+};
+
+/* 571 */
+struct __cppobj RBX::Parent<XmlElement>
+{
+  XmlElement *first;
+  XmlElement *last;
+};
+
+/* 572 */
+struct __cppobj XmlNameValuePair
+{
+  RBX::Name *tag;
+  int valueType;                        ///< enum XmlNameValuePair::ValueType
+  void *stringValue;                    ///< std::string *
+  unsigned __int8 gap_C[4];
+};
+
+/* 573 */
+struct __cppobj RBX::Allocator<XmlElement>
+{
+  unsigned __int8 gap_0[1];
+};
+
+/* 574 */
+struct __cppobj XmlElement : RBX::Sibling<XmlElement>, RBX::Parent<XmlElement>, XmlNameValuePair
+{
+  unsigned __int8 gap_C[4];
+  unsigned __int8 attributes[8];        ///< RBX::Parent<XmlAttribute>
 };
 

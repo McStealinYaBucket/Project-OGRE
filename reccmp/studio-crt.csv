@@ -31,7 +31,6 @@ address,type,size,symbol
 0088faf0,library,7,?GetProxy@InternalContextBase@details@Concurrency@@UAEPAUIThreadProxy@3@XZ
 008919e0,library,16,__mkgmtime_1
 0089ca20,library,10,?SchedulersNeedNotifications@ResourceManager@details@Concurrency@@QAE_NXZ
-00966460,library,7,?GetAnonymousScheduleGroup@SchedulerBase@details@Concurrency@@QAEPAVScheduleGroupBase@23@XZ
 00a4c048,library,6,__RTC_NumErrors_5
 00a559c0,library,93,??1filebuf@@UAE@XZ_0
 00a7d0f4,library,11,??_U@YAPAXI@Z

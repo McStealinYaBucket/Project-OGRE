@@ -93,6 +93,18 @@ CLASSES = [
     # (dtor 0x009741c0 100%, no size assert), LuaSettings (0x88 asserted; ctor 0x0085e360 at 0.739), StarterGear
     # (ctor 100%, no size assert), STUDIO ScreenGui/RunService, Workspace, TaskScheduler, SleepStage, Primitive
     "RBX::World", "RBX::ContactManager",
+    # wave6 sync (sweep13, build/sweep13/P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT = the
+    # PDB's), PLAYER / STUDIO: SleepStage (0x14c) ctor 0x008e7f50 / 0x00a06180, dtor 0x008e7160 / 0x00a053a0;
+    # Primitive (0x170) dtor 0x00755540 / 0x00894860 (ctor 0.989); MultiJoint (0xcc) dtor 0x009741c0 / 0x009bf3a0;
+    # the settings items (settings-serialization.md) DebugSettings (0x7c) ctor 0x0065fa10 / 0x00778980,
+    # GameSettings (0x94) 0x006f6030 / 0x00792df0, TaskSchedulerSettings (0x68) 0x0065fb60 / 0x00778ae0,
+    # LuaSettings (0x88) 0x0085e360 / 0x00948980; StarterGear (0x60) ctor 0x006cb3e0 / 0x007b33e0; v8xml
+    # MemoryBinder (0x20) ctor 0x006fb6e0 / 0x00749c70, ArchiveBinder (0x2c) ctor 0x006faeb0 / 0x00749620, dtor
+    # 0x006fb460 / 0x007499f0, XmlWriter (0x14) ctor 0x00628a20 / 0x0074c890, XmlElement (0x28) ctor 0x00567110 /
+    # 0x005cac50. Not yet: NetworkSettings (ctor 0.474), GlobalAdvancedSettings (no ctor row; singleton 0.381)
+    "RBX::SleepStage", "RBX::Primitive", "RBX::MultiJoint", "RBX::DebugSettings", "RBX::GameSettings",
+    "RBX::TaskSchedulerSettings", "RBX::LuaSettings", "RBX::StarterGear", "MemoryBinder", "ArchiveBinder",
+    "XmlWriter", "XmlElement",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 

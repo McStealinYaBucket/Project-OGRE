@@ -6,13 +6,14 @@
 
 #include "stdafx.h"
 #include "decomp.h"
-
 #include "V8World/World.h"
 #include "V8World/CleanStage.h"
 #include "V8World/MovingAssemblyStage.h"
 #include "V8World/SendPhysics.h"
 #include "V8World/TreeStage.h"
 #include "V8World/SleepStage.h"
+#include "V8World/StepJointsStage.h"
+#include "V8Kernel/Kernel.h"
 #include "V8World/Assembly.h"
 #include "V8World/Contact.h"
 #include "V8World/Geometry.h"
@@ -23,7 +24,6 @@
 #include "V8Kernel/Constants.h"
 
 #include <boost/bind.hpp>
-
 #include <set>
 #include <vector>
 
@@ -226,10 +226,20 @@ namespace RBX {
 		return true;
 	}
 
-	// 2013 order (0x00747f20): Break, Assembly, Filter, UiStep, the ContactManager's Broadphase, then
-	// four SleepStage profilers (+0x13c..), StepJointsStage's and two Kernel ones, not ported yet.
-	// STUB: PLAYER 0x00747f20
-	// STUB: STUDIO 0x00888870
+	const SleepStage* World::getSleepStage() const
+	{
+		return static_cast<const SleepStage*>(cleanStage->findStage(IStage::SLEEP_STAGE));
+	}
+
+	const StepJointsStage* World::getStepJointsStage() const
+	{
+		return static_cast<const StepJointsStage*>(cleanStage->findStage(IStage::STEP_JOINTS_STAGE));
+	}
+
+	// 2013 order (0x00747f20): World's four, the ContactManager's, the SleepStage's four, the
+	// StepJointsStage's and the Kernel's two; each stage lookup walks the chain again.
+	// FUNCTION: PLAYER 0x00747f20
+	// FUNCTION: STUDIO 0x00888870
 	void World::loadProfilers(std::vector<Profiling::CodeProfiler*>& worldProfilers) const
 	{
 		worldProfilers.push_back(profilingBreak.get());
@@ -237,7 +247,15 @@ namespace RBX {
 		worldProfilers.push_back(profilingFilter.get());
 		worldProfilers.push_back(profilingUiStep.get());
 		worldProfilers.push_back(contactManager->profiler.get());
+		worldProfilers.push_back(getSleepStage()->profilingCollision.get());
+		worldProfilers.push_back(getSleepStage()->profilingJointSleep.get());
+		worldProfilers.push_back(getSleepStage()->profilingWake.get());
+		worldProfilers.push_back(getSleepStage()->profilingSleep.get());
+		worldProfilers.push_back(getStepJointsStage()->profilingJointUpdate.get());
+		worldProfilers.push_back(getKernel()->profilingKernelBodies.get());
+		worldProfilers.push_back(getKernel()->profilingKernelConnectors.get());
 	}
+
 
 	// mac: 0x5A9998 (44B, batch776): the stage chain walk to the
 	// MovingAssemblyStage, then the grounded-assembly removal there.
@@ -270,16 +288,174 @@ namespace RBX {
 		cleanStage->onJointPrimitiveSet(joint, prim);
 	}
 
-	// mac: 0x5AAF40 -- RBXASSERT(num == 1) at World.cpp:746.
-	// STUB: PLAYER 0x00747e40
-	// STUB: STUDIO 0x00888790
-	void World::removeFromBreakable(Joint* joint)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x5A9120 (batch299: NULL-guard + world assert + Sleep tickle).
+	// STUB: PLAYER 0x00745dd0
+	// STUB: STUDIO 0x00886bf0
+	void World::ticklePrimitive(Primitive* p, bool recursive)
 	{
-		if (joint->isBreakable())
+		if (p == NULL)
+			return;
+		RBXASSERT(p->getWorld());
+		Assembly* assembly = p->getAssembly();
+		if (assembly != NULL)
 		{
-			size_t num = breakableJoints.erase(joint);
-			RBXASSERT(num == 1);
+			IStage* stage = getStage();
+			while (stage != NULL && stage->getStageType() != IStage::SLEEP_STAGE)
+				stage = stage->getDownstream();
+			if (stage != NULL)
+				static_cast<SleepStage*>(stage)->onExternalTickleAssembly(assembly, recursive);
 		}
+	}
+
+	// STUB: PLAYER 0x00745e50
+	// STUB: STUDIO 0x00886c70
+	Assembly* World::onPrimitiveEngineChanging(Primitive* p)
+	{
+		STUB(0x00745e50);
+		return NULL;
+	}
+
+	// STUB: PLAYER 0x00745fc0
+	// STUB: STUDIO 0x00886de0
+	void World::onPrimitiveEngineChanged(Assembly* a)
+	{
+		STUB(0x00745fc0);
+	}
+
+	// STUB: PLAYER 0x00746040
+	// STUB: STUDIO 0x00886e60
+	void World::onPrimitiveFixedChanging(Primitive* p)
+	{
+		STUB(0x00746040);
+	}
+
+	// STUB: PLAYER 0x00746110
+	// STUB: STUDIO 0x00886f30
+	void World::onPrimitiveFixedChanged(Primitive* p)
+	{
+		STUB(0x00746110);
+	}
+
+	// STUB: PLAYER 0x007461e0
+	// STUB: STUDIO 0x00887000
+	void World::onPrimitivePreventCollideChanged(Primitive* p)
+	{
+		STUB(0x007461e0);
+	}
+
+	// STUB: PLAYER 0x00745820
+	// STUB: STUDIO 0x00886660
+	void World::onPrimitiveContactParametersChanged(Primitive* p)
+	{
+		STUB(0x00745820);
+	}
+
+
+
+
+	// mac: 0x5A9754 (223B).
+	// FUNCTION: PLAYER 0x007458a0
+	// FUNCTION: STUDIO 0x008866e0
+	void World::onPrimitiveExtentsChanged(Primitive* p)
+	{
+		RBXASSERT(p->getWorld());
+		RBXASSERT(!inStepCode); contactManager->onPrimitiveExtentsChanged(p);
+	}
+	// FUNCTION: PLAYER 0x00747620
+	// FUNCTION: STUDIO 0x00887f70
+	void World::onAssemblyExtentsChanged(Assembly* a)
+	{
+		RBXASSERT(!inStepCode);
+		RBXASSERT(a->getAssemblyPrimitive()->getWorld());
+		a->visitPrimitives(boost::bind(&ContactManager::onPrimitiveExtentsChanged,
+			contactManager, _1));
+	}
+
+	// mac: 0x5AA9F8 (32B).  Exactly one call: append to the +32 array.
+	void World::reportTouchInfo(const TouchInfo& info)
+	{
+		touchReporting.append(info);
+	}
+
+	// mac: 0x5AAA18 (batch259: prim+253 anchored check gates the +124
+	// low-nibble bump (high nibble preserved); then the +8 signal).
+	void World::onPrimitiveCollided(Primitive* p0, Primitive* p1)
+	{
+		if (!p0->getAnchoredProperty())
+			p0->bumpCollideCount();
+		if (!p1->getAnchoredProperty())
+			p1->bumpCollideCount();
+		primitiveCollideSignal(std::make_pair(p0, p1));
+	}
+
+	// mac: 0x5AA47E (29B).
+	int World::getUiStepId()
+	{
+		return worldStepId / Constants::worldStepsPerUiStep();
 	}
 
 	// mac: 0x5AAD81..0x5AAE9A: the four expand-tests.  getEdgeType() is 0 for every
@@ -294,6 +470,231 @@ namespace RBX {
 		return joint->getEdgeType() != 0 ||
 			(unsigned int)(joint->getJointType() - Joint::ROTATE_JOINT) <= (Joint::MANUAL_GLUE_JOINT - Joint::ROTATE_JOINT);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// mac: 0x5AACA8.
 	// STUB: PLAYER 0x0074a5d0
@@ -323,19 +724,26 @@ namespace RBX {
 
 		if (joint->isBreakable())
 		{
-			// DELTA: the binary guards this with vtbl slot 2
-			// (IPipelined::putInKernel, 0x576E4A) whose argument is not
-			// recoverable from the 80-insn disasm head we have; isBreakable()
-			// is used so insert/erase stay symmetric with removeFromBreakable.
+			// DELTA: 2013 guards this with vtbl slot 2; isBreakable() keeps it symmetric with removeFromBreakable.
 			bool ok = breakableJoints.insert(joint).second;
+
+
+
 			RBXASSERT(ok);                           // World.cpp:732 "ok"
 		}
 
-		// getEdgeType() == 0 and type in [1,5] => a user joint.
-		if (joint->getEdgeType() == 0 &&
+		if (joint->getEdgeType() == 0 &&	// a user joint: type in [1,5]
 			(unsigned int)(joint->getJointType() - Joint::WELD_JOINT) <= (Joint::MOTOR_6D_JOINT - Joint::WELD_JOINT))
-		{
 			joint->notifyMoved();
+	}
+	// FUNCTION: PLAYER 0x00747e40
+	// FUNCTION: STUDIO 0x00888790
+	void World::removeFromBreakable(Joint* joint)
+	{
+		if (joint->isBreakable())
+		{
+			size_t num = breakableJoints.erase(joint);
+			RBXASSERT(num == 1);
 		}
 	}
 
@@ -386,118 +794,53 @@ namespace RBX {
 		++numContacts;                                // +124
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// mac: 0x5AB2B8.
 	// STUB: PLAYER 0x00745a80
 	// STUB: STUDIO 0x008868b0
 	void World::destroyContact(Contact* contact)
 	{
+		RBXASSERT(!inStepCode);
 		cleanStage->onEdgeRemoving(contact);               // vtbl+0x14
 		--numContacts;
 	}
 
-	// mac: 0x5AA9F8 (32B).  Exactly one call: append to the +32 array.
-	void World::reportTouchInfo(const TouchInfo& info)
-	{
-		touchReporting.append(info);
-	}
 
-	// mac: 0x5AAA18 (batch259: prim+253 anchored check gates the +124
-	// low-nibble bump (high nibble preserved); then the +8 signal).
-	void World::onPrimitiveCollided(Primitive* p0, Primitive* p1)
-	{
-		if (!p0->getAnchoredProperty())
-			p0->bumpCollideCount();
-		if (!p1->getAnchoredProperty())
-			p1->bumpCollideCount();
-		primitiveCollideSignal(std::make_pair(p0, p1));
-	}
 
-	// mac: 0x5A9120 (batch299: NULL-guard + world assert + Sleep tickle).
-	// STUB: PLAYER 0x00745dd0
-	// STUB: STUDIO 0x00886bf0
-	void World::ticklePrimitive(Primitive* prim, bool recursive)
-	{
-		if (prim == NULL)
-			return;
-		RBXASSERT(prim->getWorld() != NULL);  // :362
-		Assembly* assembly = prim->getAssembly();
-		if (assembly != NULL)
-		{
-			IStage* stage = getStage();
-			while (stage != NULL && stage->getStageType() != IStage::SLEEP_STAGE)
-				stage = stage->getDownstream();
-			if (stage != NULL)
-				static_cast<SleepStage*>(stage)->onExternalTickleAssembly(assembly, recursive);
-		}
-	}
 
-	// mac: 0x5A9834 (batch299: :432/:433/Assembly.h:203 asserts + extents
-	// fan. Binary calls visitPrimitivesImpl directly; the public
-	// visitPrimitives walks identically from the same root).
-	// STUB: PLAYER 0x00747620
-	// STUB: STUDIO 0x00887f70
-	void World::onAssemblyExtentsChanged(Assembly* assembly)
-	{
-		RBXASSERT(!inStepCode);  // :432
-		Primitive* assemblyPrim = assembly->getAssemblyPrimitive();
-		RBXASSERT(assemblyPrim == NULL || assemblyPrim->getWorld() != NULL);  // :433 shape
-		RBXASSERT(assemblyPrim != NULL);  // Assembly.h:203 "p"
-		assembly->visitPrimitives(boost::bind(&ContactManager::onPrimitiveExtentsChanged,
-			contactManager, _1));
-	}
 
-	// STUB: PLAYER 0x00745820
-	// STUB: STUDIO 0x00886660
-	void World::onPrimitiveContactParametersChanged(Primitive* p)
-	{
-		STUB(0x00745820);
-	}
 
-	// STUB: PLAYER 0x00745e50
-	// STUB: STUDIO 0x00886c70
-	Assembly* World::onPrimitiveEngineChanging(Primitive* p)
-	{
-		STUB(0x00745e50);
-		return NULL;
-	}
 
-	// STUB: PLAYER 0x00745fc0
-	// STUB: STUDIO 0x00886de0
-	void World::onPrimitiveEngineChanged(Assembly* a)
-	{
-		STUB(0x00745fc0);
-	}
 
-	// STUB: PLAYER 0x00746040
-	// STUB: STUDIO 0x00886e60
-	void World::onPrimitiveFixedChanging(Primitive* p)
-	{
-		STUB(0x00746040);
-	}
 
-	// STUB: PLAYER 0x00746110
-	// STUB: STUDIO 0x00886f30
-	void World::onPrimitiveFixedChanged(Primitive* p)
-	{
-		STUB(0x00746110);
-	}
 
-	// STUB: PLAYER 0x007461e0
-	// STUB: STUDIO 0x00887000
-	void World::onPrimitivePreventCollideChanged(Primitive* p)
-	{
-		STUB(0x007461e0);
-	}
 
-	// mac: 0x5A9754 (223B).
-	// STUB: PLAYER 0x007458a0
-	// STUB: STUDIO 0x008866e0
-	void World::onPrimitiveExtentsChanged(Primitive* prim)
-	{
-		RBXASSERT(prim->getWorld() != NULL);  // :425 "p->getWorld()"
-		assertNotInStep();  // :426 "!inStepCode" (established equivalent).
-		contactManager->onPrimitiveExtentsChanged(prim);
-	}
+
+
+
+
+
 
 	// mac: 0x5AB4E0 (885B).  Asserts carried verbatim (World.cpp:856-861 + :869).
 	// Calls CleanStage::onPrimitiveAdded then ContactManager::onPrimitiveAdded
@@ -508,90 +851,46 @@ namespace RBX {
 	// member directly (worldIndex = size pre-append).
 	// STUB: PLAYER 0x007471f0
 	// STUB: STUDIO 0x00887cb0
-	void World::insertPrimitive(Primitive* prim)
+	void World::insertPrimitive(Primitive* p)
 	{
 		RBXASSERT(!inStepCode);  // :856 "!inStepCode" (World.cpp:856)
-		RBXASSERT(prim->getAssembly() == NULL);  // :857 "!p->getAssembly()"
-		RBXASSERT(!prim->inPipeline());  // :858 "!p->inPipeline()"
-		RBXASSERT(prim->getFirstEdge() == NULL);  // :859 "!p->getFirstEdge()"
-		RBXASSERT(prim->getNumEdges() == 0);  // :860 "!p->getNumEdges()"
-		RBXASSERT(prim->getWorld() == NULL);  // :861 "!p->getWorld()"
-		primitives.fastAppend(prim);
-		prim->setWorld(this);
+		RBXASSERT(!p->getAssembly());  // :857 "!p->getAssembly()"
+		RBXASSERT(!p->inPipeline());  // :858 "!p->inPipeline()"
+		RBXASSERT(!p->getFirstEdge());  // :859 "!p->getFirstEdge()"
+		RBXASSERT(!p->getNumEdges());  // :860 "!p->getNumEdges()"
+		RBXASSERT(!p->getWorld());  // :861 "!p->getWorld()"
+		primitives.fastAppend(p);
+		p->setWorld(this);
 		// IWorldStage lacks the hooks (see header note); same static_cast
 		// the harness uses.
-		cleanStage->onPrimitiveAdded(prim);  contactManager->onPrimitiveAdded(prim);
+		cleanStage->onPrimitiveAdded(p);  contactManager->onPrimitiveAdded(p);
+
+
 		RBXASSERT(!inStepCode);  // :869 "!inStepCode" (World.cpp:869)
 	}
-
-	// mac: 0x5AB856 (916B).  Asserts carried verbatim (:875-:877, :888-:893).
-	// The swap-remove is IndexArray::fastRemove via worldIndexFunc 0x5AB8D4
-	// spelled inline (back-swap + moved-occupant fix + index reset).
 	// STUB: PLAYER 0x0074a790
 	// STUB: STUDIO 0x0088b0e0
-	void World::removePrimitive(Primitive* prim, bool keepJoints)
+	void World::removePrimitive(Primitive* p, bool keepJoints)
 	{
 		RBXASSERT(!inStepCode);  // :875 "!inStepCode" (World.cpp:875)
-		RBXASSERT(prim->inPipeline());  // :876 "p->inPipeline()" (World.cpp:876)
-		RBXASSERT(prim->getWorld() != NULL);  // :877 "p->getWorld()" (World.cpp:877)
-		destroyAutoJoints(prim, NULL, !keepJoints, !keepJoints);
-		contactManager->onPrimitiveRemoved(prim);
-		cleanStage->onPrimitiveRemoving(prim);
-		primitives.fastRemove(prim);
-		prim->setWorld(NULL);
-		RBXASSERT(prim->getFirstEdge() == NULL);  // :888 (World.cpp:888)
-		RBXASSERT(prim->getNumEdges() == 0);  // :889 (World.cpp:889)
+		RBXASSERT(p->inPipeline());  // :876 "p->inPipeline()" (World.cpp:876)
+		RBXASSERT(p->getWorld());  // :877 "p->getWorld()" (World.cpp:877)
+		destroyAutoJoints(p, NULL, !keepJoints, !keepJoints);
+		contactManager->onPrimitiveRemoved(p);
+		cleanStage->onPrimitiveRemoving(p);
+		primitives.fastRemove(p);
+		p->setWorld(NULL);
+
+
+
+
+
+		RBXASSERT(p->getFirstEdge() == NULL);  // :888 (World.cpp:888)
+		RBXASSERT(p->getNumEdges() == 0);  // :889 (World.cpp:889)
 		RBXASSERT(!inStepCode);  // :890 "!inStepCode" (World.cpp:890)
-		RBXASSERT(prim->getAssembly() == NULL);  // :891 "!p->getAssembly()"
-		RBXASSERT(!prim->inPipeline());  // :892 "!p->inPipeline()" (World.cpp:892)
-		RBXASSERT(prim->getWorld() == NULL);  // :893 "!p->getWorld()" (World.cpp:893)
-	}
-
-	// mac: 0x5AA47E (29B).
-	int World::getUiStepId()
-	{
-		return worldStepId / Constants::worldStepsPerUiStep();
-	}
-
-	// mac: 0x5AB4B2 -- createAutoJoints(p, NULL, NULL).  The 3-arg body (0x5AC2E0,
-	// 335 bytes) needs ContactManager::getPrimitivesTouchingExtents 0x563F30
-	// and JointBuilder::canJoin 0x57B164, so the builder loop is still TODO.
-	void World::createAutoJoints(Primitive* prim)
-	{
-		createAutoJoints(prim, NULL, NULL);
-	}
-
-	// mac: 0x5AC2E0 (335B).  assertNotInStep (World.cpp:999); ++numLinkCalls;
-	// tempPrimitives.resize(0, false); fill via the hash walk (flag 0 =
-	// unlimited); for each survivor: doNotIgnore(ignore, include) gate,
-	// skip when prim->getJoint(other, 0) already links them, else canJoin
-	// and on success insertJoint + the inJointNotification-bracketed signal
-	// fire (same bracket as destroyJoint).
-	// STUB: PLAYER 0x0074aa80
-	// STUB: STUDIO 0x0088b3d0
-	void World::createAutoJoints(Primitive* prim,
-		std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims)
-	{
-		assertNotInStep();  // World.cpp:999 "!inStepCode"
-		++numLinkCalls;
-		tempPrimitives.resize(0, false);
-		contactManager->getPrimitivesTouchingExtents(
-			prim->getFastFuzzyExtents(), prim, 0, tempPrimitives);
-		for (int i = 0; i < tempPrimitives.size(); ++i)
-		{
-			Primitive* other = tempPrimitives[i];
-			if (!doNotIgnore(other, ignorePrims, includePrims))
-				continue;
-			if (Primitive::getJoint(prim, other, 0) != NULL)
-				continue;
-			if (Joint* joint = JointBuilder::canJoin(prim, other))
-			{
-				insertJoint(joint);
-				inJointNotification = joint;
-				autoJoinSignal(joint);
-				inJointNotification = NULL;
-			}
-		}
+		RBXASSERT(!p->getAssembly());  // :891 "!p->getAssembly()"
+		RBXASSERT(!p->inPipeline());  // :892 "!p->inPipeline()" (World.cpp:892)
+		RBXASSERT(!p->getWorld());  // :893 "!p->getWorld()" (World.cpp:893)
 	}
 
 	// mac: 0x5AC168 -- destroyAutoJoints(p, NULL, b, true).  5-arg body 0x5ABBEA.
@@ -648,6 +947,75 @@ namespace RBX {
 			(int)tempJoints.size() - startIndex);
 		// World.cpp:948 "startIndex == tempJoints.size()".
 		RBXASSERT((int)tempJoints.size() == startIndex);
+	}
+
+	// mac: 0x5AB4B2 -- createAutoJoints(p, NULL, NULL).  The 3-arg body (0x5AC2E0,
+	// 335 bytes) needs ContactManager::getPrimitivesTouchingExtents 0x563F30
+	// and JointBuilder::canJoin 0x57B164, so the builder loop is still TODO.
+	void World::createAutoJoints(Primitive* prim)
+	{
+		createAutoJoints(prim, NULL, NULL);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// mac: 0x5AC2E0 (335B).  assertNotInStep (World.cpp:999); ++numLinkCalls;
+	// tempPrimitives.resize(0, false); fill via the hash walk (flag 0 =
+	// unlimited); for each survivor: doNotIgnore(ignore, include) gate,
+	// skip when prim->getJoint(other, 0) already links them, else canJoin
+	// and on success insertJoint + the inJointNotification-bracketed signal
+	// fire (same bracket as destroyJoint).
+	// STUB: PLAYER 0x0074aa80
+	// STUB: STUDIO 0x0088b3d0
+	void World::createAutoJoints(Primitive* prim,
+		std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims)
+	{
+		RBXASSERT(!inStepCode);
+		++numLinkCalls;
+		tempPrimitives.resize(0, false);
+		contactManager->getPrimitivesTouchingExtents(
+			prim->getFastFuzzyExtents(), prim, 0, tempPrimitives);
+		for (int i = 0; i < tempPrimitives.size(); ++i)
+		{
+			Primitive* other = tempPrimitives[i];
+			if (!doNotIgnore(other, ignorePrims, includePrims))
+				continue;
+			if (Primitive::getJoint(prim, other, 0) != NULL)
+				continue;
+			if (Joint* joint = JointBuilder::canJoin(prim, other))
+			{
+				insertJoint(joint);
+				inJointNotification = joint;
+				autoJoinSignal(joint);
+				inJointNotification = NULL;
+			}
+		}
 	}
 
 	void World::joinAll()

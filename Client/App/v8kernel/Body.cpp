@@ -10,6 +10,8 @@
 namespace RBX {
 	Body* Body::worldBody = NULL;
 	unsigned int Body::globalId = 0;
+	// STUB: PLAYER 0x008ee2c0
+	// STUB: STUDIO 0x00a0c450
 	Body::Body()
 		: unknown28()  // tbb::spin_mutex at +0x1c, sharing the empty Allocator<Body> base (C2 0x008ee2c0)
 		, leafBodyIndex(-1)
@@ -29,8 +31,6 @@ namespace RBX {
 	// FUNCTION: STUDIO 0x00a0c590
 	Body::~Body()
 	{
-
-
 
 		RBXASSERT(connectorUseCount == 0);
 		RBXASSERT(!link);

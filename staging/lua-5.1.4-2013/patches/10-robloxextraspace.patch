@@ -1,5 +1,5 @@
 LUAI_EXTRASPACE = sizeof(RobloxExtraSpace) (44 bytes) and the luai_userstate* hooks construct,
-destroy and reset it. Two views of one layout: the Lua TUs (LUA_CORE/LUA_LIB) see opaque members
+destroy and reset it. Two views of one layout: the other Lua TUs (LUA_CORE/LUA_LIB) see opaque members
 and only declared constructors/destructor; every other TU (App) sees the typed 2013 members
 (Hook, shared_ptr<Shared>, intrusive_ptr<Node>, identity:5, bool yieldCaptured:1, weak_ptr,
 scoped_ptr) and their inline helpers, at the same offsets.
@@ -15,11 +15,13 @@ lua_resume 0x008ab8e0 clears bit 0 of byte [L-0x10] (yieldCaptured, a 1-bit unit
 shl/sar 0x1b, so an enum bit-field), zeroes 0x28, increments Shared+0 and inserts this into
 Shared+8, and asserts at luaconf.h:852 (push 0x354); ~RobloxExtraSpace asserts at :862 (0x35e).
 App code reads the typed members at L-0x2c (spawn 0x00674850, Node::create 0x00872480).
-The constructor and destructor bodies are not reproduced here.
+lapi.c and lstate.c, which emit the constructors and the destructor (lapi.obj 0x00874cf0-0x00875050,
+lstate.obj 0x008764d0-0x00876970), see the typed view; the bodies sit at luaconf.h 829-863 so the
+two asserts land on 852 and 862.
 
 --- a/luaconf.h
 +++ b/luaconf.h
-@@ -720,7 +720,105 @@
+@@ -720,7 +720,148 @@
  ** CHANGE (define) this if you really need that. This value must be
  ** a multiple of the maximum alignment required for your machine.
  */
@@ -37,7 +39,11 @@ The constructor and destructor bodies are not reproduced here.
 +** ctor's `inc [shared]` and insert(this) on shared+8). */
 +#include <new>
 +struct lua_State;
-+#if defined(LUA_CORE) || defined(LUA_LIB)
++/* lapi.c and lstate.c instantiate the constructors and the destructor (lapi.obj: the child ctor and
++** Set::insert/Hook::remove 0x00874cf0-0x00875050; lstate.obj: the root ctor and ~RobloxExtraSpace),
++** so they see the typed view with the bodies below. */
++#if (defined(LUA_CORE) || defined(LUA_LIB)) && !defined(lapi_c) && !defined(lstate_c)
++#define LUA_OPAQUE_EXTRASPACE
 +#pragma pack(push)
 +#pragma pack(8)
 +class RobloxExtraSpace
@@ -57,14 +63,14 @@ The constructor and destructor bodies are not reproduced here.
 +#include "boost/weak_ptr.hpp"
 +#include "boost/scoped_ptr.hpp"
 +#include "boost/intrusive_ptr.hpp"
-+#include "rbx/Intrusive/Set.h"
++#include "RBX/Intrusive/Set.h"
 +#include "security/SecurityContext.h"
 +#include "script/ThreadRef.h"
++#include "script/ExitHandlers.h"
 +namespace RBX
 +{
 +	class BaseScript;
 +	class ScriptContext;
-+	namespace Lua { class Continuations; }
 +}
 +#pragma pack(push)
 +#pragma pack(8)
@@ -73,6 +79,7 @@ The constructor and destructor bodies are not reproduced here.
 +	typedef RBX::Intrusive::Set<RobloxExtraSpace> AllThreads;
 +	struct Shared
 +	{
++		Shared() : threadCount(0), context(0) {}
 +		int threadCount;                /* +0x00 */
 +		RBX::ScriptContext* context;    /* +0x04 */
 +		AllThreads allThreads;          /* +0x08 */
@@ -107,6 +114,8 @@ The constructor and destructor bodies are not reproduced here.
 +	{
 +		get(L)->~RobloxExtraSpace();
 +	}
++	// FUNCTION: PLAYER 0x00875050
++	// STUB: STUDIO 0x00924d40
 +	static void constructChild(lua_State *L, RobloxExtraSpace *parent)
 +	{
 +		new(get(L)) RobloxExtraSpace(parent);
@@ -123,10 +132,46 @@ The constructor and destructor bodies are not reproduced here.
 +#pragma pack(pop)
 +
 +#define LUAI_EXTRASPACE		sizeof(RobloxExtraSpace)
++
++#ifndef LUA_OPAQUE_EXTRASPACE
++// FUNCTION: PLAYER 0x00876970
++// STUB: STUDIO 0x00926660
++inline RobloxExtraSpace::RobloxExtraSpace()
++	: shared(new Shared())
++	, identity(RBX::Security::Anonymous)
++{
++	++shared->threadCount;
++	shared->allThreads.insert(*this);
++}
++/* The root (lstate.obj) makes a new Shared (shared_ptr ctor 0x00876910). A child (lapi.obj) shares
++** the parent's Shared, node, identity and script; its assert is line 852 and the destructor's 862 ("node file: ...luaconf.h line: 852"), so the bodies sit here. */
++// FUNCTION: PLAYER 0x00874f40
++// STUB: STUDIO 0x00924c30
++inline RobloxExtraSpace::RobloxExtraSpace(RobloxExtraSpace* parent)
++	: shared(parent->shared)
++	, node(parent->node)
++	, identity(parent->identity)
++	, yieldCaptured(false)
++	, script(parent->script)
++{
++	++shared->threadCount;
++	RBXASSERT(node);
++	shared->allThreads.insert(*this);
++}
++/* lstate.obj: leaves the set first (remove_element inline, Hook::remove 0x00874cf0), then the members. */
++// FUNCTION: PLAYER 0x008766a0
++// STUB: STUDIO 0x00926390
++inline RobloxExtraSpace::~RobloxExtraSpace()
++{
++	shared->allThreads.remove_element(*this);
++	--shared->threadCount;
++	RBXASSERT(shared->threadCount >= 0);
++}
++#endif
  
  
  /*
-@@ -728,12 +826,29 @@
+@@ -728,12 +869,29 @@
  ** CHANGE them if you defined LUAI_EXTRASPACE and need to do something
  ** extra when a thread is created/deleted/resumed/yielded.
  */

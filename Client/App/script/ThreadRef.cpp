@@ -29,9 +29,20 @@ LOGVARIABLE(LuaBridge, 0)
 // GLOBAL: PLAYER 0x00e12d45
 // GLOBAL: STUDIO 0x00f8d529
 WeakThreadRef::Mutex WeakThreadRef::sync;
+// mac: 0x1AE590 (192B, batch448): shares the live ref, re-links under the copied node scope (no addRef -- no new live thread is created).
+// FUNCTION: PLAYER 0x00871b90
+// FUNCTION: STUDIO 0x00828010
+WeakThreadRef::WeakThreadRef(const WeakThreadRef& other)
+	: liveThreadRef(other.liveThreadRef)	// previous/next are left to addToNode (2013 stores neither)
+	, node(other.node)
+{
+	Mutex::scoped_lock lock(sync);
+	addToNode();
+}
 // FUNCTION: PLAYER 0x00872340
 // FUNCTION: STUDIO 0x00828830
 void RobloxExtraSpace::createNewNode() { node = new Node(); }	// luaconf.h inline, emitted here for Node::create
+
 // mac: 0x1AE368 (213B, batch448): node from the extra space (under the lock) + link + live ref.
 // FUNCTION: PLAYER 0x008723d0
 // FUNCTION: STUDIO 0x008288c0
@@ -42,17 +53,6 @@ WeakThreadRef::WeakThreadRef(lua_State* thread)
 	node = RobloxExtraSpace::get(thread)->getNode();
 	addToNode();
 	addRef(thread);
-}
-
-// mac: 0x1AE590 (192B, batch448): shares the live ref, re-links under the copied node scope (no addRef -- no new live thread is created).
-WeakThreadRef::WeakThreadRef(const WeakThreadRef& other)
-	: previous(NULL)
-	, next(NULL)
-	, liveThreadRef(other.liveThreadRef)
-	, node(other.node)
-{
-	Mutex::scoped_lock lock(sync);
-	addToNode();
 }
 
 // No binary symbol (batch506): behavior-derived unlink + copy + link.
@@ -70,20 +70,20 @@ WeakThreadRef& WeakThreadRef::operator=(const WeakThreadRef& other)
 }
 
 // mac: 0x1AE43E (104B, batch450): head-insert into node->first (+20 gate).
-// STUB: PLAYER 0x00871200
-// STUB: STUDIO 0x00827670
+// FUNCTION: PLAYER 0x00871200
+// FUNCTION: STUDIO 0x00827670
 void WeakThreadRef::addToNode()
 {
-	Node* self = node;
-	if (self != NULL)
+	// 2013 re-reads node after the log call (0x00871226)
+	if (node != NULL)
 	{
 		if (FLog::WeakThreadRef != 0)
 		{
 			FLog::FastLog(FLog::WeakThreadRef,
 				"WeakThreadRef::addToNode() for node %p",
-				reinterpret_cast<const void*>(self));
+				reinterpret_cast<const void*>(node));
 		}
-		WeakThreadRef* oldFirst = self->first;
+		WeakThreadRef* oldFirst = node->first;
 		if (oldFirst != NULL)
 		{
 			next = oldFirst;
@@ -92,7 +92,7 @@ void WeakThreadRef::addToNode()
 		else
 			next = NULL;
 		previous = NULL;
-		self->first = this;
+		node->first = this;
 	}
 }
 
@@ -131,25 +131,25 @@ void WeakThreadRef::reset()
 	removeRef();
 }
 // mac: 0x1AE764 (127B, batch450): doubly-linked unlink + head fixup.
-// STUB: PLAYER 0x00871260
-// STUB: STUDIO 0x008276d0
+// FUNCTION: PLAYER 0x00871260
+// FUNCTION: STUDIO 0x008276d0
 void WeakThreadRef::removeFromNode()
 {
-	Node* self = node;
-	if (self != NULL)
+	// 2013 re-reads node after the log call (0x00871226)
+	if (node != NULL)
 	{
 		if (FLog::WeakThreadRef != 0)
 		{
 			FLog::FastLog(FLog::WeakThreadRef,
 				"WeakThreadRef::removeFromNode() for node %p",
-				reinterpret_cast<const void*>(self));
+				reinterpret_cast<const void*>(node));
 		}
 		if (next != NULL)
 			next->previous = previous;
 		if (previous != NULL)
 			previous->next = next;
-		if (self->first == this)
-			self->first = next;
+		if (node->first == this)
+			node->first = next;
 		next = NULL;
 		previous = NULL;
 		node = NULL;
@@ -274,28 +274,29 @@ ThreadRef::ThreadRef(lua_State* thread)
 }
 
 // mac: 0x1AF468 (145B, batch452): vptr + unref function (iff live) + base.
-// STUB: PLAYER 0x00871e90
-// STUB: STUDIO 0x00828310
+// FUNCTION: PLAYER 0x00871e90
+// FUNCTION: STUDIO 0x00828310
 WeakFunctionRef::~WeakFunctionRef()
 {
-	lua_State* mine = threadDangerous();
-	if (functionId != 0 && mine != NULL)
+	if (functionId != 0 && !empty())
 	{
-		lua_State* state = mine;
-		if (FFlag::AllowYieldInHooks != 0)
-			state = ScriptContext::getGlobalState(state);
-		luaL_unref(state, LUA_REGISTRYINDEX, functionId);
+		if (!FFlag::AllowYieldInHooks)
+			luaL_unref(thread(), LUA_REGISTRYINDEX, functionId);
+		else
+		{
+			lua_State* global = ScriptContext::getGlobalState(thread());	// functionId is re-read after this call
+			luaL_unref(global, LUA_REGISTRYINDEX, functionId);
+		}
 	}
 }
 
 // mac: 0x1AF4FA (159B, batch451): unrefs the functionId (iff live thread),
 // then the base removeRef.
-// STUB: PLAYER 0x00871f30
-// STUB: STUDIO 0x008283b0
+// FUNCTION: PLAYER 0x00871f30
+// FUNCTION: STUDIO 0x008283b0
 void WeakFunctionRef::removeRef()
 {
-	lua_State* mine = threadDangerous();
-	if (functionId != 0 && mine != NULL)
+	if (functionId != 0 && !empty())
 	{
 		if (FLog::WeakThreadRef != 0)
 		{
@@ -303,10 +304,13 @@ void WeakFunctionRef::removeRef()
 				" WeakFunctionRef::removeRef() for node %p",
 				reinterpret_cast<const void*>(node));
 		}
-		lua_State* state = mine;
-		if (FFlag::AllowYieldInHooks != 0)
-			state = ScriptContext::getGlobalState(state);
-		luaL_unref(state, LUA_REGISTRYINDEX, functionId);
+		if (!FFlag::AllowYieldInHooks)
+			luaL_unref(thread(), LUA_REGISTRYINDEX, functionId);
+		else
+		{
+			lua_State* global = ScriptContext::getGlobalState(thread());	// functionId is re-read after this call
+			luaL_unref(global, LUA_REGISTRYINDEX, functionId);
+		}
 		functionId = 0;
 	}
 	WeakThreadRef::removeRef();
@@ -360,7 +364,6 @@ void WaitScriptSlot::operator()(const Reflection::EventArguments& arguments)
 		lua_settop(live, 0);
 	}
 }
-
 // mac: 0x171174 (394B, batch456): index/newindex/gc/eq/tostring + readonly.
 // FUNCTION: PLAYER 0x00881270
 // FUNCTION: STUDIO 0x009e58f0
@@ -388,7 +391,6 @@ void Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::registerClass(lua_
 	lua_setreadonly(L, -1, 1);
 	lua_pop(L, 1);
 }
-
 // mac: 0x1AE9FC (102B, batch457): Nodes expose no members.
 template<>
 int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_index(
@@ -397,7 +399,6 @@ int Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_index(
 {
 	throw RBX::runtime_error("%s is not a valid member", name);
 }
-
 // mac: 0x1AEA62 (102B, batch457): always throws, with the name.
 template<>
 void Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_newindex(
@@ -406,26 +407,29 @@ void Bridge<boost::intrusive_ptr<WeakThreadRef::Node>, true>::on_newindex(
 {
 	throw RBX::runtime_error("%s cannot be assigned to", name);
 }
-
 // (Placed here so its assert sits on ThreadRef.cpp line 419, as in 2013.)
 // mac: 0x1AF68C (278B, batch451): thread + non-null assert (ThreadRef.cpp:
 // 419) + pushthread/registry-ref (global-routed iff AllowYieldInHooks).
 // (C1 0x1AE868 forwards here; one definition emits both.)
-// STUB: PLAYER 0x008713a0
-// STUB: STUDIO 0x00827820
+// FUNCTION: PLAYER 0x008713a0
+// FUNCTION: STUDIO 0x00827820
 Lua::detail::LiveThreadRef::LiveThreadRef(lua_State* L)
 	: L(L)
 {
 	RBXASSERT(L);
-	lua_pushthread(L);
-	if (FFlag::AllowYieldInHooks != 0)
+	// 2013 tests the flag first and works on the member (re-read [esi+8]), not the parameter
+	if (!FFlag::AllowYieldInHooks)
 	{
-		lua_State* global = ScriptContext::getGlobalState(L);
-		lua_xmove(L, global, 1);
-		threadId = luaL_ref(global, LUA_REGISTRYINDEX);
+		lua_pushthread(this->L);
+		threadId = luaL_ref(this->L, LUA_REGISTRYINDEX);
 	}
 	else
-		threadId = luaL_ref(L, LUA_REGISTRYINDEX);
+	{
+		lua_State* global = ScriptContext::getGlobalState(this->L);
+		lua_pushthread(this->L);
+		lua_xmove(this->L, global, 1);
+		threadId = luaL_ref(global, LUA_REGISTRYINDEX);
+	}
 }
 
 // mac: 0x1AF7AC (138B, batch448): unref (global-routed iff flag) + count--.

@@ -327,8 +327,8 @@ namespace RBX {
 		G3D::CoordinateFrame worldFrame;  // +164 (TODO role).
 		G3D::Vector3 linVel;        // +212 (TODO role).
 		G3D::Vector3 angVel;        // +224 (TODO role).
-		// +236: no store in the C2 (0x008ee2c0), but the pool is singleton_pool<Body,240> (free 0x00756970).
-		undefined m_unk0xec[0xf0 - 0xec];
+		// Size 0xec: Primitive's ctor 0x00756a40 pushes 0xec to Allocator<Body>::operator new and the
+		// operator delete at 0x00756a20 returns 0xec to the pool count.
 	};
 
 } // namespace RBX

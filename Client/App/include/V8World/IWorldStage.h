@@ -45,11 +45,17 @@ namespace RBX {
 			return getDownstreamWS()->getMetric(metricType);
 		}
 	protected:
-		IWorldStage() {}
+		IWorldStage() : world(NULL) {}
 		// SimulateStage C2 0x00998e10 builds its base from (upstream, new Kernel(this), world).
 		IWorldStage(IStage* upstream, IStage* downstream, World* world)
-			: IStage(upstream, downstream, world)
+			: IStage(upstream, downstream)
+			, world(world)
 		{}
+	public:
+		World* getWorld() const { return world; }
+
+		// Every stage ctor stores it (+0x0c); IPipelined::findWorld reads it off the current stage.
+		World* world;	// 0x0c
 	};
 
 } // namespace RBX

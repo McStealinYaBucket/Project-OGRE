@@ -32,27 +32,7 @@ namespace RBX {
 		: public GlobalAdvancedSettingsItem<LuaSettings, sLuaSettings>
 	{
 	public:
-		// STUB: PLAYER 0x0085e360
-		// STUB: STUDIO 0x00948980
-		LuaSettings()
-			: gcPause(200)
-			, gcStepMul(200)
-			, unknown104(bitsToDouble(0x3F9EB851EB851EB8ull))
-			, unknown112(2)
-			, unknown116(0)
-			, unknown120(false)
-			, waitingThreadsBudget(0.1f)
-		{
-			Instance::setName("Lua");
-		}
-
-		// Singleton for openState's gc tuning (binary routes through
-		// GlobalAdvancedSettingsItem<LuaSettings>::singleton -- DELTA).
-		static LuaSettings& singleton()
-		{
-			static LuaSettings instance;
-			return instance;
-		}
+		LuaSettings();
 
 		int getGcPause() const { return gcPause; }      // +96.
 		int getGcStepMul() const { return gcStepMul; }  // +100.
@@ -90,11 +70,9 @@ namespace RBX {
 // The FactoryProduct base's out-of-line members. Their 2013 names spell the base
 // GlobalAdvancedSettings::Item (RTTI .?AVCreator@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@...).
 // clang-format off
-// 2013's copy pushes the "LuaSettings" literal (sLuaSettings folded, so it was instantiated where the
-// definition is visible); ours reads sLuaSettings. The kept COMDAT comes from LuaLibrary.obj.
-// STUB: PLAYER 0x0085e220
-// STUB: STUDIO 0x00948850
-// ??0?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@IAE@XZ
+// TEMPLATE: PLAYER 0x00654600
+// TEMPLATE: STUDIO 0x007ccfc0
+// ?singleton@?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@SAAAVLuaSettings@2@XZ
 
 // TEMPLATE: PLAYER 0x0085db70
 // TEMPLATE: STUDIO 0x009481a0
@@ -103,6 +81,12 @@ namespace RBX {
 // TEMPLATE: PLAYER 0x0085dc20
 // TEMPLATE: STUDIO 0x00948250
 // ?getClassName@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@UBEABVName@2@XZ
+
+// The item ctor pushes the "LuaSettings" literal: it is instantiated only in LuaSettings.obj,
+// where the LuaSettings ctor (0x0085e360, out of line) sees sLuaSettings' definition.
+// TEMPLATE: PLAYER 0x0085e220
+// TEMPLATE: STUDIO 0x00948850
+// ??0?$GlobalAdvancedSettingsItem@VLuaSettings@RBX@@$E?sLuaSettings@2@3QBDB@RBX@@IAE@XZ
 
 // The deleting-destructor thunk is GlobalAdvancedSettingsItem's: its destructor clears the singleton
 // slot (PLAYER 0x0085e310 stores 0 to 0x00de68a8 before the FactoryProduct vptrs).

@@ -733,7 +733,11 @@ union luai_Cast { double l_d; long l_l; };
 ** ctor's `inc [shared]` and insert(this) on shared+8). */
 #include <new>
 struct lua_State;
-#if defined(LUA_CORE) || defined(LUA_LIB)
+/* lapi.c and lstate.c instantiate the constructors and the destructor (lapi.obj: the child ctor and
+** Set::insert/Hook::remove 0x00874cf0-0x00875050; lstate.obj: the root ctor and ~RobloxExtraSpace),
+** so they see the typed view with the bodies below. */
+#if (defined(LUA_CORE) || defined(LUA_LIB)) && !defined(lapi_c) && !defined(lstate_c)
+#define LUA_OPAQUE_EXTRASPACE
 #pragma pack(push)
 #pragma pack(8)
 class RobloxExtraSpace
@@ -753,14 +757,14 @@ public:
 #include "boost/weak_ptr.hpp"
 #include "boost/scoped_ptr.hpp"
 #include "boost/intrusive_ptr.hpp"
-#include "rbx/Intrusive/Set.h"
+#include "RBX/Intrusive/Set.h"
 #include "security/SecurityContext.h"
 #include "script/ThreadRef.h"
+#include "script/ExitHandlers.h"
 namespace RBX
 {
 	class BaseScript;
 	class ScriptContext;
-	namespace Lua { class Continuations; }
 }
 #pragma pack(push)
 #pragma pack(8)
@@ -769,6 +773,7 @@ class RobloxExtraSpace : public RBX::Intrusive::Set<RobloxExtraSpace>::Hook
 	typedef RBX::Intrusive::Set<RobloxExtraSpace> AllThreads;
 	struct Shared
 	{
+		Shared() : threadCount(0), context(0) {}
 		int threadCount;                /* +0x00 */
 		RBX::ScriptContext* context;    /* +0x04 */
 		AllThreads allThreads;          /* +0x08 */
@@ -803,6 +808,8 @@ public:
 	{
 		get(L)->~RobloxExtraSpace();
 	}
+	// FUNCTION: PLAYER 0x00875050
+	// FUNCTION: STUDIO 0x00924d40
 	static void constructChild(lua_State *L, RobloxExtraSpace *parent)
 	{
 		new(get(L)) RobloxExtraSpace(parent);
@@ -819,6 +826,42 @@ private:
 #pragma pack(pop)
 
 #define LUAI_EXTRASPACE		sizeof(RobloxExtraSpace)
+
+#ifndef LUA_OPAQUE_EXTRASPACE
+// FUNCTION: PLAYER 0x00876970
+// FUNCTION: STUDIO 0x00926660
+inline RobloxExtraSpace::RobloxExtraSpace()
+	: shared(new Shared())
+	, identity(RBX::Security::Anonymous)
+{
+	++shared->threadCount;
+	shared->allThreads.insert(*this);
+}
+/* The root (lstate.obj) makes a new Shared (shared_ptr ctor 0x00876910). A child (lapi.obj) shares
+** the parent's Shared, node, identity and script; its assert is line 852 and the destructor's 862 ("node file: ...luaconf.h line: 852"), so the bodies sit here. */
+// FUNCTION: PLAYER 0x00874f40
+// FUNCTION: STUDIO 0x00924c30
+inline RobloxExtraSpace::RobloxExtraSpace(RobloxExtraSpace* parent)
+	: shared(parent->shared)
+	, node(parent->node)
+	, identity(parent->identity)
+	, yieldCaptured(false)
+	, script(parent->script)
+{
+	++shared->threadCount;
+	RBXASSERT(node);
+	shared->allThreads.insert(*this);
+}
+/* lstate.obj: leaves the set first (remove_element inline, Hook::remove 0x00874cf0), then the members. */
+// FUNCTION: PLAYER 0x008766a0
+// FUNCTION: STUDIO 0x00926390
+inline RobloxExtraSpace::~RobloxExtraSpace()
+{
+	shared->allThreads.remove_element(*this);
+	--shared->threadCount;
+	RBXASSERT(shared->threadCount >= 0);
+}
+#endif
 
 
 /*

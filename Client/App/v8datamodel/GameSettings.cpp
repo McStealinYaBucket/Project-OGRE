@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/GameSettings.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sGameSettings = "GameSettings";
@@ -17,6 +18,8 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::GameSettings);
 }
+
+
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
 // at the end of the file so no 2013 assert line above them moves.
@@ -71,3 +74,30 @@ template<> TypeRegistrar<GameSettings::UploadSetting> TypeRegistrar<GameSettings
 
 } // namespace Reflection
 } // namespace RBX
+
+namespace RBX {
+
+// FUNCTION: PLAYER 0x006f6030
+// FUNCTION: STUDIO 0x00792df0
+GameSettings::GameSettings()
+	: chatHistory(100)
+	, reportAbuseChatHistory(50)
+	, chatLinesShown(5)
+	, soundEnabled(true)
+	, highQualitySound(false)
+	, collisionSoundEnabled(true)
+	, collisionSoundVolume(10.0f)
+	, maxCollisionSounds(-1)
+	, chatLinesMax(3)
+	, bubbleChatLifetime(30.0f)
+	, hardwareMouse(false)
+	, videoCaptureEnabled(true)
+	, videoQuality(MEDIUM_RES)
+	, postImageSetting(ASK)
+{
+	Instance::setName("Game Options");
+}
+
+} // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::GameSettings, 0x94);

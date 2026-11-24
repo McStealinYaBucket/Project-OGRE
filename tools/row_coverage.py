@@ -1,11 +1,11 @@
 """Coverage of a DECOMP_PLAN Phase 5 row: every PLAYER function of a set of source files, with its score.
 
-    python3 -P tools/row_coverage.py P.json [--row 5a|5b|5d|5h] [--files Client/App/util/Math.cpp ...] [--csv out.csv]
+    python3 -P tools/row_coverage.py P.json [--row 5a|5b|5c|5d|5e|5f|5h|5k] [--files Client/App/util/Math.cpp ...] [--csv out.csv]
 
 With no --files it measures --row (default 5a: math and G3D helpers in Client/App/util + include/Util;
 5f: the Roblox code of the Network project; 5c: serialization (v8xml: XML DOM, text parser/writer,
 SerializerV2 binders, the binary deserializer, WebParser/WebSerializer);
-5b: DataModel and the core services; 5h: GUI, the Gui folder and the v8datamodel Gui classes; 5k: the client shell's LTCG block).
+5b: DataModel and the core services; 5e: script (Client/App/script); 5h: GUI, the Gui folder and the v8datamodel Gui classes; 5k: the client shell's LTCG block).
 For 5h a function also counts as a file's own when it stores one of the class's vftables (ctors) or
 sits only in the class's vftables (ida/exports/PLAYER-evidence/vtables.jsonl): most Gui classes have
 few oracle names. Math.cpp's range is one 2013 .obj; an address counts once.
@@ -250,14 +250,22 @@ ROW_5C = {
     "Client/App/v8xml/WebParser.cpp": ["RBX::WebParser::"],
     "Client/App/v8xml/WebSerializer.cpp": ["RBX::WebSerializer::"],
 }
-ROWS = {"5a": ROW_5A, "5c": ROW_5C, "5b": ROW_5B, "5h": ROW_5H, "5f": ROW_5F, "5d": ROW_5D, "5k": ROW_5K}
+# 5e: script. Every Client/App/script .cpp; ScriptContext.obj is FIXED from its __FILE__ strings
+# (first 0x0066fca0, last 0x0068bbd0) and its first markers (0x0066fa60): template runs split it into
+# clusters more than 0x2000 apart, so densest() alone took only the 0x00682220 one.
+ROW_5E = {f"Client/App/script/{c}.cpp": [] for c in (
+    "CoreScript", "DebuggerManager", "LuaArguments", "LuaAtomicClasses", "LuaEnum", "LuaInstanceBridge",
+    "LuaLibrary", "LuaMemory", "LuaSignal", "LuaSignalBridge", "LuaVM", "Script", "ScriptContext",
+    "ScriptEvent", "ScriptStats", "StarterScript", "ThreadRef")}
+ROWS = {"5a": ROW_5A, "5e": ROW_5E, "5c": ROW_5C, "5b": ROW_5B, "5h": ROW_5H, "5f": ROW_5F, "5d": ROW_5D, "5k": ROW_5K}
 # Largest gap between two markers of one .obj. DataModel.obj spans 0x0062d1e0-0x00652800 with
 # 0x9000-byte runs of template code between its own functions.
-SPAN = {"5a": 0x2000, "5c": 0x2000, "5b": 0xa000, "5h": 0x4000, "5f": 0x4000, "5d": 0x4000, "5k": 0x80000}
+SPAN = {"5a": 0x2000, "5e": 0x2000, "5c": 0x2000, "5b": 0xa000, "5h": 0x4000, "5f": 0x4000, "5d": 0x4000, "5k": 0x80000}
 VT_OWN = {"5h"}
 # File -> (first, last) PLAYER function address, for files whose .obj range is known from the binary
 # but whose markers sit in a header (template bodies) or have no oracle names (rows register these).
 FIXED = {"Client/WindowsClient": (0x00401000, 0x004803b0),
+         "Client/App/script/ScriptContext.cpp": (0x0066fa60, 0x0068bd50),
          "Client/App/v8xml/XmlElement.cpp": (0x00613c70, 0x00614a30),
          "Client/App/v8xml/XmlSerializer.cpp": (0x00627b80, 0x00629630),
          "Client/App/v8xml/SerializerV2.cpp": (0x006fa580, 0x006fd510),

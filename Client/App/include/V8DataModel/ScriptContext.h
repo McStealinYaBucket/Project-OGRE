@@ -21,6 +21,7 @@
 #include "script/ThreadRef.h"
 #include "rbx/TaskScheduler.Job.h"	// gcJob / waitingScriptsJob
 
+#include <boost/array.hpp>   // globalStates (closeStates std::swaps it)
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
@@ -571,7 +572,8 @@ namespace RBX {
 		// with 2016: no GlobalStates struct or securityAnchor, no preventNewConnection,
 		// loadedModules, loadedAssetModules or statesClosed; a third GC average. ----
 	public:
-		lua_State* globalStates[2];										// 0x68 getGlobalState 0x00670d71 (ctor leaves them)
+		typedef boost::array<lua_State*, 2> GlobalStates;
+		GlobalStates globalStates;										// 0x68 getGlobalState 0x00670d71 (ctor leaves them); closeStates 0x0068540c std::swaps it out
 		Lua::WeakThreadRef commandLineSandbox;							// 0x70 (vftable 0x00b348b0)
 		std::set<BaseScript*> scripts;									// 0x8c
 		RBX::Time nextPendingScripts;									// 0x98
@@ -592,7 +594,7 @@ namespace RBX {
 		bool collectStats;												// 0x114
 		boost::shared_ptr<ScriptStats> scriptStats;						// 0x118
 		int reentrancy;													// 0x120 startScript depth
-		rbx::atomic<int> timedoutCount;									// 0x124
+		volatile long timedoutCount;									// 0x124 ++/-- are calls to RbxInterlockedIncrement/Decrement (onCheckTimeout 0x0067a308, onHeartbeat 0x00689f89)
 		Time::Interval timoutSpan;										// 0x128
 		Time timoutTime;												// 0x130
 		rbx::atomic<int> timedout;										// 0x138

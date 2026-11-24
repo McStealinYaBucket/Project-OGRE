@@ -11,12 +11,8 @@
    - RBX::CRenderSettings is GfxBase's class (Client/Rendering/GfxBase/include/GfxBase/RenderSettings.h
      is empty). Defined below from GfxBase's ctor 0x009c5ce0 and the shell's inline getters, which
      only the shell's copies show (0x00455870-0x00455940). Move it to GfxBase when that header lands.
-   - RBX::GlobalAdvancedSettings::Item and GlobalAdvancedSettingsItem<> are App's
-     (V8DataModel/GlobalAdvancedSettings.h is a stub without them). Declared below in the 2013 shape:
-     2013 has no RTTI for NonFactoryProduct<Instance, sSettingsItem>, so Item derives Instance
-     directly; GlobalAdvancedSettingsItem's ctor stores Service::isPublic (+0x60). Only Item is
-     declared inside GlobalAdvancedSettings, and nothing here emits code for GlobalAdvancedSettings
-     itself, so App's own definition (never included here) stays the one that is linked. */
+   - RBX::GlobalAdvancedSettings::Item and GlobalAdvancedSettingsItem<> come from App's
+     V8DataModel/GlobalSettings.h (RTTI: Item derives NonFactoryProduct<Instance, sSettingsItem>). */
 
 #pragma once
 
@@ -24,51 +20,12 @@
 
 #include "V8Tree/Instance.h"
 #include "V8Tree/Service.h"
+#include "V8DataModel/GlobalSettings.h"
 #include "Reflection/Reflection.h"
 #include "rbx/signal.h"
 #include "G3D/Vector2int16.h"
 
 namespace RBX {
-
-	// App stand-in, see the header comment.
-	class GlobalAdvancedSettings
-	{
-	public:
-		class Item : public Instance
-		{
-		protected:
-			// vtable+0x3c. Shell copy: PLAYER 0x00455840.
-			/*override*/ bool askAddChild(const Instance* instance) const
-			{
-				return dynamic_cast<const Item*>(instance) != NULL;
-			}
-		};
-	};
-
-	// App stand-in, see the header comment. Only the parts the shell's CRenderSettingsItem uses.
-	template<class Class, const char* const& sClassName>
-	class GlobalAdvancedSettingsItem
-		: public DescribedCreatable<Class, GlobalAdvancedSettings::Item, sClassName>
-		, public Service
-	{
-		typedef DescribedCreatable<Class, GlobalAdvancedSettings::Item, sClassName> Super;
-		static GlobalAdvancedSettingsItem* sing;
-	protected:
-		GlobalAdvancedSettingsItem()
-		{
-			Super::setName(sClassName);
-			if (sing)
-				throw RBX::runtime_error("singleton %s already exists", sClassName);
-			sing = this;
-		}
-		~GlobalAdvancedSettingsItem()
-		{
-			sing = NULL;
-		}
-	};
-
-	template<class Class, const char* const& sClassName>
-	GlobalAdvancedSettingsItem<Class, sClassName>* GlobalAdvancedSettingsItem<Class, sClassName>::sing = NULL;
 
 	// GfxBase stand-in, see the header comment.
 	// SIZE 0x48
@@ -265,3 +222,9 @@ public:
 	// special signal used only in native code
 	rbx::signal<void(const RBX::Reflection::PropertyDescriptor*)> settingsChangedSignal;  // 0xe0
 };
+
+// The item base's ctor (App's GlobalSettings.h template), instantiated in the shell.
+// clang-format off
+// TEMPLATE: PLAYER 0x00456ee0
+// ??0?$GlobalAdvancedSettingsItem@VCRenderSettingsItem@@$E?sRenderSettings@@3QBDB@RBX@@IAE@XZ
+// clang-format on

@@ -31,7 +31,6 @@ address,type,size,symbol
 007995e0,library,84,??1strstreambuf@std@@UAE@XZ_25
 0079bac0,library,296,??1strstreambuf@std@@UAE@XZ_26
 007cc250,library,84,??1strstreambuf@std@@UAE@XZ_28
-007dbcb0,library,84,??1strstreambuf@std@@UAE@XZ_29
 007f3590,library,84,??1strstreambuf@std@@UAE@XZ_30
 007f7b10,library,186,??1strstreambuf@std@@UAE@XZ_31
 0080a360,library,84,??1strstreambuf@std@@UAE@XZ_33

@@ -6,7 +6,7 @@
 #include "V8DataModel/GeometryService.h"
 
 namespace RBX {
-	const char* const sGeometryService = "GeometryService";
+	const char* const sGeometryService = "Geometry";	// 2013 string (PLAYER doDeclare 0x0062e430 -> 0x00b79530 -> 0x00b45800)
 }
 
 using namespace RBX;

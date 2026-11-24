@@ -31,7 +31,13 @@ namespace RBX {
 	public:
 		SpanningNode() : edgeToParent(NULL) {}
 
-		~SpanningNode();													// 0x592D02 (D1), 0x592D0C (D0)
+		// Inline in 2013: Primitive's dtor (PLAYER 0x00755540) stores this vftable and calls
+		// ~IndexedMesh itself; only the deleting destructor is out of line.
+		~SpanningNode() {}
+
+		// SYNTHETIC: PLAYER 0x00753900
+		// SYNTHETIC: STUDIO 0x00892ca0
+		// RBX::SpanningNode::`scalar deleting destructor'
 
 		SpanningNode* getParent()					{return getTypedParent<SpanningNode>();}
 		const SpanningNode* getConstParent() const	{return getConstTypedParent<SpanningNode>();}

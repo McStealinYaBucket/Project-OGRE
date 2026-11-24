@@ -16,6 +16,8 @@
 #pragma once
 
 #include "V8Kernel/IStage.h"
+#include "Util/Profiling.h"
+#include "boost/scoped_ptr.hpp"
 
 namespace RBX {
 
@@ -85,14 +87,17 @@ namespace RBX {
 		int numJointConnectors() const;
 
 	private:
+		int maxBodies;        // +12 (C2 0 after the vptr store; src2016 name)
 		bool inStepCode;      // +16 (C2 false; D2 :41 assert).
 		int numLastIterations;    // +20 (stepWorld impulse stats).
 		int numOfMaxIterations;   // +24 (stepWorld impulse stats).
 		float error;              // +28 (stepWorld impulse stats).
 		float maxError;           // +32 (stepWorld impulse stats).
 		KernelData* data;     // +36 (C2 news 0xB0).
-		void* profilerBodies;     // +40 (always NULL -- see note).
-		void* profilerConnectors; // +44 (always NULL -- see note).
+		boost::scoped_ptr<Profiling::CodeProfiler> profilingKernelBodies;		// +40 ("Kernel Bodies")
+		boost::scoped_ptr<Profiling::CodeProfiler> profilingKernelConnectors;	// +44 ("Kernel Connectors")
+
+		friend class World;	// World::loadProfilers reads the two profilers
 	};
 
 } // namespace RBX

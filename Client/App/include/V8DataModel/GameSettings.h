@@ -13,8 +13,13 @@ namespace RBX {
 
 	extern const char* const sGameSettings;
 
+	// 2013 base: GlobalAdvancedSettingsItem<GameSettings, sGameSettings> (ctor PLAYER 0x006f5e10).
+	// Layout from the 2013 ctor 0x006f6030 (instance name "Game Options"), size 0x94 (Creator::create
+	// 0x0043afb0). Member order and defaults agree with the 2016 header (no overscan yet), so the
+	// unused members carry its names; the four the tree reads keep their earlier names.
+	// SIZE 0x94
 	class GameSettings
-		: public DescribedCreatable<GameSettings, GlobalAdvancedSettings, sGameSettings>
+		: public GlobalAdvancedSettingsItem<GameSettings, sGameSettings>
 	{
 	public:
 		enum UploadSetting
@@ -31,45 +36,44 @@ namespace RBX {
 			HIGH_RES = 2,
 		};
 
-		GameSettings()
-			: soundEnabled(true),
-			  highQualitySound(false),
-			  chatLinesMax(10),
-			  chatLinesShown(10)
-		{
-		}
+		GameSettings();
 
-		// preloadSound 0x2449EC gate: +0x6C in the binary; landed by name
-		// (LAYOUT DELTA -- the binary routes through GlobalAdvancedSettingsItem).
-		bool soundEnabled;
+		int chatHistory;				// 0x64  100
+		int reportAbuseChatHistory;		// 0x68  50
+		// ChatOutput::onPlayerChatMessage's active-lines cap (Mac +0x68). 2016: chatScrollLength.
+		int chatLinesShown;				// 0x6c  5
+		// preloadSound's gate (Mac +0x6c).
+		bool soundEnabled;				// 0x70  true
 		bool getSoundEnabled() const { return soundEnabled; }
-
-		// Sound::get 0x244C78-area reads +109 (0x6D): when 0 -> mode 32,
-		// else mode 64.  BSS-zero default (false -> mode 32).
-		bool highQualitySound;
-
-		// ChatOutput::removeExpired 0x5C2FD4 reads +120 (0x78) and clamps
-		// to 10 (cmovle arm 0x5C2FDC): the per-character ChatLine deque
-		// pop cap.  Name unresolved in dbq24; DELTA: behavior-pinned
-		// placeholder, init 10 = the clamp's upper value (the binary
-		// delivers the value at run time through the settings item).
-		int chatLinesMax;
-
-		// ChatOutput::onPlayerChatMessage 0x5C2B64 reads +104 (0x68): the
-		// +236 ACTIVE-lines pop cap (`cmp size, [eax+68h]; ja -> pop` --
-		// UNCLAMPED, unlike chatLinesMax +120).  Name unresolved;
-		// DELTA: behavior-pinned placeholder, init 10 to keep the same
-		// history posture as chatLinesMax (the binary delivers both at
-		// run time).
-		int chatLinesShown;
-
-		// Same-route singleton for the unported GlobalAdvancedSettingsItem
-		// (house pattern per DebugSettings::singleton; DELTA as above).
-		static GameSettings& singleton()
-		{
-			static GameSettings instance;
-			return instance;
-		}
+		// Sound::get: 0 -> mode 32, else 64 (Mac +0x6d). 2016: softwareSound.
+		bool highQualitySound;			// 0x71  false
+		bool collisionSoundEnabled;		// 0x72  true
+		float collisionSoundVolume;		// 0x74  10.0f
+		int maxCollisionSounds;			// 0x78  -1
+		// ChatOutput::removeExpired's cap, clamped to 10 (Mac +0x78). 2016: bubbleChatMaxBubbles.
+		int chatLinesMax;				// 0x7c  3
+		float bubbleChatLifetime;		// 0x80  30.0f
+		rbx::signal<void(bool)> videoRecordingSignal;	// 0x84  ctor 0x0055ca50
+		bool hardwareMouse;				// 0x88  false
+		bool videoCaptureEnabled;		// 0x89  true
+		VideoQuality videoQuality;		// 0x8c  MEDIUM_RES
+		UploadSetting postImageSetting;	// 0x90  ASK
 	};
 
 } // namespace RBX
+
+// The FactoryProduct base's out-of-line members; their names spell the 2013 base
+// GlobalAdvancedSettings::Item (RTTI), so they pair through these markers.
+// clang-format off
+// TEMPLATE: PLAYER 0x00439f70
+// TEMPLATE: STUDIO 0x004769d0
+// ?getClassName@Creator@?$FactoryProduct@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDBVInstance@2@@RBX@@QBEABVName@3@XZ
+
+// TEMPLATE: PLAYER 0x006f4960
+// TEMPLATE: STUDIO 0x00791eb0
+// ?static_getCreator@?$FactoryProduct@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDBVInstance@2@@RBX@@KAABVCreator@12@XZ
+
+// TEMPLATE: PLAYER 0x006f4ab0
+// TEMPLATE: STUDIO 0x00792020
+// ?getClassName@?$FactoryProduct@VGameSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sGameSettings@2@3QBDBVInstance@2@@RBX@@UBEABVName@2@XZ
+// clang-format on
