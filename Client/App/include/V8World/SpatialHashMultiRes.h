@@ -1,49 +1,20 @@
-/* V8World/SpatialHashMultiRes.h -- October 2013 RBX::SpatialHashStatic +
- * RBX::SpatialHash<Primitive, Contact, ContactManager, 4> template.
- *
- * (This header replaces a 0-byte placeholder.)
- *
- * EVIDENCE (symbolled 0.126.0.39503 Studio, idalib; batches 121/123/125):
- *   statics: 0x5A3AE0 getHash / 0x5A3BCC computeMinMax / 0x56E084 safeExtents
- *   0x56CB78  SpatialHash::SpatialHash(World*, ContactManager*, int)  410B
- *   0x5674E4  getPrimitivesTouchingGrids (walk, 814B)
- *   0x56D600 / 0x56D6B8  getPrimitivesInGrid overloads (183B / 100B)
- *   0x5696C2  addNode(Primitive*, Vector3int32 const&, bool)         1517B
- *   0x569CB0  findNode(Primitive*, Vector3int32 const&)               263B
- *   0x56A538  newNode(int, int, Vector3int32 const&)                 381B
- *   0x56A6B6  insertNodeToPrimitive(SpatialNode*, Primitive*,
- *               Vector3int32 const&, int)                            160B
- *   0x56A756  createTreeNode(int, int, Vector3int32 const&)          164B
- *   0x56A9EC  TreeNode::TreeNode()                                   130B
- *   0x568E38  primitiveAdded(Primitive*, bool)                       455B
- *   0x567C88  onPrimitiveAdded(Primitive*, bool)                     192B
- *   (changeMinMax 0x5692A0 + computeLevel 0x568C14: batch126.)
- *   TreeNode pool: boost::object_pool<TreeNode, 48u>; SpatialNode pool:
- *   object_pool<SpatialNode, 32u> (batch122 sweep).
- *
- * LAYOUT: the 2013 Windows ctor (PLAYER 0x008eef80; ContactManager's ctor 0x007b63a0 news 0xdc)
- * fixes it; see the member comments:
+/* V8World/SpatialHashMultiRes.h -- October 2013 RBX::NodeBase, RBX::SpatialHashStatic and the
+ * SpatialHash<Primitive, Contact, ContactManager, 4> template (bodies in SpatialHashMultiRes.inl).
+ * LAYOUT: the 2013 Windows ctor (PLAYER 0x008eef80; ContactManager's ctor 0x007b63a0 news 0xdc):
  *   0x00 ConcurrencyValidator (0x24), 0x24 maxNodes, 0x28 treeNodeCount, 0x2c World*,
- *   0x30 manager, 0x34 four bucket vectors (`eh vector constructor iterator'), 0x74 nodeCount,
+ *   0x30 manager, 0x34 four bucket vectors (`eh vector constructor iterator'), 0x74 nodesOut,
  *   0x78 int80, 0x7c G3D::Array<Primitive*>, 0x8c listener vector, 0x9c TreeNode pool,
  *   0xbc SpatialNode pool.
  * The pools are RBX::object_pool over RBX::roblox_allocator (iOS 10-29 symbols): each is a
  * boost::object_pool (0x1c) plus its CallDestructor byte, 0x20; the ctor stores requested size
- * 0x30/0x20, next and start size 0x20, max size 0 (boost 1.53 pool defaults).
- * Nodes come from malloc() and go back through free(); the
- * DFFlag::UseSpatialHashUnorderedPool branch (RBX::Allocator) is not modelled.
+ * 0x30/0x20, next and start size 0x20, max size 0 (boost 1.53 pool defaults). Nodes come from
+ * malloc() and go back through free(); ~SpatialHash's pool destructors run the node destructors
+ * (~TreeNode out of line, PLAYER 0x007b36f0; ~SpatialNode inline in the pool dtor 0x00502c50).
  *
- * The bodies in the .inl are still the Mac reconstruction (STUB); safeExtents below is laid
- * out on its 2013 assert lines (105/107).
- *
- * Original files: .../Client/App/v8world/SpatialHashMultiRes.cpp (statics,
- * getHash :72-73, computeMinMax :79) and
- * .../Client/App/include/V8World/SpatialHashMultiRes.h (safeExtents :105/
- * :107, addNode asserts :429/:474/:485/:498/:500/:509/:519, insert :220,
- * newNode :120, findNode :255, changeMinMax :624, primitiveAdded :585/:599,
- * onPrimitiveAdded listeners).
- * Template bodies live in SpatialHashMultiRes.inl (included below). */
-
+ * 2013 asserts in this header: NodeBase::getLevel :51, safeExtents :105/:107, ~TreeNode :287/:288
+ * (PLAYER strings; the file is spelled include\V8World/, Include\V8World/ and Include\v8World/
+ * by different TUs). Statics: Client/App/v8world/SpatialHashMultiRes.cpp (getHash :72-73,
+ * computeMinMax :79). */
 #pragma once
 
 #include <vector>
@@ -59,6 +30,35 @@
 #include "rbx/memory.h"
 
 namespace RBX {
+
+	// SIZE 0x14: level (a short) 0x00, hash 0x04, cell 0x08. The destructor poisons level and hash
+	// (the pool destructors 0x007b36f0 / 0x00502c50 store -2 to both after the derived members).
+	class NodeBase
+	{
+	public:
+		~NodeBase()
+		{
+			level = -2;
+			hash = -2;
+		}
+
+		short level;
+		int hash;
+		Vector3int32 cell;
+
+		int getLevel()
+		{
+			RBXASSERT(level >= -1);
+			return level;
+		}
+	};
+
+
+
+
+
+
+
 
 	class SpatialHashStatic
 	{
@@ -139,40 +139,8 @@ namespace RBX {
 	class SpatialHash
 	{
 	public:
-		// 32B exactly (pool-confirmed).  Field offsets from newNode 0x56A538
-		// (+0W level, +4 hash, +8/+12/+16 cell, +20 prim, +24 next) and
-		// insertNodeToPrimitive 0x56A6B6 (same) + newNode's +28 treeNode.
-		struct SpatialNode
-		{
-			short level;
-			short padLevel;
-			int hash;
-			Vector3int32 cell;
-			PrimitiveT* prim;
-			SpatialNode* next;
-			struct TreeNode* treeNode;
-		};
-
-		// 48B exactly (pool-confirmed).  From TreeNode::TreeNode 0x56A9EC
-		// (+0W level -1, +4 hash -1, +8/+12/+16 cell 0, +20..+35 children
-		// WORD[8] -1, +36 hasChild 0, +40 count 0, +44 0) and addNode's
-		// children[offset]=prevHash writes (:500) + count++ (:509 area).
-		struct TreeNode
-		{
-			short level;
-			short padLevel;
-			int hash;
-			Vector3int32 cell;
-			// WORD[8], unsigned: level-0 child hashes reach 65535, which a
-			// signed short would sign-extend to negative bucket indexes
-			// (binary reads movzx; the signed spelling crashed walking
-			// children >32767 -- caught live, ch=-19317 for a 46219 hash).
-			unsigned short children[8];
-			char hasChild;
-			char padChild[3];
-			int count;
-			TreeNode* treeNext;   // +44 bucket tree-chain link (was int44)
-		};
+		struct SpatialNode;	// 0x20, defined below
+		struct TreeNode;	// 0x30
 
 		// Bucket entries must be 8B ([base + hash*8]): node-chain head +
 		// tree-chain head.  Levels are std::vector<HashBucket>, which IS
@@ -232,7 +200,7 @@ namespace RBX {
 		// nothing calls primitiveRemoved/primitiveExtentsChanged yet).
 		// destroyNode 0x569DB8: unlink + (level>0 ? assert+retire tree
 		// (:327) : retire level-0 tree child iff no same-cell nodes remain)
-		// + returnNode + --nodeCount.
+		// + returnNode + --nodesOut.
 		void destroyNode(SpatialNode* node);
 		// returnNode 0x56A0E2: poison (tree/prim/next 0, level/hash -2) +
 		// pool-free.  Ours deletes + untracks (same lifetime, no leak).
@@ -266,23 +234,12 @@ namespace RBX {
 		// checkMegaClusterContact (voxel) + listener fan-out (event layout
 		// unrecoverable, array empty in-tree) are DELTAs -- see the .inl.
 		void onPrimitiveExtentsChanged(PrimitiveT* prim);
-		// mac: 0x569510 (376B).  Same-level: ExtentsInt32 overlap of the stored
-		// ranges (:276/:277 level asserts).  Cross-level: shift the finer
-		// prim's cells up to the coarser level, then overlap.  Despite the
-		// name it reads CURRENT stored cells (they're already the new ones
-		// when checkAndReleaseContacts runs) -- ported verbatim, not renamed.
 		bool oldExtentsOverlap(PrimitiveT* p0, PrimitiveT* p1);
 		// mac: 0x569450 (191B).  Collect every contact-neighbor whose pair no
 		// longer overlaps (skipping megacluster prims) into array84, then
 		// releasePair each.  Returns the last internal (like the binary);
 		// callers ignore it, so ours returns void -- documented, not hidden.
 		void checkAndReleaseContacts(PrimitiveT* prim);
-		// mac: 0x569000.  In-place cell update for a moved/resized prim (body in
-		// the next dump round): recompute cells from the new extents and
-		// changeMinMax against the stored range (adds new cells, destroys
-		// left ones).  The entry point moves tests will call directly
-		// (ContactManager::onPrimitiveExtentsChanged needs the unported
-		// checkMegaClusterContact, so it waits).
 		void primitiveExtentsChanged(PrimitiveT* prim, const Extents& extents);
 		// mac: 0x568CCE (361B): assert inserted (:757, minus the unported
 		// excluded-prim clause -- see body); changeMinMax with
@@ -304,6 +261,35 @@ namespace RBX {
 		// capped at (anchored||dragging ? maxLevelForAnchored : 3).
 		int computeLevel(const PrimitiveT* prim, const Extents& extents);
 
+		// SIZE 0x20
+		struct SpatialNode : public NodeBase
+		{
+			PrimitiveT* prim;		// 0x14
+			SpatialNode* next;		// 0x18 (bucket chain)
+			TreeNode* treeNode;		// 0x1c
+			~SpatialNode()
+			{
+				treeNode = NULL;
+				prim = NULL;
+				next = NULL;
+			}
+		};
+
+		// SIZE 0x30. children are unsigned: level-0 child hashes reach 65535 (movzx reads).
+		struct TreeNode : public NodeBase
+		{
+			unsigned short children[8];	// 0x14
+			char hasChild;				// 0x24
+			int refByPrimitives;		// 0x28
+			TreeNode* next;				// 0x2c (bucket tree chain)
+			~TreeNode()
+			{
+				RBXASSERT(refByPrimitives == 0);
+				RBXASSERT(next == NULL);
+				next = NULL;
+			}
+		};
+
 	private:
 		SpatialHash(const SpatialHash&);
 		SpatialHash& operator=(const SpatialHash&);
@@ -316,7 +302,7 @@ namespace RBX {
 		World* world;									// 0x2c
 		ManagerT* manager;								// 0x30
 		std::vector<HashBucket> buckets[MaxLevels];		// 0x34
-		int nodeCount;									// 0x74
+		int nodesOut;									// 0x74
 		int int80;										// 0x78 (max coarser-depth stat)
 		G3D::Array<PrimitiveT*> array84;				// 0x7c
 		std::vector<SpatialHashListener*> listeners;	// 0x8c
@@ -324,6 +310,25 @@ namespace RBX {
 		RBX::object_pool<SpatialNode, RBX::roblox_allocator> nodePool;		// 0xbc (requested size 0x20)
 	};
 
-#include "V8World/SpatialHashMultiRes.inl"
+	// Out-of-line node and pool destructors of the ContactManager instantiation (run by ~SpatialHash).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x007b95d0
+	// TEMPLATE: STUDIO 0x008d5f70
+	// ??1?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x007b36f0
+	// TEMPLATE: STUDIO 0x008cf770
+	// ??1TreeNode@?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x007b7450
+	// TEMPLATE: STUDIO 0x008d4400
+	// ??1?$object_pool@UTreeNode@?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@Vroblox_allocator@3@@boost@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x00502c50
+	// TEMPLATE: STUDIO 0x00592e90
+	// ??1?$object_pool@USpatialNode@?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@Vroblox_allocator@3@@boost@@QAE@XZ
+	// clang-format on
+
+#include "v8World/SpatialHashMultiRes.inl"	// the 2013 __FILE__ spelling (include\v8World/SpatialHashMultiRes.inl)
 
 } // namespace RBX

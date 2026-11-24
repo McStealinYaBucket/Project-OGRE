@@ -8,15 +8,13 @@
 
 #include "V8DataModel/StatsItem.h"
 
-namespace RBX {
+// Global namespace in 2013, name and s-name both (RTTI
+// .?AV?$DescribedNonCreatable@VProfilingItem@@VItem@Stats@RBX@@$E?sProfilingItem@@3QBDB...).
+extern const char* const sProfilingItem;
 
-	extern const char* const sProfilingItem;
-
-	class ProfilingItem
-		: public DescribedNonCreatable<ProfilingItem, StatsItem, sProfilingItem>
-	{
-	public:
-		ProfilingItem() {}
-	};
-
-} // namespace RBX
+class ProfilingItem
+	: public RBX::DescribedNonCreatable<ProfilingItem, RBX::Stats::Item, sProfilingItem>
+{
+public:
+	ProfilingItem() {}
+};

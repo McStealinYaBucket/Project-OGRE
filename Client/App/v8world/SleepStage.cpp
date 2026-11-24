@@ -361,7 +361,7 @@ namespace RBX {
 	// collect both-assemblies-unmoving joints, sleep them, clear).
 	void SleepStage::stepJoints()
 	{
-		Profiling::Mark mark(NULL, false, false);
+		Profiling::Mark mark(*profilingJointSleep, false);
 		RBXASSERT(toSleepingJoint.empty());
 		for (JointSet::iterator it = steppingJoints.begin(); it != steppingJoints.end(); ++it)
 		{
@@ -761,73 +761,55 @@ namespace RBX {
 	}
 
 
-
-
+	// FUNCTION: PLAYER 0x008e7980
+	// FUNCTION: STUDIO 0x00a05bb0
 	void SleepStage::changeAssemblyState(Assembly* a, Sim::AssemblyState newState)
 	{
 		RBXASSERT(!debugReentrant);  // :768
 		debugReentrant = true;
-		if (!a->inOrDownstreamOfStage(this))
-		{
+
+		if (!a->inOrDownstreamOfStage(this)) {
 			RBXASSERT(a->inStage(IStage::HUMANOID_STAGE));
 		}
 		else {
 			Sim::AssemblyState currentState = a->getAssemblyState();
 			RBXASSERT(currentState != newState);  // :776
 			RBXASSERT(currentState != Sim::ANCHORED);  // :777
-			size_t num = stateToSet(currentState).erase(a);
+
+			AssemblySet& oldSet = stateToSet(currentState);
+			AssemblySet& newSet = stateToSet(newState);
 
 
-
-
-
+			size_t num = oldSet.erase(a);
 			RBXASSERT(num == 1);  // :784
-			bool ok = stateToSet(newState).insert(a).second;
+			bool ok = newSet.insert(a).second;
 			RBXASSERT(ok);  // :786
-			bool currentSleeping = (currentState == Sim::SLEEPING_CHECKING
-				|| currentState == Sim::SLEEPING_DEEPLY);
-			bool newSleeping = (newState == Sim::SLEEPING_CHECKING
-				|| newState == Sim::SLEEPING_DEEPLY);
-			if (currentSleeping && newSleeping)
-			{
-				if (a->downstreamOfStage(this))
-				{
-					a->getAssemblyPrimitive()->getBody()->getRootSimBody()->clearVelocity();
-					static_cast<SimulateStage*>(getDownstreamWS())->onAssemblyRemoving(a);
+
+			if (Sim::isSleepingAssemblyState(currentState) && !Sim::isSleepingAssemblyState(newState)) {
+				a->getAssemblyPrimitive()->zeroVelocity();
+				a->wakeUp();
+				a->getAssemblyPrimitive()->getBody()->resetImpulseAccumulators();
+			}
+			if (newState == Sim::AWAKE) {
+				if (!a->downstreamOfStage(this)) {
+					Body* b = a->getAssemblyPrimitive()->getBody();
+					b->resetForceAccumulators();
+					rbx_static_cast<SimulateStage*>(getDownstreamWS())->onAssemblyAdded(a);
 				}
 			}
-			else
-			{
-				if (currentSleeping)
-				{
-					Primitive* assemblyPrim = a->getAssemblyPrimitive();
-					assemblyPrim->zeroVelocity();
-					a->wakeUp();
-					assemblyPrim->getBody()->resetImpulseAccumulators();
-				}
-				if (newState == Sim::AWAKE)
-				{
-					if (!a->downstreamOfStage(this))
-					{
-						a->getAssemblyPrimitive()->getBody()->resetForceAccumulators();
-						static_cast<SimulateStage*>(getDownstreamWS())->onAssemblyAdded(a);
-					}
-				}
-				else if (newSleeping || newState == Sim::REMOVING)
-				{
-					if (a->downstreamOfStage(this))
-					{
+			if (Sim::outOfKernelAssemblyState(newState)) {
+				if (a->downstreamOfStage(this)) {
+					if (Sim::isSleepingAssemblyState(newState))
 						a->getAssemblyPrimitive()->getBody()->getRootSimBody()->clearVelocity();
-						static_cast<SimulateStage*>(getDownstreamWS())->onAssemblyRemoving(a);
-					}
+					rbx_static_cast<SimulateStage*>(getDownstreamWS())->onAssemblyRemoving(a);
 				}
 			}
 			a->setAssemblyState(newState);
 		}
 		debugReentrant = false;
 	}
-	// STUB: PLAYER 0x008e6860
-	// STUB: STUDIO 0x00a04b60
+	// FUNCTION: PLAYER 0x008e6860
+	// FUNCTION: STUDIO 0x00a04b60
 	SleepStage::AssemblySet& SleepStage::stateToSet(Sim::AssemblyState state)
 	{
 		switch (state)
@@ -844,87 +826,105 @@ namespace RBX {
 		}
 	}
 
-	// STUB: PLAYER 0x008e6e60
-	// STUB: STUDIO 0x00a050a0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x008e6e60
+	// FUNCTION: STUDIO 0x00a050a0
 	void SleepStage::onAssemblyAdded(Assembly* assembly)
 	{
-		STUB(0x008e6e60);
-	}
+		RBXASSERT(!assembly->computeIsGrounded());
+		RBXASSERT(assembly->getAssemblyState() == Sim::ANCHORED);
 
-	// STUB: PLAYER 0x008e7c90
-	// STUB: STUDIO 0x00a05ec0
+		assembly->getAssemblyPrimitive()->getBody()->resetForceAccumulators();
+		assembly->getAssemblyPrimitive()->getBody()->resetImpulseAccumulators();
+		assembly->putInStage(this);
+
+		if (assembly->getAssemblyPrimitive()->getNetworkIsSleeping())
+		{
+			assembly->reset(Sim::SLEEPING_CHECKING);
+			bool ok = sleepingChecking.insert(assembly).second;
+			RBXASSERT(ok);
+			RBXASSERT(assembly->getAssemblyState() == Sim::SLEEPING_CHECKING);
+		}
+		else
+		{
+			assembly->reset(Sim::WAKE_PENDING);
+			assembly->wakeUp();
+			bool ok = wakePending.insert(assembly).second;
+			RBXASSERT(ok);
+			RBXASSERT(assembly->getAssemblyState() == Sim::WAKE_PENDING); }
+	}
+	// FUNCTION: PLAYER 0x008e7c90
+	// FUNCTION: STUDIO 0x00a05ec0
 	void SleepStage::onAssemblyRemoving(Assembly* assembly)
 	{
-		STUB(0x008e7c90);
+		RBXASSERT(assembly->inOrDownstreamOfStage(this));
+		RBXASSERT(assembly->getAssemblyState() != Sim::ANCHORED);
+		RBXASSERT(assembly->getAssemblyState() != Sim::REMOVING);
+
+		changeAssemblyState(assembly, Sim::REMOVING);
+
+		size_t num = removing.erase(assembly);
+		RBXASSERT(num == 1);
+		assembly->removeFromStage(this);
+		assembly->reset(Sim::ANCHORED);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// mac: 0x59FE68 (batch221b: :932-:934 asserts + throttle stamp +
-	// stepping-array admission + joint dispatch).
 	// FUNCTION: PLAYER 0x008e7e00
 	// FUNCTION: STUDIO 0x00a06030
 	void SleepStage::onEdgeAdded(Edge* e)

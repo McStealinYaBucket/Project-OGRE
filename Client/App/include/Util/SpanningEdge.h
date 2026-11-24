@@ -5,7 +5,7 @@
    (MovingAssembly) from removeJoint bodies (batches 222/228); thunks prove
    Joint::isHeavierThan/otherNode/otherConstNode live in this secondary
    vtable (batch226).
-   Model: { vptr + 16B hook links }. Joint derives it secondarily
+   Model: { vptr } only (the Mac hook links are Joint's own list hooks). Joint derives it secondarily
    (MSVC MI -- secondary position differs from binary by ABI, all access by
    name/static_cast, never raw offsets). Method bodies banked in raws;
    only getChildSpanningNode (9B forwarder) is defined here.
@@ -54,12 +54,8 @@ namespace RBX {
 		void addToSpanningTree(SpanningNode* node);
 		void removeFromSpanningTree();
 
-		// StepJoints intrusive links (edge+36/+40).
-		Edge* stepNext;
-		Edge* stepPrev;
-		// MovingAssembly intrusive links (edge+44/+48).
-		Edge* moveNext;
-		Edge* movePrev;
+		// No data members in 2013: Joint's ctor PLAYER 0x008215c0 stores this vftable at Joint+0x1c and the
+		// two list hooks that follow (+0x20, +0x28) are Joint's own boost::intrusive bases (V8World/Joint.h).
 	};
 
 } // namespace RBX

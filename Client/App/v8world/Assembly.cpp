@@ -43,25 +43,25 @@ namespace RBX {
 
 
 
+	// FUNCTION: PLAYER 0x007b15b0
+	// FUNCTION: STUDIO 0x008cd640
+	void Assembly::reset(Sim::AssemblyState newState)
+	{
+		RBXASSERT(state != newState);
 
+		if (state != Sim::ANCHORED) {
+			RBXASSERT(history);
+			delete history;
+			history = NULL;
+		}
 
+		state = newState;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		if (newState != Sim::ANCHORED) {
+			RBXASSERT(!history);
+			history = new AssemblyHistory(this);
+		}
+	}
 
 
 

@@ -1,10 +1,10 @@
-/* Util/ConcurrencyValidator.h — October 2013 (read/write race detector,
-   header-only). Carried verbatim from March 2016 App/include/util/
-   ConcurrencyValidator.h (first-party; FWService embeds one at +128 per
-   FWService D2 0x6D2D8A).
-   VERIFIED against 2013: D2 0x2F8E80 (batch216) asserts writing==0
-   (:30) + reading==0 (:31) then destroys the string member -- matches
-   this layout exactly (int + string + int = 12B; JointStage+16). */
+/* Util/ConcurrencyValidator.h -- October 2013 (read/write race detector, header-only).
+   2013: D2 0x00501660 asserts writing==0 (:30) and reading==0 (:31), then destroys the string
+   (int + string + int = 0x24; FWService +0x80, JointStage +0x10). The counters are volatile long, not
+   rbx::atomic<int>: each 2013 ctor stores writing ahead of the EH state/this-save for writeLocation
+   (Primitive ctor 0x00756a40 [esi+0x50], ContactManager ctor 0x007b63a0 [esi+4], SpatialHash ctor
+   0x008eef80 [esi]); VC9 sinks a plain store below those, and keeps a volatile one in place.
+   Pre/post checks run only under __RBX_NOT_RELEASE (none in the 2013 release builds). */
 #pragma once
 #include "rbx/Debug.h"
 #include "rbx/atomic.h"
@@ -17,9 +17,9 @@ namespace RBX {
 class ConcurrencyValidator
 {
 private:
-    rbx::atomic<int> writing;
+	volatile long writing;
 	std::string writeLocation;
-    mutable rbx::atomic<int> reading;
+	mutable volatile long reading;
 public:
 	ConcurrencyValidator() : writing(0), reading(0)
 	{
@@ -36,7 +36,7 @@ private:
 	friend class ReadOnlyValidator;
 
 	bool preRead() const {
-		++reading;
+		BOOST_INTERLOCKED_INCREMENT(&reading);
 
 		long wasWriting = writing;
 		if (wasWriting != 0) {RBXASSERT(false && "writing check failed in preRead");}
@@ -48,7 +48,7 @@ private:
 		if (wasWriting != 0)	{RBXASSERT(false && "wasWriting check failed in postRead");}
 		if (writing != 0)		{RBXASSERT(false && "writing check failed in postRead");}
 
-		--reading;
+		BOOST_INTERLOCKED_DECREMENT(&reading);
 		return true;
 	}
 
@@ -60,7 +60,7 @@ private:
 		if (wasWriting != 0)	{RBXASSERT(false && "wasWriting check failed in preWrite");}
 		if (writing != 0)		{RBXASSERT(false && "writing check failed in preWrite");}
 
-		long result = ++writing;
+		long result = BOOST_INTERLOCKED_INCREMENT(&writing);
 
 		if (result != 1)		{RBXASSERT(false && "InterlocedIncrement returned not -1 in preWrite");}
 		return true;
@@ -83,7 +83,7 @@ private:
 		if (wasReading != 0)	{RBXASSERT(false && "wasReading check failed in postWrite");}
 		if (reading != 0)		{RBXASSERT(false && "reading check failed in postWrite");}
 
-		long result = --writing;
+		long result = BOOST_INTERLOCKED_DECREMENT(&writing);
 		if (result != 0)		{RBXASSERT(false && "InterlocedIncrement returned not 0 in postWrite");}
 		if (reading != 0)		{RBXASSERT(false && "reading check failed in postWrite");}
 		return true;

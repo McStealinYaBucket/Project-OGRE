@@ -111,8 +111,8 @@ namespace RBX {
 
 		void loadProfilers(std::vector<Profiling::CodeProfiler*>& worldProfilers) const;
 		void removeFromBreakable(Joint* joint);
-		static bool isKernelOrForeignEdge(const Joint* joint);
-		static bool isAutoFamilyOrForeignEdge(const Joint* joint);
+
+
 
 	public:
 		// Evidence for the members above (PLAYER):
@@ -145,7 +145,7 @@ namespace RBX {
 		IWorldStage* getStage() { return cleanStage; }
 		Kernel* getKernel();
 		const Kernel* getKernel() const;
-		const SleepStage* getSleepStage() const; const StepJointsStage* getStepJointsStage() const;
+		SleepStage* getSleepStage(); const SleepStage* getSleepStage() const; const StepJointsStage* getStepJointsStage() const;
 		void reportTouchInfo(const TouchInfo& info);
 		void onPrimitiveExtentsChanged(Primitive* prim);
 		void onPrimitiveContactParametersChanged(Primitive* p);
@@ -155,12 +155,12 @@ namespace RBX {
 		void onPrimitiveFixedChanged(Primitive* p);
 		void onPrimitivePreventCollideChanged(Primitive* p);
 		void createAutoJoints(Primitive* prim);
-		void createAutoJoints(Primitive* prim,
-			std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims);
+		void createAutoJoints(Primitive* prim, std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims);
 		void destroyAutoJoints(Primitive* prim, bool b);
-		void destroyAutoJoints(Primitive* prim,
-			std::set<Primitive*>* ignorePrims,
-			bool manualJoints, bool autoJoints);
+		void destroyAutoJointsToWorld(const G3D::Array<Primitive*>& primitives);
+		void createAutoJointsToWorld(const G3D::Array<Primitive*>& primitives);
+		void createAutoJointsToPrimitives(const G3D::Array<Primitive*>& primitives);
+		void destroyAutoJoints(Primitive* prim, std::set<Primitive*>* ignorePrims, bool manualJoints, bool autoJoints);
 		// FUNCTION: PLAYER 0x0070d390
 		// FUNCTION: STUDIO 0x0082a960
 		void reset() { RBXASSERT(!inStepCode); worldStepId = 0; }

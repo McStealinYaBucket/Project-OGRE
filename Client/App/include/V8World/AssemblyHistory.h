@@ -13,16 +13,26 @@
 
 #pragma once
 
+#include "decomp.h"
+
 namespace RBX {
 
+	class Assembly;
+
+	// SIZE 0x20 (Assembly::reset PLAYER 0x007b15b0 news 0x20; the ctor 0x0095e450 stores 0 at +0x18 and
+	// 15 at +0x1c, the wake counter AssemblyHistory::wakeUp 0x0095d500 resets).
 	class AssemblyHistory
 	{
 	public:
+		AssemblyHistory(Assembly* assembly);
+		~AssemblyHistory();
+
 		void wakeUp();
 
 	private:
-		char reserved[24];  // +0..+20 (unmapped; C2 builds Average here).
-		int wakeCounter;    // +24 (wakeUp stores 15).
+		undefined m_unk0x00[0x18 - 0x00];	// 0x00 (the ctor builds an Average<PhysicsCoord> here)
+		int m_unk0x18;						// 0x18 (ctor 0)
+		int wakeCounter;					// 0x1c (ctor and wakeUp 15)
 	};
 
 } // namespace RBX

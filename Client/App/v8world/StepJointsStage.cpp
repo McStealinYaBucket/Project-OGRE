@@ -1,12 +1,8 @@
-/* App/v8world/StepJointsStage.cpp -- October 2013 (step-joints bodies).
-   Bodies here: D2 (pattern: delete +8; D1 0x5A41A8 per batch232 sweep) /
-     onEdgeAdded 0x5A440C / onEdgeRemoving 0x5A4486 / removeJoint 0x5A4302
-     (batches 208/228/232).
-   DEFERRED: C2 (needs HumanoidStage members, 0x180 -- batch220 body banked,
-   mapping queued). getKernel: inherited IStage::getKernel.
-   Hook mechanics DELTA (documented in header): binary threads edges through
-   typeless link addrs (edge+36/+40); ours uses the typed SpanningEdge hook
-   links with NULL-unlinked convention -- same membership and order. */
+/* App/v8world/StepJointsStage.cpp -- October 2013 (step-joints stage, 0x20), from the 2013 bytes.
+   worldStepJoints is a boost::intrusive list over Joint's StepJointsStageHook (Joint+0x20).
+   Asserts on their 2013 lines: ~StepJointsStage :26, removeJoint :43, jointsStepWorld :104
+   (C:\BuildAgent\work\<hash>\Client\App\v8world\StepJointsStage.cpp). VC9 emits the ctor and dtor
+   after jointsStepWorld (0x008ef340/0x008ef410), so the descent below is the 2013 one. */
 
 #include "stdafx.h"
 
@@ -16,99 +12,68 @@
 #include "V8World/Assembly.h"
 #include "V8World/Joint.h"
 #include "V8World/World.h"
-
 namespace RBX {
-
-	// mac: 0x5A4070 (batch220, uniform node).
-	// STUB: PLAYER 0x008ef410
-	// STUB: STUDIO 0x00a0d190
-	StepJointsStage::StepJointsStage(IStage* upstreamArg, World* worldArg)
-		: numJoints(0)
-		, listHead(NULL)
-		, listTail(NULL)
+	// FUNCTION: PLAYER 0x008ef410
+	// FUNCTION: STUDIO 0x00a0d190
+	StepJointsStage::StepJointsStage(IStage* upstream, World* world)
+		: IWorldStage(upstream, new HumanoidStage(this, world), world)
 		, profilingJointUpdate(new Profiling::CodeProfiler("Joint Update"))
-	{
-		downstream = new HumanoidStage(this, worldArg);
-		upstream = upstreamArg;
-		world = worldArg;
-	}
-
+	{}
+	// FUNCTION: PLAYER 0x008ef340
+	// FUNCTION: STUDIO 0x00a0d0c0
 	StepJointsStage::~StepJointsStage()
 	{
-		// 2013 D1 0x008ef340 asserts worldStepJoints.empty() (:26), deletes the profiler and clears the
-		// boost::intrusive list before ~IStage; ours keeps a raw list, so only the emptiness check stays.
-		RBXASSERT(numJoints == 0);
+		RBXASSERT(worldStepJoints.empty());
 	}
 
-	// mac: 0x5A440C (121B, batch228).
-	// STUB: PLAYER 0x008ef1a0
-	// STUB: STUDIO 0x00a0cf20
-	void StepJointsStage::onEdgeAdded(Edge* edge)
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x008ef110
+	// FUNCTION: STUDIO 0x00a0ce90
+	void StepJointsStage::removeJoint(Joint* j)
 	{
-		edge->putInStage(this);
-		if (edge->getEdgeType() == Edge::JOINT
-			&& rbx_static_cast<Joint*>(edge)->canStepWorld())
-		{
-			Joint* joint = rbx_static_cast<Joint*>(edge);
-			joint->moveNext = listHead;
-			joint->movePrev = NULL;
-			if (listHead != NULL)
-				listHead->movePrev = joint;
-			else
-				listTail = joint;
-			listHead = joint;
-			++numJoints;
+		if (j->canStepWorld()) {
+			worldStepJoints.erase(worldStepJoints.iterator_to(*j));
 		}
-		if (edge->getEdgeType() != Edge::JOINT)
-		{
-			getDownstreamWS()->onEdgeAdded(edge);
-			return;
-		}
-		if ((rbx_static_cast<Joint*>(edge)->getJointType() - 1) >= 5)
-		{
-			getDownstreamWS()->onEdgeAdded(edge);
-			return;
+		else {
+			RBXASSERT(!j->StepJointsStageHook::is_linked());
 		}
 	}
 
-	// mac: 0x5A4486 (98B, batch228).
+	// FUNCTION: PLAYER 0x008ef1a0
+	// FUNCTION: STUDIO 0x00a0cf20
+	void StepJointsStage::onEdgeAdded(Edge* e)
+	{
+		e->putInStage(this);
+
+		if (Joint::isJoint(e)) {
+			Joint* j = rbx_static_cast<Joint*>(e);
+			if (j->canStepWorld()) {
+				worldStepJoints.push_back(*j);
+			}
+		}
+
+		if (!Joint::isKinematicJoint(e)) {
+			getDownstreamWS()->onEdgeAdded(e);
+		}
+	}
+
 	// FUNCTION: PLAYER 0x008ef210
 	// FUNCTION: STUDIO 0x00a0cf90
-	void StepJointsStage::onEdgeRemoving(Edge* edge)
+	void StepJointsStage::onEdgeRemoving(Edge* e)
 	{
-		if (!Joint::isKinematicJoint(edge))
-		{
-			getDownstreamWS()->onEdgeRemoving(edge);
+		if (!Joint::isKinematicJoint(e)) {
+			getDownstreamWS()->onEdgeRemoving(e);
 		}
 
-		if (edge->getEdgeType() == Edge::JOINT)
-			removeJoint(rbx_static_cast<Joint*>(edge));
-		edge->removeFromStage(this);
-	}
-
-	// mac: 0x5A4302 (169B, batch232).
-	// STUB: PLAYER 0x008ef110
-	// STUB: STUDIO 0x00a0ce90
-	void StepJointsStage::removeJoint(Joint* joint)
-	{
-		if (!joint->canStepWorld())
-		{
-			// :43 -- unlinked hook state (both links NULL in our model).
-			RBXASSERT(joint->moveNext == NULL && joint->movePrev == NULL);
-			return;
+		if (Joint::isJoint(e)) {
+			removeJoint(rbx_static_cast<Joint*>(e));
 		}
-		Joint* next = static_cast<Joint*>(joint->moveNext);
-		if (next != NULL)
-			next->movePrev = joint->movePrev;
-		else
-			listTail = static_cast<Joint*>(joint->movePrev);
-		if (joint->movePrev != NULL)
-			static_cast<Joint*>(joint->movePrev)->moveNext = next;
-		else
-			listHead = next;
-		joint->moveNext = NULL;
-		joint->movePrev = NULL;
-		--numJoints;
+		e->removeFromStage(this);
 	}
 
 	// FUNCTION: PLAYER 0x008ef0d0
@@ -127,6 +92,18 @@ namespace RBX {
 		rbx_static_cast<HumanoidStage*>(getDownstreamWS())->onAssemblyRemoving(a);
 
 		a->removeFromStage(this);
+	}
+
+	// FUNCTION: PLAYER 0x008ef270
+	// FUNCTION: STUDIO 0x00a0cff0
+	void StepJointsStage::jointsStepWorld()
+	{
+		Profiling::Mark mark(*profilingJointUpdate, false);
+		for (Joints::iterator it = worldStepJoints.begin(); it != worldStepJoints.end(); ++it)
+		{
+			RBXASSERT(it->canStepWorld());
+			it->stepWorld();
+		}
 	}
 
 } // namespace RBX

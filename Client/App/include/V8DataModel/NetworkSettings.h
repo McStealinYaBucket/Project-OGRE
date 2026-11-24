@@ -38,10 +38,23 @@ namespace RBX {
 		NetworkSettings();
 
 	private:
-		bool m_unk0x64[0x6e - 0x64];	// 0x64  all false
+		bool m_unk0x64;					// 0x64  false (one byte store each in the ctor)
+		bool m_unk0x65;					// 0x65  false (one byte store each in the ctor)
+		bool m_unk0x66;					// 0x66  false (one byte store each in the ctor)
+		bool m_unk0x67;					// 0x67  false (one byte store each in the ctor)
+		bool m_unk0x68;					// 0x68  false (one byte store each in the ctor)
+		bool m_unk0x69;					// 0x69  false (one byte store each in the ctor)
+		bool m_unk0x6a;					// 0x6a  false (one byte store each in the ctor)
+		bool m_unk0x6b;					// 0x6b  false (one byte store each in the ctor)
+		bool m_unk0x6c;					// 0x6c  false (one byte store each in the ctor)
+		bool m_unk0x6d;					// 0x6d  false (one byte store each in the ctor)
 		double m_unk0x70;				// 0x70  0
 		bool m_unk0x78;					// 0x78  true
-		bool m_unk0x79[0x7e - 0x79];	// 0x79  all false
+		bool m_unk0x79;					// 0x79  false
+		bool m_unk0x7a;					// 0x7a  false
+		bool m_unk0x7b;					// 0x7b  false
+		bool m_unk0x7c;					// 0x7c  false
+		bool m_unk0x7d;					// 0x7d  false
 		std::string m_unk0x80;			// 0x80  "127.0.0.1"
 		int m_unk0x9c;					// 0x9c  0x94eb (38123)
 		std::string m_unk0xa0;			// 0xa0  ""

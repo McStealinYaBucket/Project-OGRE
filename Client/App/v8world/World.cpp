@@ -1,13 +1,13 @@
-/* App/v8world/World.cpp -- October 2013.
-   ctor 0x0074ae30 and dtor 0x00749ae0 rebuilt from the 2013 bytes (World.h has the layout); the dtor's
-   asserts sit on their 2013 lines (187, 190-193).  The bodies after the dtor are still the earlier
-   Mac-based reconstruction: STUB until each is checked against PLAYER, and their asserts are not on
-   their 2013 lines yet (tools/assert_lines.py). */
+/* App/v8world/World.cpp -- October 2013. ctor 0x0074ae30 and dtor 0x00749ae0 from the 2013 bytes (World.h has the
+   layout); the bodies after the dtor are being rebuilt in 2013 order, asserts on their 2013 lines (assert_lines.py). */
+
 
 #include "stdafx.h"
 #include "decomp.h"
 #include "V8World/World.h"
 #include "V8World/CleanStage.h"
+#include "V8World/AssemblyStage.h"
+#include "V8World/GroundStage.h"
 #include "V8World/MovingAssemblyStage.h"
 #include "V8World/SendPhysics.h"
 #include "V8World/TreeStage.h"
@@ -347,77 +347,77 @@ namespace RBX {
 
 
 
+	// FUNCTION: PLAYER 0x00745d50
+	// FUNCTION: STUDIO 0x00886b70
+	SleepStage* World::getSleepStage()
+	{
+		return rbx_static_cast<SleepStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::SLEEP_STAGE)));
+	}
 
-
-
-
-
-	// mac: 0x5A9120 (batch299: NULL-guard + world assert + Sleep tickle).
-	// STUB: PLAYER 0x00745dd0
-	// STUB: STUDIO 0x00886bf0
+	// FUNCTION: PLAYER 0x00745dd0
+	// FUNCTION: STUDIO 0x00886bf0
 	void World::ticklePrimitive(Primitive* p, bool recursive)
 	{
-		if (p == NULL)
-			return;
+		if (p) {
+			RBXASSERT(p->getWorld());
+			if (Assembly* a = p->getAssembly())
+				getSleepStage()->onExternalTickleAssembly(a, recursive);
+		}
+	}
+	// FUNCTION: PLAYER 0x00745e50
+	// FUNCTION: STUDIO 0x00886c70
+	Assembly* World::onPrimitiveEngineChanging(Primitive* p)
+	{
 		RBXASSERT(p->getWorld());
-		Assembly* assembly = p->getAssembly();
-		if (assembly != NULL)
-		{
-			IStage* stage = getStage();
-			while (stage != NULL && stage->getStageType() != IStage::SLEEP_STAGE)
-				stage = stage->getDownstream();
-			if (stage != NULL)
-				static_cast<SleepStage*>(stage)->onExternalTickleAssembly(assembly, recursive);
+		RBXASSERT(p->getAssembly());
+		RBXASSERT(p->inPipeline());
+		RBXASSERT(!inStepCode);
+		return rbx_static_cast<AssemblyStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::ASSEMBLY_STAGE)))->onEngineChanging(p);
+	}
+	// FUNCTION: PLAYER 0x00745fc0
+	// FUNCTION: STUDIO 0x00886de0
+	void World::onPrimitiveEngineChanged(Assembly* changing)
+	{
+		RBXASSERT(changing);
+		rbx_static_cast<AssemblyStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::ASSEMBLY_STAGE)))->onEngineChanged(changing);
+	}
+	// FUNCTION: PLAYER 0x00746040
+	// FUNCTION: STUDIO 0x00886e60
+	void World::onPrimitiveFixedChanging(Primitive* p)
+	{
+		RBXASSERT(p->getWorld());
+		RBXASSERT(!inStepCode);
+		rbx_static_cast<GroundStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::GROUND_STAGE)))->onPrimitiveFixedChanging(p);
+	}
+	// FUNCTION: PLAYER 0x00746110
+	// FUNCTION: STUDIO 0x00886f30
+	void World::onPrimitiveFixedChanged(Primitive* p)
+	{
+		RBXASSERT(p->getWorld());
+		RBXASSERT(!inStepCode);
+		rbx_static_cast<GroundStage*>(const_cast<IStage*>(cleanStage->findStage(IStage::GROUND_STAGE)))->onPrimitiveFixedChanged(p);
+	}
+	// FUNCTION: PLAYER 0x007461e0
+	// FUNCTION: STUDIO 0x00887000
+	void World::onPrimitivePreventCollideChanged(Primitive* p)
+	{
+		ticklePrimitive(p, false); RBXASSERT(p->getWorld());
+		for (Contact* c = p->getFirstContact(); c != NULL; c = p->getNextContact(c)) {
+			ticklePrimitive(c->otherPrimitive(p), false);
 		}
 	}
 
-	// STUB: PLAYER 0x00745e50
-	// STUB: STUDIO 0x00886c70
-	Assembly* World::onPrimitiveEngineChanging(Primitive* p)
-	{
-		STUB(0x00745e50);
-		return NULL;
-	}
 
-	// STUB: PLAYER 0x00745fc0
-	// STUB: STUDIO 0x00886de0
-	void World::onPrimitiveEngineChanged(Assembly* a)
-	{
-		STUB(0x00745fc0);
-	}
-
-	// STUB: PLAYER 0x00746040
-	// STUB: STUDIO 0x00886e60
-	void World::onPrimitiveFixedChanging(Primitive* p)
-	{
-		STUB(0x00746040);
-	}
-
-	// STUB: PLAYER 0x00746110
-	// STUB: STUDIO 0x00886f30
-	void World::onPrimitiveFixedChanged(Primitive* p)
-	{
-		STUB(0x00746110);
-	}
-
-	// STUB: PLAYER 0x007461e0
-	// STUB: STUDIO 0x00887000
-	void World::onPrimitivePreventCollideChanged(Primitive* p)
-	{
-		STUB(0x007461e0);
-	}
-
-	// STUB: PLAYER 0x00745820
-	// STUB: STUDIO 0x00886660
+	// FUNCTION: PLAYER 0x00745820
+	// FUNCTION: STUDIO 0x00886660
 	void World::onPrimitiveContactParametersChanged(Primitive* p)
 	{
-		STUB(0x00745820);
+		RBXASSERT(p->getWorld());
+		for (Contact* c = p->getFirstContact(); c != NULL; c = p->getNextContact(c)) {
+			c->onPrimitiveContactParametersChanged();
+		}
 	}
 
-
-
-
-	// mac: 0x5A9754 (223B).
 	// FUNCTION: PLAYER 0x007458a0
 	// FUNCTION: STUDIO 0x008866e0
 	void World::onPrimitiveExtentsChanged(Primitive* p)
@@ -460,16 +460,16 @@ namespace RBX {
 
 	// mac: 0x5AAD81..0x5AAE9A: the four expand-tests.  getEdgeType() is 0 for every
 	// real Joint, so in practice only a foreign edge satisfies them.
-	bool World::isKernelOrForeignEdge(const Joint* joint)
-	{
-		return joint->getEdgeType() != 0 || joint->getJointType() == Joint::KERNEL_JOINT;   // 12
-	}
 
-	bool World::isAutoFamilyOrForeignEdge(const Joint* joint)
-	{
-		return joint->getEdgeType() != 0 ||
-			(unsigned int)(joint->getJointType() - Joint::ROTATE_JOINT) <= (Joint::MANUAL_GLUE_JOINT - Joint::ROTATE_JOINT);
-	}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -711,9 +711,9 @@ namespace RBX {
 			p1->getGeometryType() != Primitive::GEOMETRY_MEGACLUSTER)
 		{
 			Joint* other = Primitive::getJoint(p0, p1, 0);
-			if (other != NULL &&
-				isKernelOrForeignEdge(other) && isKernelOrForeignEdge(joint) &&
-				isAutoFamilyOrForeignEdge(other) && isAutoFamilyOrForeignEdge(joint))
+			if (other &&
+				!Joint::isKernelJoint(other) && !Joint::isKernelJoint(joint) &&
+				!Joint::isSpringJoint(other) && !Joint::isSpringJoint(joint))
 			{
 				destroyJoint(other);
 			}
@@ -732,8 +732,8 @@ namespace RBX {
 			RBXASSERT(ok);                           // World.cpp:732 "ok"
 		}
 
-		if (joint->getEdgeType() == 0 &&	// a user joint: type in [1,5]
-			(unsigned int)(joint->getJointType() - Joint::WELD_JOINT) <= (Joint::MOTOR_6D_JOINT - Joint::WELD_JOINT))
+		if (Joint::isKinematicJoint(joint))
+
 			joint->notifyMoved();
 	}
 	// FUNCTION: PLAYER 0x00747e40
@@ -778,12 +778,34 @@ namespace RBX {
 		}
 	}
 
-	// mac: 0x5AAEB6 -- RBXASSERT(j) at World.cpp:806.
-	void World::destroyJoint(Joint* joint)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// STUB: PLAYER 0x007492d0
+	// STUB: STUDIO 0x00889c20
+	void World::destroyJoint(Joint* j)
 	{
-		RBXASSERT(joint);
-		inJointNotification = joint;
-		autoDestroySignal(joint);
+		RBXASSERT(j);
+		inJointNotification = j;
+		autoDestroySignal(j);
 		inJointNotification = NULL;
 	}
 
@@ -794,38 +816,16 @@ namespace RBX {
 		++numContacts;                                // +124
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// mac: 0x5AB2B8.
-	// STUB: PLAYER 0x00745a80
-	// STUB: STUDIO 0x008868b0
-	void World::destroyContact(Contact* contact)
+	// The World owns contacts: 2013 deletes it here (PLAYER 0x00745adf, scalar deleting destructor).
+	// FUNCTION: PLAYER 0x00745a80
+	// FUNCTION: STUDIO 0x008868b0
+	void World::destroyContact(Contact* c)
 	{
 		RBXASSERT(!inStepCode);
-		cleanStage->onEdgeRemoving(contact);               // vtbl+0x14
-		--numContacts;
+		cleanStage->onEdgeRemoving(c);
+		delete c;
+		numContacts--;
 	}
-
 
 
 
@@ -893,104 +893,104 @@ namespace RBX {
 		RBXASSERT(!p->getWorld());  // :893 "!p->getWorld()" (World.cpp:893)
 	}
 
+
+
+
+
+
+
+
+	// 2013 shape (PLAYER 0x00749340). Deltas that keep it a STUB: the 2013 owner is an IJointOwner*
+	// (Joint::getJointOwner is out of line, folded at 0x00501530, and the owner is adjusted by -0x78 to
+	// its JointInstance), and the far primitive is skipped when the set holds it.
+	// STUB: PLAYER 0x00749340
+	// STUB: STUDIO 0x00889c90
+	void World::destroyAutoJoints(Primitive* p, std::set<Primitive*>* ignorePrims, bool manualJoints, bool autoJoints)
+	{
+		RBXASSERT(!inStepCode);
+		int startIndex = tempJoints.size();
+
+
+
+
+
+		for (int i = 0; i < p->getNumJoints(); ++i)
+		{
+			Joint* destroyJ = const_cast<Joint*>(p->getConstJoint(i));
+			RBXASSERT(destroyJ);
+			if (destroyJ && ((autoJoints && Joint::isAutoJoint(destroyJ)) || (manualJoints && Joint::isManualJoint(destroyJ))))
+			{
+				JointInstance* jointOwner = destroyJ->getJointOwner();
+				RBXASSERT(jointOwner);
+				if (jointOwner) {
+					tempJoints.append(shared_from(jointOwner));
+				}
+			}
+		}
+
+
+
+		for (int i = startIndex; i < tempJoints.size(); ++i)
+		{
+			Joint* destroyJ = tempJoints[i]->getJoint();
+			RBXASSERT(destroyJ);
+			RBXASSERT(destroyJ->links(p));
+			if (doNotIgnore(destroyJ->otherPrimitive(p), ignorePrims, NULL)) {
+				destroyJoint(destroyJ);
+			}
+		}
+
+
+
+		if (tempJoints.size() - startIndex > 0) {
+			tempJoints.remove(tempJoints.begin() + startIndex, tempJoints.size() - startIndex);
+		}
+		RBXASSERT(startIndex == tempJoints.size());
+	}
+
 	// mac: 0x5AC168 -- destroyAutoJoints(p, NULL, b, true).  5-arg body 0x5ABBEA.
 	void World::destroyAutoJoints(Primitive* prim, bool b)
 	{
 		destroyAutoJoints(prim, NULL, b, true);
 	}
 
-	// mac: 0x5ABBEA (979B).
-	// Phase 1: for each joint edge on prim, select by (autoJoints &&
-	// isAutoJoint()) or (manualJoints && edge is a manual-family JOINT:
-	// getEdgeType()==0 with (getJointType() & ~8)==2, i.e. MANUAL_WELD(2)
-	// or MANUAL_GLUE(10) -- both calls go through the vtable, slots +20
-	// and +28, so overrides are honored exactly like the binary).  Collect
-	// shared_from(owner) into tempJoints (skip null owners).
-	// Phase 2: for the [startIndex, size) owners, read the Joint* back via
-	// the +132 backlink, assert it links prim (:937 "destroyJ->links(p)"),
-	// destroyJoint it iff the FAR prim passes doNotIgnore(other, ignore,
-	// NULL).  Then remove the range from tempJoints and assert the size is
-	// back to startIndex (:948).  The remaining asserts ("destroyJ" :920,
-	// owner non-null :924, tempJoint non-null :936) are ported verbatim.
-	void World::destroyAutoJoints(Primitive* prim,
-		std::set<Primitive*>* ignorePrims, bool manualJoints, bool autoJoints)
-	{
-		assertNotInStep();  // World.cpp:910 "!inStepCode"
-		int startIndex = (int)tempJoints.size();
-		for (int i = 0; i < prim->joints.size(); ++i)
-		{
-			Joint* joint = static_cast<Joint*>(prim->getJoint(i));
-			RBXASSERT(joint != NULL);  // World.cpp:920 "destroyJ"
-			if ((autoJoints && joint->isAutoJoint())
-				|| (manualJoints && joint->getEdgeType() == 0
-					&& ((joint->getJointType() & ~8) == 2)))
-			{
-				JointInstance* owner = joint->getJointOwner();
-				RBXASSERT(owner != NULL);  // World.cpp:924 "jointOwner"
-				if (owner != NULL)
-					tempJoints.append(shared_from(owner));
-			}
-		}
-		for (int k = startIndex; k < (int)tempJoints.size(); ++k)
-		{
-			JointInstance* owner = tempJoints[k].get();
-			RBXASSERT(owner != NULL);  // World.cpp:936 "destroyJ"
-			Joint* joint = owner->getJoint();
-			// World.cpp:937 "destroyJ->links(p)".
-			RBXASSERT(joint->getPrim0() == prim || joint->getPrim1() == prim);
-			Primitive* other = (joint->getPrim0() == prim)
-				? joint->getPrim1() : joint->getPrim0();
-			if (doNotIgnore(other, ignorePrims, NULL))
-				destroyJoint(joint);
-		}
-		tempJoints.remove(tempJoints.begin() + startIndex,
-			(int)tempJoints.size() - startIndex);
-		// World.cpp:948 "startIndex == tempJoints.size()".
-		RBXASSERT((int)tempJoints.size() == startIndex);
-	}
 
-	// mac: 0x5AB4B2 -- createAutoJoints(p, NULL, NULL).  The 3-arg body (0x5AC2E0,
-	// 335 bytes) needs ContactManager::getPrimitivesTouchingExtents 0x563F30
-	// and JointBuilder::canJoin 0x57B164, so the builder loop is still TODO.
-	void World::createAutoJoints(Primitive* prim)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x007498b0
+	// FUNCTION: STUDIO 0x0088a200
+	void World::destroyAutoJointsToWorld(const G3D::Array<Primitive*>& primitives)
 	{
-		createAutoJoints(prim, NULL, NULL);
+		RBXASSERT(!inStepCode);
+		std::set<Primitive*> primSet;
+		for (int i = 0; i < primitives.size(); ++i)
+			primSet.insert(primitives[i]);
+		for (int i = 0; i < primitives.size(); ++i)
+			destroyAutoJoints(primitives[i], &primSet, true, true);
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// mac: 0x5AC2E0 (335B).  assertNotInStep (World.cpp:999); ++numLinkCalls;
-	// tempPrimitives.resize(0, false); fill via the hash walk (flag 0 =
-	// unlimited); for each survivor: doNotIgnore(ignore, include) gate,
-	// skip when prim->getJoint(other, 0) already links them, else canJoin
-	// and on success insertJoint + the inJointNotification-bracketed signal
-	// fire (same bracket as destroyJoint).
 	// STUB: PLAYER 0x0074aa80
 	// STUB: STUDIO 0x0088b3d0
 	void World::createAutoJoints(Primitive* prim,
@@ -1017,6 +1017,50 @@ namespace RBX {
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x0074abf0
+	// FUNCTION: STUDIO 0x0088b540
+	void World::createAutoJointsToWorld(const G3D::Array<Primitive*>& primitives)
+	{
+		RBXASSERT(!inStepCode);
+		std::set<Primitive*> primSet;
+		for (int i = 0; i < primitives.size(); ++i)
+			primSet.insert(primitives[i]);
+		for (int i = 0; i < primitives.size(); ++i)
+			createAutoJoints(primitives[i], &primSet, NULL);
+	}
+
+
+
+	// FUNCTION: PLAYER 0x0074ad10
+	// FUNCTION: STUDIO 0x0088b660
+	void World::createAutoJointsToPrimitives(const G3D::Array<Primitive*>& primitives)
+	{
+		RBXASSERT(!inStepCode);
+		std::set<Primitive*> primSet;
+		for (int i = 0; i < primitives.size(); ++i)
+			primSet.insert(primitives[i]);
+		for (int i = 0; i < primitives.size(); ++i)
+			createAutoJoints(primitives[i], NULL, &primSet);
+	}
+
+	// mac: 0x5AB4B2 -- createAutoJoints(p, NULL, NULL).  The 3-arg body (0x5AC2E0,
+	// 335 bytes) needs ContactManager::getPrimitivesTouchingExtents 0x563F30
+	// and JointBuilder::canJoin 0x57B164, so the builder loop is still TODO.
+	void World::createAutoJoints(Primitive* prim)
+	{
+		createAutoJoints(prim, NULL, NULL);
+	}
+
 
 	void World::joinAll()
 	{

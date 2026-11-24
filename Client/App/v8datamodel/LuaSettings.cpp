@@ -17,7 +17,7 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::LuaSettings);
+// LuaSettings registers in FactoryRegistration.cpp (2013: its classDescriptor copy 0x00788570).
 }
 
 namespace RBX {

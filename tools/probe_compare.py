@@ -103,7 +103,7 @@ def main():
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     ok_all = True
     for pair in a.pairs:
-        want, _, where = pair.partition("@")
+        want, _, where = pair.rpartition("@")
         addr_s, _, size_s = where.partition(":")
         addr = int(addr_s, 16)
         size = int(size_s, 0) if size_s else sizes[addr]

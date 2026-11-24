@@ -283,8 +283,8 @@ template<class List, class Item, class IsLess> void insert_from_back(List& list,
 		}
 		list.push_front(f);
 }
-// STUB: PLAYER 0x009b43b0
-// STUB: STUDIO 0x00a6c1a0
+// FUNCTION: PLAYER 0x009b43b0
+// FUNCTION: STUDIO 0x00a6c1a0
 void TaskScheduler::scheduleJob(Job& job)
 {
 	job.updateWakeTime();
@@ -295,7 +295,7 @@ void TaskScheduler::scheduleJob(Job& job)
 		{
 			job.sleepRate.sample(0);
 			job.startWaiting();
-			job.updatePriority();
+			// 2013 has no updatePriority() here (0x009b43b0 calls enqueueWaitingJob next).
 			enqueueWaitingJob(job);
 			return;
 		}

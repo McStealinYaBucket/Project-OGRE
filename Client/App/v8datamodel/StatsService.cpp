@@ -7,7 +7,7 @@
 
 namespace RBX {
 namespace Stats {
-	const char* const sStatsService = "Stats";	// 2013 string (PLAYER doDeclare 0x00480f00 -> 0x00b509d8 -> 0x00b019b4)
+	const char* const sStats = "Stats";	// 2013 string (PLAYER doDeclare 0x00480f00 -> 0x00b509d8 -> 0x00b019b4)
 }
 }
 

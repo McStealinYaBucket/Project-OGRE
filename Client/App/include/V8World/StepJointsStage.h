@@ -13,6 +13,7 @@
 #pragma once
 
 #include "V8World/IWorldStage.h"
+#include "V8World/Joint.h"
 #include "Util/Profiling.h"
 #include "boost/scoped_ptr.hpp"
 
@@ -20,9 +21,9 @@ namespace RBX {
 
 	class World;
 	class Edge;
-	class Joint;
 	class Assembly;
 
+	// SIZE 0x20
 	class StepJointsStage : public IWorldStage
 	{
 	public:
@@ -42,12 +43,16 @@ namespace RBX {
 		void onSimulateAssemblyAdded(Assembly* a);
 		void onSimulateAssemblyRemoving(Assembly* a);
 
+	public:
+		// PLAYER 0x008ef270: the World's step loop calls it.
+		void jointsStepWorld();
+
 	private:
-		int numJoints;        // +16.
-		Joint* listHead;      // +20 (binary Edge* + edge+36 links; ours
-		Joint* listTail;      // +24 Joint-typed -- hook links live on the
-		                      // SpanningEdge secondary, Joint-only by gating).
-		boost::scoped_ptr<Profiling::CodeProfiler> profilingJointUpdate;	// +28 ("Joint Update")
+		// 2013: a constant-size boost::intrusive list over Joint's StepJointsStageHook (+0x20):
+		// size 0x10, root 0x14/0x18 (ctor 0x008ef410; onEdgeAdded 0x008ef1a0 links before the root).
+		typedef boost::intrusive::list<Joint, boost::intrusive::base_hook<StepJointsStageHook> > Joints;
+		Joints worldStepJoints;                                         // 0x10
+		boost::scoped_ptr<Profiling::CodeProfiler> profilingJointUpdate;	// 0x1c ("Joint Update")
 
 		friend class World;	// World::loadProfilers reads the profiler
 	};

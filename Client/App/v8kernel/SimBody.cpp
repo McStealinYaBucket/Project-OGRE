@@ -58,6 +58,8 @@ namespace RBX {
 		RBXASSERT(contactBodyIndex == -1);  // :58
 	}
 	// Batch261: zero the velocity pair (+60/+72), mirror into the body linVel/angVel (+212/+224), bump the body serial. (2016 refactored SimBody around a pv member; the binary stores are used verbatim here with our member names.)
+	// FUNCTION: PLAYER 0x00976b80
+	// FUNCTION: STUDIO 0x009c44b0
 	void SimBody::clearVelocity()
 	{
 		linVel = G3D::Vector3::zero();

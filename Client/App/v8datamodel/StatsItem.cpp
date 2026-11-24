@@ -15,7 +15,9 @@
 #include <cstdarg>
 
 namespace RBX {
+namespace Stats {
 	const char* const sStatsItem = "StatsItem";
+}
 }
 
 using namespace RBX;
@@ -25,7 +27,7 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::StatsItem);
+RBX_REGISTER_CLASS(RBX::Stats::Item);
 }
 
 namespace RBX {

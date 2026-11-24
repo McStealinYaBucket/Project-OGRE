@@ -28,9 +28,9 @@
 #include "V8World/IPipelined.h"
 #include "V8World/BasicSpatialHashPrimitive.h"
 #include "Util/ConcurrencyValidator.h"
+#include "Util/ComputeProp.h"
 #include "V8Kernel/BodyPvSetter.h"
 #include "decomp.h"
-
 namespace RBX {
 	class Primitive;	// EdgeList, October 2013: parallel G3D::Array<T,10,32> edges +4 / others +20 (36 B); out-of-line members in v8world/Primitive.cpp.
 	class EdgeList
@@ -464,6 +464,7 @@ namespace RBX {
 		// notify (see the slot note at the definition -- TODO-verify
 		// with PartInstance owners; unreachable in-tree today).
 		void setNetworkIsSleeping(bool value);
+		bool getNetworkIsSleeping() const { return networkIsSleeping; }
 		// Batch261: assembly-root-or-unassembled prims take zero body
 		// velocity (Body::setVelocity with Velocity::zero()).
 		void zeroVelocity();
@@ -500,7 +501,7 @@ namespace RBX {
 	private:
 		ConcurrencyValidator concurrencyValidator;  // 0x50 (D2 ~ConcurrencyValidator(+0x50))
 		SystemAddress networkOwner;  // 0x74 (C2 NetworkOwner::Unassigned())
-		bool m_unk0x7c;              // 0x7c (C2 false)
+		bool networkIsSleeping;      // 0x7c (C2 false; setNetworkIsSleeping 0x00753a90, SleepStage::onAssemblyAdded 0x008e6e60)
 		Guid guid;                   // 0x80 (getGuid 0x00753bb0 returns this+0x80)
 		bool guidSetExternally;      // 0x88 (getGuid assert "guidSetExternally")
 		SizeMultiplier sizeMultiplier;  // 0x8c (getSizeMultiplier 0x00753ac0)
@@ -521,27 +522,16 @@ namespace RBX {
 		bool dragging;               // 0x114 (setDragging 0x00754cb0: setFixed(+0x115, value))
 		bool anchoredProperty;       // 0x115
 		bool preventCollide;         // 0x116 (setPreventCollide 0x00753fc0)
-		bool networkIsSleeping;      // 0x117 (2016 order; not touched by C2)
+		bool m_unk0x117;             // 0x117 (not touched by C2)
 		float specificGravity;       // 0x118 (setter 0x007542d0; 2016 order)
 		float friction;              // 0x11c (setFriction 0x00753ff0; C2 0)
 		float elasticity;            // 0x120 (setElasticity 0x00754030; C2 0.75)
 		SurfaceType surfaces[6];     // 0x124 (setter 0x007542a0)
 		void* surfaceData[6];        // 0x13c (D2 deletes each; setSurfaceData 0x00754170)
 		undefined4 m_unk0x154;       // 0x154
-		// 2016's ComputeProp<float, Primitive> {val, dirty, object, getFunc} (Util/ComputeProp.h there):
-		// the C2 stores dirty +0x15c, object +0x160 and getFunc +0x168 (8-aligned, so +0x164 is padding),
-		// loading &computeJointK first because the ctor takes it as an argument (0x00756bf0).
-		typedef float (Primitive::*JointKFunc)();	// 8 bytes: typedef'd in Primitive's own scope (MI model)
-		struct JointKProp
-		{
-			float val;							// 0x158
-			bool dirty;							// 0x15c (C2 true)
-			Primitive* object;					// 0x160 (C2 this)
-			JointKFunc getFunc;					// 0x168
-			JointKProp(Primitive* object, JointKFunc getFunc)
-				: dirty(true), object(object), getFunc(getFunc)
-			{}
-		} jointK;							// 0x158
+		// ComputeProp<float, Primitive> {val 0x158, dirty 0x15c, object 0x160, getFunc 0x168}: the C2 loads
+		// &computeJointK first because the ctor takes it as an argument (0x00756bf0).
+		ComputeProp<float, Primitive> jointK;	// 0x158
 
 	};
 

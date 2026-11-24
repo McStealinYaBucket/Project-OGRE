@@ -6,8 +6,8 @@
 #include "V8World/Primitive.h"
 
 namespace RBX {
-	// STUB: PLAYER 0x008e61b0
-	// STUB: STUDIO 0x00a044b0
+	// FUNCTION: PLAYER 0x008e61b0
+	// FUNCTION: STUDIO 0x00a044b0
 	SendPhysics::SendPhysics()
 	{}
 
@@ -66,9 +66,9 @@ namespace RBX {
 	void SendPhysics::onMovingAssemblyRootRemoving(Assembly* a)
 	{
 		SimJob* job = a->getSimJob();
-		job->useCount--;
 
-		if (job->useCount == 0)
+
+		if (--job->useCount == 0)
 		{
 			assemblyPhysicsOffSignal(a->getAssemblyPrimitive());
 

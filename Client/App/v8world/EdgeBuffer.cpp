@@ -153,9 +153,18 @@ namespace RBX {
 	}
 
 	// 2016 shape (see header note re the contactManager arm).
+	// FUNCTION: PLAYER 0x00999460
+	// FUNCTION: STUDIO 0x00a599f0
 	void EdgeBuffer::afterAssemblyAdded(Assembly* assembly)
 	{
 		assembly->visitPrimitives(boost::bind(&EdgeBuffer::assemblyPrimitiveAdded, this, _1));
+	}
+
+	// FUNCTION: PLAYER 0x00999480
+	// FUNCTION: STUDIO 0x00a59a10
+	void EdgeBuffer::beforeAssemblyRemoving(Assembly* assembly)
+	{
+		assembly->visitPrimitives(boost::bind(&EdgeBuffer::assemblyPrimitiveRemoved, this, _1));
 	}
 
 	// mac: 0x5726EE (batch240).
@@ -176,7 +185,8 @@ namespace RBX {
 			pushEdgeIfOk(prim->getJoint(i));
 	}
 
-	// (batch240: downstream forward per downstream edge).
+	// FUNCTION: PLAYER 0x009990f0
+	// FUNCTION: STUDIO 0x00a59680
 	void EdgeBuffer::assemblyPrimitiveRemoved(Primitive* prim)
 	{
 		for (int i = 0; i < prim->getNumContacts(); ++i)

@@ -7,14 +7,7 @@
 
 namespace RBX {
 
-// mac: 0x56EFA4 __ZN3RBX12ExtentsInt32C1Ev
-// Binary: low = Vector3int32::maxInt() (0x7FFFFFFF x3), high = Vector3int32::minInt() (0x80000000 x3)
-// FUNCTION: PLAYER 0x004e5df0
-// FUNCTION: STUDIO 0x0056dac0
-ExtentsInt32::ExtentsInt32()
-	: low(Vector3int32::maxInt())
-	, high(Vector3int32::minInt())
-{}
+// ExtentsInt32() is inline in Util/ExtentsInt32.h (mac: 0x56EFA4 __ZN3RBX12ExtentsInt32C1Ev).
 
 // mac: 0x569688 __ZNK3RBX12ExtentsInt328containsERKNS_12Vector3int32E
 bool ExtentsInt32::contains(const Vector3int32& point) const {

@@ -55,7 +55,9 @@ namespace RBX {
 
 // Template copies the original emitted in this class's .obj (identical bodies, tools/unpaired_twins.py).
 // clang-format off
+// One body for every Described/NonFactoryProduct dtor over BasePlayerGui (CoreGuiService's and
+// StarterGuiService's fold); the nameref is the PUBLICS name our PDB keeps for it.
 // TEMPLATE: PLAYER 0x00708b60
 // TEMPLATE: STUDIO 0x007955e0
-// ??1?$Described@VCoreGuiService@RBX@@$E?sCoreGuiService@2@3QBDBV?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sCoreGuiService@2@3QBDB@2@$00$01@Reflection@RBX@@UAE@XZ
+// ??1?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sStarterGuiService@2@3QBDB@RBX@@UAE@XZ
 // clang-format on

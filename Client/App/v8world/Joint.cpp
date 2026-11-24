@@ -16,7 +16,7 @@
 #include "FastLog.h"
 
 LOGGROUP(JointLifetime)
-
+using G3D::CoordinateFrame;	// "jointCoord0 == CoordinateFrame()" (:77/:78)
 namespace RBX {
 
 
@@ -74,8 +74,8 @@ namespace RBX {
 		, jointOwner(NULL)
 	{
 		FASTLOG1(FLog::JointLifetime, "Joint %p created, empty primitives", this);
-		RBXASSERT(jointCoord0 == G3D::CoordinateFrame());
-		RBXASSERT(jointCoord1 == G3D::CoordinateFrame());
+		RBXASSERT(jointCoord0 == CoordinateFrame());
+		RBXASSERT(jointCoord1 == CoordinateFrame());
 	}
 	// FUNCTION: PLAYER 0x00821010
 	// FUNCTION: STUDIO 0x009146e0
@@ -153,17 +153,17 @@ namespace RBX {
 
 	}
 
-	bool Joint::isAutoJoint() const
-	{
-		int e = getEdgeType();
-		int t = getJointType();
-		if (e == 0 && (t == 0 || t == 11))
-			return false;
-		if (e == 0 && t == 12)
-			return false;
-		return e == 0 && ((t & ~8) != 2);
-	}
 
+
+
+
+
+
+
+
+
+	// STUB: PLAYER 0x0081faa0
+	// STUB: STUDIO 0x00913140
 	void Joint::notifyMoved()
 	{
 		for (int i = 0; i < 2; ++i)

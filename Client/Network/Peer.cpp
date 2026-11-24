@@ -40,5 +40,5 @@ Peer::Peer()
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::Network::Peer);
+// Peer is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }

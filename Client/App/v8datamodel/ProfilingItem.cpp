@@ -4,9 +4,7 @@
 
 #include "V8DataModel/ProfilingItem.h"
 
-namespace RBX {
-	const char* const sProfilingItem = "ProfilingItem";
-}
+const char* const sProfilingItem = "ProfilingItem";
 
 using namespace RBX;
 
@@ -15,5 +13,5 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::ProfilingItem);
+RBX_REGISTER_CLASS(ProfilingItem);
 }

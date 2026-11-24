@@ -10,7 +10,8 @@
 
 namespace RBX {
 
-	// mac: 0x532AB8 (batch244).
+	// STUB: PLAYER 0x00978800
+	// STUB: STUDIO 0x00a42030
 	Point::Point(Body* bodyArg)
 		: numOwners(1)
 		, body(bodyArg != NULL ? bodyArg : Body::getWorldBody())
@@ -30,6 +31,8 @@ namespace RBX {
 		body->accumulateForce(force, worldPos);
 	}
 
+	// FUNCTION: PLAYER 0x00978a10
+	// FUNCTION: STUDIO 0x00a42240
 	void Point::setLocalPos(const G3D::Vector3& value)
 	{
 		localPos = value;

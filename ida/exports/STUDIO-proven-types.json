@@ -698,31 +698,15 @@
    ],
    "members": [
     {
-     "name": "numJoints",
-     "offset": 16,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_INT4"
-    },
-    {
-     "name": "listHead",
-     "offset": 20,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Joint",
-     "scalar": null
-    },
-    {
-     "name": "listTail",
-     "offset": 24,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Joint",
-     "scalar": null
-    },
-    {
      "name": "uiStepJoints",
+     "offset": 16,
+     "size": 12,
+     "kind": "class",
+     "type": "boost::intrusive::list<RBX::Joint,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>",
+     "scalar": null
+    },
+    {
+     "name": "movingGroundedAssemblies",
      "offset": 28,
      "size": 12,
      "kind": "class",
@@ -5096,7 +5080,7 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x7c",
+     "name": "networkIsSleeping",
      "offset": 124,
      "size": 1,
      "kind": "scalar",
@@ -5251,7 +5235,7 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "networkIsSleeping",
+     "name": "m_unk0x117",
      "offset": 279,
      "size": 1,
      "kind": "scalar",
@@ -5310,8 +5294,8 @@
      "name": "jointK",
      "offset": 344,
      "size": 24,
-     "kind": "structure",
-     "type": "RBX::Primitive::JointKProp",
+     "kind": "class",
+     "type": "RBX::ComputeProp<float,RBX::Primitive>",
      "scalar": null
     }
    ],
@@ -5848,6 +5832,714 @@
    ],
    "base": false,
    "unique": "VXmlElement@@"
+  },
+  "RBX::NetworkSettings": {
+   "size": 288,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const *const RBX::sNetworkSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x64",
+     "offset": 100,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x65",
+     "offset": 101,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x66",
+     "offset": 102,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x67",
+     "offset": 103,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x68",
+     "offset": 104,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x69",
+     "offset": 105,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x6a",
+     "offset": 106,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x6b",
+     "offset": 107,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x6c",
+     "offset": 108,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x6d",
+     "offset": 109,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x70",
+     "offset": 112,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "m_unk0x78",
+     "offset": 120,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x79",
+     "offset": 121,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x7a",
+     "offset": 122,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x7b",
+     "offset": 123,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x7c",
+     "offset": 124,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x7d",
+     "offset": 125,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x80",
+     "offset": 128,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x9c",
+     "offset": 156,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xa0",
+     "offset": 160,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xc0",
+     "offset": 192,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "m_unk0xc8",
+     "offset": 200,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xcc",
+     "offset": 204,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xd0",
+     "offset": 208,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xd4",
+     "offset": 212,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xd8",
+     "offset": 216,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xdc",
+     "offset": 220,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xe0",
+     "offset": 224,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xe4",
+     "offset": 228,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0xe8",
+     "offset": 232,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xec",
+     "offset": 236,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0xf0",
+     "offset": 240,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0xf4",
+     "offset": 244,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xf5",
+     "offset": 245,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xf8",
+     "offset": 248,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0xfc",
+     "offset": 252,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x100",
+     "offset": 256,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x104",
+     "offset": 260,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0x108",
+     "offset": 264,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0x10c",
+     "offset": 268,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "m_unk0x110",
+     "offset": 272,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "m_unk0x118",
+     "offset": 280,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VNetworkSettings@RBX@@"
+  },
+  "RBX::InsertService": {
+   "size": 392,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, 3, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "insertRequestSignal",
+     "offset": 100,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::ContentId)>",
+     "scalar": null
+    },
+    {
+     "name": "insertRequestAssetSignal",
+     "offset": 108,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "insertRequestAssetVersionSignal",
+     "offset": 116,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,int,int)>",
+     "scalar": null
+    },
+    {
+     "name": "insertReadySignal",
+     "offset": 124,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "insertErrorSignal",
+     "offset": 132,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >)>",
+     "scalar": null
+    },
+    {
+     "name": "freeModelUrl",
+     "offset": 140,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "freeDecalUrl",
+     "offset": 168,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "baseSetsUrl",
+     "offset": 196,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "userSetsUrl",
+     "offset": 224,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "collectionUrl",
+     "offset": 252,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "assetUrl",
+     "offset": 280,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "assetVersionUrl",
+     "offset": 308,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "trustLevel",
+     "offset": 336,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "backendInsertConnection",
+     "offset": 340,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "backendInsertAssetConnection",
+     "offset": 344,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "backendInsertAssetVersionConnection",
+     "offset": 348,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "frontendInsertReadyConnection",
+     "offset": 352,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "frontendInsertErrorConnection",
+     "offset": 356,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "callbackSync",
+     "offset": 360,
+     "size": 16,
+     "kind": "class",
+     "type": "boost::recursive_mutex",
+     "scalar": null
+    },
+    {
+     "name": "callbackLibrary",
+     "offset": 376,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,RBX::InsertService::Callback,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,RBX::InsertService::Callback> > >",
+     "scalar": null
+    },
+    {
+     "name": "loadCount",
+     "offset": 388,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VInsertService@RBX@@"
+  },
+  "RBX::Profiling::CodeProfiler": {
+   "size": 49216,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Profiling::Profiler",
+     "offset": 0,
+     "size": 49216,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VCodeProfiler@Profiling@RBX@@"
+  },
+  "RBX::Profiling::Mark": {
+   "size": 48,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "section",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Profiling::CodeProfiler",
+     "scalar": null
+    },
+    {
+     "name": "enclosingMark",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Profiling::Mark",
+     "scalar": null
+    },
+    {
+     "name": "frameTick",
+     "offset": 8,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "startTime",
+     "offset": 16,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "enabled",
+     "offset": 24,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "childrenElapsed",
+     "offset": 32,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "logInclusive",
+     "offset": 40,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VMark@Profiling@RBX@@"
+  },
+  "RBX::StepJointsStage": {
+   "size": 32,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::IWorldStage",
+     "offset": 0,
+     "size": 16,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "worldStepJoints",
+     "offset": 16,
+     "size": 12,
+     "kind": "class",
+     "type": "boost::intrusive::list<RBX::Joint,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>",
+     "scalar": null
+    },
+    {
+     "name": "profilingJointUpdate",
+     "offset": 28,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Profiling::CodeProfiler>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VStepJointsStage@RBX@@"
+  },
+  "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode": {
+   "size": 48,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NodeBase",
+     "offset": 0,
+     "size": 20,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "children",
+     "offset": 20,
+     "size": 16,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "hasChild",
+     "offset": 36,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_RCHAR"
+    },
+    {
+     "name": "refByPrimitives",
+     "offset": 40,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "next",
+     "offset": 44,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "UTreeNode@?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -7285,7 +7977,19 @@
     {
      "name": "RBX::SpanningEdge",
      "offset": 28,
-     "size": 20,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none>",
+     "offset": 32,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none>",
+     "offset": 40,
+     "size": 8,
      "empty": false
     }
    ],
@@ -7606,6 +8310,128 @@
    "members": [],
    "base": true,
    "unique": "V?$Allocator@VXmlElement@@@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const *const RBX::sNetworkSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VNetworkSettings@RBX@@$E?sNetworkSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, 3, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::InsertService, char const *const RBX::sInsertService, RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>, 3, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDB$02$0A@@RBX@@"
+  },
+  "RBX::Profiling::Profiler": {
+   "size": 49216,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "bucketTimeSpan",
+     "offset": 8,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "currentBucket",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "buckets",
+     "offset": 24,
+     "size": 49152,
+     "kind": "class",
+     "type": "boost::array<RBX::Profiling::Bucket,2048>",
+     "scalar": null
+    },
+    {
+     "name": "lastSampleTime",
+     "offset": 49176,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 49184,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VProfiler@Profiling@RBX@@"
+  },
+  "RBX::NodeBase": {
+   "size": 20,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "level",
+     "offset": 0,
+     "size": 2,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_SHORT"
+    },
+    {
+     "name": "hash",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "cell",
+     "offset": 8,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::Vector3int32",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VNodeBase@RBX@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
@@ -8158,46 +8984,45 @@
    "unique": "VIndexedMesh@RBX@@"
   },
   "RBX::SpanningEdge": {
-   "size": 20,
+   "size": 4,
    "vftable": true,
    "virtual_bases": false,
    "bases": [],
-   "members": [
-    {
-     "name": "stepNext",
-     "offset": 4,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Edge",
-     "scalar": null
-    },
-    {
-     "name": "stepPrev",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Edge",
-     "scalar": null
-    },
-    {
-     "name": "moveNext",
-     "offset": 12,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Edge",
-     "scalar": null
-    },
-    {
-     "name": "movePrev",
-     "offset": 16,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Edge",
-     "scalar": null
-    }
-   ],
+   "members": [],
    "base": true,
    "unique": "VSpanningEdge@RBX@@"
+  },
+  "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::StepJointsStage,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$list_base_hook@U?$tag@VStepJointsStage@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
+  },
+  "boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::MovingAssemblyStage,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$list_base_hook@U?$tag@VMovingAssemblyStage@RBX@@@intrusive@boost@@Unone@23@U423@@intrusive@boost@@"
   },
   "RBX::DescribedCreatable<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, 27, 0>": {
    "size": 96,
@@ -8278,6 +9103,38 @@
    "members": [],
    "base": true,
    "unique": "V?$Described@VStarterGear@RBX@@$E?sStarterGear@2@3QBDBV?$FactoryProduct@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::NetworkSettings, char const *const RBX::sNetworkSettings, RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VNetworkSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sNetworkSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::InsertService, char const *const RBX::sInsertService, RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>, 3, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VInsertService@RBX@@$E?sInsertService@2@3QBDBV?$FactoryProduct@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDBV32@@2@$02$0A@@Reflection@RBX@@"
   },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
@@ -8750,6 +9607,50 @@
    "base": true,
    "unique": "VIndexedTree@RBX@@"
   },
+  "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::StepJointsStage,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::no_default_definer",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::StepJointsStage,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@VStepJointsStage@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::MovingAssemblyStage,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::detail::no_default_definer",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    },
+    {
+     "name": "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::MovingAssemblyStage,1,1>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$generic_hook@U?$get_list_node_algo@PAX@intrusive@boost@@VMovingAssemblyStage@RBX@@$00$00@detail@intrusive@boost@@"
+  },
   "RBX::Reflection::Described<RBX::DebugSettings, char const *const RBX::sDebugSettings, RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>, 27, 0>": {
    "size": 96,
    "vftable": false,
@@ -8830,6 +9731,38 @@
    "base": true,
    "unique": "V?$FactoryProduct@VStarterGear@RBX@@VInstance@2@$E?sStarterGear@2@3QBDBV32@@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::NetworkSettings, char const *const RBX::sNetworkSettings, RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VNetworkSettings@RBX@@$E?sNetworkSettings@2@3QBDBV?$FactoryProduct@VNetworkSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sNetworkSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDBV32@@RBX@@"
+  },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
    "vftable": false,
@@ -8904,6 +9837,38 @@
    "base": true,
    "unique": "U?$list_node@PAX@intrusive@boost@@"
   },
+  "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::StepJointsStage,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::list_node<void *>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@VStepJointsStage@RBX@@$00$00@detail@intrusive@boost@@"
+  },
+  "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::MovingAssemblyStage,1,1>": {
+   "size": 8,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::intrusive::list_node<void *>",
+     "offset": 0,
+     "size": 8,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "U?$node_holder@U?$list_node@PAX@intrusive@boost@@VMovingAssemblyStage@RBX@@$00$00@detail@intrusive@boost@@"
+  },
   "RBX::FactoryProduct<RBX::DebugSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sDebugSettings, RBX::Instance>": {
    "size": 96,
    "vftable": false,
@@ -8967,6 +9932,22 @@
    "members": [],
    "base": true,
    "unique": "V?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VNetworkSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sNetworkSettings@2@3QBDBVInstance@2@@RBX@@"
   },
   "RBX::GlobalAdvancedSettings::Item": {
    "size": 96,

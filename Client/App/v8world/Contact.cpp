@@ -437,11 +437,37 @@ namespace RBX {
 		return data->numConnectors();
 	}
 
-	// STUB: PLAYER 0x00851f40
-	// STUB: STUDIO 0x009a9bf0
-	GeoPairConnector* BlockBlockContact::getConnector(int i)
+	// mac: 0x55E06E (317B, batch248: heap triple fill; the +324/+328/+332
+	// per-prim callback triple queues with custom physical properties
+	// -- flags stay false in-tree, so only the else arms run).
+	// STUB: PLAYER 0x00851ae0
+	// STUB: STUDIO 0x009a9790
+	void Contact::onPrimitiveContactParametersChanged()
 	{
-		return myData()->getConnector(i);
+		if (heapData == NULL)
+		{
+			generateDataForMovingAssemblyStage();
+			if (heapData == NULL)
+				return;
+		}
+		Primitive* p0 = getPrim0();
+		Primitive* p1 = getPrim1();
+		heapData->friction = calculateFriction(p0->getFriction(), p1->getFriction());
+		float minElastic = p0->getElasticity() < p1->getElasticity()
+			? p0->getElasticity() : p1->getElasticity();
+		// The Mac reads two more per-primitive fields here (Mac +316/+320); their 2013 Primitive
+		// counterparts are not identified (Primitive is 0x170 in 2013 and has no room left for
+		// the bring-up stand-ins), so the elasticities are used directly.
+		float e0 = p0->getElasticity();
+		float e1 = p1->getElasticity();
+
+
+
+
+
+		float combined = e0 < e1 ? e0 : e1;
+		heapData->elasticBase = combined;
+		heapData->elasticScaled = combined * Constants::getElasticMultiplier(minElastic);
 	}
 
 	// Batch275: base triple + 148B solver block.
@@ -471,35 +497,11 @@ namespace RBX {
 		solverData = NULL;
 	}
 
-	// mac: 0x55E06E (317B, batch248: heap triple fill; the +324/+328/+332
-	// per-prim callback triple queues with custom physical properties
-	// -- flags stay false in-tree, so only the else arms run).
-	void Contact::onPrimitiveContactParametersChanged()
+	// STUB: PLAYER 0x00851f40
+	// STUB: STUDIO 0x009a9bf0
+	GeoPairConnector* BlockBlockContact::getConnector(int i)
 	{
-		if (heapData == NULL)
-		{
-			generateDataForMovingAssemblyStage();
-			if (heapData == NULL)
-				return;
-		}
-		Primitive* p0 = getPrim0();
-		Primitive* p1 = getPrim1();
-		heapData->friction = calculateFriction(p0->getFriction(), p1->getFriction());
-		float minElastic = p0->getElasticity() < p1->getElasticity()
-			? p0->getElasticity() : p1->getElasticity();
-		// The Mac reads two more per-primitive fields here (Mac +316/+320); their 2013 Primitive
-		// counterparts are not identified (Primitive is 0x170 in 2013 and has no room left for
-		// the bring-up stand-ins), so the elasticities are used directly.
-		float e0 = p0->getElasticity();
-		float e1 = p1->getElasticity();
-
-
-
-
-
-		float combined = e0 < e1 ? e0 : e1;
-		heapData->elasticBase = combined;
-		heapData->elasticScaled = combined * Constants::getElasticMultiplier(minElastic);
+		return myData()->getConnector(i);
 	}
 
 } // namespace RBX

@@ -110,10 +110,14 @@ namespace RBX {
 			if (SimBody* s = getRootSimBody())
 				s->accumulateTorque(torque);
 		}
+		// FUNCTION: PLAYER 0x008e6910
+		// FUNCTION: STUDIO 0x00a04c10
 		void resetForceAccumulators() {
 			if (SimBody* s = getRootSimBody())
 				s->resetForceAccumulators();
 		}
+		// FUNCTION: PLAYER 0x008e6970
+		// FUNCTION: STUDIO 0x00a04c70
 		void resetImpulseAccumulators() {
 			if (SimBody* s = getRootSimBody())
 				s->resetImpulseAccumulators();

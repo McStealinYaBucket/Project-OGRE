@@ -1,7 +1,7 @@
 /* App/v8kernel/Kernel.cpp -- October 2013.
    The ctor, dtor (:41) and insert/removeConnector (:104/:116) sit on their 2013 lines. */
 #include "stdafx.h"
-
+#include "decomp.h"
 #include "V8Kernel/Kernel.h"
 #include "V8Kernel/KernelData.h"
 #include "V8Kernel/Point.h"
@@ -11,7 +11,7 @@
 #include "V8Kernel/Constants.h"
 #include "Util/Math.h"
 #include "Util/Profiling.h"
-
+#include <algorithm>
 namespace RBX {
 
 	// GLOBAL: PLAYER 0x00e118c0
@@ -70,14 +70,14 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x008322d0
-	// STUB: STUDIO 0x009a4930
+	// FUNCTION: PLAYER 0x008322d0
+	// FUNCTION: STUDIO 0x009a4930
 	void Kernel::insertBody(Body* b)
 	{
 		RBXASSERT(b->getRootSimBody()->getDt() == 0.0f);
-		data->insertBody(b);	// 2013 also keeps maxBodies (+0x0c) up to date here
+		data->insertBody(b);
+		maxBodies = std::max(maxBodies, numContactBodies() + numJointBodies() + numRealTimeBodies() + numFreeFallBodies());
 	}
-
 
 
 
@@ -93,10 +93,10 @@ namespace RBX {
 		data->removeBody(b);
 	}
 	// STUB: PLAYER 0x008309d0
-	void Kernel::insertPoint(Point* point)
-	{
+	Point* Kernel::insertPoint(Point* point)
+	{	for (int i = 0; i < data->points.size(); ++i) { if (Point::sameBodyAndOffset(*point, *data->points[i])) { data->points[i]->numOwners++; delete point; return data->points[i]; } }
 		RBXASSERT(!inStepCode);
-		point->kernelIndex = (int)data->points.size(); data->points.append(point);	// 2013: an IndexArray fastAppend
+		point->kernelIndex = (int)data->points.size(); data->points.append(point); return point;	// 2013: an IndexArray fastAppend
 	}
 	// FUNCTION: PLAYER 0x00832370
 	int Kernel::insertConnector(Connector* connector)
@@ -132,24 +132,21 @@ namespace RBX {
 	}
 	int Kernel::numJointConnectors() const { return data->jointConnectors.size(); }
 
-	// mac: 0x52AB7E (488B, batch249).
-	Point* Kernel::searchForDuplicatePoint(Point* input)
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x00831820
+	// FUNCTION: STUDIO 0x009a3e80
+	Point* Kernel::newPointLocal(Body* body, const G3D::Vector3& localPos)
 	{
-		for (size_t i = 0; i < data->points.size(); ++i)
-		{
-			Point* candidate = data->points[i];
-			RBXASSERT(candidate->kernelIndex == (int)i);  // :103
-			if (Point::sameBodyAndOffset(*input, *candidate))
-			{
-				RBXASSERT(candidate->kernelIndex == (int)i);  // :103
-				++candidate->numOwners;
-				if (input != NULL)
-					delete input;
-				return candidate;
-			}
-		}
-		insertPoint(input);
-		return input;
+		RBXASSERT(!inStepCode);
+		Point* point = new Point(body);
+		point->setLocalPos(localPos);
+		return insertPoint(point);
 	}
 
 
@@ -165,37 +162,56 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x00830ab0
-	// STUB: STUDIO 0x009a3110
+
+
+
+	// FUNCTION: PLAYER 0x00830ab0
+	// FUNCTION: STUDIO 0x009a3110
 	void Kernel::deletePoint(Point* point)
 	{
 		RBXASSERT(!inStepCode);
-		if (point != NULL && point->numOwners-- == 1)
+		if (point != NULL && --point->numOwners == 0)
 		{
 			removePoint(point);
 			delete point;
 		}
 	}
 
-	// 2016 shapes (first-party; stepWorldThrottled validates each
-	// realtime connector before solving; EAs queued).
-	bool Kernel::validateConnector(Connector* connector) const
+
+	// STUB: PLAYER 0x00832430
+	// STUB: STUDIO 0x009a4a90
+	void Kernel::step(bool throttling, int numThreads)
 	{
-		bool oneInKernel = validateConnectorBody(connector->getBody(Connector::body0));
-		oneInKernel = validateConnectorBody(connector->getBody(Connector::body1)) || oneInKernel;
-		return oneInKernel;
+		RBXASSERT(!inStepCode);
+		inStepCode = true;
+		if (throttling) {
+			preStepThrottled();
+			stepWorldThrottled();
+		}
+		else {
+			preStep();
+			stepWorld();
+		}
+		inStepCode = false;
 	}
 
-	bool Kernel::validateConnectorBody(Body* body) const
+	// STUB: PLAYER 0x0082ebc0
+	// STUB: STUDIO 0x009a1100
+	void Kernel::preStepThrottled()
 	{
-		if (body != NULL)
-		{
-			if (body->getRootSimBody()->isInKernel())
-				return true;
-			else if (body->isLeafBody())
-				return true;
+		Profiling::Mark mark(*profilingKernelBodies, false);
+		for (int i = 0; i < data->realTimeBodies.size(); ++i) {
+			SimBody* b = data->realTimeBodies[i];
+			if (b->getDirty())
+				b->update();
 		}
-		return false;
+	}
+
+	// STUB: PLAYER 0x008318e0
+	// STUB: STUDIO 0x009a3f40
+	void Kernel::preStep()
+	{
+		STUB(0x008318e0);
 	}
 
 	// mac: 0x52B058 (batch298: kernel-substep loop over points, realtime +
@@ -213,7 +229,7 @@ namespace RBX {
 		for (int k = 0; k < steps; ++k)
 		{
 			{
-				Profiling::Mark markBodies(NULL, false, false);
+				Profiling::Mark markConnectors(*profilingKernelConnectors, false);
 				for (size_t i = 0; i < kd->points.size(); ++i)
 					kd->points[i]->step();
 				for (size_t j = 0; j < kd->realTimeConnectors.size(); ++j)
@@ -228,7 +244,7 @@ namespace RBX {
 					kd->humanoidConnectors[j]->computeForce(false);
 			}
 			{
-				Profiling::Mark markConnectors(NULL, false, false);
+				Profiling::Mark markBodies(*profilingKernelBodies, false);
 				for (size_t i = 0; i < kd->realTimeBodies.size(); ++i)
 					kd->realTimeBodies[i]->step();
 				for (size_t i = 0; i < kd->leafBodies.size(); ++i)
@@ -247,7 +263,7 @@ namespace RBX {
 	{
 		KernelData* kd = data;
 		{
-			Profiling::Mark mark(NULL, false, false);
+			Profiling::Mark mark(*profilingKernelBodies, false);
 			for (size_t i = 0; i < kd->freeFallBodies.size(); /* manual */)
 			{
 				SimBody* sim = kd->freeFallBodies[i];
@@ -275,7 +291,7 @@ namespace RBX {
 		}
 		if (kd->contactConnectors.size() > 0)
 		{
-			Profiling::Mark mark(NULL, false, false);
+			Profiling::Mark mark(*profilingKernelConnectors, false);
 			float target = Constants::kernelDt()
 				* ((int)kd->contactBodies.size() / Constants::impulseSolverAccuracyScalar() + 1);
 			int iters = 0;
@@ -303,7 +319,7 @@ namespace RBX {
 				maxError = avgResidual;
 		}
 		{
-			Profiling::Mark mark(NULL, false, false);
+			Profiling::Mark mark(*profilingKernelBodies, false);
 			for (size_t i = 0; i < kd->contactBodies.size(); ++i)
 				kd->contactBodies[i]->stepPosition();
 		}
@@ -313,7 +329,7 @@ namespace RBX {
 		for (int k = 0; k < steps; ++k)
 		{
 			{
-				Profiling::Mark mark(NULL, false, false);
+				Profiling::Mark mark(*profilingKernelConnectors, false);
 				for (size_t i = 0; i < kd->points.size(); ++i)
 					kd->points[i]->step();
 				for (size_t j = 0; j < kd->realTimeConnectors.size(); ++j)
@@ -340,7 +356,7 @@ namespace RBX {
 				}
 			}
 			{
-				Profiling::Mark mark(NULL, false, false);
+				Profiling::Mark mark(*profilingKernelBodies, false);
 				for (size_t i = 0; i < kd->realTimeBodies.size(); ++i)
 					kd->realTimeBodies[i]->step();
 				for (size_t i = 0; i < kd->jointBodies.size(); ++i)
@@ -351,5 +367,26 @@ namespace RBX {
 		}
 	}
 
+
+	// 2016 shapes (first-party; stepWorldThrottled validates each
+	// realtime connector before solving; EAs queued).
+	bool Kernel::validateConnector(Connector* connector) const
+	{
+		bool oneInKernel = validateConnectorBody(connector->getBody(Connector::body0));
+		oneInKernel = validateConnectorBody(connector->getBody(Connector::body1)) || oneInKernel;
+		return oneInKernel;
+	}
+
+	bool Kernel::validateConnectorBody(Body* body) const
+	{
+		if (body != NULL)
+		{
+			if (body->getRootSimBody()->isInKernel())
+				return true;
+			else if (body->isLeafBody())
+				return true;
+		}
+		return false;
+	}
 
 } // namespace RBX

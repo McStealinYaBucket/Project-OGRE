@@ -23,5 +23,6 @@ namespace RBX
 	namespace Network
 	{
 		bool isTrustedContent(const char* url);
+		void initWithoutSecurity();
 	}
 }

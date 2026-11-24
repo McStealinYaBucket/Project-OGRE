@@ -8,11 +8,7 @@
      SpanningEdge secondary +32 (Thn32) / sizes new(0x98) (Weld/Snap),
      MultiJoint 0xD0/RotateP-V 0xDC/Glue 0x100 (follow-ups).
    JointType enum (13, matches 2016 order; base asserts "0" Joint.h:106).
-   DELTAS (all marked): step/moving hooks skipped (types unmapped);
-     isGeometryOrthogonal mapped by kind (TODO-verify 2013 set);
-     getJointType/isAutoJoint/canJoin/builders with concrete types (follow-up);
-     setPrimitive slot-4 override with JointInstance integration (follow-up);
-     FastLog JointLifetime skipped (channel absent).
+   Hooks: StepJointsStageHook +0x20 / MovingAssemblyStageHook +0x28 (boost::intrusive, zeroed by the ctor).
    Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8world/Joint.h (path inferred) */
 
 #pragma once
@@ -22,18 +18,22 @@
 #include "Util/SpanningEdge.h"
 #include "V8World/Edge.h"
 
+#include <boost/intrusive/list.hpp>
+
 namespace RBX {
 
 	class Primitive;
+	class StepJointsStage;
+	class MovingAssemblyStage;
+
+	// Joint ctor PLAYER 0x008215c0 zeroes both; removeJoint 0x008ef110 asserts "!j->StepJointsStageHook::is_linked()".
+	typedef boost::intrusive::list_base_hook< boost::intrusive::tag<StepJointsStage> > StepJointsStageHook;
+	typedef boost::intrusive::list_base_hook< boost::intrusive::tag<MovingAssemblyStage> > MovingAssemblyStageHook;
 	class IMoving;
 	class JointInstance;
 	class Link;
 
-	// Carried from March 2016 v8world/Joint.h (first-party; order verified
-	// against all 13 binary getJointType bodies). Named (no object) so the
-	// header stays definition-free across TUs.
-
-	class Joint : public Edge, public SpanningEdge
+	class Joint : public Edge, public SpanningEdge, public StepJointsStageHook, public MovingAssemblyStageHook
 	{
 	public:
 		enum JointType {
@@ -110,20 +110,18 @@ namespace RBX {
 		// FUNCTION: STUDIO 0x007a0650
 		virtual G3D::CoordinateFrame align(Primitive* pMove, Primitive* pStay) { RBXASSERT(0); return G3D::CoordinateFrame(); }
 		// clang-format on
-		// vtable+0x30. PLAYER 0x00528720 (empty, folded).
-		virtual void setPhysics() {}
-		// vtable+0x34/+0x38. mac: 0x57A260 / 0x575C40 (7B each, batch231):
-		// base answers false (stepper families override).
+		virtual void setPhysics() {}	// vtable+0x30, PLAYER 0x00528720 (empty, folded)
+		// vtable+0x34/+0x38: false in the base (stepper families override).
 		// FUNCTION: PLAYER 0x00927cc0 FOLDED
 		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool canStepWorld() const { return false; }
 		// FUNCTION: PLAYER 0x00927cc0 FOLDED
 		// FUNCTION: STUDIO 0x008db930 FOLDED
 		virtual bool canStepUi() const { return false; }
-		// vtable+0x3c. PLAYER 0x00528720 (empty, folded).
-		virtual void stepWorld() {}
-		// vtable+0x40. PLAYER 0x00927840 (`xor al,al; ret 8`, folded).
-		virtual bool stepUi(double distributedGameTime) { return false; }
+		virtual void stepWorld() {}	// vtable+0x3c, PLAYER 0x00528720 (empty, folded)
+		virtual bool stepUi(double distributedGameTime) { return false; }	// vtable+0x40, 0x00927840 (folded)
+		// FUNCTION: PLAYER 0x0071b680
+		// FUNCTION: STUDIO 0x007a0a50
 		static bool isSpringJoint(const Edge* e) {
 			int jt = getJointType(e);
 			return (jt >= ROTATE_JOINT && jt <= GLUE_JOINT) || jt == MANUAL_GLUE_JOINT;
@@ -132,6 +130,8 @@ namespace RBX {
 			int jt = getJointType(e);
 			return jt >= MOTOR_1D_JOINT && jt <= MOTOR_6D_JOINT;
 		}
+		// FUNCTION: PLAYER 0x00745c70
+		// FUNCTION: STUDIO 0x00886a90
 		static bool isKernelJoint(const Edge* e) {
 			return getJointType(e) == KERNEL_JOINT;
 		}
@@ -143,10 +143,11 @@ namespace RBX {
 		static const Joint* findConstJoint(const Primitive* p, JointType type);
 		// mac: 0x578114 (129B, batch219a): find + :120 "answer" assert.
 		static const Joint* getConstJoint(const Primitive* p, JointType type);
-		// mac: 0x578196 (9B, batch219a): non-const twin.
-		static Joint* getJoint(Primitive* p, JointType type);
-		// Auto-joint filter (uses [5]=getEdgeType, [7]=getJointType).
-		bool isAutoJoint() const;
+		static Joint* getJoint(Primitive* p, JointType type);	// mac: 0x578196, the non-const twin
+		// FUNCTION: PLAYER 0x00745cb0
+		// FUNCTION: STUDIO 0x00886ad0
+		static bool isAutoJoint(const Edge* e) { return !isGroundJoint(e) && !isKernelJoint(e) && !isManualJoint(e); }
+
 		// mac: 0x4103C8 (115B, batch216): spanning-tree membership -- the auto
 		// families (types 1..10) plus anchor/free. Static per the mangling
 		// (Edge const* only, no this).
@@ -166,8 +167,7 @@ namespace RBX {
 		// differs by ABI; dispatch is by name here). The SpanningEdge*
 		// back-adjusts -32 to the sibling joint (binary MI layout).
 		virtual bool isHeavierThan(const SpanningEdge* other) const;
-		// Header-inline in binary (0 links-hits; body from Primitive::getJoint
-		// use sites + "links(p0, p1)"/"!links(p0, p1)" asserts :454/:463).
+		using Edge::links;	// "destroyJ->links(p)" (World.cpp:937); the pair form below asserts :454/:463
 		bool links(const Primitive* p0, const Primitive* p1) const
 		{
 			const Primitive* a0 = getPrim0();
@@ -214,10 +214,9 @@ namespace RBX {
 		}
 
 	private:
-		// StepJointsStageHook + MovingAssemblyStageHook skipped (types unmapped).
-		JointInstance* jointOwner;             // +52 (NULL init)
-		G3D::CoordinateFrame jointCoord0;      // +56 (48B)
-		G3D::CoordinateFrame jointCoord1;      // +104 (48B)
+		JointInstance* jointOwner;             // 0x30 (NULL init; Joint ctor 0x00821622)
+		G3D::CoordinateFrame jointCoord0;      // 0x34
+		G3D::CoordinateFrame jointCoord1;      // 0x64
 
 	};
 

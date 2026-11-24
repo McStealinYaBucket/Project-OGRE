@@ -60,6 +60,11 @@ namespace RBX {
 		void onKernelJointAdded(KernelJoint* joint);
 		void checkForFreeGroundJoint(RigidJoint* joint);
 		void onKernelJointRemoving(KernelJoint* joint);
+
+		// World::onPrimitiveFixedChanging/Changed forward here (PLAYER 0x008eaf70 / 0x008eb0f0).
+		void onPrimitiveFixedChanging(Primitive* p);
+		void onPrimitiveFixedChanged(Primitive* p);
+		void rebuildOthers(Primitive* p);
 	};
 
 } // namespace RBX

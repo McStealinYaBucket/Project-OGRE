@@ -2302,10 +2302,8 @@ struct __cppobj RBX::IWorldStage : RBX::IStage
 /* 380 */
 struct __cppobj RBX::MovingAssemblyStage : RBX::IWorldStage
 {
-  int numJoints;
-  RBX::Joint *listHead;
-  RBX::Joint *listTail;
-  unsigned __int8 uiStepJoints[12];     ///< std::set<RBX::Assembly *>
+  unsigned __int8 uiStepJoints[12];     ///< boost::intrusive::list<RBX::Joint,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>
+  unsigned __int8 movingGroundedAssemblies[12]; ///< std::set<RBX::Assembly *>
 };
 
 /* 381 */
@@ -3406,7 +3404,7 @@ struct __cppobj RBX::Network::Client : RBX::DescribedCreatable<RBX::Network::Cli
   unsigned __int8 serverId[20];         ///< RakNet::SystemAddress
   unsigned __int8 ticket[28];           ///< std::string
   int userId;
-  void *networkSettings;                ///< RBX::NetworkSettings *
+  RBX::NetworkSettings *networkSettings;
   unsigned __int8 connectionAcceptedSignal[4]; ///< rbx::signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
   unsigned __int8 connectionFailedSignal[4]; ///< rbx::signal<void __cdecl(std::string,int,std::string)>
   unsigned __int8 connectionRejectedSignal[4]; ///< rbx::signal<void __cdecl(std::string)>
@@ -3660,7 +3658,7 @@ struct __cppobj RBX::Primitive : RBX::IPipelined, RBX::SpanningNode, RBX::BasicS
 {
   unsigned __int8 concurrencyValidator[36]; ///< RBX::ConcurrencyValidator
   unsigned __int8 networkOwner[8];      ///< RBX::SystemAddress
-  bool m_unk0x7c;
+  bool networkIsSleeping;
   unsigned __int8 gap_7D[3];
   unsigned __int8 guid[8];              ///< RBX::Guid
   bool guidSetExternally;
@@ -3682,28 +3680,24 @@ struct __cppobj RBX::Primitive : RBX::IPipelined, RBX::SpanningNode, RBX::BasicS
   bool dragging;
   bool anchoredProperty;
   bool preventCollide;
-  bool networkIsSleeping;
+  bool m_unk0x117;
   float specificGravity;
   float friction;
   float elasticity;
   unsigned __int8 surfaces[24];         ///< array
   unsigned __int8 surfaceData[24];      ///< array
   unsigned int m_unk0x154;
-  unsigned __int8 jointK[24];           ///< RBX::Primitive::JointKProp
+  unsigned __int8 jointK[24];           ///< RBX::ComputeProp<float,RBX::Primitive>
 };
 
 /* 538 */
 struct __cppobj RBX::SpanningEdge
 {
   void **__vftable;
-  RBX::Edge *stepNext;
-  RBX::Edge *stepPrev;
-  RBX::Edge *moveNext;
-  RBX::Edge *movePrev;
 };
 
 /* 539 */
-struct __cppobj RBX::Joint : RBX::Edge, RBX::SpanningEdge
+struct __cppobj RBX::Joint : RBX::Edge, RBX::SpanningEdge, boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none>, boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none>
 {
   void *jointOwner;                     ///< RBX::JointInstance *
   unsigned __int8 jointCoord0[48];      ///< G3D::CoordinateFrame
@@ -3948,5 +3942,212 @@ struct __cppobj XmlElement : RBX::Sibling<XmlElement>, RBX::Parent<XmlElement>, 
 {
   unsigned __int8 gap_C[4];
   unsigned __int8 attributes[8];        ///< RBX::Parent<XmlAttribute>
+};
+
+/* 575 */
+struct __cppobj boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::StepJointsStage,1,1> : boost::intrusive::list_node<void *>
+{
+};
+
+/* 576 */
+struct __cppobj boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::StepJointsStage,1,1> : boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::StepJointsStage,1,1>
+{
+};
+
+/* 577 */
+struct __cppobj boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none> : boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::StepJointsStage,1,1>
+{
+};
+
+/* 578 */
+struct __cppobj boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::MovingAssemblyStage,1,1> : boost::intrusive::list_node<void *>
+{
+};
+
+/* 579 */
+struct __cppobj boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::MovingAssemblyStage,1,1> : boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::MovingAssemblyStage,1,1>
+{
+};
+
+/* 580 */
+struct __cppobj boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::MovingAssemblyStage>,boost::intrusive::none,boost::intrusive::none> : boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void *>,RBX::MovingAssemblyStage,1,1>
+{
+};
+
+/* 581 */
+struct __cppobj RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 582 */
+struct __cppobj RBX::Reflection::Described<RBX::NetworkSettings, char const *const RBX::sNetworkSettings, RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>
+{
+};
+
+/* 583 */
+struct __cppobj RBX::DescribedCreatable<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, 27, 0> : RBX::Reflection::Described<RBX::NetworkSettings, char const *const RBX::sNetworkSettings, RBX::FactoryProduct<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 584 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const *const RBX::sNetworkSettings> : RBX::DescribedCreatable<RBX::NetworkSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sNetworkSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 585 */
+struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const *const RBX::sNetworkSettings>
+{
+  bool m_unk0x64;
+  bool m_unk0x65;
+  bool m_unk0x66;
+  bool m_unk0x67;
+  bool m_unk0x68;
+  bool m_unk0x69;
+  bool m_unk0x6a;
+  bool m_unk0x6b;
+  bool m_unk0x6c;
+  bool m_unk0x6d;
+  unsigned __int8 gap_6E[2];
+  double m_unk0x70;
+  bool m_unk0x78;
+  bool m_unk0x79;
+  bool m_unk0x7a;
+  bool m_unk0x7b;
+  bool m_unk0x7c;
+  bool m_unk0x7d;
+  unsigned __int8 gap_7E[2];
+  unsigned __int8 m_unk0x80[28];        ///< std::string
+  int m_unk0x9c;
+  unsigned __int8 m_unk0xa0[28];        ///< std::string
+  unsigned __int8 gap_BC[4];
+  double m_unk0xc0;
+  bool m_unk0xc8;
+  unsigned __int8 gap_C9[3];
+  int m_unk0xcc;
+  int m_unk0xd0;
+  int m_unk0xd4;
+  int m_unk0xd8;
+  bool m_unk0xdc;
+  unsigned __int8 gap_DD[3];
+  int m_unk0xe0;
+  float m_unk0xe4;
+  int m_unk0xe8;
+  int m_unk0xec;
+  float m_unk0xf0;
+  bool m_unk0xf4;
+  bool m_unk0xf5;
+  unsigned __int8 gap_F6[2];
+  unsigned int m_unk0xf8;
+  int m_unk0xfc;
+  int m_unk0x100;
+  float m_unk0x104;
+  float m_unk0x108;
+  float m_unk0x10c;
+  double m_unk0x110;
+  int m_unk0x118;
+  unsigned __int8 gap_11C[4];
+};
+
+/* 586 */
+struct __cppobj RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 587 */
+struct __cppobj RBX::Reflection::Described<RBX::InsertService, char const *const RBX::sInsertService, RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>, 3, 0> : RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>
+{
+};
+
+/* 588 */
+struct __cppobj RBX::DescribedCreatable<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, 3, 0> : RBX::Reflection::Described<RBX::InsertService, char const *const RBX::sInsertService, RBX::FactoryProduct<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, RBX::Instance>, 3, 0>
+{
+};
+
+/* 589 */
+struct __cppobj RBX::InsertService : RBX::DescribedCreatable<RBX::InsertService, RBX::Instance, char const *const RBX::sInsertService, 3, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 insertRequestSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,RBX::ContentId)>
+  unsigned __int8 insertRequestAssetSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,int,int)>
+  unsigned __int8 insertRequestAssetVersionSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,int,int)>
+  unsigned __int8 insertReadySignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 insertErrorSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,std::string)>
+  unsigned __int8 freeModelUrl[28];     ///< std::string
+  unsigned __int8 freeDecalUrl[28];     ///< std::string
+  unsigned __int8 baseSetsUrl[28];      ///< std::string
+  unsigned __int8 userSetsUrl[28];      ///< std::string
+  unsigned __int8 collectionUrl[28];    ///< std::string
+  unsigned __int8 assetUrl[28];         ///< std::string
+  unsigned __int8 assetVersionUrl[28];  ///< std::string
+  float trustLevel;
+  unsigned __int8 backendInsertConnection[4]; ///< rbx::signals::connection
+  unsigned __int8 backendInsertAssetConnection[4]; ///< rbx::signals::connection
+  unsigned __int8 backendInsertAssetVersionConnection[4]; ///< rbx::signals::connection
+  unsigned __int8 frontendInsertReadyConnection[4]; ///< rbx::signals::connection
+  unsigned __int8 frontendInsertErrorConnection[4]; ///< rbx::signals::connection
+  unsigned __int8 callbackSync[16];     ///< boost::recursive_mutex
+  unsigned __int8 callbackLibrary[12];  ///< std::map<std::string,RBX::InsertService::Callback>
+  unsigned __int8 loadCount[4];         ///< rbx::atomic<int>
+};
+
+/* 590 */
+struct __cppobj RBX::Profiling::Profiler
+{
+  void **__vftable;
+  unsigned __int8 gap_4[4];
+  unsigned __int8 bucketTimeSpan[8];    ///< RBX::Time::Interval
+  int currentBucket;
+  unsigned __int8 gap_14[4];
+  unsigned __int8 buckets[49152];       ///< boost::array<RBX::Profiling::Bucket,2048>
+  unsigned __int8 lastSampleTime[8];    ///< RBX::Time
+  unsigned __int8 name[28];             ///< std::string
+  unsigned __int8 gap_C03C[4];
+};
+
+/* 591 */
+struct __cppobj RBX::Profiling::CodeProfiler : RBX::Profiling::Profiler
+{
+};
+
+/* 592 */
+struct __cppobj RBX::Profiling::Mark
+{
+  RBX::Profiling::CodeProfiler *section;
+  RBX::Profiling::Mark *enclosingMark;
+  bool frameTick;
+  unsigned __int8 gap_9[7];
+  unsigned __int8 startTime[8];         ///< RBX::Time
+  bool enabled;
+  unsigned __int8 gap_19[7];
+  unsigned __int8 childrenElapsed[8];   ///< RBX::Time::Interval
+  bool logInclusive;
+  unsigned __int8 gap_29[7];
+};
+
+/* 593 */
+struct __cppobj RBX::StepJointsStage : RBX::IWorldStage
+{
+  unsigned __int8 worldStepJoints[12];  ///< boost::intrusive::list<RBX::Joint,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::StepJointsStage>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>
+  unsigned __int8 profilingJointUpdate[4]; ///< boost::scoped_ptr<RBX::Profiling::CodeProfiler>
+};
+
+/* 594 */
+struct __cppobj RBX::NodeBase
+{
+  __int16 level;
+  unsigned __int8 gap_2[2];
+  int hash;
+  unsigned __int8 cell[12];             ///< RBX::Vector3int32
+};
+
+/* 595 */
+struct __cppobj RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode : RBX::NodeBase
+{
+  unsigned __int8 children[16];         ///< array
+  char hasChild;
+  unsigned __int8 gap_25[3];
+  int refByPrimitives;
+  RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode *next;
 };
 

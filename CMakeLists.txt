@@ -54,6 +54,12 @@ foreach(lang C CXX)
         set(CMAKE_${lang}_FLAGS_${cfg} "")
     endforeach()
 endforeach()
+# OGRE_TARGET_PLAYER or OGRE_TARGET_STUDIO: the two 2013 checkouts spell a few #includes differently,
+# and VC9 records the spelling in __FILE__ and in COMDAT line records (DataModel.cpp's Object.h).
+if(NOT OGRE_TARGET)
+    set(OGRE_TARGET PLAYER)
+endif()
+add_compile_definitions(OGRE_TARGET_${OGRE_TARGET})
 set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDLL)     # /MD: both exes import MSVCR90/MSVCP90
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded)    # /Z7: no shared compile PDB, no mspdbsrv races
 foreach(cfg DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)

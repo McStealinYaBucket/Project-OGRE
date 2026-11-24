@@ -21,18 +21,74 @@ SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::SpatialHash(
 	, treeNodeCount(0)
 	, world(world)
 	, manager(manager)
-	, nodeCount(0)
+	, nodesOut(0)
 	, int80(0)
 {
 	// setup() sizes the four level tables (2013 ctor 0x008eef80 calls it last).
 	setup();
 }
 
+// (Spacing: the 2013 dtor assert is SpatialHashMultiRes.inl:91.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ~SpatialHash: PLAYER 0x007b95d0 / STUDIO 0x008d5f70, paired by the TEMPLATE rows in SpatialHashMultiRes.h
+// (this file is included as "v8World/...", the 2013 spelling, so its line records do not resolve to a marker here).
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::~SpatialHash()
 {
-	// The pools release every node (their destructors run the trivial node destructors).
-	// Prims are NOT owned (never deleted here).
+	RBXASSERT(nodesOut == 0);
 }
 
 // mac: 0x56B900 (97B).  Per level: buckets.resize(numBuckets) (std::vector,
@@ -43,59 +99,6 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::setup()
 {
 	for (int i = 0; i < MaxLevels; ++i)
 		buckets[i].resize((size_t)SpatialHashStatic::numBuckets(i));
-}
-
-// mac: 0x5674E4 (814B).  See the session notes for the branch-by-branch mapping;
-// the shape: assert answer empty (:894); per level (skip when the bucket
-// vector is empty -- vestigial post-setup, kept verbatim) computeMinMax,
-// walk every cell in [min,max], collect the cell's prims, skip self,
-// dedup via the set, safeExtents + overlapsOrTouches filter, emplace with
-// the maxCount early-out (0 = unlimited); assert temp < 200 (:929).
-// STUB: PLAYER 0x007b9a50
-// STUB: STUDIO 0x008d63f0
-template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
-void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::getPrimitivesTouchingGrids(
-	const Extents& extents, const PrimitiveT* ignorePrim, unsigned long maxCount,
-	boost::unordered_set<PrimitiveT*>& answer)
-{
-	RBXASSERT(answer.size() == 0);  // :894 "answer.size() == 0"
-	Vector3int32 minCell, maxCell;
-	G3D::Array<PrimitiveT*> foundThisGrid;
-	for (int level = 0; level < MaxLevels; ++level)
-	{
-		if (buckets[level].empty())
-			continue;
-		SpatialHashStatic::computeMinMax(level, extents, minCell, maxCell);
-		for (int x = minCell.x; x <= maxCell.x; ++x)
-		{
-			for (int y = minCell.y; y <= maxCell.y; ++y)
-			{
-				for (int z = minCell.z; z <= maxCell.z; ++z)
-				{
-					Vector3int32 cell(x, y, z);
-					foundThisGrid.resize(0, false);
-					getPrimitivesInGrid(level, cell, foundThisGrid);
-					for (int i = 0; i < foundThisGrid.size(); ++i)
-					{
-						PrimitiveT* prim = foundThisGrid[i];
-						if (prim == ignorePrim)
-							continue;
-						if (answer.find(prim) != answer.end())
-							continue;
-						Extents safe = SpatialHashStatic::safeExtents(
-							prim->getFastFuzzyExtents());
-						if (extents.overlapsOrTouches(safe))
-						{
-							answer.insert(prim);
-							if (maxCount != 0 && (unsigned long)answer.size() >= maxCount)
-								return;
-						}
-					}
-				}
-			}
-		}
-	}
-	RBXASSERT(foundThisGrid.size() < 200);  // :929 "foundThisGrid.size() < 200"
 }
 
 // mac: 0x56D600 (183B): assert out empty (:1044); per level query cell>>=1
@@ -115,8 +118,8 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::getPrimitivesInGrid
 	}
 }
 
-// mac: 0x56D6B8 (100B): hash the cell, walk the bucket chain, append exact
-// cell matches (cell compare, not overlap -- overlap is the caller's job).
+// STUB: PLAYER 0x007b4db0
+// STUB: STUDIO 0x008d1050
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::getPrimitivesInGrid(
 	int level, const Vector3int32& cell, G3D::Array<PrimitiveT*>& out)
@@ -175,7 +178,7 @@ SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::newNode(
 	if (treeNode == NULL)
 		treeNode = createTreeNode(level, hash, cell);
 	node->treeNode = treeNode;
-	++treeNode->count;
+	++treeNode->refByPrimitives;
 	RBXASSERT(level == treeNode->level);  // :120 "level == answer->treeNode->level"
 	return node;
 }
@@ -196,7 +199,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::insertNodeToPrimiti
 
 // mac: 0x56A756 (164B): alloc + TreeNode() + ++treeNodeCount, then set
 // level/hash/cell and link into the bucket's tree chain
-// (tree->treeNext = head; head = tree).
+// (tree->next = head; head = tree).
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 typename SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::TreeNode*
 SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::createTreeNode(
@@ -205,19 +208,19 @@ SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::createTreeNode(
 	TreeNode* treeNode = treeNodePool.malloc();
 	// TreeNode::TreeNode 0x56A9EC inits (see header): level -1, hash -1,
 	// cell 0, children[8] -1, hasChild 0, count 0, +44 0.  The level/hash/
-	// cell/treeNext are overwritten below; children/hasChild/count must
+	// cell/next are overwritten below; children/hasChild/count must
 	// start clean (uninitialized garbage caused hasChild=-40/count=737M
 	// crashes on first level>0 insert -- caught live).
 	for (int i = 0; i < 8; ++i)
 		treeNode->children[i] = -1;
 	treeNode->hasChild = 0;
-	treeNode->count = 0;
+	treeNode->refByPrimitives = 0;
 	treeNode->level = (short)level;
 	treeNode->hash = hash;
 	treeNode->cell = cell;
 	++treeNodeCount;
 	HashBucket& bucket = buckets[level][hash];
-	treeNode->treeNext = bucket.treeHead;
+	treeNode->next = bucket.treeHead;
 	bucket.treeHead = treeNode;
 	return treeNode;
 }
@@ -353,7 +356,7 @@ int SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::computeLevel(
 	return level;
 }
 
-// mac: 0x5696C2 (1517B).  Assert level set (:429); hash; ++nodeCount; node =
+// mac: 0x5696C2 (1517B).  Assert level set (:429); hash; ++nodesOut; node =
 // newNode; insertNodeToPrimitive; bucket prepend.  Then the coarser-level
 // loop (L = level+1 .. 3): halve the cell, hash, pair-check every node in
 // the matching cell (skip self; same-cell only with the :485 gridId assert;
@@ -373,7 +376,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::addNode(
 	RBXASSERT(prim->getSpatialNodeLevel() != -1);
 	int level = prim->getSpatialNodeLevel();
 	int hash = SpatialHashStatic::getHash(level, cell);
-	++nodeCount;
+	++nodesOut;
 	SpatialNode* node = newNode(level, hash, cell);
 	insertNodeToPrimitive(node, prim, cell, hash);
 	HashBucket& ownBucket = buckets[level][hash];
@@ -478,7 +481,7 @@ SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::findTreeNode(
 {
 	for (TreeNode* treeNode = buckets[level][hash].treeHead;
 		treeNode != NULL;
-		treeNode = treeNode->treeNext)
+		treeNode = treeNode->next)
 	{
 		RBXASSERT(treeNode->hash == hash);    // :133 "tn->hashId == hash"
 		RBXASSERT(treeNode->level == level);  // :134 "tn->level == level"
@@ -537,7 +540,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::addContactFromChild
 
 // mac: 0x569DB8 (213B): unlink + (level>0 ? assert tree (:327) + retire it :
 // retire the level-0 tree child iff no same-cell nodes remain) +
-// returnNode + --nodeCount.
+// returnNode + --nodesOut.
 template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::destroyNode(
 	SpatialNode* node)
@@ -554,7 +557,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::destroyNode(
 			removeTreeNodeChild(0, node->cell);
 	}
 	returnNode(node);
-	--nodeCount;
+	--nodesOut;
 }
 
 // mac: 0x56A0E2 (132B): poison (tree/prim/next 0, level/hash -2) + pool-free.
@@ -577,7 +580,7 @@ template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
 void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::retireTreeNode(
 	TreeNode* treeNode)
 {
-	if (--treeNode->count == 0 && treeNode->hasChild == 0)
+	if (--treeNode->refByPrimitives == 0 && treeNode->hasChild == 0)
 	{
 		// Copy out BEFORE _retireTreeNode deletes the object (use-after-free
 		// caught live: the old code read treeNode->level/cell after free,
@@ -599,9 +602,9 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::_retireTreeNode(
 	HashBucket& bucket = buckets[treeNode->level][treeNode->hash];
 	TreeNode** link = &bucket.treeHead;
 	while (*link != treeNode)
-		link = &(*link)->treeNext;
-	*link = treeNode->treeNext;
-	treeNode->treeNext = NULL;
+		link = &(*link)->next;
+	*link = treeNode->next;
+	treeNode->next = NULL;
 	treeNodePool.free(treeNode);
 	--treeNodeCount;
 }
@@ -634,7 +637,7 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::removeTreeNodeChild
 		RBXASSERT(treeNode->children[offset] == (unsigned short)childHash);
 		treeNode->hasChild = (char)(treeNode->hasChild & ~(1 << offset));
 		treeNode->children[offset] = -1;
-		if (treeNode->count != 0 || treeNode->hasChild != 0)
+		if (treeNode->refByPrimitives != 0 || treeNode->hasChild != 0)
 			return;
 		_retireTreeNode(treeNode);
 	}
@@ -805,3 +808,124 @@ void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::primitiveExtentsCha
 	}
 	checkAndReleaseContacts(prim);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 2013 shape (PLAYER 0x007b9a50), asserts on their 2013 .inl lines (:894, :929).
+// STUB: PLAYER 0x007b9a50
+// STUB: STUDIO 0x008d63f0
+template<class PrimitiveT, class ContactT, class ManagerT, int MaxLevels>
+void SpatialHash<PrimitiveT, ContactT, ManagerT, MaxLevels>::getPrimitivesTouchingGrids(
+	const Extents& extents, const PrimitiveT* ignorePrim, unsigned long maxCount,
+	boost::unordered_set<PrimitiveT*>& answer)
+{
+	RBXASSERT(answer.size() == 0);
+	Vector3int32 minCell, maxCell;
+	G3D::Array<PrimitiveT*> foundThisGrid;
+	for (int level = 0; level < MaxLevels; ++level)
+	{
+		if (buckets[level].empty())
+			continue;
+		SpatialHashStatic::computeMinMax(level, extents, minCell, maxCell);
+		for (int x = minCell.x; x <= maxCell.x; ++x)
+		{
+			for (int y = minCell.y; y <= maxCell.y; ++y)
+			{
+				for (int z = minCell.z; z <= maxCell.z; ++z)
+				{
+					foundThisGrid.resize(0, false);
+					getPrimitivesInGrid(level, Vector3int32(x, y, z), foundThisGrid);
+					for (int i = 0; i < foundThisGrid.size(); ++i)
+					{
+						PrimitiveT* prim = foundThisGrid[i];
+						if (prim == ignorePrim)
+							continue;
+						if (answer.find(prim) != answer.end())
+							continue;
+						Extents safe = SpatialHashStatic::safeExtents(prim->getFastFuzzyExtents());
+						if (extents.overlapsOrTouches(safe))
+						{
+							answer.insert(prim);
+							if (maxCount != 0 && (unsigned long)answer.size() >= maxCount)
+								return;
+						}
+					}
+				}
+			}
+		}
+	}
+	RBXASSERT(foundThisGrid.size() < 200);
+}
+

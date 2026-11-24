@@ -15,7 +15,7 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::NetworkSettings);
+// NetworkSettings is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }
 
 
@@ -72,10 +72,28 @@ template<> TypeRegistrar<NetworkSettings::PhysicsReceiveMethod> TypeRegistrar<Ne
 
 namespace RBX {
 
-// STUB: PLAYER 0x005b7cf0
+// FUNCTION: PLAYER 0x005b7cf0
+// FUNCTION: STUDIO 0x00609e80
 NetworkSettings::NetworkSettings()
-	: m_unk0x70(0)
+	: m_unk0x64(false)
+	, m_unk0x65(false)
+	, m_unk0x66(false)
+	, m_unk0x67(false)
+	, m_unk0x68(false)
+	, m_unk0x69(false)
+	, m_unk0x6a(false)
+	, m_unk0x6b(false)
+	, m_unk0x6c(false)
+#ifdef OGRE_TARGET_PLAYER	// STUDIO's ctor 0x00609e80 stores only 0x64-0x6c (older revision, 2 days apart)
+	, m_unk0x6d(false)
+#endif
+	, m_unk0x70(0)
 	, m_unk0x78(true)
+	, m_unk0x79(false)
+	, m_unk0x7a(false)
+	, m_unk0x7b(false)
+	, m_unk0x7c(false)
+	, m_unk0x7d(false)
 	, m_unk0x80("127.0.0.1")
 	, m_unk0x9c(0x94eb)
 	, m_unk0xa0("")
@@ -101,10 +119,6 @@ NetworkSettings::NetworkSettings()
 	, m_unk0x110(60.0)
 	, m_unk0x118(0)
 {
-	for (int i = 0; i < 0x6e - 0x64; i++)
-		m_unk0x64[i] = false;
-	for (int i = 0; i < 0x7e - 0x79; i++)
-		m_unk0x79[i] = false;
 	Instance::setName("Network");
 }
 

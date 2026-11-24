@@ -10,7 +10,6 @@ address,type,size,symbol
 005bc660,library,84,??1strstreambuf@std@@UAE@XZ_2
 005d7940,library,225,??1_Locimp@locale@std@@UAE@XZ
 005de760,library,84,??1strstreambuf@std@@UAE@XZ_3
-0060af40,library,84,??1strstreambuf@std@@UAE@XZ_5
 006102f0,library,84,??1strstreambuf@std@@UAE@XZ_6
 0061cf70,library,146,??1strstreambuf@std@@UAE@XZ_7
 00623d70,library,80,??1ios_base@std@@UAE@XZ_2

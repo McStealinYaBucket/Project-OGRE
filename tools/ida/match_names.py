@@ -332,10 +332,8 @@ FACTS = [
      "XmlElement.obj (5c-serialization.md)"),
     # wave5 sync (notes/runs/2026-11-23-phase5-wave5: base-blockers.md "IDA owner"; sweep12). Checked 2026-11-23
     # with capstone on both targets.
-    (0x00480e90, 0x0043f250, "keep", "", "ios:",
-     "doDeclare<Stats::sStatsItem> | the 100% body is ours, but our tree spells the template argument RBX::sStatsItem; "
-     "the 2013 RTTI spells it Stats (.?AV?$NonFactoryProduct@VInstance@RBX@@$E?sStatsItem@Stats@2@3QBDB@RBX@@), "
-     "so the iOS name stays"),
+    # (wave7: the keep row for doDeclare<Stats::sStatsItem> 0x00480e90 / 0x0043f250 is gone: the tree now spells
+    # RBX::Stats::sStatsItem (util-target.md "Stats::Item"), so reccmp's 100% name is the 2013 one.)
     (0x00482680, 0x0043f240, "rename", "??$callDoDeclare@$E?sStatsItem@Stats@RBX@@3QBDB@Name@RBX@@SAXXZ", "match:",
      "RBX::Name::callDoDeclare<RBX::Stats::sStatsItem>() | reccmp 100% vs our callDoDeclare<sStatsItem> (sweep12), "
      "a `jmp` to doDeclare 0x00480e90 (STUDIO 0x0043f250); namespace Stats from the 2013 RTTI, as above"),

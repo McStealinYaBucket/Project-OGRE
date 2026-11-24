@@ -1,20 +1,12 @@
-/* V8World/MovingAssemblyStage.h -- October 2013 (moving-assembly node).
-   Evidence: C2 (batch220: news 0x20 StepJointsStage) / D2 (batch223:
-     :24 uiStepJoints.empty + set-erase + link walk + delete +8) /
-     getStageType 0x587216 -> 10 / onEdgeAdded 0x587026 (95B) /
-     onEdgeRemoving 0x587086 (88B) / removeJoint 0x586EE6 (201B, :51)
-     (batches 208/220/222/223).
-   Members: count16 + edge hook list (binary edge+44/+48 links, ours
-   SpanningEdge moveNext/movePrev -- mechanics DELTA, membership/order
-   exact) + uiStepJoints set<Assembly*> (D2-erased) + second list head
-   (stepper-side, untouched by captured bodies).
-   Layout: IStage base (+4 upstream / +8 downstream=StepJointsStage /
-     +12 world).
+/* V8World/MovingAssemblyStage.h -- October 2013 (moving-assembly stage, 0x28), from the 2013 bytes.
+   IWorldStage (upstream 0x04, downstream = StepJointsStage 0x08, world 0x0c), uiStepJoints (boost::intrusive
+   list over Joint's MovingAssemblyStageHook) 0x10, movingGroundedAssemblies (std::set) 0x1c.
    Original file: Client/App/v8world/MovingAssemblyStage.h (path inferred) */
 
 #pragma once
 
 #include "V8World/IWorldStage.h"
+#include "V8World/Joint.h"
 
 #include <set>
 
@@ -22,7 +14,6 @@ namespace RBX {
 
 	class World;
 	class Edge;
-	class Joint;
 	class Assembly;
 
 	// 2013 size: `new 0x28` in AssemblyStage::AssemblyStage PLAYER 0x008ea638. The Mac
@@ -49,14 +40,15 @@ namespace RBX {
 		void onSimulateAssemblyAdded(Assembly* a);
 		void onSimulateAssemblyRemoving(Assembly* a);
 
+		// PLAYER 0x008eb2a0 (2013 has no animated-joint set: one loop over uiStepJoints).
+		void jointsStepUi(double distributedGameTime);
+
 	private:
-		// 2013: these three words are a boost::intrusive::list<Joint, base_hook<
-		// list_base_hook<tag<MovingAssemblyStage>>>> (size, then the root node; Joint's
-		// hook is at Joint+0x28 by RTTI). Kept as plain members until Joint's hook lands.
-		int numJoints;                              // 0x10  onEdgeAdded 0x008eb27a
-		Joint* listHead;                            // 0x14
-		Joint* listTail;                            // 0x18
-		std::set<Assembly*> uiStepJoints;           // 0x1c  (D2-erased)
+		// 2013: a constant-size boost::intrusive list over Joint's MovingAssemblyStageHook (+0x28):
+		// size 0x10, root 0x14/0x18 (ctor 0x008eb610, onEdgeAdded 0x008eb250).
+		typedef boost::intrusive::list<Joint, boost::intrusive::base_hook<MovingAssemblyStageHook> > Joints;
+		Joints uiStepJoints;                                 // 0x10
+		std::set<Assembly*> movingGroundedAssemblies;        // 0x1c
 	};
 
 } // namespace RBX

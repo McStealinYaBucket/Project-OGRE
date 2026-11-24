@@ -13,6 +13,8 @@
 
 namespace RBX {
 
+	class PartInstance;
+
 	extern const char* const sRootInstance;
 
 	class RootInstance
@@ -20,6 +22,11 @@ namespace RBX {
 	{
 	public:
 		RootInstance() {}
+
+		// PLAYER 0x007e33f0 (iOS __ZN3RBX12RootInstance15publicInsertRaw...EPS4_RS1_...bb): two
+		// trailing bools in 2013 (InsertService::insert 0x007d6a20 passes true, true).
+		void publicInsertRaw(const Instances& instances, Instance* requestedParent,
+			std::vector<weak_ptr<PartInstance> >& parts, bool joinParts, bool suppressMove);
 	};
 
 } // namespace RBX

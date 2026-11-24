@@ -31,23 +31,32 @@
 
 namespace RBX {
 
-	extern const char* const sStatsItem;
-
-	namespace Stats { template<class T> class TypedStatsItem; }
+	// 2013 names: RBX::Stats::Item and RBX::Stats::sStatsItem (RTTI
+	// .?AV?$NonFactoryProduct@VInstance@RBX@@$E?sStatsItem@Stats@2@3QBDB@RBX@@,
+	// .?AV?$DescribedNonCreatable@VItem@Stats@RBX@@...). RBX::StatsItem is kept as a typedef
+	// for the users outside the Stats files.
+	namespace Stats {
+		extern const char* const sStatsItem;
+		class Item;
+		template<class T> class TypedStatsItem;
+	}
+	typedef Stats::Item StatsItem;
 
 	class RunningAverageItemDouble;
 
-	class StatsItem
-		: public DescribedNonCreatable<StatsItem, Instance, sStatsItem>
+namespace Stats {
+
+	class Item
+		: public DescribedNonCreatable<Item, Instance, sStatsItem>
 	{
 	public:
-		StatsItem()
+		Item()
 			: statValue(0.0)
 			, delegate(NULL)
 		{}
 
 		// mac: 0x4A2F5A: factory-create a plain child + setName + setParent.
-		StatsItem* createChildItem(const char* name);
+		Item* createChildItem(const char* name);
 		// mac: 0x1ACCB8: same shape for a functor-fed TypedStatsItem<int>.
 		template<class T>
 		Stats::TypedStatsItem<T>* createChildItem(const char* name, boost::function<T()> getter);
@@ -85,7 +94,7 @@ namespace RBX {
 		// FUNCTION: STUDIO 0x00443f80
 		/*override*/ virtual bool askAddChild(const Instance* instance) const
 		{
-			return fastDynamicCast<StatsItem>(instance) != NULL;
+			return fastDynamicCast<Item>(instance) != NULL;
 		}
 
 	private:
@@ -94,9 +103,10 @@ namespace RBX {
 		// +0x64 role: display string (format* writes; getStringValue2 reads).
 		std::string displayString;
 		// +0x34 role: refresh delegate (no writer evidenced; NULL).
-		StatsItem* delegate;
+		Item* delegate;
 	};
 
+} // namespace Stats
 } // namespace RBX
 
 // Template bodies live in TypedStatsItem.h (included here, after the

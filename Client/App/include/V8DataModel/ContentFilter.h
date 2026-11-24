@@ -21,6 +21,10 @@ namespace RBX {
 	{
 	public:
 		ContentFilter() {}
+
+		// Read from memory by TextLabel::setText 0x006beeb0 (PLAYER 0x00b77cc0 = 1024), so it is
+		// defined out of line in ContentFilter.cpp.
+		static const unsigned MAX_CONTENT_FILTER_SIZE;
 	};
 
 } // namespace RBX

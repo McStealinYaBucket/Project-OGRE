@@ -1,0 +1,1548 @@
+file,address,size,score,marker,oracle_name
+Client/App/v8world/Assembly.cpp,0x007b1390,89,100,M,RBX::Assembly::getAssemblyState() const
+Client/App/v8world/Assembly.cpp,0x007b13f0,98,-,,RBX::Assembly::getPrimitiveAssemblyFast(RBX::Primitive*)
+Client/App/v8world/Assembly.cpp,0x007b1460,34,50.0,,
+Client/App/v8world/Assembly.cpp,0x007b1490,45,-,,
+Client/App/v8world/Assembly.cpp,0x007b14c0,110,100,M,RBX::Assembly::otherAssembly(RBX::Edge*)
+Client/App/v8world/Assembly.cpp,0x007b1530,21,-,,
+Client/App/v8world/Assembly.cpp,0x007b1550,94,-,,
+Client/App/v8world/Assembly.cpp,0x007b15b0,331,-,M,RBX::Assembly::reset(RBX::Sim::AssemblyState)
+Client/App/v8world/Assembly.cpp,0x007b1700,5,100,,public: virtual void __thiscall RBX::Assembly::onLowersChanged(void)
+Client/App/v8world/Assembly.cpp,0x007b1710,228,33.7,,"RBX::notifyAssemblyPrimitiveMoved(RBX::Primitive*, bool)"
+Client/App/v8world/Assembly.cpp,0x007b1800,106,-,,
+Client/App/v8world/Assembly.cpp,0x007b1870,111,-,,
+Client/App/v8world/Assembly.cpp,0x007b18e0,86,100,M,RBX::Assembly::getAssemblyPrimitive()
+Client/App/v8world/Assembly.cpp,0x007b1940,86,100,M,RBX::Assembly::getConstAssemblyPrimitive() const
+Client/App/v8world/Assembly.cpp,0x007b19a0,156,88.1,M,RBX::Assembly::isAssemblyRootPrimitive(RBX::Primitive const*)
+Client/App/v8world/Assembly.cpp,0x007b1a40,12,100,,RBX::Assembly::getCanThrottle() const
+Client/App/v8world/Assembly.cpp,0x007b1a50,137,32.7,,RBX::Assembly::computeCanThrottle(RBX::Edge*)
+Client/App/v8world/Assembly.cpp,0x007b1ae0,34,-,,
+Client/App/v8world/Assembly.cpp,0x007b1b10,22,58.8,,
+Client/App/v8world/Assembly.cpp,0x007b1b30,175,-,,
+Client/App/v8world/Assembly.cpp,0x007b1be0,165,-,,
+Client/App/v8world/Assembly.cpp,0x007b1c90,61,-,,
+Client/App/v8world/Assembly.cpp,0x007b1cd0,395,100,M,RBX::Assembly::~Assembly()
+Client/App/v8world/Assembly.cpp,0x007b1e60,8,-,,"non-virtual thunk to RBX::Assembly::~Assembly() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Assembly.cpp,0x007b1e70,31,91.7,,
+Client/App/v8world/Assembly.cpp,0x007b1e90,252,-,,
+Client/App/v8world/Assembly.cpp,0x007b1f90,463,-,,
+Client/App/v8world/Assembly.cpp,0x007b2160,30,100,,"RBX::Assembly::~Assembly() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Assembly.cpp,0x007b2180,163,-,,RBX::Assembly::gatherPrimitiveExternalEdges(RBX::Primitive*)
+Client/App/v8world/Assembly.cpp,0x007b2230,126,-,,
+Client/App/v8world/Assembly.cpp,0x007b22b0,129,-,,
+Client/App/v8world/Assembly.cpp,0x007b2340,74,-,,
+Client/App/v8world/Assembly.cpp,0x007b2390,123,-,,
+Client/App/v8world/Assembly.cpp,0x007b2410,116,-,,
+Client/App/v8world/Assembly.cpp,0x007b2490,101,-,,
+Client/App/v8world/Assembly.cpp,0x007b2500,179,-,,RBX::Assembly::getAssemblyEdges()
+Client/App/v8world/Assembly.cpp,0x007b25c0,79,-,,
+Client/App/v8world/Assembly.cpp,0x007b2610,28,-,,
+Client/App/v8world/Assembly.cpp,0x007b2630,28,-,,
+Client/App/v8world/Assembly.cpp,0x007b2650,217,-,,
+Client/App/v8world/Assembly.cpp,0x007b2730,172,-,,
+Client/App/v8world/Assembly.cpp,0x007b27e0,169,-,,RBX::Assembly::getAssemblyClump()
+Client/App/v8world/Assembly.cpp,0x007b2890,169,-,,RBX::Assembly::getConstAssemblyClump() const
+Client/App/v8world/Assembly.cpp,0x007b2940,345,-,,
+Client/App/v8world/Assembly.cpp,0x007b2aa0,654,-,,"RBX::Assembly::setPhysics(G3D::Array<RBX::CompactCFrame, 10, 32ul> const&, RBX::PV const&)"
+Client/App/v8world/AssemblyHistory.cpp,0x0095d510,70,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095d560,60,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095d5a0,71,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095d5f0,213,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095d6d0,746,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095d9c0,94,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095da20,1035,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095de30,43,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095de60,78,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095ded0,190,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095df90,60,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095dfd0,68,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e020,41,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e050,731,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e330,42,-,M,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e360,92,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e3c0,141,-,,
+Client/App/v8world/AssemblyHistory.cpp,0x0095e450,56,-,M,
+Client/App/v8world/AssemblyStage.cpp,0x008ea3c0,36,100,,"RBX::AssemblyStage::~AssemblyStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/AssemblyStage.cpp,0x008ea3f0,38,-,,
+Client/App/v8world/AssemblyStage.cpp,0x008ea420,36,-,,
+Client/App/v8world/AssemblyStage.cpp,0x008ea450,38,-,,
+Client/App/v8world/AssemblyStage.cpp,0x008ea480,36,-,,
+Client/App/v8world/AssemblyStage.cpp,0x008ea4b0,87,-,M,
+Client/App/v8world/AssemblyStage.cpp,0x008ea510,102,-,M,RBX::AssemblyStage::onEngineChanged(RBX::Assembly*)
+Client/App/v8world/AssemblyStage.cpp,0x008ea580,127,67.5,,
+Client/App/v8world/AssemblyStage.cpp,0x008ea600,30,100,,"RBX::EdgeBuffer::~EdgeBuffer() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/AssemblyStage.cpp,0x008ea620,118,100,M,"RBX::AssemblyStage::AssemblyStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/Ball.cpp,0x008fb560,98,-,,RBX::Ball::getMomentSolid(float) const
+Client/App/v8world/Ball.cpp,0x008fb5d0,16,-,,RBX::Ball::getVolume() const
+Client/App/v8world/Ball.cpp,0x008fb5e0,293,-,,"RBX::Ball::hitTest(RBX::RbxRay const&, G3D::Vector3&, bool&)"
+Client/App/v8world/Ball.cpp,0x008fb710,151,-,,RBX::Ball::setSize(G3D::Vector3 const&)
+Client/App/v8world/Ball.cpp,0x008fb7b0,105,-,,RBX::Ball::closestSurfaceToPoint(G3D::Vector3 const&) const
+Client/App/v8world/Ball.cpp,0x008fb820,237,-,,RBX::Ball::getSurfaceNormalInBody(unsigned long) const
+Client/App/v8world/Ball.cpp,0x008fb930,783,-,,"RBX::Ball::getSurfaceVertInBody(unsigned long, int) const"
+Client/App/v8world/Ball.cpp,0x008fbc60,233,-,,"RBX::Ball::getMostAlignedSurface(G3D::Vector3 const&, G3D::Matrix3 const&) const"
+Client/App/v8world/Ball.cpp,0x008fbd50,132,-,,"RBX::Ball::vertOverlapsFace(G3D::Vector3 const&, unsigned long) const"
+Client/App/v8world/Ball.cpp,0x008fbdf0,174,-,,RBX::Ball::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/Ball.cpp,0x008fbec0,388,-,,RBX::Ball::getPlaneFromSurface(unsigned long) const
+Client/App/v8world/BallCellContact.cpp,0x00966600,329,-,,"RBX::BallCellContact::getFarthestPlane(float&, G3D::Vector3 const&)"
+Client/App/v8world/BallCellContact.cpp,0x00966750,338,-,,"RBX::BallCellContact::getClosestEdge(RBX::POLY::Face const*, float&, G3D::Vector3 const&)"
+Client/App/v8world/BallCellContact.cpp,0x009668b0,90,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966910,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966960,90,-,,
+Client/App/v8world/BallCellContact.cpp,0x009669c0,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966a10,90,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966a70,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966ac0,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966b10,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966b60,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966bb0,77,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966c00,87,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966c60,24,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966c80,87,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966ce0,24,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966d00,87,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966d60,24,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966d80,15,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966d90,15,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966da0,15,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966db0,15,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966dc0,211,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966ea0,211,-,,
+Client/App/v8world/BallCellContact.cpp,0x00966f80,211,-,,
+Client/App/v8world/BallCellContact.cpp,0x00967060,211,-,,
+Client/App/v8world/BallCellContact.cpp,0x00967140,118,-,,
+Client/App/v8world/BallCellContact.cpp,0x009671c0,35,-,,"RBX::BallVertexConnector::~BallVertexConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/BallCellContact.cpp,0x009671f0,148,-,,
+Client/App/v8world/BallCellContact.cpp,0x00967290,35,-,,"RBX::BallEdgeConnector::~BallEdgeConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/BallCellContact.cpp,0x009672c0,148,-,,
+Client/App/v8world/BallCellContact.cpp,0x00967360,35,-,,"RBX::BallPlaneConnector::~BallPlaneConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/BallCellContact.cpp,0x00967390,278,-,,RBX::BallCellContact::newBallPlaneConnector(RBX::POLY::Face const*)
+Client/App/v8world/BallCellContact.cpp,0x009674b0,357,-,,RBX::BallCellContact::newBallEdgeConnector(RBX::POLY::Edge const*)
+Client/App/v8world/BallCellContact.cpp,0x00967620,234,-,,RBX::BallCellContact::newBallVertexConnector(RBX::POLY::Vertex const*)
+Client/App/v8world/BallCellContact.cpp,0x00967710,528,-,,"RBX::BallCellContact::findClosestFeatures(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/BallCellContact.cpp,0x00967920,742,-,,"RBX::BallCellContact::BallCellContact(RBX::Primitive*, RBX::Primitive*, G3D::Vector3int16 const&)"
+Client/App/v8world/BallCellContact.cpp,0x00967c20,73,-,,"RBX::BallCellContact::~BallCellContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/BallPolyContact.cpp,0x00967e70,335,-,,"RBX::BallPolyContact::getClosestEdge(RBX::POLY::Face const*, float&, G3D::Vector3 const&)"
+Client/App/v8world/BallPolyContact.cpp,0x00967fc0,293,-,,
+Client/App/v8world/BallPolyContact.cpp,0x009680f0,350,-,,"RBX::BallPolyContact::getFarthestPlane(float&, G3D::Vector3 const&)"
+Client/App/v8world/BallPolyContact.cpp,0x00968250,77,-,,
+Client/App/v8world/BallPolyContact.cpp,0x009682a0,15,-,,
+Client/App/v8world/BallPolyContact.cpp,0x009682b0,211,-,,
+Client/App/v8world/BallPolyContact.cpp,0x00968390,251,14.0,,"RBX::BallPolyContact::BallPolyContact(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/BallPolyContact.cpp,0x00968490,40,78.3,,"RBX::BallPolyContact::~BallPolyContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/BallPolyContact.cpp,0x009684c0,209,-,,
+Client/App/v8world/BallPolyContact.cpp,0x009685a0,288,-,,
+Client/App/v8world/BallPolyContact.cpp,0x009686c0,165,-,,
+Client/App/v8world/BallPolyContact.cpp,0x00968770,528,-,,"RBX::BallPolyContact::findClosestFeatures(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/Block.cpp,0x0085e7b0,38,-,,RBX::Block::getVolume() const
+Client/App/v8world/Block.cpp,0x0085e7e0,227,-,,"RBX::Block::getEdgePoint(G3D::Vector3int16 const&, RBX::NormalId&) const"
+Client/App/v8world/Block.cpp,0x0085e8d0,224,-,,"RBX::Block::getPlanePoint(G3D::Vector3int16 const&, RBX::NormalId&) const"
+Client/App/v8world/Block.cpp,0x0085e9b0,128,-,,"RBX::Block::getBallBlockInfo(int, G3D::Vector3int16, G3D::Vector3 const*&, RBX::NormalId&)"
+Client/App/v8world/Block.cpp,0x0085ea30,281,-,,"RBX::Block::getBallInsideInfo(G3D::Vector3 const&, G3D::Vector3 const*&, RBX::NormalId&)"
+Client/App/v8world/Block.cpp,0x0085eb50,205,-,,
+Client/App/v8world/Block.cpp,0x0085ec20,136,-,,
+Client/App/v8world/Block.cpp,0x0085ecc0,242,-,,
+Client/App/v8world/Block.cpp,0x0085edc0,13,-,,
+Client/App/v8world/Block.cpp,0x0085edd0,16,-,,
+Client/App/v8world/Block.cpp,0x0085ede0,27,100,,"protected: static struct std::_Tree_nod<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::_Node * __cdecl std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::_Min(struct std::_Tree_nod<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::_Node *)"
+Client/App/v8world/Block.cpp,0x0085ee00,23,-,,
+Client/App/v8world/Block.cpp,0x0085ee20,458,-,,"RBX::Block::hitTest(RBX::RbxRay const&, G3D::Vector3&, bool&)"
+Client/App/v8world/Block.cpp,0x0085eff0,122,-,,RBX::CornerWedgePoly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/Block.cpp,0x0085f070,251,-,,"protected: struct std::pair<class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator,class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator> __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::_Eqrange(void const * const &)"
+Client/App/v8world/Block.cpp,0x0085f170,445,-,,RBX::Block::getCenterToCorner(G3D::Matrix3 const&) const
+Client/App/v8world/Block.cpp,0x0085f330,706,-,,"public: class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::erase(class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::const_iterator)"
+Client/App/v8world/Block.cpp,0x0085f600,121,-,,
+Client/App/v8world/Block.cpp,0x0085f680,202,-,,"public: class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::erase(class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::const_iterator,class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::const_iterator)"
+Client/App/v8world/Block.cpp,0x0085f750,42,-,,
+Client/App/v8world/Block.cpp,0x0085f780,49,-,,
+Client/App/v8world/Block.cpp,0x0085f7c0,46,-,,
+Client/App/v8world/Block.cpp,0x0085f7f0,53,-,,
+Client/App/v8world/Block.cpp,0x0085f830,77,-,,
+Client/App/v8world/Block.cpp,0x0085f880,77,-,,
+Client/App/v8world/Block.cpp,0x0085f8d0,90,-,,
+Client/App/v8world/Block.cpp,0x0085f930,77,-,,
+Client/App/v8world/Block.cpp,0x0085f980,90,-,,
+Client/App/v8world/Block.cpp,0x0085f9e0,77,-,,
+Client/App/v8world/Block.cpp,0x0085fa30,59,-,,
+Client/App/v8world/Block.cpp,0x0085fa70,66,-,,
+Client/App/v8world/Block.cpp,0x0085fac0,15,-,,
+Client/App/v8world/Block.cpp,0x0085fad0,15,-,,
+Client/App/v8world/Block.cpp,0x0085fae0,87,-,,
+Client/App/v8world/Block.cpp,0x0085fb40,21,-,,
+Client/App/v8world/Block.cpp,0x0085fb60,87,-,,
+Client/App/v8world/Block.cpp,0x0085fbc0,21,-,,
+Client/App/v8world/Block.cpp,0x0085fbe0,89,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockCorners, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/Block.cpp,0x0085fc40,211,-,,
+Client/App/v8world/Block.cpp,0x0085fd20,211,-,,
+Client/App/v8world/Block.cpp,0x0085fe00,27,-,,
+Client/App/v8world/Block.cpp,0x0085fe20,27,-,,
+Client/App/v8world/Block.cpp,0x0085fe40,136,-,,
+Client/App/v8world/Block.cpp,0x0085fed0,5,-,,
+Client/App/v8world/Block.cpp,0x0085fee0,287,-,,
+Client/App/v8world/Block.cpp,0x00860000,96,-,,
+Client/App/v8world/Block.cpp,0x00860060,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockCorners, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockCorners, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/Block.cpp,0x00860190,63,-,,
+Client/App/v8world/Block.cpp,0x008601d0,68,-,,
+Client/App/v8world/Block.cpp,0x00860220,129,-,,
+Client/App/v8world/Block.cpp,0x008602b0,43,-,,
+Client/App/v8world/Block.cpp,0x008602e0,103,-,,
+Client/App/v8world/Block.cpp,0x00860350,96,-,,
+Client/App/v8world/Block.cpp,0x008603b0,30,-,,
+Client/App/v8world/Block.cpp,0x008603d0,131,-,,
+Client/App/v8world/Block.cpp,0x00860460,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockCorners, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/Block.cpp,0x00860480,100,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockMesh, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/Block.cpp,0x008604f0,98,-,,
+Client/App/v8world/Block.cpp,0x00860560,83,-,,
+Client/App/v8world/Block.cpp,0x008605c0,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockMesh, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockMesh, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/Block.cpp,0x008606f0,314,-,,
+Client/App/v8world/Block.cpp,0x00860830,326,-,,RBX::Block::setSize(G3D::Vector3 const&)
+Client/App/v8world/Block.cpp,0x00860980,30,-,,
+Client/App/v8world/Block.cpp,0x008609a0,131,-,,
+Client/App/v8world/Block.cpp,0x00860a30,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::BlockMesh, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/Block.cpp,0x00860a50,98,-,,
+Client/App/v8world/Block.cpp,0x00860ac0,83,-,,
+Client/App/v8world/Block.cpp,0x00860b20,314,-,,
+Client/App/v8world/Block.cpp,0x00860c60,175,-,,RBX::Block::buildMesh()
+Client/App/v8world/Buoyancy.cpp,0x0095fcc0,25,-,,RBX::BuoyancyContact::computeIsCollidingUi(float)
+Client/App/v8world/Buoyancy.cpp,0x0095fce0,60,-,,RBX::BuoyancyBallContact::initializeCrossSections()
+Client/App/v8world/Buoyancy.cpp,0x0095fd20,33,-,,"RBX::BuoyancyBallContact::getSurfaceAreaInDirection(G3D::Vector3 const&, float&, float&)"
+Client/App/v8world/Buoyancy.cpp,0x0095fd50,452,-,,RBX::BuoyancyBallContact::computeIsColliding(float)
+Client/App/v8world/Buoyancy.cpp,0x0095ff20,441,-,,RBX::BuoyancyBallContact::getWaterVelocity(int)
+Client/App/v8world/Buoyancy.cpp,0x009600e0,163,-,,RBX::BuoyancyBoxContact::initializeCrossSections()
+Client/App/v8world/Buoyancy.cpp,0x00960190,294,-,,"RBX::BuoyancyBoxContact::getSurfaceAreaInDirection(G3D::Vector3 const&, float&, float&)"
+Client/App/v8world/Buoyancy.cpp,0x009602c0,204,-,,RBX::BuoyancyCylinderContact::initializeCrossSections()
+Client/App/v8world/Buoyancy.cpp,0x00960390,192,-,,RBX::BuoyancyWedgeContact::initializeCrossSections()
+Client/App/v8world/Buoyancy.cpp,0x00960450,204,-,,RBX::BuoyancyCornerWedgeContact::initializeCrossSections()
+Client/App/v8world/Buoyancy.cpp,0x00960520,298,-,,
+Client/App/v8world/Buoyancy.cpp,0x00960650,1437,-,,"RBX::BuoyancyContact::computeExtentsWaterBand(RBX::Extents const&, float&, float&)"
+Client/App/v8world/Buoyancy.cpp,0x00960bf0,243,-,,RBX::BuoyancyContact::isTouchingWater(RBX::Primitive*)
+Client/App/v8world/Buoyancy.cpp,0x00960cf0,15,-,,RBX::BuoyancyContact::computeIsColliding(float)
+Client/App/v8world/Buoyancy.cpp,0x00960d00,52,-,,"RBX::BuoyancyBallContact::getCrossSections(int, G3D::Vector3 const&)"
+Client/App/v8world/Buoyancy.cpp,0x00960d40,394,-,,"RBX::BuoyancyBoxContact::getCrossSections(int, G3D::Vector3 const&)"
+Client/App/v8world/Buoyancy.cpp,0x00960ed0,92,-,,RBX::BuoyancyContact::getConnector(int)
+Client/App/v8world/Buoyancy.cpp,0x00960f30,8,-,,
+Client/App/v8world/Buoyancy.cpp,0x00960f40,221,-,,
+Client/App/v8world/Buoyancy.cpp,0x00961020,213,-,,
+Client/App/v8world/Buoyancy.cpp,0x00961100,298,-,,RBX::BuoyancyContact::deleteConnectors()
+Client/App/v8world/Buoyancy.cpp,0x00961230,5,-,,RBX::BuoyancyContact::deleteAllConnectors()
+Client/App/v8world/Buoyancy.cpp,0x00961240,155,-,,RBX::BuoyancyContact::~BuoyancyContact()
+Client/App/v8world/Buoyancy.cpp,0x009612e0,267,-,,RBX::BuoyancyContact::updateSubmergeRatio()
+Client/App/v8world/Buoyancy.cpp,0x009613f0,55,-,,RBX::BuoyancyContact::getWaterVelocity(int)
+Client/App/v8world/Buoyancy.cpp,0x00961430,1023,-,,
+Client/App/v8world/Buoyancy.cpp,0x00961830,105,-,,RBX::BuoyancyContact::stepContact()
+Client/App/v8world/Buoyancy.cpp,0x009618a0,136,-,,RBX::BuoyancyBallContact::createConnectors()
+Client/App/v8world/Buoyancy.cpp,0x00961930,1244,-,,RBX::BuoyancyBallContact::updateWaterBand()
+Client/App/v8world/Buoyancy.cpp,0x00961e10,231,-,,RBX::BuoyancyBallContact::updateSubmergeRatio()
+Client/App/v8world/Buoyancy.cpp,0x00961f00,427,-,,RBX::BuoyancyBoxContact::createConnectors()
+Client/App/v8world/Buoyancy.cpp,0x009620b0,670,-,,RBX::BuoyancyBoxContact::updateWaterBand()
+Client/App/v8world/Buoyancy.cpp,0x00962350,153,-,,
+Client/App/v8world/Buoyancy.cpp,0x009623f0,1014,-,,RBX::BuoyancyCylinderContact::updateSubmergeRatio()
+Client/App/v8world/Buoyancy.cpp,0x009627f0,285,-,,RBX::BuoyancyWedgeContact::updateSubmergeRatio()
+Client/App/v8world/Buoyancy.cpp,0x00962910,285,-,,RBX::BuoyancyCornerWedgeContact::updateSubmergeRatio()
+Client/App/v8world/Buoyancy.cpp,0x00962a30,32,-,,
+Client/App/v8world/Buoyancy.cpp,0x00962a50,6,100,,RBX::PartInstance::getResizeIncrement() const
+Client/App/v8world/Buoyancy.cpp,0x00962a60,32,-,,
+Client/App/v8world/Buoyancy.cpp,0x00962a80,6,100,,RBX::BuoyancyWedgeContact::getType()
+Client/App/v8world/Buoyancy.cpp,0x00962a90,32,-,,
+Client/App/v8world/Buoyancy.cpp,0x00962ab0,30,-,,"RBX::BuoyancyContact::~BuoyancyContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Buoyancy.cpp,0x00962ad0,32,-,,
+Client/App/v8world/Buoyancy.cpp,0x00962af0,448,-,,"RBX::BuoyancyContact::create(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/CleanStage.cpp,0x008e62d0,109,54.5,M,
+Client/App/v8world/CleanStage.cpp,0x008e6340,46,100,,"RBX::CleanStage::~CleanStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/CleanStage.cpp,0x008e6370,30,100,M,RBX::CleanStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/CleanStage.cpp,0x008e6390,30,100,M,RBX::CleanStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/CleanStage.cpp,0x008e63b0,273,100,M,"RBX::CleanStage::onJointPrimitiveNulling(RBX::Joint*, RBX::Primitive*)"
+Client/App/v8world/CleanStage.cpp,0x008e64d0,114,100,M,"RBX::CleanStage::onJointPrimitiveSet(RBX::Joint*, RBX::Primitive*)"
+Client/App/v8world/CleanStage.cpp,0x008e6550,50,100,M,RBX::CleanStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/CleanStage.cpp,0x008e6590,213,100,M,RBX::CleanStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/Clump.cpp,0x008e4f40,31,100,M,RBX::Clump::isClumpRootPrimitive(RBX::Primitive const*)
+Client/App/v8world/Clump.cpp,0x008e4f60,36,100,,"RBX::Clump::~Clump() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Clump.cpp,0x008e4f90,12,20.0,M,
+Client/App/v8world/Clump.cpp,0x008e4fa0,271,100,M,"RBX::Clump::loadConstMotors(G3D::Array<RBX::Joint const*, 10, 32ul>&) const"
+Client/App/v8world/Clump.cpp,0x008e50b0,271,100,M,"RBX::Clump::loadMotors(G3D::Array<RBX::Joint*, 10, 32ul>&)"
+Client/App/v8world/Contact.cpp,0x008508d0,247,-,,RBX::Contact::step(int)
+Client/App/v8world/Contact.cpp,0x008509d0,60,-,,
+Client/App/v8world/Contact.cpp,0x00850a10,40,-,,RBX::Contact::computeIsCollidingUi(float)
+Client/App/v8world/Contact.cpp,0x00850a40,6,100,,RBX::BallBallContact::getConnector(int)
+Client/App/v8world/Contact.cpp,0x00850a50,49,100,M,RBX::BallBallContact::deleteAllConnectors()
+Client/App/v8world/Contact.cpp,0x00850a90,68,-,,
+Client/App/v8world/Contact.cpp,0x00850ae0,423,-,,
+Client/App/v8world/Contact.cpp,0x00850c90,25,100,,RBX::ContactConnector::getBody(RBX::Connector::BodyIndex)
+Client/App/v8world/Contact.cpp,0x00850cb0,149,-,,
+Client/App/v8world/Contact.cpp,0x00850d50,640,-,,"RBX::BallBlockContact::computeIsColliding(int&, G3D::Vector3int16&, G3D::Vector3&, float)"
+Client/App/v8world/Contact.cpp,0x00850fd0,524,-,,
+Client/App/v8world/Contact.cpp,0x008511e0,32,14.6,M,RBX::BlockBlockContact::numConnectors() const
+Client/App/v8world/Contact.cpp,0x00851200,2007,-,,"RBX::BlockBlockContactData::getBestPlaneEdge(float, bool&)"
+Client/App/v8world/Contact.cpp,0x008519e0,88,-,,
+Client/App/v8world/Contact.cpp,0x00851a40,157,-,,"RBX::FixedArray<RBX::GeoPairConnector*, 8ul>::fastRemove(unsigned long)"
+Client/App/v8world/Contact.cpp,0x00851ae0,282,-,,
+Client/App/v8world/Contact.cpp,0x00851c00,64,0.0,,
+Client/App/v8world/Contact.cpp,0x00851c40,77,-,,RBX::BallBlockContact::computeIsColliding(float)
+Client/App/v8world/Contact.cpp,0x00851c90,125,32.7,,RBX::BlockBlockContact::generateDataForMovingAssemblyStage()
+Client/App/v8world/Contact.cpp,0x00851d10,285,-,,"RBX::BlockBlockContactData::findGeoPairConnectorFFlag(RBX::Body*, RBX::Body*, RBX::GeoPairType, int, int)"
+Client/App/v8world/Contact.cpp,0x00851e30,263,-,,RBX::BallBallContact::computeIsColliding(float)
+Client/App/v8world/Contact.cpp,0x00851f40,41,25.0,M,RBX::BlockBlockContact::getConnector(int)
+Client/App/v8world/Contact.cpp,0x00852050,243,27.5,M,RBX::BlockBlockContact::deleteAllConnectorsFFlag()
+Client/App/v8world/Contact.cpp,0x00852150,103,-,,"RBX::BlockBlockContact::findGeoPairConnectorFFlag(RBX::Body*, RBX::Body*, RBX::GeoPairType, int, int)"
+Client/App/v8world/Contact.cpp,0x008521c0,152,-,,"RBX::BlockBlockContact::computeIsColliding(float, bool&)"
+Client/App/v8world/Contact.cpp,0x00852260,19,75.0,M,RBX::BlockBlockContact::deleteAllConnectors()
+Client/App/v8world/Contact.cpp,0x00852280,28,-,,RBX::BlockBlockContact::computeIsColliding(float)
+Client/App/v8world/Contact.cpp,0x008522a0,90,-,,
+Client/App/v8world/Contact.cpp,0x00852300,77,-,,
+Client/App/v8world/Contact.cpp,0x00852350,90,-,,
+Client/App/v8world/Contact.cpp,0x008523b0,77,-,,
+Client/App/v8world/Contact.cpp,0x00852400,90,-,,
+Client/App/v8world/Contact.cpp,0x00852460,77,-,,
+Client/App/v8world/Contact.cpp,0x008524b0,77,-,,
+Client/App/v8world/Contact.cpp,0x00852500,77,-,,
+Client/App/v8world/Contact.cpp,0x00852550,77,-,,
+Client/App/v8world/Contact.cpp,0x008525a0,77,-,,
+Client/App/v8world/Contact.cpp,0x008525f0,87,-,,
+Client/App/v8world/Contact.cpp,0x00852650,24,-,,
+Client/App/v8world/Contact.cpp,0x00852670,87,-,,
+Client/App/v8world/Contact.cpp,0x008526d0,24,-,,
+Client/App/v8world/Contact.cpp,0x008526f0,87,-,,
+Client/App/v8world/Contact.cpp,0x00852750,24,-,,
+Client/App/v8world/Contact.cpp,0x00852770,15,-,,
+Client/App/v8world/Contact.cpp,0x00852780,15,-,,
+Client/App/v8world/Contact.cpp,0x00852790,15,-,,
+Client/App/v8world/Contact.cpp,0x008527a0,15,-,,
+Client/App/v8world/Contact.cpp,0x008527b0,61,47.6,,"RBX::BlockBlockContact::~BlockBlockContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Contact.cpp,0x008527f0,211,-,,
+Client/App/v8world/Contact.cpp,0x008528d0,211,-,,
+Client/App/v8world/Contact.cpp,0x008529b0,211,-,,
+Client/App/v8world/Contact.cpp,0x00852a90,211,-,,
+Client/App/v8world/Contact.cpp,0x00852b70,48,-,,
+Client/App/v8world/Contact.cpp,0x00852ba0,95,-,,
+Client/App/v8world/Contact.cpp,0x00852c00,26,21.1,,RBX::GeoPairConnector::updateContactPoint()
+Client/App/v8world/Contact.cpp,0x00852c20,35,-,,"RBX::GeoPairConnector::~GeoPairConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Contact.cpp,0x00852c50,48,-,,
+Client/App/v8world/Contact.cpp,0x00852c80,35,-,,"RBX::BallBallConnector::~BallBallConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Contact.cpp,0x00852cb0,75,-,,
+Client/App/v8world/Contact.cpp,0x00852d00,35,-,,"RBX::BallBlockConnector::~BallBlockConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Contact.cpp,0x00852d30,283,-,,RBX::BallBallContact::stepContact()
+Client/App/v8world/Contact.cpp,0x00852e50,407,-,,RBX::BallBlockContact::stepContact()
+Client/App/v8world/Contact.cpp,0x00852ff0,918,-,,"RBX::BlockBlockContact::loadGeoPairEdgeEdgeFFlag(int, int, int, int)"
+Client/App/v8world/Contact.cpp,0x00853390,946,-,,"RBX::BlockBlockContact::loadGeoPairPointPlaneFFlag(int, int, int, RBX::NormalId, RBX::NormalId)"
+Client/App/v8world/Contact.cpp,0x00853750,117,-,,
+Client/App/v8world/Contact.cpp,0x008537d0,709,22.7,M,"RBX::BlockBlockContactData::findGeoPairConnector(RBX::Body*, RBX::Body*, RBX::GeoPairType, int, int)"
+Client/App/v8world/Contact.cpp,0x00853aa0,396,-,,"RBX::BlockBlockContactData::loadGeoPairEdgeEdgePlane(RBX::FixedArray<RBX::GeoPairConnector*, 8ul>&, int, int, int, int)"
+Client/App/v8world/Contact.cpp,0x00853c30,1120,-,,"RBX::BlockBlockContactData::loadGeoPairEdgeEdgePlaneFFlag(int, int, int, int)"
+Client/App/v8world/Contact.cpp,0x00854090,1149,-,,"RBX::BlockBlockContactData::intersectRectQuadFFlag(G3D::Vector2&, G3D::Vector2 (&) [4])"
+Client/App/v8world/Contact.cpp,0x00854510,103,100,M,"RBX::BlockBlockContact::findGeoPairConnector(RBX::Body*, RBX::Body*, RBX::GeoPairType, int, int)"
+Client/App/v8world/Contact.cpp,0x00854580,315,-,,"RBX::BlockBlockContact::loadGeoPairEdgeEdge(RBX::FixedArray<RBX::GeoPairConnector*, 8ul>&, int, int, int, int)"
+Client/App/v8world/Contact.cpp,0x008546c0,273,-,,"RBX::BlockBlockContact::loadGeoPairPointPlane(RBX::FixedArray<RBX::GeoPairConnector*, 8ul>&, int, int, int, RBX::NormalId, RBX::NormalId)"
+Client/App/v8world/Contact.cpp,0x008547e0,668,-,,RBX::BlockBlockContactData::computePlaneContactFFlag()
+Client/App/v8world/Contact.cpp,0x00854a80,1154,-,,"RBX::BlockBlockContactData::intersectRectQuad(RBX::FixedArray<RBX::GeoPairConnector*, 8ul>&, G3D::Vector2&, G3D::Vector2 (&) [4])"
+Client/App/v8world/Contact.cpp,0x00854fa0,678,-,,"RBX::BlockBlockContactData::computePlaneContact(RBX::FixedArray<RBX::GeoPairConnector*, 8ul>&)"
+Client/App/v8world/Contact.cpp,0x00855250,172,-,,RBX::BlockBlockContactData::stepContact()
+Client/App/v8world/Contact.cpp,0x00855300,102,-,,RBX::BlockBlockContact::stepContact()
+Client/App/v8world/ContactManager.cpp,0x007b35f0,194,95.8,M,"RBX::ContactManager::releasePair(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007b36c0,22,-,,
+Client/App/v8world/ContactManager.cpp,0x007b36e0,14,-,,
+Client/App/v8world/ContactManager.cpp,0x007b36f0,213,-,,
+Client/App/v8world/ContactManager.cpp,0x007b37d0,164,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3880,486,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::oldExtentsOverlap(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007b3a70,252,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3b70,242,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::findTreeNode(int, int, RBX::Vector3int32 const&)"
+Client/App/v8world/ContactManager.cpp,0x007b3c70,150,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3d10,125,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3d90,124,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::insertNodeToPrimitive(RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::SpatialNode*, RBX::Primitive*, RBX::Vector3int32 const&, int)"
+Client/App/v8world/ContactManager.cpp,0x007b3e10,8,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3e20,8,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3e30,170,100,,public: class RBX::RbxRay __thiscall RBX::RbxRay::unit(void)const
+Client/App/v8world/ContactManager.cpp,0x007b3ee0,165,-,,
+Client/App/v8world/ContactManager.cpp,0x007b3f90,953,-,,"RBX::ContactManager::getSlowHit(G3D::Array<RBX::Primitive*, 10, 32ul> const&, RBX::RbxRay const&, G3D::Array<RBX::Primitive const*, 10, 32ul> const*, RBX::HitTestFilter const*, G3D::Vector3&, float, bool&, bool&) const"
+Client/App/v8world/ContactManager.cpp,0x007b4350,27,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4370,702,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4630,192,-,,
+Client/App/v8world/ContactManager.cpp,0x007b46f0,653,-,,"RBX::ContactManager::checkMegaClusterWaterContact(RBX::Primitive*, G3D::Vector3int16 const&, G3D::Vector3int16 const&, G3D::Vector3int16 const&)"
+Client/App/v8world/ContactManager.cpp,0x007b4980,129,100,,"public: __thiscall G3D::Array<class RBX::IndexedTree *,10,32>::~Array<class RBX::IndexedTree *,10,32>(void)"
+Client/App/v8world/ContactManager.cpp,0x007b4a10,260,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4b20,158,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4bc0,171,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4c70,98,100,,"public: class std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::const_iterator __thiscall std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::find(class RBX::IMoving * const &)const"
+Client/App/v8world/ContactManager.cpp,0x007b4ce0,202,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4db0,170,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4e60,194,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::checkAndReleaseContacts(RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007b4f30,43,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4f60,92,-,,
+Client/App/v8world/ContactManager.cpp,0x007b4fc0,71,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5010,153,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::getPrimitivesInGrid(RBX::Vector3int32 const&, G3D::Array<RBX::Primitive*, 10, 32ul>&)"
+Client/App/v8world/ContactManager.cpp,0x007b50b0,81,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5110,101,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5180,62,100,,"public: unsigned int __thiscall boost::unordered::detail::table<struct boost::unordered::detail::set<class std::allocator<class RBX::Primitive *>,class RBX::Primitive *,struct boost::hash<class RBX::Primitive *>,struct std::equal_to<class RBX::Primitive *>>>::delete_nodes(struct boost::unordered::detail::ptr_bucket *,struct boost::unordered::detail::ptr_bucket *)"
+Client/App/v8world/ContactManager.cpp,0x007b51c0,1904,-,,"RBX::ContactManager::getFastHit(RBX::RbxRay const&, G3D::Array<RBX::Primitive const*, 10, 32ul> const*, RBX::HitTestFilter const*, G3D::Vector3&, bool&, bool&, RBX::CellID&, bool, bool) const"
+Client/App/v8world/ContactManager.cpp,0x007b5930,76,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5980,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b59d0,198,-,,"RBX::ContactManager::getHit(RBX::RbxRay const&, G3D::Array<RBX::Primitive const*, 10, 32ul> const*, RBX::HitTestFilter const*, G3D::Vector3&, bool&, RBX::CellID&, bool, bool) const"
+Client/App/v8world/ContactManager.cpp,0x007b5aa0,480,-,,"RBX::ContactManager::getHitLegacy(RBX::RbxRay const&, RBX::Primitive const*, RBX::HitTestFilter const*, G3D::Vector3&, float&, float const&, bool) const"
+Client/App/v8world/ContactManager.cpp,0x007b5c80,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5cd0,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5d20,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5d70,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5dc0,80,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5e10,125,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5e90,187,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5f50,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5fa0,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b5ff0,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6040,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6090,283,-,,
+Client/App/v8world/ContactManager.cpp,0x007b61b0,294,-,,
+Client/App/v8world/ContactManager.cpp,0x007b62e0,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6340,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b63a0,329,80.4,M,RBX::ContactManager::ContactManager(RBX::World*)
+Client/App/v8world/ContactManager.cpp,0x007b64f0,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6550,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b65a0,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6600,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6650,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b66b0,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6700,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6760,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b67b0,90,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6810,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6860,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b68b0,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6900,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6950,77,-,,
+Client/App/v8world/ContactManager.cpp,0x007b69a0,15,-,,
+Client/App/v8world/ContactManager.cpp,0x007b69b0,21,-,,
+Client/App/v8world/ContactManager.cpp,0x007b69d0,15,-,,
+Client/App/v8world/ContactManager.cpp,0x007b69e0,21,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6a00,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6a60,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6ac0,211,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6ba0,211,-,,
+Client/App/v8world/ContactManager.cpp,0x007b6c80,1253,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7170,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b71d0,21,-,,
+Client/App/v8world/ContactManager.cpp,0x007b71f0,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7250,21,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7270,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b72d0,21,-,,
+Client/App/v8world/ContactManager.cpp,0x007b72f0,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7350,24,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7370,87,-,,
+Client/App/v8world/ContactManager.cpp,0x007b73d0,24,-,,
+Client/App/v8world/ContactManager.cpp,0x007b73f0,24,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7410,24,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7430,15,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7440,15,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7450,294,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7580,125,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7600,129,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7690,189,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7750,64,-,,
+Client/App/v8world/ContactManager.cpp,0x007b7790,1327,-,,RBX::ContactManager::checkMegaClusterBigTerrainContact(RBX::Primitive*)
+Client/App/v8world/ContactManager.cpp,0x007b7cc0,1708,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8370,792,-,,"RBX::ContactManager::checkMegaClusterContact(RBX::Primitive*, bool, bool, bool)"
+Client/App/v8world/ContactManager.cpp,0x007b8690,163,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8740,660,-,,RBX::ContactManager::applyDeferredTerrainChanges()
+Client/App/v8world/ContactManager.cpp,0x007b89e0,211,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8ac0,211,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8ba0,5,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8bb0,165,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8c60,172,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8d10,169,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8dc0,113,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8e40,98,-,,
+Client/App/v8world/ContactManager.cpp,0x007b8eb0,5,0.0,,RBX::Contact::putInKernel(RBX::Kernel*)
+Client/App/v8world/ContactManager.cpp,0x007b8ec0,89,86.2,,RBX::Contact::removeFromKernel()
+Client/App/v8world/ContactManager.cpp,0x007b8f20,143,-,,RBX::BallBallContact::~BallBallContact()
+Client/App/v8world/ContactManager.cpp,0x007b8fb0,37,-,,"RBX::BallBallContact::~BallBallContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/ContactManager.cpp,0x007b8fe0,98,-,,
+Client/App/v8world/ContactManager.cpp,0x007b9050,9,100,,RBX::BallBallContact::numConnectors() const
+Client/App/v8world/ContactManager.cpp,0x007b9060,143,-,,RBX::BallBlockContact::~BallBlockContact()
+Client/App/v8world/ContactManager.cpp,0x007b90f0,37,-,,"RBX::BallBlockContact::~BallBlockContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/ContactManager.cpp,0x007b9120,709,53.1,M,"RBX::ContactManager::createContact(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007b93f0,158,-,,
+Client/App/v8world/ContactManager.cpp,0x007b9490,310,-,,
+Client/App/v8world/ContactManager.cpp,0x007b95d0,240,70.9,,
+Client/App/v8world/ContactManager.cpp,0x007b96c0,907,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::getPrimitivesTouchingGrids(RBX::Extents const&, boost::unordered::unordered_set<RBX::Primitive const*, boost::hash<RBX::Primitive const*>, std::equal_to<RBX::Primitive const*>, std::allocator<RBX::Primitive const*>> const&, unsigned long, boost::unordered::unordered_set<RBX::Primitive*, boost::hash<RBX::Primitive*>, std::equal_to<RBX::Primitive*>, std::allocator<RBX::Primitive*>>&)"
+Client/App/v8world/ContactManager.cpp,0x007b9a50,832,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::getPrimitivesTouchingGrids(RBX::Extents const&, RBX::Primitive const*, unsigned long, boost::unordered::unordered_set<RBX::Primitive*, boost::hash<RBX::Primitive*>, std::equal_to<RBX::Primitive*>, std::allocator<RBX::Primitive*>>&)"
+Client/App/v8world/ContactManager.cpp,0x007b9d90,168,-,,
+Client/App/v8world/ContactManager.cpp,0x007b9e40,385,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::removeTreeNodeChild(int, RBX::Vector3int32&)"
+Client/App/v8world/ContactManager.cpp,0x007b9fd0,533,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::addContactFromChildren(RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::TreeNode*, RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007ba1f0,477,-,,
+Client/App/v8world/ContactManager.cpp,0x007ba3d0,232,-,,
+Client/App/v8world/ContactManager.cpp,0x007ba4c0,185,-,,
+Client/App/v8world/ContactManager.cpp,0x007ba580,169,39.2,,
+Client/App/v8world/ContactManager.cpp,0x007ba630,169,-,,"RBX::ContactManager::getPrimitivesTouchingExtentsIgnoreAncestor(RBX::Extents const&, boost::unordered::unordered_set<RBX::Primitive const*, boost::hash<RBX::Primitive const*>, std::equal_to<RBX::Primitive const*>, std::allocator<RBX::Primitive const*>> const&, int, G3D::Array<RBX::Primitive*, 10, 32ul>&)"
+Client/App/v8world/ContactManager.cpp,0x007ba6e0,369,-,,
+Client/App/v8world/ContactManager.cpp,0x007ba860,1302,-,,
+Client/App/v8world/ContactManager.cpp,0x007bad80,280,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::newNode(int, int, RBX::Vector3int32 const&)"
+Client/App/v8world/ContactManager.cpp,0x007baea0,76,-,,
+Client/App/v8world/ContactManager.cpp,0x007baef0,8,-,,
+Client/App/v8world/ContactManager.cpp,0x007baf00,149,-,,"RBX::ContactManager::onTerrainCellRemoved(G3D::Vector3int16 const&, int const&, G3D::Array<RBX::Primitive*, 10, 32ul> const&)"
+Client/App/v8world/ContactManager.cpp,0x007bafa0,1299,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::addNode(RBX::Primitive*, RBX::Vector3int32 const&, bool)"
+Client/App/v8world/ContactManager.cpp,0x007bb4c0,277,-,,
+Client/App/v8world/ContactManager.cpp,0x007bb5e0,220,100,M,public: __thiscall RBX::ContactManager::~ContactManager(void)
+Client/App/v8world/ContactManager.cpp,0x007bb6c0,648,1.1,M,RBX::ContactManager::terrainCellChanged(RBX::Voxel::CellChangeInfo const&)
+Client/App/v8world/ContactManager.cpp,0x007bb950,376,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::changeMinMax(RBX::Primitive*, RBX::ExtentsInt32 const*, RBX::ExtentsInt32 const*, RBX::ExtentsInt32 const*, bool)"
+Client/App/v8world/ContactManager.cpp,0x007bbad0,368,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::primitiveAdded(RBX::Primitive*, bool)"
+Client/App/v8world/ContactManager.cpp,0x007bbc40,335,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::primitiveRemoved(RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007bbd90,512,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::primitiveExtentsChanged(RBX::Primitive*, RBX::Extents const&)"
+Client/App/v8world/ContactManager.cpp,0x007bbf90,226,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::onPrimitiveAdded(RBX::Primitive*, bool)"
+Client/App/v8world/ContactManager.cpp,0x007bc080,491,-,,"RBX::SpatialHash<RBX::Primitive, RBX::Contact, RBX::ContactManager, 4>::onPrimitiveExtentsChanged(RBX::Primitive*)"
+Client/App/v8world/ContactManager.cpp,0x007bc270,121,42.6,M,RBX::ContactManager::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/ContactManager.cpp,0x007bc2f0,111,49.1,M,RBX::ContactManager::onPrimitiveRemoved(RBX::Primitive*)
+Client/App/v8world/ContactManagerSpatialHash.cpp,0x008ef090,28,100,,"public: __thiscall RBX::ContactManagerSpatialHash::ContactManagerSpatialHash(class RBX::World *,class RBX::ContactManager *)"
+Client/App/v8world/ContactStage.cpp,0x009aa810,46,100,,"RBX::ContactStage::~ContactStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/ContactStage.cpp,0x009aa840,30,100,M,RBX::ContactStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/ContactStage.cpp,0x009aa860,30,100,M,RBX::ContactStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/ContactStage.cpp,0x009aa880,323,100,M,RBX::ContactStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/ContactStage.cpp,0x009aa9d0,280,86.2,M,RBX::ContactStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/CornerWedgePoly.cpp,0x00900f40,93,-,,RBX::CornerWedgePoly::getCofmOffset() const
+Client/App/v8world/CornerWedgePoly.cpp,0x00900fa0,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00900ff0,90,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901050,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009010a0,15,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009010b0,87,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901110,21,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901130,211,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901210,136,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009012a0,5,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009012b0,124,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901330,96,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901390,100,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::ParallelRampMesh, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/CornerWedgePoly.cpp,0x00901400,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::ParallelRampMesh, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::ParallelRampMesh, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/CornerWedgePoly.cpp,0x00901530,30,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901550,131,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009015e0,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::ParallelRampMesh, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/CornerWedgePoly.cpp,0x00901600,98,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901670,83,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009016d0,314,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901810,175,-,,RBX::ParallelRampPoly::buildMesh()
+Client/App/v8world/CornerWedgePoly.cpp,0x009018c0,60,-,,RBX::RightAngleRampPoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/CornerWedgePoly.cpp,0x00901910,505,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901b10,244,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901c10,530,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901e30,140,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901ec0,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901f10,90,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901f70,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901fc0,15,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00901fd0,87,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902030,21,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902050,211,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902130,136,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009021c0,5,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009021d0,124,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902250,96,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009022b0,100,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::RightAngleRampMesh, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/CornerWedgePoly.cpp,0x00902320,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::RightAngleRampMesh, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::RightAngleRampMesh, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/CornerWedgePoly.cpp,0x00902450,30,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902470,131,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902500,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::RightAngleRampMesh, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/CornerWedgePoly.cpp,0x00902520,98,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902590,83,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009025f0,314,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902730,175,-,,RBX::RightAngleRampPoly::buildMesh()
+Client/App/v8world/CornerWedgePoly.cpp,0x009027e0,59,-,,RBX::CornerWedgePoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/CornerWedgePoly.cpp,0x00902840,83,100,,"public: void __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::const_iterator::_Dec(void)"
+Client/App/v8world/CornerWedgePoly.cpp,0x009028a0,75,100,,"public: void __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::const_iterator::_Inc(void)"
+Client/App/v8world/CornerWedgePoly.cpp,0x009028f0,445,-,,RBX::CornerWedgePoly::getCenterToCorner(G3D::Matrix3 const&) const
+Client/App/v8world/CornerWedgePoly.cpp,0x00902ab0,90,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902b10,88,-,,"public: unsigned int __thiscall std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::erase(void const * const &)"
+Client/App/v8world/CornerWedgePoly.cpp,0x00902b70,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902bc0,90,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902c20,77,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902c70,15,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902c80,87,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902ce0,21,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902d00,211,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902de0,136,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902e70,5,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902e80,124,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902f00,96,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00902f60,100,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::CornerWedgeMesh, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/CornerWedgePoly.cpp,0x00902fd0,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::CornerWedgeMesh, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::CornerWedgeMesh, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/CornerWedgePoly.cpp,0x00903100,30,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00903120,131,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009031b0,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::CornerWedgeMesh, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/CornerWedgePoly.cpp,0x009031d0,98,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x00903240,83,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009032a0,314,-,,
+Client/App/v8world/CornerWedgePoly.cpp,0x009033e0,175,-,,RBX::CornerWedgePoly::buildMesh()
+Client/App/v8world/Edge.cpp,0x00967c70,40,100,M,"public: __thiscall RBX::Edge::Edge(class RBX::Primitive *,class RBX::Primitive *)"
+Client/App/v8world/Edge.cpp,0x00967ca0,105,100,M,"RBX::Edge::setPrimitive(int, RBX::Primitive*)"
+Client/App/v8world/EdgeBuffer.cpp,0x00998ef0,189,100,M,RBX::EdgeBuffer::pushSpringOk(RBX::Edge*)
+Client/App/v8world/EdgeBuffer.cpp,0x00998fb0,260,100,M,RBX::EdgeBuffer::pushKinematicOk(RBX::Edge*)
+Client/App/v8world/EdgeBuffer.cpp,0x009990c0,44,100,M,RBX::EdgeBuffer::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/EdgeBuffer.cpp,0x009990f0,121,-,,
+Client/App/v8world/EdgeBuffer.cpp,0x00999170,255,100,M,RBX::EdgeBuffer::pushEdgeIfOk(RBX::Edge*)
+Client/App/v8world/EdgeBuffer.cpp,0x00999270,227,100,M,RBX::EdgeBuffer::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/EdgeBuffer.cpp,0x00999360,130,76.9,M,RBX::EdgeBuffer::assemblyPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/EdgeBuffer.cpp,0x009993f0,101,91.2,,
+Client/App/v8world/EdgeBuffer.cpp,0x00999460,19,-,M,
+Client/App/v8world/EdgeBuffer.cpp,0x00999480,19,-,M,
+Client/App/v8world/EdgeBuffer.cpp,0x009994a0,205,100,M,RBX::EdgeBuffer::~EdgeBuffer()
+Client/App/v8world/EdgeStage.cpp,0x009995e0,46,100,,"RBX::EdgeStage::~EdgeStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/EdgeStage.cpp,0x00999610,30,100,M,RBX::EdgeStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/EdgeStage.cpp,0x00999630,24,100,M,RBX::EdgeStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/EdgeStage.cpp,0x00999650,30,100,M,RBX::EdgeStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/EdgeStage.cpp,0x00999670,30,100,M,RBX::EdgeStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/GlueJoint.cpp,0x00975e10,749,50.5,M,"RBX::GlueJoint::canBuildJoint(RBX::Primitive*, RBX::Primitive*, RBX::NormalId, RBX::NormalId)"
+Client/App/v8world/GlueJoint.cpp,0x00976100,77,-,,
+Client/App/v8world/GlueJoint.cpp,0x00976150,77,-,,
+Client/App/v8world/GlueJoint.cpp,0x009761a0,1136,-,,RBX::ManualGlueJoint::computeIntersectingSurfacePoints()
+Client/App/v8world/GlueJoint.cpp,0x00976610,21,-,,
+Client/App/v8world/GlueJoint.cpp,0x00976630,15,-,,
+Client/App/v8world/GlueJoint.cpp,0x00976640,211,-,,
+Client/App/v8world/GlueJoint.cpp,0x00976720,32,-,,"RBX::NormalBreakConnector::~NormalBreakConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/GlueJoint.cpp,0x00976740,665,-,,RBX::GlueJoint::putInKernel(RBX::Kernel*)
+Client/App/v8world/GlueJoint.cpp,0x009769e0,24,-,,RBX::ManualGlueJoint::putInKernel(RBX::Kernel*)
+Client/App/v8world/GroundStage.cpp,0x008ea7a0,235,100,M,RBX::GroundStage::onKernelJointAdded(RBX::KernelJoint*)
+Client/App/v8world/GroundStage.cpp,0x008ea890,235,100,M,RBX::GroundStage::onKernelJointRemoving(RBX::KernelJoint*)
+Client/App/v8world/GroundStage.cpp,0x008ea980,178,96.7,M,RBX::GroundStage::heaviestRigidToGround(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eaa40,8,-,,
+Client/App/v8world/GroundStage.cpp,0x008eaa50,30,100,,"RBX::AnchorJoint::~AnchorJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/GroundStage.cpp,0x008eaa70,46,100,,"RBX::GroundStage::~GroundStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/GroundStage.cpp,0x008eaaa0,301,100,M,"RBX::GroundStage::addGroundJoint(RBX::Primitive*, bool)"
+Client/App/v8world/GroundStage.cpp,0x008eabd0,326,100,M,"RBX::GroundStage::removeGroundJoint(RBX::Primitive*, bool)"
+Client/App/v8world/GroundStage.cpp,0x008ead20,202,100,M,RBX::GroundStage::rebuildFreeGround(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eadf0,152,100,M,RBX::GroundStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eae90,217,100,M,RBX::GroundStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eaf70,51,-,M,RBX::GroundStage::onPrimitiveFixedChanging(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eafb0,251,100,M,RBX::GroundStage::checkForFreeGroundJoint(RBX::RigidJoint*)
+Client/App/v8world/GroundStage.cpp,0x008eb0b0,60,-,M,RBX::GroundStage::rebuildOthers(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eb0f0,81,-,M,RBX::GroundStage::onPrimitiveFixedChanged(RBX::Primitive*)
+Client/App/v8world/GroundStage.cpp,0x008eb150,101,100,M,RBX::GroundStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/GroundStage.cpp,0x008eb1c0,99,100,M,RBX::GroundStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/HumanoidStage.cpp,0x0099ad70,198,100,M,RBX::HumanoidStage::toHumanoid(RBX::Assembly*)
+Client/App/v8world/HumanoidStage.cpp,0x0099ae40,58,100,M,RBX::HumanoidStage::onAssemblyAdded(RBX::Assembly*)
+Client/App/v8world/HumanoidStage.cpp,0x0099ae80,205,100,M,RBX::HumanoidStage::~HumanoidStage()
+Client/App/v8world/HumanoidStage.cpp,0x0099af50,181,100,M,RBX::HumanoidStage::fromHumanoid(RBX::Assembly*)
+Client/App/v8world/HumanoidStage.cpp,0x0099b010,62,100,M,RBX::HumanoidStage::onAssemblyRemoving(RBX::Assembly*)
+Client/App/v8world/HumanoidStage.cpp,0x0099b050,167,100,M,"RBX::HumanoidStage::HumanoidStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/HumanoidStage.cpp,0x0099b100,30,100,,"RBX::HumanoidStage::~HumanoidStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/IMoving.cpp,0x00822bc0,184,100,M,RBX::IMoving::checkSleep()
+Client/App/v8world/IMoving.cpp,0x00822c80,55,100,,"protected: struct std::_Tree_nod<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::_Node * __thiscall std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::_Buynode(void)"
+Client/App/v8world/IMoving.cpp,0x00822cc0,319,-,,RBX::IMovingManager::onMovingHeartbeat()
+Client/App/v8world/IMoving.cpp,0x00822e00,116,100,M,RBX::IMoving::makeMoving()
+Client/App/v8world/IMoving.cpp,0x00822e80,100,42.3,M,RBX::IMoving::setMovingManager(RBX::IMovingManager*)
+Client/App/v8world/IMoving.cpp,0x00822ef0,53,100,M,RBX::IMoving::notifyMoved()
+Client/App/v8world/IMoving.cpp,0x00822f30,80,-,,
+Client/App/v8world/IMoving.cpp,0x00822f80,243,24.2,,RBX::IMovingManager::~IMovingManager()
+Client/App/v8world/IPipelined.cpp,0x00909870,137,100,,RBX::IPipelined::getStage(RBX::IStage::StageType) const
+Client/App/v8world/IPipelined.cpp,0x00909900,161,100,M,RBX::IPipelined::putInPipeline(RBX::IStage*)
+Client/App/v8world/IPipelined.cpp,0x009099b0,223,100,M,RBX::IPipelined::removeFromPipeline(RBX::IStage*)
+Client/App/v8world/IPipelined.cpp,0x00909a90,301,100,M,RBX::IPipelined::putInStage(RBX::IStage*)
+Client/App/v8world/IPipelined.cpp,0x00909bc0,291,100,M,RBX::IPipelined::removeFromStage(RBX::IStage*)
+Client/App/v8world/IPipelined.cpp,0x00909cf0,85,100,,RBX::IPipelined::getKernel() const
+Client/App/v8world/IPipelined.cpp,0x00909d50,5,100,M,RBX::IPipelined::putInKernel(RBX::Kernel*)
+Client/App/v8world/IPipelined.cpp,0x00909d60,161,100,,RBX::IPipelined::removeFromKernel()
+Client/App/v8world/IWorldStage.cpp,0x00997450,98,100,M,RBX::IWorldStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/IWorldStage.cpp,0x009974c0,98,100,M,RBX::IWorldStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/Joint.cpp,0x0081f9e0,178,-,,RBX::Joint::getJointWorldCoord(int)
+Client/App/v8world/Joint.cpp,0x0081faa0,50,-,,
+Client/App/v8world/Joint.cpp,0x0081fae0,109,100,M,RBX::Joint::setJointOwner(RBX::IJointOwner*)
+Client/App/v8world/Joint.cpp,0x0081fb50,447,100,M,RBX::biggerJointGuid2
+Client/App/v8world/Joint.cpp,0x0081fd10,23,100,M,public: virtual class RBX::SpanningNode const * __thiscall RBX::Joint::getConstNode(int)const
+Client/App/v8world/Joint.cpp,0x0081fd30,989,-,,"RBX::Joint::FaceVerticesOverlapped(RBX::Primitive const*, unsigned long, RBX::Primitive const*, unsigned long, float)"
+Client/App/v8world/Joint.cpp,0x00820110,2158,-,,"RBX::Joint::FaceEdgesOverlapped(RBX::Primitive const*, unsigned long, RBX::Primitive const*, unsigned long, float)"
+Client/App/v8world/Joint.cpp,0x00820980,34,-,,
+Client/App/v8world/Joint.cpp,0x008209b0,107,-,,
+Client/App/v8world/Joint.cpp,0x00820a20,85,-,,
+Client/App/v8world/Joint.cpp,0x00820a80,85,-,,
+Client/App/v8world/Joint.cpp,0x00820ae0,118,-,,
+Client/App/v8world/Joint.cpp,0x00820b60,124,-,,
+Client/App/v8world/Joint.cpp,0x00820be0,150,-,,
+Client/App/v8world/Joint.cpp,0x00820c80,64,100,M,"RBX::Joint::findConstJoint(RBX::Primitive const*, RBX::Joint::JointType)"
+Client/App/v8world/Joint.cpp,0x00820cc0,89,100,M,"RBX::Joint::getConstJoint(RBX::Primitive const*, RBX::Joint::JointType)"
+Client/App/v8world/Joint.cpp,0x00820d20,5,100,M,"RBX::Joint::getJoint(RBX::Primitive*, RBX::Joint::JointType)"
+Client/App/v8world/Joint.cpp,0x00820d30,140,100,M,"RBX::Joint::setPrimitive(int, RBX::Primitive*)"
+Client/App/v8world/Joint.cpp,0x00820dc0,165,-,,
+Client/App/v8world/Joint.cpp,0x00820e70,119,100,M,RBX::biggerJointSize2
+Client/App/v8world/Joint.cpp,0x00820ef0,131,100,M,public: virtual bool __thiscall RBX::Joint::isHeavierThan(class RBX::SpanningEdge const *)const
+Client/App/v8world/Joint.cpp,0x00820f80,40,100,M,public: virtual class RBX::SpanningNode const * __thiscall RBX::Joint::otherConstNode(class RBX::SpanningNode const *)const
+Client/App/v8world/Joint.cpp,0x00820fb0,81,-,M,"RBX::Joint::FacesOverlapped(RBX::Primitive const*, unsigned long, RBX::Primitive const*, unsigned long, float)"
+Client/App/v8world/Joint.cpp,0x00821010,181,100,M,RBX::Joint::~Joint()
+Client/App/v8world/Joint.cpp,0x008210d0,66,100,,RBX::Joint::getJointType() const
+Client/App/v8world/Joint.cpp,0x00821120,645,24.3,M,"RBX::Joint::canBuildJoint(RBX::Primitive*, RBX::Primitive*, RBX::NormalId, RBX::NormalId, float, float)"
+Client/App/v8world/Joint.cpp,0x008213b0,45,-,,
+Client/App/v8world/Joint.cpp,0x008213e0,45,-,,
+Client/App/v8world/Joint.cpp,0x00821410,417,80.0,M,RBX::Joint::Joint()
+Client/App/v8world/Joint.cpp,0x008215c0,548,79.9,M,"RBX::Joint::Joint(RBX::Primitive*, RBX::Primitive*, G3D::CoordinateFrame const&, G3D::CoordinateFrame const&)"
+Client/App/v8world/Joint.cpp,0x008217f0,818,90.4,,"RBX::Reflection::EnumDesc<RBX::Joint::JointType>::addPair(RBX::Joint::JointType, char const*)"
+Client/App/v8world/Joint.cpp,0x00821b30,341,100,M,RBX::Reflection::EnumDesc<RBX::Joint::JointType>::EnumDesc()
+Client/App/v8world/JointBuilder.cpp,0x008ef4f0,305,53.4,M,"RBX::JointBuilder::canJoin(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/JointStage.cpp,0x00997730,128,83.5,M,"RBX::JointStage::edgeHasPrimitiveHere(RBX::Edge*, RBX::Primitive*)"
+Client/App/v8world/JointStage.cpp,0x009977b0,189,100,,"public: bool __thiscall RBX::BiMultiMap<class RBX::Primitive *,class RBX::Joint *>::pairInMap(class RBX::Primitive * const &,class RBX::Joint * const &)"
+Client/App/v8world/JointStage.cpp,0x00997870,97,100,,"public: struct std::pair<class std::_Tree<class std::_Tmap_traits<class RBX::Primitive *,class RBX::Joint *,struct std::less<class RBX::Primitive *>,class std::allocator<struct std::pair<class RBX::Primitive * const,class RBX::Joint *>>,1>>::iterator,bool> __thiscall std::_Tree<class std::_Tmap_traits<class RBX::Primitive *,class RBX::Joint *,struct std::less<class RBX::Primitive *>,class std::allocator<struct std::pair<class RBX::Primitive * const,class RBX::Joint *>>,1>>::insert(struct std::pair<class RBX::Primitive * const,class RBX::Joint *> const &)"
+Client/App/v8world/JointStage.cpp,0x009978e0,194,-,,
+Client/App/v8world/JointStage.cpp,0x009979b0,114,100,M,RBX::JointStage::moveEdgeToDownstream(RBX::Edge*)
+Client/App/v8world/JointStage.cpp,0x00997a30,114,100,M,RBX::JointStage::removeEdgeFromDownstream(RBX::Edge*)
+Client/App/v8world/JointStage.cpp,0x00997ab0,339,100,,"RBX::BiMultiMap<RBX::Primitive*, RBX::Joint*>::removePair(RBX::Primitive* const&, RBX::Joint* const&)"
+Client/App/v8world/JointStage.cpp,0x00997c10,147,100,M,RBX::JointStage::removeJointFromHere(RBX::Joint*)
+Client/App/v8world/JointStage.cpp,0x00997cb0,314,100,M,RBX::JointStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/JointStage.cpp,0x00997df0,435,100,M,RBX::JointStage::~JointStage()
+Client/App/v8world/JointStage.cpp,0x00997fb0,166,100,M,RBX::JointStage::putJointHere(RBX::Joint*)
+Client/App/v8world/JointStage.cpp,0x00998060,263,100,M,RBX::JointStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/JointStage.cpp,0x00998170,264,-,,
+Client/App/v8world/JointStage.cpp,0x00998280,30,100,,"RBX::JointStage::~JointStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/JointStage.cpp,0x009982a0,180,100,M,"RBX::JointStage::visitAddedPrimitive(RBX::Primitive*, RBX::Joint*, std::vector<RBX::Joint*, std::allocator<RBX::Joint*>>&)"
+Client/App/v8world/JointStage.cpp,0x00998360,281,73.1,M,RBX::JointStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/JointStage.cpp,0x00998480,684,74.5,M,RBX::JointStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/KernelJoint.cpp,0x006d52d0,114,-,,RBX::KernelJoint::getBody(RBX::Connector::BodyIndex)
+Client/App/v8world/KernelJoint.cpp,0x006d5350,28,-,,
+Client/App/v8world/KernelJoint.cpp,0x006d5370,53,-,,"RBX::KernelJoint::~KernelJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MechToAssemblyStage.cpp,0x009971d0,109,56.4,,"RBX::MechToAssemblyStage::MechToAssemblyStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/MechToAssemblyStage.cpp,0x00997240,46,100,,"RBX::MechToAssemblyStage::~MechToAssemblyStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Mechanism.cpp,0x007f9e20,88,90.5,,RBX::Mechanism::~Mechanism()
+Client/App/v8world/Mechanism.cpp,0x007f9e80,8,-,,"non-virtual thunk to RBX::Mechanism::~Mechanism() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Mechanism.cpp,0x007f9e90,30,48.6,,"RBX::Mechanism::~Mechanism() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Mechanism.cpp,0x007f9eb0,36,66.7,,
+Client/App/v8world/Mechanism.cpp,0x007f9ee0,31,-,,
+Client/App/v8world/Mechanism.cpp,0x007f9f00,80,52.2,,
+Client/App/v8world/Mechanism.cpp,0x007f9f50,59,27.5,,
+Client/App/v8world/Mechanism.cpp,0x007f9f90,116,-,,RBX::Mechanism::getConstRootMovingPrimitive(RBX::Primitive const*)
+Client/App/v8world/Mechanism.cpp,0x007fa010,5,-,,RBX::Mechanism::getConstRootMovingPrimitive(RBX::Primitive const*)
+Client/App/v8world/Mechanism.cpp,0x007fa020,83,100,M,RBX::Mechanism::getRootAssembly()
+Client/App/v8world/Mechanism.cpp,0x007fa080,199,-,,RBX::Mechanism::isMechanismRootPrimitive(RBX::Primitive const*)
+Client/App/v8world/Mechanism.cpp,0x007fa150,88,-,,RBX::Mechanism::isComplexMovingMechanism(RBX::Assembly const*)
+Client/App/v8world/MegaClusterPoly.cpp,0x00903490,18,-,,RBX::MegaClusterPoly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/MegaClusterPoly.cpp,0x009034b0,6,-,,RBX::MegaClusterPoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/MegaClusterPoly.cpp,0x009034c0,411,-,,
+Client/App/v8world/MegaClusterPoly.cpp,0x00903660,208,-,,
+Client/App/v8world/MegaClusterPoly.cpp,0x00903730,623,-,,"RBX::MegaClusterPoly::findCellsTouchingGeometryWithBuffer(float const&, G3D::CoordinateFrame const&, RBX::Geometry const&, G3D::CoordinateFrame const&, std::map<int, G3D::Vector3int16*, std::less<int>, std::allocator<std::pair<int const, G3D::Vector3int16*>>>*) const"
+Client/App/v8world/MegaClusterPoly.cpp,0x009039a0,91,-,,
+Client/App/v8world/MegaClusterPoly.cpp,0x00903a00,44,-,,
+Client/App/v8world/MegaClusterPoly.cpp,0x00903a30,863,-,,
+Client/App/v8world/MegaClusterPoly.cpp,0x00903d90,101,-,,"void __cdecl std::_Distance2<class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator,unsigned int>(class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator,class std::_Tree<class std::_Tmap_traits<void const *,struct boost::detail::tss_data_node,struct std::less<void const *>,class std::allocator<struct std::pair<void const * const,struct boost::detail::tss_data_node>>,0>>::iterator,unsigned int &,struct std::bidirectional_iterator_tag)"
+Client/App/v8world/MegaClusterPoly.cpp,0x00903e00,381,-,,"RBX::MegaClusterPoly::findTouchingSurfacesConvex(G3D::CoordinateFrame const&, unsigned long&, RBX::Geometry const&, G3D::CoordinateFrame const&, unsigned long&) const"
+Client/App/v8world/Motor6DJoint.cpp,0x0095e5b0,197,-,,"RBX::Motor6DJoint::setJointOffsetCFrame(G3D::Vector3, G3D::Vector3)"
+Client/App/v8world/Motor6DJoint.cpp,0x0095e680,323,-,,"RBX::Motor6DJoint::setCurrentOffsetAngle(G3D::Vector3, G3D::Vector3)"
+Client/App/v8world/Motor6DJoint.cpp,0x0095e7d0,102,-,,RBX::Motor6DJoint::getParentId() const
+Client/App/v8world/Motor6DJoint.cpp,0x0095e840,121,-,,RBX::Motor6DJoint::resetLink()
+Client/App/v8world/Motor6DJoint.cpp,0x0095e8c0,850,-,,RBX::Motor6DJoint::stepUi(double)
+Client/App/v8world/Motor6DJoint.cpp,0x0095ec20,128,-,,RBX::Motor6DJoint::setCurrentZAngle(float)
+Client/App/v8world/Motor6DJoint.cpp,0x0095eca0,80,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ecf0,90,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ed50,77,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095eda0,77,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095edf0,87,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ee50,24,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ee70,15,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ee80,211,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095ef60,88,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095efc0,119,-,,RBX::Motor6DJoint::~Motor6DJoint()
+Client/App/v8world/Motor6DJoint.cpp,0x0095f040,8,-,,"non-virtual thunk to RBX::Motor6DJoint::~Motor6DJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Motor6DJoint.cpp,0x0095f050,259,-,,
+Client/App/v8world/Motor6DJoint.cpp,0x0095f160,30,-,,"RBX::Motor6DJoint::~Motor6DJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MotorJoint.cpp,0x0095f180,101,-,,RBX::MotorJoint::setJointAngle(float)
+Client/App/v8world/MotorJoint.cpp,0x0095f1f0,47,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f220,133,-,,RBX::MotorJoint::isAligned()
+Client/App/v8world/MotorJoint.cpp,0x0095f2b0,119,-,,RBX::MotorJoint::setCurrentAngle(float)
+Client/App/v8world/MotorJoint.cpp,0x0095f330,102,-,,RBX::MotorJoint::getParentId() const
+Client/App/v8world/MotorJoint.cpp,0x0095f3a0,69,-,,RBX::MotorJoint::resetLink()
+Client/App/v8world/MotorJoint.cpp,0x0095f3f0,269,-,,RBX::MotorJoint::stepUi(double)
+Client/App/v8world/MotorJoint.cpp,0x0095f500,90,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f560,77,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f5b0,77,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f600,87,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f660,24,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f680,15,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f690,211,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f770,88,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f7d0,179,-,,
+Client/App/v8world/MotorJoint.cpp,0x0095f890,8,-,,"non-virtual thunk to RBX::MotorJoint::~MotorJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MotorJoint.cpp,0x0095f8a0,119,-,,RBX::MotorJoint::~MotorJoint()
+Client/App/v8world/MotorJoint.cpp,0x0095f920,30,-,,"RBX::MotorJoint::~MotorJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb230,30,100,M,RBX::MovingAssemblyStage::onSimulateAssemblyAdded(RBX::Assembly*)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb250,80,32.9,M,RBX::MovingAssemblyStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb2a0,305,-,M,RBX::MovingAssemblyStage::jointsStepUi(double)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb3e0,16,100,M,public: unsigned int __thiscall RBX::MovingAssemblyStage::removeMovingGroundedAssembly(class RBX::Assembly *)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb3f0,162,42.4,M,RBX::MovingAssemblyStage::removeJoint(RBX::Joint*)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb4a0,47,100,M,RBX::MovingAssemblyStage::onSimulateAssemblyRemoving(RBX::Assembly*)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb4d0,65,100,M,RBX::MovingAssemblyStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb520,231,51.6,M,RBX::MovingAssemblyStage::~MovingAssemblyStage()
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb610,184,45.6,M,"RBX::MovingAssemblyStage::MovingAssemblyStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/MovingAssemblyStage.cpp,0x008eb6d0,30,100,,"RBX::MovingAssemblyStage::~MovingAssemblyStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MovingStage.cpp,0x0099a420,109,100,M,"RBX::MovingStage::MovingStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/MovingStage.cpp,0x0099a490,71,100,M,RBX::assertNotInPipeline2(RBX::Assembly*)
+Client/App/v8world/MovingStage.cpp,0x0099a4e0,46,100,,"RBX::MovingStage::~MovingStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/MovingStage.cpp,0x0099a510,160,100,M,RBX::MovingStage::onMechanismAdded(RBX::Mechanism*)
+Client/App/v8world/MovingStage.cpp,0x0099a5b0,146,100,M,RBX::MovingStage::onMechanismRemoving(RBX::Mechanism*)
+Client/App/v8world/MutilJoint.cpp,0x009741c0,223,100,M,RBX::MultiJoint::~MultiJoint()
+Client/App/v8world/MutilJoint.cpp,0x009742a0,148,-,,"RBX::MultiJoint::addToMultiJoint(RBX::Point*, RBX::Point*, RBX::Connector*)"
+Client/App/v8world/MutilJoint.cpp,0x00974340,378,1.7,M,RBX::MultiJoint::removeFromKernel()
+Client/App/v8world/MutilJoint.cpp,0x009744c0,283,4.3,M,RBX::MultiJoint::isBroken() const
+Client/App/v8world/MutilJoint.cpp,0x009745e0,8,-,,
+Client/App/v8world/MutilJoint.cpp,0x009745f0,30,100,,"RBX::MultiJoint::~MultiJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Poly.cpp,0x008f96b0,8,-,,"RBX::Poly::hitTest(RBX::RbxRay const&, G3D::Vector3&, bool&)"
+Client/App/v8world/Poly.cpp,0x008f96c0,178,-,,RBX::Poly::setSize(G3D::Vector3 const&)
+Client/App/v8world/Poly.cpp,0x008f9780,634,-,,"RBX::Poly::findTouchingSurfacesConvex(G3D::CoordinateFrame const&, unsigned long&, RBX::Geometry const&, G3D::CoordinateFrame const&, unsigned long&) const"
+Client/App/v8world/Poly.cpp,0x008f9a00,103,-,,"RBX::Poly::FacesOverlapped(G3D::CoordinateFrame const&, unsigned long&, RBX::Geometry const&, G3D::CoordinateFrame const&, unsigned long&, float) const"
+Client/App/v8world/Poly.cpp,0x008f9a70,838,-,,"RBX::Poly::FaceVerticesOverlapped(G3D::CoordinateFrame const&, unsigned long&, RBX::Geometry const&, G3D::CoordinateFrame const&, unsigned long&, float) const"
+Client/App/v8world/Poly.cpp,0x008f9dc0,1972,-,,"RBX::Poly::FaceEdgesOverlapped(G3D::CoordinateFrame const&, unsigned long&, RBX::Geometry const&, G3D::CoordinateFrame const&, unsigned long&, float) const"
+Client/App/v8world/Poly.cpp,0x008fa580,10,-,,
+Client/App/v8world/Poly.cpp,0x008fa590,10,-,,
+Client/App/v8world/Poly.cpp,0x008fa5a0,85,-,,RBX::POLY::Face::plane() const
+Client/App/v8world/Poly.cpp,0x008fa600,136,-,,"RBX::Poly::collidesWithGroundPlane(G3D::CoordinateFrame const&, float) const"
+Client/App/v8world/Poly.cpp,0x008fa690,199,-,,RBX::Poly::getPlaneFromSurface(unsigned long) const
+Client/App/v8world/Poly.cpp,0x008fa760,141,-,,RBX::Poly::getSurfaceNormalInBody(unsigned long) const
+Client/App/v8world/Poly.cpp,0x008fa7f0,166,-,,"RBX::Poly::getSurfaceVertInBody(unsigned long, int) const"
+Client/App/v8world/Poly.cpp,0x008fa8a0,352,-,,"RBX::Poly::getMostAlignedSurface(G3D::Vector3 const&, G3D::Matrix3 const&) const"
+Client/App/v8world/Poly.cpp,0x008faa00,104,-,,RBX::Poly::getNumVertsInSurface(unsigned long) const
+Client/App/v8world/Poly.cpp,0x008faa70,356,-,,RBX::Poly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/Poly.cpp,0x008fabe0,151,-,,
+Client/App/v8world/Poly.cpp,0x008fac80,554,-,,RBX::Poly::closestSurfaceToPoint(G3D::Vector3 const&) const
+Client/App/v8world/Poly.cpp,0x008faeb0,249,-,,"RBX::Poly::vertOverlapsFace(G3D::Vector3 const&, unsigned long) const"
+Client/App/v8world/Poly.cpp,0x008fafb0,1446,-,,"RBX::Poly::polygonIntersectionWithFace(std::vector<G3D::Vector3, std::allocator<G3D::Vector3>> const&, unsigned long) const"
+Client/App/v8world/PolyCellContact.cpp,0x00962fe0,44,-,,"RBX::CellEdgeEdgePair::~CellEdgeEdgePair() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x00963010,27,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963030,20,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963050,186,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963110,8,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963120,18,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963140,191,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963200,106,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963270,30,-,,"RBX::CellContact::~CellContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x00963290,20,-,,RBX::CellContact::numConnectors() const
+Client/App/v8world/PolyCellContact.cpp,0x009632b0,8,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009632c0,19,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009632e0,168,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963390,31,-,,"RBX::PolyCellPair::~PolyCellPair() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x009633b0,342,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963510,352,-,,RBX::CellFaceFacePair::pairIsValid()
+Client/App/v8world/PolyCellContact.cpp,0x00963670,155,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963710,95,-,,RBX::CellEdgeEdgePair::allocateClone()
+Client/App/v8world/PolyCellContact.cpp,0x00963770,208,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963840,72,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963890,138,-,,"RBX::FixedArray<G3D::Vector3, 40ul>::push_back(G3D::Vector3 const&)"
+Client/App/v8world/PolyCellContact.cpp,0x00963920,127,-,,"RBX::FixedArray<G3D::Vector3, 40ul>::operator[](unsigned long) const"
+Client/App/v8world/PolyCellContact.cpp,0x009639a0,49,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009639e0,539,-,,RBX::PolyCellContact::findBestPair()
+Client/App/v8world/PolyCellContact.cpp,0x00963c00,89,-,,RBX::CellFaceFacePair::allocateClone()
+Client/App/v8world/PolyCellContact.cpp,0x00963c60,337,-,,"RBX::CellFaceFacePair::computeVertices(RBX::FixedArray<G3D::Vector3, 40ul>&, G3D::CoordinateFrame const&)"
+Client/App/v8world/PolyCellContact.cpp,0x00963dc0,204,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963e90,144,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00963f20,1275,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964420,109,-,,"RBX::PolyCellContact::findClosestFeatures(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyCellContact.cpp,0x00964490,327,-,,RBX::CellFaceFacePair::test()
+Client/App/v8world/PolyCellContact.cpp,0x009645e0,110,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964650,110,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009646c0,110,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964730,110,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009647a0,110,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964810,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964890,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964910,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964990,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964a10,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964a90,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964b10,163,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964bc0,70,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964c10,163,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964cc0,70,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964d10,163,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964dc0,70,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964e10,105,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964e80,105,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964ef0,105,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964f60,105,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00964fd0,87,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965030,43,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965060,87,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009650c0,43,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009650f0,87,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965150,43,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965180,28,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009651a0,28,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009651c0,28,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009651e0,28,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965200,85,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965260,85,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009652c0,85,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965320,85,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965380,142,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965410,35,-,,"RBX::FaceVertexConnector::~FaceVertexConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x00965440,342,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009655a0,59,-,,"RBX::FaceEdgeConnector::~FaceEdgeConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x009655e0,239,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009656d0,42,-,,"RBX::EdgeEdgeConnector::~EdgeEdgeConnector() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyCellContact.cpp,0x00965700,292,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965830,476,-,,"RBX::CellFaceFacePair::newFaceEdgeConnector(unsigned long, RBX::POLY::Vertex const*, RBX::POLY::Vertex const*)"
+Client/App/v8world/PolyCellContact.cpp,0x00965a10,316,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965b50,334,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965ca0,180,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965d60,120,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965de0,120,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00965e60,134,-,,"RBX::CellEdgeEdgePair::loadConnectors(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyCellContact.cpp,0x00965ef0,577,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00966150,180,-,,
+Client/App/v8world/PolyCellContact.cpp,0x00966210,531,-,,"RBX::CellFaceFacePair::loadConnectors(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyCellContact.cpp,0x00966450,128,-,,
+Client/App/v8world/PolyCellContact.cpp,0x009664d0,30,-,,"RBX::PolyCellContact::~PolyCellContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyContact.cpp,0x009a55a0,263,-,,RBX::PolyContact::worstFeatureOverlap()
+Client/App/v8world/PolyContact.cpp,0x009a56b0,215,-,,
+Client/App/v8world/PolyContact.cpp,0x009a5790,107,-,,
+Client/App/v8world/PolyContact.cpp,0x009a5800,311,-,,"RBX::PolyContact::deleteConnectors(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyContact.cpp,0x009a5940,60,-,,RBX::PolyContact::stepContact()
+Client/App/v8world/PolyContact.cpp,0x009a5980,233,-,,
+Client/App/v8world/PolyContact.cpp,0x009a5a70,152,19.6,,RBX::PolyContact::~PolyContact()
+Client/App/v8world/PolyContact.cpp,0x009a5b10,10,-,,RBX::PolyContact::deleteAllConnectors()
+Client/App/v8world/PolyContact.cpp,0x009a5b20,219,-,,RBX::PolyContact::updateClosestFeatures()
+Client/App/v8world/PolyContact.cpp,0x009a5c00,140,-,,RBX::PolyContact::computeIsColliding(float)
+Client/App/v8world/PolyPolyContact.cpp,0x00968a10,44,-,,"RBX::EdgeEdgePair::~EdgeEdgePair() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyPolyContact.cpp,0x00968a40,103,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968ab0,19,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968ad0,149,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968b70,31,-,,"RBX::FaceFacePair::~FaceFacePair() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyPolyContact.cpp,0x00968b90,420,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968d40,150,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968de0,95,-,,RBX::EdgeEdgePair::allocateClone()
+Client/App/v8world/PolyPolyContact.cpp,0x00968e40,135,-,,"RBX::FixedArray<RBX::PolyConnector*, 40ul>::push_back(RBX::PolyConnector* const&)"
+Client/App/v8world/PolyPolyContact.cpp,0x00968ed0,105,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00968f40,467,-,,RBX::PolyPolyContact::findBestPair()
+Client/App/v8world/PolyPolyContact.cpp,0x00969120,83,-,,RBX::FaceFacePair::allocateClone()
+Client/App/v8world/PolyPolyContact.cpp,0x00969180,316,-,,"RBX::FaceFacePair::computeVertices(RBX::FixedArray<G3D::Vector3, 40ul>&, G3D::CoordinateFrame const&)"
+Client/App/v8world/PolyPolyContact.cpp,0x009692c0,184,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969380,1283,-,,RBX::EdgeEdgePair::test()
+Client/App/v8world/PolyPolyContact.cpp,0x00969890,215,-,,"RBX::PolyPolyContact::findClosestFeatures(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyPolyContact.cpp,0x00969970,311,-,,RBX::FaceFacePair::test()
+Client/App/v8world/PolyPolyContact.cpp,0x00969ab0,105,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969b20,28,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969b40,30,-,,"RBX::PolyPolyContact::~PolyPolyContact() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/PolyPolyContact.cpp,0x00969b60,85,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969bc0,101,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969c30,292,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x00969d60,476,-,,"RBX::FaceFacePair::newFaceEdgeConnector(unsigned long, RBX::POLY::Vertex const*, RBX::POLY::Vertex const*)"
+Client/App/v8world/PolyPolyContact.cpp,0x00969f40,316,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a080,236,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a170,180,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a230,120,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a2b0,120,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a330,134,-,,"RBX::EdgeEdgePair::loadConnectors(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/PolyPolyContact.cpp,0x0096a3c0,180,-,,
+Client/App/v8world/PolyPolyContact.cpp,0x0096a480,508,-,,"RBX::FaceFacePair::loadConnectors(RBX::FixedArray<RBX::PolyConnector*, 40ul>&)"
+Client/App/v8world/Primitive.cpp,0x00753ac0,102,80.0,M,RBX::Primitive::getSizeMultiplier() const
+Client/App/v8world/Primitive.cpp,0x00753b40,106,48.3,M,RBX::Primitive::setSizeMultiplier(RBX::Primitive::SizeMultiplier)
+Client/App/v8world/Primitive.cpp,0x00753bb0,83,100,M,RBX::Primitive::getGuid() const
+Client/App/v8world/Primitive.cpp,0x00753c10,108,88.9,M,RBX::Primitive::setGuid(RBX::Guid const&)
+Client/App/v8world/Primitive.cpp,0x00753c80,10,100,,public: class RBX::Clump const * __thiscall RBX::Primitive::getConstClump(void)const
+Client/App/v8world/Primitive.cpp,0x00753c90,10,100,M,public: class RBX::Assembly * __thiscall RBX::Primitive::getAssembly(void)
+Client/App/v8world/Primitive.cpp,0x00753ca0,10,100,,public: class RBX::Mechanism * __thiscall RBX::Primitive::getMechanism(void)
+Client/App/v8world/Primitive.cpp,0x00753cb0,102,100,M,RBX::Primitive::getGeometryType() const
+Client/App/v8world/Primitive.cpp,0x00753d20,89,100,M,RBX::Primitive::getCollideType() const
+Client/App/v8world/Primitive.cpp,0x00753d80,10,100,M,RBX::Primitive::getSize() const
+Client/App/v8world/Primitive.cpp,0x00753d90,13,-,,
+Client/App/v8world/Primitive.cpp,0x00753da0,112,100,M,RBX::Primitive::computeJointK()
+Client/App/v8world/Primitive.cpp,0x00753e10,10,100,M,RBX::Primitive::getCanThrottle() const
+Client/App/v8world/Primitive.cpp,0x00753e20,164,-,,RBX::Primitive::setCanThrottle(bool)
+Client/App/v8world/Primitive.cpp,0x00753ed0,61,100,M,RBX::Primitive::setEngineType(RBX::Primitive::EngineType)
+Client/App/v8world/Primitive.cpp,0x00753f10,44,-,,RBX::Primitive::setOwner(RBX::IMoving*)
+Client/App/v8world/Primitive.cpp,0x00753f40,118,100,M,"RBX::Primitive::setFixed(bool, bool)"
+Client/App/v8world/Primitive.cpp,0x00753fc0,42,100,M,RBX::Primitive::setPreventCollide(bool)
+Client/App/v8world/Primitive.cpp,0x00753ff0,51,100,M,RBX::Primitive::setFriction(float)
+Client/App/v8world/Primitive.cpp,0x00754030,51,100,M,RBX::Primitive::setElasticity(float)
+Client/App/v8world/Primitive.cpp,0x00754070,179,63.0,M,RBX::Primitive::getFaceInObject(RBX::NormalId) const
+Client/App/v8world/Primitive.cpp,0x00754130,60,-,,
+Client/App/v8world/Primitive.cpp,0x00754170,302,-,,"RBX::Primitive::setSurfaceData(RBX::NormalId, RBX::SurfaceData const&)"
+Client/App/v8world/Primitive.cpp,0x007542a0,27,100,M,"public: void __thiscall RBX::Primitive::setSurfaceType(enum RBX::NormalId,enum RBX::SurfaceType)"
+Client/App/v8world/Primitive.cpp,0x007542c0,13,-,,
+Client/App/v8world/Primitive.cpp,0x007542d0,38,-,,
+Client/App/v8world/Primitive.cpp,0x00754300,32,-,,
+Client/App/v8world/Primitive.cpp,0x00754320,24,-,,
+Client/App/v8world/Primitive.cpp,0x00754340,261,-,,
+Client/App/v8world/Primitive.cpp,0x00754450,261,-,,
+Client/App/v8world/Primitive.cpp,0x00754560,176,100,,RBX::EdgeList::getEdge(int) const
+Client/App/v8world/Primitive.cpp,0x00754610,30,-,,RBX::Poly::getNumSurfaces() const
+Client/App/v8world/Primitive.cpp,0x00754630,116,75.7,,
+Client/App/v8world/Primitive.cpp,0x007546b0,196,100,M,"RBX::EdgeList::getNext(RBX::Primitive const*, RBX::Edge*) const"
+Client/App/v8world/Primitive.cpp,0x00754780,11,100,,RBX::Primitive::getConstJoint(int) const
+Client/App/v8world/Primitive.cpp,0x00754790,11,-,,
+Client/App/v8world/Primitive.cpp,0x007547a0,44,-,,
+Client/App/v8world/Primitive.cpp,0x007547d0,82,-,,
+Client/App/v8world/Primitive.cpp,0x00754830,21,40.0,,
+Client/App/v8world/Primitive.cpp,0x00754850,20,-,,
+Client/App/v8world/Primitive.cpp,0x00754870,21,-,,
+Client/App/v8world/Primitive.cpp,0x00754890,20,-,,
+Client/App/v8world/Primitive.cpp,0x007548b0,86,100,M,public: class RBX::Edge * __thiscall RBX::Primitive::getFirstRigidAt(class RBX::Joint *)
+Client/App/v8world/Primitive.cpp,0x00754910,33,28.6,M,
+Client/App/v8world/Primitive.cpp,0x00754940,32,100,M,public: class RBX::RigidJoint * __thiscall RBX::Primitive::getNextRigid(class RBX::RigidJoint *)
+Client/App/v8world/Primitive.cpp,0x00754960,336,25.8,M,"RBX::Primitive::getJoint(RBX::Primitive*, RBX::Primitive*, int)"
+Client/App/v8world/Primitive.cpp,0x00754ab0,311,20.4,,"RBX::Primitive::getContact(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/Primitive.cpp,0x00754bf0,30,-,,
+Client/App/v8world/Primitive.cpp,0x00754c10,30,-,,
+Client/App/v8world/Primitive.cpp,0x00754c30,113,-,,RBX::Primitive::setMassInertia(float)
+Client/App/v8world/Primitive.cpp,0x00754cb0,21,100,M,RBX::Primitive::setDragging(bool)
+Client/App/v8world/Primitive.cpp,0x00754cd0,21,100,M,RBX::Primitive::setAnchoredProperty(bool)
+Client/App/v8world/Primitive.cpp,0x00754cf0,154,-,,
+Client/App/v8world/Primitive.cpp,0x00754d90,67,-,,
+Client/App/v8world/Primitive.cpp,0x00754de0,39,32.3,,public: virtual class RBX::SpanningEdge * __thiscall RBX::Primitive::getFirstSpanningEdge(void)
+Client/App/v8world/Primitive.cpp,0x00754e10,44,50.0,,public: virtual class RBX::SpanningEdge * __thiscall RBX::Primitive::getNextSpanningEdge(class RBX::SpanningEdge *)
+Client/App/v8world/Primitive.cpp,0x00754e40,307,63.8,M,RBX::Primitive::calculateSortSize()
+Client/App/v8world/Primitive.cpp,0x00754f80,25,-,,RBX::Block::getMoment(float) const
+Client/App/v8world/Primitive.cpp,0x00754fa0,170,-,,RBX::Block::~Block()
+Client/App/v8world/Primitive.cpp,0x00755050,30,-,,"RBX::Block::~Block() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Primitive.cpp,0x007550d0,6,100,,RBX::RotateJoint::getJointType() const
+Client/App/v8world/Primitive.cpp,0x007550e0,148,-,,
+Client/App/v8world/Primitive.cpp,0x00755180,6,100,,RBX::RotatePJoint::getJointType() const
+Client/App/v8world/Primitive.cpp,0x00755190,110,-,,
+Client/App/v8world/Primitive.cpp,0x00755200,24,-,,RBX::MegaClusterPoly::getMoment(float) const
+Client/App/v8world/Primitive.cpp,0x00755220,30,-,,RBX::MegaClusterPoly::getCofmOffset() const
+Client/App/v8world/Primitive.cpp,0x00755240,30,-,,"RBX::PyramidPoly::~PyramidPoly() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Primitive.cpp,0x00755260,97,-,,
+Client/App/v8world/Primitive.cpp,0x007552d0,268,-,,
+Client/App/v8world/Primitive.cpp,0x007553e0,25,100,M,RBX::Primitive::getSortSize()
+Client/App/v8world/Primitive.cpp,0x00755400,215,100,,RBX::EdgeList::~EdgeList()
+Client/App/v8world/Primitive.cpp,0x007554e0,96,100,,RBX::Body::getPV_Spin_Lock()
+Client/App/v8world/Primitive.cpp,0x00755540,607,100,M,RBX::Primitive::~Primitive()
+Client/App/v8world/Primitive.cpp,0x007557a0,13,-,,RBX::Primitive::getRadius() const
+Client/App/v8world/Primitive.cpp,0x007557b0,8,-,,"non-virtual thunk to RBX::Primitive::~Primitive() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Primitive.cpp,0x007557c0,276,61.3,M,RBX::Primitive::computeFuzzyExtents()
+Client/App/v8world/Primitive.cpp,0x007558e0,136,100,M,RBX::Primitive::getFastFuzzyExtents()
+Client/App/v8world/Primitive.cpp,0x00755970,370,7.0,M,
+Client/App/v8world/Primitive.cpp,0x00755b10,175,-,,
+Client/App/v8world/Primitive.cpp,0x00755bc0,374,-,,
+Client/App/v8world/Primitive.cpp,0x00755d40,66,100,M,RBX::Primitive::getFaceInWorld(RBX::NormalId)
+Client/App/v8world/Primitive.cpp,0x00755d90,362,-,,RBX::Primitive::setPV(RBX::PV const&)
+Client/App/v8world/Primitive.cpp,0x00755f00,11,100,M,RBX::Primitive::getCoordinateFrame() const
+Client/App/v8world/Primitive.cpp,0x00755f10,257,-,,
+Client/App/v8world/Primitive.cpp,0x00756020,30,100,,"RBX::Primitive::~Primitive() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/Primitive.cpp,0x00756040,283,67.8,M,RBX::EdgeList::removeEdge(RBX::Edge*)
+Client/App/v8world/Primitive.cpp,0x00756160,179,100,M,RBX::Primitive::removeEdge(RBX::Edge*)
+Client/App/v8world/Primitive.cpp,0x00756220,125,-,,
+Client/App/v8world/Primitive.cpp,0x007562a0,116,-,,
+Client/App/v8world/Primitive.cpp,0x00756320,121,-,,
+Client/App/v8world/Primitive.cpp,0x007563a0,79,100,,public: __thiscall RBX::EdgeList::EdgeList(class RBX::Primitive *)
+Client/App/v8world/Primitive.cpp,0x007563f0,179,100,M,RBX::EdgeList::insertEdge(RBX::Edge*)
+Client/App/v8world/Primitive.cpp,0x007564b0,179,100,M,RBX::Primitive::insertEdge(RBX::Edge*)
+Client/App/v8world/Primitive.cpp,0x00756570,244,-,,
+Client/App/v8world/Primitive.cpp,0x00756670,80,-,,
+Client/App/v8world/Primitive.cpp,0x007566c0,80,-,,
+Client/App/v8world/Primitive.cpp,0x00756710,80,-,,
+Client/App/v8world/Primitive.cpp,0x00756760,80,-,,
+Client/App/v8world/Primitive.cpp,0x007567b0,80,-,,
+Client/App/v8world/Primitive.cpp,0x00756800,80,-,,
+Client/App/v8world/Primitive.cpp,0x00756850,80,-,,
+Client/App/v8world/Primitive.cpp,0x007568a0,80,100,,"private: static struct boost::singleton_pool<class RBX::Body,236,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::pool_type & __cdecl boost::singleton_pool<class RBX::Body,236,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::get_pool(void)"
+Client/App/v8world/Primitive.cpp,0x007568f0,23,-,,"RBX::Geometry::polygonIntersectionWithFace(std::vector<G3D::Vector3, std::allocator<G3D::Vector3>> const&, unsigned long) const"
+Client/App/v8world/Primitive.cpp,0x00756910,90,100,,"public: static void * __cdecl boost::singleton_pool<class RBX::Body,236,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::malloc(void)"
+Client/App/v8world/Primitive.cpp,0x00756970,77,100,,"public: static void __cdecl boost::singleton_pool<class RBX::Body,236,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::free(void * const)"
+Client/App/v8world/Primitive.cpp,0x007569c0,87,100,,public: static void * __cdecl RBX::Allocator<class RBX::Body>::operator new(unsigned int)
+Client/App/v8world/Primitive.cpp,0x00756a20,24,-,,
+Client/App/v8world/Primitive.cpp,0x00756a40,591,98.9,M,RBX::Primitive::Primitive(RBX::Geometry::GeometryType)
+Client/App/v8world/PrismPoly.cpp,0x008fd200,131,-,,RBX::PrismPoly::getGeometryParameter(std::string const&) const
+Client/App/v8world/PrismPoly.cpp,0x008fd290,82,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fd2f0,27,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fd310,165,-,,"RBX::PrismPoly::setGeometryParameter(std::string const&, int)"
+Client/App/v8world/PrismPoly.cpp,0x008fd3c0,1247,-,,RBX::PrismPoly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/PrismPoly.cpp,0x008fd8a0,342,-,,RBX::PrismPoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/PrismPoly.cpp,0x008fda40,78,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fda90,83,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdaf0,345,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdc50,87,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdcb0,53,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdcf0,77,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdd40,90,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdda0,77,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fddf0,15,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fde00,87,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fde60,21,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fde80,211,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdf60,136,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fdff0,5,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fe000,147,-,,RBX::POLY::PrismMesh::PrismMesh(RBX::Vector3_2Ints const&)
+Client/App/v8world/PrismPoly.cpp,0x008fe0a0,96,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::ValueCount::ValueCount(RBX::Vector3_2Ints const&)"
+Client/App/v8world/PrismPoly.cpp,0x008fe100,100,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::ValueCount::~ValueCount()"
+Client/App/v8world/PrismPoly.cpp,0x008fe170,301,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::returnToken(RBX::Vector3_2Ints const&, RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::ValueCount*)"
+Client/App/v8world/PrismPoly.cpp,0x008fe2a0,30,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fe2c0,131,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fe350,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::Token>::dispose()"
+Client/App/v8world/PrismPoly.cpp,0x008fe370,98,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fe3e0,83,-,,
+Client/App/v8world/PrismPoly.cpp,0x008fe440,256,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PrismMesh, RBX::Vector3_2IntsComparer>::getToken(RBX::Vector3_2Ints const&)"
+Client/App/v8world/PrismPoly.cpp,0x008fe540,201,-,,RBX::PrismPoly::buildMesh()
+Client/App/v8world/PyramidPoly.cpp,0x008fe610,131,-,,RBX::PyramidPoly::getGeometryParameter(std::string const&) const
+Client/App/v8world/PyramidPoly.cpp,0x008fe6a0,28,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008fe6c0,165,-,,"RBX::PyramidPoly::setGeometryParameter(std::string const&, int)"
+Client/App/v8world/PyramidPoly.cpp,0x008fe770,93,-,,RBX::PyramidPoly::getCofmOffset() const
+Client/App/v8world/PyramidPoly.cpp,0x008fe7d0,1216,-,,RBX::PyramidPoly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/PyramidPoly.cpp,0x008fec90,303,-,,RBX::PyramidPoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/PyramidPoly.cpp,0x008fee10,117,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008fee90,706,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff160,55,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff1a0,145,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff240,505,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff440,101,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff4b0,331,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff600,202,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff6d0,410,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff870,88,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff8d0,174,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff980,77,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ff9d0,90,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffa30,77,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffa80,15,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffa90,87,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffaf0,21,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffb10,211,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffbf0,136,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffc80,5,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008ffc90,147,-,,RBX::POLY::PyramidMesh::PyramidMesh(RBX::Vector3_2Ints const&)
+Client/App/v8world/PyramidPoly.cpp,0x008ffd30,96,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::ValueCount::ValueCount(RBX::Vector3_2Ints const&)"
+Client/App/v8world/PyramidPoly.cpp,0x008ffd90,100,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::ValueCount::~ValueCount()"
+Client/App/v8world/PyramidPoly.cpp,0x008ffe00,301,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::returnToken(RBX::Vector3_2Ints const&, RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::ValueCount*)"
+Client/App/v8world/PyramidPoly.cpp,0x008fff30,30,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008fff50,131,-,,
+Client/App/v8world/PyramidPoly.cpp,0x008fffe0,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::Token>::dispose()"
+Client/App/v8world/PyramidPoly.cpp,0x00900000,98,-,,
+Client/App/v8world/PyramidPoly.cpp,0x00900070,83,-,,
+Client/App/v8world/PyramidPoly.cpp,0x009000d0,256,-,,"RBX::GeometryPool<RBX::Vector3_2Ints, RBX::POLY::PyramidMesh, RBX::Vector3_2IntsComparer>::getToken(RBX::Vector3_2Ints const&)"
+Client/App/v8world/PyramidPoly.cpp,0x009001d0,201,-,,RBX::PyramidPoly::buildMesh()
+Client/App/v8world/RigidJoint.cpp,0x008ee6f0,93,55.4,M,RBX::RigidJoint::isAligned()
+Client/App/v8world/RigidJoint.cpp,0x008ee750,91,43.5,M,"RBX::RigidJoint::align(RBX::Primitive*, RBX::Primitive*)"
+Client/App/v8world/RotateConnector.cpp,0x008b9dd0,19,-,,RBX::RotateConnector::getBody(RBX::Connector::BodyIndex)
+Client/App/v8world/RotateConnector.cpp,0x008b9df0,158,-,,
+Client/App/v8world/RotateConnector.cpp,0x008b9e90,72,-,,
+Client/App/v8world/RotateConnector.cpp,0x008b9ee0,71,-,,RBX::RotateConnector::setVelocityGoal(float)
+Client/App/v8world/RotateConnector.cpp,0x008b9f30,81,-,,RBX::RotateConnector::stepGoals()
+Client/App/v8world/RotateConnector.cpp,0x008b9f90,58,-,,RBX::PointToPointBreakConnector::potentialEnergy()
+Client/App/v8world/RotateConnector.cpp,0x008b9fd0,136,-,,RBX::RotateConnector::computeNormalRotationFromBaseFast(G3D::Vector3&)
+Client/App/v8world/RotateConnector.cpp,0x008ba060,500,-,,RBX::RotateConnector::computeForce(bool)
+Client/App/v8world/RotateConnector.cpp,0x008ba260,251,-,,RBX::PointToPointBreakConnector::computeForce(bool)
+Client/App/v8world/RotateConnector.cpp,0x008ba360,349,-,,RBX::NormalBreakConnector::computeForce(bool)
+Client/App/v8world/RotateConnector.cpp,0x008ba4c0,79,-,,RBX::RotateConnector::reset()
+Client/App/v8world/RotateJoint.cpp,0x00974940,83,-,,RBX::RotateJoint::removeFromKernel()
+Client/App/v8world/RotateJoint.cpp,0x009749a0,166,-,,RBX::DynamicRotateJoint::~DynamicRotateJoint()
+Client/App/v8world/RotateJoint.cpp,0x00974a50,16,-,,RBX::DynamicRotateJoint::setPhysics()
+Client/App/v8world/RotateJoint.cpp,0x00974a60,209,-,,RBX::DynamicRotateJoint::removeFromKernel()
+Client/App/v8world/RotateJoint.cpp,0x00974b40,154,-,,RBX::DynamicRotateJoint::getChannelValue(double)
+Client/App/v8world/RotateJoint.cpp,0x00974be0,28,-,,RBX::RotatePJoint::stepWorld()
+Client/App/v8world/RotateJoint.cpp,0x00974c00,28,-,,RBX::RotateVJoint::stepWorld()
+Client/App/v8world/RotateJoint.cpp,0x00974c20,85,-,,
+Client/App/v8world/RotateJoint.cpp,0x00974c80,8,-,,"non-virtual thunk to RBX::RotateJoint::~RotateJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/RotateJoint.cpp,0x00974c90,86,-,,
+Client/App/v8world/RotateJoint.cpp,0x00974cf0,86,-,,
+Client/App/v8world/RotateJoint.cpp,0x00974d50,4,-,,RBX::PointToPointBreakConnector::getBroken()
+Client/App/v8world/RotateJoint.cpp,0x00974d60,43,-,,"RBX::RotateJoint::~RotateJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/RotateJoint.cpp,0x00974d90,449,65.2,M,"RBX::RotateJoint::surfaceTypeToJoint(RBX::SurfaceType, RBX::Primitive*, RBX::Primitive*, G3D::CoordinateFrame const&, G3D::CoordinateFrame const&)"
+Client/App/v8world/RotateJoint.cpp,0x00974f60,1777,24.0,M,"RBX::RotateJoint::canBuildJoint(RBX::Primitive*, RBX::Primitive*, RBX::NormalId, RBX::NormalId)"
+Client/App/v8world/RotateJoint.cpp,0x00975660,221,-,,
+Client/App/v8world/RotateJoint.cpp,0x00975740,703,-,,RBX::RotateJoint::putInKernel(RBX::Kernel*)
+Client/App/v8world/RotateJoint.cpp,0x00975a00,104,-,,RBX::DynamicRotateJoint::stepUi(double)
+Client/App/v8world/RotateJoint.cpp,0x00975a70,305,-,,RBX::DynamicRotateJoint::putInKernel(RBX::Kernel*)
+Client/App/v8world/SendPhysics.cpp,0x008e5ec0,113,100,M,RBX::SendPhysics::buildSimJob(RBX::SimJob*)
+Client/App/v8world/SendPhysics.cpp,0x008e5f40,160,100,M,RBX::SendPhysics::destroySimJob(RBX::SimJob*)
+Client/App/v8world/SendPhysics.cpp,0x008e5fe0,203,98.4,M,RBX::SendPhysics::onMovingAssemblyRootAdded(RBX::Assembly*)
+Client/App/v8world/SendPhysics.cpp,0x008e60b0,60,95.5,M,RBX::SendPhysics::onMovingAssemblyRootRemoving(RBX::Assembly*)
+Client/App/v8world/SendPhysics.cpp,0x008e60f0,183,100,M,RBX::SendPhysics::~SendPhysics()
+Client/App/v8world/SendPhysics.cpp,0x008e61b0,115,75.4,M,
+Client/App/v8world/SimJob.cpp,0x00822250,27,100,M,public: static class RBX::SimJob * __cdecl RBX::SimJob::getSimJobFromPrimitive(class RBX::Primitive *)
+Client/App/v8world/SimJob.cpp,0x00822270,104,100,M,RBX::SimJobTracker::tracking()
+Client/App/v8world/SimJob.cpp,0x008222e0,166,100,M,RBX::SimJobTracker::getSimJob()
+Client/App/v8world/SimJob.cpp,0x00822390,145,100,M,RBX::SimJob::SimJob(RBX::Assembly*)
+Client/App/v8world/SimJob.cpp,0x00822430,209,100,M,RBX::SimJob::~SimJob()
+Client/App/v8world/SimJob.cpp,0x00822510,444,78.2,,"unsigned long RBX::fastRemoveShort<RBX::SimJobTracker*>(std::vector<RBX::SimJobTracker*, std::allocator<RBX::SimJobTracker*>>&, RBX::SimJobTracker* const&)"
+Client/App/v8world/SimJob.cpp,0x008226d0,219,100,M,RBX::SimJobTracker::stopTracking()
+Client/App/v8world/SimJob.cpp,0x008227b0,265,100,M,RBX::SimJobTracker::setSimJob(RBX::SimJob*)
+Client/App/v8world/SimJob.cpp,0x008228c0,191,100,M,"RBX::SimJobTracker::transferTrackers(RBX::SimJob*, RBX::SimJob*)"
+Client/App/v8world/SimulateStage.cpp,0x00998730,42,100,M,RBX::SimulateStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/SimulateStage.cpp,0x00998760,30,100,M,RBX::SimulateStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/SimulateStage.cpp,0x00998780,104,100,,RBX::Assembly* RBX::IndexedTree::getOneBelowRoot<RBX::Assembly>()
+Client/App/v8world/SimulateStage.cpp,0x009987f0,104,100,M,RBX::SimulateStage::removeFromSendPhysics(RBX::Assembly*)
+Client/App/v8world/SimulateStage.cpp,0x00998860,185,100,,"public: struct std::pair<class std::_Tree<class std::_Tmap_traits<class RBX::Assembly *,int,struct std::less<class RBX::Assembly *>,class std::allocator<struct std::pair<class RBX::Assembly * const,int>>,0>>::iterator,bool> __thiscall std::_Tree<class std::_Tmap_traits<class RBX::Assembly *,int,struct std::less<class RBX::Assembly *>,class std::allocator<struct std::pair<class RBX::Assembly * const,int>>,0>>::insert(struct std::pair<class RBX::Assembly * const,int> const &)"
+Client/App/v8world/SimulateStage.cpp,0x00998920,195,100,M,RBX::SimulateStage::putFirstMovingRootInSendPhysics(RBX::Assembly*)
+Client/App/v8world/SimulateStage.cpp,0x009989f0,201,54.5,M,RBX::SimulateStage::removeLastMovingRootFromSendPhysics(RBX::Assembly*)
+Client/App/v8world/SimulateStage.cpp,0x00998ac0,330,100,M,RBX::SimulateStage::onAssemblyAdded(RBX::Assembly*)
+Client/App/v8world/SimulateStage.cpp,0x00998c10,140,100,M,RBX::SimulateStage::onAssemblyRemoving(RBX::Assembly*)
+Client/App/v8world/SimulateStage.cpp,0x00998ca0,366,100,M,RBX::SimulateStage::~SimulateStage()
+Client/App/v8world/SimulateStage.cpp,0x00998e10,181,100,M,"RBX::SimulateStage::SimulateStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/SimulateStage.cpp,0x00998ed0,30,100,,"RBX::SimulateStage::~SimulateStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/SleepStage.cpp,0x008e6790,205,-,,RBX::SleepStage::isAffecting(RBX::Edge*)
+Client/App/v8world/SleepStage.cpp,0x008e6860,143,96.0,M,RBX::SleepStage::stateToSet(RBX::Sim::AssemblyState)
+Client/App/v8world/SleepStage.cpp,0x008e6910,85,-,,
+Client/App/v8world/SleepStage.cpp,0x008e6970,77,-,,
+Client/App/v8world/SleepStage.cpp,0x008e69c0,214,60.8,,
+Client/App/v8world/SleepStage.cpp,0x008e6aa0,170,-,,RBX::SleepStage::computeStateFromNeighbors(RBX::Assembly*)
+Client/App/v8world/SleepStage.cpp,0x008e6b50,119,-,,
+Client/App/v8world/SleepStage.cpp,0x008e6bd0,63,-,,RBX::SleepStage::getMetric(RBX::IWorldStage::MetricType)
+Client/App/v8world/SleepStage.cpp,0x008e6c10,48,100,,"class RBX::Reflection::CallbackDescriptor * * __cdecl stdext::_Unchecked_move_backward<class RBX::Reflection::CallbackDescriptor * *,class RBX::Reflection::CallbackDescriptor * *>(class RBX::Reflection::CallbackDescriptor * *,class RBX::Reflection::CallbackDescriptor * *,class RBX::Reflection::CallbackDescriptor * *)"
+Client/App/v8world/SleepStage.cpp,0x008e6c40,161,100,,"public: void __thiscall RBX::IndexArray<class RBX::Contact,&public: int & __thiscall RBX::Contact::steppingIndexFunc(void)>::fastAppend(class RBX::Contact *)"
+Client/App/v8world/SleepStage.cpp,0x008e6cf0,185,100,,"RBX::IndexArray<RBX::Contact, &RBX::Contact::steppingIndexFunc()>::fastRemove(RBX::Contact*)"
+Client/App/v8world/SleepStage.cpp,0x008e6db0,150,100,,"public: __thiscall G3D::Array<class RBX::IndexedTree *,10,32>::Array<class RBX::IndexedTree *,10,32>(void)"
+Client/App/v8world/SleepStage.cpp,0x008e6e50,12,100,,"public: __thiscall RBX::IndexArray<class RBX::IndexedTree,&private: int & __thiscall RBX::IndexedTree::getIndex(void)>::IndexArray<class RBX::IndexedTree,&private: int & __thiscall RBX::IndexedTree::getIndex(void)>(void)"
+Client/App/v8world/SleepStage.cpp,0x008e6e60,766,1.0,M,RBX::SleepStage::onAssemblyAdded(RBX::Assembly*)
+Client/App/v8world/SleepStage.cpp,0x008e7160,1715,100,M,RBX::SleepStage::~SleepStage()
+Client/App/v8world/SleepStage.cpp,0x008e7820,6,100,,RBX::SleepStage::getStageType() const
+Client/App/v8world/SleepStage.cpp,0x008e7830,335,90.1,,"RBX::SleepStage::changeJointState(RBX::Joint*, RBX::Sim::EdgeState)"
+Client/App/v8world/SleepStage.cpp,0x008e7980,772,58.8,M,"RBX::SleepStage::changeAssemblyState(RBX::Assembly*, RBX::Sim::AssemblyState)"
+Client/App/v8world/SleepStage.cpp,0x008e7c90,356,1.9,M,RBX::SleepStage::onAssemblyRemoving(RBX::Assembly*)
+Client/App/v8world/SleepStage.cpp,0x008e7e00,322,100,M,RBX::SleepStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/SleepStage.cpp,0x008e7f50,843,100,M,"RBX::SleepStage::SleepStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/SleepStage.cpp,0x008e82a0,30,100,,"RBX::SleepStage::~SleepStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/SleepStage.cpp,0x008e82c0,49,-,,
+Client/App/v8world/SleepStage.cpp,0x008e8300,91,75.0,,"RBX::SleepStage::onExternalTickleAssembly(RBX::Assembly*, bool)"
+Client/App/v8world/SleepStage.cpp,0x008e8360,704,66.5,,RBX::SleepStage::stepJoints()
+Client/App/v8world/SleepStage.cpp,0x008e8620,771,-,,RBX::SleepStage::stepAssembliesAwake()
+Client/App/v8world/SleepStage.cpp,0x008e8930,739,-,,RBX::SleepStage::stepAssembliesSleepingChecking()
+Client/App/v8world/SleepStage.cpp,0x008e8c20,78,80.0,,
+Client/App/v8world/SleepStage.cpp,0x008e8c70,68,85.7,,
+Client/App/v8world/SleepStage.cpp,0x008e8cc0,460,97.5,,"RBX::SleepStage::changeContactState(RBX::Contact*, RBX::Sim::EdgeState)"
+Client/App/v8world/SleepStage.cpp,0x008e8e90,406,94.4,M,RBX::SleepStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/SleepStage.cpp,0x008e9030,313,-,,RBX::SleepStage::wakeEdge(RBX::Edge*)
+Client/App/v8world/SleepStage.cpp,0x008e9170,1685,-,,"RBX::SleepStage::stepContacts(RBX::IndexArray<RBX::Contact, &RBX::Contact::steppingIndexFunc()>&)"
+Client/App/v8world/SleepStage.cpp,0x008e9820,410,-,,"RBX::SleepStage::traverse(RBX::Assembly*, std::deque<RBX::Assembly*, std::allocator<RBX::Assembly*>>&, int)"
+Client/App/v8world/SleepStage.cpp,0x008e99c0,124,-,,"RBX::SleepStage::doContacts(RBX::IndexArray<RBX::Contact, &RBX::Contact::steppingIndexFunc()> (&) [2])"
+Client/App/v8world/SleepStage.cpp,0x008e9a40,838,-,,"RBX::SleepStage::wakeAssemblies(std::set<RBX::Assembly*, std::less<RBX::Assembly*>, std::allocator<RBX::Assembly*>>&, int, RBX::Sim::AssemblyState)"
+Client/App/v8world/SleepStage.cpp,0x008e9d90,1411,-,,"RBX::SleepStage::stepSleepStage(int, int, bool)"
+Client/App/v8world/SpatialFilter.cpp,0x008e3980,180,-,,RBX::SpatialFilter::isNotClientAddress(RBX::Assembly*)
+Client/App/v8world/SpatialFilter.cpp,0x008e3a40,90,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e3aa0,55,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e3ae0,271,22.2,,"RBX::SpatialFilter::filterAssembly(RBX::Assembly*, bool)"
+Client/App/v8world/SpatialFilter.cpp,0x008e3c10,83,100,,"public: void __thiscall std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::const_iterator::_Dec(void)"
+Client/App/v8world/SpatialFilter.cpp,0x008e3c70,760,59.6,M,RBX::SpatialFilter::moveInto(RBX::SpatialFilter::MoveInstructions&)
+Client/App/v8world/SpatialFilter.cpp,0x008e3f70,130,100,,"protected: struct std::pair<class std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::iterator,class std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::iterator> __thiscall std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::_Eqrange(class RBX::IMoving * const &)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4000,82,100,,"protected: void __thiscall std::_Tree<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::_Rrotate(struct std::_Tree_nod<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::_Node *)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4060,286,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e4180,231,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e4270,57,100,,"protected: struct std::_Tree_nod<class std::_Tset_traits<class RBX::SpanningNode *,struct std::less<class RBX::SpanningNode *>,class std::allocator<class RBX::SpanningNode *>,0>>::_Node * __thiscall std::_Tree<class std::_Tset_traits<class RBX::SpanningNode *,struct std::less<class RBX::SpanningNode *>,class std::allocator<class RBX::SpanningNode *>,0>>::_Buynode(struct std::_Tree_nod<class std::_Tset_traits<class RBX::SpanningNode *,struct std::less<class RBX::SpanningNode *>,class std::allocator<class RBX::SpanningNode *>,0>>::_Node *,struct std::_Tree_nod<class std::_Tset_traits<class RBX::SpanningNode *,struct std::less<class RBX::SpanningNode *>,class std::allocator<class RBX::SpanningNode *>,0>>::_Node *,struct std::_Tree_nod<class std::_Tset_traits<class RBX::SpanningNode *,struct std::less<class RBX::SpanningNode *>,class std::allocator<class RBX::SpanningNode *>,0>>::_Node *,class RBX::SpanningNode * const &,char)"
+Client/App/v8world/SpatialFilter.cpp,0x008e42b0,8,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e42c0,162,-,,
+Client/App/v8world/SpatialFilter.cpp,0x008e4370,505,100,,"protected: class std::_Tree<class std::_Tset_traits<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>,0>>::iterator __thiscall std::_Tree<class std::_Tset_traits<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>,0>>::_Insert(bool,struct std::_Tree_nod<class std::_Tset_traits<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>,0>>::_Node *,class RBX::BaseScript * const &)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4570,185,100,,"public: struct std::pair<class std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::iterator,bool> __thiscall std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::insert(class RBX::IMoving * const &)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4630,215,100,,RBX::SpatialFilter::~SpatialFilter()
+Client/App/v8world/SpatialFilter.cpp,0x008e4710,80,100,,RBX::IStage::getKernel()
+Client/App/v8world/SpatialFilter.cpp,0x008e4760,80,100,,RBX::IWorldStage::getMetric(RBX::IWorldStage::MetricType)
+Client/App/v8world/SpatialFilter.cpp,0x008e47b0,356,100,M,RBX::SpatialFilter::changePhase(RBX::SpatialFilter::MoveInstructions&)
+Client/App/v8world/SpatialFilter.cpp,0x008e4920,372,-,,RBX::SpatialFilter::filterAssemblies()
+Client/App/v8world/SpatialFilter.cpp,0x008e4aa0,200,-,,RBX::SpatialFilter::moveAll(RBX::Assembly::FilterPhase)
+Client/App/v8world/SpatialFilter.cpp,0x008e4b70,39,-,,RBX::SpatialFilter::filterStep()
+Client/App/v8world/SpatialFilter.cpp,0x008e4ba0,219,71.2,M,RBX::SpatialFilter::onMovingAssemblyRootAdded(RBX::Assembly*)
+Client/App/v8world/SpatialFilter.cpp,0x008e4c80,213,100,M,RBX::SpatialFilter::onFixedAssemblyRootAdded(RBX::Assembly*)
+Client/App/v8world/SpatialFilter.cpp,0x008e4d60,141,41.3,,RBX::SpatialFilter::onAssemblyRootRemoving(RBX::Assembly*)
+Client/App/v8world/SpatialFilter.cpp,0x008e4df0,43,100,,"public: __thiscall std::set<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>>::set<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>>(void)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4e20,216,100,M,"RBX::SpatialFilter::SpatialFilter(RBX::IStage*, RBX::World*)"
+Client/App/v8world/SpatialFilter.cpp,0x008e4f00,30,100,,"RBX::SpatialFilter::~SpatialFilter() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/SpatialHashMultiRes.cpp,0x007925a0,197,100,M,"RBX::SpatialHashStatic::getHash(int, RBX::Vector3int32 const&)"
+Client/App/v8world/SpatialHashMultiRes.cpp,0x00792670,307,62.6,M,"RBX::SpatialHashStatic::computeMinMax(int, RBX::Extents const&, RBX::Vector3int32&, RBX::Vector3int32&)"
+Client/App/v8world/StepJointsStage.cpp,0x008ef0d0,30,100,M,RBX::StepJointsStage::onSimulateAssemblyAdded(RBX::Assembly*)
+Client/App/v8world/StepJointsStage.cpp,0x008ef0f0,30,100,M,RBX::StepJointsStage::onSimulateAssemblyRemoving(RBX::Assembly*)
+Client/App/v8world/StepJointsStage.cpp,0x008ef110,137,45.1,M,RBX::StepJointsStage::removeJoint(RBX::Joint*)
+Client/App/v8world/StepJointsStage.cpp,0x008ef1a0,112,54.0,M,RBX::StepJointsStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/StepJointsStage.cpp,0x008ef210,85,100,M,RBX::StepJointsStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/StepJointsStage.cpp,0x008ef270,204,-,M,RBX::StepJointsStage::jointsStepWorld()
+Client/App/v8world/StepJointsStage.cpp,0x008ef340,194,73.9,M,RBX::StepJointsStage::~StepJointsStage()
+Client/App/v8world/StepJointsStage.cpp,0x008ef410,188,41.7,M,"RBX::StepJointsStage::StepJointsStage(RBX::IStage*, RBX::World*)"
+Client/App/v8world/StepJointsStage.cpp,0x008ef4d0,30,100,,"RBX::StepJointsStage::~StepJointsStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/TreeStage.cpp,0x008eb750,79,100,,public: void __thiscall RBX::TreeStage::destroyAssembly(class RBX::Primitive *)
+Client/App/v8world/TreeStage.cpp,0x008eb7a0,293,100,M,RBX::TreeStage::onEdgeAdded(RBX::Edge*)
+Client/App/v8world/TreeStage.cpp,0x008eb8d0,323,100,M,RBX::TreeStage::onEdgeRemoving(RBX::Edge*)
+Client/App/v8world/TreeStage.cpp,0x008eba20,98,100,M,RBX::TreeStage::onPrimitiveAdded(RBX::Primitive*)
+Client/App/v8world/TreeStage.cpp,0x008eba90,94,100,M,RBX::TreeStage::onPrimitiveRemoving(RBX::Primitive*)
+Client/App/v8world/TreeStage.cpp,0x008ebaf0,24,-,,RBX::TreeStage::getMetric(RBX::IWorldStage::MetricType)
+Client/App/v8world/TreeStage.cpp,0x008ebb10,80,-,,
+Client/App/v8world/TreeStage.cpp,0x008ebb60,132,-,,
+Client/App/v8world/TreeStage.cpp,0x008ebbf0,71,100,,"public: void __thiscall RBX::IndexedTree::visitMeAndChildren<class RBX::Assembly,class boost::_bi::bind_t<void,void (__cdecl *)(class RBX::Assembly *),class boost::_bi::list1<struct boost::arg<1>>>>(class boost::_bi::bind_t<void,void (__cdecl *)(class RBX::Assembly *),class boost::_bi::list1<struct boost::arg<1>>>)"
+Client/App/v8world/TreeStage.cpp,0x008ebc40,280,100,M,RBX::TreeStage::cleanMechanism(RBX::Mechanism*)
+Client/App/v8world/TreeStage.cpp,0x008ebd60,264,-,,
+Client/App/v8world/TreeStage.cpp,0x008ebe70,88,100,,"public: unsigned int __thiscall std::_Tree<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::erase(class RBX::Joint * const &)"
+Client/App/v8world/TreeStage.cpp,0x008ebed0,333,44.8,,RBX::TreeStage::~TreeStage()
+Client/App/v8world/TreeStage.cpp,0x008ec020,6,100,,RBX::Motor6DJoint::getJointType() const
+Client/App/v8world/TreeStage.cpp,0x008ec030,177,100,M,RBX::TreeStage::removeFromPipeline(RBX::Mechanism*)
+Client/App/v8world/TreeStage.cpp,0x008ec0f0,112,100,M,RBX::TreeStage::dirtyMechanism(RBX::Mechanism*)
+Client/App/v8world/TreeStage.cpp,0x008ec160,152,100,M,RBX::TreeStage::destroyMechanism(RBX::Primitive*)
+Client/App/v8world/TreeStage.cpp,0x008ec200,226,-,,
+Client/App/v8world/TreeStage.cpp,0x008ec2f0,30,100,,"RBX::TreeStage::~TreeStage() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/TreeStage.cpp,0x008ec310,376,-,,"RBX::TreeStage::onSpanningEdgeAdding(RBX::SpanningEdge*, RBX::SpanningNode*)"
+Client/App/v8world/TreeStage.cpp,0x008ec490,1452,66.9,M,RBX::TreeStage::onSpanningEdgeAdded(RBX::SpanningEdge*)
+Client/App/v8world/TreeStage.cpp,0x008eca40,57,100,M,public: virtual void __thiscall RBX::TreeStage::onSpanningEdgeRemoving(class RBX::SpanningEdge *)
+Client/App/v8world/TreeStage.cpp,0x008eca80,800,86.9,M,"RBX::TreeStage::onSpanningEdgeRemoved(RBX::SpanningEdge*, RBX::SpanningNode*)"
+Client/App/v8world/WedgePoly.cpp,0x009002a0,50,-,,RBX::WedgePoly::getCofmOffset() const
+Client/App/v8world/WedgePoly.cpp,0x009002e0,56,-,,RBX::WedgePoly::getFaceFromLegacyNormalId(RBX::NormalId) const
+Client/App/v8world/WedgePoly.cpp,0x00900330,292,-,,RBX::WedgePoly::getSurfaceCoordInBody(unsigned long) const
+Client/App/v8world/WedgePoly.cpp,0x00900460,458,-,,RBX::WedgePoly::getCenterToCorner(G3D::Matrix3 const&) const
+Client/App/v8world/WedgePoly.cpp,0x00900630,77,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900680,90,-,,
+Client/App/v8world/WedgePoly.cpp,0x009006e0,77,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900730,15,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900740,87,-,,
+Client/App/v8world/WedgePoly.cpp,0x009007a0,21,-,,
+Client/App/v8world/WedgePoly.cpp,0x009007c0,211,-,,
+Client/App/v8world/WedgePoly.cpp,0x009008a0,136,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900930,5,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900940,103,-,,
+Client/App/v8world/WedgePoly.cpp,0x009009b0,96,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900a10,100,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::WedgeMesh, RBX::Vector3Comparer>::ValueCount::~ValueCount()"
+Client/App/v8world/WedgePoly.cpp,0x00900a80,301,-,,"RBX::GeometryPool<G3D::Vector3, RBX::POLY::WedgeMesh, RBX::Vector3Comparer>::returnToken(G3D::Vector3 const&, RBX::GeometryPool<G3D::Vector3, RBX::POLY::WedgeMesh, RBX::Vector3Comparer>::ValueCount*)"
+Client/App/v8world/WedgePoly.cpp,0x00900bb0,30,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900bd0,131,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900c60,29,-,,"boost::detail::sp_counted_impl_p<RBX::GeometryPool<G3D::Vector3, RBX::POLY::WedgeMesh, RBX::Vector3Comparer>::Token>::dispose()"
+Client/App/v8world/WedgePoly.cpp,0x00900c80,98,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900cf0,83,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900d50,314,-,,
+Client/App/v8world/WedgePoly.cpp,0x00900e90,175,-,,RBX::WedgePoly::buildMesh()
+Client/App/v8world/WeldJoint.cpp,0x007fa960,43,-,,"RBX::ManualWeldJoint::~ManualWeldJoint() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8world/World.cpp,0x00745590,100,100,M,public: bool __thiscall RBX::EThrottle::increaseLoad(bool)
+Client/App/v8world/World.cpp,0x00745600,250,100,M,public: bool __thiscall RBX::EThrottle::computeThrottle(int)
+Client/App/v8world/World.cpp,0x00745720,94,100,M,public: float __thiscall RBX::EThrottle::getEnvironmentSpeed(void)const
+Client/App/v8world/World.cpp,0x00745780,13,100,M,public: class RBX::Kernel * __thiscall RBX::World::getKernel(void)
+Client/App/v8world/World.cpp,0x00745790,56,-,,
+Client/App/v8world/World.cpp,0x007457d0,20,-,,
+Client/App/v8world/World.cpp,0x007457f0,20,-,,
+Client/App/v8world/World.cpp,0x00745810,13,-,,
+Client/App/v8world/World.cpp,0x00745820,122,4.8,M,RBX::World::onPrimitiveContactParametersChanged(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x007458a0,170,100,M,RBX::World::onPrimitiveExtentsChanged(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00745950,170,-,,RBX::World::onPrimitiveGeometryChanged(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00745a00,11,100,M,"RBX::World::onJointPrimitiveNulling(RBX::Joint*, RBX::Primitive*)"
+Client/App/v8world/World.cpp,0x00745a10,11,100,M,"RBX::World::onJointPrimitiveSet(RBX::Joint*, RBX::Primitive*)"
+Client/App/v8world/World.cpp,0x00745a20,10,100,,public: void __thiscall RakNet::ReliabilityLayer::SetSplitMessageProgressInterval(int)
+Client/App/v8world/World.cpp,0x00745a30,9,-,,
+Client/App/v8world/World.cpp,0x00745a40,18,-,,
+Client/App/v8world/World.cpp,0x00745a60,28,-,,
+Client/App/v8world/World.cpp,0x00745a80,113,75.4,M,RBX::World::destroyContact(RBX::Contact*)
+Client/App/v8world/World.cpp,0x00745b00,134,100,,private: static class boost::mutex * __cdecl rbx::signals::signal<void __cdecl (class RBX::Joint *)>::safe_static_do_get_mutex(void)
+Client/App/v8world/World.cpp,0x00745b90,5,100,,private: static void __cdecl rbx::signals::signal<void __cdecl (class RBX::Joint *)>::safe_static_init_mutex(void)
+Client/App/v8world/World.cpp,0x00745ba0,134,100,,"private: static class boost::mutex * __cdecl rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::safe_static_do_get_mutex(void)"
+Client/App/v8world/World.cpp,0x00745c30,5,100,,"private: static void __cdecl rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::safe_static_init_mutex(void)"
+Client/App/v8world/World.cpp,0x00745c40,47,100,,public: static bool __cdecl RBX::Joint::isGroundJoint(class RBX::Edge const *)
+Client/App/v8world/World.cpp,0x00745c70,56,71.1,,
+Client/App/v8world/World.cpp,0x00745cb0,106,-,,
+Client/App/v8world/World.cpp,0x00745d20,42,-,,
+Client/App/v8world/World.cpp,0x00745d50,42,-,M,
+Client/App/v8world/World.cpp,0x00745d80,43,-,,
+Client/App/v8world/World.cpp,0x00745db0,13,-,,
+Client/App/v8world/World.cpp,0x00745dc0,13,-,,
+Client/App/v8world/World.cpp,0x00745dd0,120,58.9,M,"RBX::World::ticklePrimitive(RBX::Primitive*, bool)"
+Client/App/v8world/World.cpp,0x00745e50,354,1.9,M,RBX::World::onPrimitiveEngineChanging(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00745fc0,126,4.3,M,RBX::World::onPrimitiveEngineChanged(RBX::Assembly*)
+Client/App/v8world/World.cpp,0x00746040,206,3.1,M,RBX::World::onPrimitiveFixedChanging(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00746110,206,3.1,M,RBX::World::onPrimitiveFixedChanged(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x007461e0,142,3.8,M,RBX::World::onPrimitivePreventCollideChanged(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00746270,54,100,M,public: int __thiscall RBX::World::onAssemblyInSimluationStage(class RBX::Assembly *)
+Client/App/v8world/World.cpp,0x007462b0,46,-,,
+Client/App/v8world/World.cpp,0x007462e0,54,-,,
+Client/App/v8world/World.cpp,0x00746320,125,-,,
+Client/App/v8world/World.cpp,0x007463a0,78,100,,"protected: void __thiscall std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::_Lrotate(struct std::_Tree_nod<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::_Node *)"
+Client/App/v8world/World.cpp,0x007463f0,380,-,,
+Client/App/v8world/World.cpp,0x00746570,48,-,,
+Client/App/v8world/World.cpp,0x007465a0,202,100,,"public: __thiscall G3D::Array<class boost::shared_ptr<class RBX::JointInstance>,10,32>::~Array<class boost::shared_ptr<class RBX::JointInstance>,10,32>(void)"
+Client/App/v8world/World.cpp,0x00746670,706,100,,"public: class std::_Tree<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::iterator __thiscall std::_Tree<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::erase(class std::_Tree<class std::_Tset_traits<class RBX::Joint *,struct std::less<class RBX::Joint *>,class std::allocator<class RBX::Joint *>,0>>::const_iterator)"
+Client/App/v8world/World.cpp,0x00746940,305,-,,
+Client/App/v8world/World.cpp,0x00746a80,53,100,,"protected: void __thiscall std::_Tree<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::_Erase(struct std::_Tree_nod<class std::_Tset_traits<class RBX::IMoving *,struct std::less<class RBX::IMoving *>,class std::allocator<class RBX::IMoving *>,0>>::_Node *)"
+Client/App/v8world/World.cpp,0x00746ac0,115,-,,
+Client/App/v8world/World.cpp,0x00746b40,94,-,,
+Client/App/v8world/World.cpp,0x00746ba0,282,-,,
+Client/App/v8world/World.cpp,0x00746cc0,84,100,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Joint *)>::signal<void __cdecl (class RBX::Joint *)>(void)
+Client/App/v8world/World.cpp,0x00746d20,84,100,,"public: __thiscall rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>(void)"
+Client/App/v8world/World.cpp,0x00746d80,84,100,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Primitive *)>::signal<void __cdecl (class RBX::Primitive *)>(void)
+Client/App/v8world/World.cpp,0x00746de0,162,-,,
+Client/App/v8world/World.cpp,0x00746e90,175,-,,
+Client/App/v8world/World.cpp,0x00746f40,201,100,,"RBX::IndexArray<RBX::Primitive, &RBX::Primitive::worldIndexFunc()>::fastRemove(RBX::Primitive*)"
+Client/App/v8world/World.cpp,0x00747010,155,-,,
+Client/App/v8world/World.cpp,0x007470b0,286,-,,
+Client/App/v8world/World.cpp,0x007471d0,8,-,,
+Client/App/v8world/World.cpp,0x007471e0,15,-,,
+Client/App/v8world/World.cpp,0x007471f0,576,92.1,M,RBX::World::insertPrimitive(RBX::Primitive*)
+Client/App/v8world/World.cpp,0x00747430,202,100,,"public: class std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::iterator __thiscall std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::erase(class std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::const_iterator,class std::_Tree<class std::_Tset_traits<class RBX::Assembly *,struct std::less<class RBX::Assembly *>,class std::allocator<class RBX::Assembly *>,0>>::const_iterator)"
+Client/App/v8world/World.cpp,0x00747500,102,-,,
+Client/App/v8world/World.cpp,0x00747570,57,-,,
+Client/App/v8world/World.cpp,0x007475b0,62,-,,
+Client/App/v8world/World.cpp,0x007475f0,46,100,,"public: __thiscall std::set<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>>::~set<class RBX::BaseScript *,struct std::less<class RBX::BaseScript *>,class std::allocator<class RBX::BaseScript *>>(void)"
+Client/App/v8world/World.cpp,0x00747620,185,100,M,RBX::World::onAssemblyExtentsChanged(RBX::Assembly*)
+Client/App/v8world/World.cpp,0x007476e0,439,-,,
+Client/App/v8world/World.cpp,0x007478a0,1010,-,,"RBX::World::doWorldStep(bool, int, int)"
+Client/App/v8world/World.cpp,0x00747ca0,408,-,,"RBX::World::computeFallen(G3D::Array<RBX::Primitive*, 10, 32ul>&) const"
+Client/App/v8world/World.cpp,0x00747e40,103,100,M,RBX::World::removeFromBreakable(RBX::Joint*)
+Client/App/v8world/World.cpp,0x00747eb0,107,100,M,RBX::World::removeJoint(RBX::Joint*)
+Client/App/v8world/World.cpp,0x00747f20,1067,100,M,"private: void __thiscall RBX::World::loadProfilers(class std::vector<class RBX::Profiling::CodeProfiler *,class std::allocator<class RBX::Profiling::CodeProfiler *>> &)const"
+Client/App/v8world/World.cpp,0x00748350,715,100,,public: void __thiscall rbx::signals::signal<void __cdecl (class RBX::Joint *)>::disconnectAll(void)
+Client/App/v8world/World.cpp,0x00748620,435,-,,
+Client/App/v8world/World.cpp,0x007487e0,715,100,,"public: void __thiscall rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::disconnectAll(void)"
+Client/App/v8world/World.cpp,0x00748ab0,435,-,,
+Client/App/v8world/World.cpp,0x00748c70,715,100,,public: void __thiscall rbx::signals::signal<void __cdecl (class RBX::Primitive *)>::disconnectAll(void)
+Client/App/v8world/World.cpp,0x00748f40,181,-,,"rbx::signals::signal_with_args<1, void (RBX::Joint*)>::operator()(RBX::Joint*)"
+Client/App/v8world/World.cpp,0x00749000,130,100,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Joint *)>::~signal<void __cdecl (class RBX::Joint *)>(void)
+Client/App/v8world/World.cpp,0x00749090,185,-,,
+Client/App/v8world/World.cpp,0x00749150,130,100,,"public: __thiscall rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::~signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>(void)"
+Client/App/v8world/World.cpp,0x007491e0,130,100,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Primitive *)>::~signal<void __cdecl (class RBX::Primitive *)>(void)
+Client/App/v8world/World.cpp,0x00749270,91,-,,
+Client/App/v8world/World.cpp,0x007492d0,99,87.1,,
+Client/App/v8world/World.cpp,0x00749340,900,52.9,M,
+Client/App/v8world/World.cpp,0x007496d0,447,-,,
+Client/App/v8world/World.cpp,0x00749890,22,100,,"public: void __thiscall RBX::World::destroyAutoJoints(class RBX::Primitive *,bool)"
+Client/App/v8world/World.cpp,0x007498b0,286,-,M,"RBX::World::destroyAutoJointsToWorld(G3D::Array<RBX::Primitive*, 10, 32ul> const&)"
+Client/App/v8world/World.cpp,0x007499d0,210,-,,
+Client/App/v8world/World.cpp,0x00749ab0,5,-,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Joint *)>::~signal<void __cdecl (class RBX::Joint *)>(void)
+Client/App/v8world/World.cpp,0x00749ac0,5,-,,"public: __thiscall rbx::signals::signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>::~signal<void __cdecl (struct std::pair<class RBX::Primitive *,class RBX::Primitive *>)>(void)"
+Client/App/v8world/World.cpp,0x00749ad0,5,-,,public: __thiscall rbx::signals::signal<void __cdecl (class RBX::Primitive *)>::~signal<void __cdecl (class RBX::Primitive *)>(void)
+Client/App/v8world/World.cpp,0x00749ae0,808,100,M,RBX::World::~World()
+Client/App/v8world/World.cpp,0x00749e10,688,-,,"RBX::World::uiStep(bool, double)"
+Client/App/v8world/World.cpp,0x0074a0c0,1288,-,,"RBX::World::step(bool, double, float, int)"
+Client/App/v8world/World.cpp,0x0074a5d0,443,91.7,M,RBX::World::insertJoint(RBX::Joint*)
+Client/App/v8world/World.cpp,0x0074a790,749,87.0,M,"RBX::World::removePrimitive(RBX::Primitive*, bool)"
+Client/App/v8world/World.cpp,0x0074aa80,332,99.1,M,"RBX::World::createAutoJoints(RBX::Primitive*, std::set<RBX::Primitive*, std::less<RBX::Primitive*>, std::allocator<RBX::Primitive*>>*, std::set<RBX::Primitive*, std::less<RBX::Primitive*>, std::allocator<RBX::Primitive*>>*)"
+Client/App/v8world/World.cpp,0x0074abd0,17,100,,public: void __thiscall RBX::World::createAutoJoints(class RBX::Primitive *)
+Client/App/v8world/World.cpp,0x0074abf0,284,-,M,"RBX::World::createAutoJointsToWorld(G3D::Array<RBX::Primitive*, 10, 32ul> const&)"
+Client/App/v8world/World.cpp,0x0074ad10,284,-,M,"RBX::World::createAutoJointsToPrimitives(G3D::Array<RBX::Primitive*, 10, 32ul> const&)"
+Client/App/v8world/World.cpp,0x0074ae30,804,100,M,RBX::World::World()
+Client/App/v8kernel/Body.cpp,0x008ecdf0,18,100,M,public: void __thiscall RBX::Body::advanceStateIndex(void)
+Client/App/v8kernel/Body.cpp,0x008ece10,10,-,,
+Client/App/v8kernel/Body.cpp,0x008ece20,67,52.6,,
+Client/App/v8kernel/Body.cpp,0x008ece70,154,100,M,RBX::Body::validateParentCofmDirty()
+Client/App/v8kernel/Body.cpp,0x008ecf10,568,100,M,RBX::Body::makeCofmDirty()
+Client/App/v8kernel/Body.cpp,0x008ed150,8,100,M,RBX::Body::onChildAdding(RBX::IndexedTree*)
+Client/App/v8kernel/Body.cpp,0x008ed160,233,32.2,,RBX::Body::setMeInParent(G3D::CoordinateFrame const&)
+Client/App/v8kernel/Body.cpp,0x008ed250,205,3.0,,RBX::Body::setMeInParent(RBX::Link*)
+Client/App/v8kernel/Body.cpp,0x008ed320,195,34.7,M,"RBX::Body::setPv(RBX::PV const&, RBX::BodyPvSetter const&)"
+Client/App/v8kernel/Body.cpp,0x008ed3f0,94,-,,
+Client/App/v8kernel/Body.cpp,0x008ed450,45,-,,
+Client/App/v8kernel/Body.cpp,0x008ed480,44,-,,
+Client/App/v8kernel/Body.cpp,0x008ed4b0,247,100,M,RBX::Body::getBranchCofmOffset()
+Client/App/v8kernel/Body.cpp,0x008ed5b0,15,100,,public: class RBX::Body * __thiscall RBX::IndexedTree::getRoot<class RBX::Body>(void)
+Client/App/v8kernel/Body.cpp,0x008ed5c0,132,100,M,RBX::Body::resetRoot(RBX::Body*)
+Client/App/v8kernel/Body.cpp,0x008ed650,266,91.5,,
+Client/App/v8kernel/Body.cpp,0x008ed760,71,-,,
+Client/App/v8kernel/Body.cpp,0x008ed7b0,113,59.2,,
+Client/App/v8kernel/Body.cpp,0x008ed830,160,100,,public: class G3D::Matrix3 __thiscall RBX::Body::getBranchIWorldAtPoint(class G3D::Vector3 const &)
+Client/App/v8kernel/Body.cpp,0x008ed8d0,286,-,,
+Client/App/v8kernel/Body.cpp,0x008ed9f0,80,100,,"private: static struct boost::singleton_pool<class RBX::Cofm,60,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::pool_type & __cdecl boost::singleton_pool<class RBX::Cofm,60,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::get_pool(void)"
+Client/App/v8kernel/Body.cpp,0x008eda40,80,100,,"private: static struct boost::singleton_pool<class RBX::SimBody,308,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::pool_type & __cdecl boost::singleton_pool<class RBX::SimBody,308,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::get_pool(void)"
+Client/App/v8kernel/Body.cpp,0x008eda90,90,100,,"public: static void * __cdecl boost::singleton_pool<class RBX::Cofm,60,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::malloc(void)"
+Client/App/v8kernel/Body.cpp,0x008edaf0,77,100,,"public: static void __cdecl boost::singleton_pool<class RBX::Cofm,60,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::free(void * const)"
+Client/App/v8kernel/Body.cpp,0x008edb40,90,100,,"public: static void * __cdecl boost::singleton_pool<class RBX::SimBody,308,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::malloc(void)"
+Client/App/v8kernel/Body.cpp,0x008edba0,77,100,,"public: static void __cdecl boost::singleton_pool<class RBX::SimBody,308,struct boost::default_user_allocator_malloc_free,class boost::mutex,32,0>::free(void * const)"
+Client/App/v8kernel/Body.cpp,0x008edbf0,77,-,,
+Client/App/v8kernel/Body.cpp,0x008edc40,87,100,,public: static void * __cdecl RBX::Allocator<class RBX::Cofm>::operator new(unsigned int)
+Client/App/v8kernel/Body.cpp,0x008edca0,21,-,,
+Client/App/v8kernel/Body.cpp,0x008edcc0,87,100,,public: static void * __cdecl RBX::Allocator<class RBX::SimBody>::operator new(unsigned int)
+Client/App/v8kernel/Body.cpp,0x008edd20,24,-,,
+Client/App/v8kernel/Body.cpp,0x008edd40,15,-,,
+Client/App/v8kernel/Body.cpp,0x008edd50,318,-,,RBX::Body::onParentChanging()
+Client/App/v8kernel/Body.cpp,0x008ede90,145,-,,RBX::Body::onParentChanged(RBX::IndexedTree*)
+Client/App/v8kernel/Body.cpp,0x008edf30,304,100,M,RBX::Body::refreshCofm()
+Client/App/v8kernel/Body.cpp,0x008ee060,108,100,M,RBX::Body::setCofmOffset(G3D::Vector3 const&)
+Client/App/v8kernel/Body.cpp,0x008ee0d0,162,-,,RBX::Body::onChildAdded(RBX::IndexedTree*)
+Client/App/v8kernel/Body.cpp,0x008ee180,96,-,,RBX::Body::onChildRemoved(RBX::IndexedTree*)
+Client/App/v8kernel/Body.cpp,0x008ee1e0,211,-,,
+Client/App/v8kernel/Body.cpp,0x008ee2c0,309,40.5,M,
+Client/App/v8kernel/Body.cpp,0x008ee400,549,100,M,RBX::Body::~Body()
+Client/App/v8kernel/Body.cpp,0x008ee630,99,-,,
+Client/App/v8kernel/Body.cpp,0x008ee6a0,24,-,,
+Client/App/v8kernel/Body.cpp,0x008ee6c0,40,100,,"RBX::Body::~Body() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8kernel/BuoyancyConnector.cpp,0x009a34b0,336,-,,RBX::BuoyancyConnector::computeForce(bool)
+Client/App/v8kernel/BuoyancyConnector.cpp,0x009a3600,388,-,,RBX::BuoyancyConnector::updateContactPoint()
+Client/App/v8kernel/Cofm.cpp,0x0099a650,1351,100,M,RBX::Cofm::updateIfDirty()
+Client/App/v8kernel/Connector.cpp,0x008b9d80,46,100,M,RBX::Connector::computeCanThrottle()
+Client/App/v8kernel/Connector.cpp,0x008b9db0,25,-,,RBX::PointToPointBreakConnector::getBody(RBX::Connector::BodyIndex)
+Client/App/v8kernel/Constants.cpp,0x0084d380,18,100,M,public: static int __cdecl RBX::Constants::uiStepsPerSec(void)
+Client/App/v8kernel/Constants.cpp,0x0084d3a0,19,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d3c0,6,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d3d0,37,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d400,6,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d410,7,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d420,6,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d430,7,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d440,7,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d450,30,100,M,public: static float __cdecl RBX::Constants::uiDt(void)
+Client/App/v8kernel/Constants.cpp,0x0084d470,7,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d480,60,29.3,,
+Client/App/v8kernel/Constants.cpp,0x0084d4c0,66,28.6,,
+Client/App/v8kernel/Constants.cpp,0x0084d510,89,-,,
+Client/App/v8kernel/Constants.cpp,0x0084d570,405,-,,"RBX::Constants::getKmsMaxJointForce(float, float)"
+Client/App/v8kernel/Constants.cpp,0x0084d710,1202,-,,"RBX::Constants::getJointKMultiplier(G3D::Vector3 const&, bool)"
+Client/App/v8kernel/Constants.cpp,0x0084dc00,261,2.8,M,"RBX::Constants::getJointK(G3D::Vector3 const&, bool)"
+Client/App/v8kernel/ContactConnector.cpp,0x0084e8b0,349,35.4,M,"RBX::ContactConnector::getReordedSimBody(RBX::SimBody*&, RBX::SimBody*&, RBX::Body*&, RBX::PairParams&)"
+Client/App/v8kernel/ContactConnector.cpp,0x0084ea10,28,100,M,"RBX::ContactConnector::getReordedSimBody(RBX::SimBody*&, RBX::SimBody*&, RBX::PairParams&)"
+Client/App/v8kernel/ContactConnector.cpp,0x0084ea30,480,55.8,M,RBX::ContactConnector::updateContactPoint()
+Client/App/v8kernel/ContactConnector.cpp,0x0084ec10,215,-,,RBX::BallBallConnector::updateContactPoint()
+Client/App/v8kernel/ContactConnector.cpp,0x0084ecf0,447,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x0084eeb0,419,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x0084f060,79,-,,RBX::BallBlockConnector::updateContactPoint()
+Client/App/v8kernel/ContactConnector.cpp,0x0084f0b0,516,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x0084f2c0,32,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x0084f2e0,689,30.2,,"RBX::ContactConnector::getSimBodyAndContactVelocity(RBX::SimBody*&, RBX::SimBody*&, RBX::PairParams&, float&, G3D::Vector3&)"
+Client/App/v8kernel/ContactConnector.cpp,0x0084f5a0,1144,71.7,M,RBX::ContactConnector::computeForce(bool)
+Client/App/v8kernel/ContactConnector.cpp,0x0084fa20,2466,74.9,M,RBX::ContactConnector::computeImpulse(float&)
+Client/App/v8kernel/ContactConnector.cpp,0x008503d0,175,-,,RBX::Block::getEdgeVertex(int) const
+Client/App/v8kernel/ContactConnector.cpp,0x00850480,259,63.5,,"RBX::GeoPair::match(RBX::Body*, RBX::Body*, RBX::GeoPairType, int, int)"
+Client/App/v8kernel/ContactConnector.cpp,0x00850590,96,-,,RBX::ContactConnector::isIntersecting()
+Client/App/v8kernel/ContactConnector.cpp,0x008505f0,84,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x00850650,122,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x008506d0,67,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x00850720,56,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x00850760,56,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x008507a0,17,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x008507c0,49,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x00850800,106,-,,
+Client/App/v8kernel/ContactConnector.cpp,0x00850870,88,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082ebc0,125,-,M,
+Client/App/v8kernel/Kernel.cpp,0x0082ec40,523,17.4,M,RBX::Kernel::stepWorldThrottled()
+Client/App/v8kernel/Kernel.cpp,0x0082ee50,255,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082ef50,218,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082f030,274,27.3,,
+Client/App/v8kernel/Kernel.cpp,0x0082f150,43,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082f180,191,100,,"public: void __thiscall G3D::Array<class RBX::IndexedTree *,10,32>::resize(int,bool)"
+Client/App/v8kernel/Kernel.cpp,0x0082f240,983,100,,RBX::KernelData::~KernelData()
+Client/App/v8kernel/Kernel.cpp,0x0082f620,65,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082f670,219,100,M,RBX::Kernel::~Kernel()
+Client/App/v8kernel/Kernel.cpp,0x0082f750,6,100,,RBX::HUMAN::Dead::getStateType() const
+Client/App/v8kernel/Kernel.cpp,0x0082f760,167,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082f810,194,-,,"RBX::IndexArray<RBX::SimBody, &RBX::SimBody::getFreeFallBodyIndex()>::fastRemove(RBX::SimBody*)"
+Client/App/v8kernel/Kernel.cpp,0x0082f8e0,167,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082f990,194,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fa60,167,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fb10,194,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fbe0,167,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fc90,194,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fd60,175,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fe10,201,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082fee0,175,-,,
+Client/App/v8kernel/Kernel.cpp,0x0082ff90,201,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830060,161,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830110,185,-,,
+Client/App/v8kernel/Kernel.cpp,0x008301d0,161,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830280,185,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830340,185,100,,"RBX::IndexArray<RBX::IndexedTree, &RBX::IndexedTree::getIndex()>::fastRemove(RBX::IndexedTree*)"
+Client/App/v8kernel/Kernel.cpp,0x00830400,161,-,,
+Client/App/v8kernel/Kernel.cpp,0x008304b0,185,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830570,161,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830620,185,-,,
+Client/App/v8kernel/Kernel.cpp,0x008306e0,233,69.2,,RBX::KernelData::addLeafBody(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x008307d0,160,-,,
+Client/App/v8kernel/Kernel.cpp,0x00830870,63,-,,
+Client/App/v8kernel/Kernel.cpp,0x008308b0,154,24.0,,RBX::KernelData::removeBodyFromCurrentList(RBX::SimBody*)
+Client/App/v8kernel/Kernel.cpp,0x00830950,30,100,,"RBX::Kernel::~Kernel() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8kernel/Kernel.cpp,0x00830970,89,57.1,M,RBX::Kernel::removePoint(RBX::Point*)
+Client/App/v8kernel/Kernel.cpp,0x008309d0,224,33.3,M,RBX::Kernel::insertPoint(RBX::Point*)
+Client/App/v8kernel/Kernel.cpp,0x00830ab0,110,91.1,M,RBX::Kernel::deletePoint(RBX::Point*)
+Client/App/v8kernel/Kernel.cpp,0x00830b20,1417,10.3,M,RBX::Kernel::stepWorld()
+Client/App/v8kernel/Kernel.cpp,0x008310b0,194,100,,public: __thiscall RBX::KernelData::KernelData(void)
+Client/App/v8kernel/Kernel.cpp,0x00831180,202,52.2,,RBX::KernelData::addLeafBodies(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x00831250,277,100,,RBX::KernelData::removeBody(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x00831370,327,13.7,,RBX::KernelData::addBodyToNewList(RBX::SimBody*)
+Client/App/v8kernel/Kernel.cpp,0x008314c0,103,-,,
+Client/App/v8kernel/Kernel.cpp,0x00831530,85,-,,
+Client/App/v8kernel/Kernel.cpp,0x00831590,243,100,M,RBX::Kernel::Kernel(RBX::IStage*)
+Client/App/v8kernel/Kernel.cpp,0x00831690,389,100,M,RBX::Kernel::removeBody(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x00831820,186,-,M,"RBX::Kernel::newPointLocal(RBX::Body*, G3D::Vector3 const&)"
+Client/App/v8kernel/Kernel.cpp,0x008318e0,373,-,M,
+Client/App/v8kernel/Kernel.cpp,0x00831a60,308,100,,RBX::KernelData::insertBody(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x00831ba0,989,27.2,,RBX::KernelData::addConnector(RBX::Connector*)
+Client/App/v8kernel/Kernel.cpp,0x00831f80,839,11.7,,RBX::KernelData::removeConnector(RBX::Connector*)
+Client/App/v8kernel/Kernel.cpp,0x008322d0,150,81.0,M,RBX::Kernel::insertBody(RBX::Body*)
+Client/App/v8kernel/Kernel.cpp,0x00832370,86,100,M,RBX::Kernel::insertConnector(RBX::Connector*)
+Client/App/v8kernel/Kernel.cpp,0x008323d0,86,100,M,RBX::Kernel::removeConnector(RBX::Connector*)
+Client/App/v8kernel/Kernel.cpp,0x00832430,125,-,M,"RBX::Kernel::step(bool, int)"
+Client/App/v8kernel/Link.cpp,0x008e3580,239,100,M,RBX::RevoluteLink::computeChildInParent(G3D::CoordinateFrame&) const
+Client/App/v8kernel/Link.cpp,0x008e3670,201,100,M,RBX::D6Link::computeChildInParent(G3D::CoordinateFrame&) const
+Client/App/v8kernel/Link.cpp,0x008e3740,89,100,M,RBX::Link::dirty()
+Client/App/v8kernel/Link.cpp,0x008e37a0,133,100,M,"RBX::Link::reset(G3D::CoordinateFrame const&, G3D::CoordinateFrame const&)"
+Client/App/v8kernel/Point.cpp,0x00978890,97,100,,"RBX::Point::~Point() [D0, deleting: the MSVC scalar deleting destructor]"
+Client/App/v8kernel/PolyConnectors.cpp,0x009664f0,266,-,,
+Client/App/v8kernel/SimBody.cpp,0x00976a00,372,100,M,RBX::SimBody::~SimBody()
+Client/App/v8kernel/SimBody.cpp,0x00976b80,109,-,,
+Client/App/v8kernel/SimBody.cpp,0x00976bf0,176,-,,
+Client/App/v8kernel/SimBody.cpp,0x00976ca0,81,-,,
+Client/App/v8kernel/SimBody.cpp,0x00976d00,73,-,,
+Client/App/v8kernel/SimBody.cpp,0x00976d50,181,42.6,,RBX::SimBody::getOwnerPV()
+Client/App/v8kernel/SimBody.cpp,0x00976e10,1461,20.1,M,RBX::SimBody::step()
+Client/App/v8kernel/SimBody.cpp,0x009773d0,930,37.3,,RBX::SimBody::stepVelocity()
+Client/App/v8kernel/SimBody.cpp,0x00977780,664,14.3,,"RBX::SimBody::applyImpulse(G3D::Vector3 const&, G3D::Vector3 const&)"
+Client/App/v8kernel/SimBody.cpp,0x00977a20,807,65.9,,RBX::SimBody::stepPosition()
+Client/App/v8kernel/SimBody.cpp,0x00977d50,1012,52.4,,RBX::SimBody::stepFreeFall()
+Client/App/v8kernel/SimBody.cpp,0x00978150,778,50.4,M,RBX::SimBody::update()

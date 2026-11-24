@@ -16,6 +16,7 @@
 #pragma once
 
 #include "V8Kernel/IStage.h"
+#include "G3D/Vector3.h"
 #include "Util/Profiling.h"
 #include "boost/scoped_ptr.hpp"
 
@@ -46,7 +47,15 @@ namespace RBX {
 		// mac: 0x52A7F4 (batch244: :98 !inStepCode + :60/:61 IndexArray
 		// protocol into data->points; removePoint/deletePoint queue with
 		// the point-removal body).
-		void insertPoint(Point* point);
+		// 2013 (PLAYER 0x008309d0) searches the points for a same-body/offset duplicate first and returns
+		// the point kept (the 2013 :98 assert sits after the search loop).
+		Point* insertPoint(Point* point);
+		// PLAYER 0x00831820 (:146).
+		Point* newPointLocal(Body* body, const G3D::Vector3& localPos);
+		// PLAYER 0x00832430 (:185): preStep + stepWorld, or preStepThrottled + stepWorldThrottled.
+		void step(bool throttling, int numThreads);
+		void preStep();				// PLAYER 0x008318e0
+		void preStepThrottled();	// PLAYER 0x0082ebc0
 		// 0x52Axxx (batch222: :77 root-dt assert + KernelData::insertBody;
 		// the +12 max-count maintenance is skipped (binary repurposes
 		// Kernel+12 as a counter; ours stays NULL-world, unread -- loud
@@ -57,9 +66,6 @@ namespace RBX {
 		void removeBody(Body* body);
 		// mac: 0x52A9AE (batch249: :110 !inStepCode + fastRemove by index).
 		void removePoint(Point* point);
-		// mac: 0x52AB7E (batch249: body+localPos match bump owners + delete
-		// the input; else insertPoint; :103 index asserts).
-		Point* searchForDuplicatePoint(Point* input);
 		// (batch244: post-dec equals 1 releases the last owner, then
 		// removePoint + delete).
 		void deletePoint(Point* point);

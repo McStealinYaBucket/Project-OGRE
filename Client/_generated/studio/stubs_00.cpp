@@ -59,6 +59,14 @@ extern "C" void ogre_stub_007600d0()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
 
+// public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
+// STUB: STUDIO 0x00789030
+extern "C" void ogre_stub_00789030()
+{
+	STUB(0x00789030);
+}
+#pragma comment(linker, "/alternatename:?publicInsertRaw@RootInstance@RBX@@QAEXABV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@PAVInstance@2@AAV?$vector@V?$weak_ptr@VPartInstance@RBX@@@boost@@V?$allocator@V?$weak_ptr@VPartInstance@RBX@@@boost@@@std@@@4@_N3@Z=_ogre_stub_00789030")
+
 // void __cdecl RBX::registerNewLightAPI(void)
 // STUB: STUDIO 0x007d7380
 extern "C" void ogre_stub_007d7380()

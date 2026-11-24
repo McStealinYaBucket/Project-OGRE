@@ -1126,7 +1126,7 @@ public:
 
 // TEMPLATE: PLAYER 0x00641940
 // TEMPLATE: STUDIO 0x0075f1f0
-// ??$fastDynamicCast@VStatsItem@RBX@@@DescribedBase@Reflection@RBX@@SAPBVStatsItem@2@PBV012@@Z
+// ??$fastDynamicCast@VItem@Stats@RBX@@@DescribedBase@Reflection@RBX@@SAPBVItem@Stats@2@PBV012@@Z
 
 // TEMPLATE: PLAYER 0x00643ff0
 // ??$connect@V?$function@$$A6AX_N@Z@boost@@@?$signal@$$A6AX_N@Z@signals@rbx@@QAE?AVconnection@12@ABV?$function@$$A6AX_N@Z@boost@@@Z

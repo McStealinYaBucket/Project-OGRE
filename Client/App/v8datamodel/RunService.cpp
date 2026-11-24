@@ -5,8 +5,7 @@
    start and the ctor from the PLAYER bytes (0x0072bb60..0x0072efd0); reflection and the stepping
    bodies not written yet.
    Both jobs read TaskScheduler::Job::Stats as 2013 lays it out: timespanSinceLastStep at +0 and
-   timespanOfLastStep at +8 (Stats ctor 0x009b98d0, ret 0xc, no timeNow). Base's Stats still has
-   2016's timeNow first, so error() and stepDataModelJob() stay STUB until Base drops it. */
+   timespanOfLastStep at +8 (Stats ctor 0x009b98d0, ret 0xc, no timeNow). */
 
 #include "stdafx.h"
 
@@ -91,7 +90,7 @@ namespace RBX {
 		// SYNTHETIC: STUDIO 0x007991f0
 		// RBX::PhysicsJob::`scalar deleting destructor'
 
-		// STUB: PLAYER 0x0072b880
+		// FUNCTION: PLAYER 0x0072b880
 		virtual TaskScheduler::StepResult stepDataModelJob(const Stats& stats)
 		{
 			shared_ptr<DataModel> d(dataModel.lock());
@@ -100,7 +99,10 @@ namespace RBX {
 
 			FASTLOG1(FLog::DataModelJobs, "Physics Job start, data model: %p", d.get());
 			DataModel::scoped_write_request request(d.get());
-			d->physicsStep(Constants::uiDt(), stats.timespanSinceLastStep.seconds(), stats.timespanOfLastStep.seconds(), allotedConcurrency);
+			// Read into locals first: the original loads timespanSinceLastStep before timespanOfLastStep.
+			double dt = stats.timespanSinceLastStep.seconds();
+			double dutyDt = stats.timespanOfLastStep.seconds();
+			d->physicsStep(Constants::uiDt(), dt, dutyDt, allotedConcurrency);
 			FASTLOG1(FLog::DataModelJobs, "Physics Job finish, data model: %p", d.get());
 			return TaskScheduler::Stepped;
 		}
@@ -194,9 +196,25 @@ namespace RBX {
 		TaskScheduler::singleton().add(heartbeatTask);
 	}
 
-	// Only the guard of the 2013 body (555 bytes: the heartbeat, Stepped/Heartbeat signals and
-	// the script stepping) is written.
+	// 2013 has no FASTLOG here (2016 logs the step and the budget).
+	// STUB: PLAYER 0x0072da30
+	// STUB: STUDIO 0x0079b6b0
+	void RunService::raiseHeartbeat(double wallStep, const Time::Interval& stepBudget)
+	{
+		totalWallTime += wallStep;
+
+		double gameStep = totalGameTime - totalGameTimeAtLastHeartbeat;
+
+		heartbeatSignal(Heartbeat(totalWallTime, wallStep, totalGameTime, gameStep, Time::nowFast() + stepBudget));
+
+		scriptHeartbeatSignal(wallStep);
+
+		totalGameTimeAtLastHeartbeat = totalGameTime;
+	}
+
+	// 2013 has no cyclic-executive branch: the heartbeat is raised once per step.
 	// STUB: PLAYER 0x0072dc30
+	// STUB: STUDIO 0x0079b850
 	TaskScheduler::StepResult HeartbeatTask::stepDataModelJob(const Stats& stats)
 	{
 		shared_ptr<DataModel> d(dataModel.lock());
@@ -205,6 +223,13 @@ namespace RBX {
 		shared_ptr<RunService> r(runService.lock());
 		if (!r)
 			return TaskScheduler::Done;
+
+		FASTLOG1(FLog::DataModelJobs, "Heartbeat start, data model: %p", d.get());
+		DataModel::scoped_write_request request(d.get());
+
+		r->raiseHeartbeat(stats.timespanSinceLastStep.seconds(), stepBudget);
+
+		FASTLOG1(FLog::DataModelJobs, "Heartbeat finish, data model: %p", d.get());
 		return TaskScheduler::Stepped;
 	}
 
@@ -214,8 +239,8 @@ namespace RBX {
 		: runState(RS_STOPPED)
 		, totalGameTime(0.0)
 		, totalGameTimeAtLastHeartbeat(0.0)
-		, totalWallTime(0.0)
 		, skippedTimeAccumulated(0.0)
+		, totalWallTime(0.0)
 	{
 		setName("Run Service");
 	}

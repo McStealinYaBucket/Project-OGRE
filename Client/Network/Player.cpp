@@ -36,7 +36,7 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::Network::Player);
+// Player is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
@@ -88,3 +88,33 @@ template<> TypeRegistrar<Network::Player::ChatMode> TypeRegistrar<Network::Playe
 
 } // namespace Reflection
 } // namespace RBX
+
+// Stand-in, not 2013 code (no marker). 2013's Player.obj and the other Network TUs call
+// ServiceProvider::find<T>()/create<T>() for these services from functions this tree does not have
+// yet (find<SpawnerService> PLAYER 0x0053be80, find<StarterGuiService> 0x00539450,
+// find<PersonalServerService> 0x005391f0, find<SocialService> 0x00539ea0, find<JointsService>
+// 0x00590c10, create<MarketplaceService> 0x00598400), so their isNullClassName/Creator copies spell
+// include\Util/Object.h. Without a Network instantiation, PLAYER's DataModel.obj supplies them, and it
+// spells include\util/object.h (see DataModel.cpp). Drop each line once its real caller is written.
+// create<Lighting>: 2013's Creator<Lighting> copies come from the client shell (getClassName 0x00449980,
+// Creator ctor 0x0044b820), which this tree does not have yet.
+#include "V8DataModel/SpawnerService.h"
+#include "V8DataModel/StarterGuiService.h"
+#include "V8DataModel/StarterPackService.h"
+#include "V8DataModel/PersonalServerService.h"
+#include "V8DataModel/SocialService.h"
+#include "V8DataModel/JointsService.h"
+#include "V8DataModel/PhysicsService.h"
+#include "V8DataModel/ScriptService.h"
+#include "V8DataModel/MarketplaceService.h"
+#include "V8DataModel/Lighting.h"
+template RBX::SpawnerService* RBX::ServiceProvider::find<RBX::SpawnerService>() const;
+template RBX::StarterGuiService* RBX::ServiceProvider::find<RBX::StarterGuiService>() const;
+template RBX::StarterPackService* RBX::ServiceProvider::find<RBX::StarterPackService>() const;
+template RBX::PersonalServerService* RBX::ServiceProvider::find<RBX::PersonalServerService>() const;
+template RBX::SocialService* RBX::ServiceProvider::find<RBX::SocialService>() const;
+template RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() const;
+template RBX::PhysicsService* RBX::ServiceProvider::find<RBX::PhysicsService>() const;
+template RBX::ScriptService* RBX::ServiceProvider::find<RBX::ScriptService>() const;
+template RBX::MarketplaceService* RBX::ServiceProvider::create<RBX::MarketplaceService>() const;
+template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;

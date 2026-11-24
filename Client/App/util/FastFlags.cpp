@@ -36,9 +36,12 @@ bool ImpulseSolverForContact = false;
 bool SkipBroadPhaseWhenThrottling = false;
 bool BlockBlockNarrowPhaseRefactor = false;
 bool SegregatedLuaEnvironments = false;
+// 2013 registers LuaDebugger in DebuggerManager.obj (PLAYER 0x00a82050, STUDIO 0x00b14760).
+// GLOBAL: PLAYER 0x00e12ec8
+// GLOBAL: STUDIO 0x00f67698
 bool LuaDebugger = false;
 bool DebugCrashEnabled = false;
-bool AllowYieldInHooks = false;
+// AllowYieldInHooks is defined in script/ThreadRef.cpp (FASTFLAGVARIABLE, as 2013's ThreadRef.obj).
 bool CamelCaseHackEnabled = false;
 
 // mac: 0x60B053 reads this.  Default true -> isValidRobloxAssetUrl gate runs

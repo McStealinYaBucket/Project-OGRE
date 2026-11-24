@@ -156,13 +156,13 @@ namespace RBX {
 		}
 		void resetImpulseAccumulators() {
 			updateIfDirty();
-			impulse = G3D::Vector3::zero();
-			rotationalImpulse = G3D::Vector3::zero();
+			impulse = G3D::Vector3(0.0, 0.0, 0.0);	// inline zero stores (SleepStage::onAssemblyAdded 0x008e6f8d)
+			rotationalImpulse = G3D::Vector3(0.0, 0.0, 0.0);
 		}
 		void resetForceAccumulators() {
 			updateIfDirty();
 			force = getWorldGravityForce();
-			torque = G3D::Vector3::zero();
+			torque = G3D::Vector3(0.0, 0.0, 0.0);
 		}
 		// FUNCTION: PLAYER 0x0082de80
 		// FUNCTION: STUDIO 0x009a0450

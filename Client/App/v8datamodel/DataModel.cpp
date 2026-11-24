@@ -6,18 +6,14 @@
        original file /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/DataModel.cpp line 1485
      - Scalar setters below from F:\2013Decompile\exports\decomp\Refl_DataModel.cpp.txt:
        setRemoteBuildMode 0x2CDEC2 (*(this+3440)=a2, Mach-O); getRemoteBuildMode 0x2CDED4;
-       setServerSaveUrl 0x2CDEE4 (assign string at +3444);
-       setScreenshotSEOInfo 0x2D1664 (+3448); setVideoSEOInfo 0x2D1686 (+3452);
+       setServerSaveUrl 0x2CDEE4 (assign string at +3444); setScreenshotSEOInfo 0x2D1664 (+3448); setVideoSEOInfo 0x2D1686 (+3452);
        setPlaceVersion 0x2D1442 (+3464, FastLog "Setting place version");
        setPlaceID 0x2D14A4 (+3456 + ScriptContext::setRobloxPlace wiring — TODO);
-       setCreatorID 0x2D153C (+3468/+3472); setGenre 0x2D159E (+3476);
-       setGear 0x2D15DA (+3480/+3481 + allowedGearTypeChanged signal at +2784);
-       isGearTypeAllowed 0x2D164A (bittest on +3484);
-       activateExperimentalFeatures 0x2D152C (*(this+3460)=1);
+       setCreatorID 0x2D153C (+3468/+3472); setGenre 0x2D159E (+3476); setGear 0x2D15DA (+3480/+3481 + allowedGearTypeChanged signal at +2784);
+       isGearTypeAllowed 0x2D164A (bittest on +3484); activateExperimentalFeatures 0x2D152C (*(this+3460)=1);
        canSaveLocal 0x2D01B2 (returns 0 — 2016 returns true on Windows);
        getSyncronizationArbiter 0x2D2E70 (parentDM null ? this+184 : parentDM+184);
-       setUiMessage 0x2D04F2 / clearUiMessage 0x2D0514 (string at +2988);
-       getPlaceID 0x2E425A (int at +3456).
+       setUiMessage 0x2D04F2 / clearUiMessage 0x2D0514 (string at +2988); getPlaceID 0x2E425A (int at +3456).
    TODO(decompile, needs Visit/Workspace/ScriptContext/GuiBuilder + reflection block):
      canSave 0x2D257A (static, find<Visit> + uploadUrl), close 0x2CFF76 (getVerb "Exit"),
      toggleToolsOff 0x2D00E4 (getVerb "TogglePlayMode"), completeShutdown 0x2D038C,
@@ -28,11 +24,15 @@
      loadWorld 0x2CD928 / loadGame 0x2CDA8C / loadContent 0x2CDBAA / save 0x2CDDFE,
      getJobsInfo 0x2CE8BE / getJobsExtendedStats 0x2D0548 / peak fractions / stats window,
      saveToRoblox 0x2D01BA, serverSavePlace 0x2D25EA,
-     doDataModelSetup 0x2D2EB2 (GenericJobs wiring). */
+     doDataModelSetup 0x2D2EB2 (GenericJobs wiring).
+   Object.h: PLAYER's DataModel.obj spells it include\util/object.h (isNullClassName<sContentFilter>
+     0x00632290), STUDIO's include\Util/Object.h; the include below keeps the line count. */
 
 #include "stdafx.h"
 #include "decomp.h"
-
+#ifdef OGRE_TARGET_PLAYER
+#include "util/object.h"
+#endif
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/DataModelJob.h"
 #include "V8DataModel/Visit.h"

@@ -19,7 +19,7 @@ REFLECTION_END();
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::Network::Server);
+// Server is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }
 
 namespace RBX {

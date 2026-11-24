@@ -14,7 +14,14 @@ namespace RBX {
 		Vector3int32	low;
 		Vector3int32	high;
 
-		ExtentsInt32(); // 0x56EFA4: low = maxInt(), high = minInt()
+		// Inline in 2013: the Primitive ctor 0x00756a40 calls it out of line with no EH state store
+		// before the call (VC9 saw the body and knew it cannot throw); the kept copy sits outside App.
+		// FUNCTION: PLAYER 0x004e5df0
+		// FUNCTION: STUDIO 0x0056dac0
+		ExtentsInt32()
+			: low(Vector3int32::maxInt())
+			, high(Vector3int32::minInt())
+		{}
 
 		ExtentsInt32(const Vector3int32& _min, const Vector3int32& _max)
 			: low(_min)

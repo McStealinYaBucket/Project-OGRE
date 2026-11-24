@@ -51,6 +51,14 @@ extern "C" void ogre_stub_0075ed40()
 }
 #pragma comment(linker, "/alternatename:?registerNewLightAPI@RBX@@YAXXZ=_ogre_stub_0075ed40")
 
+// public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
+// STUB: PLAYER 0x007e33f0
+extern "C" void ogre_stub_007e33f0()
+{
+	STUB(0x007e33f0);
+}
+#pragma comment(linker, "/alternatename:?publicInsertRaw@RootInstance@RBX@@QAEXABV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@PAVInstance@2@AAV?$vector@V?$weak_ptr@VPartInstance@RBX@@@boost@@V?$allocator@V?$weak_ptr@VPartInstance@RBX@@@boost@@@std@@@4@_N3@Z=_ogre_stub_007e33f0")
+
 // unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
 // STUB: PLAYER 0x009b59b0
 extern "C" void ogre_stub_009b59b0()

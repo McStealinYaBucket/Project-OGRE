@@ -31,11 +31,11 @@ namespace FLog {
 
 namespace RBX {
 
-	// STUB: PLAYER 0x00756a40
-	// STUB: STUDIO 0x00895d10
+	// FUNCTION: PLAYER 0x00756a40
+	// FUNCTION: STUDIO 0x00895d10
 	Primitive::Primitive(int geometryType)
 		: networkOwner(Network::NetworkOwner::Unassigned())
-		, m_unk0x7c(false)
+		, networkIsSleeping(false)
 		, guidSetExternally(false)
 		, sizeMultiplier(SIZE_MULTIPLIER_0)
 		, sortSize(0)
@@ -98,6 +98,29 @@ namespace RBX {
 		return body->getCanThrottle();
 	}
 
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x00753ac0
+	// FUNCTION: STUDIO 0x00892e70
+	int Primitive::getSizeMultiplier() const
+	{
+		switch (sizeMultiplier)
+		{
+		case SIZE_MULTIPLIER_0: return 1;
+		case SIZE_MULTIPLIER_1: return 5;
+		case SIZE_MULTIPLIER_2: return 10;
+		case SIZE_MULTIPLIER_3: return 20;
+		default: break;
+		}
+		RBXASSERT(0);
+		return 1;
+	}
+
 	const Assembly* Primitive::getConstAssembly() const
 	{
 		return Assembly::getConstPrimitiveAssembly(this);
@@ -113,30 +136,7 @@ namespace RBX {
 		return Clump::getConstPrimitiveClump(this);
 	}
 
-	void Primitive::setNetworkIsSleeping(bool value)
-	{
-		if (value != networkIsSleeping)
-		{
-			networkIsSleeping = value;
-			myOwner->onNetworkIsSleepingChanged();
-		}
-	}
 
-	void Primitive::zeroVelocity()
-	{
-		Assembly* assembly = getAssembly();
-		bool assemblyRoot = (assembly != NULL) && (assembly->getAssemblyPrimitive() == this);
-		if (assemblyRoot || assembly == NULL)
-			getBody()->setVelocity(Velocity::zero());
-	}
-
-	// FUNCTION: PLAYER 0x007542a0
-	void Primitive::setSurfaceType(NormalId normalId, SurfaceType surfaceType)
-	{
-		if (surfaces[normalId] != surfaceType) {
-			surfaces[normalId] = surfaceType;
-		}
-	}
 
 	// FUNCTION: PLAYER 0x00753bb0
 	const Guid& Primitive::getGuid() const
@@ -145,25 +145,30 @@ namespace RBX {
 		return guid;
 	}
 
+	// STUB: PLAYER 0x00753c10
+	// STUB: STUDIO 0x00892fc0
+	void Primitive::setGuid(const Guid& value)
+	{
+		RBXASSERT(!world);
+		guid.copyDataFrom(value);	// Guid::assign
+		guidSetExternally = true;
+	}
+
 	int Primitive::countNumAutoJoints() const
 	{
 		int total = 0;
 		for (int i = 0; i < joints.size(); ++i)
 		{
 			const Joint* j = static_cast<const Joint*>(joints.getEdge(i));
-			if (j->isAutoJoint())
+			if (Joint::isAutoJoint(j))
 				++total;
 		}
 		return total;
 	}
-
-	// mac: 0x590916. p0 is `this`; p1 arrives as the argument.
 	// STUB: PLAYER 0x00754960
 	// STUB: STUDIO 0x00893c90
 	Joint* Primitive::getJoint(Primitive* p0, Primitive* p1, int n)
 	{
-		// Fewer-edged prim list; nth links(p0,p1) match (NULL if exhausted).
-		// (static in 2013: p0 is pushed like p1)
 		Primitive* least = (p0->joints.size() <= p1->joints.size()) ? p0 : p1;
 		int found = 0;
 		for (int i = 0; i < least->joints.size(); ++i)
@@ -174,12 +179,10 @@ namespace RBX {
 		}
 		return NULL;
 	}
-
 	Edge* Primitive::getJoint(int i)
 	{
 		return joints.getEdge(i);
 	}
-
 	// FUNCTION: PLAYER 0x007548b0
 	Edge* Primitive::getFirstRigidAt(Joint* start)
 	{
@@ -190,19 +193,16 @@ namespace RBX {
 		}
 		return NULL;
 	}
-
 	// STUB: PLAYER 0x00754910
 	RigidJoint* Primitive::getFirstRigid()
 	{
 		return static_cast<RigidJoint*>(getFirstRigidAt(getFirstJoint()));
 	}
-
 	// FUNCTION: PLAYER 0x00754940
 	RigidJoint* Primitive::getNextRigid(RigidJoint* prev)
 	{
 		return static_cast<RigidJoint*>(getFirstRigidAt(getNextJoint(prev)));
 	}
-
 	const Joint* Primitive::getConstJoint(int i) const
 	{
 		return static_cast<const Joint*>(joints.getEdge(i));
@@ -363,21 +363,31 @@ namespace RBX {
 		sortSize = (unsigned int)result;
 	}
 
-	// mac: 0x58FC9E (151B).
-	// STUB: PLAYER 0x00753ac0
-	// STUB: STUDIO 0x00892e70
-	int Primitive::getSizeMultiplier() const
+
+
+	void Primitive::setNetworkIsSleeping(bool value)
 	{
-		switch (sizeMultiplier)
+		if (value != networkIsSleeping)
 		{
-		case SIZE_MULTIPLIER_0: return 1;
-		case SIZE_MULTIPLIER_1: return 5;
-		case SIZE_MULTIPLIER_2: return 10;
-		case SIZE_MULTIPLIER_3: return 20;
-		default: break;
+			networkIsSleeping = value;
+			myOwner->onNetworkIsSleepingChanged();
 		}
-		RBXASSERT(false);  // Primitive.cpp:120 "0"
-		return 1;
+	}
+	// STUB: PLAYER 0x00754130
+	// STUB: STUDIO 0x008934e0
+	void Primitive::zeroVelocity()
+	{
+		Assembly* assembly = getAssembly();
+		bool assemblyRoot = (assembly != NULL) && (assembly->getAssemblyPrimitive() == this);
+		if (assemblyRoot || assembly == NULL)
+			getBody()->setVelocity(Velocity::zero());
+	}
+	// FUNCTION: PLAYER 0x007542a0
+	void Primitive::setSurfaceType(NormalId normalId, SurfaceType surfaceType)
+	{
+		if (surfaces[normalId] != surfaceType) {
+			surfaces[normalId] = surfaceType;
+		}
 	}
 
 	// mac: 0x5911DE (176B).  minss/maxss spelled as ternaries: `x<y?x:y` matches
@@ -409,16 +419,6 @@ namespace RBX {
 		}
 	}
 
-	// mac: 0x58FE46 (153B).  Guid::assign spelled via copyDataFrom (extract +
-	// assign -- same bytes, no pointer surgery).
-	// STUB: PLAYER 0x00753c10
-	// STUB: STUDIO 0x00892fc0
-	void Primitive::setGuid(const Guid& value)
-	{
-		RBXASSERT(world == NULL);  // Primitive.cpp:152 "!world"
-		guid.copyDataFrom(value);
-		guidSetExternally = true;
-	}
 
 	// getMechanism 0x590F4A / getConstMechanism 0x590F54: forward to the
 	// Mechanism statics (real walks; NULL for unlinked prims).
@@ -482,14 +482,16 @@ namespace RBX {
 		}
 		return NULL;
 	}
-	// mac: 0x590808.
+	// STUB: PLAYER 0x00754870
+	// STUB: STUDIO 0x00893ba0
 	Contact* Primitive::getFirstContact()
 	{
 		if (contacts.size() <= 0)
 			return NULL;
 		return static_cast<Contact*>(contacts.getEdge(0));
 	}
-	// mac: 0x590826.
+	// FUNCTION: PLAYER 0x00754890
+	// FUNCTION: STUDIO 0x00893bc0
 	Contact* Primitive::getNextContact(Contact* c)
 	{
 		return static_cast<Contact*>(contacts.getNext(this, c));
@@ -573,8 +575,6 @@ namespace RBX {
 			- cf.rotation.column(2) * half.z;
 		return result;
 	}
-
-
 
 
 

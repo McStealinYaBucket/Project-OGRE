@@ -35,7 +35,8 @@ namespace RBX {
 	class HeartbeatTask;
 
 	// 2013 layout (PLAYER ctor 0x0072efd0, stopTasks 0x0072bb60): Instance 0x60, Service @0x60,
-	// physicsJob @0x64, heartbeatTask @0x6c, runState @0x74, four doubles @0x78..0x90, six
+	// physicsJob @0x64, heartbeatTask @0x6c, runState @0x74, four doubles @0x78..0x90 (2016's
+	// totalWallTime and skippedTimeAccumulated swap places: raiseHeartbeat 0x0072da30 accumulates at 0x90), six
 	// signals @0x98..0xac (no 2016 dummyTasksPadding / renderSteppedEarlyCallbackMap).
 	// Signal names: runTransitionSignal @0xa4 (initializeContents 0x0064f559 connects
 	// onRunTransition there), heartbeatSignal @0xa0 (HeartbeatInstance 0x00871186); the others
@@ -62,8 +63,8 @@ namespace RBX {
 		RunState runState;							// 0x74
 		double totalGameTime;						// 0x78
 		double totalGameTimeAtLastHeartbeat;		// 0x80
-		double totalWallTime;						// 0x88
-		double skippedTimeAccumulated;				// 0x90
+		double skippedTimeAccumulated;				// 0x88
+		double totalWallTime;						// 0x90  raiseHeartbeat 0x0072da30 adds wallStep here
 
 		friend class DataModel;
 		friend class RuntimeScriptService;	// onServiceProvider reads runState.
@@ -89,6 +90,8 @@ namespace RBX {
 		void setRunState(int state);
 
 		void stopTasks();
+
+		void raiseHeartbeat(double wallStep, const Time::Interval& stepBudget);
 
 		// PhysicsJob::getDesiredConcurrencyCount 0x0072b760 returns 1024 when set (the 2016
 		// name; a settings class exposes it as "ParallelPhysics", initializer 0x00a81880).

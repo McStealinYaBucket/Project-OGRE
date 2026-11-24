@@ -5,9 +5,8 @@
      so the class exists in namespace RBX::Stats and is service-
      creatable. NO C2/D2/vtable symbols DB-wide (implicit trivial
      type -- same shape as the other thin services here).
-   className "StatsService" is inferred by in-tree convention
-   (s-name == unqualified C++ name, cf. sJointsService) -- TODO:
-   confirm against the binary string table.
+   2013 RTTI: DescribedNonCreatable<Stats::StatsService, Instance, &Stats::sStats, 1, 2>
+   (INTERNAL_LOCAL, Security::RobloxPlace); sStats = "Stats".
    Functionality (stat items/children) queues with the Stats era
    (LuaStatsItem + Stats::Item machinery).
    Original file: (2013 path TODO). */
@@ -21,10 +20,10 @@
 namespace RBX {
 namespace Stats {
 
-	extern const char* const sStatsService;
+	extern const char* const sStats;
 
 	class StatsService
-		: public DescribedNonCreatable<StatsService, Instance, sStatsService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<StatsService, Instance, sStats, Reflection::ClassDescriptor::INTERNAL_LOCAL, Security::RobloxPlace>
 		, public Service
 	{
 	public:

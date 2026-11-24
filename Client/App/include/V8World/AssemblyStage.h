@@ -16,6 +16,8 @@
 
 namespace RBX {
 
+	class Primitive;
+
 	class World;
 
 	class AssemblyStage : public EdgeBuffer
@@ -37,6 +39,10 @@ namespace RBX {
 		virtual StageType getStageType() const { return ASSEMBLY_STAGE; }
 		// mac: 0x55807E (batch297: putInStage + afterAssemblyAdded).
 		void onFixedAssemblyRootAdded(Assembly* assembly);
+
+		// World::onPrimitiveEngineChanging/Changed forward here (PLAYER 0x008ea4b0 / 0x008ea510).
+		Assembly* onEngineChanging(Primitive* p);
+		void onEngineChanged(Assembly* a);
 	};
 
 } // namespace RBX

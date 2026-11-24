@@ -51,13 +51,14 @@ namespace RBX {
 		}
 	}
 
-	// 2013 pushes permission 2 where 2016 names LocalUser (3 in our Security enum).
-	// STUB: PLAYER 0x00844e90
-	// STUB: STUDIO 0x0098a860
+	// 2013 pushes permission 2 where 2016 names LocalUser (3 in our Security enum): the 2013
+	// enum has one level fewer below LocalUser (ScriptContext.cpp writes the same cast).
+	// FUNCTION: PLAYER 0x00844e90
+	// FUNCTION: STUDIO 0x0098a860
 	void DebrisService::setMaxItems(int value)
 	{
 		if (!legacyMaxItems)
-			RBX::Security::Context::current().requirePermission(RBX::Security::LocalUser, "DebrisService MaxItems is restricted");
+			RBX::Security::Context::current().requirePermission((RBX::Security::Permissions)2, "DebrisService MaxItems is restricted");
 		if (value != maxItems)
 		{
 			if (value < 0)

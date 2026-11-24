@@ -105,6 +105,16 @@ CLASSES = [
     "RBX::SleepStage", "RBX::Primitive", "RBX::MultiJoint", "RBX::DebugSettings", "RBX::GameSettings",
     "RBX::TaskSchedulerSettings", "RBX::LuaSettings", "RBX::StarterGear", "MemoryBinder", "ArchiveBinder",
     "XmlWriter", "XmlElement",
+    # wave7 sync (sweep14, build/sweep14/P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT or
+    # // SIZE = the PDB's), PLAYER / STUDIO: NetworkSettings (0x120) ctor 0x005b7cf0 / 0x00609e80; InsertService
+    # (0x188, datamodel-5b-5.md) ctor 0x007db980 (STUDIO 0x008775b0 at 0.993), dtor 0x007dbbf0 / 0x00877820;
+    # Profiling::CodeProfiler (0xc040) ctor 0x00745230 / 0x007d7a90; Profiling::Mark (0x30) ctor 0x007454f0 /
+    # 0x007d7d50; StepJointsStage (0x20, world-5d.md) ctor 0x008ef410 / 0x00a0d190, dtor 0x008ef340 / 0x00a0d0c0;
+    # SpatialHash<Primitive,Contact,ContactManager,4>::TreeNode (0x30, base NodeBase 0x14) dtor 0x007b36f0 /
+    # 0x008cf770. Not yet: SpatialHash itself (ctor 0x008eef80 100%, no size assertion), StarterGuiService (0x98;
+    # ctor 0.974, the prime_list end pointer), AssemblyHistory (0x20; ctor 0.08)
+    "RBX::NetworkSettings", "RBX::InsertService", "RBX::Profiling::CodeProfiler", "RBX::Profiling::Mark",
+    "RBX::StepJointsStage", "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode",
 ]
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 
@@ -130,7 +140,7 @@ PRIM_SIZE = {"T_INT4": 4, "T_UINT4": 4, "T_LONG": 4, "T_ULONG": 4, "T_SHORT": 2,
              "T_INT8": 8, "T_UINT8": 8, "T_WCHAR": 2, "T_INT2": 2, "T_UINT2": 2, "T_INT1": 1, "T_UINT1": 1,
              "T_HRESULT": 4, "T_REAL80": 10}
 HEAD = re.compile(r"^(0x[0-9a-fA-F]+) : Length = \d+, Leaf = 0x[0-9a-fA-F]+ (\w+)")
-UDTLINE = re.compile(r"Size = (\d+)\s*,\s*class name = (.*), unique name = ([^,\s]+)(?:, UDT\((0x[0-9a-fA-F]+)\))?")
+UDTLINE = re.compile(r"Size = (?:\(LF_\w+\) )?(\d+)\s*,\s*class name = (.*), unique name = ([^,\s]+)(?:, UDT\((0x[0-9a-fA-F]+)\))?")
 
 
 def fix_2013(res, target):
@@ -346,7 +356,7 @@ def dump(pdb, out, json_path=None):
         elif leaf == "LF_MODIFIER":
             d["elem"] = tkey(re.search(r"modifies type (\S+)", body).group(1))
         elif leaf == "LF_ARRAY":
-            d["size"] = int(re.search(r"length = (\d+)", body).group(1))
+            d["size"] = int(re.search(r"length = (?:\(LF_\w+\) )?(\d+)", body).group(1))
         elif leaf == "LF_ENUM":
             d["elem"] = tkey(re.search(r"type = (\S+)", body).group(1))
             d["name"] = re.search(r"enum name = (.*), UDT", body).group(1)
@@ -448,14 +458,14 @@ def dump(pdb, out, json_path=None):
             elif f in ("LF_VBCLASS", "LF_IVBCLASS"):
                 vb = True
             elif f == "LF_BCLASS":
-                m = re.search(r"type = (\S+), offset = (\d+)", rest)
+                m = re.search(r"type = (\S+), offset = (?:\(LF_\w+\) )?(\d+)", rest)
                 bk = udt(tkey(m.group(1).rstrip(",")))
                 bn = cname(bk)
                 bases.append({"name": bn, "offset": int(m.group(2)), "size": info(bk)[1]["size"],
                               "empty": not has_members(bk)})
                 todo.append((bn, bk))
             elif f == "LF_MEMBER":
-                m = re.search(r"type = (\S+), offset = (\d+)\s+member name = '(.*)'", rest)
+                m = re.search(r"type = (\S+), offset = (?:\(LF_\w+\) )?(\d+)\s+member name = '(.*)'", rest)
                 t, off, name = tkey(m.group(1).rstrip(",")), int(m.group(2)), m.group(3)
                 kind, ref, size, scalar = describe(t)
                 if kind == "bitfield":

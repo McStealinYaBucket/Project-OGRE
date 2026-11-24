@@ -71,6 +71,8 @@ namespace RBX {
 		// contactManager arm is DeferredContacts-gated (off) -- see
 		// assemblyPrimitiveAdded's no-op arm).
 		void afterAssemblyAdded(Assembly* assembly);
+		// PLAYER 0x00999480: visitPrimitives(assemblyPrimitiveRemoved).
+		void beforeAssemblyRemoving(Assembly* assembly);
 
 	protected:
 		EdgeBuffer(IStage* upstream, IStage* downstream, World* world)

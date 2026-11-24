@@ -75,6 +75,8 @@ namespace RBX {
 		// history arm dead while +60 stays NULL -- link-covered, runs
 		// with staged assemblies in 162+).
 		void wakeUp();
+		// PLAYER 0x007b15b0: drops the history leaving a non-anchored state, builds one entering one.
+		void reset(Sim::AssemblyState newState);
 		// mac: 0x555420 (batch299: assembly-prim assert + moved fan).
 		void notifyMovedFromExternal();
 		// Batch257: throttle predicates over the assembly prims
@@ -181,13 +183,6 @@ namespace RBX {
 		void visitAssemblies(Func func) {
 			this->visitMeAndChildren<Assembly, Func>(func);
 		}
-		template<class Func>
-		void visitPrimitives(Func func) {
-			Primitive* p = getAssemblyPrimitive();
-			RBXASSERT(p != NULL);
-			visitPrimitivesImpl<Func>(func, p);
-		}
-
 	private:
 		template<class Func>
 		void visitPrimitivesImpl(Func func, Primitive* p) {
@@ -201,6 +196,13 @@ namespace RBX {
 		}
 
 	public:
+		// Assembly.h:203 "p" in 2013.
+		template<class Func>
+		void visitPrimitives(Func func) {
+			Primitive* p = getAssemblyPrimitive();
+			RBXASSERT(p);
+			visitPrimitivesImpl<Func>(func, p);
+		}
 
 }; // class Assembly
 

@@ -7,6 +7,7 @@
 #include "Util/BrickColor.h"
 #include "V8Tree/Property.h"
 #include "Gui/ProfanityFilter.h"
+#include "V8DataModel/ContentFilter.h"
 
 namespace RBX {
 	const char* const sTextLabel = "TextLabel";
@@ -234,15 +235,14 @@ namespace RBX {
 		Super::setTransparencyLegacy(value);
 	}
 
-	// Blocked: the 2013 body reads ContentFilter::MAX_CONTENT_FILTER_SIZE (0x400) from memory at PLAYER
-	// 0x00b77cc0, a static member ContentFilter.cpp defines; ContentFilter.h does not declare it yet.
-	// STUB: PLAYER 0x006beeb0
-	// STUB: STUDIO 0x00853090
+	// The 2013 body reads ContentFilter::MAX_CONTENT_FILTER_SIZE (0x400) from memory at PLAYER
+	// 0x00b77cc0, a static member ContentFilter.cpp defines.
+	// FUNCTION: PLAYER 0x006beeb0
+	// FUNCTION: STUDIO 0x00853090
 	void TextLabel::setText(std::string value)
 	{
-		const size_t maxContentFilterSize = 0x400;
-		if (value.size() > maxContentFilterSize)
-			value = value.substr(0, maxContentFilterSize);
+		if (value.size() > ContentFilter::MAX_CONTENT_FILTER_SIZE)
+			value = value.substr(0, ContentFilter::MAX_CONTENT_FILTER_SIZE);
 		if (!ProfanityFilter::ContainsProfanity(value) || getRobloxLocked())
 		{
 			if (text != value)

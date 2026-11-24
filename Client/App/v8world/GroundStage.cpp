@@ -269,6 +269,34 @@ namespace RBX {
 	}
 
 	// mac: 0x575604 (123B, batch209).
+	// FUNCTION: PLAYER 0x008eaf70
+	// FUNCTION: STUDIO 0x00a09170
+	void GroundStage::onPrimitiveFixedChanging(Primitive* p)
+	{
+		if (Joint::findConstJoint(p, Joint::ANCHOR_JOINT)) removeGroundJoint(p, true);
+		else removeGroundJoint(p, false);
+	}
+
+	// FUNCTION: PLAYER 0x008eb0b0
+	// FUNCTION: STUDIO 0x00a092b0
+	void GroundStage::rebuildOthers(Primitive* p)
+	{
+		for (RigidJoint* r = p->getFirstRigid(); r != NULL; r = p->getNextRigid(r)) {
+			rebuildFreeGround(r->otherPrimitive(p));
+		}
+	}
+
+	// FUNCTION: PLAYER 0x008eb0f0
+	// FUNCTION: STUDIO 0x00a092f0
+	void GroundStage::onPrimitiveFixedChanged(Primitive* p)
+	{
+		addGroundJoint(p, p->requestFixed());
+		if (!p->requestFixed()) {
+			rebuildFreeGround(p);
+		}
+		rebuildOthers(p);
+	}
+
 	// FUNCTION: PLAYER 0x008eb150
 	// FUNCTION: STUDIO 0x00a09350
 	void GroundStage::onEdgeAdded(Edge* edge)

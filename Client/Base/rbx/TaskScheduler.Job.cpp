@@ -204,16 +204,17 @@ void TaskScheduler::Job::notifyCoordinatorsPreStep()
 	}
 }
 
-// STUB: PLAYER 0x009b9de0
-// STUB: STUDIO 0x00a70e00
+// FUNCTION: PLAYER 0x009b9de0
+// FUNCTION: STUDIO 0x00a70e00
 void TaskScheduler::Job::preStep()
 {
+	const Time now = Time::now<Time::Fast>();
+	updateError(now);	// 2013 refreshes the error first (0x009b9e10)
 	state = Running;
 
 	FASTLOG4(FLog::TaskSchedulerRun, "JobStart. this: %p arbiter: %p time: %u error: %d", this, getArbiter().get(), (unsigned)stepStartTime.timestampSeconds(),
 		currentError.urgent ? -1 : (int)currentError.error);
 	FASTLOGS(FLog::TaskSchedulerRun, "JobStart %s", name.c_str());
-
 
 	shared_ptr<Arbiter> ar(getArbiter());
 	if (ar)

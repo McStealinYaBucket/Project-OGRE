@@ -22,7 +22,7 @@
 
 using namespace RBX;
 using namespace RBX::Lua;
-
+FASTFLAGVARIABLE(AllowYieldInHooks, false)	// 2013: ThreadRef.obj registers it (PLAYER 0x00a81db0, var 0x00e12d44)
 LOGVARIABLE(WeakThreadRef, 0)
 LOGVARIABLE(ThreadRefCounts, 0)
 LOGVARIABLE(LuaBridge, 0)

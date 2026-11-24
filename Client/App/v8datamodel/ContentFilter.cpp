@@ -7,6 +7,9 @@
 
 namespace RBX {
 	const char* const sContentFilter = "ContentFilter";
+
+	// GLOBAL: PLAYER 0x00b77cc0
+	const unsigned ContentFilter::MAX_CONTENT_FILTER_SIZE = 1024;
 }
 
 using namespace RBX;

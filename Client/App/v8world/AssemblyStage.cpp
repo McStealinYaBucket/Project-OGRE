@@ -1,8 +1,4 @@
-/* App/v8world/AssemblyStage.cpp -- October 2013 (assembly node).
-   C2 0x557E08 (149B, batch220: news 0x34 MovingAssemblyStage; the +20 set
-   member is EdgeBuffer::assemblyEdges, default-constructed). D2: implicit
-   (EdgeBuffer::~EdgeBuffer owns the teardown -- binary D1 0x557ECE calls
-   the base dtor). getStageType header-inline. getKernel: inherited. */
+/* App/v8world/AssemblyStage.cpp -- October 2013 (assembly stage), from the 2013 bytes; onEngineChanged asserts on :40. */
 
 #include "stdafx.h"
 
@@ -10,8 +6,42 @@
 #include "V8World/MovingAssemblyStage.h"
 #include "V8World/World.h"
 #include "V8World/Assembly.h"
+#include "V8World/Primitive.h"
 
 namespace RBX {
+
+
+
+
+
+
+
+
+	// FUNCTION: PLAYER 0x008ea4b0
+	// FUNCTION: STUDIO 0x00a086c0
+	Assembly* AssemblyStage::onEngineChanging(Primitive* p)
+	{
+		if (Assembly::isAssemblyRootPrimitive(p)) {
+			Assembly* a = p->getAssembly();
+			if (a->inPipeline() && a->downstreamOfStage(this)) {
+				beforeAssemblyRemoving(a);
+				rbx_static_cast<MovingAssemblyStage*>(getDownstreamWS())->onSimulateAssemblyRemoving(a);
+				a->removeFromPipeline(this);
+				return a;
+			}
+		}
+		return NULL;
+	}
+
+	// FUNCTION: PLAYER 0x008ea510
+	// FUNCTION: STUDIO 0x00a08720
+	void AssemblyStage::onEngineChanged(Assembly* a)
+	{
+		RBXASSERT(a);
+		a->putInPipeline(this);
+		rbx_static_cast<MovingAssemblyStage*>(getDownstreamWS())->onSimulateAssemblyAdded(a);
+		afterAssemblyAdded(a);
+	}
 
 	// mac: 0x557E08 (149B, batch220).
 	// FUNCTION: PLAYER 0x008ea620
