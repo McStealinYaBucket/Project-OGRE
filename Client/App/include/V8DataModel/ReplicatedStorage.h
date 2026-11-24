@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sReplicatedStorage;
 
 	class ReplicatedStorage
-		: public DescribedNonCreatable<ReplicatedStorage, Instance, sReplicatedStorage, Reflection::ClassDescriptor::PERSISTENT>
+		: public DescribedCreatable<ReplicatedStorage, Instance, sReplicatedStorage>
 		, public Service
 	{
 	public:

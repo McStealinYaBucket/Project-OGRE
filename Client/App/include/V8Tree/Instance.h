@@ -392,7 +392,7 @@ public:
 	static Instance* getRootAncestor(Instance* instance) { return instance ? instance->getRootAncestor() : NULL; }
 	static const Instance* getRootAncestor(const Instance* instance) { return instance ? instance->getRootAncestor() : NULL; }
 
-	bool getRobloxLocked() const { return fw()->b22 != 0; }	// 0x0061d780 reads fw+0x19
+	bool getRobloxLocked() const { return fw()->b22; }	// 0x0061d780 reads fw+0x19 (FWValue<bool>, InsertService::insert 0x007d6a20 tests the byte as read)
 	void setRobloxLocked(bool value);
 
 	bool contains(const Instance* child) const;		// Recursive. Also returns true if this==child

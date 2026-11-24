@@ -19,7 +19,7 @@ namespace RBX {
 	extern const char* const sJointsService;
 
 	class JointsService
-		: public DescribedNonCreatable<JointsService, Instance, sJointsService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<JointsService, Instance, sJointsService, Reflection::ClassDescriptor::INTERNAL>
 		, public Service
 	{
 	public:

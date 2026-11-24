@@ -198,8 +198,8 @@ namespace RBX
 	}
 
 	/* mac: 0x551FE2 */
-	// STUB: PLAYER 0x006a98f0
-	// STUB: STUDIO 0x0076f930
+	// FUNCTION: PLAYER 0x006a98f0
+	// FUNCTION: STUDIO 0x0076f930
 	shared_ptr<Instance> ServiceProvider::create(Instance* context, const RBX::Name& name)
 	{
 		while (context!=NULL)
@@ -209,7 +209,7 @@ namespace RBX
 			{
 				shared_ptr<Instance> child = serviceProvider->createChild(name, EngineCreator);
 				if (dynamic_cast<Service*>(child.get())) {
-					child->setParent(serviceProvider);
+					child->setAndLockParent(serviceProvider);	// 2013 call 0x00621b60, one argument
 					return child;
 				}
 				return shared_ptr<Instance>();

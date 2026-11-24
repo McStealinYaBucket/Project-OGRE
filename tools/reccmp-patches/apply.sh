@@ -14,6 +14,14 @@
 #   - import thunks (jmp [slot]) are also found for CSV-supplied import slots.
 #   - FuncInfo magic 0x19930521/0x19930522 accepted (upstream only searches 0x19930520, so a VC9
 #     image yields almost no __ehfuncinfo/__Unwind labels).
+#
+# 0002-ogre-one-past-end-pointers.patch
+#   - An immediate that is one past the end of a matched variable is named `<var>+end` when the
+#     same function also uses the variable's start and nothing but an unmatched string starts
+#     there. MSVC loads `array + N` as a constant, which lands on whatever the linker put next:
+#     boost's prime_list end PLAYER 0x00bdb080 is a garbage "string", ours an assert string.
+#     Measured on sweep14 PLAYER: +5, -0 (LegacyContentTable 0x008f08a0, ContactManager
+#     0x007b63a0, LibraryService 0x0088ec90, LRUCache 0x00663980, unordered table 0x005c4490).
 set -e
 cd "$(dirname "$0")/../.."
 SP=$(toolchain/venv/bin/python -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')

@@ -191,7 +191,7 @@ namespace G3D {
 	};
 }
 
-// STUB: PLAYER 0x006fc990
+// FUNCTION: PLAYER 0x006fc990
 // STUB: STUDIO 0x0074af20
 void SerializerV2::loadInstances(const XmlElement* root, Instances& result, IReferenceBinder& binder, CreatorRole creatorRole)
 {

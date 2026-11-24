@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sCollectionService;
 
 	class CollectionService
-		: public DescribedNonCreatable<CollectionService, Instance, sCollectionService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<CollectionService, Instance, sCollectionService>
 		, public Service
 	{
 	public:

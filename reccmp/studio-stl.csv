@@ -25,7 +25,6 @@ address,type,size,symbol
 00778d80,library,164,??1strstreambuf@std@@UAE@XZ_21
 00781a70,library,125,??1_Locimp@locale@std@@UAE@XZ_4
 0078b8f0,library,322,??1strstreambuf@std@@UAE@XZ_22
-007958a0,library,84,??1strstreambuf@std@@UAE@XZ_23
 007994c0,library,84,??1strstreambuf@std@@UAE@XZ_24
 007995e0,library,84,??1strstreambuf@std@@UAE@XZ_25
 0079bac0,library,296,??1strstreambuf@std@@UAE@XZ_26
@@ -41,7 +40,6 @@ address,type,size,symbol
 0083d620,library,84,??1strstreambuf@std@@UAE@XZ_40
 00844a40,library,408,??1strstreambuf@std@@UAE@XZ_41
 00858310,library,84,??1strstreambuf@std@@UAE@XZ_42
-0086c8b0,library,84,??1strstreambuf@std@@UAE@XZ_44
 00887780,library,84,??1strstreambuf@std@@UAE@XZ_45
 0088eb70,library,309,??1strstreambuf@std@@UAE@XZ_46
 008efc60,library,84,??1strstreambuf@std@@UAE@XZ_48

@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sGamePassService;
 
 	class GamePassService
-		: public DescribedNonCreatable<GamePassService, Instance, sGamePassService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<GamePassService, Instance, sGamePassService>
 		, public Service
 	{
 	public:

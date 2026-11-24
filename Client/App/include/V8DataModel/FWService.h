@@ -24,7 +24,7 @@ namespace RBX {
 	extern const char* const sFWService;
 
 	class FWService
-		: public DescribedNonCreatable<FWService, Instance, sFWService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<FWService, Instance, sFWService>
 		, public Service
 	{
 	public:

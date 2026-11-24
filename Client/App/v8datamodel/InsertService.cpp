@@ -1,6 +1,6 @@
-/* App/v8datamodel/InsertService.cpp -- October 2013. The setters, the ctor and the implicit dtor from
-   the PLAYER bytes (0x007cfb40..0x007dbe40); the insert, asset-loading, web-request and reflection
-   bodies are not written yet. See include/V8DataModel/InsertService.h for the layout evidence. */
+/* App/v8datamodel/InsertService.cpp -- October 2013. Setters, ctor, implicit dtor and onServiceProvider
+   (its assert on the 2013 line 178) from the PLAYER bytes (0x007cfb40..0x007de310); the insert, asset-
+   loading, web-request and reflection bodies are not written yet. Layout evidence in the header. */
 
 #include "stdafx.h"
 
@@ -8,6 +8,8 @@
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/Workspace.h"
 #include "security/SecurityContext.h"
+#include "Network/Players.h"
+#include <boost/bind.hpp>
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(RBX::InsertService, 0x188);
@@ -85,7 +87,7 @@ namespace RBX {
 	}
 
 	// 2013 passes two bools to publicInsertRaw and requires permission 2 (2016: Plugin).
-	// STUB: PLAYER 0x007d6a20
+	// FUNCTION: PLAYER 0x007d6a20
 	void InsertService::insert(shared_ptr<Instance> instance)
 	{
 		if (DataModel* dataModel = (DataModel*)getParent())
@@ -113,6 +115,80 @@ namespace RBX {
 		setName(sInsertService);
 		Instance::propArchivable.setValue(this, false);
 		loadCount = 0;
+	}
+
+
+	// The three backend handlers fire the remote insert events; their bodies wait on the
+	// InsertService reflection block (RemoteEventDesc statics, e.g. 0x00e0fd3c).
+	// STUB: PLAYER 0x007ddf70
+	// STUB: STUDIO 0x00879ba0
+	void InsertService::backendInsertRequested(std::string key, ContentId contentId)
+	{
+		STUB(0x007ddf70);
+	}
+
+	// STUB: PLAYER 0x007de070
+	// STUB: STUDIO 0x00879ca0
+	void InsertService::backendInsertAssetVersionRequested(std::string key, int assetVersionId, int userId)
+	{
+		STUB(0x007de070);
+	}
+
+	// STUB: PLAYER 0x007de1c0
+	// STUB: STUDIO 0x00879df0
+	void InsertService::backendInsertAssetRequested(std::string key, int assetId, int userId)
+	{
+		STUB(0x007de1c0);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// Only the backend (server) listens for insert requests. Instance::onServiceProvider is empty
+	// and inline, so Super adds no call.
+	// FUNCTION: PLAYER 0x007de310
+	// FUNCTION: STUDIO 0x00879f40
+	void InsertService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		if (oldProvider && Network::Players::backendProcessing(oldProvider))
+		{
+			RBXASSERT(backendInsertConnection.connected());
+			backendInsertConnection.disconnect();
+			backendInsertAssetConnection.disconnect();
+			backendInsertAssetVersionConnection.disconnect();
+		}
+
+		Super::onServiceProvider(oldProvider, newProvider);
+
+		if (newProvider && Network::Players::backendProcessing(newProvider))
+		{
+			backendInsertConnection = insertRequestSignal.connect(boost::bind(&InsertService::backendInsertRequested, this, _1, _2));
+			backendInsertAssetConnection = insertRequestAssetSignal.connect(boost::bind(&InsertService::backendInsertAssetRequested, this, _1, _2, _3));
+			backendInsertAssetVersionConnection = insertRequestAssetVersionSignal.connect(boost::bind(&InsertService::backendInsertAssetVersionRequested, this, _1, _2, _3));
+		}
 	}
 
 } // namespace RBX

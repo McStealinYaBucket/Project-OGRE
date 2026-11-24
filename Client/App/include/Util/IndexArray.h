@@ -66,7 +66,7 @@ namespace RBX {
 		}
 		// FUNCTION: PLAYER 0x00830340
 		// FUNCTION: STUDIO 0x009a29a0
-		// ?fastRemove@?$IndexArray@VIndexedTree@RBX@@$1?getIndex@12@AAEAAHXZ@RBX@@QAEXPAVIndexedTree@2@@Z
+		// ?fastRemove@?$IndexArray@VConnector@RBX@@$1?getRealTimeIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
 		inline void fastRemove(Item* item)
 		{
 			RBXASSERT_IF_VALIDATING(array.find(item) != array.end());
@@ -104,11 +104,6 @@ namespace RBX {
 			return array[n];
 		}
 
-
-
-
-
-
 		inline Item* operator[](unsigned int n) {
 			RBXASSERT(indexOf(array[n]) == n);
 			return array[n];
@@ -123,6 +118,11 @@ namespace RBX {
 			RBXASSERT(indexOf(array[n]) == n);
 			return array[n];
 		}
+
+
+
+
+
 
 		inline void remove(Item* item)
 		{

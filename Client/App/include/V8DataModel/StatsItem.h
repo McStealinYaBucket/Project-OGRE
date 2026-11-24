@@ -9,14 +9,11 @@
      child + setName + setParent (public setParentInternal forward);
      factory replaced by direct new+shared -- same observable, no
      per-instantiation registrar needed).
-   Display (batch611): formatValue(double,fmt,...) 0x4A2EA8 stores
-     +0x5C + vformats into +0x64; typed Id/If/Ii/Im/Iy/Ij forward
-     (%.3g/%.3g/%d/%d/%llu/%d + converted double); Ib writes
-     true/false + 0.0/1.0; formatRate(avg) 0x4A2E40 (rate + CV math +
-     "%.1f/s (%.0f%%CV)"); getStringValue2 0x4A3F8C (refresh + read
-     display); getValue 0x4A3FBC (refresh + read +0x5C); update base
-     forwards to the +0x34 delegate (no writer evidenced -- always
-     NULL in-tree). formatMem queues (needs RBX::Log::formatMem dump).
+   Display: formatValue(double,fmt,...) stores +0x60 and vformats into +0x68; the
+     formatValue<T> specializations forward (%.3g/%.3g/%d/%llu/%d); <bool> writes
+     true/false + 0.0/1.0; formatRate (rate + CV, "%.1f/s (%.0f%%CV)"). update()
+     refreshes the parent Item (PLAYER 0x0073ec00); TypedStatsItem<T> overrides it.
+     Layout (2013 Item ctor PLAYER 0x0048e470): double 0x60, string 0x68, size 0x88.
    TODO: full decompile.
    Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/StatsItem.h */
 
@@ -50,9 +47,11 @@ namespace Stats {
 		: public DescribedNonCreatable<Item, Instance, sStatsItem>
 	{
 	public:
+		// fldz into +0x60, then the +0x68 string (STUDIO's older revision differs).
+		// FUNCTION: PLAYER 0x0048e470
+		// STUB: STUDIO 0x0043e560
 		Item()
 			: statValue(0.0)
-			, delegate(NULL)
 		{}
 
 		// mac: 0x4A2F5A: factory-create a plain child + setName + setParent.
@@ -70,21 +69,19 @@ namespace Stats {
 		RunningAverageItemDouble* createBoundChildItem(const char* name,
 			const RunningAverage<double, double>& average);
 
-		// Display (batch611). update() forwards to the +0x34 delegate
-		// (always NULL in-tree: no writer evidenced); getValue refreshes
-		// then reads +0x5C; getStringValue2 refreshes then reads +0x64.
+		// update() (PLAYER 0x0073ec00) refreshes the parent Stats::Item; TypedStatsItem<T>
+		// overrides it. getValue refreshes then reads +0x60; getStringValue2 refreshes then
+		// reads +0x68.
 		virtual void update();  // vtable+0x70, the only virtual Stats::Item adds (2013 vftable 0x00b01ba4, 29 slots)
 		double getValue();  // not virtual in 2013 (no slot after update)
 		std::string getStringValue2();
 		void formatValue(double value, const char* fmt, ...);
-		void formatValueId(const double& value);
-		void formatValueIf(const float& value);
-		void formatValueIi(const int& value);
-		void formatValueIm(unsigned long value);
-		void formatValueIy(const unsigned long long& value);
-		void formatValueIj(unsigned int value);
-		void formatValueIb(const bool& value);
-		// formatMem 0x4A2D80: Log::formatMem into +0x64 (no +0x5C store).
+		// ios: Item::formatValue<T>(T const&). Only explicit specializations exist
+		// (StatsItem.cpp): double, float, int, unsigned long long, unsigned int, bool,
+		// unsigned long.
+		template<class T>
+		void formatValue(const T& value);
+		// formatMem 0x4A2D80: Log::formatMem into +0x68 (no +0x60 store).
 		void formatMem(unsigned int bytes);
 		void formatRate(const RunningAverageTimeInterval<>& average);
 
@@ -98,13 +95,9 @@ namespace Stats {
 		}
 
 	private:
-		// +0x5C role: numeric value (formatValue stores; getValue reads).
-		double statValue;
-		// +0x64 role: display string (format* writes; getStringValue2 reads).
-		std::string displayString;
-		// +0x34 role: refresh delegate (no writer evidenced; NULL).
-		Item* delegate;
-	};
+		double statValue;            // 0x60 (formatValue stores; getValue reads)
+		std::string displayString;   // 0x68 (format* writes; getStringValue2 reads)
+	};                               // SIZE 0x88 (TypedStatsItem<int> is new 0xa8, function at 0x88)
 
 } // namespace Stats
 } // namespace RBX

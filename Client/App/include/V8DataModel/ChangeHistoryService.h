@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sChangeHistoryService;
 
 	class ChangeHistoryService
-		: public DescribedNonCreatable<ChangeHistoryService, Instance, sChangeHistoryService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<ChangeHistoryService, Instance, sChangeHistoryService>
 		, public Service
 	{
 	public:

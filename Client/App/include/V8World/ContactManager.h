@@ -93,6 +93,8 @@ namespace RBX {
 		// mac: 0x5656D0 (32B): forwards to the hash production entry (re-level
 		// wrapper).  The voxel hook inside is a DELTA (see the .inl).
 		void onPrimitiveExtentsChanged(Primitive* prim);
+		// PLAYER 0x007b9490 (World::onPrimitiveGeometryChanged's callee).
+		void onPrimitiveGeometryChanged(Primitive* prim);
 
 		// Bring-up helper (not in binary): drive a hash cell update for a
 		// moved/resized prim directly.  Retained for white-box moves tests;

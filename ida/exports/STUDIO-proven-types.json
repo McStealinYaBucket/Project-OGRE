@@ -3899,7 +3899,7 @@
      "offset": 0,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::SimBody *,10,32>",
+     "type": "RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getFreeFallBodyIndex(void)>",
      "scalar": null
     },
     {
@@ -3907,7 +3907,7 @@
      "offset": 16,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::SimBody *,10,32>",
+     "type": "RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getRealTimeBodyIndex(void)>",
      "scalar": null
     },
     {
@@ -3915,7 +3915,7 @@
      "offset": 32,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::SimBody *,10,32>",
+     "type": "RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getJointBodyIndex(void)>",
      "scalar": null
     },
     {
@@ -3923,7 +3923,7 @@
      "offset": 48,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::SimBody *,10,32>",
+     "type": "RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getContactBodyIndex(void)>",
      "scalar": null
     },
     {
@@ -3931,7 +3931,7 @@
      "offset": 64,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Body *,10,32>",
+     "type": "RBX::IndexArray<RBX::Body, {public: int & __thiscall RBX::Body::getLeafBodyIndex(void), 0}>",
      "scalar": null
     },
     {
@@ -3939,7 +3939,7 @@
      "offset": 80,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Point *,10,32>",
+     "type": "RBX::IndexArray<RBX::Point, {public: int & __thiscall RBX::Point::getKernelIndex(void), 0}>",
      "scalar": null
     },
     {
@@ -3947,7 +3947,7 @@
      "offset": 96,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Connector *,10,32>",
+     "type": "RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getHumanoidIndex(void)>",
      "scalar": null
     },
     {
@@ -3955,7 +3955,7 @@
      "offset": 112,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Connector *,10,32>",
+     "type": "RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getSecondPassIndex(void)>",
      "scalar": null
     },
     {
@@ -3963,7 +3963,7 @@
      "offset": 128,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Connector *,10,32>",
+     "type": "RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getRealTimeIndex(void)>",
      "scalar": null
     },
     {
@@ -3971,7 +3971,7 @@
      "offset": 144,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Connector *,10,32>",
+     "type": "RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getJointIndex(void)>",
      "scalar": null
     },
     {
@@ -3979,7 +3979,7 @@
      "offset": 160,
      "size": 16,
      "kind": "class",
-     "type": "G3D::Array<RBX::Connector *,10,32>",
+     "type": "RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getContactIndex(void)>",
      "scalar": null
     }
    ],
@@ -6541,6 +6541,156 @@
    "base": false,
    "unique": "UTreeNode@?$SpatialHash@VPrimitive@RBX@@VContact@2@VContactManager@2@$03@RBX@@"
   },
+  "RBX::TimerService": {
+   "size": 120,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, 11, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::HeartbeatInstance",
+     "offset": 96,
+     "size": 8,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 104,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "items",
+     "offset": 108,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<RBX::TimerService::Item,std::allocator<RBX::TimerService::Item> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VTimerService@RBX@@"
+  },
+  "RBX::PhysicsSettings": {
+   "size": 112,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettingsItem<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "throttleAdjustTime",
+     "offset": 104,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    }
+   ],
+   "base": false,
+   "unique": "VPhysicsSettings@RBX@@"
+  },
+  "RBX::StarterGuiService": {
+   "size": 152,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::StarterGuiService, RBX::BasePlayerGui, char const *const RBX::sStarterGuiService, 27, 0>",
+     "offset": 0,
+     "size": 116,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 116,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "coreGuiEnabledState",
+     "offset": 120,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RBX::StarterGuiService::CoreGuiType,bool,boost::hash<RBX::StarterGuiService::CoreGuiType>,std::equal_to<RBX::StarterGuiService::CoreGuiType>,std::allocator<std::pair<RBX::StarterGuiService::CoreGuiType const,bool> > >",
+     "scalar": null
+    },
+    {
+     "name": "coreGuiChangedSignal",
+     "offset": 144,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::StarterGuiService::CoreGuiType,bool)>",
+     "scalar": null
+    },
+    {
+     "name": "showGui",
+     "offset": 148,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "resetPlayerGui",
+     "offset": 149,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VStarterGuiService@RBX@@"
+  },
+  "RBX::Network::ItemQueue": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "itemList",
+     "offset": 0,
+     "size": 12,
+     "kind": "class",
+     "type": "boost::intrusive::list<RBX::Network::Item,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::Network::ItemTag>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>",
+     "scalar": null
+    },
+    {
+     "name": "inCode",
+     "offset": 12,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VItemQueue@Network@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -8433,6 +8583,78 @@
    "base": true,
    "unique": "VNodeBase@RBX@@"
   },
+  "RBX::DescribedCreatable<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, 11, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::TimerService, char const *const RBX::sTimerService, RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>, 11, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VTimerService@RBX@@VInstance@2@$E?sTimerService@2@3QBDB$0L@$0A@@RBX@@"
+  },
+  "RBX::HeartbeatInstance": {
+   "size": 8,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "heartbeatConnection",
+     "offset": 4,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "VHeartbeatInstance@RBX@@"
+  },
+  "RBX::GlobalAdvancedSettingsItem<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalAdvancedSettingsItem@VPhysicsSettings@RBX@@$E?sPhysicsSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::StarterGuiService, RBX::BasePlayerGui, char const *const RBX::sStarterGuiService, 27, 0>": {
+   "size": 116,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::StarterGuiService, char const *const RBX::sStarterGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>, 27, 0>",
+     "offset": 0,
+     "size": 116,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VStarterGuiService@RBX@@VBasePlayerGui@2@$E?sStarterGuiService@2@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -9136,6 +9358,54 @@
    "base": true,
    "unique": "V?$Described@VInsertService@RBX@@$E?sInsertService@2@3QBDBV?$FactoryProduct@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDBV32@@2@$02$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::TimerService, char const *const RBX::sTimerService, RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>, 11, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VTimerService@RBX@@$E?sTimerService@2@3QBDBV?$FactoryProduct@VTimerService@RBX@@VInstance@2@$E?sTimerService@2@3QBDBV32@@2@$0L@$0A@@Reflection@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings, RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VPhysicsSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sPhysicsSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::StarterGuiService, char const *const RBX::sStarterGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>, 27, 0>": {
+   "size": 116,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>",
+     "offset": 0,
+     "size": 116,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VStarterGuiService@RBX@@$E?sStarterGuiService@2@3QBDBV?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sStarterGuiService@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -9763,6 +10033,54 @@
    "base": true,
    "unique": "V?$FactoryProduct@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDBV32@@RBX@@"
   },
+  "RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VTimerService@RBX@@VInstance@2@$E?sTimerService@2@3QBDBV32@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings, RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VPhysicsSettings@RBX@@$E?sPhysicsSettings@2@3QBDBV?$FactoryProduct@VPhysicsSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sPhysicsSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>": {
+   "size": 116,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::BasePlayerGui",
+     "offset": 0,
+     "size": 116,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sStarterGuiService@2@3QBDB@RBX@@"
+  },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
    "vftable": false,
@@ -9948,6 +10266,22 @@
    "members": [],
    "base": true,
    "unique": "V?$FactoryProduct@VNetworkSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sNetworkSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalAdvancedSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VPhysicsSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sPhysicsSettings@2@3QBDBVInstance@2@@RBX@@"
   },
   "RBX::GlobalAdvancedSettings::Item": {
    "size": 96,

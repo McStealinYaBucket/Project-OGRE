@@ -33,12 +33,12 @@ namespace RBX {
 	// signal_with_args<1, void(RBX::Heartbeat const&)>(this+156), then a
 	// void(double) signal (this+168) with the gameTime delta.  Names carried
 	// from March 2016 Util/RunStateOwner.h -- they map 1:1 onto the binary
-	// double order.  DELTAs: (a) the binary's +32 is a PLAIN double
-	// (Time::nowFast() + interval[0]); the 2016 carry wrapped it as a
-	// Time {double sec} -- layout-equivalent; the member keeps the raw
-	// double and the Time-taking ctor stores timestampSeconds().
-	// (b) members are non-const so the raiseHeartbeat body (lands with the
-	// scheduler-era heartbeat plumbing) can fill them.
+	// double order. +32 is a Time: raiseHeartbeat PLAYER 0x0072da30 copies the
+	// Time::nowFast()+stepBudget result into it as two dwords, which a double
+	// member (fld/fstp) does not give.
+	// Members are non-const so the raiseHeartbeat body can fill them.
+	//
+	//
 	class Heartbeat 		// This event occurs at regular intervals
 	{
 	public:
@@ -47,13 +47,13 @@ namespace RBX {
 		                         //      (ChatOutput::onHeartbeat 0x5C298C reads +8).
 		double gameTime;         // +16: RunService+116 (gameTimeValue).
 		double gameStep;         // +24: gameTime - RunService+124 (prev).
-		double expirationTime;   // +32: Time::nowFast() + interval value.
+		Time expirationTime;     // +32: Time::nowFast() + interval value.
 
 		Heartbeat() {}
 
 		Heartbeat(double wallTime, double wallStep, double gameTime, double gameStep, Time expirationTime)
 			: wallTime(wallTime), wallStep(wallStep), gameTime(gameTime), gameStep(gameStep)
-			, expirationTime(expirationTime.timestampSeconds())
+			, expirationTime(expirationTime)
 		{}
 	};
 

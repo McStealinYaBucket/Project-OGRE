@@ -89,7 +89,7 @@ void TaskScheduler::endAllThreads()
 {
 	std::for_each(threads.begin(), threads.end(), boost::bind(&Thread::join, _1));
 }
-// FUNCTION: PLAYER 0x009b7ec0
+// STUB: PLAYER 0x009b7ec0
 // FUNCTION: STUDIO 0x00a70670
 void TaskScheduler::setThreadCount(ThreadPoolConfig threadConfig)
 {
@@ -202,7 +202,7 @@ void TaskScheduler::dropThread(Thread* thread)
 		if (iter->get() == thread) { threads.erase(iter); break; }
 	}
 }
-// FUNCTION: PLAYER 0x009b7140
+// STUB: PLAYER 0x009b7140
 // FUNCTION: STUDIO 0x00a6f8f0
 void TaskScheduler::disableThreads(int count, Threads& threads)
 {
@@ -320,7 +320,7 @@ void TaskScheduler::Thread::loop()
 }
 
 
-// FUNCTION: PLAYER 0x009b75f0
+// STUB: PLAYER 0x009b75f0
 // STUB: STUDIO 0x00a6fda0
 void TaskScheduler::getJobsInfo(std::vector<shared_ptr<const Job> >& result)
 {
@@ -357,7 +357,7 @@ void TaskScheduler::setJobsExtendedStatsWindow(double seconds)
 
 // NOTE (2013): cancelCyclicExecutive / releaseCyclicExecutive (2016) absent.
 
-// FUNCTION: PLAYER 0x009b78f0
+// STUB: PLAYER 0x009b78f0
 // STUB: STUDIO 0x00a700a0
 void TaskScheduler::getJobsByName(const std::string& name, std::vector<boost::shared_ptr<const Job> >& result)
 {

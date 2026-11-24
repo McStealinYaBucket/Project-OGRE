@@ -147,7 +147,7 @@ namespace RBX {
 		const Kernel* getKernel() const;
 		SleepStage* getSleepStage(); const SleepStage* getSleepStage() const; const StepJointsStage* getStepJointsStage() const;
 		void reportTouchInfo(const TouchInfo& info);
-		void onPrimitiveExtentsChanged(Primitive* prim);
+		void onPrimitiveExtentsChanged(Primitive* prim); void onPrimitiveGeometryChanged(Primitive* p);
 		void onPrimitiveContactParametersChanged(Primitive* p);
 		Assembly* onPrimitiveEngineChanging(Primitive* p);
 		void onPrimitiveEngineChanged(Assembly* a);

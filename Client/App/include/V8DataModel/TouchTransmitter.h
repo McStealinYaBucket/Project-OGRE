@@ -34,7 +34,7 @@
    CLASS SIZE: the two non-virtual thunks are at -32 and -36, so the two
    polymorphic bases sit at this+0x20 and this+0x24 and the vtable is at
    this+0 -- the standard Countable/DescribedCreatable/FactoryProduct shape,
-   which `DescribedCreatable<TouchTransmitter, Instance, sTouchTransmitter>`
+   which `DescribedCreatable<TouchTransmitter, Instance, sTouchTransmitter, Reflection::ClassDescriptor::INTERNAL>`
    already produces.
 
    DEFAULT NAME: 0x4E2FAA ends with
@@ -57,7 +57,7 @@ namespace RBX {
 	extern const char* const sTouchTransmitter;
 
 	class TouchTransmitter
-		: public DescribedCreatable<TouchTransmitter, Instance, sTouchTransmitter>
+		: public DescribedCreatable<TouchTransmitter, Instance, sTouchTransmitter, Reflection::ClassDescriptor::INTERNAL>
 	{
 	public:
 		// mac: 0x4E2FAA (451B): Instance::Instance(NULL), the vtable fixups for

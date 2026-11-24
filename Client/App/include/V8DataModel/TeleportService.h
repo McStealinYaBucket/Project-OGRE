@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sTeleportService;
 
 	class TeleportService
-		: public DescribedNonCreatable<TeleportService, Instance, sTeleportService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<TeleportService, Instance, sTeleportService>
 		, public Service
 	{
 	public:

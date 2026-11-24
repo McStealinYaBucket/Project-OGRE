@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sAssetService;
 
 	class AssetService
-		: public DescribedNonCreatable<AssetService, Instance, sAssetService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<AssetService, Instance, sAssetService>
 		, public Service
 	{
 	public:

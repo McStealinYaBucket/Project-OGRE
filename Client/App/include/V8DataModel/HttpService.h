@@ -13,7 +13,7 @@ namespace RBX {
 	extern const char* const sHttpService;
 
 	class HttpService
-		: public DescribedCreatable<HttpService, Instance, sHttpService>
+		: public DescribedCreatable<HttpService, Instance, sHttpService, Reflection::ClassDescriptor::PERSISTENT_HIDDEN>
 	{
 	public:
 		enum HttpContentType

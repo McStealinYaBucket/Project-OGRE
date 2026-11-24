@@ -2,8 +2,7 @@
    Evidence: Workspace::createTerrain 0x514E84 creates MegaClusterInstance via
      Creatable<Instance>::create + setAndLockParent when the terrain slot
      (Workspace+110) is null; asserts "terrain" (Workspace.cpp).
-     Binary hierarchy: DescribedCreatable<MegaClusterInstance, PartInstance,
-     sMegaCluster> (see FactoryProduct/Creator EAs in handoff).
+     Binary hierarchy: DescribedCreatable<MegaClusterInstance, PartInstance, sMegaCluster, Reflection::ClassDescriptor::PERSISTENT_HIDDEN> (see FactoryProduct/Creator EAs in handoff).
      TRUE parent is PartInstance — Instance stands in directly until the
      v8datamodel physics-part chain (PVInstance etc.) is reconstructed.
    TODO: full decompile (voxel grid, encode/decode, cell scripts).
@@ -18,9 +17,9 @@ namespace RBX {
 	extern const char* const sMegaCluster;
 
 	class MegaClusterInstance
-		: public DescribedCreatable<MegaClusterInstance, PartInstance, sMegaCluster>
+		: public DescribedCreatable<MegaClusterInstance, PartInstance, sMegaCluster, Reflection::ClassDescriptor::PERSISTENT_HIDDEN>
 		// Restored TRUE parent (was Instance standing in; binary:
-		// DescribedCreatable<MegaClusterInstance, PartInstance, sMegaCluster>).
+		// DescribedCreatable<MegaClusterInstance, PartInstance, sMegaCluster, Reflection::ClassDescriptor::PERSISTENT_HIDDEN>).
 	{
 	public:
 		MegaClusterInstance() {}

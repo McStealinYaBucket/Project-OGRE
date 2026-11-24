@@ -70,7 +70,7 @@ namespace RBX {
 		// removePoint + delete).
 		void deletePoint(Point* point);
 		// (batch222: :104 !inStepCode + delegate; returns the kind).
-		int insertConnector(Connector* connector);
+		void insertConnector(Connector* connector);
 		// (batch222: :116 !inStepCode + delegate).
 		void removeConnector(Connector* connector);
 		// 2016 shapes (first-party; stepWorldThrottled validates each

@@ -3338,17 +3338,17 @@ struct __cppobj RBX::GuiService : RBX::DescribedNonCreatable<RBX::GuiService, RB
 /* 503 */
 struct __cppobj RBX::KernelData
 {
-  unsigned __int8 freeFallBodies[16];   ///< G3D::Array<RBX::SimBody *,10,32>
-  unsigned __int8 realTimeBodies[16];   ///< G3D::Array<RBX::SimBody *,10,32>
-  unsigned __int8 jointBodies[16];      ///< G3D::Array<RBX::SimBody *,10,32>
-  unsigned __int8 contactBodies[16];    ///< G3D::Array<RBX::SimBody *,10,32>
-  unsigned __int8 leafBodies[16];       ///< G3D::Array<RBX::Body *,10,32>
-  unsigned __int8 points[16];           ///< G3D::Array<RBX::Point *,10,32>
-  unsigned __int8 humanoidConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
-  unsigned __int8 secondPassConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
-  unsigned __int8 realTimeConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
-  unsigned __int8 jointConnectors[16];  ///< G3D::Array<RBX::Connector *,10,32>
-  unsigned __int8 contactConnectors[16]; ///< G3D::Array<RBX::Connector *,10,32>
+  unsigned __int8 freeFallBodies[16];   ///< RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getFreeFallBodyIndex(void)>
+  unsigned __int8 realTimeBodies[16];   ///< RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getRealTimeBodyIndex(void)>
+  unsigned __int8 jointBodies[16];      ///< RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getJointBodyIndex(void)>
+  unsigned __int8 contactBodies[16];    ///< RBX::IndexArray<RBX::SimBody, &public: int & __thiscall RBX::SimBody::getContactBodyIndex(void)>
+  unsigned __int8 leafBodies[16];       ///< RBX::IndexArray<RBX::Body, {public: int & __thiscall RBX::Body::getLeafBodyIndex(void), 0}>
+  unsigned __int8 points[16];           ///< RBX::IndexArray<RBX::Point, {public: int & __thiscall RBX::Point::getKernelIndex(void), 0}>
+  unsigned __int8 humanoidConnectors[16]; ///< RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getHumanoidIndex(void)>
+  unsigned __int8 secondPassConnectors[16]; ///< RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getSecondPassIndex(void)>
+  unsigned __int8 realTimeConnectors[16]; ///< RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getRealTimeIndex(void)>
+  unsigned __int8 jointConnectors[16];  ///< RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getJointIndex(void)>
+  unsigned __int8 contactConnectors[16]; ///< RBX::IndexArray<RBX::Connector, &public: int & __thiscall RBX::Connector::getContactIndex(void)>
 };
 
 /* 504 */
@@ -4149,5 +4149,95 @@ struct __cppobj RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager
   unsigned __int8 gap_25[3];
   int refByPrimitives;
   RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode *next;
+};
+
+/* 596 */
+struct __cppobj RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 597 */
+struct __cppobj RBX::Reflection::Described<RBX::TimerService, char const *const RBX::sTimerService, RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>, 11, 0> : RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>
+{
+};
+
+/* 598 */
+struct __cppobj RBX::DescribedCreatable<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, 11, 0> : RBX::Reflection::Described<RBX::TimerService, char const *const RBX::sTimerService, RBX::FactoryProduct<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, RBX::Instance>, 11, 0>
+{
+};
+
+/* 599 */
+struct __cppobj RBX::HeartbeatInstance
+{
+  void **__vftable;
+  unsigned __int8 heartbeatConnection[4]; ///< rbx::signals::scoped_connection
+};
+
+/* 600 */
+struct __cppobj RBX::TimerService : RBX::DescribedCreatable<RBX::TimerService, RBX::Instance, char const *const RBX::sTimerService, 11, 0>, RBX::HeartbeatInstance, RBX::Service
+{
+  unsigned __int8 gap_69[3];
+  unsigned __int8 items[12];            ///< std::list<RBX::TimerService::Item>
+};
+
+/* 601 */
+struct __cppobj RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance> : RBX::GlobalAdvancedSettings::Item
+{
+};
+
+/* 602 */
+struct __cppobj RBX::Reflection::Described<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings, RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>
+{
+};
+
+/* 603 */
+struct __cppobj RBX::DescribedCreatable<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, 27, 0> : RBX::Reflection::Described<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings, RBX::FactoryProduct<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 604 */
+struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings> : RBX::DescribedCreatable<RBX::PhysicsSettings, RBX::GlobalAdvancedSettings::Item, char const *const RBX::sPhysicsSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 605 */
+struct __cppobj RBX::PhysicsSettings : RBX::GlobalAdvancedSettingsItem<RBX::PhysicsSettings, char const *const RBX::sPhysicsSettings>
+{
+  unsigned __int8 gap_64[4];
+  double throttleAdjustTime;
+};
+
+/* 606 */
+struct __cppobj RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService> : RBX::BasePlayerGui
+{
+};
+
+/* 607 */
+struct __cppobj RBX::Reflection::Described<RBX::StarterGuiService, char const *const RBX::sStarterGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>, 27, 0> : RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>
+{
+};
+
+/* 608 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::StarterGuiService, RBX::BasePlayerGui, char const *const RBX::sStarterGuiService, 27, 0> : RBX::Reflection::Described<RBX::StarterGuiService, char const *const RBX::sStarterGuiService, RBX::NonFactoryProduct<RBX::BasePlayerGui, char const *const RBX::sStarterGuiService>, 27, 0>
+{
+};
+
+/* 609 */
+struct __cppobj RBX::StarterGuiService : RBX::DescribedNonCreatable<RBX::StarterGuiService, RBX::BasePlayerGui, char const *const RBX::sStarterGuiService, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_75[3];
+  unsigned __int8 coreGuiEnabledState[24]; ///< boost::unordered::unordered_map<RBX::StarterGuiService::CoreGuiType,bool,boost::hash<RBX::StarterGuiService::CoreGuiType>,std::equal_to<RBX::StarterGuiService::CoreGuiType>,std::allocator<std::pair<RBX::StarterGuiService::CoreGuiType const,bool> > >
+  unsigned __int8 coreGuiChangedSignal[4]; ///< rbx::signal<void __cdecl(RBX::StarterGuiService::CoreGuiType,bool)>
+  bool showGui;
+  bool resetPlayerGui;
+  unsigned __int8 gap_96[2];
+};
+
+/* 610 */
+struct __cppobj RBX::Network::ItemQueue
+{
+  unsigned __int8 itemList[12];         ///< boost::intrusive::list<RBX::Network::Item,boost::intrusive::base_hook<boost::intrusive::list_base_hook<boost::intrusive::tag<RBX::Network::ItemTag>,boost::intrusive::none,boost::intrusive::none> >,boost::intrusive::none,boost::intrusive::none>
+  int inCode;
 };
 

@@ -182,34 +182,34 @@ namespace RBX {
 		void setOwner(IMoving* owner) { myOwner = owner; }
 		IMoving* getOwner() const { return myOwner; }
 
-		// mac: 0x5921C0 (31 bytes) is a ONE-LINE forwarder:
-		//   mov eax,[this+0ECh]        ; the Geometry* (the polymorphic
-		//   mov ecx,[eax]              ;  pointer that getGridCorner and
-		//   mov [esp],eax              ;  computeFuzzyExtents also use)
-		//   call dword ptr [ecx+48h]    ; vtable slot [18]
-		//   movzx eax,al                ; -> Geometry::isGeometryOrthogonal
-		// Geometry::isGeometryOrthogonal 0x55AF1E is 10 bytes and is
-		// `mov eax,1; ret` -- the base returns TRUE, and each Poly subclass
-		// that is not axis-aligned overrides slot [18] (WedgePoly 0x5A6EA0,
-		// PrismPoly 0x593DAC, PyramidPoly 0x592940, ParallelRampPoly
-		// mac: 0x5886C8, RightAngleRampPoly 0x596B20, CornerWedgePoly 0x571250,
-		// MegaClusterPoly 0x592870).  The switch below is the resolved form
-		// of that dispatch (the geometry kinds whose override is non-true).
-		bool isGeometryOrthogonal() const
-		{
-			switch (getGeometryType())
-			{
-			case GEOMETRY_WEDGE:
-			case GEOMETRY_PRISM:
-			case GEOMETRY_PYRAMID:
-			case GEOMETRY_PARALLELRAMP:
-			case GEOMETRY_RIGHTANGLERAMP:
-			case GEOMETRY_CORNERWEDGE:
-				return false;
-			default:
-				return true;
-			}
-		}
+		// Out of line in 2013: a tail jump through Geometry's vtable+0x44 (PLAYER 0x007542c0).
+		bool isGeometryOrthogonal() const;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// mac: 0x4437AE: NORM_Y/STUDS + NORM_Y_NEG/INLET at construction.
 		void setSurfaceType(NormalId normalId, SurfaceType surfaceType);

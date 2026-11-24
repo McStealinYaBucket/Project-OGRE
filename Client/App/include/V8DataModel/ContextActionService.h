@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sContextActionService;
 
 	class ContextActionService
-		: public DescribedNonCreatable<ContextActionService, Instance, sContextActionService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<ContextActionService, Instance, sContextActionService>
 		, public Service
 	{
 	public:

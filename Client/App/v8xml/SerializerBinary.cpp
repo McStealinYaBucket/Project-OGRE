@@ -1139,7 +1139,7 @@ namespace RBX {
 						if (serviceByte == 1 && rootIsProvider && serviceRooted[k] != 0)
 							object = createServiceInstance(root, typeName);
 						else if (creator != NULL)
-							object = boost::dynamic_pointer_cast<Instance, Reflection::DescribedBase>(creator->create());
+							object = boost::dynamic_pointer_cast<Instance, Object>(creator->create());
 					if (object)
 						{
 							if (idMap[static_cast<size_t>(ids[k])])

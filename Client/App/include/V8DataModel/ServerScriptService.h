@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sServerScriptService;
 
 	class ServerScriptService
-		: public DescribedNonCreatable<ServerScriptService, Instance, sServerScriptService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<ServerScriptService, Instance, sServerScriptService>
 		, public Service
 	{
 	public:

@@ -1,0 +1,78 @@
+diff -ru a/reccmp/compare/asm/parse.py b/reccmp/compare/asm/parse.py
+--- a/reccmp/compare/asm/parse.py	2026-11-24 01:06:50.882020092 -0500
++++ b/reccmp/compare/asm/parse.py	2026-11-24 01:06:50.882813860 -0500
+@@ -49,6 +49,8 @@
+         self.replacements: dict[int, str] = {}
+         self.indirect_replacements: dict[int, str] = {}
+         self.number_placeholders = True
++        # OGRE: every hex value the current function's code mentions (see lookup).
++        self.function_values: set[int] = set()
+ 
+     def reset(self):
+         self.replacements = {}
+@@ -65,6 +67,14 @@
+         self, addr: int, exact: bool = False, indirect: bool = False
+     ) -> str | None:
+         """Wrapper for user-provided name lookup"""
++        # OGRE: a pointer one past the end of a variable whose start this function also
++        # uses is named after that variable, whatever the linker put next.
++        end_of = getattr(self.name_lookup, "end_of", None)
++        if not indirect and end_of is not None:
++            found = end_of(addr)
++            if found is not None and found[0] in self.function_values:
++                return found[1]
++
+         if callable(self.name_lookup):
+             return self.name_lookup(addr, exact=exact, indirect=indirect)
+ 
+@@ -220,6 +230,14 @@
+ 
+         ig = InstructGen(bytes(data), start_addr, self.is_32bit)
+ 
++        self.function_values = {
++            int(m, 16)
++            for section in ig.sections
++            if section.type == SectionType.CODE
++            for inst in section.contents
++            for m in re.findall(r"0x[0-9a-fA-F]+", inst[3])
++        }
++
+         for section in ig.sections:
+             if section.type == SectionType.CODE:
+                 for inst in section.contents:
+diff -ru a/reccmp/compare/asm/replacement.py b/reccmp/compare/asm/replacement.py
+--- a/reccmp/compare/asm/replacement.py	2026-11-24 01:06:50.883618909 -0500
++++ b/reccmp/compare/asm/replacement.py	2026-11-24 01:06:57.932376038 -0500
+@@ -96,6 +96,26 @@
+         return None
+ 
+     @cache
++    def end_of(addr: int) -> tuple[int, str] | None:
++        """OGRE: if addr is one past the end of a matched variable, return that variable's
++        start address and an `<name>+end` name, unless an entity other than an unmatched
++        string starts there (PLAYER 0x00bdb080 starts a garbage "string" made of a COL pointer).
++        ParseAsm uses it only when the same function also references the start (a begin/end
++        pair, as in boost's prime_list lower_bound)."""
++        here = db.get(image_id, addr, exact=True)
++        if here is not None and (here.entity_type != EntityType.STRING or here.matched):
++            return None
++        prev = db.get(image_id, addr - 1, exact=False)
++        if prev is None or not prev.matched or prev.entity_type != EntityType.DATA:
++            return None
++        start = prev.addr(image_id)
++        size = prev.any_size(image_id)
++        if start is None or size < 8 or start + size != addr:
++            return None
++        name = prev.match_name("+end")
++        return None if name is None else (start, name)
++
++    @cache
+     def lookup(addr: int, exact: bool = False, indirect: bool = False) -> str | None:
+         """Returns the name that represents the entity at the given address.
+         If there is no suitable name, return None and let the caller choose one (i.e. placeholder).
+@@ -117,4 +137,5 @@
+         offset = addr - base_addr
+         return get_name(entity, offset)
+ 
++    lookup.end_of = end_of  # type: ignore[attr-defined]
+     return lookup

@@ -262,10 +262,18 @@ foreach(f cmdline config_file convert options_description parsers positional_opt
         utf8_codecvt_facet value_semantic variables_map winmain)
     list(APPEND OGRE_BOOST_PO_SOURCES "${OGRE_BOOST_SRC}/program_options/src/${f}.cpp")
 endforeach()
-# Native, not /GL: compiled with the shell's flags (/GL /GS /fp:precise) it is closer to the 2013
-# config but measured -154 PLAYER entries at 100% (2026-11-13: its LTCG bodies fold with the shell's
-# trivial Instance virtuals, canClientCreate 0x00402730 went absent).
-ogre_library(boost_po SOURCES ${OGRE_BOOST_PO_SOURCES} FLAGS ${OGRE_BOOST_FLAGS})
+# PLAYER: /GL with the shell's flags, as in 2013 (untyped_value::xparse 0x00478330 is LTCG code).
+# Measured 2026-11-24 on one source snapshot, two regeneration rounds each: +292 / -48 PLAYER entries
+# against native (165 sp_counted_impl_pd and program_options vftables, 93 shell-region bodies;
+# the losses are program_options-named STL bodies). It cost 154 on 2026-11-13, before the shell
+# stand-ins and the twin-pairing rules. -DOGRE_BOOST_PO_GL=OFF builds it native.
+option(OGRE_BOOST_PO_GL "Build PLAYER's program_options with the shell's /GL flags (the 2013 config)" ON)
+if(OGRE_BOOST_PO_GL AND OGRE_TARGET STREQUAL "PLAYER")
+    ogre_library(boost_po SOURCES ${OGRE_BOOST_PO_SOURCES} FLAGS /O2 /Ob2 /Oi /Oy /GS /fp:precise /GL /GR
+        /EHsc ${OGRE_BOOST_DEFS} /DBOOST_SYSTEM_DYN_LINK /DBOOST_THREAD_DYN_LINK)
+else()
+    ogre_library(boost_po SOURCES ${OGRE_BOOST_PO_SOURCES} FLAGS ${OGRE_BOOST_FLAGS})
+endif()
 target_include_directories(boost_po PRIVATE "${OGRE_BOOST_INCLUDE}")
 
 # boost.dll: Boost.Thread + Boost.System, a DLL beside both exes; the exes link its import library.

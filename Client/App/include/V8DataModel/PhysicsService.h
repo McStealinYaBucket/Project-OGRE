@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sPhysicsService;
 
 	class PhysicsService
-		: public DescribedNonCreatable<PhysicsService, Instance, sPhysicsService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<PhysicsService, Instance, sPhysicsService>
 		, public Service
 	{
 	public:

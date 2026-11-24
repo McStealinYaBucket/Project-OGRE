@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sRenderHooksService;
 
 	class RenderHooksService
-		: public DescribedNonCreatable<RenderHooksService, Instance, sRenderHooksService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<RenderHooksService, Instance, sRenderHooksService>
 		, public Service
 	{
 	public:

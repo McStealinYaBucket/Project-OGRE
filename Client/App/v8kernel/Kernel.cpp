@@ -92,23 +92,23 @@ namespace RBX {
 			|| Math::fuzzyEq(b->getRootSimBody()->getDt(), Constants::kernelDt(), 1e-6f));
 		data->removeBody(b);
 	}
-	// STUB: PLAYER 0x008309d0
+	// FUNCTION: PLAYER 0x008309d0
 	Point* Kernel::insertPoint(Point* point)
 	{	for (int i = 0; i < data->points.size(); ++i) { if (Point::sameBodyAndOffset(*point, *data->points[i])) { data->points[i]->numOwners++; delete point; return data->points[i]; } }
 		RBXASSERT(!inStepCode);
-		point->kernelIndex = (int)data->points.size(); data->points.append(point); return point;	// 2013: an IndexArray fastAppend
+		data->points.fastAppend(point); return point;
 	}
 	// FUNCTION: PLAYER 0x00832370
-	int Kernel::insertConnector(Connector* connector)
+	void Kernel::insertConnector(Connector* connector)
 	{
 		RBXASSERT(!inStepCode);
-		return data->addConnector(connector);
+		data->addConnector(connector);
 	}
-	// STUB: PLAYER 0x00830970
+	// FUNCTION: PLAYER 0x00830970
 	void Kernel::removePoint(Point* point)
 	{
-		RBXASSERT(!inStepCode); int idx = point->kernelIndex;	// 2013: an IndexArray fastRemove on one line
-		data->points[idx] = data->points.back(); data->points.pop_back(); if (idx < (int)data->points.size()) data->points[idx]->kernelIndex = idx; point->kernelIndex = -1; }
+		RBXASSERT(!inStepCode);
+		data->points.fastRemove(point); }
 	// FUNCTION: PLAYER 0x008323d0
 	// FUNCTION: STUDIO 0x009a4a30
 	void Kernel::removeConnector(Connector* connector)
@@ -178,8 +178,8 @@ namespace RBX {
 	}
 
 
-	// STUB: PLAYER 0x00832430
-	// STUB: STUDIO 0x009a4a90
+	// FUNCTION: PLAYER 0x00832430
+	// FUNCTION: STUDIO 0x009a4a90
 	void Kernel::step(bool throttling, int numThreads)
 	{
 		RBXASSERT(!inStepCode);
@@ -195,178 +195,219 @@ namespace RBX {
 		inStepCode = false;
 	}
 
-	// STUB: PLAYER 0x0082ebc0
-	// STUB: STUDIO 0x009a1100
-	void Kernel::preStepThrottled()
-	{
-		Profiling::Mark mark(*profilingKernelBodies, false);
-		for (int i = 0; i < data->realTimeBodies.size(); ++i) {
-			SimBody* b = data->realTimeBodies[i];
-			if (b->getDirty())
-				b->update();
-		}
-	}
-
-	// STUB: PLAYER 0x008318e0
-	// STUB: STUDIO 0x009a3f40
+	// Before the solve: refresh dirty sims; a contact body under an external force or impulse moves to the realtime list.
+	// FUNCTION: PLAYER 0x008318e0
+	// FUNCTION: STUDIO 0x009a3f40
 	void Kernel::preStep()
 	{
-		STUB(0x008318e0);
-	}
-
-	// mac: 0x52B058 (batch298: kernel-substep loop over points, realtime +
-	// humanoid connectors, realTime sims and leaf bodies. IndexArray
-	// :113 asserts dropped -- KernelData lists are plain G3D arrays
-	// with no index protocol (loud DELTA); loop membership identical.
-	// STUB: PLAYER 0x0082ec40
-	// STUB: STUDIO 0x009a1180
-	void Kernel::stepWorldThrottled()
-	{
-		KernelData* kd = data;
-		int steps = Constants::kernelStepsPerWorldStep();
-		if (steps <= 0)
-			return;
-		for (int k = 0; k < steps; ++k)
-		{
-			{
-				Profiling::Mark markConnectors(*profilingKernelConnectors, false);
-				for (size_t i = 0; i < kd->points.size(); ++i)
-					kd->points[i]->step();
-				for (size_t j = 0; j < kd->realTimeConnectors.size(); ++j)
-				{
-					Connector* c = kd->realTimeConnectors[j];
-					RBXASSERT(validateConnector(c));  // :393
-					c->computeForce(false);
-				}
-				for (size_t i = 0; i < kd->points.size(); ++i)
-					kd->points[i]->forceToBody();
-				for (size_t j = 0; j < kd->humanoidConnectors.size(); ++j)
-					kd->humanoidConnectors[j]->computeForce(false);
-			}
-			{
-				Profiling::Mark markBodies(*profilingKernelBodies, false);
-				for (size_t i = 0; i < kd->realTimeBodies.size(); ++i)
-					kd->realTimeBodies[i]->step();
-				for (size_t i = 0; i < kd->leafBodies.size(); ++i)
-					kd->leafBodies[i]->updatePV();
-			}
-		}
-	}
-
-	// mac: 0x52BBDA (batch298: freeFall update/promote/stepFreeFall +
-	// impulse loop + contact stepPosition + kernel substeps. IndexArray
-	// :103/:113 asserts dropped -- plain G3D arrays, no index protocol
-	// (loud DELTA); membership and order identical).
-	// STUB: PLAYER 0x00830b20
-	// STUB: STUDIO 0x009a3180
-	void Kernel::stepWorld()
-	{
-		KernelData* kd = data;
+		IndexArray<SimBody, &SimBody::getRealTimeBodyIndex>& realTimeBodies(data->realTimeBodies);
+		IndexArray<SimBody, &SimBody::getJointBodyIndex>& jointBodies(data->jointBodies);
+		IndexArray<SimBody, &SimBody::getContactBodyIndex>& contactBodies(data->contactBodies);
+		IndexArray<Connector, &Connector::getContactIndex>& contactConnectors(data->contactConnectors);
 		{
 			Profiling::Mark mark(*profilingKernelBodies, false);
-			for (size_t i = 0; i < kd->freeFallBodies.size(); /* manual */)
-			{
-				SimBody* sim = kd->freeFallBodies[i];
-				if (sim->getDirty())
-					sim->update();
-				if (sim->hasExternalForceOrImpulse())
-				{
-					sim->updateAngMomentum();
-					// Promote freeFall -> realTime (back-swap + reindex):
-					SimBody* moved = kd->freeFallBodies.last();
-					kd->freeFallBodies[i] = moved;
-					moved->freeFallBodyIndex = (int)i;
-					kd->freeFallBodies.pop(false);
-					sim->freeFallBodyIndex = -1;
-					sim->realTimeBodyIndex = (int)kd->realTimeBodies.size();
-					kd->realTimeBodies.append(sim);
-					sim->setDt(Constants::kernelDt());
+			for (int i = 0; i < realTimeBodies.size(); ++i)
+				realTimeBodies[i]->updateIfDirty();
+			for (int i = 0; i < jointBodies.size(); ++i)
+				jointBodies[i]->updateIfDirty();
+			for (int i = 0; i < contactBodies.size(); ++i) {
+				SimBody* simBody = contactBodies[i];
+				simBody->updateIfDirty();
+				if (simBody->hasExternalForceOrImpulse()) {
+					contactBodies.fastRemove(simBody);
+					realTimeBodies.fastAppend(simBody);
+					data->addLeafBodies(simBody->getBody());
+					simBody->setDt(Constants::kernelDt());
+					--i;
 				}
-				else
-				{
-					sim->stepFreeFall();
-					++i;
+				else {
+					simBody->updateSymmetricContactState();
+					simBody->stepVelocity();
 				}
 			}
 		}
-		if (kd->contactConnectors.size() > 0)
 		{
 			Profiling::Mark mark(*profilingKernelConnectors, false);
-			float target = Constants::kernelDt()
-				* ((int)kd->contactBodies.size() / Constants::impulseSolverAccuracyScalar() + 1);
-			int iters = 0;
-			float avgResidual = 0.0f;
-			do
-			{
-				if (iters >= Constants::impulseSolverMaxIterations())
-					break;
-				float residual = 0.0f;
-				for (size_t j = 0; j < kd->contactConnectors.size(); ++j)
-				{
-					Connector* c = kd->contactConnectors[j];
-					RBXASSERT(validateConnector(c));  // :303
-					c->computeImpulse(residual);
+			for (int i = 0; i < contactConnectors.size(); ++i)
+				rbx_static_cast<ContactConnector*>(contactConnectors[i])->clearImpulseComputed();
+		}
+	}
+
+	// FUNCTION: PLAYER 0x0082ebc0
+	// FUNCTION: STUDIO 0x009a1100
+	void Kernel::preStepThrottled()
+	{
+		const IndexArray<SimBody, &SimBody::getRealTimeBodyIndex>& realTimeBodies(data->realTimeBodies);
+		Profiling::Mark mark(*profilingKernelBodies, false);
+		for (int i = 0; i < realTimeBodies.size(); ++i)
+			realTimeBodies[i]->updateIfDirty();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// Free fall, then the impulse solver over the contact connectors, then the kernel substeps.
+	// FUNCTION: PLAYER 0x00830b20
+	// FUNCTION: STUDIO 0x009a3180
+	void Kernel::stepWorld()
+	{
+		IndexArray<SimBody, &SimBody::getFreeFallBodyIndex>& freeFallBodies(data->freeFallBodies);
+		IndexArray<SimBody, &SimBody::getRealTimeBodyIndex>& realTimeBodies(data->realTimeBodies);
+		IndexArray<SimBody, &SimBody::getContactBodyIndex>& contactBodies(data->contactBodies);
+		const IndexArray<SimBody, &SimBody::getJointBodyIndex>& jointBodies(data->jointBodies);
+		const IndexArray<Body, &Body::getLeafBodyIndex>& leafBodies(data->leafBodies);
+		const IndexArray<Point, &Point::getKernelIndex>& points(data->points);
+		const IndexArray<Connector, &Connector::getHumanoidIndex>& humanoidConnectors(data->humanoidConnectors);
+		const IndexArray<Connector, &Connector::getRealTimeIndex>& realtimeConnectors(data->realTimeConnectors);
+		const IndexArray<Connector, &Connector::getSecondPassIndex>& secondPassConnectors(data->secondPassConnectors);
+		const IndexArray<Connector, &Connector::getJointIndex>& jointConnectors(data->jointConnectors);
+		const IndexArray<Connector, &Connector::getContactIndex>& contactConnectors(data->contactConnectors);
+		{
+			Profiling::Mark mark(*profilingKernelBodies, false);
+			for (int i = 0; i < freeFallBodies.size(); ++i) {
+				SimBody* simBody = freeFallBodies[i];
+				simBody->updateIfDirty();
+				if (simBody->hasExternalForceOrImpulse()) {
+					simBody->updateAngMomentum();
+					freeFallBodies.fastRemove(simBody);
+					realTimeBodies.fastAppend(simBody);
+					simBody->setDt(Constants::kernelDt());
+					--i;
 				}
-				avgResidual = residual / (float)kd->contactConnectors.size();
-				++iters;
+				else {
+					simBody->stepFreeFall();
+				}
 			}
-			while (target <= avgResidual);
-			numLastIterations = iters;
-			if (iters > numOfMaxIterations)
-				numOfMaxIterations = iters;
-			error = avgResidual;
-			if (avgResidual > maxError)
-				maxError = avgResidual;
+		}
+		if (contactConnectors.size() > 0) {
+			Profiling::Mark mark(*profilingKernelConnectors, false);
+			float residualVelocity = 0.0f;
+			int i;
+			float tolerance = Constants::impulseSolverAccuracy()
+				* (contactBodies.size() / Constants::impulseSolverAccuracyScalar() + 1);
+			for (i = 0; i < Constants::impulseSolverMaxIterations(); ++i) {
+				residualVelocity = 0.0f;
+				for (int j = 0; j < contactConnectors.size(); ++j) {
+					RBXASSERT(validateConnector(contactConnectors[j]));
+					contactConnectors[j]->computeImpulse(residualVelocity);
+				}
+				residualVelocity /= contactConnectors.size();
+				if (residualVelocity < tolerance) {
+					++i;
+					break;
+				}
+			}
+			numLastIterations = i;
+			if (numLastIterations > numOfMaxIterations)
+				numOfMaxIterations = numLastIterations;
+			error = residualVelocity;
+			if (error > maxError)
+				maxError = error;
 		}
 		{
 			Profiling::Mark mark(*profilingKernelBodies, false);
-			for (size_t i = 0; i < kd->contactBodies.size(); ++i)
-				kd->contactBodies[i]->stepPosition();
+			for (int i = 0; i < contactBodies.size(); ++i)
+				contactBodies[i]->stepPosition();
 		}
-		int steps = Constants::kernelStepsPerWorldStep();
-		if (steps <= 0)
-			return;
-		for (int k = 0; k < steps; ++k)
-		{
+
+
+
+
+
+
+
+		for (int i = 0; i < Constants::kernelStepsPerWorldStep(); i++) {
 			{
 				Profiling::Mark mark(*profilingKernelConnectors, false);
-				for (size_t i = 0; i < kd->points.size(); ++i)
-					kd->points[i]->step();
-				for (size_t j = 0; j < kd->realTimeConnectors.size(); ++j)
-				{
-					Connector* c = kd->realTimeConnectors[j];
-					RBXASSERT(validateConnector(c));  // :337
-					c->computeForce(false);
+				for (int j = 0; j < points.size(); ++j)
+					points[j]->step();
+				for (int j = 0; j < realtimeConnectors.size(); ++j) {
+					RBXASSERT(validateConnector(realtimeConnectors[j]));
+					realtimeConnectors[j]->computeForce(false);
 				}
-				for (size_t i = 0; i < kd->points.size(); ++i)
-					kd->points[i]->forceToBody();
-				for (size_t j = 0; j < kd->humanoidConnectors.size(); ++j)
-					kd->humanoidConnectors[j]->computeForce(false);
-				for (size_t j = 0; j < kd->secondPassConnectors.size(); ++j)
-				{
-					Connector* c = kd->secondPassConnectors[j];
-					RBXASSERT(validateConnector(c));  // :353
-					c->computeForce(false);
+
+				for (int j = 0; j < jointConnectors.size(); ++j) {
+					RBXASSERT(validateConnector(jointConnectors[j]));
+					jointConnectors[j]->computeForce(false);
 				}
-				for (size_t j = 0; j < kd->jointConnectors.size(); ++j)
-				{
-					Connector* c = kd->jointConnectors[j];
-					RBXASSERT(validateConnector(c));  // :342
-					c->computeForce(false);
+
+				for (int j = 0; j < points.size(); ++j)
+					points[j]->forceToBody();
+
+				for (int j = 0; j < humanoidConnectors.size(); ++j)
+					humanoidConnectors[j]->computeForce(false);
+
+				for (int j = 0; j < secondPassConnectors.size(); ++j) {
+					RBXASSERT(validateConnector(secondPassConnectors[j]));
+					secondPassConnectors[j]->computeForce(false);
 				}
 			}
 			{
 				Profiling::Mark mark(*profilingKernelBodies, false);
-				for (size_t i = 0; i < kd->realTimeBodies.size(); ++i)
-					kd->realTimeBodies[i]->step();
-				for (size_t i = 0; i < kd->jointBodies.size(); ++i)
-					kd->jointBodies[i]->step();
-				for (size_t i = 0; i < kd->leafBodies.size(); ++i)
-					kd->leafBodies[i]->updatePV();
+				for (int j = 0; j < realTimeBodies.size(); ++j)
+					realTimeBodies[j]->step();
+				for (int j = 0; j < jointBodies.size(); ++j)
+					jointBodies[j]->step();
+				int leafBodiesSize = leafBodies.size();
+				for (int j = 0; j < leafBodiesSize; ++j)
+					leafBodies[j]->updatePV();
 			}
 		}
 	}
 
+
+
+
+
+
+
+
+	// The throttled step runs only the realtime bodies and their connectors.
+	// FUNCTION: PLAYER 0x0082ec40
+	// FUNCTION: STUDIO 0x009a1180
+	void Kernel::stepWorldThrottled()
+	{
+		const IndexArray<SimBody, &SimBody::getRealTimeBodyIndex>& realtimeBodies(data->realTimeBodies);
+		const IndexArray<Body, &Body::getLeafBodyIndex>& leafBodies(data->leafBodies);
+		const IndexArray<Point, &Point::getKernelIndex>& points(data->points);
+		const IndexArray<Connector, &Connector::getRealTimeIndex>& realtimeConnectors(data->realTimeConnectors);
+		const IndexArray<Connector, &Connector::getHumanoidIndex>& humanoidConnectors(data->humanoidConnectors);
+		for (int i = 0; i < Constants::kernelStepsPerWorldStep(); i++) {
+			{
+				Profiling::Mark mark(*profilingKernelConnectors, false);
+				for (int j = 0; j < points.size(); ++j)
+					points[j]->step();
+				for (int j = 0; j < realtimeConnectors.size(); ++j) {
+					RBXASSERT(validateConnector(realtimeConnectors[j]));
+					realtimeConnectors[j]->computeForce(false);
+				}
+				for (int j = 0; j < points.size(); ++j)
+					points[j]->forceToBody();
+				for (int j = 0; j < humanoidConnectors.size(); ++j)
+					humanoidConnectors[j]->computeForce(false);
+			}
+			{
+				Profiling::Mark mark(*profilingKernelBodies, false);
+				for (int j = 0; j < realtimeBodies.size(); ++j)
+					realtimeBodies[j]->step();
+				int leafBodiesSize = leafBodies.size();
+				for (int j = 0; j < leafBodiesSize; ++j)
+					leafBodies[j]->updatePV();
+			}
+		}
+	}
 
 	// 2016 shapes (first-party; stepWorldThrottled validates each
 	// realtime connector before solving; EAs queued).

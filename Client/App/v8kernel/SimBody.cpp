@@ -128,21 +128,16 @@ namespace RBX {
 		RBXASSERT(dirty);  // SimBody.cpp:89 (concurrency check)
 		dirty = false;
 	}
-
-	// (batch254: iWorld = rot * moment * rot'; angMomentum = iWorld * rotVel.)
+	// iWorld = rot * moment * rot'; angMomentum = iWorld * rotVel.
+	// FUNCTION: PLAYER 0x00976bf0
+	// FUNCTION: STUDIO 0x009c4520
 	void SimBody::updateAngMomentum()
 	{
 		G3D::Matrix3 scaled;
 		G3D::Matrix3 world;
 		Math::mulMatrixDiagVector(pvFrame.rotation, moment, scaled);
 		Math::mulMatrixMatrixTranspose(scaled, pvFrame.rotation, world);
-		const float* rows = world;
-		float vx = angVel.x;
-		float vy = angVel.y;
-		float vz = angVel.z;
-		angMomentum.x = rows[2] * vz + rows[0] * vx + rows[1] * vy;
-		angMomentum.y = rows[5] * vz + rows[3] * vx + rows[4] * vy;
-		angMomentum.z = rows[8] * vz + rows[6] * vx + rows[7] * vy;
+		angMomentum = world * angVel;
 	}
 
 	// 2016 shape (owner-frame PV for cofm bodies).
@@ -439,6 +434,12 @@ namespace RBX {
 			body->angVel = angVel;
 		}
 		body->advanceStateIndex();
+	}
+	// STUB: PLAYER 0x0082e000
+	// STUB: STUDIO 0x009a05d0
+	bool SimBody::updateSymmetricContactState()
+	{
+		return symmetricContact;
 	}
 
 } // namespace RBX

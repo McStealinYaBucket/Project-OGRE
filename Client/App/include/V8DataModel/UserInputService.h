@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sUserInputService;
 
 	class UserInputService
-		: public DescribedNonCreatable<UserInputService, Instance, sUserInputService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<UserInputService, Instance, sUserInputService>
 		, public Service
 	{
 	public:

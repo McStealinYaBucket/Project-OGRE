@@ -22,7 +22,6 @@ using boost::scoped_ptr;
 using boost::weak_ptr;
 using boost::enable_shared_from_this;
 
-
 namespace RBX
 {
     namespace Reflection
@@ -77,10 +76,11 @@ namespace RBX
     {
         return !(lhs < rhs) && !(rhs < lhs);
     }
+	class Object;	// 2013 ICreator::create returns the Object subobject (Instance+0x18): Creator::create `add ecx,0x18` (Teams 0x0053d1d0); AbstractFactoryProduct<Instance>::create 0x0059a5e0 dynamic-casts it Object -> Instance
 	class RBXInterface ICreator
 	{
 	public:
-		virtual shared_ptr<Reflection::DescribedBase> create() const = 0;
+		virtual shared_ptr<Object> create() const = 0;
 	};
 	// 2013 (absent from 2016): every Instance carries an RBX::Object subobject at +0x18,
 	// reached through AbstractFactoryProduct<Instance> -> Creatable<Instance> -> Object
@@ -227,7 +227,7 @@ namespace RBX
 			static bool wasConstructed() {return isConstructed == isConstructedTrue();}
 			// STUB: PLAYER 0x0077ebf0
 			// STUB: STUDIO 0x00729990
-			/* override */ shared_ptr<Reflection::DescribedBase> create() const {
+			/* override */ shared_ptr<Object> create() const {
 				RBXASSERT(wasConstructed());
 				return Creatable<FactoryClass>::template create<Class>();
 			}

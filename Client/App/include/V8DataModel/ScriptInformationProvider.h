@@ -18,7 +18,7 @@ namespace RBX {
 	extern const char* const sScriptInformationProvider;
 
 	class ScriptInformationProvider
-		: public DescribedNonCreatable<ScriptInformationProvider, Instance, sScriptInformationProvider, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<ScriptInformationProvider, Instance, sScriptInformationProvider>
 		, public Service
 	{
 	public:

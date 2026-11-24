@@ -29,6 +29,10 @@ namespace RBX {
 		virtual ~Point() {}
 
 		Body* getBody() { return body; }
+		// KernelData::points' index (2013: out of line, PLAYER 0x0082e140 `lea eax,[ecx+4]`).
+		// FUNCTION: PLAYER 0x0082e140
+		// FUNCTION: STUDIO 0x008944a0
+		int& getKernelIndex() { return kernelIndex; }
 		const G3D::Vector3& getWorldPos() const { return worldPos; }
 		// 2016 shapes (first-party; EAs queued with the stepper).
 		void step();

@@ -33,7 +33,8 @@ namespace RBX {
 			CONTACT,
 			JOINT,
 			HUMANOID,
-			KERNEL_JOINT
+			KERNEL_JOINT,
+			BUOYANCY	// BuoyancyConnector's slot 0 (PLAYER 0x00962a80) returns 4
 		} KernelType;
 
 		typedef enum { body0, body1 } BodyIndex;
@@ -65,6 +66,12 @@ namespace RBX {
 		bool isSecondPass() const { return secondPassIndex >= 0; }
 		bool isJoint() const { return jointIndex >= 0; }
 		bool isContact() const { return contactIndex >= 0; }
+		// IndexArray<Connector, &getXIndex> slots of KernelData (2013 accessors 0x0082e5d0..0x0082e9d0).
+		int& getHumanoidIndex() { return humanoidIndex; }
+		int& getRealTimeIndex() { return realTimeIndex; }
+		int& getSecondPassIndex() { return secondPassIndex; }
+		int& getJointIndex() { return jointIndex; }
+		int& getContactIndex() { return contactIndex; }
 		bool isInKernel() const {
 			return isHumanoid() || isRealTime() || isSecondPass()
 				|| isJoint() || isContact();

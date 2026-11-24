@@ -89,9 +89,9 @@ namespace RBX
 		void extract(Data &data) const { data = this->data; }
 
 		void copyDataFrom(const Guid& other) {
-			Data data;
-			other.extract(data);
-			this->assign(data);
+			// 2013 passes other's Data straight to assign (Primitive::setGuid
+			// PLAYER 0x00753c10): no local Data is built.
+			assign(other.data);
 		}
 
 		// For debugging only. A string that is not guaranteed to be unique

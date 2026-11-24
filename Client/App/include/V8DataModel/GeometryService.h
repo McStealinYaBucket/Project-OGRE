@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sGeometryService;
 
 	class GeometryService
-		: public DescribedNonCreatable<GeometryService, Instance, sGeometryService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<GeometryService, Instance, sGeometryService>
 		, public Service
 	{
 	public:

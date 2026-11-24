@@ -4,16 +4,19 @@
    is not decompiled yet (see include/V8World/ContactManager.h). */
 
 #include "stdafx.h"
+#include "decomp.h"
 
 #include "V8World/ContactManager.h"
 #include "V8World/ContactManagerSpatialHash.h"
 #include "V8World/Primitive.h"
+#include "V8World/Geometry.h"
 #include "V8World/Contact.h"
 #include "V8World/World.h"
 #include "Util/Extents.h"
 #include "Util/FastFlags.h"
 #include "G3D/Array.h"
 #include "rbx/Debug.h"
+#include <algorithm>
 
 namespace RBX {
 
@@ -22,8 +25,8 @@ namespace RBX {
 		G3D::Array<Primitive*, 10, 32>& out);
 
 	// mac: 0x563626 (C1 0x56361C is the 9-byte C1 thunk).
-	// STUB: PLAYER 0x007b63a0
-	// STUB: STUDIO 0x008d2550
+	// FUNCTION: PLAYER 0x007b63a0
+	// FUNCTION: STUDIO 0x008d2550
 	ContactManager::ContactManager(World* world)
 		: spatialHash(new ContactManagerSpatialHash(world, this))
 		, myMegaClusterPrim(NULL)
@@ -116,47 +119,471 @@ namespace RBX {
 	// :573 (Block-family fallthrough).  Ordering by collide type first (v6
 	// holds the lower, v3 the higher) makes (2,1)-style inversions
 	// unreachable -- the switch only ever sees t0 <= t1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// STUB: PLAYER 0x007b9120
 	// STUB: STUDIO 0x008d5ac0
 	Contact* ContactManager::createContact(Primitive* p0, Primitive* p1)
 	{
-		// ContactManager.cpp:534.
-		RBXASSERT(p0->getGeometryType() != Primitive::GEOMETRY_MEGACLUSTER
-			&& p1->getGeometryType() != Primitive::GEOMETRY_MEGACLUSTER);
-
-		Primitive* a = p0;
-		Primitive* b = p1;
+		RBXASSERT(p0->getGeometryType() != Geometry::GEOMETRY_MEGACLUSTER && p1->getGeometryType() != Geometry::GEOMETRY_MEGACLUSTER);
 		if (p0->getCollideType() > p1->getCollideType())
+			std::swap(p0, p1);
+		switch (p0->getCollideType())
 		{
-			a = p1;
-			b = p0;
-		}
-		int t0 = a->getCollideType();
-		int t1 = b->getCollideType();
-		if (t0 == 3)
-			return new PolyPolyContact(a, b);
-		if (t0 == 2)
-		{
-			if (t1 == 3)
-				return new PolyPolyContact(a, b);
-			if (t1 == 2)
-				return new BlockBlockContact(a, b);
-			RBXASSERT(false);  // :573 "0"
+		case 1:
+			switch (p1->getCollideType())
+			{
+			case 1:
+				return new BallBallContact(p0, p1);
+			case 2:
+				return new BallBlockContact(p0, p1);
+			case 3:
+				return new BallPolyContact(p0, p1);
+			default:
+
+
+
+
+
+
+
+
+
+				RBXASSERT(0);
+				return NULL;
+			}
+		case 2:
+			switch (p1->getCollideType())
+			{
+			case 2:
+				return new BlockBlockContact(p0, p1);
+			case 3:
+				return new PolyPolyContact(p0, p1);
+			default:
+
+
+
+
+				RBXASSERT(0);
+				return NULL;
+			}
+		case 3:
+			return new PolyPolyContact(p0, p1);
+		default:
+			RBXCRASH("ContactManager::createContact");
 			return NULL;
 		}
-		if (t0 == 1)
-		{
-			if (t1 == 3)
-				return new BallPolyContact(a, b);
-			if (t1 == 2)
-				return new BallBlockContact(a, b);
-			if (t1 == 1)
-				return new BallBallContact(a, b);
-			RBXASSERT(false);  // :558 "0"
-			return NULL;
-		}
-		RBXCRASH();
-		return NULL;
+	}
+	// STUB: PLAYER 0x007b9490
+	void ContactManager::onPrimitiveGeometryChanged(Primitive* prim)
+	{
+		STUB(0x007b9490);
 	}
 
 	// mac: 0x56539A (185B).  Verbatim for the shipped (flag-off) path.
@@ -177,8 +604,17 @@ namespace RBX {
 		// Flag-on Assembly/Mechanism grounded dance: unported (see above).
 	}
 
+
+
+
+
+
+
+
+
+
 	// mac: 0x565454 (226B).
-	// STUB: PLAYER 0x007b35f0
+	// FUNCTION: PLAYER 0x007b35f0
 	// STUB: STUDIO 0x008cf670
 	void ContactManager::releasePair(Primitive* p0, Primitive* p1)
 	{
@@ -198,7 +634,7 @@ namespace RBX {
 			world->destroyContact(contact);
 			return;
 		}
-		RBXASSERT(false);  // ContactManager.cpp:637 "0"
+		RBXASSERT(0);
 	}
 
 	// mac: 0x563FAC (62B).  File-static in the binary (the symbol is literally

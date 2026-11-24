@@ -99,6 +99,9 @@ namespace RBX {
 		}
 		const G3D::Matrix3& getInverseInertiaInWorld() const { return momentRecipWorld; }
 		// 2016 shapes (symmetric-contact gating for the impulse solver).
+		// 2013: a header inline emitted in Kernel.obj (PLAYER 0x0082e000) gated on FFlag::SymmetricContact (0x00d30f08,
+		// not declared in Util/FastFlags.h yet); stubbed in SimBody.cpp until the flag exists.
+		bool updateSymmetricContactState();
 		bool isSymmetricContact() const { return symmetricContact; }
 		bool isVerticalContact() const { return verticalContact; }
 		void clearSymmetricContact() { symmetricContact = false; }
@@ -127,6 +130,9 @@ namespace RBX {
 			updateIfDirty();
 			force += value;
 		}
+		// 2013 emits it out of line (ContactConnector.obj; Point::forceToBody calls it).
+		// FUNCTION: PLAYER 0x0084e340
+		// FUNCTION: STUDIO 0x009a6030
 		void accumulateForce(const G3D::Vector3& value, const G3D::Vector3& worldPos) {
 			updateIfDirty();
 			force += value;
@@ -184,6 +190,13 @@ namespace RBX {
 			return isFreeFallBody() || isRealTimeBody()
 				|| isJointBody() || isContactBody();
 		}
+		// IndexArray<SimBody, &getXIndex> slots of KernelData (2013 accessors 0x0082e150..0x0082e3d0 read +0xf0..+0xfc).
+		int& getFreeFallBodyIndex() { return freeFallBodyIndex; }
+		int& getRealTimeBodyIndex() { return realTimeBodyIndex; }
+		int& getJointBodyIndex() { return jointBodyIndex; }
+		int& getContactBodyIndex() { return contactBodyIndex; }
+		// KernelData::addConnector/removeConnector: `add [+0x100+4*type], d; add [+0x100], d` (PLAYER 0x00831ba0).
+		void updateConnectorCount(int type, int delta) { numConnectors[type] += delta; numConnectors[0] += delta; }
 		bool validateBodyLists() const {
 			return (freeFallBodyIndex >= 0) + (realTimeBodyIndex >= 0)
 				+ (jointBodyIndex >= 0) + (contactBodyIndex >= 0) <= 1;

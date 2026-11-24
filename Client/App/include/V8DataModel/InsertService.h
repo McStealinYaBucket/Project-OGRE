@@ -31,6 +31,8 @@ namespace RBX {
 		: public DescribedCreatable<InsertService, Instance, sInsertService, Reflection::ClassDescriptor::INTERNAL>
 		, public Service	// 0x60 (isPublic, ctor stores 1)
 	{
+		typedef DescribedCreatable<InsertService, Instance, sInsertService, Reflection::ClassDescriptor::INTERNAL> Super;
+
 	public:
 		InsertService();
 
@@ -68,6 +70,12 @@ namespace RBX {
 		std::string assetUrl;			// 0x118 setAssetUrl 0x007cfcf0
 		std::string assetVersionUrl;	// 0x134 setAssetVersionUrl 0x007cfd40
 		float trustLevel;				// 0x150 setTrustLevel 0x007cfb40; ctor 0.5
+
+		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider);
+
+		void backendInsertRequested(std::string key, ContentId contentId);
+		void backendInsertAssetVersionRequested(std::string key, int assetVersionId, int userId);
+		void backendInsertAssetRequested(std::string key, int assetId, int userId);
 
 		rbx::signals::connection backendInsertConnection;				// 0x154 insertRequestSignal
 		rbx::signals::connection backendInsertAssetConnection;			// 0x158 insertRequestAssetSignal

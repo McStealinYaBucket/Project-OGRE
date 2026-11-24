@@ -37,8 +37,10 @@ namespace RBX {
 		DebrisService();
 		void setMaxItems(int value);
 		int getMaxItems() const { return maxItems; }
+		void addItem(shared_ptr<Instance> item, double lifetime);
 	private:
 		void cleanup();
+		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider);
 	};
 
 } // namespace RBX

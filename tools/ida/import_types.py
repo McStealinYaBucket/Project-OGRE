@@ -115,8 +115,18 @@ CLASSES = [
     # ctor 0.974, the prime_list end pointer), AssemblyHistory (0x20; ctor 0.08)
     "RBX::NetworkSettings", "RBX::InsertService", "RBX::Profiling::CodeProfiler", "RBX::Profiling::Mark",
     "RBX::StepJointsStage", "RBX::SpatialHash<RBX::Primitive,RBX::Contact,RBX::ContactManager,4>::TreeNode",
+    # wave8 sync (sweep15, build/sweep15/P-final.json / S-final.json effective 100%; size = DECOMP_SIZE_ASSERT or
+    # // SIZE = the PDB's), PLAYER / STUDIO: TimerService (0x78, datamodel-5b-6.md) ctor 0x007a6d10 / 0x008bb430;
+    # PhysicsSettings (0x70) ctor 0x0085da60 / 0x009424e0; StarterGuiService (0x98) ctor 0x0070c150 / 0x00798860
+    # (reccmp patch 0002); Network::ItemQueue (0x10) dtor 0x005d42a0 / 0x0066d630; Stats::Item (0x88: StatsItem.h
+    # SIZE comment, TypedStatsItem<int> is new 0xa8 with its member at 0x88) ctor
+    # 0x0048e470 (PLAYER only: STUDIO 0x0043e560 at 0.655). KernelData (already listed) is now eleven IndexArrays
+    # (world-5d.md, wave8). Not yet: Kernel (ctor 0x00831590 / dtor 0x0082f670 100%, no size assertion),
+    # SpatialHash (no size assertion), AssemblyHistory (ctor 0.08)
+    "RBX::TimerService", "RBX::PhysicsSettings", "RBX::StarterGuiService", "RBX::Network::ItemQueue",
+    "RBX::Stats::Item",
 ]
-PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::Stats::Item"}     # proven in PLAYER only (STUDIO ctor/dtor below 100%)
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

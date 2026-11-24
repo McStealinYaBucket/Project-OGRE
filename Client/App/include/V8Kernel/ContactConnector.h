@@ -70,6 +70,8 @@ namespace RBX {
 			SimBody* simBody1, const PairParams& params, float direction);
 
 		PairParams& getContactPoint() { return contactPoint; }
+		// Kernel::preStep 0x008318e0 clears it inline (`mov byte [eax+0x70],0`).
+		void clearImpulseComputed() { impulseComputed = false; }
 		const PairParams& getContactPoint() const { return contactPoint; }
 		// mac: 0x5296B2 (batch290: reorder + symmetric apply pair + sync
 		// into oldContactPoint when listed and diverged). Virtual per

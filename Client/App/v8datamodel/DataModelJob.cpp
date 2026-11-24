@@ -36,18 +36,17 @@ namespace RBX {
 		RBXASSERT(arbiter);		// "arbiter" (DataModelJob.cpp:36)
 	}
 
-	/* mac: 0x3122C6 — matches 2016 semantics: max(1, arbiter->getNumPlayers()) unless per-player */
+	/* 2013: the arbiter is held through shared_dynamic_cast (0x004fb420); a per-player job counts 1,
+	   others std::max(1, players) by reference, converted with one fild. */
 	// STUB: PLAYER 0x0070ce10
 	// STUB: STUDIO 0x008454e0
 	double DataModelJob::getPriorityFactor()
 	{
-		const shared_ptr<TaskScheduler::Arbiter>& baseArbiter = getArbiter();
-		DataModelArbiter* arbiter = dynamic_cast<DataModelArbiter*>(baseArbiter.get());
-		if (!arbiter || isPerPlayer)
-			return 1;
-
-		int numPlayers = arbiter->getNumPlayers();
-		return (numPlayers > 1) ? (double)numPlayers : 1.0;
+		shared_ptr<DataModelArbiter> arbiter = shared_dynamic_cast<DataModelArbiter>(getArbiter());
+		if (!arbiter)
+			return 1.0;
+		int factor = isPerPlayer ? 1 : std::max(1, arbiter->getNumPlayers());
+		return factor;
 	}
 
 

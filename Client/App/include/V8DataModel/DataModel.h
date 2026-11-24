@@ -940,7 +940,7 @@ public:
 
 // TEMPLATE: PLAYER 0x00641a20
 // TEMPLATE: STUDIO 0x0075f2d0
-// ??0?$Described@VScriptService@RBX@@$E?sScriptService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sScriptService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@QAE@XZ
+// ??0?$Described@VScriptService@RBX@@$E?sScriptService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sScriptService@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 
 // TEMPLATE: PLAYER 0x00642370
 // ??1?$scoped_ptr@UImplementation@LegacyLock@DataModel@RBX@@@boost@@QAE@XZ
@@ -951,7 +951,7 @@ public:
 
 // TEMPLATE: PLAYER 0x00643290
 // TEMPLATE: STUDIO 0x00760b10
-// ??0?$Described@VPhysicsService@RBX@@$E?sPhysicsService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@QAE@XZ
+// ??0?$Described@VPhysicsService@RBX@@$E?sPhysicsService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsService@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 
 // TEMPLATE: PLAYER 0x00643d30
 // TEMPLATE: STUDIO 0x006fd1e0

@@ -25,21 +25,45 @@ namespace RBX {
 	class Geometry
 	{
 	public:
+		// Same values as Primitive's; 2013 asserts spell Geometry::GEOMETRY_MEGACLUSTER (ContactManager.cpp:534).
+		typedef enum {
+			GEOMETRY_UNDEFINED = 0, GEOMETRY_BALL, GEOMETRY_BLOCK, GEOMETRY_CYLINDER, GEOMETRY_WEDGE, GEOMETRY_PRISM,
+			GEOMETRY_PYRAMID, GEOMETRY_PARALLELRAMP, GEOMETRY_RIGHTANGLERAMP, GEOMETRY_CORNERWEDGE, GEOMETRY_MEGACLUSTER,
+			GEOMETRY_SMOOTHCLUSTER, GEOMETRY_TRI_MESH
+		} GeometryType;
 		Geometry()
 			: size(G3D::Vector3::zero())
 			, centerToCornerDistance(0.0f)
 		{}
 		virtual ~Geometry() {}
 
-		virtual int getGeometryType() const = 0;
-		virtual int getCollideType() const = 0;
+		// 2013 vftable (Geometry 0x00b56444, Block 0x00b57394, Ball 0x00b5670c; mac names):
+		virtual int getGeometryType() const = 0;		// vtable+0x04
+		virtual int getCollideType() const = 0;		// vtable+0x08
 		const G3D::Vector3& getSize() const { return size; }
-		// 2013 stores through a vftable slot (Primitive::setSize); not modelled yet.
+		// vtable+0x0c, base 0x00753630 (Block 0x00860830, Ball 0x008fb710 override).
+		virtual void setSize(const G3D::Vector3& value) { size = value; }
 		void setSizeNonVirtual(const G3D::Vector3& value) { size = value; }
-		// Slot 17 (0x5886C0 base identity).
+		// vtable+0x10 setGeometryParameter, +0x14 getGeometryParameter (bases 0x00753650/0x00753690),
+		// +0x18..+0x3c pure in Geometry (getRadius ... vertOverlapsFace): placeholders until modelled.
+		virtual void VTable0x10() {}
+		virtual void VTable0x14() {}
+		virtual void VTable0x18() {}
+		virtual void VTable0x1c() {}
+		virtual void VTable0x20() {}
+		virtual void VTable0x24() {}
+		virtual void VTable0x28() {}
+		virtual void VTable0x2c() {}
+		virtual void VTable0x30() {}
+		virtual void VTable0x34() {}
+		virtual void VTable0x38() {}
+		virtual void VTable0x3c() {}
+		// vtable+0x40 (0x5886C0 base identity).
 		// FUNCTION: PLAYER 0x004901e0
 		// FUNCTION: STUDIO 0x0051fb70
 		virtual int getFaceFromLegacyNormalId(NormalId nId) const { return (int)nId; }
+		// vtable+0x44; base `mov al,1` (0x006be550, folded). The sloped polys answer false.
+		virtual bool isGeometryOrthogonal() const { return true; }
 
 	protected:
 		G3D::Vector3 size;          // +4..12
@@ -67,6 +91,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 4; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		virtual int getFaceFromLegacyNormalId(NormalId nId) const
 		{
 			static const int t[6] = { 2, 1, 0, 3, 4, 1 };
@@ -80,6 +105,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 5; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		// numSides/numFaces/mesh + face tables TODO (needs mesh module).
 	};
 
@@ -88,6 +114,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 6; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		// Same TODO as Prism (no NORM_Y case).
 	};
 
@@ -96,6 +123,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 7; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		// Inherits base identity (no override in binary).
 	};
 
@@ -104,6 +132,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 8; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		virtual int getFaceFromLegacyNormalId(NormalId nId) const
 		{
 			static const int t[6] = { -1, 1, 2, 3, 0, 5 };
@@ -119,6 +148,7 @@ namespace RBX {
 	public:
 		virtual int getGeometryType() const { return 9; }
 		virtual int getCollideType() const { return 3; }
+		virtual bool isGeometryOrthogonal() const { return false; }
 		virtual int getFaceFromLegacyNormalId(NormalId nId) const
 		{
 			static const int t[6] = { 0, -1, 1, 2, 3, 4 };

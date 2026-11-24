@@ -39,8 +39,8 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x008215c0
-	// STUB: STUDIO 0x00914c90
+	// FUNCTION: PLAYER 0x008215c0
+	// FUNCTION: STUDIO 0x00914c90
 	Joint::Joint(Primitive* p0, Primitive* p1,
 		const G3D::CoordinateFrame& c0, const G3D::CoordinateFrame& c1)
 		: Edge(p0, p1)

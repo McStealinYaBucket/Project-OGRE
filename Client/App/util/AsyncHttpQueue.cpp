@@ -38,8 +38,8 @@
        create 0x1E4CEA. THREE children only -- no "Queue size" (children
        "Average time in queue"@0xB343FF, "Average process time"@0xB34415,
        "Num slow requests"@0xB3442A). update() calls Stats::Item::
-       formatValue<int> (0x4A30CE) for numSlowRequests; this tree's int
-       forwarder is formatValueIi (StatsItem.cpp:97). MI thunks ZThn32/
+       formatValue<int> (0x4A30CE) for numSlowRequests; StatsItem.cpp
+       defines it as an explicit specialization. MI thunks ZThn32/
        ZThn36. create() used Creatable<Instance>::create in the binary;
        ported with the in-tree direct-new convention (DELTA inline).
      * resetStatsItem 0x1E209E: setParent(NULL) + reset(); then
@@ -105,10 +105,10 @@ public:
 	{
 		avgTimeInQueue->formatValue(httpQueue->getAvgTimeInQueue(), "%.4f msec", httpQueue->getAvgTimeInQueue());
 		avgRequestCompleteTime->formatValue(httpQueue->getAvgRequestCompleteTime(), "%.4f msec", httpQueue->getAvgRequestCompleteTime());
-		// DELTA: binary calls Stats::Item::formatValue<int>(int const&)
-		// (0x4A30CE); formatValueIi (StatsItem.cpp:97) is this tree's int
-		// forwarder -- same "%d" observable.
-		numSlowRequests->formatValueIi(httpQueue->getNumSlowRequests());
+		// The 2013 call is the Stats::Item::formatValue<int>(int const&)
+		// specialization in StatsItem.cpp (PLAYER 0x0073b450,
+		// STUDIO 0x007c3af0).
+		numSlowRequests->formatValue(httpQueue->getNumSlowRequests());
 	}
 
 	// Inlined into create in 2013 (no out-of-line body).

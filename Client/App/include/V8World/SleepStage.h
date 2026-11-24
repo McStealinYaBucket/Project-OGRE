@@ -67,6 +67,9 @@ namespace RBX {
 		void recursiveWakeEvent(Contact* contact);
 		void recursiveWakeEvent(Assembly* assembly);
 		bool highVelocityNewTouch(Contact* contact);
+		// PLAYER 0x008e6790 (SleepStage.cpp:505/:506).
+		bool isAffecting(Edge* e);
+		void wakeEdge(Edge* e);	// PLAYER 0x008e9030
 		void stepJoints();
 		void onExternalTickleAssembly(Assembly* assembly, bool recursive);
 

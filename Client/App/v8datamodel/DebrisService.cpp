@@ -1,9 +1,12 @@
-/* App/v8datamodel/DebrisService.cpp -- October 2013. cleanup, setMaxItems and the ctor from the PLAYER
-   bytes (0x008446f0..0x008455c0); addItem/onServiceProvider need TimerService. */
+/* App/v8datamodel/DebrisService.cpp -- October 2013. cleanup, setMaxItems, addItem, onServiceProvider
+   and the ctor from the PLAYER bytes (0x008446f0..0x008455c0). The AddItem function descriptors are
+   not written yet. */
 
 #include "stdafx.h"
 
 #include "V8DataModel/DebrisService.h"
+#include "V8DataModel/TimerService.h"
+#include <boost/bind.hpp>
 #include "security/SecurityContext.h"
 #include "decomp.h"
 #include "Util/standardout.h"
@@ -67,6 +70,38 @@ namespace RBX {
 			raisePropertyChanged(prop_MaxItems);
 			cleanup();
 		}
+	}
+
+	// STUB: PLAYER 0x00845000
+	// STUB: STUDIO 0x0098a9d0
+	void DebrisService::addItem(shared_ptr<Instance> item, double lifetime)
+	{
+		if (!item)
+			return;
+
+		item->securityCheck();
+
+		if (timer)
+			timer->delay(boost::bind(&::cleanup, weak_ptr<Instance>(item)), lifetime);
+
+		queue.push(item);
+		cleanup();
+	}
+
+	// Instance::onServiceProvider is empty and inline, so nothing calls Super here.
+	// STUB: PLAYER 0x00845380
+	// STUB: STUDIO 0x0098ad50
+	void DebrisService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		while ((int)queue.size() > 0)
+		{
+			::cleanup(queue.front());
+			queue.pop();
+		}
+
+		Super::onServiceProvider(oldProvider, newProvider);
+
+		timer = shared_from(ServiceProvider::create<TimerService>(newProvider));
 	}
 
 	// FUNCTION: PLAYER 0x008455c0

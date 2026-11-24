@@ -174,7 +174,7 @@ protected:
 // ?_Incsize@?$list@URequest@AsyncHttpQueue@RBX@@V?$allocator@URequest@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
 
 // TEMPLATE: PLAYER 0x0086bc70
-// ?_Incsize@?$list@UFailedUrl@AsyncHttpQueue@RBX@@V?$allocator@UFailedUrl@AsyncHttpQueue@RBX@@@std@@@std@@IAEXI@Z
+// ?_Incsize@?$list@VItem@TimerService@RBX@@V?$allocator@VItem@TimerService@RBX@@@std@@@std@@IAEXI@Z
 
 // TEMPLATE: PLAYER 0x0086c5b0
 // TEMPLATE: STUDIO 0x009b97c0

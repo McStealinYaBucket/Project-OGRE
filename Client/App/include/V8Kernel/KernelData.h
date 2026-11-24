@@ -1,13 +1,13 @@
-/* V8Kernel/KernelData.h -- October 2013: the kernel's body and connector lists (0xb0, 11 G3D::Array; D2 PLAYER 0x0082f240).
-   2013 defines every member here (asserts cite KernelData.h:38-230); Kernel.cpp emits the copies. 2016 uses IndexArray x12. */
+/* V8Kernel/KernelData.h -- October 2013: the kernel's lists, 11 IndexArrays (no buoyancy list), 0xb0. Their operator[]/fastAppend/fastRemove
+   are out-of-line copies in Kernel.obj (PLAYER 0x0082e150-0x0082e9d0, 0x0082f760-0x00830620). Asserts on their 2013 lines (:38-:230). */
 #pragma once
 
-#include "G3D/Array.h"
+#include "Util/IndexArray.h"
+#include "V8Kernel/Point.h"
 #include "V8Kernel/Body.h"
 #include "V8Kernel/SimBody.h"
 #include "V8Kernel/Connector.h"
 #include "V8Kernel/ContactConnector.h"
-#include "V8Kernel/Pair.h"
 #include "V8Kernel/Constants.h"
 #include "Util/FastFlags.h"
 namespace RBX {
@@ -16,17 +16,17 @@ namespace RBX {
 	class KernelData
 	{
 	public:
-		G3D::Array<SimBody*> freeFallBodies;          // 0x00
-		G3D::Array<SimBody*> realTimeBodies;          // 0x10
-		G3D::Array<SimBody*> jointBodies;             // 0x20
-		G3D::Array<SimBody*> contactBodies;           // 0x30
-		G3D::Array<Body*> leafBodies;                 // 0x40
-		G3D::Array<Point*> points;                    // 0x50
-		G3D::Array<Connector*> humanoidConnectors;    // 0x60
-		G3D::Array<Connector*> secondPassConnectors;  // 0x70
-		G3D::Array<Connector*> realTimeConnectors;    // 0x80
-		G3D::Array<Connector*> jointConnectors;       // 0x90
-		G3D::Array<Connector*> contactConnectors;     // 0xa0
+		IndexArray<SimBody, &SimBody::getFreeFallBodyIndex> freeFallBodies;           // 0x00
+		IndexArray<SimBody, &SimBody::getRealTimeBodyIndex> realTimeBodies;           // 0x10
+		IndexArray<SimBody, &SimBody::getJointBodyIndex> jointBodies;                 // 0x20
+		IndexArray<SimBody, &SimBody::getContactBodyIndex> contactBodies;             // 0x30
+		IndexArray<Body, &Body::getLeafBodyIndex> leafBodies;                         // 0x40
+		IndexArray<Point, &Point::getKernelIndex> points;                             // 0x50
+		IndexArray<Connector, &Connector::getHumanoidIndex> humanoidConnectors;       // 0x60
+		IndexArray<Connector, &Connector::getSecondPassIndex> secondPassConnectors;   // 0x70
+		IndexArray<Connector, &Connector::getRealTimeIndex> realTimeConnectors;       // 0x80
+		IndexArray<Connector, &Connector::getJointIndex> jointConnectors;             // 0x90
+		IndexArray<Connector, &Connector::getContactIndex> contactConnectors;         // 0xa0
 
 		// FUNCTION: PLAYER 0x008310b0
 		// FUNCTION: STUDIO 0x009a3710
@@ -47,500 +47,410 @@ namespace RBX {
 			RBXASSERT(jointConnectors.size() == 0);
 			RBXASSERT(contactConnectors.size() == 0);
 		}
-
-		void insertBody(Body* b);
-		void removeBody(Body* body);
-		void addBodyToNewList(SimBody* simBody);
-		void removeBodyFromCurrentList(SimBody* simBody);
-		void addLeafBody(Body* body);
-		void addLeafBodies(Body* body);
-		void removeLeafBodies(Body* body);
-		int addConnector(Connector* connector);
-		void removeConnector(Connector* connector);
-	};
-
-
-
-	// FUNCTION: PLAYER 0x00831a60
-	// FUNCTION: STUDIO 0x009a40c0
-	inline void KernelData::insertBody(Body* b)
-	{
-		RBXASSERT(b->getRoot() == b);
-		SimBody* simBody = b->getSimBody();
-		RBXASSERT(!b->isLeafBody() && !simBody->isInKernel());
-		addBodyToNewList(simBody);
-		RBXASSERT(simBody->validateBodyLists());
-	}
-	// FUNCTION: PLAYER 0x00831250
-	// FUNCTION: STUDIO 0x009a38b0
-	inline void KernelData::removeBody(Body* b) {
-		RBXASSERT(b->getRoot() == b);
-		RBXASSERT(!b->isLeafBody());
-
-		SimBody* simBody = b->getSimBody();
-		removeBodyFromCurrentList(simBody);
-		simBody->clearSymStateAndAccummulator();
-		RBXASSERT(simBody->validateBodyLists());
-	}
-
-	// (batch221b: routed by canThrottle + connector counters with the
-	// FreeFall/ImpulseSolver flags; dt stamped per list).
-	inline void KernelData::addBodyToNewList(SimBody* simBody)
-	{
-		Body* body = simBody->getBody();
-		if (!body->canThrottle)
+		// FUNCTION: PLAYER 0x00831180
+		// FUNCTION: STUDIO 0x009a37e0
+		void addLeafBodies(Body* b)
 		{
-			if (simBody->realTimeBodyIndex >= 0)
-				return;
-			removeBodyFromCurrentList(simBody);
-			RBXASSERT(simBody != NULL);  // :60 "item"
-			RBXASSERT(simBody->realTimeBodyIndex == -1);  // :61
-			simBody->realTimeBodyIndex = (int)realTimeBodies.size();
-			realTimeBodies.append(simBody);
-			simBody->dt = Constants::kernelDt();
-			addLeafBodies(body);
-			return;
-		}
-		if (simBody->numConnectors[4] > 0)
-		{
-			if (simBody->jointBodyIndex >= 0)
-				return;
-			removeBodyFromCurrentList(simBody);
-			RBXASSERT(simBody != NULL);  // :60
-			RBXASSERT(simBody->jointBodyIndex == -1);  // :61
-			simBody->jointBodyIndex = (int)jointBodies.size();
-			jointBodies.append(simBody);
-			simBody->dt = Constants::kernelDt();
-			addLeafBodies(body);
-			return;
-		}
-		if (simBody->numConnectors[5] > 0)
-		{
-			if (!FFlag::ImpulseSolverForContact)
-			{
-				if (simBody->jointBodyIndex >= 0)
-					return;
-				removeBodyFromCurrentList(simBody);
-				RBXASSERT(simBody != NULL);  // :60
-				RBXASSERT(simBody->jointBodyIndex == -1);  // :61
-				simBody->jointBodyIndex = (int)jointBodies.size();
-				jointBodies.append(simBody);
-				simBody->dt = Constants::kernelDt();
-				addLeafBodies(body);
-				return;
-			}
-			if (simBody->contactBodyIndex >= 0)
-				return;
-			removeBodyFromCurrentList(simBody);
-			RBXASSERT(simBody != NULL);  // :60
-			RBXASSERT(simBody->contactBodyIndex == -1);  // :61
-			simBody->contactBodyIndex = (int)contactBodies.size();
-			contactBodies.append(simBody);
-			simBody->dt = Constants::freeFallDt();
-			return;
-		}
-		if (!FFlag::FreeFallOptimization || simBody->numConnectors[0] != 0)
-		{
-			if (simBody->jointBodyIndex >= 0)
-				return;
-			removeBodyFromCurrentList(simBody);
-			RBXASSERT(simBody != NULL);  // :60
-			RBXASSERT(simBody->jointBodyIndex == -1);  // :61
-			simBody->jointBodyIndex = (int)jointBodies.size();
-			jointBodies.append(simBody);
-			simBody->dt = Constants::kernelDt();
-			addLeafBodies(body);
-			return;
-		}
-		if (simBody->freeFallBodyIndex < 0)
-		{
-			removeBodyFromCurrentList(simBody);
-			RBXASSERT(simBody != NULL);  // :60
-			RBXASSERT(simBody->freeFallBodyIndex == -1);  // :61
-			simBody->freeFallBodyIndex = (int)freeFallBodies.size();
-			freeFallBodies.append(simBody);
-			simBody->dt = Constants::freeFallDt();
-		}
-	}
-
-	// (batch221b: list(priority realTime > joint > contact > freeFall) +
-	// dt reset).
-	inline void KernelData::removeBodyFromCurrentList(SimBody* simBody)
-	{
-		Body* body = simBody->getBody();
-		if (simBody->realTimeBodyIndex >= 0)
-		{
-			removeLeafBodies(body);
-			int idx = simBody->realTimeBodyIndex;
-			realTimeBodies[idx] = realTimeBodies.back();
-			realTimeBodies.pop_back();
-			if (idx < (int)realTimeBodies.size())
-				realTimeBodies[idx]->realTimeBodyIndex = idx;
-			simBody->realTimeBodyIndex = -1;
-		}
-		else if (simBody->jointBodyIndex >= 0)
-		{
-			removeLeafBodies(body);
-			int idx = simBody->jointBodyIndex;
-			jointBodies[idx] = jointBodies.back();
-			jointBodies.pop_back();
-			if (idx < (int)jointBodies.size())
-				jointBodies[idx]->jointBodyIndex = idx;
-			simBody->jointBodyIndex = -1;
-		}
-		else if (simBody->contactBodyIndex >= 0)
-		{
-			int idx = simBody->contactBodyIndex;
-			contactBodies[idx] = contactBodies.back();
-			contactBodies.pop_back();
-			if (idx < (int)contactBodies.size())
-				contactBodies[idx]->contactBodyIndex = idx;
-			simBody->contactBodyIndex = -1;
-		}
-		else if (simBody->freeFallBodyIndex >= 0)
-		{
-			int idx = simBody->freeFallBodyIndex;
-			freeFallBodies[idx] = freeFallBodies.back();
-			freeFallBodies.pop_back();
-			if (idx < (int)freeFallBodies.size())
-				freeFallBodies[idx]->freeFallBodyIndex = idx;
-			simBody->freeFallBodyIndex = -1;
-			simBody->updateAngMomentum();
-		}
-		simBody->dt = 0.0f;
-	}
-
-	// (batch221a/254: :220 non-leaf + :221 connectors + :60/:61
-	// IndexArray protocol + :223 listed).
-	// STUB: PLAYER 0x008306e0
-	// STUB: STUDIO 0x009a2d40
-	inline void KernelData::addLeafBody(Body* body)
-	{
-		RBXASSERT(!body->isLeafBody());  // :220
-		RBXASSERT(body->connectorUseCount > 0);  // :221
-		RBXASSERT(body != NULL);  // :60 "item"
-		RBXASSERT(body->leafBodyIndex == -1);  // :61
-		body->leafBodyIndex = (int)leafBodies.size();
-		leafBodies.append(body);
-		RBXASSERT(body->isLeafBody());  // :223
-	}
-
-	// (batch221a: child walk + :103 index + :56 non-leaf-child +
-	// :57 non-root-child + connectorUse gate + recurse).
-	// STUB: PLAYER 0x00831180
-	// STUB: STUDIO 0x009a37e0
-	inline void KernelData::addLeafBodies(Body* body)
-	{
-		for (int i = 0; i < body->numChildren(); ++i)
-		{
-			Body* child = body->getTypedChild<Body>(i);
-			RBXASSERT(child->getTypedParent<Body>() == body);  // :103 shape
-			RBXASSERT(!child->isLeafBody());  // :56
-			RBXASSERT(child != child->getRoot<Body>());  // :57
-			if (child->connectorUseCount > 0)
-				addLeafBody(child);
-			addLeafBodies(child);
-		}
-	}
-
-	// (batch254: :230 post-remove + recurse over children).
-	inline void KernelData::removeLeafBodies(Body* body)
-	{
-		for (int i = 0; i < body->numChildren(); ++i)
-		{
-			Body* child = body->getTypedChild<Body>(i);
-			RBXASSERT(child->getTypedParent<Body>() == body);  // :103 shape
-			if (child->isLeafBody())
-			{
-				int idx = child->leafBodyIndex;
-				leafBodies[idx] = leafBodies.back();
-				leafBodies.pop_back();
-				if (idx < (int)leafBodies.size())
-					leafBodies[idx]->leafBodyIndex = idx;
-				child->leafBodyIndex = -1;
-				RBXASSERT(!child->isLeafBody());  // :230
-			}
-			removeLeafBodies(child);
-		}
-	}
-
-	// (batch221b: kind routing (1/2/3 admitted; 0/4+ rejected) +
-	// secondPass/joint/contact/realTime/humanoid appends + body linkage
-	// + :150/:151 validates; returns the kind).
-	// STUB: PLAYER 0x00831ba0
-	// STUB: STUDIO 0x009a4200
-	inline int KernelData::addConnector(Connector* connector)
-	{
-		RBXASSERT(!connector->isInKernel());  // :88
-		Body* b0 = connector->getBody(Connector::body0);
-		Body* b1 = connector->getBody(Connector::body1);
-		SimBody* sim0 = (b0 != NULL) ? b0->getRoot<Body>()->getSimBody() : NULL;
-		SimBody* sim1 = (b1 != NULL) ? b1->getRoot<Body>()->getSimBody() : NULL;
-		int kind = (int)connector->getConnectorKernelType();
-		bool listed0 = sim0 != NULL && sim0->isInKernel();
-		bool listed1 = sim1 != NULL && sim1->isInKernel();
-		if (!listed0 && !listed1 && (unsigned int)(kind - 1) >= 2
-			&& kind != Connector::KERNEL_JOINT)
-			return kind;
-		if (kind == Connector::KERNEL_JOINT)
-		{
-			RBXASSERT(connector != NULL);  // :60 "item"
-			RBXASSERT(connector->secondPassIndex == -1);  // :61
-			connector->secondPassIndex = (int)secondPassConnectors.size();
-			secondPassConnectors.append(connector);
-			if (sim0 != NULL)
-			{
-				++sim0->numConnectors[2];
-				++sim0->numConnectors[0];
-			}
-			if (sim1 != NULL)
-			{
-				++sim1->numConnectors[2];
-				++sim1->numConnectors[0];
+			for (int i = 0; i < b->numChildren(); ++i) {
+				Body* child = b->getChild(i);
+				RBXASSERT(!child->isLeafBody());
+				RBXASSERT(child != child->getRoot());
+				if (child->connectorUseCount > 0)
+					addLeafBody(child);
+				addLeafBodies(child);
 			}
 		}
-		else if (kind != Connector::HUMANOID)
+
+		// FUNCTION: PLAYER 0x00831a60
+		// FUNCTION: STUDIO 0x009a40c0
+		void insertBody(Body* b)
 		{
-			bool throttle0 = sim0 == NULL || sim0->getBody()->canThrottle;
-			bool throttle1 = sim1 == NULL || sim1->getBody()->canThrottle;
-			if (throttle0 && throttle1)
+			RBXASSERT(b->getRoot() == b);
+			SimBody* simBody = b->getSimBody();
+			RBXASSERT(!b->isLeafBody() && !simBody->isInKernel());
+			addBodyToNewList(simBody);
+			RBXASSERT(simBody->validateBodyLists());
+		}
+		// FUNCTION: PLAYER 0x00831250
+		// FUNCTION: STUDIO 0x009a38b0
+		void removeBody(Body* b) {
+			RBXASSERT(b->getRoot() == b);
+			RBXASSERT(!b->isLeafBody());
+			SimBody* simBody = b->getSimBody();
+			removeBodyFromCurrentList(simBody);
+			simBody->clearSymStateAndAccummulator();
+
+			RBXASSERT(simBody->validateBodyLists());
+		}
+		// FUNCTION: PLAYER 0x00831ba0
+		// FUNCTION: STUDIO 0x009a4200
+		void addConnector(Connector* c) {
+			RBXASSERT(!c->isInKernel());
+			Body* body0 = c->getBody(Connector::body0);
+			Body* body1 = c->getBody(Connector::body1);
+			SimBody* simBody0 = body0 ? body0->getRootSimBody() : NULL;
+			SimBody* simBody1 = body1 ? body1->getRootSimBody() : NULL;
+			Connector::KernelType connectorType = c->getConnectorKernelType();
+			if ((simBody0 == NULL || !simBody0->isInKernel())
+				&& (simBody1 == NULL || !simBody1->isInKernel())
+				&& connectorType != Connector::HUMANOID
+				&& connectorType != Connector::JOINT
+				&& connectorType != Connector::KERNEL_JOINT)
+				return;
+			if (connectorType == Connector::HUMANOID)
 			{
-				if (kind == Connector::JOINT || kind == 4
-					|| !FFlag::ImpulseSolverForContact
-					|| (sim0 != NULL && sim0->jointBodyIndex >= 0)
-					|| (sim1 != NULL && sim1->jointBodyIndex >= 0))
-				{
-					RBXASSERT(connector != NULL);  // :60
-					RBXASSERT(connector->jointIndex == -1);  // :61
-					connector->jointIndex = (int)jointConnectors.size();
-					jointConnectors.append(connector);
-					if (sim0 != NULL)
-					{
-						++sim0->numConnectors[4];
-						++sim0->numConnectors[0];
-					}
-					if (sim1 != NULL)
-					{
-						++sim1->numConnectors[4];
-						++sim1->numConnectors[0];
-					}
-				}
-				else
-				{
-					RBXASSERT(kind == Connector::CONTACT);  // :137
-					RBXASSERT(connector != NULL);  // :60
-					RBXASSERT(connector->contactIndex == -1);  // :61
-					connector->contactIndex = (int)contactConnectors.size();
-					contactConnectors.append(connector);
-					if (sim0 != NULL)
-					{
-						++sim0->numConnectors[5];
-						++sim0->numConnectors[0];
-					}
-					if (sim1 != NULL)
-					{
-						++sim1->numConnectors[5];
-						++sim1->numConnectors[0];
-					}
-				}
+				humanoidConnectors.fastAppend(c);
+				if (simBody0)
+					simBody0->updateConnectorCount(1, 1);
+				if (simBody1)
+					simBody1->updateConnectorCount(1, 1);
+			}
+			else if (connectorType == Connector::KERNEL_JOINT)
+			{
+				secondPassConnectors.fastAppend(c);
+				if (simBody0)
+					simBody0->updateConnectorCount(2, 1);
+				if (simBody1)
+					simBody1->updateConnectorCount(2, 1);
+			}
+			else if ((simBody0 && !simBody0->getBody()->getCanThrottle())
+				|| (simBody1 && !simBody1->getBody()->getCanThrottle()))
+			{
+				realTimeConnectors.fastAppend(c);
+				if (simBody0)
+					simBody0->updateConnectorCount(3, 1);
+				if (simBody1)
+					simBody1->updateConnectorCount(3, 1);
+			}
+			else if (connectorType == Connector::JOINT || connectorType == Connector::BUOYANCY
+				|| !FFlag::ImpulseSolverForContact
+				|| (simBody0 && simBody0->isJointBody()) || (simBody1 && simBody1->isJointBody()))
+			{
+				jointConnectors.fastAppend(c);
+				if (simBody0)
+					simBody0->updateConnectorCount(4, 1);
+				if (simBody1)
+					simBody1->updateConnectorCount(4, 1);
 			}
 			else
 			{
-				RBXASSERT(connector != NULL);  // :60
-				RBXASSERT(connector->realTimeIndex == -1);  // :61
-				connector->realTimeIndex = (int)realTimeConnectors.size();
-				realTimeConnectors.append(connector);
-				if (sim0 != NULL)
-				{
-					++sim0->numConnectors[3];
-					++sim0->numConnectors[0];
-				}
-				if (sim1 != NULL)
-				{
-					++sim1->numConnectors[3];
-					++sim1->numConnectors[0];
-				}
+				RBXASSERT(connectorType == Connector::CONTACT);
+				contactConnectors.fastAppend(c);
+				if (simBody0) simBody0->updateConnectorCount(5, 1);
+				if (simBody1) simBody1->updateConnectorCount(5, 1);
 			}
-		}
-		else
-		{
-			RBXASSERT(connector != NULL);  // :60
-			RBXASSERT(connector->humanoidIndex == -1);  // :61
-			connector->humanoidIndex = (int)humanoidConnectors.size();
-			humanoidConnectors.append(connector);
-			if (sim0 != NULL)
-			{
-				++sim0->numConnectors[1];
-				++sim0->numConnectors[0];
-			}
-			if (sim1 != NULL)
-			{
-				++sim1->numConnectors[1];
-				++sim1->numConnectors[0];
-			}
-		}
-		Body* bodies[2] = { b0, b1 };
-		for (int b = 0; b < 2; ++b)
-		{
-			Body* body = bodies[b];
-			if (body == NULL)
-				continue;
-			++body->connectorUseCount;
-			SimBody* sim = body->getRoot<Body>()->getSimBody();
-			if (sim->freeFallBodyIndex >= 0 || sim->realTimeBodyIndex >= 0
-				|| sim->jointBodyIndex >= 0 || sim->contactBodyIndex >= 0)
-			{
-				addBodyToNewList(sim);
-				if (body->getRoot<Body>() != body && body->leafBodyIndex < 0
-					&& (sim->jointBodyIndex >= 0 || sim->realTimeBodyIndex >= 0))
-					addLeafBody(body);
-			}
-		}
-		RBXASSERT(sim0 == NULL || sim0->validateBodyLists());  // :150
-		RBXASSERT(sim1 == NULL || sim1->validateBodyLists());  // :151
-		return kind;
-	}
+			if (body0)
+				addConnectorToBody(c, body0);
+			if (body1)
+				addConnectorToBody(c, body1);
 
-	// (batch221b: all-clear early-out; per-list fastRemove + sim/body
-	// decrements; symmetry pair + leaf arm on the contact path).
-	// STUB: PLAYER 0x00831f80
-	// STUB: STUDIO 0x009a45e0
-	inline void KernelData::removeConnector(Connector* connector)
-	{
-		if (connector->humanoidIndex < 0 && connector->realTimeIndex < 0
-			&& connector->secondPassIndex < 0 && connector->jointIndex < 0
-			&& connector->contactIndex < 0)
-		{
-			return;
+
+
+
+			RBXASSERT(simBody0 == NULL || simBody0->validateBodyLists());
+			RBXASSERT(simBody1 == NULL || simBody1->validateBodyLists());
 		}
-		Body* b0 = connector->getBody(Connector::body0);
-		Body* b1 = connector->getBody(Connector::body1);
-		SimBody* sim0 = (b0 != NULL) ? b0->getRoot<Body>()->getSimBody() : NULL;
-		SimBody* sim1 = (b1 != NULL) ? b1->getRoot<Body>()->getSimBody() : NULL;
-		if (connector->humanoidIndex >= 0)
+
+
+		// FUNCTION: PLAYER 0x00831f80
+		// FUNCTION: STUDIO 0x009a45e0
+		void removeConnector(Connector* c)
 		{
-			int idx = connector->humanoidIndex;
-			humanoidConnectors[idx] = humanoidConnectors.back();
-			humanoidConnectors.pop_back();
-			if (idx < (int)humanoidConnectors.size())
-				humanoidConnectors[idx]->humanoidIndex = idx;
-			connector->humanoidIndex = -1;
-			if (sim0 != NULL)
-			{
-				--sim0->numConnectors[1];
-				--sim0->numConnectors[0];
+
+
+
+
+
+
+
+
+			if (!c->isInKernel())
+				return;
+			Body* body0 = c->getBody(Connector::body0);
+			Body* body1 = c->getBody(Connector::body1);
+			SimBody* simBody0 = body0 ? body0->getRootSimBody() : NULL;
+			SimBody* simBody1 = body1 ? body1->getRootSimBody() : NULL;
+			if (c->isHumanoid()) {
+				humanoidConnectors.fastRemove(c);
+				if (simBody0) simBody0->updateConnectorCount(1, -1);
+				if (simBody1) simBody1->updateConnectorCount(1, -1);
 			}
-			if (sim1 != NULL)
-			{
-				--sim1->numConnectors[1];
-				--sim1->numConnectors[0];
+			else if (c->isSecondPass()) {
+				secondPassConnectors.fastRemove(c);
+				if (simBody0) simBody0->updateConnectorCount(2, -1);
+				if (simBody1) simBody1->updateConnectorCount(2, -1);
+			}
+			else if (c->isRealTime()) {
+				realTimeConnectors.fastRemove(c);
+				if (simBody0) simBody0->updateConnectorCount(3, -1);
+				if (simBody1) simBody1->updateConnectorCount(3, -1);
+			}
+			else if (c->isJoint()) {
+				jointConnectors.fastRemove(c);
+				if (simBody0) simBody0->updateConnectorCount(4, -1);
+				if (simBody1) simBody1->updateConnectorCount(4, -1);
+			}
+			else {
+				RBXASSERT(c->isContact());
+				contactConnectors.fastRemove(c);
+				if (simBody0) simBody0->updateConnectorCount(5, -1);
+				if (simBody1) simBody1->updateConnectorCount(5, -1);
+				ContactConnector* conn = static_cast<ContactConnector*>(c);
+				PairParams params = conn->getContactPoint();
+				if (conn->getReordedSimBody(simBody0, simBody1, params))
+					conn->applyContactPointForSymmetryDetection(simBody0, simBody1, params, -1.0f);
+			}
+			if (body0)
+				removeConnectorFromBody(c, body0);
+			if (body1)
+				removeConnectorFromBody(c, body1);
+
+
+
+
+
+			RBXASSERT(simBody0 == NULL || simBody0->validateBodyLists());
+			RBXASSERT(simBody1 == NULL || simBody1->validateBodyLists());
+		}
+	private:
+		// FUNCTION: PLAYER 0x008306e0
+		// FUNCTION: STUDIO 0x009a2d40
+		void addLeafBody(Body* b)
+		{
+			RBXASSERT(!b->isLeafBody());
+			RBXASSERT(b->connectorUseCount > 0);
+			leafBodies.fastAppend(b);
+			RBXASSERT(b->isLeafBody());
+		}
+		// FUNCTION: PLAYER 0x008307d0
+		void removeLeafBody(Body* b)
+		{
+			RBXASSERT(b->isLeafBody());
+			leafBodies.fastRemove(b);
+			RBXASSERT(!b->isLeafBody());
+		}
+		// FUNCTION: PLAYER 0x00830870
+		// FUNCTION: STUDIO 0x009a2ed0
+		void removeLeafBodies(Body* b)
+		{
+			for (int i = 0; i < b->numChildren(); ++i) {
+				Body* child = b->getChild(i);
+				if (child->isLeafBody())
+					removeLeafBody(child);
+				removeLeafBodies(child);
 			}
 		}
-		else if (connector->secondPassIndex >= 0)
+		// The connector's bodies join the leaf list when their root sim is a joint or realtime body.
+		// FUNCTION: PLAYER 0x008314c0
+		// FUNCTION: STUDIO 0x009a3b20
+		void addConnectorToBody(Connector* c, Body* b)
 		{
-			int idx = connector->secondPassIndex;
-			secondPassConnectors[idx] = secondPassConnectors.back();
-			secondPassConnectors.pop_back();
-			if (idx < (int)secondPassConnectors.size())
-				secondPassConnectors[idx]->secondPassIndex = idx;
-			connector->secondPassIndex = -1;
-			if (sim0 != NULL)
-			{
-				--sim0->numConnectors[2];
-				--sim0->numConnectors[0];
-			}
-			if (sim1 != NULL)
-			{
-				--sim1->numConnectors[2];
-				--sim1->numConnectors[0];
+			b->connectorUseCount++;
+			SimBody* simBody = b->getRootSimBody();
+			if (simBody->isInKernel()) {
+				addBodyToNewList(simBody);
+				if (b != b->getRoot() && !b->isLeafBody()
+					&& (simBody->isJointBody() || simBody->isRealTimeBody()))
+					addLeafBody(b);
 			}
 		}
-		else if (connector->realTimeIndex >= 0)
+		// FUNCTION: PLAYER 0x00831530
+		// FUNCTION: STUDIO 0x009a3b90
+		void removeConnectorFromBody(Connector* c, Body* b)
 		{
-			int idx = connector->realTimeIndex;
-			realTimeConnectors[idx] = realTimeConnectors.back();
-			realTimeConnectors.pop_back();
-			if (idx < (int)realTimeConnectors.size())
-				realTimeConnectors[idx]->realTimeIndex = idx;
-			connector->realTimeIndex = -1;
-			if (sim0 != NULL)
-			{
-				--sim0->numConnectors[3];
-				--sim0->numConnectors[0];
+			b->connectorUseCount--;
+			if (b->isLeafBody() && b->connectorUseCount == 0)
+				removeLeafBody(b);
+			SimBody* simBody = b->getRootSimBody();
+			if (simBody->isInKernel())
+				addBodyToNewList(simBody);
+		}
+		// List choice: not throttleable -> realTime; joint connectors -> joint; contact connectors -> contact
+		// (ImpulseSolverForContact) or joint; no connectors -> freeFall (FreeFallOptimization) or joint.
+		// FUNCTION: PLAYER 0x00831370
+		// FUNCTION: STUDIO 0x009a39d0
+		void addBodyToNewList(SimBody* simBody)
+		{
+			if (!simBody->getBody()->getCanThrottle()) {
+				if (!simBody->isRealTimeBody()) {
+					removeBodyFromCurrentList(simBody);
+					realTimeBodies.fastAppend(simBody);
+					simBody->setDt(Constants::kernelDt());
+					addLeafBodies(simBody->getBody());
+				}
 			}
-			if (sim1 != NULL)
-			{
-				--sim1->numConnectors[3];
-				--sim1->numConnectors[0];
+			else if (simBody->numConnectors[4] > 0) {
+				if (!simBody->isJointBody()) {
+					removeBodyFromCurrentList(simBody);
+					jointBodies.fastAppend(simBody);
+					simBody->setDt(Constants::kernelDt());
+					addLeafBodies(simBody->getBody());
+				}
+			}
+			else if (simBody->numConnectors[5] > 0) {
+				if (FFlag::ImpulseSolverForContact) {
+					if (!simBody->isContactBody()) {
+						removeBodyFromCurrentList(simBody);
+						contactBodies.fastAppend(simBody);
+						simBody->setDt(Constants::freeFallDt());
+					}
+				}
+				else if (!simBody->isJointBody()) {
+					removeBodyFromCurrentList(simBody);
+					jointBodies.fastAppend(simBody);
+					simBody->setDt(Constants::kernelDt());
+					addLeafBodies(simBody->getBody());
+				}
+			}
+			else if (FFlag::FreeFallOptimization && simBody->numConnectors[0] == 0) {
+				if (!simBody->isFreeFallBody()) {
+					removeBodyFromCurrentList(simBody);
+					freeFallBodies.fastAppend(simBody);
+					simBody->setDt(Constants::freeFallDt());
+					simBody->clearSymStateAndAccummulator();
+				}
+			}
+			else if (!simBody->isJointBody()) {
+				removeBodyFromCurrentList(simBody);
+				jointBodies.fastAppend(simBody);
+				simBody->setDt(Constants::kernelDt());
+				addLeafBodies(simBody->getBody());
 			}
 		}
-		else if (connector->jointIndex >= 0)
+		// FUNCTION: PLAYER 0x008308b0
+		// FUNCTION: STUDIO 0x009a2f10
+		void removeBodyFromCurrentList(SimBody* simBody)
 		{
-			int idx = connector->jointIndex;
-			jointConnectors[idx] = jointConnectors.back();
-			jointConnectors.pop_back();
-			if (idx < (int)jointConnectors.size())
-				jointConnectors[idx]->jointIndex = idx;
-			connector->jointIndex = -1;
-			if (sim0 != NULL)
-			{
-				--sim0->numConnectors[4];
-				--sim0->numConnectors[0];
+			if (simBody->isRealTimeBody()) {
+				removeLeafBodies(simBody->getBody());
+				realTimeBodies.fastRemove(simBody);
+				simBody->setDt(0.0f);
 			}
-			if (sim1 != NULL)
-			{
-				--sim1->numConnectors[4];
-				--sim1->numConnectors[0];
+			else if (simBody->isJointBody()) {
+				removeLeafBodies(simBody->getBody());
+				jointBodies.fastRemove(simBody);
+				simBody->setDt(0.0f);
+			}
+			else if (simBody->isContactBody()) {
+				contactBodies.fastRemove(simBody);
+				simBody->setDt(0.0f);
+			}
+			else if (simBody->isFreeFallBody()) {
+				freeFallBodies.fastRemove(simBody);
+				simBody->updateAngMomentum();
+				simBody->setDt(0.0f);
 			}
 		}
-		else
-		{
-			RBXASSERT(connector->isContact());  // :194
-			int idx = connector->contactIndex;
-			contactConnectors[idx] = contactConnectors.back();
-			contactConnectors.pop_back();
-			if (idx < (int)contactConnectors.size())
-				contactConnectors[idx]->contactIndex = idx;
-			connector->contactIndex = -1;
-			if (sim0 != NULL)
-			{
-				--sim0->numConnectors[5];
-				--sim0->numConnectors[0];
-			}
-			if (sim1 != NULL)
-			{
-				--sim1->numConnectors[5];
-				--sim1->numConnectors[0];
-			}
-			// Binary copies this connector's contactPoint (+212) to a stack
-			// PairParams (v33+v34) and runs the symmetry pair on it.
-			ContactConnector* cc = static_cast<ContactConnector*>(connector);
-			PairParams params = cc->getContactPoint();
-			SimBody* ordered0 = sim0;
-			SimBody* ordered1 = sim1;
-			if (cc->getReordedSimBody(ordered0, ordered1, params))
-				cc->applyContactPointForSymmetryDetection(ordered0, ordered1, params, -1.0f);
-		}
-		for (int b = 0; b < 2; ++b)
-		{
-			Body* body = (b == 0) ? b0 : b1;
-			if (body == NULL)
-				continue;
-			if (--body->connectorUseCount == 0 && body->leafBodyIndex >= 0)
-			{
-				int idx = body->leafBodyIndex;
-				leafBodies[idx] = leafBodies.back();
-				leafBodies.pop_back();
-				if (idx < (int)leafBodies.size())
-					leafBodies[idx]->leafBodyIndex = idx;
-				body->leafBodyIndex = -1;
-				RBXASSERT(!body->isLeafBody());  // :230 shape
-			}
-			SimBody* sim = body->getRoot<Body>()->getSimBody();
-			if (sim->freeFallBodyIndex >= 0 || sim->realTimeBodyIndex >= 0
-				|| sim->jointBodyIndex >= 0 || sim->contactBodyIndex >= 0)
-				addBodyToNewList(sim);
-		}
-	}
+	};
+	// The IndexArray instances KernelData and Kernel call (Util/IndexArray.h bodies; the Connector realTime ones fold
+	// with IndexedTree's: operator[] const 0x0082e7d0, fastRemove 0x00830340, fastAppend 0x009997a0).
+	// TEMPLATE: PLAYER 0x0082e150
+	// TEMPLATE: STUDIO 0x009a0710
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getFreeFallBodyIndex@12@QAEAAHXZ@RBX@@QAEPAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e1d0
+	// TEMPLATE: STUDIO 0x009a0790
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getRealTimeBodyIndex@12@QAEAAHXZ@RBX@@QAEPAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e250
+	// TEMPLATE: STUDIO 0x009a0810
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getRealTimeBodyIndex@12@QAEAAHXZ@RBX@@QBEQAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e2d0
+	// TEMPLATE: STUDIO 0x009a0890
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getJointBodyIndex@12@QAEAAHXZ@RBX@@QAEPAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e350
+	// TEMPLATE: STUDIO 0x009a0910
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getJointBodyIndex@12@QAEAAHXZ@RBX@@QBEQAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e3d0
+	// TEMPLATE: STUDIO 0x009a0990
+	// ??A?$IndexArray@VSimBody@RBX@@$1?getContactBodyIndex@12@QAEAAHXZ@RBX@@QAEPAVSimBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e450
+	// TEMPLATE: STUDIO 0x009a0a10
+	// ??A?$IndexArray@VBody@RBX@@$H?getLeafBodyIndex@12@QAEAAHXZA@@RBX@@QBEQAVBody@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e4d0
+	// TEMPLATE: STUDIO 0x009a0a90
+	// ??A?$IndexArray@VPoint@RBX@@$H?getKernelIndex@12@QAEAAHXZA@@RBX@@QAEPAVPoint@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e550
+	// TEMPLATE: STUDIO 0x009a0b10
+	// ??A?$IndexArray@VPoint@RBX@@$H?getKernelIndex@12@QAEAAHXZA@@RBX@@QBEQAVPoint@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e5d0
+	// TEMPLATE: STUDIO 0x009a0b90
+	// ??A?$IndexArray@VConnector@RBX@@$1?getHumanoidIndex@12@QAEAAHXZ@RBX@@QBEQAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e6d0
+	// TEMPLATE: STUDIO 0x009a0c90
+	// ??A?$IndexArray@VConnector@RBX@@$1?getSecondPassIndex@12@QAEAAHXZ@RBX@@QBEQAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e7d0
+	// TEMPLATE: STUDIO 0x00665e40
+	// ??A?$IndexArray@VConnector@RBX@@$1?getRealTimeIndex@12@QAEAAHXZ@RBX@@QBEQAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e8d0
+	// TEMPLATE: STUDIO 0x009a0e10
+	// ??A?$IndexArray@VConnector@RBX@@$1?getJointIndex@12@QAEAAHXZ@RBX@@QBEQAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e950
+	// TEMPLATE: STUDIO 0x009a0e90
+	// ??A?$IndexArray@VConnector@RBX@@$1?getContactIndex@12@QAEAAHXZ@RBX@@QAEPAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082e9d0
+	// TEMPLATE: STUDIO 0x009a0f10
+	// ??A?$IndexArray@VConnector@RBX@@$1?getContactIndex@12@QAEAAHXZ@RBX@@QBEQAVConnector@1@H@Z
+	// TEMPLATE: PLAYER 0x0082f760
+	// TEMPLATE: STUDIO 0x009a1d10
+	// ?fastAppend@?$IndexArray@VSimBody@RBX@@$1?getFreeFallBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082f810
+	// TEMPLATE: STUDIO 0x009a1dc0
+	// ?fastRemove@?$IndexArray@VSimBody@RBX@@$1?getFreeFallBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082f8e0
+	// TEMPLATE: STUDIO 0x009a1e90
+	// ?fastAppend@?$IndexArray@VSimBody@RBX@@$1?getRealTimeBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082f990
+	// TEMPLATE: STUDIO 0x009a1f40
+	// ?fastRemove@?$IndexArray@VSimBody@RBX@@$1?getRealTimeBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fa60
+	// TEMPLATE: STUDIO 0x009a2010
+	// ?fastAppend@?$IndexArray@VSimBody@RBX@@$1?getJointBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fb10
+	// TEMPLATE: STUDIO 0x009a20c0
+	// ?fastRemove@?$IndexArray@VSimBody@RBX@@$1?getJointBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fbe0
+	// TEMPLATE: STUDIO 0x009a2190
+	// ?fastAppend@?$IndexArray@VSimBody@RBX@@$1?getContactBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fc90
+	// TEMPLATE: STUDIO 0x009a2240
+	// ?fastRemove@?$IndexArray@VSimBody@RBX@@$1?getContactBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fd60
+	// TEMPLATE: STUDIO 0x009a2310
+	// ?fastAppend@?$IndexArray@VBody@RBX@@$H?getLeafBodyIndex@12@QAEAAHXZA@@RBX@@QAEXPAVBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fe10
+	// TEMPLATE: STUDIO 0x009a23c0
+	// ?fastRemove@?$IndexArray@VBody@RBX@@$H?getLeafBodyIndex@12@QAEAAHXZA@@RBX@@QAEXPAVBody@2@@Z
+	// TEMPLATE: PLAYER 0x0082fee0
+	// TEMPLATE: STUDIO 0x009a2490
+	// ?fastAppend@?$IndexArray@VPoint@RBX@@$H?getKernelIndex@12@QAEAAHXZA@@RBX@@QAEXPAVPoint@2@@Z
+	// TEMPLATE: PLAYER 0x0082ff90
+	// TEMPLATE: STUDIO 0x009a2540
+	// ?fastRemove@?$IndexArray@VPoint@RBX@@$H?getKernelIndex@12@QAEAAHXZA@@RBX@@QAEXPAVPoint@2@@Z
+	// TEMPLATE: PLAYER 0x00830060
+	// TEMPLATE: STUDIO 0x009a2610
+	// ?fastAppend@?$IndexArray@VConnector@RBX@@$1?getHumanoidIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x00830110
+	// TEMPLATE: STUDIO 0x009a26c0
+	// ?fastRemove@?$IndexArray@VConnector@RBX@@$1?getHumanoidIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x008301d0
+	// TEMPLATE: STUDIO 0x009a2780
+	// ?fastAppend@?$IndexArray@VConnector@RBX@@$1?getSecondPassIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x00830280
+	// TEMPLATE: STUDIO 0x009a2830
+	// ?fastRemove@?$IndexArray@VConnector@RBX@@$1?getSecondPassIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x00830400
+	// TEMPLATE: STUDIO 0x009a2a60
+	// ?fastAppend@?$IndexArray@VConnector@RBX@@$1?getJointIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x008304b0
+	// TEMPLATE: STUDIO 0x009a2b10
+	// ?fastRemove@?$IndexArray@VConnector@RBX@@$1?getJointIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x00830570
+	// TEMPLATE: STUDIO 0x009a2bd0
+	// ?fastAppend@?$IndexArray@VConnector@RBX@@$1?getContactIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x00830620
+	// TEMPLATE: STUDIO 0x009a2c80
+	// ?fastRemove@?$IndexArray@VConnector@RBX@@$1?getContactIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
+	// TEMPLATE: PLAYER 0x009997a0
+	// TEMPLATE: STUDIO 0x009a28f0
+	// ?fastAppend@?$IndexArray@VConnector@RBX@@$1?getRealTimeIndex@12@QAEAAHXZ@RBX@@QAEXPAVConnector@2@@Z
 
 } // namespace RBX

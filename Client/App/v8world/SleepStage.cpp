@@ -497,42 +497,42 @@ namespace RBX {
 
 
 
+	// A contact affects its assemblies only while it touches; a joint always does.
+	// FUNCTION: PLAYER 0x008e6790
+	// FUNCTION: STUDIO 0x00a04a90
+	bool SleepStage::isAffecting(Edge* e)
+	{
+		RBXASSERT(e->inOrDownstreamOfStage(this));
+		RBXASSERT(e->getEdgeState() != Sim::UNDEFINED);
+		Sim::EdgeState state = e->getEdgeState();
+		if (e->getEdgeType() == Edge::CONTACT)
+			return (state == Sim::CONTACTING) || (state == Sim::CONTACTING_SLEEPING);
+		return true;
+	}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// FUNCTION: PLAYER 0x008e9030
+	// FUNCTION: STUDIO 0x00a07260
+	void SleepStage::wakeEdge(Edge* e)
+	{
+		RBXASSERT(e->inOrDownstreamOfStage(this));
+		RBXASSERT(e->getEdgeState() != Sim::UNDEFINED);
+		Sim::EdgeState state = e->getEdgeState();
+		if (e->getEdgeType() == Edge::CONTACT) {
+			Contact* c = rbx_static_cast<Contact*>(e);
+			if (state == Sim::CONTACTING_SLEEPING)
+				changeContactState(c, Sim::CONTACTING);
+			else if (state == Sim::SLEEPING)
+				changeContactState(c, Sim::STEPPING);
+		}
+		else
+		{
+			RBXASSERT(Joint::isJoint(e));
+			if (state == Sim::SLEEPING)
+				changeJointState(rbx_static_cast<Joint*>(e), Sim::STEPPING);
+		}
+	}
 
 
 

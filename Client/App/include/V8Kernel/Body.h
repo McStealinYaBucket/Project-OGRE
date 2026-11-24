@@ -248,6 +248,10 @@ namespace RBX {
 		float getMass() const { return mass; }
 		const G3D::Vector3& getCofmOffset() { return cofmOffset; }
 		Body* getChild(int i) { return getTypedChild<Body>(i); }
+		// KernelData::leafBodies' index (2013: out of line, PLAYER 0x0082e130 `lea eax,[ecx+0x20]`).
+		// FUNCTION: PLAYER 0x0082e130
+		// FUNCTION: STUDIO 0x009a0700
+		int& getLeafBodyIndex() { return leafBodyIndex; }
 		G3D::Matrix3 getIBody() const { return moment; }
 		// 2013 splits the 2016 PV into worldFrame + linVel/angVel; the
 		// frame IS the PV position (cf. getPV_Spin_Lock).

@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sCookiesService;
 
 	class CookiesService
-		: public DescribedNonCreatable<CookiesService, Instance, sCookiesService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<CookiesService, Instance, sCookiesService>
 		, public Service
 	{
 	public:

@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sSpawnerService;
 
 	class SpawnerService
-		: public DescribedNonCreatable<SpawnerService, Instance, sSpawnerService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<SpawnerService, Instance, sSpawnerService>
 		, public Service
 	{
 	public:

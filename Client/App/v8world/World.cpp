@@ -197,8 +197,8 @@ namespace RBX {
 		delete cleanStage;
 		delete contactManager;
 	}
-
 	// FUNCTION: PLAYER 0x008bb760
+	// FUNCTION: STUDIO 0x00966460
 	SendPhysics* World::getSendPhysics()
 	{
 		return sendPhysics;
@@ -435,6 +435,18 @@ namespace RBX {
 			contactManager, _1));
 	}
 
+
+
+
+	// FUNCTION: PLAYER 0x00745950
+	// FUNCTION: STUDIO 0x00886790
+	void World::onPrimitiveGeometryChanged(Primitive* p)
+	{
+		RBXASSERT(p->getWorld());
+		RBXASSERT(!inStepCode);
+		contactManager->onPrimitiveGeometryChanged(p);
+	}
+
 	// mac: 0x5AA9F8 (32B).  Exactly one call: append to the +32 array.
 	void World::reportTouchInfo(const TouchInfo& info)
 	{
@@ -460,18 +472,6 @@ namespace RBX {
 
 	// mac: 0x5AAD81..0x5AAE9A: the four expand-tests.  getEdgeType() is 0 for every
 	// real Joint, so in practice only a foreign edge satisfies them.
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sBadgeService;
 
 	class BadgeService
-		: public DescribedNonCreatable<BadgeService, Instance, sBadgeService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<BadgeService, Instance, sBadgeService>
 		, public Service
 	{
 	public:

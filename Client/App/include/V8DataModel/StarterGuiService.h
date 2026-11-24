@@ -5,8 +5,8 @@
    lower_bound(11), max_load_factor 1.0), the signal at 0x90 (ctor 0x00708a90) and two bools at
    0x94/0x95 that the ctor sets to true (iOS setShowGui / setResetPlayerGui). Member names are 2016's.
    getCoreGuiEnabled 0x007095e0 and setCoreGuiEnabled 0x00709c60 index the map at 0x78 and fire the
-   signal at 0x90. In 2013 the class sits in PlayerGui.obj (0x007083d0-0x0070c450); its code is still
-   in StarterGuiService.cpp. */
+   signal at 0x90. In 2013 the class sits in PlayerGui.obj (0x007083d0-0x0070c450), so its code is
+   in v8datamodel/PlayerGui.cpp. */
 
 #pragma once
 

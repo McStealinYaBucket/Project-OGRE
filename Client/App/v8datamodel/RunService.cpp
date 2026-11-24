@@ -196,7 +196,7 @@ namespace RBX {
 		TaskScheduler::singleton().add(heartbeatTask);
 	}
 
-	// 2013 has no FASTLOG here (2016 logs the step and the budget).
+	// 2013 has no FASTLOG here, and the script heartbeat gets gameStep (2016: wallStep).
 	// STUB: PLAYER 0x0072da30
 	// STUB: STUDIO 0x0079b6b0
 	void RunService::raiseHeartbeat(double wallStep, const Time::Interval& stepBudget)
@@ -207,7 +207,7 @@ namespace RBX {
 
 		heartbeatSignal(Heartbeat(totalWallTime, wallStep, totalGameTime, gameStep, Time::nowFast() + stepBudget));
 
-		scriptHeartbeatSignal(wallStep);
+		scriptHeartbeatSignal(gameStep);
 
 		totalGameTimeAtLastHeartbeat = totalGameTime;
 	}

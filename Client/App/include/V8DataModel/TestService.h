@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sTestService;
 
 	class TestService
-		: public DescribedNonCreatable<TestService, Instance, sTestService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<TestService, Instance, sTestService>
 		, public Service
 	{
 	public:

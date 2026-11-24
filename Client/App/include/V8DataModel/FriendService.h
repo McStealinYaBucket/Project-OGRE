@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sFriendService;
 
 	class FriendService
-		: public DescribedNonCreatable<FriendService, Instance, sFriendService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedCreatable<FriendService, Instance, sFriendService, Reflection::ClassDescriptor::INTERNAL>
 		, public Service
 	{
 	public:

@@ -58,10 +58,13 @@ ROW_5B = {
     "Client/Network/Players.cpp": ["RBX::Network::Players::"],
     "Client/Network/Player.cpp": ["RBX::Network::Player::"],
     "Client/App/v8datamodel/RunService.cpp": ["RBX::RunService::"],
-    "Client/App/v8datamodel/StarterGuiService.cpp": ["RBX::StarterGuiService::"],
     "Client/App/v8datamodel/StarterPackService.cpp": ["RBX::StarterPackService::"],
     "Client/App/v8datamodel/DebrisService.cpp": ["RBX::DebrisService::"],
     "Client/App/v8datamodel/PhysicsInstructions.cpp": ["RBX::PhysicsInstructions::"],
+    # StarterGuiService's code is in PlayerGui.cpp (row 5h) since wave 8, as in 2013's PlayerGui.obj.
+    "Client/App/v8datamodel/InsertService.cpp": ["RBX::InsertService::"],
+    "Client/App/v8datamodel/TimerService.cpp": ["RBX::TimerService::"],
+    "Client/App/v8datamodel/PhysicsSettings.cpp": ["RBX::PhysicsSettings::"],
 }
 ROW_5H = {f"Client/App/v8datamodel/{c}.cpp": [f"RBX::{c}::"] for c in (
     "GuiBase", "GuiBase2d", "GuiBase3d", "GuiObject", "Frame", "ScreenGui", "GuiMain", "BillboardGui",

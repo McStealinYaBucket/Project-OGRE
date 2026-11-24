@@ -51,14 +51,6 @@ namespace RBX {
 		return child.get();
 	}
 
-	// Item::update: forwards to the +0x34 delegate (always NULL
-	// in-tree: no writer evidenced).
-	void StatsItem::update()
-	{
-		if (delegate != NULL)
-			delegate->update();
-	}
-
 	// getValue 0x4A3FBC: refresh, then read +0x5C.
 	double StatsItem::getValue()
 	{
@@ -81,7 +73,7 @@ namespace RBX {
 		displayString.assign(RBX::Log::formatMem(bytes));
 	}
 
-	// formatValue(double,fmt,...) 0x4A2EA8: store +0x5C, vformat into +0x64.
+	// formatValue(double,fmt,...) 0x4A2EA8: store +0x60, vformat into +0x68.
 	// STUB: PLAYER 0x0073b380
 	// STUB: STUDIO 0x007c3a20
 	void StatsItem::formatValue(double value, const char* fmt, ...)
@@ -93,59 +85,65 @@ namespace RBX {
 		va_end(args);
 	}
 
-	// formatValueId 0x4A305A ("%.3g").
+	// formatValue<double> 0x4A305A ("%.3g").
 	// FUNCTION: PLAYER 0x0073b3f0
 	// FUNCTION: STUDIO 0x007c3a90
-	void StatsItem::formatValueId(const double& value)
+	template<>
+	void StatsItem::formatValue<double>(const double& value)
 	{
 		formatValue(value, "%.3g", value);
 	}
 
-	// formatValueIf 0x4A3094 ("%.3g" of the widened float).
+	// formatValue<float> 0x4A3094 ("%.3g" of the widened float).
 	// FUNCTION: PLAYER 0x0073b420
 	// FUNCTION: STUDIO 0x007c3ac0
-	void StatsItem::formatValueIf(const float& value)
+	template<>
+	void StatsItem::formatValue<float>(const float& value)
 	{
 		double wide = value;
 		formatValue(wide, "%.3g", wide);
 	}
 
-	// formatValueIm 0x4A3108 ("%d", unsigned-long flavor).
-	void StatsItem::formatValueIm(unsigned long value)
+	// formatValue<unsigned long> 0x4A3108 ("%d", unsigned-long flavor).
+	template<>
+	void StatsItem::formatValue<unsigned long>(const unsigned long& value)
 	{
 		formatValue((double)value, "%d", (int)value);
 	}
 
-	// formatValueIi 0x4A30CE ("%d").
+	// formatValue<int> 0x4A30CE ("%d").
 	// FUNCTION: PLAYER 0x0073b450
 	// FUNCTION: STUDIO 0x007c3af0
-	void StatsItem::formatValueIi(const int& value)
+	template<>
+	void StatsItem::formatValue<int>(const int& value)
 	{
 		formatValue((double)value, "%d", value);
 	}
 
-	// formatValueIj 0x4A31A6 ("%d", unsigned flavor).
-	void StatsItem::formatValueIj(unsigned int value)
+	// formatValue<unsigned long long> 0x4A3152 ("%llu", PLAYER string 0x00b50b30).
+	// FUNCTION: PLAYER 0x0073b480
+	// FUNCTION: STUDIO 0x007c3b20
+	template<>
+	void StatsItem::formatValue<unsigned long long>(const unsigned long long& value)
 	{
-		formatValue((double)value, "%d", (int)value);
+		formatValue((double)value, "%llu", value);
 	}
 
-	// formatValueIy 0x4A3152 ("%llu"). TOOLCHAIN DELTA: VS2012's
-	// vsnprintf has no %llu (VS2015+ only), so the format is spelled
-	// %I64u for the same output; values are lossless below 2^53 and
-	// exact-decimal at any width either way.
-	// STUB: PLAYER 0x0073b480
-	// STUB: STUDIO 0x007c3b20
-	void StatsItem::formatValueIy(const unsigned long long& value)
+	// formatValue<unsigned int> 0x4A31A6 ("%d" of the raw value; the double gets 2^32 added when negative).
+	// FUNCTION: PLAYER 0x0073b4e0
+	// FUNCTION: STUDIO 0x007c3b80
+	template<>
+	void StatsItem::formatValue<unsigned int>(const unsigned int& value)
 	{
-		formatValue((double)value, "%I64u", value);
+		formatValue((double)value, "%d", value);
 	}
 
-	// formatValueIb 0x4A31F0: true/false display + 1.0/0.0 store
+	// formatValue<bool> 0x4A31F0: true/false display + 1.0/0.0 store
 	// (does NOT route through the core).
 	// STUB: PLAYER 0x0073b510
 	// STUB: STUDIO 0x007c3bb0
-	void StatsItem::formatValueIb(const bool& value)
+	template<>
+	void StatsItem::formatValue<bool>(const bool& value)
 	{
 		displayString.assign(value ? "true" : "false");
 		statValue = value ? 1.0 : 0.0;
@@ -162,6 +160,15 @@ namespace RBX {
 		double rate = average.rate();
 		double cv = average.coefficient_of_variation() * 100.0;
 		formatValue(rate, "%.1f/s (%.0f%%CV)", rate, cv);
+	}
+
+	// Item::update: refresh the parent item, if it is one.
+	// FUNCTION: PLAYER 0x0073ec00
+	// FUNCTION: STUDIO 0x007c6b50
+	void StatsItem::update()
+	{
+		if (Item* parent = fastDynamicCast<Item>(getParent()))
+			parent->update();
 	}
 
 } // namespace RBX

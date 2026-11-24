@@ -145,8 +145,8 @@ namespace RBX {
 		return guid;
 	}
 
-	// STUB: PLAYER 0x00753c10
-	// STUB: STUDIO 0x00892fc0
+	// FUNCTION: PLAYER 0x00753c10
+	// FUNCTION: STUDIO 0x00892fc0
 	void Primitive::setGuid(const Guid& value)
 	{
 		RBXASSERT(!world);
@@ -389,10 +389,10 @@ namespace RBX {
 			surfaces[normalId] = surfaceType;
 		}
 	}
-
-	// mac: 0x5911DE (176B).  minss/maxss spelled as ternaries: `x<y?x:y` matches
-	// minss in every case including NaN (unordered falls to y, i.e. the
-	// bound -- verified against the SSE truth table).
+	// FUNCTION: PLAYER 0x007542c0
+	// FUNCTION: STUDIO 0x00893670
+	bool Primitive::isGeometryOrthogonal() const { return geometry->isGeometryOrthogonal(); }
+	// mac: 0x5911DE (176B): minss/maxss spelled as ternaries `x<y?x:y` (NaN falls to the bound, as minss does).
 	G3D::Vector3 Primitive::clipToSafeSize(const G3D::Vector3& size)
 	{
 		float cx = size.x < 2048.0f ? size.x : 2048.0f;

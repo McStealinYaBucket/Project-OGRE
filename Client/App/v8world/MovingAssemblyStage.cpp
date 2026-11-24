@@ -94,14 +94,14 @@ namespace RBX {
 			removeJoint(rbx_static_cast<Joint*>(e));
 		e->removeFromStage(this);
 	}
-	// STUB: PLAYER 0x008eb2a0
-	// STUB: STUDIO 0x00a094a0
+	// FUNCTION: PLAYER 0x008eb2a0
+	// FUNCTION: STUDIO 0x00a094a0
 	void MovingAssemblyStage::jointsStepUi(double distributedGameTime)
 	{
 		for (Joints::iterator it = uiStepJoints.begin(); it != uiStepJoints.end(); ++it)
 		{
 			RBXASSERT(it->canStepUi());
-			Assembly* a0 = NULL;
+			const Assembly* a0 = NULL;
 			bool a0IsGrounded = false;
 			if (Joint::isKinematicJoint(&*it)) {
 				a0 = it->getPrimitive(0)->getAssembly();
@@ -115,7 +115,7 @@ namespace RBX {
 			}
 
 			if (it->stepUi(distributedGameTime) && a0IsGrounded)
-				movingGroundedAssemblies.insert(a0);
+				movingGroundedAssemblies.insert(const_cast<Assembly*>(a0));
 		}
 	}
 

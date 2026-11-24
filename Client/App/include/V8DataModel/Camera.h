@@ -65,7 +65,7 @@ namespace RBX {
 	class Frustum;
 
 	class Camera
-		: public DescribedCreatable<Camera, Instance, sCamera>
+		: public DescribedCreatable<Camera, Instance, sCamera, Reflection::ClassDescriptor::PERSISTENT_LOCAL>
 	{
 	public:
 		enum CameraType

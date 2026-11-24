@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sMarketplaceService;
 
 	class MarketplaceService
-		: public DescribedCreatable<MarketplaceService, Instance, sMarketplaceService, Reflection::ClassDescriptor::INTERNAL>
+		: public DescribedCreatable<MarketplaceService, Instance, sMarketplaceService, Reflection::ClassDescriptor::RUNTIME>
 		, public Service
 	{
 	public:

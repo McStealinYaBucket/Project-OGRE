@@ -15,7 +15,7 @@ namespace RBX {
 	extern const char* const sPersonalServerService;
 
 	class PersonalServerService
-		: public DescribedNonCreatable<PersonalServerService, Instance, sPersonalServerService, Reflection::ClassDescriptor::RUNTIME_LOCAL>
+		: public DescribedNonCreatable<PersonalServerService, Instance, sPersonalServerService>
 		, public Service
 	{
 	public:

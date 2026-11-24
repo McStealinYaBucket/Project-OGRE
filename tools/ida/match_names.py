@@ -203,15 +203,8 @@ FACTS = [
     # and startMMTimer rows are reccmp 100% in sweep7 and come through the bulk rule). Checked 2026-11-13 with
     # capstone; STUDIO addresses from STUDIO-PLAYER-bodymatch.csv pairs, Time.cpp's GLOBAL markers, or the
     # same instruction in the paired STUDIO body.
-    (0x0073b3f0, 0x007c3a90, "keep", "", "ios:",
-     "the iOS name RBX::Stats::Item::formatValue<double> stays: our StatsItem::formatValueId (100%) is the prior "
-     "tree's invented spelling of the same template instance (CLAUDE.md: its invented names lose to oracle names)"),
-    (0x0073b420, 0x007c3ac0, "keep", "", "ios:",
-     "the iOS name RBX::Stats::Item::formatValue<float> stays: our StatsItem::formatValueIf (100%) is the prior "
-     "tree's invented spelling of the same template instance"),
-    (0x0073b450, 0x007c3af0, "keep", "", "ios:",
-     "the iOS name RBX::Stats::Item::formatValue<int> stays: our StatsItem::formatValueIi (100%) is the prior "
-     "tree's invented spelling of the same template instance"),
+    # The three Stats::Item::formatValue<T> keep rows (0x0073b3f0/0x0073b420/0x0073b450) were dropped in the
+    # wave8 sync: the tree now spells them ??$formatValue@N/M/H@Item@Stats@RBX@@ and the iOS names agree by signature.
     (0x009bb130, 0x00a71f80, "rename", "_ZN3RBX8getStartEv", "ios:",
      "RBX::getStart() | iOS 1029 has its function-local static _ZZN3RBX8getStartEvE5start (the function itself "
      "is inlined there); body: guard bit 0x00e1b648, QueryPerformanceCounter (IAT 0x00aa1150) into the static "
@@ -350,6 +343,14 @@ FACTS = [
      "const&) 0x004c4780 (match:) except for the import it calls: basic_string(const char*) [0x00aa130c] (STUDIO "
      "[0x00b4e520], shell /GS copy) against basic_string(const string&) [0x00aa12f4]; then Name lookup 0x00613a90 "
      "into +0x1c; ContentProvider::readContent builds it in the return slot (settings-serialization.md)"),
+    # wave8 sync: with program_options built /GL, reccmp pairs our windows_file_codecvt deleting dtor with the
+    # boost filesystem copy 0x009befb0 (slot 0 of ??_7windows_file_codecvt 0x00bbb00c); the shell copy that held
+    # the name since an earlier sync is the program_options facet's (identical body apart from the operator
+    # delete call target).
+    (0x00474040, None, "rename", "??_Eutf8_codecvt_facet@detail@program_options@boost@@UAEPAXI@Z", "rtti:",
+     "boost::program_options::detail::utf8_codecvt_facet::`vector deleting destructor' | slot 0 of the vftable "
+     "0x00be64d0 whose COL 0x00c75d38 names .?AUutf8_codecvt_facet@detail@program_options@boost@@ (its slots 2 and "
+     "6 are the program_options do_max_length/do_unshift); the windows_file_codecvt name moves to 0x009befb0"),
 ]
 
 
