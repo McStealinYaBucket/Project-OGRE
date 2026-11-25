@@ -454,6 +454,65 @@ FACTS = [
      "RBX::View::SetFullscreen(bool) | compares the flag at +0x45, then calls View::changeResolution 0x00467ae0 "
      "('Done View::changeResolution') after GetWindowLongA(GWL_STYLE), or View::restoreResolution 0x004676a0 "
      "('Start View::restoreResolution'); PLAYER only"),
+    # wave12 sync: the unresolved callees gen_link_stubs still called "unknown" (integrate.md wave 12,
+    # Client/_generated/<t>/unresolved.txt), named with the decorated names our tree declares; checked from the
+    # exe bytes. STUDIO addresses from STUDIO-PLAYER-bodymatch.csv pairs or the same byte pattern.
+    (0x009b8060, 0x00a72540, "rename",
+     "?utf8_encode@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV?$basic_string@_WU?$"
+     "char_traits@_W@std@@V?$allocator@_W@2@@3@@Z", "src2016:",
+     "RBX::utf8_encode(const std::wstring&) (Base StringConv) | WideCharToMultiByte into a std::string (char "
+     "assign/_Tidy imports); CVersionInfo::Load 0x00463f50 passes it the GetShortPathNameW result"),
+    (0x009b8100, 0x00a725e0, "rename",
+     "?utf8_decode@RBX@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@ABV?$basic_string@DU?$"
+     "char_traits@D@std@@V?$allocator@D@2@@3@@Z", "src2016:",
+     "RBX::utf8_decode(const std::string&) (Base StringConv) | MultiByteToWideChar into a std::wstring (wchar_t "
+     "assign/_Tidy imports), 16 callers; directly after utf8_encode"),
+    (0x009d5da0, 0x006aaa70, "rename",
+     "?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", "str:",
+     "G3D::Log::println(const std::string&) (iOS 1029 symbol) | if logFile: printHeader 0x009d5df0, fprintf(logFile, "
+     "'%s\\n' 0x00bbd0b8, s.c_str()), fflush"),
+    (0x009d5fa0, 0x006aac70, "rename",
+     "?print@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", "str:",
+     "G3D::Log::print(const std::string&) (iOS 1029 symbol) | println's twin with format '%s' 0x00be1f20 (no newline)"),
+    (0x009b0f40, 0x00a68030, "rename", "?setLogProvider@Log@RBX@@SAXPAVILogProvider@2@@Z", "src2016:",
+     "RBX::Log::setLogProvider(ILogProvider*) | stores its argument to 0x00e1aa80 (STUDIO 0x00f9dc70), "
+     "RBX::Log::provider; the MainLogManager ctor 0x0043fa50 calls it with `this` right after "
+     "`mainLogManager = this` (0x0043fbb7)"),
+    (0x009b19a0, 0x00a68a90, "rename", "?setAssertionHook@RBX@@YAXP6A_NPBD0H@Z@Z", "src2016:",
+     "RBX::setAssertionHook (Base RbxAssert.cpp) | stores to _debugHook 0x00e1aac8 (STUDIO 0x00f9dcb8, our GLOBAL "
+     "markers); the MainLogManager ctor passes handleDebugAssert 0x00440850"),
+    (0x009b19b0, 0x00a68aa0, "rename", "?setFailureHook@RBX@@YAXP6A_NPBD0H@Z@Z", "src2016:",
+     "RBX::setFailureHook (Base RbxAssert.cpp) | stores to _failureHook 0x00e1aacc (STUDIO 0x00f9dcbc); the "
+     "MainLogManager ctor passes handleFailure 0x00440920"),
+    (0x00e1aa80, 0x00f9dc70, "data4", "_ZN3RBX3Log8providerE", "ios:",
+     "RBX::Log::provider (ILogProvider*) | iOS 1029 symbol; written only by setLogProvider 0x009b0f40 "
+     "(STUDIO 0x00a68030)"),
+    (0x0066ef10, 0x0077fae0, "rename", "?getSalt@ProtectedString@RBX@@QBEPBDXZ", "ios:",
+     "RBX::ProtectedString::getSalt() const (iOS 1029 symbol) | `mov eax, '10:46:55'; ret` (STUDIO '19:11:34', "
+     "a __TIME__ salt), before readUnprotectedChar 0x0066ef50; our Util/ProtectedString.h declares it static"),
+    (0x00703070, 0x0070c5d0, "rename",
+     "??$convert@VVector2int16@G3D@@@Variant@Reflection@RBX@@QAEAAVVector2int16@G3D@@XZ", "ios:",
+     "RBX::Reflection::Variant::convert<G3D::Vector2int16>() (iOS 1029 symbol) | `jmp genericConvert<Vector2int16>` "
+     "0x00702090, the shape of convert<UDim2> 0x00703080 (100%); called by Variant::get<Vector2int16> 0x008b2496"),
+    (0x008d3540, 0x00846e30, "rename",
+     "?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$"
+     "allocator@D@2@@std@@AAVContentId@2@@Z", "ios:",
+     "RBX::StringConverter<ContentId>::convertToValue (iOS 1029 symbol) | cdecl (text, value): value = "
+     "ContentId(text) 0x004c4780, return true; called by TypedPropertyDescriptor<ContentId>::setStringValue "
+     "0x00700d40 (vftable slot 10)"),
+    (0x0066f460, 0x00780050, "rename",
+     "?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$"
+     "allocator@D@2@@std@@AAVProtectedString@2@@Z", "ios:",
+     "RBX::StringConverter<ProtectedString>::convertToValue (iOS 1029 symbol) | cdecl (text, value): value = "
+     "ProtectedString::fromTrustedSource(text) 0x0066f320, calculateHash 0x0066f060, return true; called by "
+     "TypedPropertyDescriptor<ProtectedString>::setStringValue 0x0066f6c0 (vftable slot 10)"),
+    # app-12 (app-followups.md): STUB in Util/Http.cpp, 85.1 / 94.1 in sweep19, paired by reccmp in both targets.
+    (0x00623bb0, 0x006cca30, "rename", "?isMoneySite@Http@RBX@@SA_NPBD@Z", "str:",
+     "RBX::Http::isMoneySite(const char*) | host-suffix tests against 'paypal.com' and 'rixty.com'; our STUB "
+     "Util/Http.cpp pairs here (85.1, PLAYER and STUDIO)"),
+    (0x00624620, 0x006cd530, "rename", "?trustCheckBrowser@Http@RBX@@SA_NPBD@Z", "src2016:",
+     "RBX::Http::trustCheckBrowser(const char*) | ends `test al,al; setne al` on isMoneySite 0x00623bb0; our STUB "
+     "Util/Http.cpp pairs here (94.1, PLAYER and STUDIO)"),
 ]
 
 

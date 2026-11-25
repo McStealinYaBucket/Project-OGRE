@@ -63,7 +63,7 @@ RBX_REGISTER_CLASS(Metadata::Properties);
 RBX_REGISTER_CLASS(Metadata::Events);
 RBX_REGISTER_CLASS(Metadata::Callbacks);
 // PLAYER loads from the exe's folder (STUDIO from RobloxSettings' resources folder, not written).
-// STUB: PLAYER 0x00447970
+// FUNCTION: PLAYER 0x00447970
 // STUB: STUDIO 0x004338a0
 boost::shared_ptr<Metadata::Reflection> Metadata::Reflection::safe_static_do_get_singleton()
 {

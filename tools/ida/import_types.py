@@ -154,9 +154,20 @@ CLASSES = [
     # Network::Players / Server (SIZE asserted, ctor/dtor below 100%; network-5f-2)
     "RBX::Reflection::Descriptor", "RBX::Reflection::Metadata::Item", "RBX::Reflection::Metadata::Class",
     "XmlAttribute", "RBX::ToggleFullscreenVerb", "RBX::Network::Player",
+    # wave12 sync (sweep19, build/sweep19/P-final.json / S-final.json 100%; size = the tree's // SIZE = the PDB's),
+    # PLAYER / STUDIO: the shell's LogManager (0x28) dtor 0x00440780 / 0x0041e120, MainLogManager (0x64) dtor
+    # 0x00440600 / 0x0041dfa0 (ctor 87.1 / 60.2), RobloxCrashReporter (0x268) ctor 0x0043f570 / 0x0041d0c0 with
+    # Network's CrashReporter (0x268) ctor 0x00520070 / 0x005d78c0 and dtor 0x005200f0 / 0x005d7940,
+    # VideoControl (0x120) dtor 0x00464dd0 / 0x0048c940, SoundState (0x60) dtor 0x00464b60 / 0x0048c6e0
+    # (shell-5k-3). PLAYER only (WindowsClient GameVerbs): LeaveGameVerb (0x10) ctor 0x00438220, RecordToggleVerb
+    # (0x70) dtor 0x00439230. Not yet: VistaAPIs (dtor 100%, no size annotation), Network::Players / Server
+    # (ctor/dtor 0.51-0.91)
+    "LogManager", "MainLogManager", "CrashReporter", "RobloxCrashReporter", "RBX::VideoControl", "RBX::SoundState",
+    "RBX::LeaveGameVerb", "RBX::RecordToggleVerb",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
-PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb", "RBX::Network::Player"}
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb", "RBX::Network::Player",
+               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

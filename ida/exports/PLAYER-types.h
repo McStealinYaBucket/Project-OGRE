@@ -4218,8 +4218,8 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *is_composing;
-  void *_Destroy;
+  void *isReadOnly;
+  void *allocator_char__________0_;
   void *createChild;
   void *writeXml;
   void *verifySetParent;
@@ -6052,7 +6052,7 @@ struct __cppobj XmlAttribute : RBX::Sibling<XmlAttribute>, XmlNameValuePair
 /* 736 */
 struct __cppobj RBX::ToggleFullscreenVerb : RBX::Verb
 {
-  void *videoControl;                   ///< RBX::VideoControl *
+  RBX::VideoControl *videoControl;
   void *view;                           ///< RBX::View *
 };
 
@@ -6141,5 +6141,109 @@ struct __cppobj RBX::Network::Player : RBX::DescribedCreatable<RBX::Network::Pla
   unsigned __int8 m_unk0x1b0[28];       ///< std::string
   unsigned __int8 m_unk0x1cc[8];        ///< boost::shared_ptr<RBX::Instance>
   unsigned int m_unk0x1d4;
+};
+
+/* 742 */
+typedef const char *STRSAFE_PCNZCH;
+
+/* 743 */
+struct __cppobj LogManager
+{
+  void **__vftable;
+  void *log;                            ///< RBX::Log *
+  unsigned int threadID;
+  unsigned __int8 name[28];             ///< std::string
+};
+
+/* 744 */
+struct __cppobj RBX::ILogProvider
+{
+  void **__vftable;
+};
+
+/* 745 */
+struct __cppobj MainLogManager : RBX::ILogProvider, LogManager
+{
+  unsigned __int8 crashReporter[4];     ///< boost::scoped_ptr<RobloxCrashReporter>
+  unsigned __int8 fastLogChannels[16];  ///< std::vector<RBX::Log *>
+  void *crashExtention;                 ///< ? *
+  void *crashEventExtention;            ///< ? *
+  unsigned __int8 guid[28];             ///< std::string
+};
+
+/* 746 */
+struct __cppobj CrashReporter
+{
+  void **__vftable;
+  int threadResult;
+  void *exceptionInfo;                  ///< _EXCEPTION_POINTERS *
+  unsigned __int8 reportCrashEvent[4];  ///< RBX::CEvent
+  unsigned __int8 watcherThread[4];     ///< boost::scoped_ptr<boost::thread>
+  bool hangReportingEnabled;
+  bool isAlive;
+  unsigned __int8 gap_16[2];
+  int deadlockCounter;
+  bool destructing;
+  bool immediateUploadEnabled;
+  unsigned __int8 gap_1E[2];
+  unsigned __int8 controls[584];        ///< CrashReportControls
+};
+
+/* 747 */
+struct __cppobj RobloxCrashReporter : CrashReporter
+{
+};
+
+/* 748 */
+struct __cppobj Ogre::IFrameDataCallback
+{
+  void **__vftable;
+};
+
+/* 749 */
+struct __cppobj RBX::VideoControl : Ogre::IFrameDataCallback
+{
+  bool recorded;
+  unsigned __int8 gap_5[3];
+  int videoQuality;
+  unsigned __int8 m_unk0x0c[256];       ///< array
+  unsigned __int8 capture[4];           ///< boost::scoped_ptr<RBX::IVideoCapture>
+  unsigned __int8 soundState[4];        ///< boost::scoped_ptr<RBX::SoundState>
+  void *rbxView;                        ///< RBX::ViewBase *
+  void *frameRateManager;               ///< RBX::FrameRateManager *
+  RBX::Verb *verb;
+};
+
+/* 750 */
+struct __cppobj RBX::SoundState
+{
+  unsigned __int8 createDSPFunction[32]; ///< boost::function<FMOD::DSP * __cdecl(FMOD_DSP_DESCRIPTION &)>
+  unsigned __int8 getSampleRateFunction[32]; ///< boost::function<int __cdecl(void)>
+  unsigned __int8 enabledFunction[32];  ///< boost::function<bool __cdecl(void)>
+};
+
+/* 751 */
+struct __cppobj RBX::LeaveGameVerb : RBX::Verb
+{
+  void *doc;                            ///< RBX::Document *
+};
+
+/* 752 */
+struct __cppobj RBX::RecordToggleVerb : RBX::Verb
+{
+  void *doc;                            ///< RBX::Document *
+  void *game;                           ///< RBX::Game *
+  unsigned __int8 videoControl[4];      ///< boost::scoped_ptr<RBX::VideoControl>
+  unsigned __int8 fileName[28];         ///< std::string
+  bool videoUploadingEnabled;
+  bool stop;
+  unsigned __int8 gap_36[2];
+  unsigned __int8 helper[4];            ///< boost::scoped_ptr<boost::thread>
+  unsigned __int8 gap_3C[4];
+  unsigned __int8 job[32];              ///< boost::function<void __cdecl(void)>
+  unsigned __int8 jobWait[4];           ///< RBX::CEvent
+  unsigned __int8 jobDone[4];           ///< RBX::CEvent
+  unsigned __int8 threadDone[4];        ///< RBX::CEvent
+  unsigned __int8 gap_6C[4];
 };
 

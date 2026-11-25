@@ -104,3 +104,9 @@ void RBX::Network::initWithoutSecurity()
 	NetworkSettings::classDescriptor();
 	NetworkSettings::singleton();
 }
+
+// The RakNet incoming password Server::onCreateRakPeer sets (2016 name). Default-constructed by the
+// API.obj initializer PLAYER 0x00a5ece0.
+// GLOBAL: PLAYER 0x00dd6670
+// GLOBAL: STUDIO 0x00f5e690
+namespace RBX { namespace Network { std::string versionB; } }

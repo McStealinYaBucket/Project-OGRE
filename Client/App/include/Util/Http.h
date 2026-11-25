@@ -443,7 +443,7 @@ public:
 // Library and template bodies the WinHttp/WinInet drivers call whose 2013 copy sits in another
 // object (ATL in the client shell, boost gzip in Network): our only copy is emitted by WinHttp.cpp,
 // WinInet.cpp or Http.cpp, so these markers pair them with the copy the 2013 linker kept
-// (instruction sequence identical; the two CStringT constructors differ by inlining).
+// (instruction sequence identical; the two CStringT constructors differ by inlining). 0x00436af0 holds ~CStringT, ~CSimpleStringT and ~CPathT folded; reccmp names our copy by ~CPathT.
 
 // TEMPLATE: PLAYER 0x00401930
 // TEMPLATE: STUDIO 0x006cb7f0
@@ -463,7 +463,7 @@ public:
 
 // TEMPLATE: PLAYER 0x00436af0
 // TEMPLATE: STUDIO 0x0041b750
-// ??1?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@QAE@XZ
+// ??1?$CPathT@V?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@@ATL@@QAE@XZ
 
 // TEMPLATE: PLAYER 0x00440d20
 // TEMPLATE: STUDIO 0x0041e640

@@ -10,8 +10,8 @@
                             crashReporter +0x2c, fastLogChannels +0x30, crashExtention +0x40
                             (".Client.dmp"), crashEventExtention +0x44 (".Client.crashevent"),
                             guid +0x48. 2013 has no gameState (2016's setLeaveGame).
-   CrashReporter is Client/Network's (ctor 0x00520070, dtor 0x005200f0, ProcessException 0x0051fcb0);
-   the tree has no network/CrashReporter.h yet, so the two virtuals and the dtor are declared here.
+   CrashReporter is Client/Network's (Network/CrashReporter.h: ctor 0x00520070, dtor 0x005200f0,
+   ProcessException 0x0051fcb0, GenerateDmpFileName 0x0051fad0 with three parameters).
 
    LogManager.cpp:
    2013 path from the assert in the MainLogManager constructor (`mainLogManager == NULL`, line 354);
@@ -53,33 +53,12 @@
 #include "FastLog.h"
 #include "decomp.h"
 
-// Client/Network's crash reporter: vftable logEvent, ProcessException; no virtual destructor.
-// controls at +0x20 (RobloxCrashReporter's ctor fills it); operator new 0x268 (WriteCrashDump).
-struct CrashReportControls
-{
-	char appName[128];        // 0x00
-	char appVersion[128];     // 0x80
-	char pathToMinidump[260]; // 0x100
-	char crashExtention[64];  // 0x204
-	int minidumpType;         // 0x244
-};
-
-class CrashReporter
-{
-	undefined m_unk0x04[0x20 - 0x04];        // 0x04
-protected:
-	virtual void logEvent(const char* msg); // vtable+0x00
-public:
-	CrashReportControls controls;           // 0x20
-
-	CrashReporter();                        // PLAYER 0x00520070
-	~CrashReporter();                       // PLAYER 0x005200f0
-	void Start();                           // PLAYER 0x005205a0
-	virtual LONG ProcessException(struct _EXCEPTION_POINTERS* info, bool noMsg); // vtable+0x04, PLAYER 0x0051fcb0
-	HRESULT GenerateDmpFileName(char* dumpFilepath, int cchdumpFilepath, bool fastLog = false, bool fullDmp = false); // PLAYER 0x0051fad0
-};
+// Client/Network's crash reporter (logEvent, ProcessException; controls at +0x20; size 0x268).
+#include "Network/CrashReporter.h"
 
 // VTABLE: PLAYER 0x00be1f3c
+// VTABLE: STUDIO 0x00d0cc04
+// SIZE 0x28
 class LogManager
 {
 	RBX::Log* log;          // 0x04
@@ -102,6 +81,7 @@ protected:
 };
 
 // VTABLE: PLAYER 0x00be1f5c
+// VTABLE: STUDIO 0x00d0cc24
 // SIZE 0x268
 class RobloxCrashReporter : public CrashReporter
 {
@@ -115,6 +95,8 @@ protected:
 
 // VTABLE: PLAYER 0x00be1f48 RBX::ILogProvider
 // VTABLE: PLAYER 0x00be1f50 LogManager
+// VTABLE: STUDIO 0x00d0cc10 RBX::ILogProvider
+// VTABLE: STUDIO 0x00d0cc18 LogManager
 // SIZE 0x64
 class MainLogManager
 	: public RBX::ILogProvider
@@ -153,6 +135,7 @@ private:
 };
 
 // VTABLE: PLAYER 0x00be1f68
+// VTABLE: STUDIO 0x00d0cc30
 class ThreadLogManager
 	: public LogManager
 {

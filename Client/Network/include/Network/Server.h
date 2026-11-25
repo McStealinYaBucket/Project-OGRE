@@ -35,6 +35,14 @@ namespace Network {
 		// mac: 0x87D908 (static 2016 shape carried: provider assert + find).
 		static bool serverIsPresent(const Instance* context, bool testInDatamodel = true);
 
+	protected:
+		// Overrides, vftable 0x00b1e34c (STUDIO 0x00bd00fc).
+		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // +0x20
+		/*override*/ bool askAddChild(const Instance* instance) const;                                    // +0x3c
+		/*override*/ void onCreateRakPeer();                                                              // +0x70
+
+	public:
+
 		undefined4 m_unk0xac4;                          // 0xac4 ctor 0
 		shared_ptr<Instance> m_unk0xac8;                // 0xac8 dtor releases +0xacc last; pointee unproven
 		shared_ptr<Instance> m_unk0xad0;                // 0xad0 dtor releases +0xad4; pointee unproven

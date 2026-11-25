@@ -18,8 +18,10 @@
 #include "LogManagerExterns.h"
 
 // GLOBAL: PLAYER 0x00e2510c
+// GLOBAL: STUDIO 0x00fa4fec
 MainLogManager* LogManager::mainLogManager = NULL;
 // GLOBAL: PLAYER 0x00e2525c
+// GLOBAL: STUDIO 0x00fa57b8
 RBX::mutex MainLogManager::fastLogChannelsLock;
 
 // The logs folder (<user AppData>\logs), printed to the console the first time it is asked for.
@@ -49,7 +51,8 @@ const ATL::CPath& LogManager::GetLogPath()
 }
 
 // The exe's file version ("0, 126, 0, 39503"), for the crash files' names.
-// STUB: PLAYER 0x0043eb80
+// FUNCTION: PLAYER 0x0043eb80
+// FUNCTION: STUDIO 0x0041c6d0
 std::string GetAppVersion()
 {
 	CVersionInfo vi;
@@ -60,6 +63,7 @@ std::string GetAppVersion()
 
 // FastLog's external sink: one "Log Channel" file per channel, created on its first message.
 // FUNCTION: PLAYER 0x0043ec40
+// FUNCTION: STUDIO 0x0041c790
 void MainLogManager::fastLogMessage(FLog::Channel id, const char* message)
 {
 	RBX::mutex::scoped_lock lock(fastLogChannelsLock);
@@ -78,6 +82,7 @@ void MainLogManager::fastLogMessage(FLog::Channel id, const char* message)
 
 // Characters 3..7 of the session GUID ("RBX" + 32 hex digits).
 // FUNCTION: PLAYER 0x0043ed90
+// FUNCTION: STUDIO 0x0041c8e0
 std::string MainLogManager::getSessionId()
 {
 	std::string id = guid;
@@ -86,7 +91,8 @@ std::string MainLogManager::getSessionId()
 	return id;
 }
 
-// STUB: PLAYER 0x0043ee20
+// FUNCTION: PLAYER 0x0043ee20
+// STUB: STUDIO 0x0041c970
 std::string MainLogManager::getCrashEventName()
 {
 	FASTLOG(FLog::CrashReporterInit, "Getting crash event name");
@@ -103,7 +109,8 @@ std::string MainLogManager::getCrashEventName()
 	return (LPCTSTR)path;
 }
 
-// STUB: PLAYER 0x0043efb0
+// FUNCTION: PLAYER 0x0043efb0
+// FUNCTION: STUDIO 0x0041cb00
 std::string MainLogManager::getLogFileName()
 {
 	ATL::CPath path = GetLogPath();
@@ -117,7 +124,8 @@ std::string MainLogManager::getLogFileName()
 	return (LPCTSTR)path;
 }
 
-// STUB: PLAYER 0x0043f0f0
+// FUNCTION: PLAYER 0x0043f0f0
+// FUNCTION: STUDIO 0x0041cc40
 std::string MainLogManager::getFastLogFileName(FLog::Channel channelId)
 {
 	ATL::CPath path = GetLogPath();
@@ -130,7 +138,8 @@ std::string MainLogManager::getFastLogFileName(FLog::Channel channelId)
 	return (LPCTSTR)path;
 }
 
-// STUB: PLAYER 0x0043f230
+// FUNCTION: PLAYER 0x0043f230
+// FUNCTION: STUDIO 0x0041cd80
 std::string MainLogManager::MakeLogFileName(const char* postfix)
 {
 	ATL::CPath path = GetLogPath();
@@ -146,7 +155,8 @@ std::string MainLogManager::MakeLogFileName(const char* postfix)
 }
 
 // The main log's name with "_<thread name>_<thread id>" before its ".txt".
-// STUB: PLAYER 0x0043f380
+// FUNCTION: PLAYER 0x0043f380
+// FUNCTION: STUDIO 0x0041ced0
 std::string ThreadLogManager::getLogFileName()
 {
 	std::string fileName = mainLogManager->getLogFileName();
@@ -157,6 +167,7 @@ std::string ThreadLogManager::getLogFileName()
 }
 
 // FUNCTION: PLAYER 0x0043f470
+// FUNCTION: STUDIO 0x0041cfc0
 RBX::Log* LogManager::getLog()
 {
 	if (log == NULL)
@@ -166,6 +177,7 @@ RBX::Log* LogManager::getLog()
 
 // RBX::Log::current(): the main thread's log, or the calling thread's own.
 // FUNCTION: PLAYER 0x0043f540
+// FUNCTION: STUDIO 0x0041d090
 RBX::Log* MainLogManager::provideLog()
 {
 	if (GetCurrentThreadId() == threadID)
@@ -175,7 +187,8 @@ RBX::Log* MainLogManager::provideLog()
 }
 
 // The minidump settings: data segments, plus indirectly referenced memory on Vista and later.
-// STUB: PLAYER 0x0043f570
+// FUNCTION: PLAYER 0x0043f570
+// FUNCTION: STUDIO 0x0041d0c0
 RobloxCrashReporter::RobloxCrashReporter(const char* outputPath, const char* appName, const char* crashExtention)
 {
 	controls.minidumpType = MiniDumpWithDataSegs;
@@ -193,7 +206,8 @@ RobloxCrashReporter::RobloxCrashReporter(const char* outputPath, const char* app
 
 bool RobloxCrashReporter::silent;
 
-// STUB: PLAYER 0x0043f660
+// FUNCTION: PLAYER 0x0043f660
+// FUNCTION: STUDIO 0x0041d1b0
 LONG RobloxCrashReporter::ProcessException(struct _EXCEPTION_POINTERS* info, bool noMsg)
 {
 	LogManager::ReportEvent(EVENTLOG_INFORMATION_TYPE, "StartProcessException...");
@@ -216,12 +230,14 @@ LONG RobloxCrashReporter::ProcessException(struct _EXCEPTION_POINTERS* info, boo
 }
 
 // FUNCTION: PLAYER 0x0043f710
+// FUNCTION: STUDIO 0x0041d260
 void RobloxCrashReporter::logEvent(const char* msg)
 {
 	LogManager::ReportEvent(EVENTLOG_INFORMATION_TYPE, msg);
 }
 
-// STUB: PLAYER 0x0043f730
+// FUNCTION: PLAYER 0x0043f730
+// FUNCTION: STUDIO 0x0041d280
 void MainLogManager::WriteCrashDump()
 {
 	std::string appName = "log_";
@@ -234,7 +250,8 @@ void MainLogManager::WriteCrashDump()
 }
 
 // A FastLog dump and a 5-byte "Fake" .dmp, so the next start uploads the logs.
-// STUB: PLAYER 0x0043f8c0
+// FUNCTION: PLAYER 0x0043f8c0
+// STUB: STUDIO 0x0041d410
 bool MainLogManager::CreateFakeCrashDump()
 {
 	if (!crashReporter)
@@ -297,27 +314,9 @@ bool MainLogManager::CreateFakeCrashDump()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // _set_purecall_handler's target: report, then crash on purpose.
-// STUB: PLAYER 0x0043f9b0
+// FUNCTION: PLAYER 0x0043f9b0
+// FUNCTION: STUDIO 0x0041d510
 static void __cdecl purecallHandler()
 {
 	CString message;
@@ -337,6 +336,7 @@ static void __cdecl purecallHandler()
        purecall handler and FastLog's external sink. */
 
 // STUB: PLAYER 0x0043fa50
+// STUB: STUDIO 0x0041d5b0
 MainLogManager::MainLogManager(LPCTSTR productName, const char* crashExtention, const char* crashEventExtention)
 	: LogManager(productName)
 	, crashExtention(crashExtention)
@@ -379,6 +379,7 @@ struct olderthan
 
 // Deletes the oldest files of logs\<folder> until filesRemaining are left.
 // STUB: PLAYER 0x004403a0
+// STUB: STUDIO 0x0041dd40
 void MainLogManager::CullLogs(const char* folder, int filesRemaining)
 {
 	ATL::CPath path = GetLogPath();
@@ -408,7 +409,8 @@ void MainLogManager::CullLogs(const char* folder, int filesRemaining)
 }
 
 // G3D's common log is deleted here (its file name is read first, as for the thread logs below).
-// STUB: PLAYER 0x00440600
+// FUNCTION: PLAYER 0x00440600
+// FUNCTION: STUDIO 0x0041dfa0
 MainLogManager::~MainLogManager()
 {
 	if (G3D::Log::common())
@@ -428,6 +430,7 @@ MainLogManager::~MainLogManager()
 }
 
 // FUNCTION: PLAYER 0x00440780
+// FUNCTION: STUDIO 0x0041e120
 LogManager::~LogManager()
 {
 	if (log != NULL)
@@ -440,12 +443,14 @@ LogManager::~LogManager()
 
 // The G3D hooks drop the message and the prompt flag.
 // FUNCTION: PLAYER 0x00440830
+// FUNCTION: STUDIO 0x0041e1d0
 bool MainLogManager::handleG3DDebugAssert(const char* expression, const std::string& message, const char* filename, int lineNumber, bool useGuiPrompt)
 {
 	return handleDebugAssert(expression, filename, lineNumber);
 }
 
-// STUB: PLAYER 0x00440850
+// FUNCTION: PLAYER 0x00440850
+// FUNCTION: STUDIO 0x0041e1f0
 bool MainLogManager::handleDebugAssert(const char* expression, const char* filename, int lineNumber)
 {
 	CString message;
@@ -455,12 +460,14 @@ bool MainLogManager::handleDebugAssert(const char* expression, const char* filen
 }
 
 // FUNCTION: PLAYER 0x00440900
+// FUNCTION: STUDIO 0x0041e2a0
 bool MainLogManager::handleG3DFailure(const char* expression, const std::string& message, const char* filename, int lineNumber, bool useGuiPrompt)
 {
 	return handleFailure(expression, filename, lineNumber);
 }
 
-// STUB: PLAYER 0x00440920
+// FUNCTION: PLAYER 0x00440920
+// FUNCTION: STUDIO 0x0041e2c0
 bool MainLogManager::handleFailure(const char* expression, const char* filename, int lineNumber)
 {
 	CString message;
@@ -472,6 +479,7 @@ bool MainLogManager::handleFailure(const char* expression, const char* filename,
 
 // Event-log types to StandardOut (`message` in esi in the PLAYER shell).
 // FUNCTION: PLAYER 0x00440a70
+// FUNCTION: STUDIO 0x0041e370
 void LogManager::ReportEvent(WORD type, LPCSTR message)
 {
 	switch (type)
@@ -501,9 +509,11 @@ ThreadLogManager::ThreadLogManager()
 
 // One ThreadLogManager per thread, in a thread_specific_ptr made on first use.
 // GLOBAL: PLAYER 0x00e25098
+// GLOBAL: STUDIO 0x00fa4fd8
 static boost::thread_specific_ptr<ThreadLogManager>* threadLogManagers;
 
 // FUNCTION: PLAYER 0x00440bd0
+// FUNCTION: STUDIO 0x0041e4d0
 static void initThreadLogManagers()
 {
 	static boost::thread_specific_ptr<ThreadLogManager> managers;
@@ -511,6 +521,7 @@ static void initThreadLogManagers()
 }
 
 // FUNCTION: PLAYER 0x00440c60
+// FUNCTION: STUDIO 0x0041e560
 ThreadLogManager* ThreadLogManager::getCurrent()
 {
 	static boost::once_flag flag = BOOST_ONCE_INIT;

@@ -102,5 +102,12 @@ namespace Network {
 		return Client::findClient(context, testInDatamodel) != NULL;
 	}
 
+	// STUB: PLAYER 0x005adcc0
+	// STUB: STUDIO 0x0060c700
+	void Client::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		STUB(0x005adcc0);
+	}
+
 } // namespace Network
 } // namespace RBX

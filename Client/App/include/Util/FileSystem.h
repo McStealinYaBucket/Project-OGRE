@@ -11,7 +11,21 @@
 #include <boost/filesystem/path.hpp>
 
 namespace RBX {
+	// 2013 values: getUserDirectory 0x006ea4c0 tests dir == 3 for the exe directory, and its two
+	// folder switches take 0 (LocalAppData), 1 (Pictures), 2 (Videos).
+	enum FileSystemDir
+	{
+		DirAppData = 0,
+		DirPicture,
+		DirVideo,
+		DirExe
+	};
+
 	namespace FileSystem {
+
+		// PLAYER 0x006ea4c0 (util/FileSystem.cpp): <folder>\Roblox\[subDirectory]\, created on
+		// request; "" when it cannot be made.
+		std::string getUserDirectory(bool create, FileSystemDir dir, const char* subDirectory);
 
 		// mac: 0x395FB6 callee. TODO: real path (usually %APPDATA%/... or
 		// Documents/... in 2013 — verify from the FileSystem module).

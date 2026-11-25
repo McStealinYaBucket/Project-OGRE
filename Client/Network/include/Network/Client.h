@@ -43,6 +43,9 @@ namespace Network {
 		// mac: 0x844AEC / 0x844B7C (static 2016 shape carried).
 		static Client* findClient(const Instance* context, bool testInDatamodel = true);
 		static bool clientIsPresent(const Instance* context, bool testInDatamodel = true);
+
+	protected:
+		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // +0x20, PLAYER 0x005adcc0
 	};
 
 } // namespace Network

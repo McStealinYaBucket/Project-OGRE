@@ -353,12 +353,12 @@ const Type& Type::getSingleton<G3D::Vector2int16>()
 	return type;
 }
 
+// getSingleton<Region3int16> is defined in voxel/Grid.cpp: 2013 Grid.obj, PLAYER 0x00793b60,
+// whose TType ctor asserts the "Reflection/Type.h" spelling; this .obj's Type<T> ctors assert
+// "reflection/Type.h". (Four comment lines keep the asserts below on their lines.)
+//
 template<>
-const Type& Type::getSingleton<RBX::Region3int16>()
-{
-	static TType<RBX::Region3int16> type("Region3int16");
-	return type;
-}
+const Type& Type::getSingleton<RBX::Region3int16>();
 
 // Pre-main Type touches (section 246 POSTMORTEM). Descriptor::lockedDown
 // goes true on the first DescribedBase construction, after which ANY

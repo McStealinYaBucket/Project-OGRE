@@ -6,6 +6,10 @@
 namespace RBX {
 namespace Network {
 
+// GLOBAL: PLAYER 0x00b19694
+// GLOBAL: STUDIO 0x00bd180c
+const char* const sReplicator = "NetworkReplicator";
+
 // FUNCTION: PLAYER 0x00598da0
 // FUNCTION: STUDIO 0x0063be70
 Time::Interval Replicator::PingJob::sleepTime(const Stats& stats)

@@ -87,7 +87,9 @@ namespace Network {
 			CLASSIC_AND_BUBBLE_CHAT = 2,
 		};
 
-		Players() {}
+		// PLAYER 0x00570980 / 0x005705c0 (operator new(0x1f8) in the creator 0x0058eb00).
+		Players();
+		~Players();
 
 		// mac: 0x2E32CC caller: direct-child count (binary reads the children
 		// cow at Players+180).
@@ -126,6 +128,16 @@ namespace Network {
 		std::string getLoadDataUrl(int userId) const;
 		std::string getSaveDataUrl(int userId) const;
 		std::string getSaveLeaderboardDataUrl(int userId) const;
+
+	protected:
+		// Instance overrides, vftable 0x00b17034 (STUDIO 0x00bca804).
+		/*override*/ bool askAddChild(const Instance* instance) const;                          // +0x3c
+		/*override*/ void onDescendantRemoving(const shared_ptr<Instance>& instance);            // +0x54
+		/*override*/ void onChildAdded(Instance* child);                                         // +0x58
+		/*override*/ void onChildRemoving(Instance* child);                                      // +0x5c
+		/*override*/ void onChildChanged(Instance* instance, const PropertyChanged& event);      // +0x64
+
+	public:
 
 		// 2013 layout from the constructor PLAYER 0x00570980 (operator new(0x1f8) in 0x0058eb00) and
 		// destructor 0x005705c0, both not yet matched. Instance is 0x60; Service's bool sits at 0x60.

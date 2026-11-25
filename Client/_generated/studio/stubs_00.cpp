@@ -19,6 +19,30 @@ extern "C" void ogre_stub_006aa930()
 }
 #pragma comment(linker, "/alternatename:?common@Log@G3D@@SAPAV12@XZ=_ogre_stub_006aa930")
 
+// public: static class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::Log::getCommonLogFilename(void)
+// STUB: STUDIO 0x006aa9e0
+extern "C" void ogre_stub_006aa9e0()
+{
+	STUB(0x006aa9e0);
+}
+#pragma comment(linker, "/alternatename:?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ=_ogre_stub_006aa9e0")
+
+// void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+// STUB: STUDIO 0x006ab080
+extern "C" void ogre_stub_006ab080()
+{
+	STUB(0x006ab080);
+}
+#pragma comment(linker, "/alternatename:?setAssertionHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z=_ogre_stub_006ab080")
+
+// void __cdecl G3D::setFailureHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+// STUB: STUDIO 0x006ab090
+extern "C" void ogre_stub_006ab090()
+{
+	STUB(0x006ab090);
+}
+#pragma comment(linker, "/alternatename:?setFailureHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z=_ogre_stub_006ab090")
+
 // public: __thiscall RBX::CRenderSettings::CRenderSettings(void)
 // STUB: STUDIO 0x006c20b0
 extern "C" void ogre_stub_006c20b0()
@@ -67,14 +91,6 @@ extern "C" void ogre_stub_007600d0()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
 
-// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::FileSystem::getUserDirectory(bool, enum RBX::FileSystemDir, char const *)
-// STUB: STUDIO 0x00772800
-extern "C" void ogre_stub_00772800()
-{
-	STUB(0x00772800);
-}
-#pragma comment(linker, "/alternatename:?getUserDirectory@FileSystem@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_NW4FileSystemDir@2@PBD@Z=_ogre_stub_00772800")
-
 // public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
 // STUB: STUDIO 0x00789030
 extern "C" void ogre_stub_00789030()
@@ -90,6 +106,14 @@ extern "C" void ogre_stub_007d7380()
 	STUB(0x007d7380);
 }
 #pragma comment(linker, "/alternatename:?registerNewLightAPI@RBX@@YAXXZ=_ogre_stub_007d7380")
+
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl format_string(char const *, ...)
+// STUB: STUDIO 0x007f27e0
+extern "C" void ogre_stub_007f27e0()
+{
+	STUB(0x007f27e0);
+}
+#pragma comment(linker, "/alternatename:?format_string@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ=_ogre_stub_007f27e0")
 
 // unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
 // STUB: STUDIO 0x00a68be0

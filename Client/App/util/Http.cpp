@@ -155,6 +155,16 @@ Http::MutexGuard::~MutexGuard()
 	}
 }
 
+// 2013 Windows trust-check state: the call_once target 0x00622e00 only clears this flag.
+static bool g_unk0x00de3e50;
+
+// FUNCTION: PLAYER 0x00622e00
+// FUNCTION: STUDIO 0x006cb500
+static void FUN_00622e00()
+{
+	g_unk0x00de3e50 = false;
+}
+
 // FUNCTION: PLAYER 0x00622ec0
 // FUNCTION: STUDIO 0x006cb6a0
 void Http::ThrowIfFailure(bool success, const char* url, const char* message)
@@ -397,42 +407,122 @@ bool Http::isRobloxSite(const char* url)
 	return rbx_isRobloxSite(url) != 0;
 }
 
-// Http::isMoneySite -- declared in Http.h ("implemented via rbx_isMoneySite
-// (0x5FE861) elsewhere"); the elsewhere never landed, so define it here,
-// mirroring isRobloxSite.
-bool Http::isMoneySite(const char* url)
+
+} // namespace RBX
+
+// CString/CUrl for trustCheck (included here, not at the top, so the line-100 assert stays put).
+#include <atlstr.h>
+#include <atlutil.h>
+#include "decomp.h"
+
+namespace RBX
 {
-	return rbx_isMoneySite(url) != 0;
+
+// The three url tests trustCheck calls (cdecl, one argument). Not written yet; noinline keeps the
+// stand-in bodies out of line like the 2013 ones (288-1127 bytes).
+// STUB: PLAYER 0x006238a0
+// STUB: STUDIO 0x006cc5f0
+__declspec(noinline) bool FUN_006238a0(const char* url)
+{
+	STUB(0x006238a0);
+	return false;
 }
 
-// mac: 0x1FB95C - Http::trustCheck(const char*, bool)
-// STUB: PLAYER 0x00624210
-// STUB: STUDIO 0x006cd090
-bool Http::trustCheck(const char* url, bool allowExternal)
+// STUB: PLAYER 0x00623a90
+// STUB: STUDIO 0x006cc910
+__declspec(noinline) bool FUN_00623a90(const char* url)
 {
-	static boost::once_flag domainsInitialized = BOOST_ONCE_INIT;
-	boost::call_once(initRobloxDomains, domainsInitialized); // sub_1FB9B3 target
+	STUB(0x00623a90);
+	return false;
+}
 
-	bool isRoblox = rbx_isRobloxSite(url) != 0;
-	if (allowExternal)
+// 2013: the host, lower-cased, ends in "paypal.com" or "rixty.com" (only for ftp/http/https urls).
+// STUB: PLAYER 0x00623bb0
+// STUB: STUDIO 0x006cca30
+bool Http::isMoneySite(const char* url)
+{
+	CUrl crackedUrl;
+	crackedUrl.CrackUrl(url);
+	switch (crackedUrl.GetScheme())
 	{
-		return !isRoblox;
+	case ATL_URL_SCHEME_FTP:
+	case ATL_URL_SCHEME_HTTP:
+	case ATL_URL_SCHEME_HTTPS:
+		break;
+	default:
+		return false;
 	}
-	if (!isRoblox)
+	CString host(crackedUrl.GetHostName());
+	host.MakeLower();
+	if (host.Right(10) == "paypal.com")
+		return true;
+	if (host.Right(9) == "rixty.com")
+		return true;
+	return false;
+}
+
+// STUB: PLAYER 0x00623da0
+// STUB: STUDIO 0x006ccc20
+__declspec(noinline) bool FUN_00623da0(const char* url)
+{
+	STUB(0x00623da0);
+	return false;
+}
+
+// 2013 Windows body (no Mac counterpart: CUrl and the res:// checks are Windows-only).
+// FUNCTION: PLAYER 0x00624210
+// FUNCTION: STUDIO 0x006cd090
+bool Http::trustCheck(const char* url, bool externalRequest)
+{
+	static boost::once_flag flag = BOOST_ONCE_INIT;
+	boost::call_once(&FUN_00622e00, flag);
+	if (g_unk0x00de3e50)
+		return true;
+	if (externalRequest)
+		return FUN_006238a0(url);
+	if (CString("about:blank") == url)
+		return true;
+	if (FUN_00623da0(url))
+		return true;
+	if (FUN_00623a90(url))
+		return true;
+
+	CUrl crackedUrl;
+	crackedUrl.CrackUrl(url);
+	switch (crackedUrl.GetScheme())
 	{
-		return isScript(url);
+	case ATL_URL_SCHEME_FTP:
+	case ATL_URL_SCHEME_HTTP:
+	case ATL_URL_SCHEME_HTTPS:
+		return false;
 	}
-	return true;
+
+	CString s(url);
+	s.Replace("%20", " ");
+	if (s.Find("res://") == 0)
+	{
+		if (s.Find("res://mshtml.dll") == 0 || s.Find("res://ieframe.dll") == 0 || s.Find("res://shdoclc.dll") == 0)
+			return true;
+		char moduleName[MAX_PATH];
+		if (::GetModuleFileNameA(NULL, moduleName, MAX_PATH))
+		{
+			CString resUrl;
+			resUrl.Format("res://%s", moduleName);
+			if (s.Find(resUrl) == 0)
+				return true;
+		}
+	}
+	return false;
 }
 
 // mac: 0x1FA0DA - Http::trustCheckBrowser(const char*)
+// STUB: PLAYER 0x00624620
+// STUB: STUDIO 0x006cd530
 bool Http::trustCheckBrowser(const char* url)
 {
-	if (!trustCheck(url, false))
-	{
-		return rbx_isMoneySite(url) != 0;
-	}
-	return true;
+	if (trustCheck(url, false))
+		return true;
+	return isMoneySite(url);
 }
 
 // mac: 0x250BF2 - Http::urlEncode(std::string)

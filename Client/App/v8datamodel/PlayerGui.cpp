@@ -173,7 +173,7 @@ namespace Reflection {
 	}
 
 	// ICF-folded with Players::askAddChild.
-	// FUNCTION: PLAYER 0x0070a240
+	// FUNCTION: PLAYER 0x0070a240 FOLDED
 	bool PlayerGui::askSetParent(const Instance* instance) const
 	{
 		return Instance::fastDynamicCast<Network::Player>(instance) != NULL;

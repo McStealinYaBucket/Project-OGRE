@@ -14,6 +14,7 @@ address,type,size,symbol
 005ad4a1,library,6,__RTC_NumErrors_1
 005b1a30,library,5,?SpinYield@ExternalContextBase@details@Concurrency@@UAEXXZ
 005b7aa0,library,7,?Id@SchedulerBase@details@Concurrency@@UBEIXZ
+005d7940,library,225,??1CrashReporter@@QAE@XZ
 005d7f50,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ
 005d83d0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_0
 00607c10,library,7,?GetDefaultDestination@UMSThreadVirtualProcessor@details@Concurrency@@UAEPAUIExecutionContext@3@XZ

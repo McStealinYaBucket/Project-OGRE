@@ -870,3 +870,89 @@ ContentId ContentProvider::readContent(const char* name, std::istream& stream, u
 }
 
 } // namespace RBX
+
+// The 2013 Windows cache cleanup, which the ContentProvider ctor (0x00666280) starts on a
+// boost::thread as bind(&FUN_00664260, 604800, &<ctor member +0x84>). Kept at the end of the
+// file so the asserts above keep their lines.
+#include <atlstr.h>
+#include "decomp.h"
+
+LOGGROUP(ContentProviderCleanup)
+
+namespace RBX {
+
+// Byte-identical (probe_compare), 96.7 in reccmp: the original's push 10000000 (0x00989680) lies inside
+// its .text, so without .reloc reccmp reads it as an address.
+// STUB: PLAYER 0x0065ff50
+static __int64 FUN_0065ff50(SYSTEMTIME a, SYSTEMTIME b)
+{
+	FILETIME ft;
+	SystemTimeToFileTime(&a, &ft);
+	ULARGE_INTEGER ta;
+	ta.HighPart = ft.dwHighDateTime;
+	ta.LowPart = ft.dwLowDateTime;
+	SystemTimeToFileTime(&b, &ft);
+	ULARGE_INTEGER tb;
+	tb.HighPart = ft.dwHighDateTime;
+	tb.LowPart = ft.dwLowDateTime;
+	return (ta.QuadPart - tb.QuadPart) / 10000000;
+}
+
+// The ContentProvider cache directory as a path (static string cache, "ContentProvider"). Not written.
+// STUB: PLAYER 0x00661a30
+__declspec(noinline) boost::filesystem::path FUN_00661a30(bool create)
+{
+	STUB(0x00661a30);
+	return boost::filesystem::path();
+}
+
+// Deletes the cache files last accessed (or, failing that, created) more than maxAgeSeconds ago.
+// STUB: PLAYER 0x00664260
+void FUN_00664260(__int64 maxAgeSeconds, bool* stop)
+{
+	boost::filesystem::path cacheDir = FUN_00661a30(false);
+	CString dir(cacheDir.string().c_str());
+	if (dir != "")
+	{
+		SYSTEMTIME now;
+		GetLocalTime(&now);
+		unsigned int fileNumber = 0;
+		WIN32_FIND_DATAA fd;
+		HANDLE h = FindFirstFileA(dir + "*.*", &fd);
+		if (h != INVALID_HANDLE_VALUE)
+		{
+			do
+			{
+				if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+				{
+					SYSTEMTIME localTime;
+					if (fd.ftLastAccessTime.dwLowDateTime || fd.ftLastAccessTime.dwHighDateTime)
+					{
+						SYSTEMTIME utc;
+						FileTimeToSystemTime(&fd.ftLastAccessTime, &utc);
+						SystemTimeToTzSpecificLocalTime(NULL, &utc, &localTime);
+						if (FUN_0065ff50(now, localTime) > maxAgeSeconds)
+						{
+							FASTLOG1(FLog::ContentProviderCleanup, "Deleting old file number %u", fileNumber);
+							DeleteFileA(dir + fd.cFileName);
+						}
+					}
+					else if (fd.ftCreationTime.dwLowDateTime || fd.ftCreationTime.dwHighDateTime)
+					{
+						SYSTEMTIME utc;
+						FileTimeToSystemTime(&fd.ftCreationTime, &utc);
+						SystemTimeToTzSpecificLocalTime(NULL, &utc, &localTime);
+						if (FUN_0065ff50(now, localTime) > maxAgeSeconds)
+						{
+							FASTLOG1(FLog::ContentProviderCleanup, "Deleting old file number %u", fileNumber);
+							DeleteFileA(dir + fd.cFileName);
+						}
+					}
+				}
+				fileNumber++;
+			} while (FindNextFileA(h, &fd) && !*stop);
+		}
+	}
+}
+
+} // namespace RBX

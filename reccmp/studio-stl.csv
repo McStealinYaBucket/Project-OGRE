@@ -8,7 +8,6 @@ address,type,size,symbol
 005bc4e0,library,84,??1strstreambuf@std@@UAE@XZ_0
 005bc5a0,library,84,??1strstreambuf@std@@UAE@XZ_1
 005bc660,library,84,??1strstreambuf@std@@UAE@XZ_2
-005d7940,library,225,??1_Locimp@locale@std@@UAE@XZ
 005de760,library,84,??1strstreambuf@std@@UAE@XZ_3
 006102f0,library,84,??1strstreambuf@std@@UAE@XZ_6
 0061cf70,library,146,??1strstreambuf@std@@UAE@XZ_7

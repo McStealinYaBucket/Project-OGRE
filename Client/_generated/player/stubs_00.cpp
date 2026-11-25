@@ -3,6 +3,22 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: void __thiscall RBX::View::SetFullscreen(bool)
+// STUB: PLAYER 0x00467880
+extern "C" void ogre_stub_00467880()
+{
+	STUB(0x00467880);
+}
+#pragma comment(linker, "/alternatename:?SetFullscreen@View@RBX@@QAEX_N@Z=_ogre_stub_00467880")
+
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl format_string(char const *, ...)
+// STUB: PLAYER 0x00629910
+extern "C" void ogre_stub_00629910()
+{
+	STUB(0x00629910);
+}
+#pragma comment(linker, "/alternatename:?format_string@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ=_ogre_stub_00629910")
+
 // public: void __thiscall RBX::DataModel::physicsStep(float, double, double, int)
 // STUB: PLAYER 0x00642850
 extern "C" void ogre_stub_00642850()
@@ -10,14 +26,6 @@ extern "C" void ogre_stub_00642850()
 	STUB(0x00642850);
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_00642850")
-
-// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::FileSystem::getUserDirectory(bool, enum RBX::FileSystemDir, char const *)
-// STUB: PLAYER 0x006ea4c0
-extern "C" void ogre_stub_006ea4c0()
-{
-	STUB(0x006ea4c0);
-}
-#pragma comment(linker, "/alternatename:?getUserDirectory@FileSystem@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_NW4FileSystemDir@2@PBD@Z=_ogre_stub_006ea4c0")
 
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: PLAYER 0x006fffc0
@@ -106,3 +114,27 @@ extern "C" void ogre_stub_009d5c60()
 	STUB(0x009d5c60);
 }
 #pragma comment(linker, "/alternatename:?common@Log@G3D@@SAPAV12@XZ=_ogre_stub_009d5c60")
+
+// public: static class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl G3D::Log::getCommonLogFilename(void)
+// STUB: PLAYER 0x009d5d10
+extern "C" void ogre_stub_009d5d10()
+{
+	STUB(0x009d5d10);
+}
+#pragma comment(linker, "/alternatename:?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ=_ogre_stub_009d5d10")
+
+// void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+// STUB: PLAYER 0x009d63b0
+extern "C" void ogre_stub_009d63b0()
+{
+	STUB(0x009d63b0);
+}
+#pragma comment(linker, "/alternatename:?setAssertionHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z=_ogre_stub_009d63b0")
+
+// void __cdecl G3D::setFailureHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
+// STUB: PLAYER 0x009d63c0
+extern "C" void ogre_stub_009d63c0()
+{
+	STUB(0x009d63c0);
+}
+#pragma comment(linker, "/alternatename:?setFailureHook@G3D@@YAXP6A_NPBDABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0H_N@Z@Z=_ogre_stub_009d63c0")

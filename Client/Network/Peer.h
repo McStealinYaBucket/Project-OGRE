@@ -43,6 +43,11 @@ namespace Network {
 
 		Peer();
 		~Peer();
+
+		// Overrides and the one new virtual, vftable 0x00b1f2f4 (STUDIO 0x00bd5074).
+		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // +0x20
+		/*override*/ bool askAddChild(const Instance* instance) const;                                    // +0x3c
+		virtual void onCreateRakPeer();                                                                   // +0x70
 	};
 
 } }

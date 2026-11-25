@@ -1052,9 +1052,11 @@ def gen(target, build=BUILD, json_path=None):
                 labels.add(a)
                 if r["source"] == "rtti:" and r["name"].startswith("??_7"):
                     rtti_vt[a] = r["name"]
-            # MSVC names: our own PUBLICS names (match: = reccmp proved the body at 100%; lib:, rtti:, str:)
+            # MSVC names: our own PUBLICS names (match: = reccmp proved the body at 100%; lib:, rtti:, str:).
+            # An adjustor thunk (out of the function list) pairs the same way: its rtti: name is the slot
+            # of an RTTI-named vftable, the one fact that tells identical `sub ecx,N; jmp` twins apart.
             if r["kind"] == "func" and r["source"] in ("match:", "lib:", "rtti:", "str:") and \
-                    a in kept and a not in claimed:
+                    (a in kept or a in thunks) and a not in claimed:
                 decorated[a] = (r["name"], r["demangled"] or r["name"], r["source"])
             if r["kind"] == "func" and r["source"] in ("ios:", "mac:", "prior:"):
                 oracle[a] = (r["demangled"] or r["name"], r["name"])
@@ -1188,9 +1190,13 @@ def gen(target, build=BUILD, json_path=None):
     # A match: name is a pairing a reccmp run proved at 100%; it beats a position or signature pair that
     # contradicts it (twin bodies: a position vote from an aligned reference line in a function that does
     # not match is weaker than a whole body that does).
+    # An adjustor thunk's rtti: name counts as proven too (2026-11-24): 0x0044db50 is the
+    # error_info_injector<bad_placement_any_cast> {12} thunk (slot 0 of RTTI vftable 0x00b11c68), but once
+    # a run paired it with our identical <std::exception> thunk 0x00706580 (mapped_file.obj), the 1000-vote
+    # and the sticky libdata row kept that pairing against the shell's thunk 0x00413ed0.
     proven = {}
     for a, d in sorted(dres.items()):
-        if d and decorated[a][2] == "match:" and a not in mk:
+        if d and (decorated[a][2] == "match:" or decorated[a][2] == "rtti:" and a in thunks) and a not in mk:
             proven.setdefault(d, a)
     proven_at = {a: d for d, a in proven.items()}
     # ... unless the position pair names an identical twin of the proven body: then the callers' votes decide.

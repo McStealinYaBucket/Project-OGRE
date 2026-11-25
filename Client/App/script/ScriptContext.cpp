@@ -78,7 +78,7 @@ LOGVARIABLE(FullScriptCode, 255)
 // provider attach (the arm gates on != 0 and passes the byte value as
 // the span).
 LOGVARIABLE(LuaScriptTimeoutSeconds, 255)
-LOGVARIABLE(Network, 1)	// PLAYER byte 0x00d30f1b = 1; initializer 0x00a66090, after LuaScriptTimeoutSeconds's, before HttpQueue's
+LOGVARIABLE(Network, 6)	// PLAYER byte 0x00d30f1b = 6 (datacmp); initializer 0x00a66090, after LuaScriptTimeoutSeconds's, before HttpQueue's
 // 0xFA9AFC/0xFA9B04 bytes = 0xFF in the 2013 PE (batch723/724; Initer
 // slots 0xFA9B00/0xFA9B08, registration InitFunc_480): attach/detach
 // script logging; declared byte-faithful for the provider-connection era.

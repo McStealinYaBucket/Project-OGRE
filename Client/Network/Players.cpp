@@ -190,6 +190,18 @@ namespace Network {
 		return serviceProvider && !Players::clientIsPresent(context, testInDatamodel);
 	}
 
+	// The parent lock is FWInstance's first byte (fw+0x18) through FWValue<bool>::set 0x0052c000, as in
+	// DataModel's ctor; 2016 calls it lockParent().
+	// FUNCTION: PLAYER 0x00569260
+	// FUNCTION: STUDIO 0x005cd460
+	void Players::onDescendantRemoving(const shared_ptr<Instance>& instance)
+	{
+		if (Players::backendProcessing(this, false))
+			if (Player* player = Instance::fastDynamicCast<Player>(instance.get()))
+				player->fw()->b21.set(true, player->fwRef());
+		Instance::onDescendantRemoving(instance);
+	}
+
 	// FUNCTION: PLAYER 0x0056b8c0
 	// FUNCTION: STUDIO 0x005d0d70
 	bool Players::isNetworkClient(const Instance* instance)
@@ -204,6 +216,56 @@ namespace Network {
 		if (Players* players = ServiceProvider::find<Players>(context))
 			return players->localPlayer.get();
 		return NULL;
+	}
+
+	// Callees: ServiceProvider::find<FriendService> 0x00548490 (cdecl), FriendService::playerRemoving
+	// 0x006afb40 (not declared by App's FriendService.h), the erase from the players list 0x0055fbb0,
+	// then playerRemovingSignal (0x1cc) and playerRemovingLateSignal (0x1d0) when backendProcessing.
+	// STUB: PLAYER 0x0056bd20
+	// STUB: STUDIO 0x005d11d0
+	void Players::onChildRemoving(Instance* child)
+	{
+		STUB(0x0056bd20);
+	}
+
+	// Player id lookup (getPlayerByID 0x0055dc60), the list append 0x00564bc0, FriendService::playerAdded
+	// 0x006b36a0, guest naming ("Player" + format, 0x00b17000), five connections into the Player's
+	// signals, Teams::assignNewPlayerToTeam, playerAddedEarly/playerAdded, Player::rebuildGui.
+	// STUB: PLAYER 0x0056ff40
+	// STUB: STUDIO 0x005d6040
+	void Players::onChildAdded(Instance* child)
+	{
+		STUB(0x0056ff40);
+	}
+
+	// STUB: PLAYER 0x005705c0
+	Players::~Players()
+	{
+	}
+
+	// STUB: PLAYER 0x00570980
+	Players::Players()
+		: m_unk0x178(false), m_unk0x179(true), m_unk0x1a4(0), m_unk0x1b0(12)
+		, m_unk0x1b4(0), m_unk0x1b8(0), m_unk0x1bc(0)
+	{
+	}
+
+	// Folded by the linker with PlayerGui::askSetParent (identical body).
+	// FUNCTION: PLAYER 0x0070a240 FOLDED
+	// FUNCTION: STUDIO 0x00796960
+	bool Players::askAddChild(const Instance* instance) const
+	{
+		return Instance::fastDynamicCast<Player>(instance) != NULL;
+	}
+
+	// The 2013 body (0x005661f0): when the local player's SuperSafeChatReplicate (PropDescriptor at
+	// 0x00dd8e44, getter 0x00527600, setter 0x00527620) changes, fire m_unk0x1d4 with its value (false
+	// without a local player). That descriptor is not declared yet. Below the 2013 asserts on purpose.
+	// STUB: PLAYER 0x005661f0
+	// STUB: STUDIO 0x005c9a10
+	void Players::onChildChanged(Instance* instance, const PropertyChanged& event)
+	{
+		STUB(0x005661f0);
 	}
 
 } // namespace Network

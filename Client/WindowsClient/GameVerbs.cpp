@@ -4,6 +4,7 @@
 
 #include "GameVerbs.h"
 
+#include "Document.h"
 #include "View.h"
 #include "../Win/VideoControl.h"
 #include "V8DataModel/GameSettings.h"
@@ -11,7 +12,29 @@
 
 namespace RBX {
 
-// STUB: PLAYER 0x00439330
+// FUNCTION: PLAYER 0x00438220
+LeaveGameVerb::LeaveGameVerb(Document& doc, VerbContainer* container)
+	: Verb(container, "Exit")
+	, doc(doc)
+{
+}
+
+// FUNCTION: PLAYER 0x004382d0
+void LeaveGameVerb::doIt(IDataState* dataState)
+{
+	doc.m_unk0x00->CloseWindow();
+}
+
+// Stops the helper thread (2016 also aborts a running capture first; 2013 does not).
+// FUNCTION: PLAYER 0x00439230
+RecordToggleVerb::~RecordToggleVerb()
+{
+	stop = true;
+	jobWait.Set();
+	threadDone.Wait();
+}
+
+// FUNCTION: PLAYER 0x00439330
 bool RecordToggleVerb::isEnabled() const
 {
 	return GameSettings::singleton().videoCaptureEnabled && isUploadingVideo();

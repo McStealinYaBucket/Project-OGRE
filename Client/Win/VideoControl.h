@@ -1,40 +1,113 @@
 /* Win/VideoControl.h -- October 2013 client shell (Client\Win\VideoControl.cpp, asserts `verb` line 36,
-   `rbxView` 39, `soundservice` 111, `captureStarted` 127).
-   Only what the verbs read is declared so far: the capture object at +0x10c, whose isRunning is
-   vftable slot 3 (RecordToggleVerb::isChecked, PLAYER 0x00439360, jumps through [vtbl+0xc]).
-   2013's VideoControl is far larger than 2016's (0x10c bytes before the capture pointer); the rest of
-   its layout is not proven yet. */
+   `rbxView` 39, `soundservice` 111, `captureStarted` 127; PLAYER and STUDIO).
+   2013's VideoControl is an Ogre::IFrameDataCallback (RTTI), unlike 2016's, keeps a 0x100-byte path
+   buffer, and its IVideoCapture has 10 slots. Written so far: the destructor and the four frame
+   callbacks; the ctor (PLAYER 0x00464c30, LTCG: `this` on the stack, the verb in ecx) and
+   startRecording (0x00464f30) need RecordToggleVerb's ctor, GameSettings' 2013 video-quality member
+   (+0x90) and two ViewBase virtuals first. */
 
 #pragma once
 
 #include <string>
 
+#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include "decomp.h"
 
+namespace FMOD
+{
+	class DSP;
+}
+struct FMOD_DSP_DESCRIPTION;
+
+namespace Ogre
+{
+	// RbxOgre's frame-data callback (RTTI .?AVIFrameDataCallback@Ogre@@). Declared here until the
+	// RbxOgre header that defines it exists (Client/Rendering). Its out-of-line dtor is PLAYER
+	// 0x00464b20 (STUDIO 0x0048d680).
+	// VTABLE: PLAYER 0x00be517c
+	// VTABLE: STUDIO 0x00d19d9c
+	class IFrameDataCallback
+	{
+	public:
+		virtual ~IFrameDataCallback() {}           // vtable+0x00
+		virtual void VTable0x04(void* p_unk) = 0;  // vtable+0x04
+		virtual void VTable0x08(void* p_unk) = 0;  // vtable+0x08
+		virtual void VTable0x0c() = 0;             // vtable+0x0c
+		virtual void VTable0x10() = 0;             // vtable+0x10
+
+		// SYNTHETIC: PLAYER 0x00464b30
+		// SYNTHETIC: STUDIO 0x0048d660
+		// Ogre::IFrameDataCallback::`scalar deleting destructor'
+	};
+}
+
 namespace RBX {
 
 	class Verb;
+	class ViewBase;
+	class FrameRateManager;
+
+	// The sound callbacks the recording loop uses (startRecording binds three SoundService
+	// members). Its dtor is out of line: PLAYER 0x00464b60, STUDIO 0x0048c6e0.
+	// SIZE 0x60
+	struct SoundState
+	{
+		boost::function<FMOD::DSP*(FMOD_DSP_DESCRIPTION&)> createDSPFunction; // 0x00
+		boost::function<int()> getSampleRateFunction;                         // 0x20
+		boost::function<bool()> enabledFunction;                              // 0x40
+	};
 
 	// VTABLE: PLAYER 0x00be12b4
-	// 2013 has 10 slots (dtor 0x00430a20, then nine pure); the first four follow the 2016 order,
-	// which isRunning's slot confirms. The other six are not named yet.
+	// VTABLE: STUDIO 0x00d0c3a4
+	// 10 slots in 2013 (dtor 0x00430a20, then nine pure). The first five follow the 2016 order
+	// (isRunning: RecordToggleVerb::isChecked; setVideoQuality: VideoControl's ctor); the frame
+	// callbacks forward to 0x14/0x18 (with the verb) and 0x20/0x24. 0x1c is not seen called here.
 	class IVideoCapture
 	{
 	public:
-		virtual ~IVideoCapture() {}             // vtable+0x00
-		virtual bool start(int cx, int cy, void* soundState) = 0; // vtable+0x04
-		virtual bool stop() = 0;                 // vtable+0x08
-		virtual bool isRunning() = 0;            // vtable+0x0c
+		virtual ~IVideoCapture() {}                                     // vtable+0x00
+		virtual bool start(int cx, int cy, SoundState* soundState) = 0; // vtable+0x04
+		virtual bool stop() = 0;                                        // vtable+0x08
+		virtual bool isRunning() = 0;                                   // vtable+0x0c
+		virtual void setVideoQuality(int videoQuality) = 0;             // vtable+0x10
+		virtual void VTable0x14(void* p_unk, Verb* verb) = 0;           // vtable+0x14
+		virtual void VTable0x18(void* p_unk, Verb* verb) = 0;           // vtable+0x18
+		virtual void VTable0x1c() = 0;                                  // vtable+0x1c
+		virtual void VTable0x20() = 0;                                  // vtable+0x20
+		virtual void VTable0x24() = 0;                                  // vtable+0x24
 	};
 
-	class VideoControl
+	// VTABLE: PLAYER 0x00be5164
+	// VTABLE: STUDIO 0x00d19d84
+	// SIZE 0x120
+	// Members from the ctor (PLAYER 0x00464c30): recorded +0x4 (false), videoQuality +0x8 (-1), the
+	// path buffer +0xc (strcpy of FileSystem::getUserDirectory(true, DirVideo, NULL)), capture
+	// +0x10c, soundState +0x110, rbxView +0x114, frameRateManager +0x118, verb +0x11c.
+	class VideoControl : public Ogre::IFrameDataCallback
 	{
-		undefined m_unk0x00[0x10c];                 // 0x000
+		bool recorded;                             // 0x004
+		int videoQuality;                          // 0x008
+		char m_unk0x0c[0x10c - 0x0c];              // 0x00c
 		boost::scoped_ptr<IVideoCapture> capture;  // 0x10c
+		boost::scoped_ptr<SoundState> soundState;  // 0x110
+		ViewBase* rbxView;                         // 0x114
+		FrameRateManager* frameRateManager;        // 0x118
+		Verb* verb;                                // 0x11c
+
 	public:
+		~VideoControl();                                // vtable+0x00
+		/*override*/ void VTable0x04(void* p_unk);      // vtable+0x04
+		/*override*/ void VTable0x08(void* p_unk);      // vtable+0x08
+		/*override*/ void VTable0x0c();                 // vtable+0x0c
+		/*override*/ void VTable0x10();                 // vtable+0x10
+
 		bool isVideoRecording() { return capture->isRunning(); }
+
+		// SYNTHETIC: PLAYER 0x00464db0
+		// SYNTHETIC: STUDIO 0x0048c920
+		// RBX::VideoControl::`scalar deleting destructor'
 	};
 
 } // namespace RBX

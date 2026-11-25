@@ -1817,8 +1817,8 @@
     "void *luaClone",
     "void *setName",
     "void *getPersistentDataCost",
-    "void *is_composing",
-    "void *_Destroy",
+    "void *isReadOnly",
+    "void *allocator_char__________0_",
     "void *createChild",
     "void *writeXml",
     "void *verifySetParent",
@@ -7829,6 +7829,454 @@
    "base": false,
    "unique": "VPlayer@Network@RBX@@"
   },
+  "LogManager": {
+   "size": 40,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "log",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Log",
+     "scalar": null
+    },
+    {
+     "name": "threadID",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_ULONG"
+    },
+    {
+     "name": "name",
+     "offset": 12,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLogManager@@"
+  },
+  "MainLogManager": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::ILogProvider",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "LogManager",
+     "offset": 4,
+     "size": 40,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "crashReporter",
+     "offset": 44,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RobloxCrashReporter>",
+     "scalar": null
+    },
+    {
+     "name": "fastLogChannels",
+     "offset": 48,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Log *,std::allocator<RBX::Log *> >",
+     "scalar": null
+    },
+    {
+     "name": "crashExtention",
+     "offset": 64,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "crashEventExtention",
+     "offset": 68,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "guid",
+     "offset": 72,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VMainLogManager@@"
+  },
+  "CrashReporter": {
+   "size": 616,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "threadResult",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "exceptionInfo",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "_EXCEPTION_POINTERS",
+     "scalar": null
+    },
+    {
+     "name": "reportCrashEvent",
+     "offset": 12,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::CEvent",
+     "scalar": null
+    },
+    {
+     "name": "watcherThread",
+     "offset": 16,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "hangReportingEnabled",
+     "offset": 20,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "isAlive",
+     "offset": 21,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "deadlockCounter",
+     "offset": 24,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "destructing",
+     "offset": 28,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "immediateUploadEnabled",
+     "offset": 29,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "controls",
+     "offset": 32,
+     "size": 584,
+     "kind": "structure",
+     "type": "CrashReportControls",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VCrashReporter@@"
+  },
+  "RobloxCrashReporter": {
+   "size": 616,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "CrashReporter",
+     "offset": 0,
+     "size": 616,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VRobloxCrashReporter@@"
+  },
+  "RBX::VideoControl": {
+   "size": 288,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "Ogre::IFrameDataCallback",
+     "offset": 0,
+     "size": 4,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "recorded",
+     "offset": 4,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "videoQuality",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "m_unk0x0c",
+     "offset": 12,
+     "size": 256,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "capture",
+     "offset": 268,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::IVideoCapture>",
+     "scalar": null
+    },
+    {
+     "name": "soundState",
+     "offset": 272,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::SoundState>",
+     "scalar": null
+    },
+    {
+     "name": "rbxView",
+     "offset": 276,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ViewBase",
+     "scalar": null
+    },
+    {
+     "name": "frameRateManager",
+     "offset": 280,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::FrameRateManager",
+     "scalar": null
+    },
+    {
+     "name": "verb",
+     "offset": 284,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Verb",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VVideoControl@RBX@@"
+  },
+  "RBX::SoundState": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "createDSPFunction",
+     "offset": 0,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<FMOD::DSP * __cdecl(FMOD_DSP_DESCRIPTION &)>",
+     "scalar": null
+    },
+    {
+     "name": "getSampleRateFunction",
+     "offset": 32,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<int __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "enabledFunction",
+     "offset": 64,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<bool __cdecl(void)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "USoundState@RBX@@"
+  },
+  "RBX::LeaveGameVerb": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "doc",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Document",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLeaveGameVerb@RBX@@"
+  },
+  "RBX::RecordToggleVerb": {
+   "size": 112,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "doc",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Document",
+     "scalar": null
+    },
+    {
+     "name": "game",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Game",
+     "scalar": null
+    },
+    {
+     "name": "videoControl",
+     "offset": 20,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::VideoControl>",
+     "scalar": null
+    },
+    {
+     "name": "fileName",
+     "offset": 24,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "videoUploadingEnabled",
+     "offset": 52,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "stop",
+     "offset": 53,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "helper",
+     "offset": 56,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "job",
+     "offset": 64,
+     "size": 32,
+     "kind": "class",
+     "type": "boost::function<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "jobWait",
+     "offset": 96,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::CEvent",
+     "scalar": null
+    },
+    {
+     "name": "jobDone",
+     "offset": 100,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::CEvent",
+     "scalar": null
+    },
+    {
+     "name": "threadDone",
+     "offset": 104,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::CEvent",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VRecordToggleVerb@RBX@@"
+  },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
    "vftable": false,
@@ -10073,6 +10521,24 @@
    "members": [],
    "base": true,
    "unique": "V?$Countable@VPlayer@Network@RBX@@@Diagnostics@RBX@@"
+  },
+  "RBX::ILogProvider": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VILogProvider@RBX@@"
+  },
+  "Ogre::IFrameDataCallback": {
+   "size": 4,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [],
+   "base": true,
+   "unique": "VIFrameDataCallback@Ogre@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,

@@ -3,18 +3,41 @@
    0x00be1bcc..0x00be1c2c, seven slots each: dump, dtor, isEnabled, isChecked, isSelected, getText,
    doIt). No 2013 __FILE__ string names this file (none of its code asserts), so the path is the
    2016 tree's (WindowsClient/GameVerbs.cpp).
-   Only ToggleFullscreenVerb and RecordToggleVerb's state queries are written so far. */
+   Written so far: LeaveGameVerb, ToggleFullscreenVerb, RecordToggleVerb's dtor and state queries. */
 
 #pragma once
 
+#include <string>
+
+#include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/thread/thread.hpp>
+
 #include "V8Tree/Verb.h"
+#include "rbx/CEvent.h"
 
 #include "decomp.h"
 
 namespace RBX {
 
+	class Document;
+	class Game;
 	class View;
 	class VideoControl;
+
+	// VTABLE: PLAYER 0x00be1bcc
+	// SIZE 0x10
+	// Ctor PLAYER 0x00438220 (`this` on the stack, ret 0xc). Against 2016 it holds the Document,
+	// not the View, and doIt only closes the window (2013's MainLogManager has no game state).
+	// No user-declared dtor: its scalar deleting destructor is the shared 0x004382b0.
+	class LeaveGameVerb : public Verb
+	{
+		Document& doc; // 0x0c
+
+	public:
+		LeaveGameVerb(Document& doc, VerbContainer* container);
+		/*override*/ void doIt(IDataState* dataState); // vtable+0x18
+	};
 
 	// VTABLE: PLAYER 0x00be1c2c
 	// SIZE 0x14
@@ -34,21 +57,36 @@ namespace RBX {
 	};
 
 	// VTABLE: PLAYER 0x00be1bec
-	// Members read by the queries below: videoControl +0x14, videoUploadingEnabled +0x34. The ctor,
-	// dtor (0x00439230) and doIt (0x004396c0) are not written yet.
+	// SIZE 0x70
+	// Layout from the ctor (PLAYER 0x00439000, not written: it needs Game::getDataModel, the
+	// DSVideoCaptureEngine and VideoControl ctors and two ViewBase virtuals) and the dtor. Against
+	// 2016: no View* member (the ctor's second argument is the gfx view, passed on to VideoControl),
+	// and the dtor does not abort a running capture. `job` sits at +0x40: boost::function's buffer is
+	// 8-aligned here (the dtor destroys the functor at +0x48).
 	class RecordToggleVerb : public Verb
 	{
-		undefined m_unk0x0c[0x14 - 0x0c]; // 0x0c
-		VideoControl* videoControl;       // 0x14
-		undefined m_unk0x18[0x34 - 0x18]; // 0x18
-		bool videoUploadingEnabled;       // 0x34
+		const Document& doc;                          // 0x0c
+		Game* game;                                   // 0x10
+		boost::scoped_ptr<VideoControl> videoControl; // 0x14
+		std::string fileName;                         // 0x18
+		bool videoUploadingEnabled;                   // 0x34
+		bool stop;                                    // 0x35
+		boost::scoped_ptr<boost::thread> helper;      // 0x38
+		boost::function<void()> job;                  // 0x40
+		CEvent jobWait;                               // 0x60
+		CEvent jobDone;                               // 0x64
+		CEvent threadDone;                            // 0x68
 
 		bool isUploadingVideo() const { return videoUploadingEnabled; }
 
 	public:
+		~RecordToggleVerb();
 		/*override*/ bool isEnabled() const;  // vtable+0x08
 		/*override*/ bool isChecked() const;  // vtable+0x0c
 		/*override*/ bool isSelected() const; // vtable+0x10
+
+		// SYNTHETIC: PLAYER 0x00439210
+		// RBX::RecordToggleVerb::`scalar deleting destructor'
 	};
 
 } // namespace RBX

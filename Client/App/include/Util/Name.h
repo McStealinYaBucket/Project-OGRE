@@ -89,7 +89,7 @@ namespace RBX {
 		bool operator==(const std::string& other) const { return str == other; }
 		bool operator!=(const std::string& other) const { return str != other; }
 		bool operator!=(const Name& other) const { return this != &other; }
-		bool operator<(const Name& other) const { return str < other.str; }
+		bool operator<(const Name& other) const { return sortIndex < other.sortIndex; }	// 2013: MemberDescriptorContainer::compare 0x00614cd0 is a signed cmp of [name+0]
 		int compare(const std::string& other) const { return str.compare(other); }
 		int compare(const Name& other) const { return str.compare(other.str); }
 		const std::string& toString() const { return str; }	// 2013: by reference (ReflectionMetadata lookups pass &name->str, no copy)

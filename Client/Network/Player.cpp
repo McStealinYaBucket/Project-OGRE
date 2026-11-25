@@ -320,6 +320,7 @@ namespace Network {
 	}
 
 	// FUNCTION: PLAYER 0x00550d40
+	// STUB: STUDIO 0x005fccd0
 	Player::Player()
 		: teamColor(BrickColor::brick_1)
 		, neutral(true)
@@ -360,6 +361,9 @@ namespace Network {
 	__declspec(noinline) void Player::setCharacter(ModelInstance* value)
 	{
 		STUB(0x00553710);
+		// Also a stand-in: one opaque call (the real body makes it too) so VC9 does not prove this
+		// stub nothrow, which drops ~Player's body EH state (0x00553fa0 enters at state 0x1b).
+		Players::backendProcessing(this, false);
 	}
 
 	// FUNCTION: PLAYER 0x00553a10
@@ -398,7 +402,8 @@ namespace Network {
 		setCharacter(NULL);
 	}
 
-	// STUB: PLAYER 0x00553fa0
+	// FUNCTION: PLAYER 0x00553fa0
+	// FUNCTION: STUDIO 0x00600220
 	Player::~Player()
 	{
 		setCharacter(NULL);
@@ -441,11 +446,6 @@ template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
 // the blank lines hold it there until the functions between are written.
 namespace RBX {
 namespace Network {
-
-
-
-
-
 
 
 
