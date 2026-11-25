@@ -1,10 +1,9 @@
 /* Win/VideoControl.h -- October 2013 client shell (Client\Win\VideoControl.cpp, asserts `verb` line 36,
    `rbxView` 39, `soundservice` 111, `captureStarted` 127; PLAYER and STUDIO).
    2013's VideoControl is an Ogre::IFrameDataCallback (RTTI), unlike 2016's, keeps a 0x100-byte path
-   buffer, and its IVideoCapture has 10 slots. Written so far: the destructor and the four frame
-   callbacks; the ctor (PLAYER 0x00464c30, LTCG: `this` on the stack, the verb in ecx) and
-   startRecording (0x00464f30) need RecordToggleVerb's ctor, GameSettings' 2013 video-quality member
-   (+0x90) and two ViewBase virtuals first. */
+   buffer, and its IVideoCapture has 10 slots. Written so far: the ctor (PLAYER 0x00464c30), the
+   destructor and the four frame callbacks; startRecording (0x00464f30) needs SoundService's
+   2013 callbacks and two ViewBase virtuals first. */
 
 #pragma once
 
@@ -89,7 +88,7 @@ namespace RBX {
 	{
 		bool recorded;                             // 0x004
 		int videoQuality;                          // 0x008
-		char m_unk0x0c[0x10c - 0x0c];              // 0x00c
+		char path[0x100];                          // 0x00c
 		boost::scoped_ptr<IVideoCapture> capture;  // 0x10c
 		boost::scoped_ptr<SoundState> soundState;  // 0x110
 		ViewBase* rbxView;                         // 0x114
@@ -97,6 +96,7 @@ namespace RBX {
 		Verb* verb;                                // 0x11c
 
 	public:
+		VideoControl(IVideoCapture* capture, ViewBase* rbxView, FrameRateManager* frameRateManager, Verb* verb);
 		~VideoControl();                                // vtable+0x00
 		/*override*/ void VTable0x04(void* p_unk);      // vtable+0x04
 		/*override*/ void VTable0x08(void* p_unk);      // vtable+0x08
@@ -104,6 +104,8 @@ namespace RBX {
 		/*override*/ void VTable0x10();                 // vtable+0x10
 
 		bool isVideoRecording() { return capture->isRunning(); }
+		// 2013 only forwards (the ctor calls the capture slot directly, no store to videoQuality).
+		void setVideoQuality(int quality) { capture->setVideoQuality(quality); }
 
 		// SYNTHETIC: PLAYER 0x00464db0
 		// SYNTHETIC: STUDIO 0x0048c920

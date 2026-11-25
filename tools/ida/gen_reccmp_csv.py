@@ -517,7 +517,7 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
             t, d, nm = view[node]
             off = vr - node
             if off and (t not in ("DATA", "-") or node in code) or \
-                    (d or "").startswith(("__imp_", "__real@")) and t != "FLOAT":
+                    (d or "").startswith(("__imp_", "__real@")) and t != "FLOAT" or (d or "").startswith(RTC):
                 continue
             if t == "FUNCTION" and off == 0 or t == "-" and node in code:
                 pass  # function pointer (push offset f, vftable slot)
@@ -527,6 +527,9 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
     for node, oas in (extra or {}).items():  # aligned_refs
         if node is None:  # unnamed /GS __ehhandler$ stubs both sides push (aligned_refs)
             anon_code.update(oa for oa in oas if orig.in_text(oa) and oa not in kept)
+            continue
+        if node == "seh":  # unnamed __sehtable$ scope tables (aligned_refs): data, never a function start
+            anon_code.update(oa for oa in oas if not orig.in_text(oa))
             continue
         for oa in oas:
             note(node, oa)
@@ -623,6 +626,12 @@ def data_rows(orig, exe, pairs, view, code, kept, skip, extra=None, labels=(), p
     return sorted(rows)
 
 
+# The CRT's zero-size .rtc$IAA/IZZ/TAA/TZZ section sentinels (MSVCRT _initsect_.obj): a reference past
+# one lands on whatever data follows it in our image, so it pairs nothing (wave 12: ___rtc_tzz 0x00c7f9f4
+# was paired with FuncInfo+4 of the original, which holds nstate 2).
+RTC = ("___rtc_",)
+SEH_PUSH = b"\x6a\xff"  # push -1, before the scope-table push of an _except_handler3 frame
+
 # mov edx,[esp+8]; lea eax,[edx+N]: the head of a /GS __ehhandler$ stub (shell near misses, wave 11:
 # 0x0040c2c0 call_once pushes 0x00a52069)
 EH_STUB = bytes.fromhex("8b5424088d42")
@@ -681,13 +690,21 @@ def aligned_refs(orig, exe, json_path, view):
                         if view.get(vr, (0, None, None))[1:] == (None, None) and rimg[vr - rbase:vr - rbase + 6] == EH_STUB == orig.b(vo, 6):
                             refs.setdefault(None, []).append(vo)  # an unnamed __ehhandler$ stub on both sides
                             continue
+                        # `push -1; push __sehtable$f; push _except_handler3`: the unnamed __try scope table
+                        # (CrashReporter::WatcherThreadFunc 0x0051fe50 pushes 0x00c80b58). Both tables start
+                        # with record 0's enclosing level -1.
+                        if view.get(vr, (0, None, None))[1:] == (None, None) and oi.mnemonic == "push" and \
+                                orig.b(ox - 2, 2) == SEH_PUSH == rimg[ry - 2 - rbase:ry - rbase] and \
+                                orig.b(vo, 4) == b"\xff" * 4 == rimg[vr - rbase:vr - rbase + 4]:
+                            refs.setdefault("seh", []).append(vo)
+                            continue
                         j = bisect.bisect_right(starts, vr) - 1
                         if j < 0:
                             continue
                         node = starts[j]
                         t, d, _ = view[node]
                         off = vr - node
-                        if off and t not in ("DATA", "-") or (d or "").startswith(("__imp_", "__real@")):
+                        if off and t not in ("DATA", "-") or (d or "").startswith(("__imp_", "__real@") + RTC):
                             continue
                         refs.setdefault(node, []).append(vo - off)
     return refs
@@ -866,8 +883,8 @@ def sticky(path, new, view, kept, held, used_sym, orig, labels):
     for r in list(csv.reader(lines, escapechar="\\", doublequote=False))[1:]:
         a, typ, size, sym, name = (r + [""] * 5)[:5]
         oa = int(a, 16)
-        if oa in have or (sym or name) in taken or typ in ("library", "") and oa not in kept or \
-                sym and sym not in syms or not sym and name and name not in procs:
+        if oa in have or (sym or name) and (sym or name) in taken or typ in ("library", "") and oa not in kept or \
+                sym and sym not in syms or not sym and name and name not in procs or sym.startswith(RTC):
             continue
         have.add(oa)
         taken.add(sym or name)

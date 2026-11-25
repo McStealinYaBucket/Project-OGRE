@@ -305,6 +305,15 @@ These carry over from OpenRBX unchanged:
   - VC9 proves a same-TU STUB callee nothrow and drops EH states; one cross-TU call in the stub restored `~Player` 0x00553fa0 (91.3% → 100%).
   - `Network/CrashReporter.cpp` is `#pragma optimize("", off)` after its includes; unoptimized frames are laid out by local-variable name, so oracle names for locals matter (four functions 48–90% → 100%). A `return` after `_exit` emits a dead `mov` even there.
   - A template marker name must be the one reccmp reports for our folded copy (`~CPathT` 0x00436af0: +4 per target).
+- **Patterns proven 2026-11-25 by Phase 5 wave 13** (`notes/runs/2026-11-23-phase5-wave13/`):
+  - `Name::compare(Name)` subtracts sort indices; `Guid::compare(a, b)` compares the names directly, or the helper inlines where 2013 calls it (0x006f9500).
+  - `FastVarType` is a global-scope enum: `FLog::RegisterFlag` is a Log.dll import decorated `...PAPA_NW4FastVarType@@@Z`.
+  - `ProtectedString::getSalt` is a const member returning a per-target salt (PLAYER "10:46:55", STUDIO "19:11:34").
+  - `flag ? a : b` avoids the `xor eax,eax` the if/return form emits; a ternary passed straight into a bool signal argument keeps `push eax` in both arms (Player::getSuperSafeChat 0x00527600).
+  - In `p->find<T>()->f(x)`, `x` is evaluated before the call; 2013 wrote `T* t = p->find<T>(); t->f(x);`.
+  - `/Od` `__try`/`__except` reproduces byte for byte; the generator emits the `push -1; push __sehtable$; push _except_handler3` scope-table rows (CrashReporter::WatcherThreadFunc 0x0051fe50).
+  - A probe compile of one TU with `/DOGRE_PV=n` variants plus `tools/probe_compare.py` tests a guess without a full build (never name the macro `V`: it breaks boost/bind).
+  - The shell's `GlobalAdvancedSettingsItem<CRenderSettingsItem>` ctor 0x00456ee0 gets its 2013 frame once a real shell caller of `singleton()` exists and `createInstance` 0x00409020 stays out of line (RecordToggleVerb::doIt 0x004396c0).
 - **Boost.Thread and Boost.System are called through `dllimport`**: all 18 boost.dll imports (IAT 0x00aa2d00–0x00aa2d44) are `call [imp]` at 146 sites, with no thunk. Every engine library is built with `BOOST_THREAD_DYN_LINK` and `BOOST_SYSTEM_DYN_LINK` (`Security::Context::current` 0x0053ac40 89.7% → 100%).
 - **HTTP is WinHttp and WinInet, not libcurl** (no `curl_easy`/`CURLOPT` string; WINHTTP.dll 12 imports, WININET.dll 15). The WinHttp code sits at 0x008239b0–0x00826990, the WinInet code at 0x00827540–0x00828250 (user agent "Roblox/WinInet"): 2016's `App/util/WinHttp.cpp` and `WinInet.cpp`.
 - **STL: `_SECURE_SCL=0`**, proven by `Poly::getNumSurfaces` (PLAYER 0x00754610, STUDIO 0x008939c0), which stops matching under `_SECURE_SCL=1`; `_invalid_parameter_noinfo` is imported nowhere. `sizeof(std::vector<T>)` = 0x10, `sizeof(std::string)` = 0x1c (StatsService ctor).

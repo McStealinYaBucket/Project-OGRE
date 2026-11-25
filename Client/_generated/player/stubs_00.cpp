@@ -27,6 +27,14 @@ extern "C" void ogre_stub_00642850()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_00642850")
 
+// public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
+// STUB: PLAYER 0x0066f460
+extern "C" void ogre_stub_0066f460()
+{
+	STUB(0x0066f460);
+}
+#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z=_ogre_stub_0066f460")
+
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: PLAYER 0x006fffc0
 extern "C" void ogre_stub_006fffc0()
@@ -75,6 +83,22 @@ extern "C" void ogre_stub_007e33f0()
 }
 #pragma comment(linker, "/alternatename:?publicInsertRaw@RootInstance@RBX@@QAEXABV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@PAVInstance@2@AAV?$vector@V?$weak_ptr@VPartInstance@RBX@@@boost@@V?$allocator@V?$weak_ptr@VPartInstance@RBX@@@boost@@@std@@@4@_N3@Z=_ogre_stub_007e33f0")
 
+// public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
+// STUB: PLAYER 0x008d3540
+extern "C" void ogre_stub_008d3540()
+{
+	STUB(0x008d3540);
+}
+#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z=_ogre_stub_008d3540")
+
+// public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
+// STUB: PLAYER 0x009b0f40
+extern "C" void ogre_stub_009b0f40()
+{
+	STUB(0x009b0f40);
+}
+#pragma comment(linker, "/alternatename:?setLogProvider@Log@RBX@@SAXPAVILogProvider@2@@Z=_ogre_stub_009b0f40")
+
 // unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
 // STUB: PLAYER 0x009b59b0
 extern "C" void ogre_stub_009b59b0()
@@ -82,6 +106,22 @@ extern "C" void ogre_stub_009b59b0()
 	STUB(0x009b59b0);
 }
 #pragma comment(linker, "/alternatename:?getVideoMemory@SystemUtil@RBX@@YAIXZ=_ogre_stub_009b59b0")
+
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::utf8_encode(class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> const &)
+// STUB: PLAYER 0x009b8060
+extern "C" void ogre_stub_009b8060()
+{
+	STUB(0x009b8060);
+}
+#pragma comment(linker, "/alternatename:?utf8_encode@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@3@@Z=_ogre_stub_009b8060")
+
+// class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> __cdecl RBX::utf8_decode(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
+// STUB: PLAYER 0x009b8100
+extern "C" void ogre_stub_009b8100()
+{
+	STUB(0x009b8100);
+}
+#pragma comment(linker, "/alternatename:?utf8_decode@RBX@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@@Z=_ogre_stub_009b8100")
 
 // public: void __thiscall RBX::Limits::Counter::add(class RBX::Limits::Countable *)
 // STUB: PLAYER 0x009b90a0
@@ -122,6 +162,14 @@ extern "C" void ogre_stub_009d5d10()
 	STUB(0x009d5d10);
 }
 #pragma comment(linker, "/alternatename:?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ=_ogre_stub_009d5d10")
+
+// public: void __thiscall G3D::Log::println(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
+// STUB: PLAYER 0x009d5da0
+extern "C" void ogre_stub_009d5da0()
+{
+	STUB(0x009d5da0);
+}
+#pragma comment(linker, "/alternatename:?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z=_ogre_stub_009d5da0")
 
 // void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
 // STUB: PLAYER 0x009d63b0

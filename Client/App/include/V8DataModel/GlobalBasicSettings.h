@@ -1,23 +1,6 @@
-/* V8DataModel/GlobalBasicSettings.h -- October 2013 STUB (minimal shell).
-   Evidence: NonFactoryProduct<GlobalBasicSettings, Settings> 0x36933A; C++-only (no metadata);
-     sGlobalBasicSettings = "UserSettings" (PLAYER 0x00b31088).
-   TODO: full decompile.
-   Original file: /Applications/buildAgent/work/fa0a2141fe3d2f4d/Client/App/v8datamodel/GlobalBasicSettings.h */
+/* V8DataModel/GlobalBasicSettings.h -- forwards to V8DataModel/GlobalSettings.h, where the 2013
+   asserts place GlobalBasicSettingsItem<> (GlobalSettings.h:176) beside GlobalBasicSettings. */
 
 #pragma once
 
-#include "V8DataModel/Settings.h"
-
-namespace RBX {
-
-	extern const char* const sGlobalBasicSettings;
-
-	class GlobalBasicSettings
-		: public DescribedNonCreatable<GlobalBasicSettings, Settings, sGlobalBasicSettings>
-	{
-	public:
-		GlobalBasicSettings() {}
-		static boost::shared_ptr<GlobalBasicSettings> singleton();
-	};
-
-} // namespace RBX
+#include "V8DataModel/GlobalSettings.h"

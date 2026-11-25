@@ -1,7 +1,7 @@
 /* V8DataModel/GlobalSettings.h -- October 2013.
    The 2013 asserts name this file: "s.get()==sing" at GlobalSettings.h:132
-   (GlobalAdvancedSettingsItem<T>::singleton, PLAYER 0x00654600) and :176 (the basic-settings
-   twin, not modelled yet). GlobalAdvancedSettings.h only forwards here.
+   (GlobalAdvancedSettingsItem<T>::singleton, PLAYER 0x00654600) and :176
+   (GlobalBasicSettingsItem<T>::singleton, PLAYER 0x00439bf0). GlobalAdvancedSettings.h only forwards here.
 
    GlobalAdvancedSettings (ctor PLAYER 0x00658580): Settings (0xac), then a boost::mutex at
    +0xac/+0xb0 (both zeroed in the ctor; singleton() locks it through lea ecx,[gs+0xac]).
@@ -42,6 +42,30 @@ namespace RBX {
 		{
 		protected:
 			// vtable+0x3c (PLAYER 0x00455840)
+			/*override*/ bool askAddChild(const Instance* instance) const
+			{
+				return dynamic_cast<const Item*>(instance) != NULL;
+			}
+		};
+
+		boost::mutex mutex;	// 0xac
+	};
+
+	extern const char* const sGlobalBasicSettings;
+
+	// "UserSettings". Size 0xb4 (create PLAYER 0x006587d0); ctor 0x00658640 zeroes the mutex.
+	// SIZE 0xb4
+	class GlobalBasicSettings
+		: public DescribedNonCreatable<GlobalBasicSettings, Settings, sGlobalBasicSettings>
+	{
+	public:
+		GlobalBasicSettings() {}
+		static boost::shared_ptr<GlobalBasicSettings> singleton();
+
+		class Item : public NonFactoryProduct<Instance, sSettingsItem>
+		{
+		protected:
+			// vtable+0x3c (PLAYER 0x006f6480, in GameSettings.obj)
 			/*override*/ bool askAddChild(const Instance* instance) const
 			{
 				return dynamic_cast<const Item*>(instance) != NULL;
@@ -105,30 +129,6 @@ namespace RBX {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				RBXASSERT(s.get()==sing);
 			}
 			return *static_cast<Class*>(sing);
@@ -137,5 +137,49 @@ namespace RBX {
 
 	template<class Class, const char* const& sClassName>
 	GlobalAdvancedSettingsItem<Class, sClassName>* GlobalAdvancedSettingsItem<Class, sClassName>::sing;
+
+	// GlobalBasicSettingsItem<Class, sClassName>: the advanced item's twin. Ctor (GameBasicSettings:
+	// PLAYER 0x006f8550) sets Service::isPublic +0x60, names the instance and fills the slot. The
+	// singleton (GameBasicSettings: PLAYER 0x00439bf0, the /GL shell's copy) asserts at line 176.
+	template<class Class, const char* const& sClassName>
+	class GlobalBasicSettingsItem
+		: public DescribedCreatable<Class, GlobalBasicSettings::Item, sClassName>
+		, public Service
+	{
+		static GlobalBasicSettingsItem* sing;
+
+	protected:
+		GlobalBasicSettingsItem()
+		{
+			Instance::setName(sClassName);
+			if (sing)
+				throw RBX::runtime_error("singleton %s already exists", sClassName);
+			sing = this;
+		}
+		~GlobalBasicSettingsItem()
+		{
+			sing = NULL;
+		}
+
+	public:
+		static Class& singleton()
+		{
+			if (sing)
+				return *static_cast<Class*>(sing);
+
+			GlobalBasicSettings* gs = GlobalBasicSettings::singleton().get();
+			boost::mutex::scoped_lock lock(gs->mutex);
+			if (!sing)
+			{
+				shared_ptr<Class> s = Class::createInstance();
+				s->setParent(gs);
+				RBXASSERT(s.get()==sing);
+			}
+			return *static_cast<Class*>(sing);
+		}
+	};
+
+	template<class Class, const char* const& sClassName>
+	GlobalBasicSettingsItem<Class, sClassName>* GlobalBasicSettingsItem<Class, sClassName>::sing;
 
 } // namespace RBX

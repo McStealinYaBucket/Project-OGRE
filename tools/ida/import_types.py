@@ -164,9 +164,18 @@ CLASSES = [
     # (ctor/dtor 0.51-0.91)
     "LogManager", "MainLogManager", "CrashReporter", "RobloxCrashReporter", "RBX::VideoControl", "RBX::SoundState",
     "RBX::LeaveGameVerb", "RBX::RecordToggleVerb",
+    # wave13 sync (sweep20, build/sweep20/P-final.json / S-final.json 100%; size = the tree's DECOMP_SIZE_ASSERT =
+    # the PDB's), PLAYER / STUDIO: GameBasicSettings (0x90) ctor 0x006f8e70 / 0x00794e10 with its base
+    # GlobalBasicSettingsItem<GameBasicSettings,sGameBasicSettings> ctor 0x006f8550 / 0x00794580 (app-13);
+    # Network::Players (0x1f8) ctor 0x00570980 / 0x005d6a80, dtor 0x005705c0 / 0x005d66c0; Network::IdSerializer
+    # (0x1094) ctor 0x005aafd0 / 0x0061b2d0, dtor 0x005a53a0 (PLAYER) (network-5f-4). Network::Player is now
+    # proven in STUDIO too (dtor 0x00600220 100%), so it leaves PLAYER_ONLY. Not yet: Game (0x34; ctor 0x00655e70
+    # unpaired, no App code includes Game.h), GlobalBasicSettings (0xb4; ctor 0x00658640 unpaired), Network::Server
+    # (ctor 0.51, dtor 0.91), MainLogManager's ctor (0.886 / 0.61), VistaAPIs (no size annotation)
+    "RBX::GameBasicSettings", "RBX::Network::Players", "RBX::Network::IdSerializer",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
-PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb", "RBX::Network::Player",
+PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
                "RBX::LeaveGameVerb", "RBX::RecordToggleVerb"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
@@ -431,7 +440,10 @@ def dump(pdb, out, json_path=None):
 
     def cname(k):
         n = info(k)[1]["name"]
-        if len(names.get(n, ())) <= 1:
+        # a template instantiation recorded under its bare template name (GlobalBasicSettingsItem<GameBasicSettings,
+        # sGameBasicSettings> is just "RBX::GlobalBasicSettingsItem" in the PDB): spell it from the unique name
+        bare = "<" not in n and uniq_at.get(k, "").startswith("V?$")
+        if len(names.get(n, ())) <= 1 and not bare:
             return n
         if k not in undn:
             o = subprocess.run(["llvm-undname"], input="?x@@3%sA\n" % uniq_at[k], capture_output=True,

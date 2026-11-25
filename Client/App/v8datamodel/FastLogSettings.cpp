@@ -13,6 +13,18 @@
 
 // LOGVARIABLE(group, default) spelled out so each channel carries its reccmp marker.
 namespace FLog {
+	// Initializer PLAYER 0x00a65080 / STUDIO 0x00b1c250 (the shell's GameVerbs log through it).
+	// GLOBAL: PLAYER 0x00de3f41
+	// GLOBAL: STUDIO 0x00f84e19
+	Channel Verbs = 0;
+	int VerbsIniter = RegisterLogGroup("Verbs", &Verbs, NULL, FASTVARTYPE_STATIC);
+
+	// Initializer PLAYER 0x00a65120 / STUDIO 0x00b1c2f0 (the shell's LogManager logs through it).
+	// GLOBAL: PLAYER 0x00d30ede
+	// GLOBAL: STUDIO 0x00ec17ca
+	Channel CrashReporterInit = 1;
+	int CrashReporterInitIniter = RegisterLogGroup("CrashReporterInit", &CrashReporterInit, NULL, FASTVARTYPE_STATIC);
+
 	// Initializer PLAYER 0x00a651c0 / STUDIO 0x00b1c390, ahead of DataModelJobs's.
 	// GLOBAL: PLAYER 0x00de3f47
 	// GLOBAL: STUDIO 0x00f84e1f

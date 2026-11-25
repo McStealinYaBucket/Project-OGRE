@@ -223,6 +223,19 @@ public:
 	rbx::signal<void(const RBX::Reflection::PropertyDescriptor*)> settingsChangedSignal;  // 0xe0
 };
 
+// The item base's singleton() and createInstance (App's GlobalSettings.h / Util/Object.h templates),
+// instantiated in the shell by RecordToggleVerb::doIt. LTCG keeps createInstance out of line with its
+// result in eax and a padding `sub esp,8` frame; that 8-aligned chain gives the ctor below its 0x2c frame.
+// clang-format off
+// TEMPLATE: PLAYER 0x00407230
+// ?singleton@?$GlobalAdvancedSettingsItem@VCRenderSettingsItem@@$E?sRenderSettings@@3QBDB@RBX@@SAAAVCRenderSettingsItem@@XZ
+// clang-format on
+
+// clang-format off
+// TEMPLATE: PLAYER 0x00409020
+// ?createInstance@?$FactoryProduct@VCRenderSettingsItem@@VItem@GlobalAdvancedSettings@RBX@@$E?sRenderSettings@@3QBDBVInstance@4@@RBX@@SA?AV?$shared_ptr@VCRenderSettingsItem@@@boost@@XZ
+// clang-format on
+
 // The item base's ctor (App's GlobalSettings.h template), instantiated in the shell.
 // clang-format off
 // TEMPLATE: PLAYER 0x00456ee0

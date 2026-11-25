@@ -46,21 +46,11 @@ namespace Network {
 		(void)character;
 		return 0;
 	}
-	// Network::ChatMessage value-ctor family (0x89BBD2 / 0x89BC8E /
-	// mac: 0x89BD10).  Binary member order: guid string default (empty COW
-	// slot at +0) -> text -> ChatType (+8) -> player px/rc (+12/+16) ->
-	// receiver px/rc (+20/+24) -> tail Guid::generateStandardGUID 0x204380
-	// writing the "{uuid}" text into +0.  The 3-arg ctor leaves receiver
-	// as an empty shared_ptr; the 0x89BC8E ctor copies every slot from
-	// `other` (opens with std::string::string(+0, other+0)) and overwrites
-	// the text with its second argument.
-	//
-	// mac: 0x89BD10 raw-asm correction: the text construction at 0x89BD30-41
-	// pushes (&text, message, &allocator) into
-	// std::string::string(char const*, std::allocator<char> const&) --
-	// the earlier decompile rendered that call as a 1-arg default
-	// construction and dropped the message; the raw call sites settle it
-	// (the 3-arg ctor carries the same shape).
+	// Network::ChatMessage value-ctor family (mac: 0x89BBD2 / 0x89BC8E / 0x89BD10). Member order:
+	// guid string (+0), text, ChatType, player, receiver; the tail Guid::generateStandardGUID writes
+	// the "{uuid}" text into +0. The 3-arg ctor leaves receiver empty; the copy form copies every slot
+	// from `other` and overwrites the text. mac: 0x89BD10 builds the text with
+	// std::string(const char*, const allocator&) (the 3-arg ctor has the same shape).
 	ChatMessage::ChatMessage(const char* message, ChatType type, const shared_ptr<Player>& player)
 	{
 		this->message = message;
@@ -144,6 +134,16 @@ namespace Network {
 		if (saveLeaderboardDataUrl.empty())
 			throw std::runtime_error("No SaveLeaderboardData url set");
 		return format(saveLeaderboardDataUrl.c_str(), userId);
+	}
+
+	// iOS: Players::setConnection(ConcurrentRakPeer*). 2013 keeps it out of line here and inlines it in
+	// ~Players (`mov [esi+0x1a4], 0` before the member dtors). Server and Client call it from their
+	// onServiceProvider overrides. The 2016 body is the same one store.
+	// FUNCTION: PLAYER 0x00559790
+	// FUNCTION: STUDIO 0x005b8250
+	void Players::setConnection(ConcurrentRakPeer* peer)
+	{
+		rakPeer = peer;
 	}
 	// mac: 0x89BE50 (340B): switch on chatType (TEAM "[[team]]", WHISPER ostringstream "[[to " +
 	// receiver name or "???" + "]]", GAME "[[game]]", default copy) + message.
@@ -238,16 +238,27 @@ namespace Network {
 		STUB(0x0056ff40);
 	}
 
-	// STUB: PLAYER 0x005705c0
+	// FUNCTION: PLAYER 0x005705c0
+	// FUNCTION: STUDIO 0x005d66c0
 	Players::~Players()
 	{
+		setConnection(NULL);
 	}
 
-	// STUB: PLAYER 0x00570980
+	// FUNCTION: PLAYER 0x00570980
+	// FUNCTION: STUDIO 0x005d6a80
 	Players::Players()
-		: m_unk0x178(false), m_unk0x179(true), m_unk0x1a4(0), m_unk0x1b0(12)
-		, m_unk0x1b4(0), m_unk0x1b8(0), m_unk0x1bc(0)
+		: m_unk0x108("")
+		, m_unk0x178(false)
+		, m_unk0x179(true)
+		, m_unk0x194(Instances())
+		, rakPeer(NULL)
+		, m_unk0x1b0(12)
+		, m_unk0x1b4(0)
+		, m_unk0x1b8(0)
+		, m_unk0x1bc(0)
 	{
+		setName("Players");
 	}
 
 	// Folded by the linker with PlayerGui::askSetParent (identical body).
@@ -258,14 +269,16 @@ namespace Network {
 		return Instance::fastDynamicCast<Player>(instance) != NULL;
 	}
 
-	// The 2013 body (0x005661f0): when the local player's SuperSafeChatReplicate (PropDescriptor at
-	// 0x00dd8e44, getter 0x00527600, setter 0x00527620) changes, fire m_unk0x1d4 with its value (false
-	// without a local player). That descriptor is not declared yet. Below the 2013 asserts on purpose.
-	// STUB: PLAYER 0x005661f0
-	// STUB: STUDIO 0x005c9a10
+	// Fires m_unk0x1d4 when the local player's SuperSafeChatReplicate changes. Below the 2013 asserts on
+	// purpose.
+	// FUNCTION: PLAYER 0x005661f0
+	// FUNCTION: STUDIO 0x005c9a10
 	void Players::onChildChanged(Instance* instance, const PropertyChanged& event)
 	{
-		STUB(0x005661f0);
+		if (instance == localPlayer.get() && &event.getDescriptor() == &Player::prop_SuperSafeChat)
+		{
+			m_unk0x1d4(localPlayer ? Player::prop_SuperSafeChat.getValue(localPlayer.get()) : false);
+		}
 	}
 
 } // namespace Network

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/GlobalBasicSettings.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sGlobalBasicSettings = "UserSettings";	// 2013 string (PLAYER 0x00b31088 -> 0x00b31060)
@@ -19,30 +20,41 @@ RBX_REGISTER_CLASS(RBX::GlobalBasicSettings);
 }
 
 // mac: 0x3909B6/0x390915/0x390887 (batches 646/647): call_once singleton.
+// 2013: the same shape as GlobalAdvancedSettings::singleton (GlobalAdvancedSettings.cpp), without
+// the raw-pointer publish: the static getter (return slot in esi), initBasicSingleton under an
+// empty Limits::Counter::Activator, and singleton() through call_once.
 #include <boost/thread/once.hpp>
 #include "Util/Object.h"
+#include "Util/Limits.h"
 #include "V8Tree/Instance.h"
 
 namespace RBX {
 namespace {
-boost::shared_ptr<GlobalBasicSettings>& globalbasicsettingsStatic()
+boost::once_flag globalbasicsettingsFlag;
+}
+// FUNCTION: PLAYER 0x006589b0
+// FUNCTION: STUDIO 0x00741140
+static boost::shared_ptr<GlobalBasicSettings> globalbasicsettingsStatic()
 {
-	static boost::shared_ptr<GlobalBasicSettings> inst;
+	static boost::shared_ptr<GlobalBasicSettings> inst = Creatable<Instance>::create<GlobalBasicSettings>();
 	return inst;
 }
-boost::once_flag globalbasicsettingsFlag;
-void initBasicSingleton()
+// FUNCTION: PLAYER 0x00658a40
+// FUNCTION: STUDIO 0x007411d0
+static void initBasicSingleton()
 {
-	// DELTA: Limits::Counter::Activator omitted (limits-tracking only,
-	// no functional effect; cf. DataModelJob::step note).
-	if (!globalbasicsettingsStatic())
-		globalbasicsettingsStatic() = Creatable<Instance>::create<GlobalBasicSettings>();
-}
+	boost::shared_ptr<Limits::Counter> noCounter;
+	Limits::Counter::Activator activator(noCounter);
+	globalbasicsettingsStatic();
 }
 
+// FUNCTION: PLAYER 0x00658ae0
+// FUNCTION: STUDIO 0x00741270
 boost::shared_ptr<GlobalBasicSettings> GlobalBasicSettings::singleton()
 {
 	boost::call_once(&initBasicSingleton, globalbasicsettingsFlag);
 	return globalbasicsettingsStatic();
 }
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::GlobalBasicSettings, 0xb4);

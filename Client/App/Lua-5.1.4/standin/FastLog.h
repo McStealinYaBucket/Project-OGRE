@@ -5,20 +5,22 @@
 #pragma once
 #include <stddef.h>
 
+// Global scope, as in Log.dll's export ?RegisterFlag@FLog@@YAHPBDPA_NPAPA_NW4FastVarType@@@Z.
+enum FastVarType
+{
+	FASTVARTYPE_STATIC = 0,
+	FASTVARTYPE_DYNAMIC = 1,
+	FASTVARTYPE_SYNC = 2
+};
+
 namespace FLog
 {
-	enum FastVarType
-	{
-		FASTVARTYPE_STATIC = 0,
-		FASTVARTYPE_DYNAMIC = 1,
-		FASTVARTYPE_SYNC = 2
-	};
 	int RegisterFlag(const char* flagName, bool* flagVar, bool** isSync = NULL, FastVarType fastVarType = FASTVARTYPE_STATIC);
 }
 
 #define FASTFLAG(var) namespace FFlag { extern bool var; }
 #define FASTFLAGVARIABLE(var, defaultvalue) \
-	namespace FFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FLog::FASTVARTYPE_STATIC); }
+	namespace FFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FASTVARTYPE_STATIC); }
 #define DYNAMIC_FASTFLAG(var) namespace DFFlag { extern bool var; }
 #define DYNAMIC_FASTFLAGVARIABLE(var, defaultvalue) \
-	namespace DFFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FLog::FASTVARTYPE_DYNAMIC); }
+	namespace DFFlag { bool var = defaultvalue; int var##Initer = FLog::RegisterFlag(#var, &var, NULL, FASTVARTYPE_DYNAMIC); }

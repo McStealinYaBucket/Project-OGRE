@@ -437,6 +437,9 @@ __declspec(noinline) bool FUN_00623a90(const char* url)
 }
 
 // 2013: the host, lower-cased, ends in "paypal.com" or "rixty.com" (only for ftp/http/https urls).
+// Two diffs left: CUrl's SetSchemeName copies with _mbsnbcpy_s (2013 App is _MBCS: the 2016
+// App.vcxproj is MultiByte, and a /D_MBCS probe matches that call), and the 2013 frame is 4 bytes
+// larger below the CUrl.
 // STUB: PLAYER 0x00623bb0
 // STUB: STUDIO 0x006cca30
 bool Http::isMoneySite(const char* url)
@@ -516,13 +519,13 @@ bool Http::trustCheck(const char* url, bool externalRequest)
 }
 
 // mac: 0x1FA0DA - Http::trustCheckBrowser(const char*)
-// STUB: PLAYER 0x00624620
-// STUB: STUDIO 0x006cd530
+// FUNCTION: PLAYER 0x00624620
+// FUNCTION: STUDIO 0x006cd530
 bool Http::trustCheckBrowser(const char* url)
 {
 	if (trustCheck(url, false))
 		return true;
-	return isMoneySite(url);
+	return isMoneySite(url) ? true : false;
 }
 
 // mac: 0x250BF2 - Http::urlEncode(std::string)

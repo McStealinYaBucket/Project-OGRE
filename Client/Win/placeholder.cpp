@@ -26,13 +26,26 @@
    shared_from_this, which ClientBase/ReflectionMetadata.cpp (the real 2013 shell code) now instantiates
    (both resolve to its object in the PLAYER map).
    Removed 2026-11-24 (wave 11): ~shared_ptr<StandardOut>, which Win/LogManager.cpp (ReportEvent) now
-   instantiates. */
+   instantiates.
+   Added 2026-11-24 (wave 13, A/B on identical engine objects, regenerated CSVs, 0 lost): the
+   intrusive_ptr<thread_data_base> dtor, CStringT(const wchar_t*), DebugSettings::singleton (with its
+   create chain), the Http temporary (its dtor) and RunningAverage<double>::sample. Tried and left out:
+   Security::Context::current (it pulls the engine's own out-of-line current() into the shell, -1) and
+   ServiceProvider::find/create<T> plus FactoryProduct<T>::className() for 13 services (-620: find<T>'s
+   shared helpers and Described<T>::classDescriptor move into the shell). */
 
 #include "V8Tree/Instance.h"
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/RunService.h"
 #include "V8DataModel/Script.h"
 #include "rbx/Tasks/Coordinator.h"
+#include "rbx/RunningAverage.h"
+#include "Util/Http.h"
+#include "V8DataModel/DebugSettings.h"
+
+#include <boost/thread/thread.hpp>
+
+#include <atlstr.h>
 
 #include <new>
 #include <vector>
@@ -51,10 +64,14 @@ namespace OgreShellStandIn {
 		// copy 0x00422330, Thread.obj's twin 0x009b6af0 (Thread, Job, Job const) the native 0x00576dc0,
 		// so the two push_back chains (0x009ba960 / 0x009b7020) stay apart. PLAYER evidence only.
 		boost::shared_ptr<RBX::Tasks::Coordinator> coordinator;
+		// ~ 18/0: the engine's unwind funclets (0x00a117ee ...) jump to the shell copy 0x004069d0
+		// (STUDIO 0x004256d0); without it the only copy is CrashReporter.obj's unoptimized one.
+		boost::intrusive_ptr<boost::detail::thread_data_base> threadData;
 	};
 
 	extern "C" void ogreShellStandInUse(Uses& u, Uses& v, RBX::RunService* r, void* raw)
 	{
+		boost::intrusive_ptr<boost::detail::thread_data_base> threadData(v.threadData); // dtor called from the unwind funclet
 		u.instance = v.instance;
 		u.instances.resize(v.instances.size());
 		u.instances.erase(u.instances.begin());
@@ -62,6 +79,14 @@ namespace OgreShellStandIn {
 		new (raw) boost::function0<void>(v.function);          // copy ctor only: function0::operator= is native-owned (0/1)
 		u.runService = RBX::shared_from(r);
 		u.script.reset();
+		// CStringT<char>(const wchar_t*) 5/0: FileSystem::getUserDirectory, redirectCallback and
+		// httpGetPostWinHttp call the shell's /GS copy 0x00440d20, which no written shell code builds yet.
+		ATL::CStringA narrowed(L"");
+		// Engine callers reach these only at their shell copies (tools/shell_twin_callers.py on the
+		// wave-13 link D: shell/native calls, the shell copy); ours were native, so built without /GS.
+		RBX::DebugSettings::singleton();                                     // 7/0 0x00407700
+		RBX::Http http("");                                                  // ctor 5/0 0x00402b50
+		static_cast<RBX::RunningAverage<double, double>*>(raw)->sample(1.0); // 5/0 0x004612a0
 #ifndef RBX_STUDIO_BUILD
 		new (raw) boost::shared_ptr<RBX::Tasks::Coordinator>(v.coordinator); // copy ctor only
 #endif

@@ -14,13 +14,28 @@
 #include "Network/Player.h"
 #include "Util/Guid.h"
 #include "Util/utilities.h"
+#include "rbx/Thread.hpp"
 #include "decomp.h"
+#include <boost/scoped_ptr.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <map>
+#include <set>
 #include <string>
+
+namespace RakNet {
+	struct SystemAddress;
+	class BitStream;
+}
 
 namespace RBX {
 namespace Network {
+
+	class ConcurrentRakPeer;
+
+	// iOS 10-29 names the type (signal<void(AbuseReport)>, AbuseReport::addMessage); 2013 passes it by
+	// value as 0x30 bytes (OnReceiveReportAbuse 0x005678ae), not 2016's 0x50. Members not needed yet.
+	struct AbuseReport;
 
 	// Network::ChatMessage -- VALUE-type chat packet
 	// (std::list<ChatMessage> storage: _M_create_node 0x8AD55A /
@@ -63,6 +78,17 @@ namespace Network {
 			const shared_ptr<Player>& receiver);													// 0x89BD10
 		bool isVisibleToPlayer(const shared_ptr<Player>& viewer) const;								// 0x89BDD6
 		std::string getReportAbuseMessage() const;													// 0x89BE50
+	};
+
+	// Implicit destructor PLAYER 0x0055b8b0 (requestProcessor at +8 first, then _data's count at +4).
+	// iOS: AbuseReporter(std::string), AbuseReporter::data, processRequests, add.
+	class AbuseReporter
+	{
+		struct data;
+		shared_ptr<data> _data;                          // 0x0
+		boost::scoped_ptr<worker_thread> requestProcessor; // 0x8
+	public:
+		AbuseReporter(std::string abuseUrl);
 	};
 
 	extern const char* const sPlayers;
@@ -112,6 +138,9 @@ namespace Network {
 		// 2016 name; PLAYER 0x0056b8c0: fastDynamicCast<Client>(instance) != NULL.
 		static bool isNetworkClient(const Instance* instance);
 
+		// PLAYER 0x00559790 (iOS name); inline in ~Players.
+		void setConnection(ConcurrentRakPeer* peer);
+
 		// Chat era (0x898962): send a chat message.  Stubbed (network
 		// unported) -- body is empty; the real body uses RakNet::BitStream,
 		// getGuidRegistry, ConcurrentRakPeer::Send, ChatMessage.
@@ -145,13 +174,9 @@ namespace Network {
 		std::string saveDataUrl;                     // 0x64 getSaveDataUrl 0x00559450
 		std::string loadDataUrl;                     // 0x80 getLoadDataUrl 0x005593b0
 		std::string saveLeaderboardDataUrl;          // 0x9c getSaveLeaderboardDataUrl 0x005594e0
-		// 0xb8: boost::unordered_set<std::string> (delete_nodes 0x0055e890; ctor bucket count from the
-		// prime list, mlf 1.0f). Placeholder bytes for now: declaring it makes the first Network TU
-		// (API.obj) emit prime_list_template<unsigned>::value with a 1.0f constant right after it, and
-		// every unordered ctor that pushes value+end then reads as "push 1.0" (PLAYER DataModel ctor
-		// 0x0064ec50, StarterGuiService 0x0070c150, ContactManager 0x007b63a0, ... dropped, measured
-		// 2026-11-24). Restore the type with Players' ctor, when the link order supplies it as 2013 did.
-		undefined m_unk0xb8[0xd0 - 0xb8];            // 0xb8
+		// 0xb8: the inline table ctor (prime-list _Lower_bound for 11 buckets, mlf 1.0f) and delete_nodes
+		// 0x0055e890 in ~Players. Name from 2016.
+		boost::unordered_set<std::string> leaderboardKeys; // 0xb8
 		std::string m_unk0xd0;                       // 0xd0
 		std::string m_unk0xec;                       // 0xec
 		std::string m_unk0x108;                      // 0x108 ctor ""
@@ -160,12 +185,12 @@ namespace Network {
 		std::string m_unk0x15c;                      // 0x15c
 		bool m_unk0x178;                             // 0x178 ctor false
 		bool m_unk0x179;                             // 0x179 ctor true
-		undefined4 m_unk0x17c;                       // 0x17c dtor: ~T 0x0055b8b0 then operator delete (scoped_ptr)
+		boost::scoped_ptr<AbuseReporter> abuseReporter; // 0x17c dtor: ~AbuseReporter 0x0055b8b0, operator delete
 		shared_ptr<Instance> m_unk0x180;             // 0x180 dtor releases +0x184; pointee unproven
-		std::list<shared_ptr<Instance> > m_unk0x188; // 0x188 element type unproven (_Buynode 0x0079f910 is folded)
+		std::list<ChatMessage> chatHistory;          // 0x188 node dtor ~ChatMessage 0x0055a560 (clear 0x0055f320)
 		copy_on_write_ptr<Instances> m_unk0x194;     // 0x194 ctor 0x00567c30
 		shared_ptr<Player> localPlayer;              // 0x19c ChatOutput reads it (mac +188)
-		undefined4 m_unk0x1a4;                       // 0x1a4 ctor 0; the dtor clears it first
+		ConcurrentRakPeer* rakPeer;                  // 0x1a4 ctor 0; setConnection 0x00559790; ~Players clears it
 		shared_ptr<Instance> m_unk0x1a8;             // 0x1a8 dtor releases +0x1ac; pointee unproven
 		undefined4 m_unk0x1b0;                       // 0x1b0 ctor 12
 		undefined4 m_unk0x1b4;                       // 0x1b4 ctor 0
@@ -182,11 +207,15 @@ namespace Network {
 		// ChatOutput::onServiceProvider PLAYER 0x00973f9e connects here (mac +0xf8). The mac build
 		// mangles it signal<void(ChatMessage const&)>; the name is ours.
 		rbx::signal<void(const ChatMessage&)> messageReceivedSignal;      // 0x1d8
-		rbx::signal<void(const ChatMessage&)> m_unk0x1dc;                  // 0x1dc signature unproven
-		rbx::signal<void(const ChatMessage&)> m_unk0x1e0;                  // 0x1e0 signature unproven
+		// OnReceiveReportAbuse 0x00567710 fires this one with a by-value AbuseReport (iOS signal type).
+		rbx::signal<void(AbuseReport)> abuseReportedReceived;             // 0x1dc
+		// Fired by 0x00566710 under a DataModel::LegacyLock (iOS signal type).
+		rbx::signal<void(const RakNet::SystemAddress&, const shared_ptr<RakNet::BitStream>&, const std::string&, const std::string&)> sendFilteredChatMessageSignal; // 0x1e0
 		rbx::signal<void(PlayerChatType, shared_ptr<Instance>, std::string, shared_ptr<Instance>)> playerChattedSignal; // 0x1e4 "PlayerChatted"
 		rbx::signal<void(std::string)> gameAnnounceSignal;                 // 0x1e8 "GameAnnounce"
-		std::map<const void*, int> m_unk0x1ec;      // 0x1ec a _Tree with 16-byte values; key/value unproven
+		// 0x1ec: ~Players' inline map dtor (erase 0x0056f800, _Erase 0x0056d7f0) destroys a std::set<std::string>
+		// at node+0x10 after a 4-byte key; key type and name from 2016.
+		std::map<int, std::set<std::string> > cheatingPlayers; // 0x1ec
 	};
 
 } // namespace Network

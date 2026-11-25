@@ -6,18 +6,12 @@
 
 #include "V8DataModel/DataModelJob.h"
 #include "V8Tree/Instance.h"
+#include "Streaming.h"
 
 namespace RBX {
 namespace Network {
 
-// RTTI: IdSerializer : Instance (vftable 0x00b1d4dc). Ctor PLAYER 0x005aafd0 (Instance(NULL), then
-// a 0x101c-byte member at 0x60 built by 0x005aa320, shared_ptr 0x107c, a std::set/map 0x1084, int
-// 0x1090 = 0x20), dtor 0x005a53a0; size 0x1094. Only the base chain is declared so far.
-class IdSerializer : public Instance
-{
-protected:
-	IdSerializer();
-};
+// IdSerializer (Replicator's base) is declared in Streaming.h.
 
 extern const char* const sReplicator;
 

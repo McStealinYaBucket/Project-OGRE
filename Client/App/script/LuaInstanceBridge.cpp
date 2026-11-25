@@ -121,6 +121,7 @@ namespace RBX { namespace Lua {
 		return name;
 	}
 	// mac: 0x173774 (526B, batch516): Instance.new(className[, parent]).
+	// probe_compare: identical; reccmp 99.2 (its getPtr call is the unpaired wrapper 0x00877530).
 	// STUB: PLAYER 0x0087af00
 	// STUB: STUDIO 0x009df580
 	int ObjectBridge::newInstance(lua_State* L)
@@ -145,10 +146,9 @@ namespace RBX { namespace Lua {
 				SharedPtrBridge<Instance>::getPtr(L, 2);
 			if (parent.get() != NULL)
 			{
-				// DELTA (fw()+22 on the parent): same unmapped flag as
-				// the 258b event/child arms -- deterministic-false.
-				// setParent forwards to setParentInternal(parent, false),
-				// exactly the binary's call.
+				// 2013: a RobloxLocked parent (fw+0x19) needs LocalUser.
+				if (parent->getRobloxLocked())
+					RBX::Security::Context::current().requirePermission(RBX::Security::LocalUser, "Parent in Instance.new()");
 				created->setParent(parent.get());
 			}
 		}

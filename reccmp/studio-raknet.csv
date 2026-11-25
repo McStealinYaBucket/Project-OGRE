@@ -4,7 +4,7 @@
 address,type,size,symbol,name
 0056e7a0,library,50,??_H@YGXPAXIHP6EPAX0@Z@Z,"void __stdcall `vector ctor iterator'(void *, unsigned int, int, void * (__thiscall *)(void *))"
 005b7b00,library,65,??0AddressOrGUID@RakNet@@QAE@ABUSystemAddress@1@@Z,public: __thiscall RakNet::AddressOrGUID::AddressOrGUID(struct RakNet::SystemAddress const &)
-00606c90,library,1,??1?$_Vector_val@W4InOut@Feature@RBX@@V?$allocator@W4InOut@Feature@RBX@@@std@@@std@@QAE@XZ,??1?$_Vector_val@W4InOut@Feature@RBX@@V?$allocator@W4InOut@Feature@RBX@@@std@@@std@@QAE@XZ
+00606c90,library,1,??1?$_Vector_val@W4ControlMode@GameBasicSettings@RBX@@V?$allocator@W4ControlMode@GameBasicSettings@RBX@@@std@@@std@@QAE@XZ,??1?$_Vector_val@W4ControlMode@GameBasicSettings@RBX@@V?$allocator@W4ControlMode@GameBasicSettings@RBX@@@std@@@std@@QAE@XZ
 0060a100,library,77,??0SocketDescriptor@RakNet@@QAE@GPBD@Z,"public: __thiscall RakNet::SocketDescriptor::SocketDescriptor(unsigned short, char const *)"
 0060a150,library,47,??4SystemAddress@RakNet@@QAEAAU01@ABU01@@Z,public: struct RakNet::SystemAddress & __thiscall RakNet::SystemAddress::operator=(struct RakNet::SystemAddress const &)
 0060a180,library,31,?EqualsExcludingPort@SystemAddress@RakNet@@QBE_NABU12@@Z,public: bool __thiscall RakNet::SystemAddress::EqualsExcludingPort(struct RakNet::SystemAddress const &) const

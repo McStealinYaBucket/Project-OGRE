@@ -13,6 +13,11 @@
 #include "reflection/EnumConverter.h"
 #include "reflection/property.h"
 #include "Util/BrickColor.h"
+#include "V8Tree/Instance.h"
+#include "Util/Guid.h"
+#include "Dictionary.h"
+#include <map>
+#include <vector>
 
 namespace RBX {
 namespace Network {
@@ -39,4 +44,41 @@ RakNet::BitStream& operator<<(RakNet::BitStream& stream, const std::string& valu
 template<class T>
 RakNet::BitStream& operator>>(RakNet::BitStream& stream, T& value);
 
+} // namespace RBX
+
+namespace RBX {
+namespace Network {
+
+// RTTI: IdSerializer : Instance (vftable PLAYER 0x00b1d4dc, 31 slots: Instance's 29 plus setRefValue
+// and setMaxGuidIndexBit). Layout from the ctor 0x005aafd0 and the implicit dtor 0x005a53a0; size
+// 0x1094. 2013 has no serverScope and no waitItemsMutex (2016 added both), and holds the registry in
+// a shared_ptr (iOS: shared_ptr<GuidItem<Instance>::Registry>), not an intrusive_ptr.
+class IdSerializer : public Instance
+{
+	typedef Instance Super;
+
+protected:
+	SharedScopeDictionary scopeNames;                                  // 0x60
+	shared_ptr<GuidItem<Instance>::Registry> guidRegistry;            // 0x107c
+
+	// iOS: IdSerializer::WaitItem; 0xc bytes (_Destroy 0x0058ce50 releases +8).
+	struct WaitItem
+	{
+		const Reflection::RefPropertyDescriptor* desc;
+		shared_ptr<Instance> instance;
+	};
+	// iOS: std::map<Guid::Data, std::vector<WaitItem> > (node isnil at +0x25).
+	typedef std::map<RBX::Guid::Data, std::vector<WaitItem> > WaitItemMap;
+	WaitItemMap waitItems;                                             // 0x1084
+	int guidIndexBits;                                                 // 0x1090 ctor 0x20; setMaxGuidIndexBit
+
+	virtual void setRefValue(WaitItem& wi, Instance* instance);        // vtable+0x70
+
+public:
+	IdSerializer();
+
+	virtual void setMaxGuidIndexBit(int bits);                         // vtable+0x74
+};
+
+} // namespace Network
 } // namespace RBX

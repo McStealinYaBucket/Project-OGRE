@@ -7,6 +7,7 @@
 #include "Document.h"
 #include "View.h"
 #include "../Win/VideoControl.h"
+#include "../ClientBase/RenderSettingsItem.h"
 #include "V8DataModel/GameSettings.h"
 #include "FastLog.h"
 
@@ -50,6 +51,43 @@ bool RecordToggleVerb::isChecked() const
 bool RecordToggleVerb::isSelected() const
 {
 	return videoControl->isVideoRecording();
+}
+
+// STUB: PLAYER 0x00439370
+void RecordToggleVerb::startAction()
+{
+	STUB(0x00439370);
+}
+
+// STUB: PLAYER 0x00439450
+void RecordToggleVerb::stopAction()
+{
+	STUB(0x00439450);
+}
+
+// Against 2016, recording starts only under the Direct3D or automatic graphics mode; otherwise the
+// verb posts the window a WM_COMMAND (id 40003) and returns without waiting.
+// STUB: PLAYER 0x004396c0
+void RecordToggleVerb::doIt(IDataState* dataState)
+{
+	OutputDebugString("RecordToggleVerb::doIt");
+
+	if (videoControl->isVideoRecording())
+	{
+		job = boost::bind(&RecordToggleVerb::stopAction, this);
+	}
+	else
+	{
+		CRenderSettings::GraphicsMode mode = CRenderSettingsItem::singleton().getGraphicsMode();
+		if (mode != CRenderSettings::AutoGraphicsMode && mode != CRenderSettings::Direct3D9)
+		{
+			::PostMessage(doc.m_unk0x00->GetHWnd(), WM_COMMAND, 40003, 0);
+			return;
+		}
+		job = boost::bind(&RecordToggleVerb::startAction, this);
+	}
+	jobWait.Set();
+	jobDone.Wait();
 }
 
 // FUNCTION: PLAYER 0x00439750

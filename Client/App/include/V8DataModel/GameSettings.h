@@ -56,8 +56,13 @@ namespace RBX {
 		rbx::signal<void(bool)> videoRecordingSignal;	// 0x84  ctor 0x0055ca50
 		bool hardwareMouse;				// 0x88  false
 		bool videoCaptureEnabled;		// 0x89  true
-		VideoQuality videoQuality;		// 0x8c  MEDIUM_RES
-		UploadSetting postImageSetting;	// 0x90  ASK
+		// "ImageUploadPromptBehavior" (setter 0x006f4810 raises desc 0x00df1fec).
+		UploadSetting postImageSetting;	// 0x8c  ASK
+		// "VideoQuality" (setter 0x006f4840, desc 0x00df207c); VideoControl's ctor passes it to
+		// IVideoCapture::setVideoQuality.
+		VideoQuality videoQuality;		// 0x90  MEDIUM_RES
+		VideoQuality getVideoQualitySetting() const { return videoQuality; }
+		UploadSetting getPostImageSetting() const { return postImageSetting; }
 	};
 
 } // namespace RBX

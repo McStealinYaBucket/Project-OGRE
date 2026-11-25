@@ -3,11 +3,11 @@
      (F:\2013Decompile\exports\decomp\Base_TaskScheduler.cpp.txt)
       - Thread::create/loop/runJob/releaseJob/join, endAllThreads, setThreadCount,
         conflictsWithScheduledJob, shouldDropThread/dropThread, disable/enableThreads,
-        getJobsInfo/getJobsByName, setJobsExtendedStatsWindow (+ maxDutyCycleWindow)
-        all present under RBX::TaskScheduler::* mangles.
+        getJobsInfo/getJobsByName, setJobsExtendedStatsWindow (+ maxDutyCycleWindow),
+        printJobs (PLAYER 0x009b6730) all present under RBX::TaskScheduler::* mangles.
       - 2013 has NO cyclic executive: cancelCyclicExecutive / releaseCyclicExecutive
-        mangles absent, zero cyclic strings in the PE. The releaseJob cyclic branch
-        and printJobs (printf diagnostics, format strings absent) are 2016-only.
+        mangles absent, zero cyclic strings in the PE. The releaseJob cyclic branch is
+        2016-only.
    2016 source (Base/rbx/TaskScheduler.Thread.cpp) used as style template; binary wins. */
 
 #include "rbx/TaskScheduler.h"
@@ -82,7 +82,7 @@ public:
 	void releaseJob();
 	TaskScheduler::StepResult runJob();
 };
-// NOTE (2013): printJobs (2016 printf diagnostics) absent from the Oct 2013 binaries.
+// printJobs (PLAYER 0x009b6730, 2016 has it too) sits at the end so the asserts keep their lines.
 // FUNCTION: PLAYER 0x009b7b40
 // FUNCTION: STUDIO 0x00a702f0
 void TaskScheduler::endAllThreads()
@@ -369,4 +369,11 @@ void TaskScheduler::getJobsByName(const std::string& name, std::vector<boost::sh
 			result.push_back(*iter);
 		}
 	}
+}
+
+// FUNCTION: PLAYER 0x009b6730
+// FUNCTION: STUDIO 0x00a6ec30
+void TaskScheduler::printJobs()
+{
+	std::for_each(threads.begin(), threads.end(), boost::bind(&Thread::printJobInfo, _1));
 }

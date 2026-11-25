@@ -325,8 +325,8 @@ namespace Lua {
 			return;
 		ScriptContext::getContext(thread.get())->resume(thread, results);
 	}
-	// STUB: PLAYER 0x0088ec90
-	// STUB: STUDIO 0x009eb7b0
+	// FUNCTION: PLAYER 0x0088ec90
+	// FUNCTION: STUDIO 0x009eb7b0
 	LibraryService::LibraryService(ScriptContext* context)
 		: context(context)
 		, librariesRegistered(false)

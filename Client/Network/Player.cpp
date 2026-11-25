@@ -14,6 +14,16 @@ DECOMP_SIZE_ASSERT(RBX::Network::Player, 0x1d8);
 // Registration 0x00a5f330 (kind 0, static); the flag byte is PLAYER 0x00dd8bfb.
 FASTFLAGVARIABLE(CalculatePlayerSpawnLocationAsEarlyAsPossible, false)
 
+// Stand-in: 2013 registers it from App (initializer PLAYER 0x00a65c60, near FastLogSettings' block);
+// the .data byte starts at 1. The Player getters read it.
+namespace FFlag
+{
+	// GLOBAL: PLAYER 0x00d30f10
+	// GLOBAL: STUDIO 0x00ec17fc
+	bool CrispFilteringEnabled = true;
+	int CrispFilteringEnabledIniter = FLog::RegisterFlag("CrispFilteringEnabled", &CrispFilteringEnabled, NULL, FASTVARTYPE_STATIC);
+}
+
 // Defined by 2013's ScriptContext.obj (registration 0x00a66090, byte 0x00d30f1b, default 1).
 LOGGROUP(Network)
 
@@ -26,11 +36,18 @@ namespace Network {
 	// CanLoadCharacterAppearance (SCRIPTING), then the ones below.
 	static Reflection::PropDescriptor<Player, bool> prop_HasBuildTools("HasBuildTools", category_Data, &Player::getHasGroupBuildTools, &Player::setHasGroupBuildTools, Reflection::PropertyDescriptor::SCRIPTING, Security::RobloxScript);
 	static Reflection::PropDescriptor<Player, bool> prop_CanLoadCharacterAppearance("CanLoadCharacterAppearance", category_Behavior, &Player::getCanLoadCharacterAppearance, &Player::setCanLoadCharacterAppearance, Reflection::PropertyDescriptor::SCRIPTING);
+	// 0x00a60290: REPLICATE_ONLY, LocalUser.
+	// Descriptor object PLAYER 0x00dd8e44, STUDIO 0x00f5b554 (getset +0x28); no GLOBAL marker, as for
+	// the other descriptors (decomplint reads a constructor-call definition as a function).
+	Reflection::PropDescriptor<Player, bool> Player::prop_SuperSafeChat("SuperSafeChatReplicate", category_Data, &Player::getSuperSafeChat, &Player::setSuperSafeChat, Reflection::PropertyDescriptor::REPLICATE_ONLY, Security::LocalUser);
 
 	// Dynamic initializers 0x00a602e0 / 0x00a60320 (BoundProp<float> ctor 0x005409d0): flags 0x13
 	// (SCRIPTING) and 0x15 (UI), security 2 (RobloxPlace).
 	Reflection::BoundProp<float> Player::prop_SimulationRadius("SimulationRadius", category_Data, &Player::simulationRadius, Reflection::PropertyDescriptor::SCRIPTING, Security::LocalUser);
 	Reflection::BoundProp<float> Player::prop_MaxSimulationRadius("MaximumSimulationRadius", category_Data, &Player::maxSimulationRadius, Reflection::PropertyDescriptor::UI, Security::LocalUser);
+
+	// 0x00a603f0 (EnumPropDescriptor ctor 0x00547680): UI, RobloxScript, read-only.
+	static Reflection::EnumPropDescriptor<Player, Player::ChatMode> prop_ChatMode("ChatMode", category_Data, &Player::getChatMode, NULL, Reflection::PropertyDescriptor::UI, Security::RobloxScript);
 
 	// Dynamic initializers 0x00a60430 / 0x00a60490: flags 0x1f (STANDARD), security 0.
 	static Reflection::PropDescriptor<Player, BrickColor> prop_teamColor("TeamColor", category_Team, &Player::getTeamColor, &Player::setTeamColor);
@@ -99,6 +116,34 @@ namespace Network {
 	bool Player::getAppearanceDidLoad() const
 	{
 		return appearanceDidLoad;
+	}
+
+	// FUNCTION: PLAYER 0x00527600
+	// FUNCTION: STUDIO 0x005d8170
+	bool Player::getSuperSafeChat() const
+	{
+		return FFlag::CrispFilteringEnabled ? userId < 0 : superSafeChat;
+	}
+
+	// FUNCTION: PLAYER 0x00527620
+	// FUNCTION: STUDIO 0x005d8190
+	void Player::setSuperSafeChat(bool value)
+	{
+		if (value != superSafeChat)
+		{
+			superSafeChat = value;
+			raisePropertyChanged(prop_SuperSafeChat);
+			raisePropertyChanged(prop_ChatMode);
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00527650
+	// FUNCTION: STUDIO 0x005d81c0
+	Player::ChatMode Player::getChatMode() const
+	{
+		if (!FFlag::CrispFilteringEnabled)
+			return superSafeChat ? CHAT_MODE_MENU : CHAT_MODE_TEXT_AND_MENU;
+		return isGuest() ? CHAT_MODE_MENU : CHAT_MODE_TEXT_AND_MENU;
 	}
 
 	// FUNCTION: PLAYER 0x00527690
@@ -446,51 +491,6 @@ template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
 // the blank lines hold it there until the functions between are written.
 namespace RBX {
 namespace Network {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

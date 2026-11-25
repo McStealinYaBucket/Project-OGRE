@@ -48,6 +48,7 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "ida"))
 import gen_reccmp_csv as G  # noqa: E402  (norm_sig, undname, read_map, pdb_view)
 
 EXP = os.path.join(ROOT, "ida", "exports")
+IDA_BAD = re.compile(r"[^A-Za-z0-9_:?@$.]")
 DUMMY = re.compile(r"^(?:j_)*(?:sub|nullsub|unknown_libname)_[0-9A-Fa-f]+$")
 REPORT = "notes/runs/2026-11-12-phase4-pairing"
 
@@ -513,6 +514,36 @@ FACTS = [
     (0x00624620, 0x006cd530, "rename", "?trustCheckBrowser@Http@RBX@@SA_NPBD@Z", "src2016:",
      "RBX::Http::trustCheckBrowser(const char*) | ends `test al,al; setne al` on isMoneySite 0x00623bb0; our STUB "
      "Util/Http.cpp pairs here (94.1, PLAYER and STUDIO)"),
+    # wave13 sync (app-13.md "IDA owner (names)"): the GameBasicSettings / GameSettings property accessors our
+    # tree does not declare yet (so no decoration to copy); iOS 1029 symbols, each checked from the exe bytes
+    # (PLAYER and STUDIO bodies identical, raise target PLAYER 0x0061c750 / STUDIO 0x006f1260).
+    (0x006f61f0, 0x00792fd0, "rename", "_ZNK3RBX17GameBasicSettings13getFullScreenEv", "ios:",
+     "RBX::GameBasicSettings::getFullScreen() const (iOS 1029) | `mov al,[ecx+7Ch]; ret`, fullscreen +0x7c "
+     "(GameBasicSettings ctor 0x006f8e70); first of GameBasicSettings' accessors in GameSettings.obj"),
+    (0x006f6200, 0x00792fe0, "rename", "_ZN3RBX17GameBasicSettings14setControlModeENS0_11ControlModeE", "ios:",
+     "RBX::GameBasicSettings::setControlMode(ControlMode) (iOS 1029) | if [+0x6c] != v: store, raisePropertyChanged "
+     "desc 0x00df2628 ('ControlMode')"),
+    (0x006f6220, 0x00793000, "rename",
+     "_ZN3RBX17GameBasicSettings16setRenderQualityENS0_20RenderQualitySettingE", "ios:",
+     "RBX::GameBasicSettings::setRenderQuality(RenderQualitySetting) (iOS 1029) | if [+0x70] != v: store, "
+     "raisePropertyChanged desc 0x00df26fc ('SavedQualityLevel')"),
+    (0x006f6240, 0x00793020, "rename", "_ZN3RBX17GameBasicSettings12setMouseLockEb", "ios:",
+     "RBX::GameBasicSettings::setMouseLock(bool) (iOS 1029) | `mov [ecx+74h],al; ret 4`, no signal"),
+    (0x006f6250, 0x00793030, "rename",
+     "_ZN3RBX17GameBasicSettings21setUploadVideoSettingENS_12GameSettings13UploadSettingE", "ios:",
+     "RBX::GameBasicSettings::setUploadVideoSetting(GameSettings::UploadSetting) (iOS 1029) | if [+0x78] != v: "
+     "store, raisePropertyChanged desc 0x00df27e8 ('VideoUploadPromptBehavior')"),
+    (0x006f6270, 0x00793050, "rename", "_ZN3RBX17GameBasicSettings23setAllTutorialsDisabledEb", "ios:",
+     "RBX::GameBasicSettings::setAllTutorialsDisabled(bool) (iOS 1029) | if byte [+0x8c] != v: store, "
+     "raisePropertyChanged desc 0x00df26a0 ('AllTutorialsDisabled')"),
+    (0x006f4810, 0x00791df0, "rename",
+     "_ZN3RBX12GameSettings19setPostImageSettingENS0_13UploadSettingE", "ios:",
+     "RBX::GameSettings::setPostImageSetting(UploadSetting) (iOS 1029) | if [+0x8c] != v: store, "
+     "raisePropertyChanged desc 0x00df1fec ('ImageUploadPromptBehavior')"),
+    (0x006f4840, 0x00791e20, "rename",
+     "_ZN3RBX12GameSettings22setVideoQualitySettingENS0_12VideoQualityE", "ios:",
+     "RBX::GameSettings::setVideoQualitySetting(VideoQuality) (iOS 1029) | if [+0x90] != v: store, "
+     "raisePropertyChanged desc 0x00df207c ('VideoQuality', category 'Video')"),
 ]
 
 
@@ -597,8 +628,8 @@ def classify(cur, src, sig_cur, ours, our_sigs, elsewhere):
     ours: our names at R, our_sigs: their norm_sigs, elsewhere: our build defines sig_cur at another body."""
     if src == "dummy" or DUMMY.match(cur):
         return "rename"
-    if cur in ours:
-        return "agree"
+    if cur in ours or cur in {IDA_BAD.sub("_", x) for x in ours}:
+        return "agree"      # (IDA stores a proc name such as resume_adapter<T> with its bad characters as '_')
     if sig_cur and sig_cur in our_sigs:
         return "agree-sig"
     if sig_cur and G.qual(sig_cur) in {G.qual(x) for x in our_sigs}:

@@ -17,6 +17,7 @@
 #include "FileOperations.h"
 #include "rbx/Log.h"
 #include "rbx/Thread.hpp"
+#include "rbx/TaskScheduler.h"
 #include "FastLog.h"
 #include "decomp.h"
 
@@ -205,13 +206,59 @@ LONG CrashReporter::ProcessException(struct _EXCEPTION_POINTERS* ExceptionInfo, 
 }
 
 // Waits for a crash (reportCrashEvent) or three minutes; a timeout without NotifyAlive is a hang,
-// dumped once through a breakpoint exception. The hang branch calls a TaskScheduler member at
-// PLAYER 0x009b6730 (walks the threads at +0x194) that Base's TaskScheduler.h does not declare.
-// STUB: PLAYER 0x0051fe50
-// STUB: STUDIO 0x005d76a0
+// dumped once through a breakpoint exception, then TaskScheduler::printJobs (PLAYER 0x009b6730).
+// 2013 gates each LaunchUploadProcess on an FFlag (2016 does not). Byte-identical to PLAYER except
+// the __except scope-table operand (__sehtable$, PLAYER 0x00c80b58), which reccmp does not pair.
+// FUNCTION: PLAYER 0x0051fe50
+// FUNCTION: STUDIO 0x005d76a0
 void CrashReporter::WatcherThreadFunc()
 {
-	STUB(0x0051fe50);
+	RBX::set_thread_name("CrashReporter_WatcherThreadFunc");
+
+	RBX::Log::current()->writeEntry(RBX::Log::Information, "WatcherThread Started");
+
+	bool quit = false;
+	while (!quit && !destructing)
+	{
+		if (!reportCrashEvent.Wait(3 * 60 * 1000))
+		{
+			if (isAlive)
+			{
+				isAlive = false;
+			}
+			else if (hangReportingEnabled)
+			{
+				if (deadlockCounter++ == 0)
+				{
+					logEvent("WatcherThread Detected hang.");
+					FASTLOG(FLog::HangDetection, "WatcherThread Detected hang.");
+
+					RBX::TaskScheduler::singleton().printJobs();
+
+					LONG result;
+					__try
+					{
+						RaiseException(EXCEPTION_BREAKPOINT, 0, 0, NULL);
+					}
+					__except (result = ProcessException(GetExceptionInformation(), true), EXCEPTION_EXECUTE_HANDLER)
+					{
+						if (FFlag::ImmediateHangUploadEnabled)
+							LaunchUploadProcess();
+					}
+				}
+			}
+		}
+		else if (!destructing)
+		{
+			FASTLOG(FLog::Crash, "Processing non-hang");
+			threadResult = ProcessException(exceptionInfo, false);
+			quit = true;
+
+			if (FFlag::ImmediateCrashUploadEnabled)
+				LaunchUploadProcess();
+		}
+	}
+	logEvent("WatcherThread Exiting.");
 }
 
 // FUNCTION: PLAYER 0x00520070
@@ -262,8 +309,8 @@ LONG CrashReporter::ProcessExceptionInThead(struct _EXCEPTION_POINTERS* Exceptio
 
 // Without exception pointers, raise a breakpoint to get some. 97.9%: only the __except scope table
 // operand (0x00c80b98) is unpaired.
-// STUB: PLAYER 0x005202d0
-// STUB: STUDIO 0x005d7b20
+// FUNCTION: PLAYER 0x005202d0
+// FUNCTION: STUDIO 0x005d7b20
 static LONG ProcessExceptionStatic(PEXCEPTION_POINTERS ExceptionInfo)
 {
 	if (ExceptionInfo == NULL)

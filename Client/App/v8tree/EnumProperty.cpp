@@ -1372,6 +1372,26 @@ void RBX::Reflection::TypedPropertyDescriptor<RBX::UDim>::writeValue(const Descr
 	oElement->setValue((int)v.offset);
 }
 
+// 2013 (PLAYER 0x00703070 / STUDIO 0x0070c5d0): the jmp to genericConvert just ahead of
+// convert<UDim2>. getDataSize/hasStringValue: ICF folded in 2013, slots 7/8 of vftable 0x00b86658
+// (getDataSize<float> 0x006fd890, Selectable::isSelectable3d 0x006be550).
+template<>
+G3D::Vector2int16& RBX::Reflection::Variant::convert<G3D::Vector2int16>(void)
+{
+	return genericConvert<G3D::Vector2int16>();
+}
+
+template<>
+int RBX::Reflection::TypedPropertyDescriptor<G3D::Vector2int16>::getDataSize(const DescribedBase* instance) const
+{
+	return sizeof(G3D::Vector2int16);
+}
+
+template<>
+bool RBX::Reflection::TypedPropertyDescriptor<G3D::Vector2int16>::hasStringValue() const {
+	return true;
+}
+
 template<>
 RBX::UDim2& RBX::Reflection::Variant::convert<RBX::UDim2>(void)
 {

@@ -27,6 +27,14 @@ extern "C" void ogre_stub_006aa9e0()
 }
 #pragma comment(linker, "/alternatename:?getCommonLogFilename@Log@G3D@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ=_ogre_stub_006aa9e0")
 
+// public: void __thiscall G3D::Log::println(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
+// STUB: STUDIO 0x006aaa70
+extern "C" void ogre_stub_006aaa70()
+{
+	STUB(0x006aaa70);
+}
+#pragma comment(linker, "/alternatename:?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z=_ogre_stub_006aaa70")
+
 // void __cdecl G3D::setAssertionHook(bool (__cdecl *)(char const *, class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, char const *, int, bool))
 // STUB: STUDIO 0x006ab080
 extern "C" void ogre_stub_006ab080()
@@ -91,6 +99,14 @@ extern "C" void ogre_stub_007600d0()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
 
+// public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
+// STUB: STUDIO 0x00780050
+extern "C" void ogre_stub_00780050()
+{
+	STUB(0x00780050);
+}
+#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z=_ogre_stub_00780050")
+
 // public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
 // STUB: STUDIO 0x00789030
 extern "C" void ogre_stub_00789030()
@@ -115,6 +131,22 @@ extern "C" void ogre_stub_007f27e0()
 }
 #pragma comment(linker, "/alternatename:?format_string@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ=_ogre_stub_007f27e0")
 
+// public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
+// STUB: STUDIO 0x00846e30
+extern "C" void ogre_stub_00846e30()
+{
+	STUB(0x00846e30);
+}
+#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z=_ogre_stub_00846e30")
+
+// public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
+// STUB: STUDIO 0x00a68030
+extern "C" void ogre_stub_00a68030()
+{
+	STUB(0x00a68030);
+}
+#pragma comment(linker, "/alternatename:?setLogProvider@Log@RBX@@SAXPAVILogProvider@2@@Z=_ogre_stub_00a68030")
+
 // unsigned int __cdecl RBX::SystemUtil::getVideoMemory(void)
 // STUB: STUDIO 0x00a68be0
 extern "C" void ogre_stub_00a68be0()
@@ -130,3 +162,19 @@ extern "C" void ogre_stub_00a6afd0()
 	STUB(0x00a6afd0);
 }
 #pragma comment(linker, "/alternatename:?add@Counter@Limits@RBX@@QAEXPAVCountable@23@@Z=_ogre_stub_00a6afd0")
+
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::utf8_encode(class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> const &)
+// STUB: STUDIO 0x00a72540
+extern "C" void ogre_stub_00a72540()
+{
+	STUB(0x00a72540);
+}
+#pragma comment(linker, "/alternatename:?utf8_encode@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@3@@Z=_ogre_stub_00a72540")
+
+// class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> __cdecl RBX::utf8_decode(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
+// STUB: STUDIO 0x00a725e0
+extern "C" void ogre_stub_00a725e0()
+{
+	STUB(0x00a725e0);
+}
+#pragma comment(linker, "/alternatename:?utf8_decode@RBX@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@@Z=_ogre_stub_00a725e0")

@@ -398,7 +398,7 @@ namespace RBX {
 			RbxDbgInfo::RemovePlace(placeID);
 	}
 
-	// STUB: PLAYER 0x0064ec50
+	// FUNCTION: PLAYER 0x0064ec50
 	// STUB: STUDIO 0x0076b720
 	DataModel::DataModel(Verb* lockVerb, DataModel* parentDM)
 		:DescribedNonCreatable<DataModel, ServiceProvider, sDataModel>()

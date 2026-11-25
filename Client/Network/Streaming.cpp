@@ -15,6 +15,7 @@
 
 #include <stdexcept>
 #include <malloc.h>
+#include "decomp.h"
 
 #define MAX_STRING_SIZE 200000
 
@@ -27,7 +28,6 @@ namespace Network {
 // The bits written are getEnumCountMSB()+1 wide; the index is read back into an int.
 // serializeEnum writes the Item's value (+0x14), not its index (+0x18, EnumDesc::addPair 0x008217f0),
 // although the name and assert say index: PLAYER 0x005a66cd reads [item+0x14].
-
 
 
 
@@ -340,4 +340,34 @@ RakNet::BitStream& operator>>(RakNet::BitStream& stream, G3D::CoordinateFrame& v
 	return stream;
 }
 
+} // namespace RBX
+
+namespace RBX {
+namespace Network {
+
+DECOMP_SIZE_ASSERT(IdSerializer, 0x1094);
+DECOMP_SIZE_ASSERT(SharedScopeDictionary, 0x101c);
+
+// FUNCTION: PLAYER 0x005a6c70
+// FUNCTION: STUDIO 0x006166f0
+void IdSerializer::setMaxGuidIndexBit(int bits)
+{
+	guidIndexBits = (bits >= 1 && bits <= 14) ? 24 : 32;
+}
+
+// FUNCTION: PLAYER 0x005a6f70
+// FUNCTION: STUDIO 0x00616b30
+void IdSerializer::setRefValue(WaitItem& wi, Instance* instance)
+{
+	wi.desc->setRefValue(wi.instance.get(), instance);
+}
+
+// FUNCTION: PLAYER 0x005aafd0
+// FUNCTION: STUDIO 0x0061b2d0
+IdSerializer::IdSerializer()
+	: guidIndexBits(32)
+{
+}
+
+} // namespace Network
 } // namespace RBX

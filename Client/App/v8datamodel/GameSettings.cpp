@@ -3,10 +3,12 @@
 #include "stdafx.h"
 
 #include "V8DataModel/GameSettings.h"
+#include "V8DataModel/GameBasicSettings.h"
 #include "decomp.h"
 
 namespace RBX {
 	const char* const sGameSettings = "GameSettings";
+	const char* const sGameBasicSettings = "UserGameSettings";
 }
 
 using namespace RBX;
@@ -92,12 +94,83 @@ GameSettings::GameSettings()
 	, bubbleChatLifetime(30.0f)
 	, hardwareMouse(false)
 	, videoCaptureEnabled(true)
-	, videoQuality(MEDIUM_RES)
 	, postImageSetting(ASK)
+	, videoQuality(MEDIUM_RES)
 {
 	Instance::setName("Game Options");
 }
 
 } // namespace RBX
 
+namespace RBX {
+namespace Reflection {
+
+// FUNCTION: PLAYER 0x006f7c20
+// FUNCTION: STUDIO 0x00793de0
+template<>
+EnumDesc<GameBasicSettings::ControlMode>::EnumDesc()
+	: EnumDescriptor("ControlMode", typeid(GameBasicSettings::ControlMode))
+{
+	addPair(GameBasicSettings::CONTROL_MOUSELOCK, "MouseLockSwitch");
+	addLegacyName("Mouse Lock Switch", GameBasicSettings::CONTROL_MOUSELOCK);
+	addPair(GameBasicSettings::CONTROL_CLASSIC, "Classic");
+}
+
+template<>
+const Type& Type::getSingleton<GameBasicSettings::ControlMode>()
+{
+	return EnumDesc<GameBasicSettings::ControlMode>::singleton();
+}
+
+// FUNCTION: PLAYER 0x006f7d60
+// FUNCTION: STUDIO 0x00793f20
+template<>
+EnumDesc<GameBasicSettings::RenderQualitySetting>::EnumDesc()
+	: EnumDescriptor("SavedQualitySetting", typeid(GameBasicSettings::RenderQualitySetting))
+{
+	addPair(GameBasicSettings::QUALITY_AUTO, "Automatic");
+	addPair(GameBasicSettings::QUALITY_1, "QualityLevel1");
+	addPair(GameBasicSettings::QUALITY_2, "QualityLevel2");
+	addPair(GameBasicSettings::QUALITY_3, "QualityLevel3");
+	addPair(GameBasicSettings::QUALITY_4, "QualityLevel4");
+	addPair(GameBasicSettings::QUALITY_5, "QualityLevel5");
+	addPair(GameBasicSettings::QUALITY_6, "QualityLevel6");
+	addPair(GameBasicSettings::QUALITY_7, "QualityLevel7");
+	addPair(GameBasicSettings::QUALITY_8, "QualityLevel8");
+	addPair(GameBasicSettings::QUALITY_9, "QualityLevel9");
+	addPair(GameBasicSettings::QUALITY_10, "QualityLevel10");
+}
+
+template<>
+const Type& Type::getSingleton<GameBasicSettings::RenderQualitySetting>()
+{
+	return EnumDesc<GameBasicSettings::RenderQualitySetting>::singleton();
+}
+
+} // namespace Reflection
+} // namespace RBX
+
+namespace RBX {
+
+// The base GlobalBasicSettingsItem ctor stays out of line (PLAYER 0x006f8550); the instance is
+// renamed "GameSettings" after the members are built.
+// FUNCTION: PLAYER 0x006f8e70
+// FUNCTION: STUDIO 0x00794e10
+GameBasicSettings::GameBasicSettings()
+	: controlMode(CONTROL_CLASSIC)
+	, renderQualitySetting(QUALITY_AUTO)
+	, mouseLocked(false)
+	, canMousePan(true)
+	, freeLook(false)
+	, uploadVideos(GameSettings::ASK)
+	, fullscreen(false)
+	, studio(false)
+	, allTutorialsDisabled(false)
+{
+	Instance::setName("GameSettings");
+}
+
+} // namespace RBX
+
 DECOMP_SIZE_ASSERT(RBX::GameSettings, 0x94);
+DECOMP_SIZE_ASSERT(RBX::GameBasicSettings, 0x90);

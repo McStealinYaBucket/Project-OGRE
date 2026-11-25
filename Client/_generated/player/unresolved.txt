@@ -1,5 +1,4 @@
 # PLAYER: unresolved externals with no stub (reason, decorated, demangled). Generated.
-data	?CrashReporterInit@FLog@@3EA	unsigned char FLog::CrashReporterInit
 data	?GfxClustersFull@FLog@@3EA	unsigned char FLog::GfxClustersFull
 data	?JointLifetime@FLog@@3EA	unsigned char FLog::JointLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
@@ -7,30 +6,21 @@ data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
-data	?Verbs@FLog@@3EA	unsigned char FLog::Verbs
 data	?aaSamples@CRenderSettings@RBX@@1W4AASamples@12@A	protected: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
-unknown	??$convert@VVector2int16@G3D@@@Variant@Reflection@RBX@@QAEAAVVector2int16@G3D@@XZ	public: class G3D::Vector2int16 & __thiscall RBX::Reflection::Variant::convert<class G3D::Vector2int16>(void)
+data	?registrar@?$ClassRegistrar@VGameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings> RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings>::registrar
+data	?registrar@?$EnumRegistrar@W4ControlMode@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode>::registrar
+data	?registrar@?$EnumRegistrar@W4RenderQualitySetting@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting>::registrar
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
 unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void __thiscall RakNet::TCPInterface::DeallocatePacket(struct RakNet::Packet *)
 unknown	?Final@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Final(void)
 unknown	?GetHash@CSHA1@@QBEPAEXZ	public: unsigned char * __thiscall CSHA1::GetHash(void) const
-unknown	?RegisterFlag@FLog@@YAHPBDPA_NPAPA_NW4FastVarType@1@@Z	int __cdecl FLog::RegisterFlag(char const *, bool *, bool **, enum FLog::FastVarType)
 unknown	?Reset@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Reset(void)
 unknown	?Send@PacketizedTCP@RakNet@@QAEXPBDIABUSystemAddress@2@_N@Z	public: void __thiscall RakNet::PacketizedTCP::Send(char const *, unsigned int, struct RakNet::SystemAddress const &, bool)
 unknown	?SendList@PacketizedTCP@RakNet@@QAE_NPAPBDPBHHABUSystemAddress@2@_N@Z	public: bool __thiscall RakNet::PacketizedTCP::SendList(char const **, int const *, int, struct RakNet::SystemAddress const &, bool)
 unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned char *, unsigned int)
-unknown	?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z	public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
-unknown	?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z	public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
-unknown	?getDataSize@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBEHPBVDescribedBase@23@@Z	public: virtual int __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getDataSize(class RBX::Reflection::DescribedBase const *) const
-unknown	?getSalt@ProtectedString@RBX@@QBEPBDXZ	public: char const * __thiscall RBX::ProtectedString::getSalt(void) const
-unknown	?hasStringValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@UBE_NXZ	public: virtual bool __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::hasStringValue(void) const
-unknown	?println@Log@G3D@@QAEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z	public: void __thiscall G3D::Log::println(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
-unknown	?setLogProvider@Log@RBX@@SAXPAVILogProvider@2@@Z	public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
-unknown	?utf8_decode@RBX@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@@Z	class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> __cdecl RBX::utf8_decode(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &)
-unknown	?utf8_encode@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@3@@Z	class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::utf8_encode(class std::basic_string<wchar_t, struct std::char_traits<wchar_t>, class std::allocator<wchar_t>> const &)
 unparsed	?slot_exception_handler@signals@rbx@@3V?$function@$$A6AXAAVexception@std@@@Z@boost@@A	class boost::function<void __cdecl(class std::exception &)> rbx::signals::slot_exception_handler
 unparsed	_LZ4_compressHC_limitedOutput	
 unparsed	_LZ4_compress_limitedOutput	

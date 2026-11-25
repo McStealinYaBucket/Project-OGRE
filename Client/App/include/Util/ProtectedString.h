@@ -33,8 +33,8 @@ namespace RBX {
 		// mac: 0x234658 - MD5(salt + source) written into *out; empty source -> empty hash
 		void calculateHash(std::string* out) const;
 
-		// mac: 0x234862
-		static const char* getSalt();
+		// mac: 0x234862. A const member in 2013 (iOS; lauxlib.c calls it through an instance).
+		const char* getSalt() const;
 
 		// mac: 0x234874 - bounds-checked single-character read (used by obfuscation
 		// checks without exposing the whole string)

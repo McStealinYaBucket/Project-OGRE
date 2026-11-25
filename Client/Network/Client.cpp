@@ -6,6 +6,8 @@
 
 #include "Network/Client.h"
 #include "Network/Players.h"
+#include "V8DataModel/DataModel.h"
+#include <boost/bind.hpp>
 #include "V8DataModel/NetworkSettings.h"
 #include "security/SecurityContext.h"
 #include "FastLog.h"
@@ -71,8 +73,6 @@ namespace Network {
 
 
 
-
-
 	// mac: 0x844AEC: provider lookup + assert, then find<Client> (or NULL).
 	// FUNCTION: PLAYER 0x005adbd0
 	// FUNCTION: STUDIO 0x0060c610
@@ -102,11 +102,48 @@ namespace Network {
 		return Client::findClient(context, testInDatamodel) != NULL;
 	}
 
-	// STUB: PLAYER 0x005adcc0
-	// STUB: STUDIO 0x0060c700
+	// Not written yet. __declspec(noinline) and the opaque call are stand-ins (see Player::setCharacter):
+	// they keep VC9 from inlining the stub or proving it nothrow inside onServiceProvider.
+	// STUB: PLAYER 0x005ac7a0
+	// STUB: STUDIO 0x0060b350
+	__declspec(noinline) void Client::disconnect(int blockDuration)
+	{
+		STUB(0x005ac7a0);
+		Players::backendProcessing(this, false);
+	}
+
+	// FUNCTION: PLAYER 0x005aca00
+	// FUNCTION: STUDIO 0x0060b5b0
+	void Client::disconnect()
+	{
+		disconnect(3000);
+	}
+
+	// FUNCTION: PLAYER 0x005adcc0
+	// FUNCTION: STUDIO 0x0060c700
 	void Client::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
 	{
-		STUB(0x005adcc0);
+		if (oldProvider)
+		{
+			closingConnection.disconnect();
+			disconnect(3000);
+			Players* players = oldProvider->find<Players>();
+			players->setConnection(NULL);
+		}
+
+		Super::onServiceProvider(oldProvider, newProvider);
+
+		if (newProvider)
+		{
+			if (DataModel* dataModel = DataModel::get(this))
+				if (dataModel->lockVerb.get())
+					dataModel->lockVerb->doIt(NULL);
+
+			Players* players = newProvider->create<Players>();
+			players->setConnection(rakPeer.get());
+
+			closingConnection = newProvider->closingSignal.connect(boost::bind((void (Client::*)())&Client::disconnect, this));
+		}
 	}
 
 } // namespace Network

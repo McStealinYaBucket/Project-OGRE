@@ -44,6 +44,9 @@ namespace Network {
 		static Client* findClient(const Instance* context, bool testInDatamodel = true);
 		static bool clientIsPresent(const Instance* context, bool testInDatamodel = true);
 
+		void disconnect(int blockDuration); // PLAYER 0x005ac7a0 (iOS name)
+		void disconnect();                  // PLAYER 0x005aca00: disconnect(3000), the closingSignal slot
+
 	protected:
 		/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // +0x20, PLAYER 0x005adcc0
 	};

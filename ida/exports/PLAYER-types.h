@@ -5427,8 +5427,8 @@ struct __cppobj RBX::GameSettings : RBX::GlobalAdvancedSettingsItem<RBX::GameSet
   bool hardwareMouse;
   bool videoCaptureEnabled;
   unsigned __int8 gap_8A[2];
-  int videoQuality;                     ///< enum RBX::GameSettings::VideoQuality
   int postImageSetting;                 ///< enum RBX::GameSettings::UploadSetting
+  int videoQuality;                     ///< enum RBX::GameSettings::VideoQuality
 };
 
 /* 652 */
@@ -6206,7 +6206,7 @@ struct __cppobj RBX::VideoControl : Ogre::IFrameDataCallback
   bool recorded;
   unsigned __int8 gap_5[3];
   int videoQuality;
-  unsigned __int8 m_unk0x0c[256];       ///< array
+  unsigned __int8 path[256];            ///< array
   unsigned __int8 capture[4];           ///< boost::scoped_ptr<RBX::IVideoCapture>
   unsigned __int8 soundState[4];        ///< boost::scoped_ptr<RBX::SoundState>
   void *rbxView;                        ///< RBX::ViewBase *
@@ -6245,5 +6245,117 @@ struct __cppobj RBX::RecordToggleVerb : RBX::Verb
   unsigned __int8 jobDone[4];           ///< RBX::CEvent
   unsigned __int8 threadDone[4];        ///< RBX::CEvent
   unsigned __int8 gap_6C[4];
+};
+
+/* 753 */
+struct __cppobj RBX::GlobalBasicSettings::Item : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>
+{
+};
+
+/* 754 */
+struct __cppobj RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance> : RBX::GlobalBasicSettings::Item
+{
+};
+
+/* 755 */
+struct __cppobj RBX::Reflection::Described<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings, RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>, 27, 0> : RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>
+{
+};
+
+/* 756 */
+struct __cppobj RBX::DescribedCreatable<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, 27, 0> : RBX::Reflection::Described<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings, RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>, 27, 0>
+{
+};
+
+/* 757 */
+struct __cppobj RBX::GlobalBasicSettingsItem<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings> : RBX::DescribedCreatable<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+};
+
+/* 758 */
+struct __cppobj RBX::GameBasicSettings : RBX::GlobalBasicSettingsItem<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings>
+{
+  unsigned __int8 fullscreenChangedSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  unsigned __int8 studioModeChangedSignal[4]; ///< rbx::signal<void __cdecl(bool)>
+  int controlMode;                      ///< enum RBX::GameBasicSettings::ControlMode
+  int renderQualitySetting;             ///< enum RBX::GameBasicSettings::RenderQualitySetting
+  bool mouseLocked;
+  bool canMousePan;
+  bool freeLook;
+  unsigned __int8 gap_77[1];
+  int uploadVideos;                     ///< enum RBX::GameSettings::UploadSetting
+  bool fullscreen;
+  bool studio;
+  unsigned __int8 gap_7E[2];
+  unsigned __int8 tutorialState[12];    ///< std::map<std::string,bool>
+  bool allTutorialsDisabled;
+  unsigned __int8 gap_8D[3];
+};
+
+/* 759 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers> : RBX::Instance
+{
+};
+
+/* 760 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Players, char const *const RBX::Network::sPlayers, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>
+{
+};
+
+/* 761 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::Players, RBX::Instance, char const *const RBX::Network::sPlayers, 27, 0> : RBX::Reflection::Described<RBX::Network::Players, char const *const RBX::Network::sPlayers, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>, 27, 0>
+{
+};
+
+/* 762 */
+struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network::Players, RBX::Instance, char const *const RBX::Network::sPlayers, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 saveDataUrl[28];      ///< std::string
+  unsigned __int8 loadDataUrl[28];      ///< std::string
+  unsigned __int8 saveLeaderboardDataUrl[28]; ///< std::string
+  unsigned __int8 leaderboardKeys[24];  ///< boost::unordered::unordered_set<std::string,boost::hash<std::string >,std::equal_to<std::string >,std::allocator<std::string > >
+  unsigned __int8 m_unk0xd0[28];        ///< std::string
+  unsigned __int8 m_unk0xec[28];        ///< std::string
+  unsigned __int8 m_unk0x108[28];       ///< std::string
+  unsigned __int8 m_unk0x124[28];       ///< std::string
+  unsigned __int8 m_unk0x140[28];       ///< std::string
+  unsigned __int8 m_unk0x15c[28];       ///< std::string
+  bool m_unk0x178;
+  bool m_unk0x179;
+  unsigned __int8 gap_17A[2];
+  unsigned __int8 abuseReporter[4];     ///< boost::scoped_ptr<RBX::Network::AbuseReporter>
+  unsigned __int8 m_unk0x180[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 chatHistory[12];      ///< std::list<RBX::Network::ChatMessage>
+  unsigned __int8 m_unk0x194[8];        ///< RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>> >
+  unsigned __int8 localPlayer[8];       ///< boost::shared_ptr<RBX::Network::Player>
+  void *rakPeer;                        ///< RBX::Network::ConcurrentRakPeer *
+  unsigned __int8 m_unk0x1a8[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned int m_unk0x1b0;
+  unsigned int m_unk0x1b4;
+  unsigned int m_unk0x1b8;
+  unsigned int m_unk0x1bc;
+  unsigned __int8 friendRequestEventSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,int)>
+  unsigned __int8 playerAddedEarlySignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 playerAddedSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 playerRemovingSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 playerRemovingLateSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 m_unk0x1d4[4];        ///< rbx::signal<void __cdecl(bool)>
+  unsigned __int8 messageReceivedSignal[4]; ///< rbx::signal<void __cdecl(RBX::Network::ChatMessage const &)>
+  unsigned __int8 abuseReportedReceived[4]; ///< rbx::signal<void __cdecl(RBX::Network::AbuseReport)>
+  unsigned __int8 sendFilteredChatMessageSignal[4]; ///< rbx::signal<void __cdecl(RakNet::SystemAddress const &,boost::shared_ptr<RakNet::BitStream> const &,std::string const &,std::string const &)>
+  unsigned __int8 playerChattedSignal[4]; ///< rbx::signal<void __cdecl(RBX::Network::Players::PlayerChatType,boost::shared_ptr<RBX::Instance>,std::string,boost::shared_ptr<RBX::Instance>)>
+  unsigned __int8 gameAnnounceSignal[4]; ///< rbx::signal<void __cdecl(std::string)>
+  unsigned __int8 cheatingPlayers[12];  ///< std::map<int,std::set<std::string>>
+};
+
+/* 763 */
+struct __cppobj RBX::Network::IdSerializer : RBX::Instance
+{
+  unsigned __int8 scopeNames[4124];     ///< RBX::Network::SharedScopeDictionary
+  unsigned __int8 guidRegistry[8];      ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
+  unsigned __int8 waitItems[12];        ///< std::map<RBX::Guid::Data,std::vector<RBX::Network::IdSerializer::WaitItem>>
+  int guidIndexBits;
 };
 

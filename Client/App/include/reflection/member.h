@@ -192,6 +192,25 @@ namespace RBX
 				}
 			}
 
+			// 2013 checks after each lookup insert (member.h 200/201): one folded checkLookup (PLAYER
+			// 0x00614db0); checkLookups is out of line at some calls (0x00615b20), inline at others.
+			void checkLookup(MemberDescriptorType* descriptor) const
+			{
+				MemberDescriptorType* d;
+				RBXASSERT(descriptorLookup.lookup(descriptor->name.c_str(), d));
+				RBXASSERT(descriptor == d);
+			}
+
+			void checkLookups() const
+			{
+				std::for_each(descriptors.begin(), descriptors.end(), boost::bind(&MemberDescriptorContainer::checkLookup, this, _1));
+			}
+
+
+
+
+
+
 			void declareSub(MemberDescriptorType* descriptor, MemberDescriptorType* replaceable)
 			{
 				RBXASSERT(replaceable != descriptor);
@@ -201,21 +220,23 @@ namespace RBX
 					{
 						descriptors.insert(iter, descriptor);
 						descriptorLookup[descriptor->name.c_str()] = descriptor;
+						checkLookups();
 					}
 					else
 					{
 						RBXASSERT(*iter != descriptor);
-
 						if (*iter == replaceable)
 						{
 							// Replace it
 							*iter = descriptor;
 							descriptorLookup[descriptor->name.c_str()] = descriptor;
+							checkLookups();
 						}
 						else if ((*iter)->name != descriptor->name)
 						{
 							descriptors.insert(iter, descriptor);
 							descriptorLookup[descriptor->name.c_str()] = descriptor;
+							checkLookups();
 						}
 						else
 						{
@@ -243,6 +264,7 @@ namespace RBX
 						// add a new one
 						descriptors.insert(iter, descriptor);
 						descriptorLookup[descriptor->name.c_str()] = descriptor;
+						checkLookups();
 					}
 					else if (*iter == descriptor) 
 					{
@@ -254,6 +276,7 @@ namespace RBX
 						// add a new one
 						descriptors.insert(iter, descriptor);
 						descriptorLookup[descriptor->name.c_str()] = descriptor;
+						checkLookups();
 					}
 					else
 					{
@@ -360,3 +383,11 @@ SKIP:				;
 
 	}
 }
+
+// MemberDescriptorContainer<T>::compare: one ICF-folded copy for all five containers, passed to
+// std::lower_bound by declare/declareSub. The marker sits here so member.h's asserts keep their lines.
+// clang-format off
+// TEMPLATE: PLAYER 0x00614cd0
+// TEMPLATE: STUDIO 0x006db810
+// ?compare@?$MemberDescriptorContainer@VPropertyDescriptor@Reflection@RBX@@@Reflection@RBX@@CA_NPBVPropertyDescriptor@23@0@Z
+// clang-format on

@@ -31,9 +31,12 @@ namespace Reflection
 
 }
 
-	// NOTE: the 2013 binary stores the salt as the literal "19:14:55"
-	// (seen at 0x234658 in calculateHash and returned by getSalt @0x234862).
-	static const char* const kProtectedStringSalt = "19:14:55";
+	// The salt is the build's __TIME__: PLAYER "10:46:55", STUDIO "19:11:34" (Mac "19:14:55").
+#if defined(OGRE_TARGET_STUDIO)
+	static const char* const kProtectedStringSalt = "19:11:34";
+#else
+	static const char* const kProtectedStringSalt = "10:46:55";
+#endif
 
 	const ProtectedString ProtectedString::emptyString;
 
@@ -45,12 +48,11 @@ namespace Reflection
 		calculateHash(hash.get());
 	}
 
-	// FUNCTION: PLAYER 0x0066f170
-	// FUNCTION: STUDIO 0x0077fd60
-	ProtectedString::ProtectedString(const ProtectedString& other)
-		: source(other.source)
-		, hash(new std::string(*other.hash))
+	// FUNCTION: PLAYER 0x0066ef10
+	// FUNCTION: STUDIO 0x0077fae0
+	const char* ProtectedString::getSalt() const
 	{
+		return kProtectedStringSalt;
 	}
 
 	ProtectedString::~ProtectedString()
@@ -87,9 +89,12 @@ namespace Reflection
 		}
 	}
 
-	const char* ProtectedString::getSalt() // 0x234862
+	// FUNCTION: PLAYER 0x0066f170
+	// FUNCTION: STUDIO 0x0077fd60
+	ProtectedString::ProtectedString(const ProtectedString& other)
+		: source(other.source)
+		, hash(new std::string(*other.hash))
 	{
-		return kProtectedStringSalt;
 	}
 
 	bool ProtectedString::readUnprotectedChar(int index, char* outChar) const // 0x234874

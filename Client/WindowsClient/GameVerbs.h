@@ -3,7 +3,8 @@
    0x00be1bcc..0x00be1c2c, seven slots each: dump, dtor, isEnabled, isChecked, isSelected, getText,
    doIt). No 2013 __FILE__ string names this file (none of its code asserts), so the path is the
    2016 tree's (WindowsClient/GameVerbs.cpp).
-   Written so far: LeaveGameVerb, ToggleFullscreenVerb, RecordToggleVerb's dtor and state queries. */
+   Written so far: LeaveGameVerb, ToggleFullscreenVerb, RecordToggleVerb's dtor, state queries and
+   doIt (its two actions are still STUBs). */
 
 #pragma once
 
@@ -79,11 +80,16 @@ namespace RBX {
 
 		bool isUploadingVideo() const { return videoUploadingEnabled; }
 
+		// Run on the helper thread; doIt binds one of them into `job`.
+		void startAction(); // PLAYER 0x00439370
+		void stopAction();  // PLAYER 0x00439450
+
 	public:
 		~RecordToggleVerb();
 		/*override*/ bool isEnabled() const;  // vtable+0x08
 		/*override*/ bool isChecked() const;  // vtable+0x0c
 		/*override*/ bool isSelected() const; // vtable+0x10
+		/*override*/ void doIt(IDataState* dataState); // vtable+0x18
 
 		// SYNTHETIC: PLAYER 0x00439210
 		// RBX::RecordToggleVerb::`scalar deleting destructor'

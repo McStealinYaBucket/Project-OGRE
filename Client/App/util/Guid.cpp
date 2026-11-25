@@ -156,8 +156,8 @@ bool RBX::Guid::Data::operator <(const RBX::Guid::Data& other) const
 // mac: 0x204658 -- null pointers fall back to Name::getNullName() / index 0
 int RBX::Guid::compare(const Guid* a, const Guid* b)
 {
-	const Scope& sa = a ? a->data.scope : Scope::null();
-	const Scope& sb = b ? b->data.scope : Scope::null();
+	const RBX::Name& sa = a ? *a->data.scope.getName() : RBX::Name::getNullName();
+	const RBX::Name& sb = b ? *b->data.scope.getName() : RBX::Name::getNullName();
 
 	const int compare = sa.compare(sb);
 	if (compare)

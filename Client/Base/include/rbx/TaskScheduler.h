@@ -108,8 +108,9 @@ namespace RBX
 		double schedulerRate() const { return schedulerDutyCycle.rate(); }
 		double getSchedulerDutyCyclePerThread() const;
 		rbx::atomic_unk0x005ba6f0<int> taskCount; // +0x08, the atomic.h:182 class (ctor 0x005ba6f0)
-		// NOTE (2013): printDiagnostics/printJobs (2016 diagnostics with printf format
-		// strings like "Arbiter:TaskName") are absent from the Oct 2013 binaries.
+		// 2013 has printJobs (PLAYER 0x009b6730; the CrashReporter's hang branch calls it), not
+		// 2016's printDiagnostics (no "Arbiter:TaskName" format strings in the Oct 2013 binaries).
+		void printJobs();
 		void setJobsExtendedStatsWindow(double seconds); // set seconds to 0.0 to disable.
 		// NOTE (2013): no cyclic executive — isCyclicExecutive/cancelCyclicExecutive/
 		// releaseCyclicExecutive (2016) have no 2013 symbols or strings and are absent.

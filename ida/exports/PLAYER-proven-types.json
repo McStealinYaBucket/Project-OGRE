@@ -5764,19 +5764,19 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "videoQuality",
+     "name": "postImageSetting",
      "offset": 140,
      "size": 4,
      "kind": "enum",
-     "type": "RBX::GameSettings::VideoQuality",
+     "type": "RBX::GameSettings::UploadSetting",
      "scalar": "T_INT4"
     },
     {
-     "name": "postImageSetting",
+     "name": "videoQuality",
      "offset": 144,
      "size": 4,
      "kind": "enum",
-     "type": "RBX::GameSettings::UploadSetting",
+     "type": "RBX::GameSettings::VideoQuality",
      "scalar": "T_INT4"
     }
    ],
@@ -8062,7 +8062,7 @@
      "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0x0c",
+     "name": "path",
      "offset": 12,
      "size": 256,
      "kind": "array",
@@ -8276,6 +8276,471 @@
    ],
    "base": false,
    "unique": "VRecordToggleVerb@RBX@@"
+  },
+  "RBX::GameBasicSettings": {
+   "size": 144,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalBasicSettingsItem<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings>",
+     "offset": 0,
+     "size": 100,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "fullscreenChangedSignal",
+     "offset": 100,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "studioModeChangedSignal",
+     "offset": 104,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "controlMode",
+     "offset": 108,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GameBasicSettings::ControlMode",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "renderQualitySetting",
+     "offset": 112,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GameBasicSettings::RenderQualitySetting",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "mouseLocked",
+     "offset": 116,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "canMousePan",
+     "offset": 117,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "freeLook",
+     "offset": 118,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "uploadVideos",
+     "offset": 120,
+     "size": 4,
+     "kind": "enum",
+     "type": "RBX::GameSettings::UploadSetting",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "fullscreen",
+     "offset": 124,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "studio",
+     "offset": 125,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "tutorialState",
+     "offset": 128,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,bool,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const,bool> > >",
+     "scalar": null
+    },
+    {
+     "name": "allTutorialsDisabled",
+     "offset": 140,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VGameBasicSettings@RBX@@"
+  },
+  "RBX::Network::Players": {
+   "size": 504,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Network::Players, RBX::Instance, char const *const RBX::Network::sPlayers, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "saveDataUrl",
+     "offset": 100,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "loadDataUrl",
+     "offset": 128,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "saveLeaderboardDataUrl",
+     "offset": 156,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "leaderboardKeys",
+     "offset": 184,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::hash<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::equal_to<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xd0",
+     "offset": 208,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xec",
+     "offset": 236,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x108",
+     "offset": 264,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x124",
+     "offset": 292,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x140",
+     "offset": 320,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x15c",
+     "offset": 348,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x178",
+     "offset": 376,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0x179",
+     "offset": 377,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "abuseReporter",
+     "offset": 380,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Network::AbuseReporter>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x180",
+     "offset": 384,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "chatHistory",
+     "offset": 392,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<RBX::Network::ChatMessage,std::allocator<RBX::Network::ChatMessage> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x194",
+     "offset": 404,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > >",
+     "scalar": null
+    },
+    {
+     "name": "localPlayer",
+     "offset": 412,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Network::Player>",
+     "scalar": null
+    },
+    {
+     "name": "rakPeer",
+     "offset": 420,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Network::ConcurrentRakPeer",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x1a8",
+     "offset": 424,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x1b0",
+     "offset": 432,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0x1b4",
+     "offset": 436,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0x1b8",
+     "offset": 440,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0x1bc",
+     "offset": 444,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "friendRequestEventSignal",
+     "offset": 448,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,int)>",
+     "scalar": null
+    },
+    {
+     "name": "playerAddedEarlySignal",
+     "offset": 452,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "playerAddedSignal",
+     "offset": 456,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "playerRemovingSignal",
+     "offset": 460,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "playerRemovingLateSignal",
+     "offset": 464,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x1d4",
+     "offset": 468,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(bool)>",
+     "scalar": null
+    },
+    {
+     "name": "messageReceivedSignal",
+     "offset": 472,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Network::ChatMessage const &)>",
+     "scalar": null
+    },
+    {
+     "name": "abuseReportedReceived",
+     "offset": 476,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Network::AbuseReport)>",
+     "scalar": null
+    },
+    {
+     "name": "sendFilteredChatMessageSignal",
+     "offset": 480,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RakNet::SystemAddress const &,boost::shared_ptr<RakNet::BitStream> const &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const &)>",
+     "scalar": null
+    },
+    {
+     "name": "playerChattedSignal",
+     "offset": 484,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::Network::Players::PlayerChatType,boost::shared_ptr<RBX::Instance>,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    },
+    {
+     "name": "gameAnnounceSignal",
+     "offset": 488,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >)>",
+     "scalar": null
+    },
+    {
+     "name": "cheatingPlayers",
+     "offset": 492,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<int,std::set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,std::less<int>,std::allocator<std::pair<int const,std::set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPlayers@Network@RBX@@"
+  },
+  "RBX::Network::IdSerializer": {
+   "size": 4244,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "scopeNames",
+     "offset": 96,
+     "size": 4124,
+     "kind": "class",
+     "type": "RBX::Network::SharedScopeDictionary",
+     "scalar": null
+    },
+    {
+     "name": "guidRegistry",
+     "offset": 4220,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>",
+     "scalar": null
+    },
+    {
+     "name": "waitItems",
+     "offset": 4228,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::Guid::Data,std::vector<RBX::Network::IdSerializer::WaitItem,std::allocator<RBX::Network::IdSerializer::WaitItem> >,std::less<RBX::Guid::Data>,std::allocator<std::pair<RBX::Guid::Data const,std::vector<RBX::Network::IdSerializer::WaitItem,std::allocator<RBX::Network::IdSerializer::WaitItem> > > > >",
+     "scalar": null
+    },
+    {
+     "name": "guidIndexBits",
+     "offset": 4240,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": false,
+   "unique": "VIdSerializer@Network@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -10540,6 +11005,44 @@
    "base": true,
    "unique": "VIFrameDataCallback@Ogre@@"
   },
+  "RBX::GlobalBasicSettingsItem<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings>": {
+   "size": 100,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$GlobalBasicSettingsItem@VGameBasicSettings@RBX@@$E?sGameBasicSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::Network::Players, RBX::Instance, char const *const RBX::Network::sPlayers, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::Players, char const *const RBX::Network::sPlayers, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VPlayers@Network@RBX@@VInstance@3@$E?sPlayers@23@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -11361,6 +11864,38 @@
    "base": true,
    "unique": "V?$Described@VPlayer@Network@RBX@@$E?sPlayer@23@3QBDBV?$FactoryProduct@VPlayer@Network@RBX@@VInstance@3@$E?sPlayer@23@3QBDBV43@@3@$0BD@$0A@@Reflection@RBX@@"
   },
+  "RBX::DescribedCreatable<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings, RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VGameBasicSettings@RBX@@VItem@GlobalBasicSettings@2@$E?sGameBasicSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Network::Players, char const *const RBX::Network::sPlayers, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VPlayers@Network@RBX@@$E?sPlayers@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPlayers@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -12132,6 +12667,38 @@
    "base": true,
    "unique": "V?$FactoryProduct@VPlayer@Network@RBX@@VInstance@3@$E?sPlayer@23@3QBDBV43@@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::GameBasicSettings, char const *const RBX::sGameBasicSettings, RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGameBasicSettings@RBX@@$E?sGameBasicSettings@2@3QBDBV?$FactoryProduct@VGameBasicSettings@RBX@@VItem@GlobalBasicSettings@2@$E?sGameBasicSettings@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPlayers>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sPlayers@Network@2@3QBDB@RBX@@"
+  },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
    "vftable": false,
@@ -12334,6 +12901,22 @@
    "base": true,
    "unique": "V?$FactoryProduct@VPhysicsSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sPhysicsSettings@2@3QBDBVInstance@2@@RBX@@"
   },
+  "RBX::FactoryProduct<RBX::GameBasicSettings, RBX::GlobalBasicSettings::Item, char const *const RBX::sGameBasicSettings, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::GlobalBasicSettings::Item",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VGameBasicSettings@RBX@@VItem@GlobalBasicSettings@2@$E?sGameBasicSettings@2@3QBDBVInstance@2@@RBX@@"
+  },
   "RBX::GlobalAdvancedSettings::Item": {
    "size": 96,
    "vftable": false,
@@ -12349,6 +12932,22 @@
    "members": [],
    "base": true,
    "unique": "VItem@GlobalAdvancedSettings@RBX@@"
+  },
+  "RBX::GlobalBasicSettings::Item": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "VItem@GlobalBasicSettings@RBX@@"
   },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>": {
    "size": 96,

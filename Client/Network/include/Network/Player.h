@@ -117,6 +117,8 @@ namespace Network {
 
 		static Reflection::BoundProp<float> prop_SimulationRadius;    // PLAYER 0x00dd9b38 (getset 0x00dd9b60)
 		static Reflection::BoundProp<float> prop_MaxSimulationRadius; // PLAYER 0x00dd8e18 (getset 0x00dd8e40)
+		// "SuperSafeChatReplicate" (iOS name prop_SuperSafeChat); Players::onChildChanged watches it.
+		static Reflection::PropDescriptor<Player, bool> prop_SuperSafeChat; // PLAYER 0x00dd8e44 (getset 0x00dd8e6c)
 
 		// FUNCTION: PLAYER 0x005273c0
 		// FUNCTION: STUDIO 0x005b7a80
@@ -140,6 +142,9 @@ namespace Network {
 		int getAccountAge() const { return accountAge; }
 		void setAccountAge(int value);
 		bool getAppearanceDidLoad() const;
+		bool getSuperSafeChat() const;
+		void setSuperSafeChat(bool value);
+		ChatMode getChatMode() const;
 		bool getHasGroupBuildTools() const { return hasGroupBuildTools; }
 		void setHasGroupBuildTools(bool value);
 
