@@ -295,7 +295,8 @@ set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/C
     Client/Win/VistaTools.cpp Client/Win/placeholder.cpp Client/Win/placeholder_creators.cpp)
 ogre_library(player_client SOURCES Client/WindowsClient/GameVerbs.cpp
     Client/WindowsClient/View.cpp Client/WindowsClient/main.cpp Client/WindowsClient/Application.cpp
-    Client/WindowsClient/FunctionMarshaller.cpp ${OGRE_CLIENT_COMMON_SOURCES}
+    Client/WindowsClient/FunctionMarshaller.cpp Client/WindowsClient/UserInput.cpp
+    Client/WindowsClient/Teleporter.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
 ogre_library(studio_client SOURCES Client/RobloxStudio/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     Client/ClientShared/placeholder.cpp FLAGS ${OGRE_STUDIO_FLAGS})
