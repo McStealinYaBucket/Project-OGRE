@@ -343,6 +343,8 @@ RakNet::BitStream& operator>>(RakNet::BitStream& stream, G3D::CoordinateFrame& v
 } // namespace RBX
 
 #include "GuidRegistryService.h"
+#include "reflection/Event.h"
+#include "reflection/Type.h"
 
 namespace RBX {
 namespace Network {
@@ -362,6 +364,58 @@ void IdSerializer::setMaxGuidIndexBit(int bits)
 void IdSerializer::setRefValue(WaitItem& wi, Instance* instance)
 {
 	wi.desc->setRefValue(wi.instance.get(), instance);
+}
+
+// FUNCTION: PLAYER 0x005a9b30
+// FUNCTION: STUDIO 0x006198a0
+template<>
+DescriptorSender<ClassDescriptor>::DescriptorSender()
+{
+	ClassDescriptor::ClassDescriptors::const_iterator iter = ClassDescriptor::all_begin();
+	ClassDescriptor::ClassDescriptors::const_iterator end = ClassDescriptor::all_end();
+	while (iter != end)
+	{
+		visit(*iter);
+		++iter;
+	}
+}
+
+// FUNCTION: PLAYER 0x005a9be0
+// FUNCTION: STUDIO 0x00619950
+template<>
+DescriptorSender<Type>::DescriptorSender()
+{
+	const std::vector<const Type*>& types = Type::getAllTypes();
+	for (size_t i = 0; i < types.size(); ++i)
+		visit(types[i]);
+}
+
+// FUNCTION: PLAYER 0x005aa120
+// FUNCTION: STUDIO 0x00619f10
+template<>
+DescriptorSender<PropertyDescriptor>::DescriptorSender()
+{
+	MemberDescriptorContainer<PropertyDescriptor>::Collection::const_iterator iter = MemberDescriptorContainer<PropertyDescriptor>::all_begin();
+	MemberDescriptorContainer<PropertyDescriptor>::Collection::const_iterator end = MemberDescriptorContainer<PropertyDescriptor>::all_end();
+	while (iter != end)
+	{
+		visit(*iter);
+		++iter;
+	}
+}
+
+// FUNCTION: PLAYER 0x005aa1f0
+// FUNCTION: STUDIO 0x00619fe0
+template<>
+DescriptorSender<EventDescriptor>::DescriptorSender()
+{
+	MemberDescriptorContainer<EventDescriptor>::Collection::const_iterator iter = MemberDescriptorContainer<EventDescriptor>::all_begin();
+	MemberDescriptorContainer<EventDescriptor>::Collection::const_iterator end = MemberDescriptorContainer<EventDescriptor>::all_end();
+	while (iter != end)
+	{
+		visit(*iter);
+		++iter;
+	}
 }
 
 // FUNCTION: PLAYER 0x005aaa00

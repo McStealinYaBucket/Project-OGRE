@@ -21,6 +21,27 @@ namespace RBX {
 RBX_REGISTER_CLASS(RBX::DebugSettings);
 }
 
+namespace RBX {
+	// The graphics card description the Windows player sizes its window by (View::calcDefaultResolution
+	// 0x00467dd0). Not written yet (1,000+ bytes of SetupDi/registry queries).
+	// STUB: PLAYER 0x00659170
+	// STUB: STUDIO 0x00773bf0
+	std::string DebugSettings::gfxcard() const
+	{
+		STUB(0x00659170);
+		return std::string();
+	}
+
+	// Not written yet: returns the first field of the video-card info struct (callee PLAYER 0x009eebb0).
+	// STUB: PLAYER 0x00659910
+	// STUB: STUDIO 0x00774340
+	int DebugSettings::videoMemory() const
+	{
+		STUB(0x00659910);
+		return 0;
+	}
+}
+
 
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit

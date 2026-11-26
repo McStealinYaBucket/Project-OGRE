@@ -40,19 +40,19 @@ ScreenshotVerb::ScreenshotVerb(const Document& doc, ViewBase* view, Game* game)
 	dataModel->screenshotReadySignal.connect(boost::bind(&ScreenshotVerb::screenshotFinished, this, _1));
 }
 
-// 2013 body: if game->getDataModel() is set, dataModel->submitTask(boost::bind(
-// &DataModel::TakeScreenshotTask, weak_ptr<DataModel>(dataModel)), DataModelJob::Write). Written out
-// it scores 95.1 (pairing only), but the bind / function1<void, DataModel*> chain then moves to the
-// shell's copies (0x0043a480, 0x0043a570, which engine code calls too, as 2013 has it) and six engine
-// entries lose their pair (0x008445f0, 0x008447e0, 0x00844de0, 0x00844f60, 0x0073da60, 0x0073db90):
-// their name rows say weak_ptr<DataModel>, but their only caller, DebrisService::addItem 0x00845000,
-// binds weak_ptr<Instance>. Land it with those rows renamed (or TEMPLATE markers for the
-// weak_ptr<Instance> chain in DebrisService.cpp). Wave 14 measured it again: 90.6 (pairing only),
-// the six rows lost, net -3 on the link.
-// STUB: PLAYER 0x00438460
+// The early return is 2013's shape: the null path leaves the EH state on its own (state -1, then
+// the shared_ptr release). The bind / function1<void, DataModel*> calls go to the shell's copies
+// (0x0043a480, 0x0043a570), which 2013's engine callers use too. 100 once the names of the engine
+// rows 0x0073da60, 0x0073db90, 0x00844de0 and 0x00844f60 say weak_ptr<Instance> (DebrisService::
+// addItem's chain, like 0x008445f0 / 0x008447e0); with the weak_ptr<DataModel> names those rows
+// take our shell bodies and doIt scores 97.5 (wave 15, build-sh/w15 C).
+// FUNCTION: PLAYER 0x00438460
 void ScreenshotVerb::doIt(IDataState* dataState)
 {
-	STUB(0x00438460);
+	boost::shared_ptr<DataModel> dataModel = game->getDataModel();
+	if (!dataModel)
+		return;
+	dataModel->submitTask(boost::bind(&DataModel::TakeScreenshotTask, boost::weak_ptr<DataModel>(dataModel)), DataModelJob::Write);
 }
 
 // Not written: it clears the view's screenshot request, shows "Screenshot saved" and offers the

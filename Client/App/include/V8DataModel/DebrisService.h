@@ -49,7 +49,7 @@ namespace RBX {
 // by identical masked bytes plus string/RTTI/callee operands (tools/unpaired_twins.py).
 
 // TEMPLATE: PLAYER 0x00844f60
-// ??$?0V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
+// ??$?0V?$bind_t@XP6AXV?$weak_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VInstance@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function0@X@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VInstance@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
 
 
 // TEMPLATE: PLAYER 0x008448e0

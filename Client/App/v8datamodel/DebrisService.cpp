@@ -72,7 +72,7 @@ namespace RBX {
 		}
 	}
 
-	// STUB: PLAYER 0x00845000
+	// FUNCTION: PLAYER 0x00845000
 	// STUB: STUDIO 0x0098a9d0
 	void DebrisService::addItem(shared_ptr<Instance> item, double lifetime)
 	{

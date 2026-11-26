@@ -11,6 +11,7 @@
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/DataModelJob.h"
 #include "V8DataModel/NetworkSettings.h"
+#include "V8DataModel/PhysicsService.h"
 #include "V8DataModel/StatsItem.h"
 #include "V8DataModel/StatsService.h"
 #include "rbx/rbxtime.h"
@@ -78,17 +79,14 @@ class PacketReceiveJob : public DataModelJob
 public:
 	weak_ptr<ConcurrentRakPeer> rakPeer;	// 0x228
 
-	// receiveRate is NetworkSettings+0x110 (2016: getReceiveRate()), private in App's
-	// NetworkSettings.h until it gets an accessor; the rest of the body is final.
-	// STUB: PLAYER 0x005b92c0
+	// FUNCTION: PLAYER 0x005b92c0
 	// STUB: STUDIO 0x0064b030
 	PacketReceiveJob(shared_ptr<ConcurrentRakPeer> rakPeer, DataModel* dataModel)
 		:DataModelJob("Net PacketReceive", DataModelJob::DataIn, false, shared_from(dataModel), Time::Interval(0))
 		,dataModel(shared_from(dataModel))
-		,receiveRate(0)
+		,receiveRate(NetworkSettings::singleton().getReceiveRate())
 		,rakPeer(rakPeer)
 	{
-		NetworkSettings::singleton();
 	}
 
 private:
@@ -162,27 +160,29 @@ public:
 		bufferHealth = item->createChildItem("Send Buffer Health");
 	}
 
-	// Duty cycle "%.1f%%", rate "%.2g/s", PhysicsService senders (+0x64), the peer's buffer health
-	// (ConcurrentRakPeer 0x005c5070) "%.4g".
-	// STUB: PLAYER 0x005ba060
-	// STUB: STUDIO 0x0064bcc0
+	// FUNCTION: PLAYER 0x005ba060
+	// FUNCTION: STUDIO 0x0064bcc0
 	/*override*/ void update()
 	{
-		STUB(0x005ba060);
+		double dutyCycle = peer->rakDutyCycle.dutyCycle();
+		rakActivity->formatValue(dutyCycle, "%.1f%%", 100.0 * dutyCycle);
+
+		double rate = peer->rakDutyCycle.rate();
+		rakRate->formatValue(rate, "%.2g/s", rate);
+
+		{
+			int senders;
+			if (PhysicsService* physicsService = ServiceProvider::find<PhysicsService>(this))
+				senders = physicsService->numSenders();
+			else
+				senders = 0;
+			physicsSenders->formatValue(senders);
+		}
+
+		double bufferHealthValue = peer->rakPeer->GetBufferHealth();
+		bufferHealth->formatValue(bufferHealthValue, "%.4g", bufferHealthValue);
 	}
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

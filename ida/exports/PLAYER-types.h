@@ -5649,8 +5649,8 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   unsigned __int8 gap_6E[2];
   double m_unk0x70;
   bool m_unk0x78;
-  bool m_unk0x79;
-  bool m_unk0x7a;
+  bool usePhysicsPacketCache;
+  bool useInstancePacketCache;
   bool m_unk0x7b;
   bool m_unk0x7c;
   bool m_unk0x7d;
@@ -5666,13 +5666,13 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   int m_unk0xd0;
   int m_unk0xd4;
   int m_unk0xd8;
-  bool m_unk0xdc;
+  bool distributedPhysicsEnabled;
   unsigned __int8 gap_DD[3];
   int m_unk0xe0;
   float m_unk0xe4;
   int m_unk0xe8;
   int m_unk0xec;
-  float m_unk0xf0;
+  float networkOwnerRate;
   bool m_unk0xf4;
   bool m_unk0xf5;
   unsigned __int8 gap_F6[2];
@@ -5682,7 +5682,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   float m_unk0x104;
   float m_unk0x108;
   float m_unk0x10c;
-  double m_unk0x110;
+  double receiveRate;
   int m_unk0x118;
   unsigned __int8 gap_11C[4];
 };
@@ -6423,11 +6423,13 @@ struct __cppobj RBX::Network::Server : RBX::DescribedCreatable<RBX::Network::Ser
 {
   unsigned __int8 gap_AC1[3];
   unsigned int m_unk0xac4;
-  unsigned __int8 m_unk0xac8[8];        ///< boost::shared_ptr<RBX::Instance>
-  unsigned __int8 m_unk0xad0[8];        ///< boost::shared_ptr<RBX::Instance>
-  unsigned __int8 m_unk0xad8[4];        ///< rbx::signals::scoped_connection
+  unsigned __int8 players[8];           ///< boost::shared_ptr<RBX::Network::Players>
+  unsigned __int8 networkOwnerJob[8];   ///< boost::shared_ptr<RBX::Network::NetworkOwnerJob>
+  unsigned __int8 itemAddedConnection[4]; ///< rbx::signals::scoped_connection
   bool m_unk0xadc;
-  unsigned __int8 m_unk0xadd[11];       ///< array
+  unsigned __int8 m_unk0xadd[3];        ///< array
+  void *physicsPacketCache;             ///< RBX::Network::PhysicsPacketCache *
+  void *instancePacketCache;            ///< RBX::Network::InstancePacketCache *
   int m_unk0xae8;
   unsigned __int8 m_unk0xaec[16];       ///< std::vector<int>
   RBX::NetworkSettings *networkSettings;
@@ -6447,5 +6449,110 @@ struct __cppobj RBX::UserInputBase
   unsigned __int8 currentCursor[8];     ///< boost::shared_ptr<RBX::TextureProxyBase>
   unsigned __int8 fallbackCursor[8];    ///< boost::shared_ptr<RBX::TextureProxyBase>
   unsigned __int8 cursorIdChangedSignal[4]; ///< rbx::signal<void __cdecl(void)>
+};
+
+/* 777 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings> : RBX::Settings
+{
+};
+
+/* 778 */
+struct __cppobj RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0> : RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>
+{
+};
+
+/* 779 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0> : RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0>
+{
+};
+
+/* 780 */
+struct __cppobj RBX::GlobalAdvancedSettings : RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0>
+{
+  unsigned __int8 mutex[8];             ///< boost::mutex
+};
+
+/* 781 */
+struct __cppobj RBX::Network::NetworkOwnerJob : RBX::DataModelJob
+{
+  unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
+  float networkOwnerRate;
+  unsigned __int8 clientMap[12];        ///< std::map<RBX::SystemAddress,RBX::Network::NetworkOwnerJob::ClientLocation>
+};
+
+/* 782 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator> : RBX::Network::IdSerializer
+{
+};
+
+/* 783 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Replicator, char const *const RBX::Network::sReplicator, RBX::NonFactoryProduct<RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator>, 1, 0> : RBX::NonFactoryProduct<RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator>
+{
+};
+
+/* 784 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::Replicator, RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator, 1, 0> : RBX::Reflection::Described<RBX::Network::Replicator, char const *const RBX::Network::sReplicator, RBX::NonFactoryProduct<RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator>, 1, 0>
+{
+};
+
+/* 785 */
+struct __cppobj RBX::Network::Replicator : RBX::DescribedNonCreatable<RBX::Network::Replicator, RBX::Network::IdSerializer, char const *const RBX::Network::sReplicator, 1, 0>, RakNet::PluginInterface2, RBX::IMetric, RBX::Voxel::CellChangeListener
+{
+  unsigned __int8 rakPeer[8];           ///< boost::shared_ptr<RBX::Network::ConcurrentRakPeer>
+  unsigned __int8 remotePlayerId[20];   ///< RakNet::SystemAddress
+  RBX::Instance *removingInstance;
+  unsigned __int8 replicatorStats[3944]; ///< RBX::Network::ReplicatorStats
+  unsigned __int8 disconnectionSignal[4]; ///< rbx::signal<void __cdecl(std::string,bool)>
+  unsigned __int8 newInstancePool[4];   ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 deleteInstancePool[4]; ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 changePropertyPool[4]; ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 eventInvocationPool[4]; ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 pingPool[4];          ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 pingBackPool[4];      ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 referencePropertyChangedPool[4]; ///< boost::scoped_ptr<RBX::AutoMemPool>
+  unsigned __int8 classDictionary[40];  ///< RBX::Network::DescriptorDictionary<RBX::Reflection::ClassDescriptor>
+  unsigned __int8 propDictionary[40];   ///< RBX::Network::DescriptorDictionary<RBX::Reflection::PropertyDescriptor>
+  unsigned __int8 eventDictionary[40];  ///< RBX::Network::DescriptorDictionary<RBX::Reflection::EventDescriptor>
+  unsigned __int8 typeDictionary[40];   ///< RBX::Network::DescriptorDictionary<RBX::Reflection::Type>
+  unsigned __int8 replicationContainers[24]; ///< boost::unordered::unordered_map<RBX::Instance const *,RBX::Network::Replicator::ReplicationData,boost::hash<RBX::Instance const *>,std::equal_to<RBX::Instance const *>,std::allocator<std::pair<RBX::Instance const * const,RBX::Network::Replicator::ReplicationData> > >
+  unsigned int m_unk0x2108;
+  unsigned __int8 clusterReplicationData[52]; ///< RBX::Network::Replicator::ClusterReplicationData
+  bool clusterDebounceEnabled;
+  bool clusterDebounce;
+  bool isClusterSpotted;
+  bool isOkToSendClusters;
+  unsigned int approximateSizeOfPendingClusterDeltas;
+  unsigned __int8 instancePacketCache[8]; ///< boost::shared_ptr<RBX::Network::InstancePacketCache>
+  unsigned __int8 clusterPacketCache[8]; ///< boost::shared_ptr<RBX::Network::ClusterPacketCache>
+  unsigned __int8 topReplicationContainers[16]; ///< std::vector<RBX::Instance *>
+  RBX::Network::Players *players;
+  unsigned __int8 m_unk0x216c[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x2174[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 processPacketsJob[8]; ///< boost::shared_ptr<RBX::Network::Replicator::ProcessPacketsJob>
+  unsigned __int8 m_unk0x2184[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x218c[8];       ///< boost::shared_ptr<void>
+  RBX::Network::ItemQueue pendingItems;
+  unsigned __int8 pendingChangedPropertyItems[24]; ///< boost::unordered::unordered_set<RBX::Reflection::ConstProperty,boost::hash<RBX::Reflection::ConstProperty>,std::equal_to<RBX::Reflection::ConstProperty>,boost::fast_pool_allocator<RBX::Reflection::ConstProperty,boost::default_user_allocator_new_delete,boost::mutex,32,0> >
+  unsigned __int8 pendingInstancesMutex[24]; ///< RBX::mutex
+  unsigned __int8 pendingNewInstances[24]; ///< boost::unordered::unordered_set<RBX::Instance const *,boost::hash<RBX::Instance const *>,std::equal_to<RBX::Instance const *>,std::allocator<RBX::Instance const *> >
+  RBX::Instance *serializingInstance;
+  void *deserializingProperty;          ///< RBX::Reflection::Property *
+  void *deserializingEventInvocation;   ///< RBX::Reflection::EventInvocation *
+  unsigned __int8 defaultObjects[12];   ///< std::map<RBX::Name const *,boost::shared_ptr<RBX::Instance>>
+  unsigned __int8 incomingPackets[36];  ///< rbx::timestamped_safe_queue<RakNet::Packet *>
+  bool processAllPacketsPerStep;
+  unsigned __int8 gap_2229[3];
+  unsigned __int8 incomingMarkers[32];  ///< std::queue<boost::shared_ptr<RBX::Network::Marker>>
+  RBX::NetworkSettings *networkSettings;
+  bool m_unk0x2250;
+  unsigned __int8 gap_2251[3];
+  unsigned __int8 m_unk0x2254[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x225c[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x2264[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 strings[12];          ///< std::map<RBX::Reflection::PropertyDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 protectedStrings[12]; ///< std::map<RBX::Reflection::PropertyDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 eventStrings[12];     ///< std::map<RBX::Reflection::EventDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 systemAddressDictionary[2064]; ///< RBX::Network::SharedDictionary<RBX::SystemAddress>
+  unsigned __int8 m_unk0x2aa0[4];       ///< rbx::signals::scoped_connection
 };
 

@@ -180,10 +180,19 @@ CLASSES = [
     # 0x00627be0, STUDIO 0x005b79c0 / 0x00748d10. Not yet: Game (0x34; ctor 0x00655e70 unpaired), Replicator
     # (ctor/dtor not paired), ScreenshotVerb (ctor 0.759), VistaAPIs (no size annotation)
     "RBX::GlobalBasicSettings", "RBX::Network::Server", "RBX::UserInputBase", "XmlNameValuePair",
+    # wave15 sync (sweep22, build/sweep22/P-final.json / S-final.json 100%; size = the tree's DECOMP_SIZE_ASSERT /
+    # // SIZE = the PDB's), PLAYER / STUDIO: GlobalAdvancedSettings (0xb4) ctor 0x00658580 / 0x00740d10 (app-15);
+    # Network::NetworkOwnerJob (0x230) ctor 0x005f7370 / 0x0066af00, dtor 0x005f74b0 / 0x0066b040. PLAYER only
+    # (STUDIO is another revision, Replicator.h): Network::Replicator (0x2aa4) ctor 0x005a5e70, dtor 0x005a55a0
+    # (network-5f-6). Not yet: Replicator::ReplicationData (dtor 0x005837d0 100%, PDB 0x10, no size annotation),
+    # Game (ctor 0x00655e70 unpaired), Selection (0x90; ctor/dtor STUB), PacketReceiveJob (ctor 0x005b92c0 100%,
+    # no size annotation), ScreenshotVerb (ctor 0.759), VistaAPIs (no size annotation)
+    "RBX::GlobalAdvancedSettings", "RBX::Network::NetworkOwnerJob", "RBX::Network::Replicator",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
-               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb"}
+               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb",
+               "RBX::Network::Replicator"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

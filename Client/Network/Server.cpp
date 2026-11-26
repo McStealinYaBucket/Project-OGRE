@@ -8,6 +8,12 @@
 #include "ConcurrentRakPeer.h"
 #include "RakPeerInterface.h"
 #include "V8DataModel/NetworkSettings.h"
+#include "V8DataModel/DataModel.h"
+#include "Network/Players.h"
+#include "Network/NetworkPacketCache.h"
+#include "Network/NetworkClusterPacketCache.h"
+#include "NetworkOwnerJob.h"
+#include <boost/bind.hpp>
 #include "security/SecurityContext.h"
 #include "FastLog.h"
 
@@ -17,11 +23,7 @@ namespace RBX { namespace Network { extern std::string versionB; } }
 
 // FFlag::DebugLocalRccServerConnection is defined in App's FastLogSettings.cpp (2013 initializer 0x00a65800).
 FASTFLAG(DebugLocalRccServerConnection)
-
-
-
-
-
+DYNAMIC_FASTFLAG(UseClusterCache)
 
 DECOMP_SIZE_ASSERT(RBX::Network::Server, 0xb78);
 
@@ -56,20 +58,18 @@ namespace Network {
 		rakPeer->rawPeer()->SetIncomingPassword(versionB.c_str(), versionB.size());
 	}
 
+	// STUB: PLAYER 0x005b1dd0
+	__declspec(noinline) void Server::stop(int blockDuration)
+	{
+		STUB(0x005b1dd0);
+	}
+
 	// FUNCTION: PLAYER 0x005b32b0
 	// FUNCTION: STUDIO 0x006132b0
 	Server::~Server()
 	{
 		FASTLOG(FLog::Network, "NetworkServer:Destroy");
 	}
-
-
-
-
-
-
-
-
 
 
 
@@ -104,6 +104,12 @@ namespace Network {
 		return Instance::fastDynamicCast<ServerReplicator>(instance) != NULL;
 	}
 
+	// STUB: PLAYER 0x005b4560
+	__declspec(noinline) void Server::onItemAdded(shared_ptr<Instance> item)
+	{
+		STUB(0x005b4560);
+	}
+
 	// FUNCTION: PLAYER 0x005b4fd0
 	// FUNCTION: STUDIO 0x00615420
 	Server::Server()
@@ -122,23 +128,44 @@ namespace Network {
 		FASTLOG(FLog::Network, "NetworkServer:Create");
 	}
 
-	// Read off (2016 shape minus the clientIsPresent throw, the players null check, workspaceLoaded and
-	// analytics): old provider: TaskScheduler::remove(networkOwnerJob 0xad0), reset; players(0xac8)->
-	// setConnection(NULL); stop(1000) 0x005b1dd0; players.reset(); itemAddedConnection(0xad8).disconnect().
-	// Peer::onServiceProvider. New provider: players = shared_from(create<Players>()), setConnection
-	// (rakPeer.get()); visitDescendants(bind(&Server::onItemAdded 0x005b4560, this, _1)) 0x005cfdd0;
-	// itemAddedConnection = onDemandWrite()->descendantAddedSignal.connect(same bind);
-	// NetworkSettings +0x79 / +0x7a gate create<PhysicsPacketCache> 0x005b2960 -> 0xae0 and
-	// create<InstancePacketCache> 0x005b2ae0 -> 0xae4; FFlag::UseClusterCache (byte 0x00de3f88,
-	// registration 0x00a661d0 in App's block) gates create<ClusterPacketCache> 0x005b2c60; NetworkSettings
-	// +0xdc gates networkOwnerJob = shared_ptr<NetworkOwnerJob>(new NetworkOwnerJob(shared_from(
-	// static_cast<DataModel*>(newProvider)))) and TaskScheduler::add. Blocked on the three cache classes,
-	// NetworkOwnerJob (its ctor reads private NetworkSettings+0xf0) and the private NetworkSettings bools.
 	// STUB: PLAYER 0x005b5310
 	// STUB: STUDIO 0x00615760
 	void Server::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
 	{
-		STUB(0x005b5310);
+		if (oldProvider)
+		{
+			TaskScheduler::singleton().remove(networkOwnerJob);
+			networkOwnerJob.reset();
+			players->setConnection(NULL);
+			stop(1000);
+			players.reset();
+			itemAddedConnection.disconnect();
+		}
+
+		Peer::onServiceProvider(oldProvider, newProvider);
+
+		if (newProvider)
+		{
+			DataModel* dataModel = boost::polymorphic_downcast<DataModel*>(newProvider);
+			players = shared_from(ServiceProvider::create<Players>(newProvider));
+			players->setConnection(rakPeer.get());
+
+			newProvider->visitDescendants(boost::bind(&Server::onItemAdded, this, _1));
+			itemAddedConnection = newProvider->onDemandWrite()->descendantAddedSignal.connect(boost::bind(&Server::onItemAdded, this, _1));
+
+			if (networkSettings->usePhysicsPacketCache)
+				physicsPacketCache = ServiceProvider::create<PhysicsPacketCache>(newProvider);
+			if (networkSettings->useInstancePacketCache)
+				instancePacketCache = ServiceProvider::create<InstancePacketCache>(newProvider);
+			if (DFFlag::UseClusterCache)
+				ServiceProvider::create<ClusterPacketCache>(newProvider);
+
+			if (networkSettings->distributedPhysicsEnabled)
+			{
+				networkOwnerJob = shared_ptr<NetworkOwnerJob>(new NetworkOwnerJob(shared_from(dataModel)));
+				TaskScheduler::singleton().add(networkOwnerJob);
+			}
+		}
 	}
 
 } // namespace Network

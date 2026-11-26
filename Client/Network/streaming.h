@@ -16,6 +16,7 @@
 #include "V8Tree/Instance.h"
 #include "Util/Guid.h"
 #include "Dictionary.h"
+#include "Util/Math.h"
 #include <map>
 #include <vector>
 
@@ -81,6 +82,45 @@ public:
 	IdSerializer();
 
 	virtual void setMaxGuidIndexBit(int bits);                         // vtable+0x74
+};
+
+// Reflection-descriptor dictionaries. The senders' ctors are explicit specializations in
+// Streaming.cpp (PLAYER ClassDescriptor 0x005a9b30, PropertyDescriptor 0x005aa120, EventDescriptor
+// 0x005aa1f0, Type 0x005a9be0). 2013 maps a descriptor straight to an int (node value 4 bytes,
+// isnil at +0x15); 2016's IdContainer {id, outdated} does not exist yet.
+template<class T>
+class DescriptorSender
+{
+protected:
+	std::map<const T*, int> descToId;                                  // 0x00
+	int idBits;                                                        // 0x0c
+
+	void visit(const T* desc)
+	{
+		descToId[desc] = descToId.size();
+		idBits = Math::computeMSB(descToId.size()) + 1;
+	}
+
+public:
+	DescriptorSender();
+};
+
+// The receiver's vector is zeroed inline by Replicator's ctor (0x005a5fc0); idBits is left unset.
+template<class T>
+class DescriptorReceiver
+{
+	std::vector<const T*> idToDesc;                                    // 0x00
+	int idBits;                                                        // 0x10
+};
+
+// SIZE 0x28: Replicator's four dictionaries are 0x28 apart (ctor 0x005a5e70); boost::noncopyable
+// after the two bases takes the last 4 bytes.
+template<class T>
+class DescriptorDictionary
+	: public DescriptorSender<T>
+	, public DescriptorReceiver<T>
+	, boost::noncopyable
+{
 };
 
 } // namespace Network

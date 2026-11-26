@@ -5943,7 +5943,7 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0x79",
+     "name": "usePhysicsPacketCache",
      "offset": 121,
      "size": 1,
      "kind": "scalar",
@@ -5951,7 +5951,7 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0x7a",
+     "name": "useInstancePacketCache",
      "offset": 122,
      "size": 1,
      "kind": "scalar",
@@ -6055,7 +6055,7 @@
      "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0xdc",
+     "name": "distributedPhysicsEnabled",
      "offset": 220,
      "size": 1,
      "kind": "scalar",
@@ -6095,7 +6095,7 @@
      "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0xf0",
+     "name": "networkOwnerRate",
      "offset": 240,
      "size": 4,
      "kind": "scalar",
@@ -6167,7 +6167,7 @@
      "scalar": "T_REAL32"
     },
     {
-     "name": "m_unk0x110",
+     "name": "receiveRate",
      "offset": 272,
      "size": 8,
      "kind": "scalar",
@@ -8426,23 +8426,23 @@
      "scalar": "T_UINT4"
     },
     {
-     "name": "m_unk0xac8",
+     "name": "players",
      "offset": 2760,
      "size": 8,
      "kind": "class",
-     "type": "boost::shared_ptr<RBX::Instance>",
+     "type": "boost::shared_ptr<RBX::Network::Players>",
      "scalar": null
     },
     {
-     "name": "m_unk0xad0",
+     "name": "networkOwnerJob",
      "offset": 2768,
      "size": 8,
      "kind": "class",
-     "type": "boost::shared_ptr<RBX::Instance>",
+     "type": "boost::shared_ptr<RBX::Network::NetworkOwnerJob>",
      "scalar": null
     },
     {
-     "name": "m_unk0xad8",
+     "name": "itemAddedConnection",
      "offset": 2776,
      "size": 4,
      "kind": "class",
@@ -8460,9 +8460,25 @@
     {
      "name": "m_unk0xadd",
      "offset": 2781,
-     "size": 11,
+     "size": 3,
      "kind": "array",
      "type": null,
+     "scalar": null
+    },
+    {
+     "name": "physicsPacketCache",
+     "offset": 2784,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Network::PhysicsPacketCache",
+     "scalar": null
+    },
+    {
+     "name": "instancePacketCache",
+     "offset": 2788,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Network::InstancePacketCache",
      "scalar": null
     },
     {
@@ -8680,6 +8696,72 @@
    ],
    "base": false,
    "unique": "VXmlNameValuePair@@"
+  },
+  "RBX::GlobalAdvancedSettings": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "mutex",
+     "offset": 172,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::mutex",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGlobalAdvancedSettings@RBX@@"
+  },
+  "RBX::Network::NetworkOwnerJob": {
+   "size": 560,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "networkOwnerRate",
+     "offset": 544,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "clientMap",
+     "offset": 548,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<RBX::SystemAddress,RBX::Network::NetworkOwnerJob::ClientLocation,std::less<RBX::SystemAddress>,std::allocator<std::pair<RBX::SystemAddress const,RBX::Network::NetworkOwnerJob::ClientLocation> > >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VNetworkOwnerJob@Network@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -10884,6 +10966,22 @@
    "base": true,
    "unique": "V?$DescribedCreatable@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDB$00$0A@@RBX@@"
   },
+  "RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGlobalAdvancedSettings@RBX@@VSettings@2@$E?sGlobalAdvancedSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -11737,6 +11835,22 @@
    "base": true,
    "unique": "V?$Described@VServer@Network@RBX@@$E?sServer@23@3QBDBV?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGlobalAdvancedSettings@RBX@@$E?sGlobalAdvancedSettings@2@3QBDBV?$NonFactoryProduct@VSettings@RBX@@$E?sGlobalAdvancedSettings@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -12539,6 +12653,22 @@
    "members": [],
    "base": true,
    "unique": "V?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Settings",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VSettings@RBX@@$E?sGlobalAdvancedSettings@2@3QBDB@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,

@@ -9,6 +9,8 @@
 // are still STUBs).
 
 #include "RakPeerInterface.h"
+#include <boost/function.hpp>
+#include <string>
 
 namespace RBX {
 	class DataModel;
@@ -16,6 +18,16 @@ namespace RBX {
 
 namespace RBX {
 namespace Network {
+
+	// iOS: RakNetAddressToString(RakNet::SystemAddress const&, bool, char) (PLAYER 0x005c6c80).
+	std::string RakNetAddressToString(const RakNet::SystemAddress& raknetAddress, bool writePort = true, char portDelineator = '|');
+
+	// 0xf0 bytes: Replicator::onStatisticsChanged (PLAYER 0x005804f0) copies it with 0x3c dwords.
+	// Members unproven.
+	struct ConcurrentRakPeerStats
+	{
+		undefined m_unk0x00[0xf0];             // 0x00
+	};
 
 	// SIZE 0x1c (operator new in Peer::onServiceProvider 0x005ba1d0)
 	class ConcurrentRakPeer
@@ -26,6 +38,9 @@ namespace Network {
 		ConcurrentRakPeer(RakNet::RakPeerInterface* peer, DataModel* dataModel);
 		~ConcurrentRakPeer();
 		RakNet::RakPeerInterface* rawPeer();
+		double GetBufferHealth();
+		// mac: addStats(RakNet::SystemAddress, boost::function<void (ConcurrentRakPeerStats const&)>)
+		void addStats(RakNet::SystemAddress address, boost::function<void(const ConcurrentRakPeerStats&)> callback);
 		// Inline: 0x005b95f6 calls the raw peer's DeallocatePacket (slot +0x60) without rawPeer().
 		void DeallocatePacket(RakNet::Packet* packet) { peer->DeallocatePacket(packet); }
 	};

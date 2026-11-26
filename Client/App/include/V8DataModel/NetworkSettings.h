@@ -50,8 +50,11 @@ namespace RBX {
 		bool m_unk0x6d;					// 0x6d  false (one byte store each in the ctor)
 		double m_unk0x70;				// 0x70  0
 		bool m_unk0x78;					// 0x78  true
-		bool m_unk0x79;					// 0x79  false
-		bool m_unk0x7a;					// 0x7a  false
+	public:
+		// Server::onServiceProvider 0x005b5310 reads 0x79/0x7a/0xdc (names: 2016, same use).
+		bool usePhysicsPacketCache;		// 0x79  false
+		bool useInstancePacketCache;	// 0x7a  false
+	private:
 		bool m_unk0x7b;					// 0x7b  false
 		bool m_unk0x7c;					// 0x7c  false
 		bool m_unk0x7d;					// 0x7d  false
@@ -64,12 +67,16 @@ namespace RBX {
 		int m_unk0xd0;					// 0xd0  1
 		int m_unk0xd4;					// 0xd4  1
 		int m_unk0xd8;					// 0xd8  2
-		bool m_unk0xdc;					// 0xdc  true
+	public:
+		bool distributedPhysicsEnabled;	// 0xdc  true
+	private:
 		int m_unk0xe0;					// 0xe0  0
 		float m_unk0xe4;				// 0xe4  10.0f
 		int m_unk0xe8;					// 0xe8  1
 		int m_unk0xec;					// 0xec  -1
-		float m_unk0xf0;				// 0xf0  10.0f
+	public:
+		float networkOwnerRate;			// 0xf0  10.0f (NetworkOwnerJob ctor 0x005f7370)
+	private:
 		bool m_unk0xf4;					// 0xf4  false
 		bool m_unk0xf5;					// 0xf5  false
 		undefined4 m_unk0xf8;			// 0xf8  not stored by the ctor
@@ -78,8 +85,12 @@ namespace RBX {
 		float m_unk0x104;				// 0x104 30.0f
 		float m_unk0x108;				// 0x108 (0x00b1ec54)
 		float m_unk0x10c;				// 0x10c (0x00b1ec54)
-		double m_unk0x110;				// 0x110 (0x00b1ec60)
+		double receiveRate;				// 0x110 (0x00b1ec60)
 		int m_unk0x118;					// 0x118 0
+
+	public:
+		// PacketReceiveJob ctor 0x005b92c0: fld qword [eax+0x110].
+		double getReceiveRate() const { return receiveRate; }
 	};
 
 } // namespace RBX

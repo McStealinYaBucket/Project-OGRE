@@ -62,10 +62,10 @@ bool ItemQueue::postValidate(int i)
 	inCode = 0;
 	return true;
 }
+// FUNCTION: PLAYER 0x005d4330
+// FUNCTION: STUDIO 0x0066d6c0
 ItemQueue::ItemQueue()
-{
-	inCode = 0;
-}
+{ inCode = 0; }
 // FUNCTION: PLAYER 0x005d42a0
 // FUNCTION: STUDIO 0x0066d630
 ItemQueue::~ItemQueue()

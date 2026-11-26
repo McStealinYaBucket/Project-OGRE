@@ -4011,8 +4011,8 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   unsigned __int8 gap_6E[2];
   double m_unk0x70;
   bool m_unk0x78;
-  bool m_unk0x79;
-  bool m_unk0x7a;
+  bool usePhysicsPacketCache;
+  bool useInstancePacketCache;
   bool m_unk0x7b;
   bool m_unk0x7c;
   bool m_unk0x7d;
@@ -4028,13 +4028,13 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   int m_unk0xd0;
   int m_unk0xd4;
   int m_unk0xd8;
-  bool m_unk0xdc;
+  bool distributedPhysicsEnabled;
   unsigned __int8 gap_DD[3];
   int m_unk0xe0;
   float m_unk0xe4;
   int m_unk0xe8;
   int m_unk0xec;
-  float m_unk0xf0;
+  float networkOwnerRate;
   bool m_unk0xf4;
   bool m_unk0xf5;
   unsigned __int8 gap_F6[2];
@@ -4044,7 +4044,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   float m_unk0x104;
   float m_unk0x108;
   float m_unk0x10c;
-  double m_unk0x110;
+  double receiveRate;
   int m_unk0x118;
   unsigned __int8 gap_11C[4];
 };
@@ -4760,11 +4760,13 @@ struct __cppobj RBX::Network::Server : RBX::DescribedCreatable<RBX::Network::Ser
 {
   unsigned __int8 gap_AC1[3];
   unsigned int m_unk0xac4;
-  unsigned __int8 m_unk0xac8[8];        ///< boost::shared_ptr<RBX::Instance>
-  unsigned __int8 m_unk0xad0[8];        ///< boost::shared_ptr<RBX::Instance>
-  unsigned __int8 m_unk0xad8[4];        ///< rbx::signals::scoped_connection
+  unsigned __int8 players[8];           ///< boost::shared_ptr<RBX::Network::Players>
+  unsigned __int8 networkOwnerJob[8];   ///< boost::shared_ptr<RBX::Network::NetworkOwnerJob>
+  unsigned __int8 itemAddedConnection[4]; ///< rbx::signals::scoped_connection
   bool m_unk0xadc;
-  unsigned __int8 m_unk0xadd[11];       ///< array
+  unsigned __int8 m_unk0xadd[3];        ///< array
+  void *physicsPacketCache;             ///< RBX::Network::PhysicsPacketCache *
+  void *instancePacketCache;            ///< RBX::Network::InstancePacketCache *
   int m_unk0xae8;
   unsigned __int8 m_unk0xaec[16];       ///< std::vector<int>
   RBX::NetworkSettings *networkSettings;
@@ -4784,5 +4786,34 @@ struct __cppobj RBX::UserInputBase
   unsigned __int8 currentCursor[8];     ///< boost::shared_ptr<RBX::TextureProxyBase>
   unsigned __int8 fallbackCursor[8];    ///< boost::shared_ptr<RBX::TextureProxyBase>
   unsigned __int8 cursorIdChangedSignal[4]; ///< rbx::signal<void __cdecl(void)>
+};
+
+/* 674 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings> : RBX::Settings
+{
+};
+
+/* 675 */
+struct __cppobj RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0> : RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>
+{
+};
+
+/* 676 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0> : RBX::Reflection::Described<RBX::GlobalAdvancedSettings, char const *const RBX::sGlobalAdvancedSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalAdvancedSettings>, 27, 0>
+{
+};
+
+/* 677 */
+struct __cppobj RBX::GlobalAdvancedSettings : RBX::DescribedNonCreatable<RBX::GlobalAdvancedSettings, RBX::Settings, char const *const RBX::sGlobalAdvancedSettings, 27, 0>
+{
+  unsigned __int8 mutex[8];             ///< boost::mutex
+};
+
+/* 678 */
+struct __cppobj RBX::Network::NetworkOwnerJob : RBX::DataModelJob
+{
+  unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
+  float networkOwnerRate;
+  unsigned __int8 clientMap[12];        ///< std::map<RBX::SystemAddress,RBX::Network::NetworkOwnerJob::ClientLocation>
 };
 

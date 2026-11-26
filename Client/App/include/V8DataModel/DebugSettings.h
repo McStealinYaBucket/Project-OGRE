@@ -29,6 +29,10 @@ namespace RBX {
 
 		DebugSettings();
 
+		// 2016 names; View::calcDefaultResolution 0x00467dd0 calls both (DebugSettings.cpp).
+		std::string gfxcard() const;	// PLAYER 0x00659170
+		int videoMemory() const;		// PLAYER 0x00659910
+
 		// printCallStack reads this byte at +0x64 (ScriptContext 2013); the ctor stores 1.
 		// Name from the 2016 "IsScriptStackTracingEnabled" property.
 		bool stackTracingEnabled;	// 0x64
@@ -52,10 +56,6 @@ namespace RBX {
 		void setEnforceInstanceCountLimit(bool b) { RBX::Limits::Counter::globallyEnforcedLimit = b; }
 		bool getEnforceInstanceCountLimit() const { return RBX::Limits::Counter::globallyEnforcedLimit; }
 		// (Spacing: getRobloxVersion's assert sits on 2013 line 85.)
-
-
-
-
 
 
 

@@ -19,6 +19,12 @@ namespace FLog {
 	Channel Verbs = 0;
 	int VerbsIniter = RegisterLogGroup("Verbs", &Verbs, NULL, FASTVARTYPE_STATIC);
 
+	// Initializer PLAYER 0x00a65100 / STUDIO 0x00b1c2d0 (the shell's View logs through it).
+	// GLOBAL: PLAYER 0x00d30edd
+	// GLOBAL: STUDIO 0x00ec17c9
+	Channel RobloxWndInit = 1;
+	int RobloxWndInitIniter = RegisterLogGroup("RobloxWndInit", &RobloxWndInit, NULL, FASTVARTYPE_STATIC);
+
 	// Initializer PLAYER 0x00a65120 / STUDIO 0x00b1c2f0 (the shell's LogManager logs through it).
 	// GLOBAL: PLAYER 0x00d30ede
 	// GLOBAL: STUDIO 0x00ec17ca
@@ -75,4 +81,13 @@ namespace FLog {
 	// GLOBAL: STUDIO 0x00ec1806
 	Channel CoreScripts = 1;
 	int CoreScriptsIniter = RegisterLogGroup("CoreScripts", &CoreScripts, NULL, FASTVARTYPE_STATIC);
+}
+
+// Dynamic (registered with kind 1; iOS 10-29 spells it DFFlag::UseClusterCache). Initializer
+// PLAYER 0x00a661d0 / STUDIO 0x00b1d3e0; Network's Server::onServiceProvider reads it.
+namespace DFFlag {
+	// GLOBAL: PLAYER 0x00de3f88
+	// GLOBAL: STUDIO 0x00f84e62
+	bool UseClusterCache = false;
+	int UseClusterCacheIniter = FLog::RegisterFlag("UseClusterCache", &UseClusterCache, NULL, FASTVARTYPE_DYNAMIC);
 }

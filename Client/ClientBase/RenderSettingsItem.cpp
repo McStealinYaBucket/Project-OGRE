@@ -190,7 +190,7 @@ static Reflection::PropDescriptor<CRenderSettingsItem, int> prop_meshCacheSize("
 static Reflection::PropDescriptor<CRenderSettingsItem, bool> prop_eagerBulkExecution("EagerBulkExecution", "Performance", &CRenderSettingsItem::getEagerBulkExecution, &CRenderSettingsItem::setEagerBulkExecution);
 REFLECTION_END();
 
-// STUB: PLAYER 0x004567d0
+// FUNCTION: PLAYER 0x004567d0
 // STUB: STUDIO 0x004376e0
 CRenderSettingsItem::CRenderSettingsItem()
 	: currentDisplaySize(800, 600)
@@ -199,18 +199,10 @@ CRenderSettingsItem::CRenderSettingsItem()
 {
 	setName("Rendering");
 	fullScreenSizes.push_back(currentDisplaySize);
-	int width, height;
 	if (SystemUtil::getVideoMemory() >= 16000000)
-	{
-		width = 1024;
-		height = 768;
-	}
+		fullscreenSize = G3D::Vector2int16(1024, 768);
 	else
-	{
-		width = 800;
-		height = 600;
-	}
-	fullscreenSize = G3D::Vector2int16(width, height);
+		fullscreenSize = G3D::Vector2int16(800, 600);
 }
 
 // FUNCTION: PLAYER 0x00456a00

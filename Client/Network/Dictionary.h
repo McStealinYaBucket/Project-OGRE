@@ -7,7 +7,9 @@
 #pragma once
 
 #include "rbx/Debug.h"
+#include "Util/SystemAddress.h"
 #include <boost/unordered_map.hpp>
+#include <map>
 #include <string>
 
 namespace RBX {
@@ -41,6 +43,31 @@ namespace Network {
 	class ReceiverDictionary
 	{
 		T dictionary[DICTIONARY_SIZE];
+	};
+
+	// Replicator's address dictionary sender, ctor PLAYER 0x0058f1c0: the inline map ctor (node
+	// isnil at +0x19), 128 default addresses, nextIndex = 1 at +0x40c.
+	template<>
+	class SenderDictionary<RBX::SystemAddress>
+	{
+		typedef std::map<RBX::SystemAddress, unsigned char> Dictionary;
+		Dictionary dictionary;                  // 0x0
+		RBX::SystemAddress items[DICTIONARY_SIZE]; // 0xc
+		int nextIndex;                          // 0x40c
+	public:
+		SenderDictionary()
+			: nextIndex(1)
+		{
+		}
+	};
+
+	// SIZE 0x810 for SystemAddress (Replicator+0x2290, ctor 0x00591720: the sender's ctor, then the
+	// receiver's 128 default addresses inline).
+	template<class T>
+	class SharedDictionary
+		: public SenderDictionary<T>
+		, public ReceiverDictionary<T>
+	{
 	};
 
 	// IdSerializer's scope-name dictionary (sender of Name pointers, receiver of strings), size 0x101c.

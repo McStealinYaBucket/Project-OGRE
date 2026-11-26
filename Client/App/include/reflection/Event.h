@@ -183,25 +183,20 @@ namespace RBX
 		public:
 			typedef Event ConstMember;
 			typedef Event Member;
-
 		protected:
 			SignatureDescriptor signature;
 			EventDescriptor(ClassDescriptor& classDescriptor, const char* name, Security::Permissions security, Attributes attributes);
-
 		public:
 			virtual rbx::signals::connection connectGeneric(DescribedBase* source, shared_ptr<GenericSlotWrapper> wrapper) const = 0;
 			const SignatureDescriptor& getSignature() const { return signature; }
-			
 			virtual bool isScriptable() const { return true; }
 			bool isPublic() const { return isScriptable(); }
-
 			virtual bool isBroadcast() const { return false; }
 			virtual void fireEvent(DescribedBase* source, const EventArguments& args) const = 0;
 			virtual void sendEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBXASSERT(false);	// Should only be called on RemoteEventDesc
 			}
-
 			bool operator==(const EventDescriptor& other) const {
 				return this == &other;
 			}
@@ -210,10 +205,8 @@ namespace RBX
 			}
 			virtual void disconnectAll(DescribedBase* source) const = 0;
 		};
-
 		template<class EventClass, typename Signature, typename SignalType, typename EventGetter = SignalType EventClass::*>
 		class RBXBaseClass EventDescBase;
-
 		template<class EventClass, typename Signature, typename SignalType>
 		class RBXBaseClass EventDescBase<EventClass, Signature, SignalType, SignalType EventClass::*> : public EventDescriptor
 		{
@@ -224,32 +217,29 @@ namespace RBX
 				:EventDescriptor(EventClass::classDescriptor(), name, security, attributes)
 				,sig(sig)
 			{}
-
 			SignalType& getSignal(EventClass* obj) const
 			{
 				return (obj->*sig);
 			}
 		public:
-			/* The source is checked via the reflection descriptor rather than a
-			   polymorphic_downcast on EventSource (not yet verified against 2013). */
+			/* 2013 casts statically (add eax,-0x1c, no isA): GameBasicSettings connect 0x006440c0,
+			   ScriptContext disconnectAll 0x006806b0. */
 			inline rbx::signals::connection connect(DescribedBase* source, const boost::function<Signature>& slot) const
             {
 				if (source)
 				{
-					EventClass* e = source->fastDynamicCast<EventClass>();
+					EventClass* e = static_cast<EventClass*>(source);
 					return (e->*sig).connect(slot);
 				}
 				else
 					return rbx::signals::connection();		// return an empty connection
 			}
-
 			inline void disconnectAll(DescribedBase* source) const
 			{
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				(e->*sig).disconnectAll();
 			}
 		};
-
 		template<class EventClass, typename Signature, typename SignalType>
 		class RBXBaseClass EventDescBase<EventClass, Signature, SignalType, SignalType* (EventClass::*)(bool)> : public EventDescriptor
 		{
@@ -260,7 +250,6 @@ namespace RBX
 				:EventDescriptor(EventClass::classDescriptor(), name, security, attributes)
 				,getOrCreate(getOrCreate)
 			{}
-
 			SignalType& getSignal(EventClass* obj) const
 			{
 				SignalType* s = (obj->*getOrCreate)(true);
@@ -278,20 +267,16 @@ namespace RBX
 				else
 					return rbx::signals::connection();		// return an empty connection
 			}
-
 			inline void disconnectAll(DescribedBase* source) const
 			{
 				EventClass* e = source->fastDynamicCast<EventClass>();
                 SignalType* s = (e->*getOrCreate)(false);
-
                 if (s)
                     s->disconnectAll();
 			}
 		};
-
 		template<int arity, class EventClass, typename Signature, typename SignalType, typename SignalGetter>
 		class EventDescImpl;
-
 		template<class EventClass, typename Signature, typename SignalType, typename SignalGetter>
 		class EventDescImpl<0, EventClass, Signature, SignalType, SignalGetter> : public EventDescBase<EventClass, Signature, SignalType, SignalGetter>
 		{
@@ -308,7 +293,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 0);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				return this->getSignal(e)();
 			}
 			void fireEvent(EventClass* instance) const
@@ -333,7 +318,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 1);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>()
 					);
@@ -362,7 +347,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 2);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
 					args[1].cast<typename boost::function_traits<Signature>::arg2_type>()
@@ -393,7 +378,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 3);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
 					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
@@ -426,7 +411,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 4);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
 					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
@@ -461,7 +446,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 5);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
                                    args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
                                    args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
@@ -498,7 +483,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 6);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
 					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
@@ -537,7 +522,7 @@ namespace RBX
 			inline void fireEvent(DescribedBase* source, const EventArguments& args) const
 			{
 				RBX_SIGNALS_ASSERT(args.size() == 7);
-				EventClass* e = source->fastDynamicCast<EventClass>();
+				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
 					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
 					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
@@ -1116,7 +1101,7 @@ namespace RBX
 			{
 				if (source)
 				{
-					EventClass* e = source->fastDynamicCast<EventClass>();
+					EventClass* e = static_cast<EventClass*>(source);
 
 					return &this->getSignal(e);
 				}

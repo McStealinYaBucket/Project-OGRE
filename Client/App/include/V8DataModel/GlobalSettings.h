@@ -34,7 +34,7 @@ namespace RBX {
 		: public DescribedNonCreatable<GlobalAdvancedSettings, Settings, sGlobalAdvancedSettings>
 	{
 	public:
-		GlobalAdvancedSettings() {}
+		GlobalAdvancedSettings();	// PLAYER 0x00658580
 		~GlobalAdvancedSettings() {}	// user-declared: the deleting dtor 0x00658430 stores the vptrs
 		static boost::shared_ptr<GlobalAdvancedSettings> singleton();
 

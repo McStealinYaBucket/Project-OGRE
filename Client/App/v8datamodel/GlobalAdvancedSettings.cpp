@@ -29,7 +29,31 @@ namespace RBX {
 #include "Util/Limits.h"
 #include "V8Tree/Instance.h"
 
+#include "Util/FileSystem.h"
+#include "V8DataModel/Selection.h"
+
 namespace RBX {
+// "<user directory>\GlobalSettings_13.xml", or "" when there is no user directory.
+// FUNCTION: PLAYER 0x00656320
+// FUNCTION: STUDIO 0x0073ee60
+static std::string advancedSettingsFile()
+{
+	std::string result = FileSystem::getUserDirectory(true, DirAppData, NULL);
+	if (result.size() > 0)
+		result += "\\GlobalSettings_13.xml";
+	return result;
+}
+
+// Ends by creating the Selection service (ServiceProvider::create<Selection> 0x00656f10).
+// FUNCTION: PLAYER 0x00658580
+// FUNCTION: STUDIO 0x00740d10
+GlobalAdvancedSettings::GlobalAdvancedSettings()
+	: DescribedNonCreatable<GlobalAdvancedSettings, Settings, sGlobalAdvancedSettings>(advancedSettingsFile())
+{
+	setName("Global Settings");
+	create<Selection>();
+}
+
 GlobalAdvancedSettings* g_sing = NULL;
 namespace {
 boost::once_flag globaladvancedsettingsFlag;

@@ -20,6 +20,13 @@ namespace RBX {
 	{
 	public:
 		PhysicsService() {}
+
+		// PeerStatsItem::update 0x005ba060 reads +0x64 inline (2016: parts.size()).
+		int numSenders() { return m_unk0x64; }
+
+	private:
+		// ctor 0x00649490: Service::isPublic is +0x60; +0x64..+0x6c are zeroed (2016: Intrusive::Set parts).
+		int m_unk0x64;				// 0x64
 	};
 
 } // namespace RBX

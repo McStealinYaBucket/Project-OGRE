@@ -56,23 +56,18 @@ namespace RBX
 				STANDARD_NO_SCRIPTING = 1 + 2 + 4 + 8 +  0,   // isPublic, canReplicate,  canXmlRead , canXmlWrite
 				PUBLIC_REPLICATE  =  1 + 2 + 0 + 0 +  0,      // isPublic, canReplicate
 			};
-
 			struct Attributes : public Descriptor::Attributes
 			{
 				Functionality flags;
-
 				Attributes():flags(STANDARD) {}
 				Attributes(Functionality flags):flags(flags) {}
 				static Attributes deprecated(const MemberDescriptor& preferred, Functionality flags = UI);
 				static Attributes deprecated(Functionality flags = UI);
 			};
-
 			const Type& type;
 			const bool bIsEnum;
-
 		protected:
 			PropertyDescriptor(ClassDescriptor& classDescriptor, const Type& type, const char* name, const char* category, Attributes attributes, Security::Permissions security, bool isEnum = false);
-
 			inline void checkFlags()
 			{
 				if (isWriteOnly())
@@ -89,10 +84,8 @@ namespace RBX
 		public:
 			inline bool isPublic() const { return bIsPublic != 0; }
 			inline bool isScriptable() const { return bIsScriptable != 0; }
-
             void setEditable(bool editable) { bIsEditable = editable ? 1 : 0; }
             inline bool isEditable() const { return bIsEditable != 0; }
-
 			virtual bool isReadOnly() const = 0;
 			virtual bool isWriteOnly() const = 0;
 			inline bool canXmlRead() const 
@@ -238,11 +231,8 @@ namespace RBX
 			/*implement*/ bool equalValues(const DescribedBase* a, const DescribedBase* b) const {
 				return getValue(a) == getValue(b);
 			}
-
             virtual int getDataSize(const DescribedBase* instance) const;
-
 			//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\/
-
 			virtual bool hasStringValue() const;
 			virtual std::string getStringValue(const DescribedBase* instance) const;
 			virtual bool setStringValue(DescribedBase* instance, const std::string& text) const;
@@ -250,7 +240,6 @@ namespace RBX
 			virtual void readValue(DescribedBase* instance, const XmlElement* element, IReferenceBinder& binder) const;
 			virtual void writeValue(const DescribedBase* instance, XmlElement* element) const;
 		};
-
 		// A light-weight convenience class that associates a PropertyDescriptor
 		// with a described object to create a "Property"
 		class ConstProperty
@@ -357,16 +346,12 @@ namespace RBX
 			{
 				return descriptor->setStringValue(const_cast<DescribedBase*>(instance), text);
 			}
-
 			inline void read(const XmlElement* element, RBX::IReferenceBinder& binder)
 			{
 				descriptor->read(const_cast<DescribedBase*>(instance), element, binder);
 			}
-
 		};
-
 		std::size_t hash_value(const ConstProperty& prop);
-
 		// Interface
 		// maps enums to an index (Used by UIs like a property grid)
 		class RBXInterface EnumPropertyDescriptor : public PropertyDescriptor {
@@ -390,24 +375,18 @@ namespace RBX
 				,enumDescriptor(enumDescriptor)
 			{}
 		};
-
 		class RBXBaseClass RefPropertyDescriptor : public PropertyDescriptor {
-
 		private:
 			typedef PropertyDescriptor Super;
-
 		public:
 			virtual DescribedBase* getRefValue(const DescribedBase* instance) const = 0;
 			virtual void setRefValue(DescribedBase* instance, DescribedBase* value) const = 0;
 			virtual void setRefValueUnsafe(DescribedBase* instance, DescribedBase* value) const = 0;
-			
 			RefPropertyDescriptor(ClassDescriptor& classDescriptor, const Type& type, const char* name, const char* category, Attributes flags = STANDARD, Security::Permissions security=Security::None)
 				:PropertyDescriptor(classDescriptor, type, name, category, flags, security)
 			{}
-
             virtual int getDataSize(const DescribedBase* instance) const
             { return 0; }
-
 			bool hasStringValue() const {
 				return false;
 			}
@@ -417,8 +396,6 @@ namespace RBX
 			bool setStringValue(DescribedBase* instance, const std::string& text) const {
 				return Super::setStringValue(instance, text);
 			}
-
-
             // mac: 0x706624 (2013) + 0x467C10 (2016, PDB): compares Type::NAME
             // (Descriptor name), NOT Type::tag. RefType singletons are named
             // "Object" with tag "Ref" (tag drives <Ref> XML elements; name
@@ -431,7 +408,6 @@ namespace RBX
                 static const RBX::Name* name = RBX::Name::lookup("Object");
                 return (&type.name == name);
             }
-
 			static bool isRefPropertyDescriptor(const PropertyDescriptor& descriptor)
 			{
 				// See RefType in reflection.h

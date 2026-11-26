@@ -12,19 +12,20 @@
        fullscreen size from calcDefaultResolution, not from the desktop;
      - SetFullscreen's GameBasicSettings::setFullScreen fires its signal before it stores.
 
-   Not in CMakeLists.txt yet (measured with a private link that adds View.obj to player_client,
-   build-sh/w14). HandleWindowsMessage (0x00466510) and ShowWindow (0x004682c0) are the other
-   callers of the resolution code; ShowWindow's assert must stay on line 739, so the file keeps a
-   blank gap above it until the rest of View.cpp is laid out. Open differences, all LTCG context
+   HandleWindowsMessage (0x00466510) and ShowWindow (0x004682c0) are the other callers of the
+   resolution code; its caller is main.cpp's WndProc (0x004426a0, not written). ShowWindow's assert
+   must stay on line 739, so the file keeps a blank gap above it until the rest of View.cpp is laid
+   out. Open differences, all LTCG context
    rather than code as far as measured: HandleWindowsMessage and findBestMonitorMatch realign their
    frames (and esp,-8) in 2013 and take other argument registers (their callers are not written);
    changeResolution passes findBestMonitorMatch dmBest in ebx in 2013; LTCG still inlines
    SetFullscreen into ToggleFullscreenVerb::doIt (2013 inlines it only into ShowWindow).
-   FLog::RobloxWndInit is only declared here: 2013 defines it in App's FastLogSettings.cpp
-   (initializer 0x00a65100, .data 0x00d30edd, default 1). */
+   FLog::RobloxWndInit is App's (FastLogSettings.cpp, initializer 0x00a65100, .data 0x00d30edd,
+   default 1); View logs through it. */
 
 // App's headers first: they include winsock2.h ahead of windows.h.
 #include "../ClientBase/RenderSettingsItem.h"
+#include "V8DataModel/DebugSettings.h"
 #include "V8DataModel/GameBasicSettings.h"
 #include "../Win/LogManager.h"
 #include "FastLog.h"
@@ -353,15 +354,27 @@ void View::changeResolution()
 	FASTLOG(FLog::RobloxWndInit, "Done View::changeResolution");
 }
 
-// Not written: it picks the line count from DebugSettings' video memory (0x00659910; 600, 1024,
-// 1200, 1280 or 1600 for up to 32, 64, 128, 256 MB or more) and card name (0x00659170: "Intel"
-// gives 1200, or 600 when it also contains "828"), which App's DebugSettings.h does not declare
-// yet. Only the tail is written, so that LTCG keeps the float argument the callers pass, and
-// noinline stands in for the 0x125-byte body, which LTCG keeps out of line.
-// STUB: PLAYER 0x00467dd0
-__declspec(noinline) G3D::Vector2int16 View::calcDefaultResolution(float aspect_XdivY)
+// The line count comes from DebugSettings: an Intel card gives 1200 (600 when its name also
+// contains "828"); otherwise up to 32, 64, 128 and 256 MB of video memory give 600, 1024, 1200 and
+// 1280, more gives 1600. `this` is unused, so LTCG passes only the result pointer (edi).
+// FUNCTION: PLAYER 0x00467dd0
+G3D::Vector2int16 View::calcDefaultResolution(float aspect_XdivY)
 {
-	int numlines = 600;
+	int videoMemory = DebugSettings::singleton().videoMemory();
+	std::string gfxcard = DebugSettings::singleton().gfxcard();
+
+	int numlines;
+	if (gfxcard.find("Intel") != std::string::npos)
+		numlines = gfxcard.find("828") != std::string::npos ? 600 : 1200;
+	else if (videoMemory <= 32)
+		numlines = 600;
+	else if (videoMemory <= 64)
+		numlines = 1024;
+	else if (videoMemory <= 128)
+		numlines = 1200;
+	else
+		numlines = videoMemory <= 256 ? 1280 : 1600;
+
 	int numrows = (int)(numlines * aspect_XdivY);
 	return G3D::Vector2int16(numrows, numlines);
 }
@@ -434,19 +447,6 @@ std::vector<G3D::Vector2int16> View::getFullscreenSizes()
 
 // View.cpp lines up to 739 hold code that is not written yet (the 2013 assert below is on line
 // 739); keep this function at the end until the rest of the file is laid out.
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

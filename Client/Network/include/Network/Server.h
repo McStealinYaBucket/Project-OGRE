@@ -25,6 +25,11 @@ namespace Network {
 
 	extern const char* const sServer;
 
+	class Players;
+	class NetworkOwnerJob;
+	class PhysicsPacketCache;
+	class InstancePacketCache;
+
 	// SIZE 0xb78
 	class Server
 		: public DescribedCreatable<Server, Peer, sServer, Reflection::ClassDescriptor::INTERNAL_LOCAL>
@@ -43,14 +48,22 @@ namespace Network {
 		/*override*/ bool askAddChild(const Instance* instance) const;                                    // +0x3c
 		/*override*/ void onCreateRakPeer();                                                              // +0x70
 
+		// iOS: stop(int), onItemAdded(boost::shared_ptr<RBX::Instance>).
+		void stop(int blockDuration);
+		void onItemAdded(shared_ptr<Instance> item);
+
 	public:
 
 		undefined4 m_unk0xac4;                          // 0xac4 ctor 0
-		shared_ptr<Instance> m_unk0xac8;                // 0xac8 dtor releases +0xacc last; pointee unproven
-		shared_ptr<Instance> m_unk0xad0;                // 0xad0 dtor releases +0xad4; pointee unproven
-		rbx::signals::scoped_connection m_unk0xad8;     // 0xad8 dtor 0x00483de0
+		// onServiceProvider 0x005b5310: create<Players> -> 0xac8, the NetworkOwnerJob -> 0xad0, the
+		// descendantAdded connection -> 0xad8, the two caches' raw pointers -> 0xae0/0xae4.
+		shared_ptr<Players> players;                    // 0xac8 dtor releases +0xacc last
+		shared_ptr<NetworkOwnerJob> networkOwnerJob;    // 0xad0 dtor releases +0xad4
+		rbx::signals::scoped_connection itemAddedConnection; // 0xad8 dtor 0x00483de0
 		bool m_unk0xadc;                                // 0xadc ctor false
-		undefined m_unk0xadd[0xae8 - 0xadd];            // 0xadd not stored by the ctor
+		undefined m_unk0xadd[0xae0 - 0xadd];            // 0xadd not stored by the ctor
+		PhysicsPacketCache* physicsPacketCache;         // 0xae0 not stored by the ctor
+		InstancePacketCache* instancePacketCache;       // 0xae4 not stored by the ctor
 		long m_unk0xae8;                                // 0xae8 ctor 1; the next script id (registerLegalScript)
 		std::vector<int> m_unk0xaec;                    // 0xaec the ctor assigns the ints 1..17 (_Assign 0x005b20c0)
 		NetworkSettings* networkSettings;               // 0xafc ctor GlobalAdvancedSettingsItem<NetworkSettings>::singleton()

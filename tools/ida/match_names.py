@@ -550,7 +550,8 @@ FACTS = [
     (0x00656320, 0x0073ee60, "rename", "globalAdvancedSettingsFile", "src2016:",
      "static globalAdvancedSettingsFile() (2016 GlobalSettings.cpp) | getUserDirectory(true, DirAppData, NULL) "
      "0x006ea4c0, append '\\GlobalSettings_13.xml' 0x00b31094 when not empty; twin of the basic-settings file "
-     "helper 0x00656390 (our basicSettingsFile, 2016 globalBasicSettingsFile)"),
+     "helper 0x00656390 (our basicSettingsFile, 2016 globalBasicSettingsFile); reccmp 100% vs our "
+     "RBX::advancedSettingsFile (app-15, sweep22): the 2016 spelling is kept as the name"),
     (0x0072aaf0, 0x0082a3e0, "rename", "?renderGameCursor@UserInputBase@RBX@@UAEXPAVAdorn@2@@Z", "rtti:",
      "RBX::UserInputBase::renderGameCursor(Adorn*) (iOS 1029) | slot 7 of UserInput's vftable 0x00be4d9c (not "
      "overridden); our Util/UserInputBase.cpp STUB pairs here"),
@@ -561,9 +562,9 @@ FACTS = [
     # shell-5k-5.md item 3: the engine bind chain next to DebrisService is weak_ptr<Instance>, not weak_ptr<DataModel>
     # (2013's weak_ptr<DataModel> bind is the shell copy 0x0043a480, called from 0x00526859 / 0x005a42ba / 0x0066e277 /
     # 0x006a9290). Our build folds both instantiations into one body (reccmp 100%, it picked the DataModel spelling);
-    # the Instance spelling is the DebrisService.cpp.obj name at the same recomp address. The function1 /
-    # basic_vtable rows 0x00844de0 / 0x00844f60 / 0x0073da60 / 0x0073db90 keep their names: our build has no
-    # Instance spelling at their recomp addresses, and 0x0073db90 has five callers (an ICF-folded body).
+    # the Instance spelling is the DebrisService.cpp.obj name at the same recomp address. The function0 /
+    # basic_vtable0 rows 0x00844de0 / 0x00844f60 / 0x0073da60 / 0x0073db90 / 0x0074c040 took their Instance
+    # spellings from the bulk rule in the wave15 sync (integrate wave 15's MATCH_SUB made reccmp pair them so).
     (0x008445f0, 0x0098a120, "rename",
      "??0?$list1@V?$value@V?$weak_ptr@VInstance@RBX@@@boost@@@_bi@boost@@@_bi@boost@@QAE@V?$value@V?$weak_ptr@"
      "VInstance@RBX@@@boost@@@12@@Z", "match:",
@@ -592,6 +593,23 @@ FACTS = [
      "0x00439402: ecx = ServiceProvider::create<SoundService> result, edi = videoControl [this+0x14] (/GL shell "
      "registers); right after VideoControl's slot functions (STUDIO 0x0048caa0: same position after ~VideoControl "
      "0x0048c940, same 625 bytes, 199 of 199 mnemonics equal)"),
+    # wave15 sync (app-15.md "IDA owner (names)"): DebugSettings' two hardware queries (our tree declares them,
+    # STUB bodies) and two log/flag globals (FastLogSettings.cpp GLOBAL markers, iOS 1029 symbols).
+    (0x00659170, 0x00773bf0, "rename",
+     "?gfxcard@DebugSettings@RBX@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ", "ios:",
+     "RBX::DebugSettings::gfxcard() const (iOS 1029) | EnumDisplayDevicesA, SetupDi* class enumeration, "
+     "'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class\\' + '\\DriverVersion', ' drv=', 'unknown'; "
+     "returns std::string; only caller View::calcDefaultResolution 0x00467dd0 (Intel / '828' test, shell-5k-6)"),
+    (0x00659910, 0x00774340, "rename", "?videoMemory@DebugSettings@RBX@@QBEHXZ", "ios:",
+     "RBX::DebugSettings::videoMemory() const (iOS 1029) | 90 bytes, one call and a std::string dtor; only caller "
+     "View::calcDefaultResolution 0x00467dd0 (the 32/64/128/256 MB table, shell-5k-6)"),
+    (0x00d30edd, 0x00ec17c9, "data1", "_ZN4FLog13RobloxWndInitE", "ios:",
+     "FLog::RobloxWndInit (iOS 1029 data) | log channel, initial 1, registered 'RobloxWndInit' by the initializer "
+     "PLAYER 0x00a65120 / STUDIO 0x00b1c2f0; our FastLogSettings.cpp GLOBAL (app-15)"),
+    (0x00de3f88, 0x00f84e62, "data1", "_ZN6DFFlag15UseClusterCacheE", "ios:",
+     "DFFlag::UseClusterCache (iOS 1029, a DFFlag not an FFlag) | registered 'UseClusterCache' with kind 1 "
+     "(dynamic) by the initializer PLAYER 0x00a661d0 / STUDIO 0x00b1d3e0; read by Network::Server::onServiceProvider; "
+     "our FastLogSettings.cpp GLOBAL (app-15)"),
 ]
 
 
@@ -836,12 +854,19 @@ def plan(target, json_path, exe):
         # STUDIO-PLAYER-bodymatch.csv), where STUDIO's name is still a dummy and nothing above decided it.
         pmap = {int(r["b_address"], 16): int(r["a_address"], 16) for r in read_csv("STUDIO-PLAYER-bodymatch.csv")
                 if r["status"] in ("pair", "pair-callpos")}
+        # a name STUDIO keeps at another address (not renamed above) cannot be set (IDA names are unique): STUDIO
+        # pairs its engine weak_ptr<DataModel> bind copies (0x0098a7b0 ...) with our DataModel spelling, while
+        # PLAYER's engine copies took DebrisService's Instance spelling and its shell copies the DataModel one
+        taken = {n for x, n in funcs.items() if not (x in updates and updates[x][0].startswith("rename"))}
         for r in read_csv("PLAYER-db-updates.csv"):
             pa = int(r["address"], 16)
             sa = pmap.get(pa)
             if r["action"] != "rename" or r["tag"] != "match:" or "reccmp" not in r["line"] or sa is None:
                 continue
             if sa in updates or sa in libown or sa not in funcs or not DUMMY.match(funcs[sa]):
+                continue
+            if r["name"] in taken:
+                stat["PLAYER name kept at another STUDIO address"] += 1
                 continue
             updates[sa] = ("rename", r["name"], "match:",
                            r["line"] + f" [STUDIO: body-identical to PLAYER 0x{pa:08x}, measured there]")

@@ -3,6 +3,22 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
+// public: void __thiscall RBX::UserInput::PostUserInputMessage(unsigned int, unsigned int, long)
+// STUB: PLAYER 0x0045f1b0
+extern "C" void ogre_stub_0045f1b0()
+{
+	STUB(0x0045f1b0);
+}
+#pragma comment(linker, "/alternatename:?PostUserInputMessage@UserInput@RBX@@QAEXIIJ@Z=_ogre_stub_0045f1b0")
+
+// public: void __thiscall RBX::VideoControl::startRecording(class RBX::Soundscape::SoundService *)
+// STUB: PLAYER 0x00464f30
+extern "C" void ogre_stub_00464f30()
+{
+	STUB(0x00464f30);
+}
+#pragma comment(linker, "/alternatename:?startRecording@VideoControl@RBX@@QAEXPAVSoundService@Soundscape@2@@Z=_ogre_stub_00464f30")
+
 // class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl format_string(char const *, ...)
 // STUB: PLAYER 0x00629910
 extern "C" void ogre_stub_00629910()
@@ -114,6 +130,14 @@ extern "C" void ogre_stub_009c5ce0()
 	STUB(0x009c5ce0);
 }
 #pragma comment(linker, "/alternatename:??0CRenderSettings@RBX@@QAE@XZ=_ogre_stub_009c5ce0")
+
+// public: struct RBX::CRenderSettings::RESOLUTIONENTRY const & __thiscall RBX::CRenderSettings::getResolutionPreset(enum RBX::CRenderSettings::ResolutionPreset)
+// STUB: PLAYER 0x009c5e10
+extern "C" void ogre_stub_009c5e10()
+{
+	STUB(0x009c5e10);
+}
+#pragma comment(linker, "/alternatename:?getResolutionPreset@CRenderSettings@RBX@@QAEABURESOLUTIONENTRY@12@W4ResolutionPreset@12@@Z=_ogre_stub_009c5e10")
 
 // public: __thiscall G3D::Log::Log(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int)
 // STUB: PLAYER 0x009d5b70

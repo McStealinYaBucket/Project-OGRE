@@ -6,8 +6,6 @@ address,type,size,symbol
 00569ea0,library,194,??1ios_base@std@@UAE@XZ_0
 005b78b0,library,111,??1ios_base@std@@UAE@XZ_1
 005de760,library,84,??1strstreambuf@std@@UAE@XZ_3
-006102f0,library,84,??1strstreambuf@std@@UAE@XZ_6
-0061cf70,library,146,??1strstreambuf@std@@UAE@XZ_7
 00623d70,library,80,??1ios_base@std@@UAE@XZ_2
 00650550,library,534,??1strstreambuf@std@@UAE@XZ_8
 00655250,library,84,??1strstreambuf@std@@UAE@XZ_9
