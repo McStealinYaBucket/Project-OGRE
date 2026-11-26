@@ -352,6 +352,15 @@ function(ogre_prior_sources LIB)
             list(APPEND keep "${f}")
         endif()
     endforeach()
+    # STUDIO links GameSettings.obj ahead of GameBasicSettings.obj: 2013 STUDIO's shared
+    # EnumDesc<GameSettings::UploadSetting>::convertToValue 0x0073cfc0 is GameSettings.cpp's copy
+    # (singleton() inlined). PLAYER's copy is the out-of-line form, so PLAYER keeps the glob order.
+    set(gs "${PROJECT_SOURCE_DIR}/Client/App/v8datamodel/GameSettings.cpp")
+    list(FIND keep "${PROJECT_SOURCE_DIR}/Client/App/v8datamodel/GameBasicSettings.cpp" gbs)
+    if(LIB STREQUAL "App" AND OGRE_TARGET STREQUAL "STUDIO" AND gbs GREATER -1 AND "${gs}" IN_LIST keep)
+        list(REMOVE_ITEM keep "${gs}")
+        list(INSERT keep ${gbs} "${gs}")
+    endif()
     target_sources(${LIB} PRIVATE ${keep})
     # App's include root as each 2013 project spelled its /I, which header asserts record
     # (C:\BuildAgent\work\<hash>\Client\App\Include\Util/... in RbxOgre code, Client\app\include in
