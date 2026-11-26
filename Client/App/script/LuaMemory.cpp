@@ -17,7 +17,24 @@ namespace RBX {
 
 	size_t LuaAllocator::heapLimit = 0;
 
+	// FUNCTION: PLAYER 0x0086b240
+	// FUNCTION: STUDIO 0x009ad260
+	LuaAllocator::~LuaAllocator()
+	{
+		if (!memPools.empty())
+		{
+			for (size_t i = 0; i < memPools.size(); ++i)
+			{
+				delete memPools[i];
+				memPools[i] = NULL;
+			}
+			memPools.clear();
+		}
+	}
+
 	// mac: 0x17C950 (210B, batch317).
+	// FUNCTION: PLAYER 0x0086b300
+	// FUNCTION: STUDIO 0x009ad320
 	LuaAllocator::LuaAllocator(bool usePool)
 		: heapSize(0)
 		, heapCount(0)
@@ -26,15 +43,9 @@ namespace RBX {
 	{
 		if (usePool)
 		{
-			for (int i = 0; i < 16; ++i)
-				memPools.push_back(new boost::pool<>(28 + i * 4));
+			for (int size = 28; size <= 88; size += 4)
+				memPools.push_back(new boost::pool<>(size));
 		}
-	}
-
-	LuaAllocator::~LuaAllocator()
-	{
-		for (size_t i = 0; i < memPools.size(); ++i)
-			delete memPools[i];
 	}
 
 	// Pool index (binary lane: (size&3)==0 && (size-24)>>2 < 17, then -1).
@@ -62,17 +73,6 @@ namespace RBX {
 		LuaAllocator* allocator = reinterpret_cast<LuaAllocator*>(ud);
 		return allocator->alloc(ptr, osize, nsize);
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1468,16 +1468,13 @@ namespace RBX {
 		// This thread specific pointer is used to re-entrancy checks
 		SAFE_STATIC(rbx::thread_specific_reference<GenericJob>, currentJob)
 
-		DataModel* const dataModel;
-
-		// The job being used for scheduling:
-		GenericJob* job;
-		// The previous job, if any, being used for scheduling:
-		GenericJob* previousJob;
-		// The mutexes used to marshal the task across threads:
-		shared_ptr<Events> events;
-
-		// NOTE (2013): no writeTransfer member (no scoped_write_transfer mangle).
+		// 2013 layout (ctor PLAYER 0x00641e60, dtor 0x0063a380; operator new 0x20 at 0x006421eb):
+		DataModel* const dataModel;				// 0x00
+		GenericJob* job;						// 0x04 the job being used for scheduling
+		GenericJob* previousJob;				// 0x08 the previous job, if any
+		shared_ptr<Events> events;				// 0x0c the mutexes used to marshal the task across threads
+		Limits::Counter::Activator activator;	// 0x14 (ctor 0x009b96b0, dtor 0x009b97f0)
+		DWORD m_unk0x1c;						// 0x1c dataModel->writeRequestingThread on entry, restored on exit
 
 		static void task(shared_ptr<Events> events)
 		{
@@ -1493,11 +1490,40 @@ namespace RBX {
 			eventsPool().push(events);
 		}
 
-		Implementation(DataModel* dataModel, boost::shared_ptr<GenericJob> job)
-			:job(job.get())
-			,dataModel(dataModel)
+		// FUNCTION: PLAYER 0x0063a380
+		// FUNCTION: STUDIO 0x00758fd0
+		~Implementation()
+		{
+			FASTLOG2(FLog::LegacyLock, "LegacyLock::~Implementation type(%d), events (%p)", job->taskType, events.get());
+
+			if (job->taskType == DataModelJob::Write)
+				dataModel->writeRequestingThread = m_unk0x1c;
+
+			if (job != previousJob)
+			{
+				// The task has completed, so undo state
+				currentJob().reset(previousJob);
+				// Signal the proxy task that we're done
+				events->releasedLock.Set();
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::Released type(%d)", job->taskType);
+			}
+			else
+			{
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyReleased type(%d)", job->taskType);
+			}
+		}
+
+		// The 2013 assert sits at DataModel.cpp:1054, so this STUB's assert string differs.
+		// STUB: PLAYER 0x00641e60
+		// STUB: STUDIO 0x0075f6e0
+		Implementation(DataModel* dataModel, boost::shared_ptr<GenericJob> job, boost::shared_ptr<Limits::Counter> counter)
+			:dataModel(dataModel)
+			,job(job.get())
+			,activator(counter)
+			,m_unk0x1c(dataModel->writeRequestingThread)
 		{
 			RBXASSERT(job);
+
 			previousJob = currentJob().get();
 			// Re-entrancy test. No need to wait if we're recursively locked on this DataModel
 			if (this->job != previousJob)
@@ -1517,56 +1543,30 @@ namespace RBX {
 				// Wait for the task to signal acquiredLock
 				events->acquiredLock.Wait();
 
-				// NOTE (2013): no writeTransfer (no scoped_write_transfer mangle).
+				if (job->taskType == DataModelJob::Write)
+					dataModel->writeRequestingThread = GetCurrentThreadId();
 
-				FASTLOG3(FLog::LegacyLock, "LegacyLock::Acquired type(%d), job (%s), events (%p)", job->taskType, job->name.c_str(), events.get());
+				// 2013 passes two arguments to the three-argument format (PLAYER 0x006420f6).
+				FASTLOG2(FLog::LegacyLock, "LegacyLock::Acquired type(%d), job (%s), events (%p)", job->taskType, events.get());
 			}
 			else
 			{
-				if (job->taskType == DataModelJob::Write)
-					RBXASSERT(dataModel->currentThreadHasWriteLock());
-
 				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyAcquired type(%d)", job->taskType);
 			}
 		}
-
-		~Implementation()
-		{
-			FASTLOG2(FLog::LegacyLock, "LegacyLock::~Implementation type(%d), events (%p)", job->taskType, events.get());
-
-			if (job != previousJob)
-			{
-				// NOTE (2013): no writeTransfer reset.
-
-				// The task has completed, so undo state
-				currentJob().reset(previousJob);
-				// Signal the proxy task that we're done
-				events->releasedLock.Set();
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::Released type(%d)", job->taskType);
-			}
-			else
-			{
-				if (job->taskType == DataModelJob::Write)
-					RBXASSERT(dataModel->currentThreadHasWriteLock());
-
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyReleased type(%d)", job->taskType);
-			}
-		}
 	};
-
-	// STUB: PLAYER 0x006421c0
-	// STUB: STUDIO 0x0075fa40
+	// FUNCTION: PLAYER 0x006421c0
+	// FUNCTION: STUDIO 0x0075fa40
 	DataModel::LegacyLock::LegacyLock(boost::shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType)
-		// TODO: What if an invalid DataModelJob::Function is passed in???
-		:implementation(dataModel ? new Implementation(dataModel.get(), dataModel->getGenericJob(taskType)) : 0)
+		:implementation(dataModel ? new Implementation(dataModel.get(), dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
 	{
-		//assert(GetCurrentThreadId() != mainThreadId);
 	}
 
+	// FUNCTION: PLAYER 0x006422c0
+	// FUNCTION: STUDIO 0x0075fb40
 	DataModel::LegacyLock::LegacyLock(DataModel* dataModel, DataModelJob::TaskType taskType)
-		:implementation(dataModel ? new Implementation(dataModel, dataModel->getGenericJob(taskType)) : 0)
+		:implementation(dataModel ? new Implementation(dataModel, dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
 	{
-		//assert(GetCurrentThreadId() != mainThreadId);
 	}
 
 	DataModel::LegacyLock::~LegacyLock()

@@ -11,13 +11,17 @@
      +0x14 bool, zeroed
      +0x18 std::vector<Verb*> verbs (three zeroed pointers at +0x1c)
      +0x28 shared_ptr, zeroed (2016: commonVerbs)
-     +0x30 a 4-byte member built by 0x00653790 (zeroes itself, then call_once + 0x004265c0)
+     +0x30 rbx::signal<void(DataModel*)>: its out-of-line ctor 0x00653790 makes the per-signature
+           SAFE_HEAP_STATIC mutex (call_once 0x00426660, getter 0x004265c0, both the /GL shell's);
+           iOS 10-29 Game::Game calls signal<void(DataModel*)>::safe_static_do_get_mutex and ~Game
+           signal<void(DataModel*)>::disconnectAll. Its dtor is 0x00654e80.
    getDataModel() is inline: the /GL shell keeps an out-of-line copy (PLAYER 0x0041ce40, this in ecx,
    return slot in eax). */
 
 #pragma once
 
 #include "decomp.h"
+#include "rbx/signal.h"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -32,6 +36,7 @@ namespace RBX {
 	class Verb;
 
 	// VTABLE: PLAYER 0x00b31044
+	// VTABLE: STUDIO 0x00c0a920
 	// SIZE 0x34
 	class Game : boost::noncopyable
 	{
@@ -41,22 +46,19 @@ namespace RBX {
 	public:
 		virtual ~Game();	// vtable+0x00
 
-		// SYNTHETIC: PLAYER 0x00656230
-		// RBX::Game::`scalar deleting destructor'
+		// Its scalar deleting destructor folds with SecurePlayerGame's (PLAYER 0x00656230) and
+		// UnsecuredStudioGame's (STUDIO 0x007ce200); the PDB keeps the subclass name, so they carry the markers.
 
 		boost::shared_ptr<DataModel> getDataModel() const { return dataModel; }
 
 		void setupDataModel(const std::string& baseUrl);
+		void setDataModel(boost::shared_ptr<DataModel> dataModel);
+		void clearVerbs(bool useLock);
+		void shutdownGameDataModel();
 
 	protected:
-		// The member at +0x30: a 4-byte object whose ctor (PLAYER 0x00653790) zeroes it and touches a
-		// SAFE_HEAP_STATIC (call_once 0x00426660, getter 0x004265c0); its dtor is 0x00654e80.
-		struct Unk0x30
-		{
-			undefined4 m_unk0x00;
-			Unk0x30();
-			~Unk0x30();
-		};
+		void doClearVerbs();
+		void shutdown();
 
 		boost::shared_ptr<DataModel> dataModel;					// 0x04
 		boost::shared_ptr<OverlayDataModel> overlayDataModel;	// 0x0c
@@ -65,13 +67,55 @@ namespace RBX {
 		std::vector<Verb*> verbs;								// 0x18
 	protected:
 		boost::shared_ptr<CommonVerbs> commonVerbs;				// 0x28 (2016 name; the ctor only zeroes it)
-		Unk0x30 m_unk0x30;										// 0x30
+		rbx::signal<void(DataModel*)> m_unk0x30;				// 0x30 (no 2016 counterpart; unnamed)
 	};
 
+	// PLAYER only: its deleting destructor folds with Game's (both vftable slots are 0x00656230).
+	// VTABLE: PLAYER 0x00b3104c
 	class SecurePlayerGame : public Game
 	{
 	public:
 		SecurePlayerGame(Verb* lockVerb, const char* baseUrl, bool shouldShowLoadingScreen);
+
+		// SYNTHETIC: PLAYER 0x00656230
+		// RBX::SecurePlayerGame::`scalar deleting destructor'
 	};
+
+	// STUDIO only (RTTI .?AVUnsecuredStudioGame@RBX@@; iOS 10-29 has it too). Its deleting destructor
+	// folds with Game's, as SecurePlayerGame's does in PLAYER.
+	// VTABLE: STUDIO 0x00c0a928
+	class UnsecuredStudioGame : public Game
+	{
+	public:
+		UnsecuredStudioGame(Verb* lockVerb, const char* baseUrl, bool shouldShowLoadingScreen);
+
+		// SYNTHETIC: STUDIO 0x007ce200
+		// RBX::UnsecuredStudioGame::`scalar deleting destructor'
+	};
+
+	// Game::m_unk0x30 (rbx::signal<void(DataModel*)>): its out-of-line members. PLAYER keeps the /GL shell's
+	// mutex helpers (0x004265c0/0x00426660), STUDIO Game.obj's; the rest are Game.obj copies in both.
+	// TEMPLATE: PLAYER 0x004265c0
+	// TEMPLATE: STUDIO 0x007cb980
+	// ?safe_static_do_get_mutex@?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@CAPAVmutex@boost@@XZ
+
+	// TEMPLATE: PLAYER 0x00426660
+	// TEMPLATE: STUDIO 0x007cba10
+	// ?safe_static_init_mutex@?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@CAXXZ
+
+	// TEMPLATE: PLAYER 0x00653790
+	// TEMPLATE: STUDIO 0x007cc250
+	// ??0?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAE@XZ
+
+	// TEMPLATE: PLAYER 0x00654790
+	// TEMPLATE: STUDIO 0x007cd150
+	// ?disconnectAll@?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAEXXZ
+
+	// TEMPLATE: PLAYER 0x00654dc0
+	// ??R?$signal_with_args@$00$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAEXPAVDataModel@RBX@@@Z
+
+	// TEMPLATE: PLAYER 0x00654e80
+	// TEMPLATE: STUDIO 0x007cd5c0
+	// ??1?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAE@XZ
 
 } // namespace RBX

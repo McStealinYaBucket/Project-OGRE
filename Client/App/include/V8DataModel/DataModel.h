@@ -548,7 +548,7 @@ public:
 	GearGenreSetting	gearGenreSetting;						// 0xde4 (not set by the ctor)
 	unsigned			allowedGearTypes;						// 0xde8 (not set by the ctor)
 	GuiBuilder			guiBuilder;								// 0xdec 0x20 (STUDIO 0x1c); ctor 0x00644f30, dtor 0x0056b810
-	DataModel*			parentDataModel;						// 0xe0c second ctor argument
+	DataModel*			parentDataModel;						// 0xe0c second ctor argument (STUDIO 0xe08, ctor 0x0076bb1a; the class pads to 0xe10 in both)
 };
 
 } // namespace RBX

@@ -74,10 +74,9 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
   - Pool only --json runs of the build being regenerated against: a run from an earlier link pairs
     stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
   - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor);
-    MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0) or a stale one
-    (_internal_accept_owner 0x005bd080); MATCH_DROP skips a /GL shell original's match: name while our shell
-    lacks that copy (STUDIO bind<weak_ptr<DataModel>> 0x0042b260). A MATCH_FIX entry with no names.csv row
-    adds one (PLAYER _internal_accept_owner 0x005baa50). Drop an entry once names.csv agrees.
+    MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0) or a stale one;
+    MATCH_DROP skips a /GL shell original's match: name while our shell lacks that copy (empty since wave 18).
+    A MATCH_FIX entry with no names.csv row adds one. Drop an entry once names.csv agrees.
   - A library row whose instantiation left our link falls back to the symbol the current <t>-<lib>.csv row
     carries (the body our link kept last time); if nothing resolves, position votes may name its address.
   - A position row never takes a library row's symbol to another original (twins: the library row wins).
@@ -145,29 +144,16 @@ _GUIMAIN_E28 = ("??_EGuiMain@RBX@@WBM@AEPAXI@Z",
                 "[thunk]:public: virtual void * __thiscall RBX::GuiMain::`vector deleting destructor'`adjustor{28}' "
                 "(unsigned int)")
 MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIMAIN_E28}
-# PLAYER has four _internal_accept_owner bodies, told apart by their weak_ptr operator= and unwind ~shared_ptr
-# (native or /GL shell copy; shell-5k-8, wave 17): 0x005bd080 is shell/shell (the TaskScheduler::Job types),
-# 0x005baa50 native/native (Registry, Thread, FWBase, YieldFunctionStateObject). names.csv gives 0x005bd080 the
-# YieldFunctionStateObject name and has no row for 0x005baa50; an entry with no names.csv row adds one.
-MATCH_FIX[("PLAYER", 0x005bd080)] = (
-    "??$_internal_accept_owner@VNetworkOwnerJob@Network@RBX@@V123@@?$enable_shared_from_this@VJob@TaskScheduler@RBX@@"
-    "@boost@@QBEXPBV?$shared_ptr@VNetworkOwnerJob@Network@RBX@@@1@PAVNetworkOwnerJob@Network@RBX@@@Z",
-    "public: void __thiscall boost::enable_shared_from_this<class RBX::TaskScheduler::Job>::_internal_accept_owner"
-    "<class RBX::Network::NetworkOwnerJob,class RBX::Network::NetworkOwnerJob>(class boost::shared_ptr<class "
-    "RBX::Network::NetworkOwnerJob> const *,class RBX::Network::NetworkOwnerJob *)const ")
-MATCH_FIX[("PLAYER", 0x005baa50)] = (
-    "??$_internal_accept_owner@VYieldFunctionStateObject@@V1@@?$enable_shared_from_this@VYieldFunctionStateObject@@@"
-    "boost@@QBEXPBV?$shared_ptr@VYieldFunctionStateObject@@@1@PAVYieldFunctionStateObject@@@Z",
-    "public: void __thiscall boost::enable_shared_from_this<class YieldFunctionStateObject>::_internal_accept_owner"
-    "<class YieldFunctionStateObject,class YieldFunctionStateObject>(class boost::shared_ptr<class "
-    "YieldFunctionStateObject> const *,class YieldFunctionStateObject *)const")
+# The wave-17 _internal_accept_owner entries (PLAYER 0x005bd080, 0x005baa50) were dropped in wave 18: names.csv
+# now carries both names, and P11+P12 regenerate byte-identical CSVs with and without them.
 # MATCH_DROP: match: names of /GL shell originals whose shell copy our link does not have yet. The name is true,
 # but our only body under it is the engine fold, so the shell original takes it (at ~70%) from the engine original
 # it really is. STUDIO 0x0042b260/0x0042e370 are the shell's bind/list1<weak_ptr<DataModel>> (IDA sync, wave 15);
 # our STUDIO shell has no GameVerbs.cpp, so the names fell on the engine copies folded with DebrisService's
 # weak_ptr<Instance> binds and left the engine originals 0x0098a310/0x0098a120 unpaired (sweep22: 100). Drop an
 # entry once the STUDIO shell instantiates the symbol.
-MATCH_DROP = {("STUDIO", 0x0042b260), ("STUDIO", 0x0042e370)}
+# Wave 18: emptied; Client/ClientShared/placeholder.cpp now instantiates the STUDIO shell bind (shell-5k-9).
+MATCH_DROP = set()
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")

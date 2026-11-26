@@ -5,7 +5,7 @@
 // otherwise. The virtuals Replicator adds are not declared yet, so its vftables are incomplete.
 // STUDIO (Oct 17) is a different revision (ctor STUDIO 0x0064a0f0, dtor 0x006497b0): no
 // removingInstance at 0x10c4, the signal sits there instead (ctor 0x00629520, dtor 0x00639040), the
-// pools follow at 0x10c8, a fourth zeroed pointer (0x128c) follows deserializingEventInvocation, and
+// pools follow at 0x10c8, removingInstance (0x128c) follows deserializingEventInvocation, and
 // ReplicatorStats (0x7e8 there, 8-aligned) sits at 0x12a0 between defaultObjects and incomingPackets. From the pools on, STUDIO offsets are PLAYER's minus 0xf6c up to
 // defaultObjects and minus 0xf7c from incomingPackets on. SIZE 0x2328 (STUDIO).
 
@@ -133,6 +133,18 @@ public:
 	std::string getRakStatsString(int verbosityLevel);
 
 	size_t incomingPacketsCount() const { return incomingPackets.size(); }
+
+	// Inline in 2013 (getRakStatsString 0x00583a60, dataOutStep 0x0059c060); 2016 name.
+	const RakNet::RakNetStatistics* getRakNetStats() const { return rakPeer ? &replicatorStats.rakStats.rakStats : NULL; }
+
+	// iOS: requestDisconnect() (no reason in 2013). PLAYER 0x0059b770, not written yet.
+	void requestDisconnect();
+
+	// iOS names; out of line in 2013 (PLAYER 0x0058d3d0 / 0x0058d430, filterChangedProperty calls both).
+	bool isSerializePending(const Instance* instance) const;
+	bool isPropertyChangedPending(const Reflection::ConstProperty& prop) const;
+	// PLAYER 0x00591bc0 (iOS name), not written yet.
+	void onParentChanged(shared_ptr<Instance> instance);
 
 protected:
 	/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider);
@@ -269,7 +281,7 @@ protected:
 	const Reflection::Property* deserializingProperty;     // 0x21f0
 	const Reflection::EventInvocation* deserializingEventInvocation; // 0x21f4
 #ifdef OGRE_TARGET_STUDIO
-	undefined4 m_unk0x128c;                                // STUDIO 0x128c, zeroed by the ctor
+	Instance* removingInstance;                            // STUDIO 0x128c, zeroed by the ctor; filterChangedProperty 0x00638330 compares it
 #endif
 
 	typedef std::map<const RBX::Name*, shared_ptr<Instance> > DefaultObjects;

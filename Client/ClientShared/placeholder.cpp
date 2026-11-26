@@ -11,9 +11,26 @@
 
 #include <new>
 
+#include <boost/bind.hpp>
+#include <boost/weak_ptr.hpp>
+
+namespace RBX {
+	class DataModel;
+}
+
+// Wave 18: bind/list1<weak_ptr<DataModel>> are shell-owned in STUDIO: every engine caller (0x006078e9
+// ...) reaches the shell's 0x0042b260 / 0x0042e370 (the generator's MATCH_DROP, which this retires).
+// Not here: list<rbx::signals::connection>::_Buynode, whose shell copy 0x0049de90 InstancePacketCache's
+// ctor calls; instantiating it moves the symbol off the engine fold 0x006d13d0 that Http.h's STUDIO
+// TEMPLATE names: +1 (0x0049de90), -4 (0x006d13d0 and three of its callers), measured wave 18.
+static void ogreStudioWeakDataModelUse(boost::weak_ptr<RBX::DataModel>)
+{
+}
+
 extern "C" void ogreStudioShellStandInUse(void* raw)
 {
 	new (raw) RBX::Stats::Item();
+	boost::bind(&ogreStudioWeakDataModelUse, *static_cast<boost::weak_ptr<RBX::DataModel>*>(raw));
 }
 
 #pragma comment(linker, "/include:_ogreStudioShellStandInUse")

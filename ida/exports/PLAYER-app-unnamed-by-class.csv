@@ -1,11 +1,11 @@
 class,functions,bytes,vtable,callers,prop,none
-(no caller with a class),4005,587908,0,0,0,4005
+(no caller with a class),3991,586180,0,0,0,3991
 Ogre::RbxSceneManager,306,1836,306,0,0,0
 RBX::FactoryProduct<>::Creator,212,26387,0,36,176,0
-RBX::ScriptContext,191,30585,2,99,90,0
 RBX::Reflection::EnumDesc<>,178,20227,0,178,0,0
-RBX::DataModel,162,26325,5,100,57,0
+RBX::DataModel,160,26076,5,98,57,0
 RBX::(free),151,18973,0,92,59,0
+RBX::ScriptContext,116,16211,2,70,44,0
 Ogre::RbxSceneNode,104,624,104,0,0,0
 Ogre::ManualObject,95,570,95,0,0,0
 RBX::Humanoid,92,12471,26,30,36,0
@@ -16,7 +16,8 @@ RBX::RemoteFunction,82,16109,2,29,51,0
 RBX::Workspace,80,11887,9,33,38,0
 RBX::SceneUpdater,80,13981,0,34,46,0
 RBX::InsertService,79,20445,2,19,58,0
-RBX::OverlayDataModel,69,11688,5,25,39,0
+RBX::Lua::Bridge<>,68,14254,0,25,43,0
+RBX::OverlayDataModel,68,11512,5,24,39,0
 RBX::TestService,67,11739,2,30,35,0
 RBX::BadgeService,60,13236,2,11,47,0
 RBX::GuiService,59,10434,2,23,34,0
@@ -38,9 +39,8 @@ RBX::SkateboardPlatform,38,8123,10,8,20,0
 RBX::ContactManager,38,6588,0,24,14,0
 RBX::Handles,38,7265,3,12,23,0
 RBX::GuiObject,38,6569,2,21,15,0
-RBX::SpatialHash<>,38,4384,0,15,23,0
 RBX::Instance,37,3932,0,23,14,0
-RBX::Lua::Bridge<>,36,4440,0,30,6,0
+RBX::SpatialHash<>,37,4235,0,14,23,0
 RBX::FriendService,36,6282,0,13,23,0
 RBX::ChatOutput,36,7673,2,21,13,0
 RBX::CellFaceFacePair,36,4229,0,19,17,0
@@ -58,7 +58,7 @@ RBX::World,29,4809,0,18,11,0
 RBX::TextBox,29,3978,4,16,9,0
 RBX::ChangeHistoryService::Item,29,4949,0,18,11,0
 RBX::Block,28,4713,0,3,25,0
-rbx::signals::signal_with_args<>,27,8818,0,24,3,0
+rbx::signals::signal_with_args<>,28,9253,0,25,3,0
 RBX::GeometryPool<>::ValueCount,27,2063,0,14,13,0
 RBX::Soundscape::SoundChannel,27,3718,2,14,11,0
 RBX::UserInputService,26,4852,4,2,20,0
@@ -164,7 +164,6 @@ RBX::PluginManager,12,1310,3,4,5,0
 RBX::Rocket,12,2077,8,3,1,0
 "RBX::Reflection::BoundYieldFuncDesc<class RBX::OverlayDataModel,void __cdecl (int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>),void,2>",12,2259,2,0,10,0
 "RBX::Reflection::EventDesc<class RBX::ArcHandles,void __cdecl (enum G3D::Vector3::Axis),class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis)>,class rbx::remote_signal<void __cdecl (enum G3D::Vector3::Axis)> RBX::ArcHandles::*>",12,2314,3,0,9,0
-RBX::Game,12,2102,0,7,5,0
 RBX::AdornRbxGfx,12,3168,0,2,10,0
 "RBX::Reflection::EventDesc<class RBX::Controller,void __cdecl (enum RBX::Controller::Button),class rbx::signal<void __cdecl (enum RBX::Controller::Button)>,class rbx::signal<void __cdecl (enum RBX::Controller::Button)> RBX::Controller::*>",11,1953,3,0,8,0
 RBX::Scripting::DebuggerManager,11,1415,2,5,4,0
@@ -212,7 +211,6 @@ boost::unordered::detail::table_impl<>,9,823,0,6,3,0
 RBX::ButtonBindingWidget,9,1102,2,3,4,0
 RBX::CustomEventReceiver,9,1020,2,4,3,0
 RBX::BlockBlockContactData,9,1294,0,6,3,0
-RBX::DataModel::LegacyLock::Implementation,9,1044,0,5,4,0
 RBX::WordList,9,1118,0,3,6,0
 RBX::BallBlockContact,9,851,0,5,4,0
 RBX::ScreenGui,9,1244,0,7,2,0
@@ -282,6 +280,7 @@ RBX::Voxel::Grid,7,1193,0,6,1,0
 "RBX::Reflection::BoundFuncDesc<class RBX::MarketplaceService,void __cdecl (class boost::shared_ptr<class RBX::Instance>,int,bool,enum RBX::MarketplaceService::CurrencyType),4>",7,1184,2,0,5,0
 RBX::PVInstance,7,585,0,3,4,0
 RBX::VirtualUser,7,827,2,2,3,0
+RBX::Game,7,891,0,4,3,0
 RBX::HingeTool,7,455,0,5,2,0
 RBX::BasicPartInstance,7,281,4,1,2,0
 RBX::ImageLabel,7,953,4,0,3,0
@@ -444,6 +443,7 @@ RBX::GlobalAdvancedSettings,4,207,2,1,1,0
 RBX::SeatImpl<class RBX::BasicPartInstance>,4,57,3,0,1,0
 "RBX::FactoryProduct<class RBX::Seat,class RBX::SeatImpl<class RBX::BasicPartInstance>,char const * const RBX::sSeat,class RBX::Instance>",4,57,3,0,1,0
 "RBX::Reflection::BoundFuncDesc<class RBX::Workspace,class boost::shared_ptr<struct RBX::Reflection::Tuple const> __cdecl (class RBX::RbxRay,class boost::shared_ptr<class RBX::Instance>,bool),3>",4,717,2,0,2,0
+RBX::DataModel::LegacyLock::Implementation,4,477,0,2,2,0
 RBX::BuoyancyBallContact,4,537,0,4,0,0
 "RBX::Reflection::BoundFuncDesc<class RBX::TestService,void __cdecl (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class boost::shared_ptr<class RBX::Instance>,int),3>",4,578,2,0,2,0
 RBX::PolyPolyContact,4,448,0,3,1,0

@@ -587,7 +587,7 @@ void ScriptContext::onCamelCaseViolation(boost::shared_ptr<Instance> object, std
 // openState's debug-API keep-alive gate: one read (PLAYER 0x0068838a), no writer, .bss (0x00de8bd9).
 bool g_unk0x00de8bd9 = false;
 static void openScriptLibrary(lua_State* L, const char* libName, lua_CFunction open);
-static int scriptPanic(lua_State* L);
+static int panic(lua_State* L);
 // mac: 0x18B5AC core (batch320: allocator + newstate + atpanic + context link + 4 locked libs + string-metatable lock + _G table; returns the state for the caller to store. gc tuning, Bridges, globals and jobs queue in later parts).
 // STUB: PLAYER 0x00688370
 // STUB: STUDIO 0x007edad0
@@ -595,13 +595,13 @@ lua_State* ScriptContext::openState()
 {
 	if (g_unk0x00de8bd9)
 	{ lua_getstack(NULL, 0, NULL); lua_getinfo(NULL, NULL, NULL); lua_getlocal(NULL, NULL, 0); lua_setlocal(NULL, NULL, 0); lua_getupvalue(NULL, 0, 0); lua_setupvalue(NULL, 0, 0); lua_gethook(NULL); lua_gethookmask(NULL); lua_gethookcount(NULL); }
-	if (luaAllocator.get() == NULL)
+	if (!luaAllocator)
 		luaAllocator.reset(new LuaAllocator(FLog::UseLuaMemoryPool != 0));
 	lua_State* L = lua_newstate(LuaAllocator::alloc, luaAllocator.get());
 	if (L == NULL)
 		throw std::runtime_error("Failed to create Lua state");
 	contextCount++;
-	lua_atpanic(L, scriptPanic);
+	lua_atpanic(L, panic);
 	lua_gc(L, LUA_GCSETSTEPMUL, LuaSettings::singleton().getGcStepMul());
 	lua_gc(L, LUA_GCSETPAUSE, LuaSettings::singleton().getGcPause());
 	RobloxExtraSpace::get(L)->setContext(this);
@@ -619,7 +619,6 @@ lua_State* ScriptContext::openState()
 	openScriptLibrary(L, "table", luaopen_table);
 	lua_createtable(L, 0, 0);
 	lua_setfield(L, LUA_GLOBALSINDEX, "_G");
-	// Bridge metatypes (batch320 EA order; 0x18B7EF block sits between _G (0x18B7BE) and the shared/print globals). Binary order 0x18B7EF- mac: 0x18BAAB: Library, AllEnumDescriptors, EnumDescriptor, Item, shared_ptr<Instance>, EventInstance, connection (shared_ptr still queues behind the Instance era), then the 17 atomic types, then WeakThreadRef::Node + 2 GenericFunctions (thread/yield eras).
 	Lua::Bridge<Lua::Library>::registerClass(L,
 		Lua::Bridge<Lua::Library>::on_index, Lua::Bridge<Lua::Library>::on_newindex);
 	Lua::Bridge<Lua::AllEnumDescriptorsPtr, true>::registerClass(L,
@@ -631,7 +630,6 @@ lua_State* ScriptContext::openState()
 	Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::registerClass(L,
 		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_index,
 		Lua::Bridge<Lua::EnumDescriptorItemPtr, true>::on_newindex);
-	// (shared_ptr<Instance> registerClass queues behind the Instance era, 0x18B85F.) shared_ptr<Instance> bridge (sections 258a-c; binary slot 0x18B85F).
 	Lua::Bridge<boost::shared_ptr<Instance>, false>::registerClass(L,
 		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_index,
 		Lua::Bridge<boost::shared_ptr<Instance>, false>::on_newindex);
@@ -675,7 +673,6 @@ lua_State* ScriptContext::openState()
 		Lua::Bridge<RBX::CellID>::on_index, Lua::Bridge<RBX::CellID>::on_newindex);
 	Lua::Bridge<RBX::InputObject>::registerClass(L,
 		Lua::Bridge<RBX::InputObject>::on_index, Lua::Bridge<RBX::InputObject>::on_newindex);
-	// (WeakThreadRef::Node + 2 GenericFunction registerClasses queue behind thread/yield eras; 0x18BA73/0x18BA8F/0x18BAAB.) Node bridge (section 245; binary slot 0x18BA73).
 	Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::registerClass(L,
 		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_index,
 		Lua::Bridge<boost::intrusive_ptr<Lua::WeakThreadRef::Node>>::on_newindex);
@@ -687,7 +684,6 @@ lua_State* ScriptContext::openState()
 	Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::registerClass(L,
 		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_index,
 		Lua::Bridge<boost::shared_ptr<Lua::GenericAsyncFunction>>::on_newindex);
-	// Class libraries batch 1 (section 236; binary order 0x18BAxx-0x18BB4B: the enum-gated tables -- Vector3 FromNormalId/FromAxis, Faces, Axes -- land with the EnumDescriptor::Item bridge era; CFrame/UDim/ UDim2/BrickColor/CellID/InputObject libraries queue behind their new* bodies, batch402 next). Enum singleton tables (section 239; binary slots 0x18BABB/0x18BAC3/ mac: 0x18BACB, ahead of the CFrame library) + Library table (section 241; binary slot 0x18BAB3, first of the block).
 	Lua::LibraryBridge::registerClassLibrary(L);
 	Lua::Enums::registerClassLibrary(L);
 	Lua::Enum::registerClassLibrary(L);
@@ -704,16 +700,12 @@ lua_State* ScriptContext::openState()
 	Lua::CoordinateFrameBridge::registerClassLibrary(L);
 	Lua::UDimBridge::registerClassLibrary(L);
 	Lua::UDim2Bridge::registerClassLibrary(L);
-	// Faces/Axes/CellID/InputObject libraries (section 240; binary slots mac: 0x18BB33/0x18BB3B/0x18BB43/0x18BB4B; SharedPtr<Instance> 0x18BB53 still queues behind the Instance era).
 	Lua::FacesBridge::registerClassLibrary(L);
 	Lua::AxesBridge::registerClassLibrary(L);
 	Lua::CellIDBridge::registerClassLibrary(L);
 	Lua::InputObjectBridge::registerClassLibrary(L);
-	// shared_ptr<Instance> reuse table (binary slot 0x18BB53, between the InputObject library and Node::create; the push weak-table lookup AVs without it -- stats() proved it live).
 	Lua::SharedPtrBridge<Instance>::registerClassLibrary(L);
-	// Instance global (binary slot 0x18BB5B, called from openState right after the SharedPtr library: luaL_register(L, "Instance")).
 	Lua::ObjectBridge::registerInstanceClassLibrary(L);
-	// Main-thread Node (binary slot 0x18BB63, batch477: sits between the InputObject library above and the game/app/Workspace globals + shared table below; the game/app/Workspace globals queue behind the DataModel era). closeState 0x18EE84 erases refs through every thread's node, so an openState'd state without one AVs on close (section 271 postmortem: intrusive_ptr px != 0 in eraseRefsFromAllNodes). Return discarded: the L-20 slot holds the ref, matching Node::create's contract.
 	Lua::WeakThreadRef::Node::create(L);
 	// game/Game (or App) and workspace/Workspace globals.
 	// 2013 (PLAYER 0x00688888-0x00688a81): no try/catch; the root is re-read through the inline
@@ -757,7 +749,6 @@ lua_State* ScriptContext::openState()
 
 
 
-	// Globals batch 1 (batch320 tail: shared table + print + gated crash__ + tick + time + ElapsedTime + printidentity; the rest queue behind yield/bridge/service eras).
 	lua_createtable(L, 0, 0);
 	lua_setfield(L, LUA_GLOBALSINDEX, "shared");
 	lua_pushcfunction(L, print);
@@ -774,7 +765,6 @@ lua_State* ScriptContext::openState()
 	lua_setfield(L, LUA_GLOBALSINDEX, "time");
 	lua_pushcfunction(L, rbxTime);
 	lua_setfield(L, LUA_GLOBALSINDEX, "ElapsedTime");
-	// Globals batch 2 (section 249; binary order 0x18BED3-0x18C2BC: wait/Wait/delay/Delay/ypcall/Spawn/printidentity/dofile/loadfile/ load/settings/UserSettings/PluginManager/DebuggerManager/stats/ Stats/version/Version; LoadLibrary/LoadRobloxLibrary queue behind LibraryService -- the only unlanded batch-2 slots). DELTA: binary registers into the -10002 sandbox env; ours uses LUA_GLOBALSINDEX like batch 1 (sandbox env unlanded -- reconcile in the sandbox-era audit).
 	lua_pushcfunction(L, wait);
 	lua_setfield(L, LUA_GLOBALSINDEX, "wait");
 	lua_pushcfunction(L, wait);
@@ -788,10 +778,8 @@ lua_State* ScriptContext::openState()
 	lua_setfield(L, LUA_GLOBALSINDEX, "ypcall");
 	lua_pushcfunction(L, spawn);
 	lua_setfield(L, LUA_GLOBALSINDEX, "Spawn");
-	// printidentity (batch637: binary slot between Spawn and dofile; the port moves it here from the batch-1 group -- registry writes only, order within the batch is not observable).
 	lua_pushcfunction(L, printidentity);
 	lua_setfield(L, LUA_GLOBALSINDEX, "printidentity");
-	// dofile/loadfile/load (batch637: pushcclosure 0x18C033/0x18C067/0x18C09B + setfield 0x18C038/0x18C081/0x18C0B5; fns dofile 0x18DC8C / loadfile 0x18DE94 / notImplemented 0x18E382).
 	lua_pushcfunction(L, dofile);
 	lua_setfield(L, LUA_GLOBALSINDEX, "dofile");
 	lua_pushcfunction(L, loadfile);
@@ -810,8 +798,8 @@ lua_State* ScriptContext::openState()
 	lua_setfield(L, LUA_GLOBALSINDEX, "LoadLibrary");
 	lua_pushcfunction(L, loadRobloxLibrary);
 	lua_setfield(L, LUA_GLOBALSINDEX, "LoadRobloxLibrary");
-	lua_pushcfunction(L, debuggermanager);
-	lua_setfield(L, LUA_GLOBALSINDEX, "DebuggerManager");
+	if (FFlag::LuaDebugger)	// PLAYER 0x00688d05
+	{ lua_pushcfunction(L, debuggermanager); lua_setfield(L, LUA_GLOBALSINDEX, "DebuggerManager"); }
 	// stats/Stats (section 250; binary order between Spawn and version/Version in the batch477 sequence).
 	lua_pushcfunction(L, stats);
 	lua_setfield(L, LUA_GLOBALSINDEX, "stats");
@@ -826,6 +814,18 @@ lua_State* ScriptContext::openState()
 	// Yielding waiters (section 249; binary 0x18C2C9: guarded singleton-construct into the yieldEvent member).
 	if (yieldEvent.get() == NULL)
 		yieldEvent.reset(new Lua::YieldingThreads(this));
+	contentClearing = false;
+	// 2013 (PLAYER 0x00688df6-0x00688fd1) schedules the GC and waiting-scripts jobs here.
+	if (!gcJob)
+	{
+		gcJob = shared_ptr<GcJob>(new GcJob(shared_from(this)));
+		TaskScheduler::singleton().add(gcJob);
+	}
+	if (!waitingScriptsJob)
+	{
+		waitingScriptsJob = shared_ptr<WaitingScriptsJob>(new WaitingScriptsJob(shared_from(this)));
+		TaskScheduler::singleton().add(waitingScriptsJob);
+	}
 	return L;
 }
 // mac: 0x18E9BC-0x18EE84 (batch722 FULL body; callers: SC detach arm 0x194FFD + DataModel::clearContents 0x2CFD89). 2013 adds the try/catch, the job removal and the LuaDebugger arms.  Sets +247 outside the reset gate,
@@ -1261,31 +1261,31 @@ namespace Lua {
 
 }
 
-// mac: 0x18C76B (352B, batch320: call open + metatable lock + locked
-// proxy with __index/__newindex/__metatable into globals).
-// Static free function in the binary (sub_); file-local here.
-// STUB: PLAYER 0x0066fb00
-// STUB: STUDIO 0x007d7ec0
-static void openScriptLibrary(lua_State* L, const char* libName, lua_CFunction open)
+// mac: 0x18C76B (352B). 2013 splits it in two statics: this locked-proxy half and openScriptLibrary.
+// FUNCTION: PLAYER 0x0066fb00
+// FUNCTION: STUDIO 0x007d7ec0
+static void FUN_0066fb00(lua_State* L, const char* libName)
 {
-	int count = open(L);
-	if (lua_getmetatable(L, -1) == 1)
-	{
-		lua_pushstring(L, "The metatable is locked");
-		lua_setfield(L, -2, "__metatable");
-		lua_settop(L, -2);
-	}
-	lua_settop(L, -(count + 1));
 	lua_newuserdata(L, 0);
 	lua_createtable(L, 0, 0);
 	lua_getfield(L, LUA_GLOBALSINDEX, libName);
 	lua_setfield(L, -2, "__index");
 	lua_pushcclosure(L, libraryWriteGuard, 0);
 	lua_setfield(L, -2, "__newindex");
-	lua_pushstring(L, "The metatable is locked");
-	lua_setfield(L, -2, "__metatable");
+	Lua::protect_metatable(L, -1);
 	lua_setmetatable(L, -2);
 	lua_setfield(L, LUA_GLOBALSINDEX, libName);
+}
+
+// FUNCTION: PLAYER 0x0066fb80
+// FUNCTION: STUDIO 0x007d7f40
+static void openScriptLibrary(lua_State* L, const char* libName, lua_CFunction open)
+{
+	int count = open(L);
+	if (lua_getmetatable(L, -1) == 1)
+	{ Lua::protect_metatable(L, -1); lua_settop(L, -2); }
+	lua_settop(L, -1 - count);
+	FUN_0066fb00(L, libName);
 }
 
 // mac: 0x2D5790 callee: trusted-core-script spawn (lands via the 3-arg
@@ -2121,9 +2121,9 @@ boost::shared_ptr<const Reflection::Tuple> ScriptContext::getScriptStats()
 	}
 	return result;
 }
-
-// Panic handler for lua_atpanic (sub_18C6D5; 2016 shape carried minus the callstack print, which queues with printCallStack).
-static int scriptPanic(lua_State* L)
+// FUNCTION: PLAYER 0x00672dc0
+// FUNCTION: STUDIO 0x007dac90
+static int panic(lua_State* L)	// iOS panic(lua_State*), the lua_atpanic handler (sub_18C6D5)
 {
 	StandardOut::singleton()->printf(MESSAGE_ERROR,
 		"Unprotected error in call to Lua API (%s)\n", lua_tostring(L, -1));

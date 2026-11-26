@@ -127,7 +127,7 @@ void View::resetScheduler()
 // 2013 against 2016: activation restores the fullscreen mode for any non-zero wParam and then
 // shows the window SW_RESTORE; deactivation restores the desktop resolution and minimizes
 // (SW_SHOWMINNOACTIVE). FFlag::OpenNativeBrowserWindowFromLua gates the GetParent test as a ternary (setne/test).
-// STUB: PLAYER 0x00466510
+// FUNCTION: PLAYER 0x00466510
 void View::HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (uMsg == WM_ACTIVATE)

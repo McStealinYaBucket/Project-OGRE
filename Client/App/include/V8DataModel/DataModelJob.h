@@ -128,7 +128,10 @@ namespace RBX {
 		// 2013 0x830 (ctor 0x0070cf60: `new 4`, zeroed, wrapped by shared_ptr ctor 0x0070cc50).
 		// A 4-byte zeroed object: most likely the Limits::Counter that DataModelJob::step's
 		// Counter::Activator uses (mac DataModelJob::step reads arbiter+2088/2092), not proven.
+	protected:
+		// DataModel::LegacyLock passes it to its Implementation (PLAYER 0x00642203 / 0x00642301).
 		shared_ptr<Limits::Counter> m_unk0x830;
+	private:
 
 		bool lookup[ConcurrencyModelCount][DataModelJob::TaskTypeCount][DataModelJob::TaskTypeCount];	// 0x838
 	};

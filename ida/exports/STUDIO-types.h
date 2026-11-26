@@ -4563,7 +4563,7 @@ struct __cppobj RBX::Network::Player : RBX::DescribedCreatable<RBX::Network::Pla
   unsigned __int8 remoteInsertSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string,G3D::Vector3)>
   unsigned __int8 connectDiedSignalBackend[8]; ///< rbx::remote_signal<void __cdecl(void)>
   unsigned __int8 remoteFriendServiceSignal[8]; ///< rbx::remote_signal<void __cdecl(bool,int)>
-  unsigned __int8 m_unk0x168[8];        ///< rbx::remote_signal<void __cdecl(void)>
+  unsigned __int8 killPlayerSignal[8];  ///< rbx::remote_signal<void __cdecl(void)>
   unsigned __int8 statsAvailableSignal[8]; ///< rbx::remote_signal<void __cdecl(std::string)>
   unsigned __int8 m_unk0x178[4];        ///< rbx::signals::scoped_connection
   unsigned __int8 chattedSignal[4];     ///< rbx::signals::signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
@@ -4670,8 +4670,8 @@ struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network:
   RBX::Network::ConcurrentRakPeer *rakPeer;
   unsigned __int8 m_unk0x1a8[8];        ///< boost::shared_ptr<RBX::Instance>
   unsigned int m_unk0x1b0;
-  unsigned int m_unk0x1b4;
-  unsigned int m_unk0x1b8;
+  int testPlayerNameId;
+  int testPlayerUserId;
   unsigned int m_unk0x1bc;
   unsigned __int8 friendRequestEventSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,RBX::FriendService::FriendEventType)>
   unsigned __int8 playerAddedEarlySignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
@@ -4873,11 +4873,24 @@ struct __cppobj RBX::Network::Replicator : RBX::DescribedNonCreatable<RBX::Netwo
   RBX::Instance *serializingInstance;
   void *deserializingProperty;          ///< RBX::Reflection::Property *
   void *deserializingEventInvocation;   ///< RBX::Reflection::EventInvocation *
-  unsigned int m_unk0x128c;
+  RBX::Instance *removingInstance;
   unsigned __int8 defaultObjects[12];   ///< std::map<RBX::Name const *,boost::shared_ptr<RBX::Instance>>
   unsigned __int8 gap_129C[4];
-  unsigned __int8 replicatorStats[3944]; ///< RBX::Network::ReplicatorStats
-  unsigned __int8 gap_2208[284];
+  unsigned __int8 replicatorStats[2024]; ///< RBX::Network::ReplicatorStats
+  unsigned __int8 incomingPackets[36];  ///< rbx::timestamped_safe_queue<RakNet::Packet *>
+  bool processAllPacketsPerStep;
+  unsigned __int8 gap_1AAD[3];
+  unsigned __int8 incomingMarkers[32];  ///< std::queue<boost::shared_ptr<RBX::Network::Marker>>
+  RBX::NetworkSettings *networkSettings;
+  bool m_unk0x2250;
+  unsigned __int8 gap_1AD5[3];
+  unsigned __int8 m_unk0x2254[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x225c[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0x2264[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 strings[12];          ///< std::map<RBX::Reflection::PropertyDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 protectedStrings[12]; ///< std::map<RBX::Reflection::PropertyDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 eventStrings[12];     ///< std::map<RBX::Reflection::EventDescriptor const *,boost::shared_ptr<void>>
+  unsigned __int8 systemAddressDictionary[2064]; ///< RBX::Network::SharedDictionary<RBX::SystemAddress>
   unsigned __int8 m_unk0x2aa0[4];       ///< rbx::signals::scoped_connection
 };
 
@@ -5014,5 +5027,24 @@ struct __cppobj RBX::Network::Replicator::ItemSender
   unsigned int maxStreamSize;
   bool sentItems;
   unsigned __int8 gap_19[3];
+};
+
+/* 700 */
+struct __cppobj RBX::LuaAllocator
+{
+  void **__vftable;
+  unsigned int heapSize;
+  unsigned int heapCount;
+  unsigned int maxHeapSize;
+  unsigned int maxHeapCount;
+  unsigned __int8 memPools[16];         ///< std::vector<boost::pool<boost::default_user_allocator_new_delete> *,std::allocator<boost::pool<boost::default_user_allocator_new_delete> *> >
+};
+
+/* 701 */
+struct __cppobj RBX::Network::PacketReceiveJob : RBX::DataModelJob
+{
+  unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
+  double receiveRate;
+  unsigned __int8 rakPeer[8];           ///< boost::weak_ptr<RBX::Network::ConcurrentRakPeer>
 };
 

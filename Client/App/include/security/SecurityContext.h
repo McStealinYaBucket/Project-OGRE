@@ -102,9 +102,11 @@ namespace RBX
 		};
 
 		// Impersonates an identity for the lifetime of the object
+		// 2013: one member (PLAYER 0x0041cf40 stores only `previous`). Its out-of-line bodies sit in the /GL
+		// shell (PLAYER 0x0041cf40 / 0x0041cf80, STUDIO 0x00461ce0 / 0x004619a0) and the engine calls them
+		// (Game::doClearVerbs 0x006542d7), so they are not inline here.
 		class Impersonator
 		{
-            Context current;
 			Context* previous;
 		public:
 			Impersonator(Identities identity);

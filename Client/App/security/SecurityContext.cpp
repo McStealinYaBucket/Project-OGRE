@@ -49,17 +49,22 @@ namespace RBX {
 			return value;
 		}
 
+		// STUB: PLAYER 0x0041cf40
+		// STUB: STUDIO 0x00461ce0
 		Impersonator::Impersonator(Identities identity)
-			  : current(identity)
 		{
-			previous = Context::ptr().get();
-			Context::ptr().reset(&current);
+			Context* context = new Context(identity);
+			previous = Context::ptr().release();
+			Context::ptr().reset(context);
 		}
 
+		// STUB: PLAYER 0x0041cf80
+		// STUB: STUDIO 0x004619a0
 		Impersonator::~Impersonator()
 		{
 			Context::ptr().reset(previous);
 		}
+
 
 
 	}

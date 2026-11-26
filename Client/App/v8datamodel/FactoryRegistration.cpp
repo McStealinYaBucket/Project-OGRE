@@ -17,6 +17,10 @@
 #include "V8DataModel/TimerService.h"
 #include "Network/NetworkPacketCache.h"
 #include "Network/NetworkClusterPacketCache.h"
+#ifdef OGRE_TARGET_STUDIO
+#include "V8DataModel/UserController.h"
+#include "V8DataModel/FriendService.h"
+#endif
 
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::GlobalAdvancedSettings);
@@ -38,5 +42,15 @@ template<> ClassRegistrar<Network::InstancePacketCache> ClassRegistrar<Network::
 // GLOBAL: PLAYER 0x00e0c8b8
 // GLOBAL: STUDIO 0x00f8325c
 template<> ClassRegistrar<Network::ClusterPacketCache> ClassRegistrar<Network::ClusterPacketCache>::registrar(0);
+#ifdef OGRE_TARGET_STUDIO
+// 2013 initializes both here (PLAYER 0x00a75820 and 0x00a76040; .bss run 0x00e0c7ac..0x00e0ce14), but only
+// STUDIO keeps this .obj's classDescriptor copies (0x00736940, 0x00734740 read the s-name from data; PLAYER's
+// 0x006e6e90 and 0x006afe70 push the literal), so PLAYER defines them in UserController.cpp/FriendService.cpp.
+// The address is the operand of the `inc` in DescribedNonCreatable<ControllerService>'s ctor (STUDIO 0x00814433).
+// GLOBAL: STUDIO 0x00f8330c
+template<> ClassRegistrar<ControllerService> ClassRegistrar<ControllerService>::registrar(0);
+// GLOBAL: STUDIO 0x00f8314c
+template<> ClassRegistrar<FriendService> ClassRegistrar<FriendService>::registrar(0);
+#endif
 } // namespace Reflection
 } // namespace RBX

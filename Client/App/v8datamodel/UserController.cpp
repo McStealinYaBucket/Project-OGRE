@@ -8,6 +8,18 @@ namespace RBX {
 	const char* const sControllerService = "ControllerService";
 }
 
+// PLAYER keeps this .obj's classDescriptor<ControllerService> copy (0x006e6e90 pushes the literal), so the
+// registrar is defined here; STUDIO defines it in FactoryRegistration.cpp (see there). The address is the
+// operand of the `inc` in DescribedNonCreatable<ControllerService>'s ctor (PLAYER 0x006e73b3).
+#ifndef OGRE_TARGET_STUDIO
+namespace RBX {
+namespace Reflection {
+// GLOBAL: PLAYER 0x00e0c968
+template<> ClassRegistrar<ControllerService> ClassRegistrar<ControllerService>::registrar(0);
+}
+}
+#endif
+
 #include "decomp.h"
 
 namespace RBX {

@@ -701,20 +701,20 @@ namespace RBX {
 	}
 
 	// ---------------------------------------------------------------- service plumbing
-	// STUB: PLAYER 0x0065fe50
-	// STUB: STUDIO 0x0078a2c0
+	// FUNCTION: PLAYER 0x0065fd00
+	const std::string& ContentProvider::getBaseUrl() const
+	{
+		return baseUrl;
+	}
+	// FUNCTION: PLAYER 0x0065fe50
+	// FUNCTION: STUDIO 0x0078a2c0
 	void ContentProvider::setBaseUrl(std::string url)
 	{
-		if (url != baseUrl)
+		if (baseUrl != url)
 		{
 			baseUrl = url;
 			raisePropertyChanged(prop_BaseUrl);
 		}
-	}
-
-	const std::string& ContentProvider::getBaseUrl() const
-	{
-		return baseUrl;
 	}
 
 	void ContentProvider::setThreadPool(int count)

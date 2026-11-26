@@ -1818,7 +1818,7 @@
     "void *setName",
     "void *getPersistentDataCost",
     "void *isReadOnly",
-    "void *AASamples____0_",
+    "void *variable_value____0_",
     "void *createChild",
     "void *writeXml",
     "void *verifySetParent",
@@ -7690,7 +7690,7 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x168",
+     "name": "killPlayerSignal",
      "offset": 360,
      "size": 8,
      "kind": "class",
@@ -8570,20 +8570,20 @@
      "scalar": "T_UINT4"
     },
     {
-     "name": "m_unk0x1b4",
+     "name": "testPlayerNameId",
      "offset": 436,
      "size": 4,
      "kind": "scalar",
      "type": null,
-     "scalar": "T_UINT4"
+     "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0x1b8",
+     "name": "testPlayerUserId",
      "offset": 440,
      "size": 4,
      "kind": "scalar",
      "type": null,
-     "scalar": "T_UINT4"
+     "scalar": "T_INT4"
     },
     {
      "name": "m_unk0x1bc",
@@ -10135,8 +10135,8 @@
      "name": "m_unk0x30",
      "offset": 48,
      "size": 4,
-     "kind": "structure",
-     "type": "RBX::Game::Unk0x30",
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(RBX::DataModel *)>",
      "scalar": null
     }
    ],
@@ -10189,6 +10189,139 @@
    ],
    "base": false,
    "unique": "VInstancePacketCache@Network@RBX@@"
+  },
+  "RBX::LuaAllocator": {
+   "size": 36,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "heapSize",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "heapCount",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "maxHeapSize",
+     "offset": 12,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "maxHeapCount",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "memPools",
+     "offset": 20,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<boost::pool<boost::default_user_allocator_new_delete> *,std::allocator<boost::pool<boost::default_user_allocator_new_delete> *> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLuaAllocator@RBX@@"
+  },
+  "RBX::Network::PacketReceiveJob": {
+   "size": 560,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "receiveRate",
+     "offset": 544,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "rakPeer",
+     "offset": 552,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::Network::ConcurrentRakPeer>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPacketReceiveJob@Network@RBX@@"
+  },
+  "RBX::RobloxCriticalSection": {
+   "size": 84,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "callers",
+     "offset": 0,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "recentCaller",
+     "offset": 4,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "olderCaller",
+     "offset": 32,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "diSection",
+     "offset": 60,
+     "size": 24,
+     "kind": "class",
+     "type": "ATL::CCriticalSection",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VRobloxCriticalSection@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,

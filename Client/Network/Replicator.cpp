@@ -1,5 +1,4 @@
-// Network/Replicator.cpp -- October 2013, partial. ~Replicator's asserts sit on their 2013 lines
-// (348 and 350); the blank block below keeps them there until the functions before it are written.
+// Network/Replicator.cpp -- October 2013, partial. ~Replicator's asserts sit on their 2013 lines (348/350).
 
 #include "Replicator.h"
 #include "Replicator.PingJob.h"
@@ -18,8 +17,7 @@ LOGGROUP(Network)
 namespace RBX {
 namespace Network {
 
-// A scoped assignment, as 2013 used it: an object with a destructor (setRefValue keeps an EH state
-// for it). No 2013 symbol names it; the name is 2016's (util/ScopedAssign.h).
+// A scoped assignment with a destructor (setRefValue keeps an EH state for it); 2016's name (util/ScopedAssign.h).
 template<class T>
 class ScopedAssign
 {
@@ -45,7 +43,6 @@ void Replicator::onStatisticsChanged(const ConcurrentRakPeerStats& stats)
 // FUNCTION: STUDIO 0x00623980
 void Replicator::setRefValue(WaitItem& wi, Instance* instance)
 {
-	// Keeps the property from being sent back to the remote peer.
 	Reflection::Property prop(*wi.desc, wi.instance.get());
 	ScopedAssign<const Reflection::Property*> assign(deserializingProperty, &prop);
 	IdSerializer::setRefValue(wi, instance);
@@ -137,6 +134,23 @@ bool Replicator::sendClusterPacket()
 	return false;
 }
 
+// FUNCTION: PLAYER 0x0058d3d0
+// FUNCTION: STUDIO 0x006326e0
+bool Replicator::isSerializePending(const Instance* instance) const
+{
+	RBX::mutex::scoped_lock lock(pendingInstancesMutex);
+	return pendingNewInstances.find(instance) != pendingNewInstances.end();
+}
+
+// FUNCTION: PLAYER 0x0058d430
+// FUNCTION: STUDIO 0x00632740
+bool Replicator::isPropertyChangedPending(const Reflection::ConstProperty& prop) const
+{
+	if (pendingChangedPropertyItems.find(prop) != pendingChangedPropertyItems.end())
+		return true;
+	return false;
+}
+
 // STUB: PLAYER 0x0058d5f0
 // STUB: STUDIO 0x006328f0
 void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop)
@@ -144,12 +158,37 @@ void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::P
 	STUB(0x0058d5f0);
 }
 
-// STUB: PLAYER 0x00591f00
-// STUB: STUDIO 0x00638330
-FilterResult Replicator::filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc)
+// STUB: PLAYER 0x00591bc0
+// STUB: STUDIO 0x00637ff0
+void Replicator::onParentChanged(shared_ptr<Instance> instance)
 {
-	STUB(0x00591f00);
-	return Accept;
+	STUB(0x00591bc0);
+}
+
+// FUNCTION: PLAYER 0x00591f00
+// STUB: STUDIO 0x00638330
+FilterResult Replicator::filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) // STUDIO: byte-identical (probe); 98.8 on a shared_from twin pairing
+{
+	if (instance == removingInstance)
+		return Reject;
+	Reflection::Property prop(desc, instance);
+	if (deserializingProperty != NULL && prop == *deserializingProperty)
+	{
+		deserializingProperty = NULL;
+		return Reject;
+	}
+	if (desc == Instance::propParent)
+	{
+		onParentChanged(shared_from(instance));
+		return Reject;
+	}
+	if (isSerializePending(instance))
+		return Reject;
+	if (!desc.canReplicate())
+		return Reject;
+	if (!isLegalSendProperty(instance, desc))
+		return Reject;
+	return isPropertyChangedPending(prop) ? Reject : Accept;
 }
 
 // FUNCTION: PLAYER 0x00598da0
@@ -173,11 +212,39 @@ void Replicator::processPacket(RakNet::Packet* packet)
 	STUB(0x0059a220);
 }
 
-// STUB: PLAYER 0x0059c060
-// STUB: STUDIO 0x0063f3b0
+// STUB: PLAYER 0x0059b770
+// STUB: STUDIO 0x0063e710
+__declspec(noinline) void Replicator::requestDisconnect() // noinline: stand-in (VC9 inlines a same-TU STUB)
+{
+	STUB(0x0059b770);
+}
+
+// FUNCTION: PLAYER 0x0059c060
+// FUNCTION: STUDIO 0x0063f3b0
 void Replicator::dataOutStep()
 {
-	STUB(0x0059c060);
+	try
+	{
+		sendItemsPacket();
+	}
+	catch (...)
+	{
+		FASTLOG(FLog::Network, "Exception during data out step, request disconnect");
+		requestDisconnect();
+		throw;
+	}
+	if (isClusterSpotted && !isOkToSendClusters)
+	{
+		clusterReplicationData.readyToSendChunks = true;
+		isOkToSendClusters = true;
+	}
+	if (const RakNet::RakNetStatistics* stats = getRakNetStats())
+	{
+		Time now = Time::now<Time::Benchmark>();
+		replicatorStats.m_unk0xf50 = now;
+		replicatorStats.kiloBytesSentPerSecond.sample((int)stats->valueOverLastSecond[RakNet::ACTUAL_BYTES_SENT] / 1024);
+		replicatorStats.kiloBytesReceivedPerSecond.sample((int)stats->valueOverLastSecond[RakNet::ACTUAL_BYTES_RECEIVED] / 1024);
+	}
 }
 
 // FUNCTION: PLAYER 0x0059cc90
@@ -212,10 +279,9 @@ bool Replicator::remoteDeleteOnDisconnect(const Instance* instance) const
 	return false;
 }
 
-// VMProtect-mutated in PLAYER.
 // STUB: PLAYER 0x0059ea20
 // STUB: STUDIO 0x00642040
-TaskScheduler::StepResult Replicator::PingJob::stepDataModelJob(const Stats& stats)
+TaskScheduler::StepResult Replicator::PingJob::stepDataModelJob(const Stats& stats) // VMProtect-mutated in PLAYER
 {
 	STUB(0x0059ea20);
 	return TaskScheduler::Done;
@@ -264,72 +330,6 @@ void Replicator::deserializePropertyValue(RakNet::BitStream& inBitstream, Reflec
 	STUB(0x005a4190);
 }
 
-// STUB: PLAYER 0x005a4b40
-// STUB: STUDIO 0x00648860
-void Replicator::readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType)
-{
-	STUB(0x005a4b40);
-}
-
-// STUB: PLAYER 0x005a4de0
-// STUB: STUDIO 0x00648ba0
-void Replicator::onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor)
-{
-	STUB(0x005a4de0);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // The STUDIO revision's ~Replicator asserts sit one line lower (349/351 against PLAYER's 348/350).
 #ifdef OGRE_TARGET_STUDIO
@@ -352,6 +352,22 @@ Replicator::~Replicator()
 	FASTLOG1(FLog::Network, "Replicator destroyed: %p", this);
 }
 
+// readItem and onPropertyChanged precede ~Replicator in 2013; they sit here (a descent) because the
+// functions above it no longer fit before its assert lines (348/350).
+// STUB: PLAYER 0x005a4b40
+// STUB: STUDIO 0x00648860
+void Replicator::readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType)
+{
+	STUB(0x005a4b40);
+}
+
+// STUB: PLAYER 0x005a4de0
+// STUB: STUDIO 0x00648ba0
+void Replicator::onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor)
+{
+	STUB(0x005a4de0);
+}
+
 // FUNCTION: PLAYER 0x005a5e70
 // FUNCTION: STUDIO 0x0064a0f0
 Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<ConcurrentRakPeer> rakPeer,
@@ -372,7 +388,7 @@ Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<C
 	, deserializingProperty(NULL)
 	, deserializingEventInvocation(NULL)
 #ifdef OGRE_TARGET_STUDIO
-	, m_unk0x128c(0)
+	, removingInstance(NULL)
 #endif
 	, processAllPacketsPerStep(false)
 	, networkSettings(networkSettings)
@@ -389,22 +405,6 @@ Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<C
 }
 
 // Blank lines: the two MTU asserts sit on their 2013 lines (3418, 3424).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -40,7 +40,20 @@ namespace RBX { namespace Lua {
 		static int unlockInstance(lua_State* L);
 		static int callMemberFunction(lua_State* L);
 		static int callMemberYieldFunction(lua_State* L);
-		static void registerInstanceClassLibrary(lua_State* L);
+		// mac: 0x199134 (90B, batch518); inline in 2013 (ScriptContext::openState 0x00688860).
+		static void registerInstanceClassLibrary(lua_State* L)
+		{
+			static const luaL_Reg classLibrary[] =
+			{
+				{ "new", newInstance },
+				{ "Lock", lockInstance },
+				{ "Unlock", unlockInstance },
+				{ NULL, NULL }
+			};
+			luaL_register(L, "Instance", classLibrary);
+			lua_setreadonly(L, -1, 1);
+			lua_pop(L, 1);
+		}
 
 		// Out of line in 2013 (newInstance and on_newindex call it).
 		// FUNCTION: PLAYER 0x00877530

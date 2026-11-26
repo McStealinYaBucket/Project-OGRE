@@ -3,14 +3,6 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
-// public: void __thiscall RBX::UserInput::PostUserInputMessage(unsigned int, unsigned int, long)
-// STUB: PLAYER 0x0045f1b0
-extern "C" void ogre_stub_0045f1b0()
-{
-	STUB(0x0045f1b0);
-}
-#pragma comment(linker, "/alternatename:?PostUserInputMessage@UserInput@RBX@@QAEXIIJ@Z=_ogre_stub_0045f1b0")
-
 // public: void __thiscall RBX::VideoControl::startRecording(class RBX::Soundscape::SoundService *)
 // STUB: PLAYER 0x00464f30
 extern "C" void ogre_stub_00464f30()

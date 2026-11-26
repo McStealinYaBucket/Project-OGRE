@@ -30,7 +30,7 @@ LOGGROUP(RobloxWndInit)
 // GLOBAL: PLAYER 0x00e250a0
 RBX::Application* appPtr;
 
-// STUB: PLAYER 0x004426a0
+// FUNCTION: PLAYER 0x004426a0
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)

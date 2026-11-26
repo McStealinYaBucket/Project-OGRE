@@ -3,13 +3,13 @@
 #include "ConcurrentRakPeer.h"
 #include "V8DataModel/DataModel.h"
 #include "rbx/TaskScheduler.h"
+#include "V8DataModel/NetworkSettings.h"
 #include "decomp.h"
 
 namespace RBX {
 namespace Network {
 
 // Blank lines: rawPeer's assert sits on its 2013 line (257).
-
 
 
 
@@ -285,12 +285,14 @@ void ConcurrentRakPeer::Send(boost::shared_ptr<const RakNet::BitStream> data, Pa
 	TaskScheduler::singleton().reschedule(packetJob);
 }
 
-// STUB: PLAYER 0x005c5610
+// NetworkSettings+0x78 is 2016's isQueueErrorComputed (App's header: m_unk0x78).
+// FUNCTION: PLAYER 0x005c5610
 // STUB: STUDIO 0x00620870
 ConcurrentRakPeer::PacketJob::PacketJob(boost::shared_ptr<RakNet::RakPeerInterface> peer, DataModel* dataModel)
 	: DataModelJob("Net Peer Send", DataModelJob::RaknetPeer, false, shared_from(dataModel), Time::Interval(0))
+	, isQueueErrorComputed(NetworkSettings::singleton().m_unk0x78)
+	, peer(peer)
 {
-	STUB(0x005c5610);
 }
 
 // FUNCTION: PLAYER 0x005c5790
@@ -300,12 +302,26 @@ Time::Interval ConcurrentRakPeer::PacketJob::sleepTime(const Stats& stats)
 	return sendQueue.empty() ? Time::Interval::max() : Time::Interval::zero();
 }
 
-// STUB: PLAYER 0x005c5900
-// STUB: STUDIO 0x00620b60
+// FUNCTION: PLAYER 0x005c5900
+// FUNCTION: STUDIO 0x00620b60
 TaskScheduler::Job::Error ConcurrentRakPeer::PacketJob::error(const Stats& stats)
 {
-	STUB(0x005c5900);
-	return Error();
+	Error result;
+	if (isQueueErrorComputed)
+	{
+		Time::Interval waitTime = sendQueue.head_waittime();
+		result.error = waitTime.seconds() * 100.0;
+		result.error *= std::min<int>(10, sendQueue.size() + 1) / 2.0;
+	}
+	else
+	{
+		double size = sendQueue.size();
+		if (size > 0)
+			result.error = stats.timespanSinceLastStep.seconds() * 100.0 * size;
+		else
+			result.error = 0;
+	}
+	return result;
 }
 
 // STUB: PLAYER 0x005c5aa0

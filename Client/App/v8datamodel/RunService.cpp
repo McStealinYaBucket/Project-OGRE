@@ -212,37 +212,34 @@ namespace RBX {
 		totalGameTimeAtLastHeartbeat = totalGameTime;
 	}
 
-	// STUB: PLAYER 0x0072db60
-	// STUB: STUDIO 0x0079b7e0
-	void RunService::setRunState(int state)	// mac: 0x236DCE: set runState + fire runTransitionSignal.
+	// FUNCTION: PLAYER 0x0072db60
+	// FUNCTION: STUDIO 0x0079b7e0
+	void RunService::setRunState(RunState state)	// mac: 0x236DCE: set runState + fire runTransitionSignal.
 	{
-		if (state != RS_STOPPED)
+		if (state == RS_RUNNING)
 		{
-			if (state == RS_PAUSED)
-			{
-				if (runState != RS_RUNNING)
-					return;
-			}
-			else if (state == RS_RUNNING)
-			{
-				if ((runState | RS_PAUSED) != RS_PAUSED)
-					return;
-				if (!physicsJob)
-					start();
-			}
+			if (runState != RS_STOPPED && runState != RS_PAUSED)
+				return;
+			if (!physicsJob)
+				start();
 		}
-		else
+		else if (state == RS_PAUSED)
 		{
+			if (runState != RS_RUNNING)
+				return;
+		}
+		else if (state == RS_STOPPED)
+		{
+			totalWallTime = 0.0;
 			totalGameTime = 0.0;
 			totalGameTimeAtLastHeartbeat = 0.0;
-			totalWallTime = 0.0;
 			skippedTimeAccumulated = 0.0;
 		}
 		RunState oldState = runState;
 		if (oldState != state)
 		{
-			runState = (RunState)state;
-			runTransitionSignal(RunTransition(oldState, (RunState)state));
+			runState = state;
+			runTransitionSignal(RunTransition(oldState, state));
 		}
 	}
 

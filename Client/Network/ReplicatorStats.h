@@ -21,7 +21,11 @@ struct ReplicatorStats
 	~ReplicatorStats();
 
 #ifdef OGRE_TARGET_STUDIO
-	undefined m_unk0x000[0x300];                // 0x000
+	undefined m_unk0x000[0x1e0];                // 0x000
+	// Replicator::dataOutStep STUDIO 0x0063f3b0 samples ACTUAL_BYTES_RECEIVED/SENT / 1024 (2016 names).
+	RunningAverage<> kiloBytesReceivedPerSecond; // 0x1e0
+	undefined m_unk0x210[0x2d0 - 0x210];        // 0x210
+	RunningAverage<> kiloBytesSentPerSecond;    // 0x2d0
 	// ItemSender::closePacket STUDIO 0x006720a0 samples both (2016 names and types).
 	RunningAverageTimeInterval<> dataPacketsSent;  // 0x300
 	undefined m_unk0x340[0x370 - 0x340];        // 0x340
@@ -31,9 +35,15 @@ struct ReplicatorStats
 	int numberOfSplitMessages;                  // 0x444
 	undefined m_unk0x448[0x6d8 - 0x448];        // 0x448
 	ConcurrentRakPeerStats rakStats;            // 0x6d8 Replicator::onStatisticsChanged STUDIO 0x00622520
-	undefined m_unk0x7c8[0x7e8 - 0x7c8];        // 0x7c8
+	undefined m_unk0x7c8[0x7d0 - 0x7c8];        // 0x7c8
+	Time m_unk0xf50;                            // 0x7d0 (PLAYER placeholder name) dataOutStep: Time::now<Benchmark>
+	undefined m_unk0x7d8[0x7e8 - 0x7d8];        // 0x7d8
 #else
-	undefined m_unk0x000[0x800];                // 0x000
+	undefined m_unk0x000[0x5a0];                // 0x000
+	// Replicator::dataOutStep 0x0059c060 samples ACTUAL_BYTES_RECEIVED/SENT / 1024 (2016 names).
+	RunningAverage<> kiloBytesReceivedPerSecond; // 0x5a0
+	undefined m_unk0x5d0[0x7d0 - 0x5d0];        // 0x5d0
+	RunningAverage<> kiloBytesSentPerSecond;    // 0x7d0
 	// ItemSender::closePacket 0x005da460 samples both (2016 names and types).
 	RunningAverageTimeInterval<> dataPacketsSent;  // 0x800
 	undefined m_unk0x840[0x870 - 0x840];        // 0x840
@@ -43,7 +53,9 @@ struct ReplicatorStats
 	int numberOfSplitMessages;                  // 0x944
 	undefined m_unk0x948[0xe58 - 0x948];        // 0x948
 	ConcurrentRakPeerStats rakStats;            // 0xe58 Replicator::onStatisticsChanged 0x005804f0
-	undefined m_unk0xf48[0xf68 - 0xf48];        // 0xf48
+	undefined m_unk0xf48[0xf50 - 0xf48];        // 0xf48
+	Time m_unk0xf50;                            // 0xf50 dataOutStep: Time::now<Benchmark>
+	undefined m_unk0xf58[0xf68 - 0xf58];        // 0xf58
 #endif
 };
 

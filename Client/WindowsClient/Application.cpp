@@ -9,16 +9,31 @@
 
 #include <algorithm>
 
+#include <boost/bind.hpp>
+
 DECOMP_SIZE_ASSERT(RBX::Application, 0x140);
 
 namespace RBX {
 
-	// Starts the members (rbx::atomic ctor 0x004022d0 out of line, three strings, the MainLogManager at
-	// +0xac) and a boost::thread on a member function (0x004034c0) into the scoped_ptr at +0x1c.
+	// Against 2016: no mainWindow store. LTCG: `this` on the stack (ret 4); MainLogManager's ctor
+	// takes its constant arguments folded in (`this` in esi only).
 	// STUB: PLAYER 0x00403000
-	__declspec(noinline) Application::Application()
+	Application::Application()
+		: processLocal_stopPreventMultipleJobsThread(NULL)
+		, processLocal_stopWaitForVideoPrerollThread(NULL)
+		, mapFileForWnd(NULL)
+		, bufForWnd(NULL)
+		, stopLogsCleanup(0)
+		, clenupFinishedEvent(FALSE, FALSE)
+		, m_unk0x20(0)
+		, crashReportEnabled(true)
+		, hideChat(false)
+		, logManager("Roblox", ".Client.dmp", ".Client.crashevent")
+		, marshaller(NULL)
+		, spoofMD5(false)
 	{
-		STUB(0x00403000);
+		enteredShutdown = 0;
+		logsCleanUpThread.reset(new boost::thread(boost::bind(&Application::logsCleanUpHelper, this)));
 	}
 
 	// STUB: PLAYER 0x004032d0
@@ -27,12 +42,32 @@ namespace RBX {
 		STUB(0x004032d0);
 	}
 
-	// Logs a fake crash dump through the MainLogManager at +0xac and tells the user (MessageBox on the
-	// View's window); first a call on the gfx view (PLAYER 0x00487d50, RbxOgre). Loads appPtr itself.
-	// STUB: PLAYER 0x00403f40
-	__declspec(noinline) void Application::UploadSessionLogs()
+	// STUB: PLAYER 0x004034c0
+	__declspec(noinline) void Application::logsCleanUpHelper()
 	{
-		STUB(0x00403f40);
+		STUB(0x004034c0);
+	}
+
+	// Against 2016: first a call on the gfx view (RbxOgre, PLAYER 0x00487d50), and both message boxes go
+	// to the View's window (2013 has no mainWindow). LTCG: no `this`; it loads appPtr itself (WndProc's
+	// ID_UPLOADSESSIONLOGS is the only caller).
+	// FUNCTION: PLAYER 0x00403f40
+	void Application::UploadSessionLogs()
+	{
+		if (ViewBase* gfxView = m_unk0x24->m_unk0x00->GetGfxView())
+			gfxView->FUN_00487d50();
+
+		if (!logManager.CreateFakeCrashDump())
+		{
+			MessageBoxA(m_unk0x24->m_unk0x00->GetHWnd(), "Failed to upload logs", "Warning",
+				MB_OK | MB_ICONWARNING);
+		}
+		else
+		{
+			MessageBoxA(m_unk0x24->m_unk0x00->GetHWnd(),
+				"Logfiles will be uploaded next time you start Roblox. Please restart roblox now.", "ROBLOX",
+				MB_OK);
+		}
 	}
 
 	// Against 2016, 2013 also sets ptMaxTrackSize, from CRenderSettings+0x2e, and clamps the size to
@@ -88,7 +123,8 @@ namespace RBX {
 	__declspec(noinline) bool Application::LoadAppSettings(HINSTANCE hInstance)
 	{
 		STUB(0x004049b0);
-		return true;
+		// Stand-in use of the argument: a stub that ignores it makes LTCG drop it at WinMain's call.
+		return hInstance != NULL;
 	}
 
 	// Against 2016: also sets the event at +0x04, joins and drops the thread at +0x124, and has no
@@ -98,14 +134,14 @@ namespace RBX {
 	{
 		enteredShutdown.compare_and_swap(1, 0);
 
-		if (m_unk0x04)
-			SetEvent(m_unk0x04);
+		if (processLocal_stopPreventMultipleJobsThread)
+			SetEvent(processLocal_stopPreventMultipleJobsThread);
 
 		if (m_unk0x124)
 			m_unk0x124->join();
 		m_unk0x124.reset();
 
-		if (Document* document = m_unk0x24)
+		if (Document* document = m_unk0x24.get())
 		{
 			if (View* view = document->m_unk0x00)
 				view->AboutToShutdown();
@@ -122,7 +158,7 @@ namespace RBX {
 	__declspec(noinline) bool Application::ParseArguments(LPTSTR lpCmdLine)
 	{
 		STUB(0x00405070);
-		return true;
+		return lpCmdLine != NULL; // stand-in use of the argument, as in LoadAppSettings
 	}
 
 } // namespace RBX

@@ -31,6 +31,8 @@
 
 #include "rbx/TaskScheduler.h"
 
+#include "UserInput.h"
+
 #include "decomp.h"
 
 namespace RBX {
@@ -53,13 +55,9 @@ namespace RBX {
 		virtual void VTable0x28(); // vtable+0x28
 		virtual void VTable0x2c(); // vtable+0x2c
 		virtual void onResize(int cx, int cy) = 0; // vtable+0x30 (WndProc's WM_SIZE, PLAYER 0x00442718)
-	};
 
-	// WindowsClient/UserInput.cpp is not written; only the call View makes is declared.
-	class UserInput
-	{
-	public:
-		void PostUserInputMessage(UINT uMsg, WPARAM wParam, LPARAM lParam); // PLAYER 0x0045f1b0
+		// A non-virtual RbxOgre call UploadSessionLogs (0x00403f40) makes on the gfx view: unnamed.
+		void FUN_00487d50(); // PLAYER 0x00487d50
 	};
 
 	class View

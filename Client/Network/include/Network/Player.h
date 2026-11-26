@@ -94,7 +94,7 @@ namespace Network {
 		rbx::remote_signal<void(std::string, G3D::Vector3)> remoteInsertSignal;  // 0x150
 		rbx::remote_signal<void()> connectDiedSignalBackend;                      // 0x158 src2016:, onServiceProvider 0x00553a10
 		rbx::remote_signal<void(bool, int)> remoteFriendServiceSignal;            // 0x160
-		rbx::remote_signal<void()> m_unk0x168;                                    // 0x168
+		rbx::remote_signal<void()> killPlayerSignal;                              // 0x168 src2016:, Players::onChildAdded 0x0056ff40 binds killPlayer
 		rbx::remote_signal<void(std::string)> statsAvailableSignal;               // 0x170
 		rbx::signals::scoped_connection m_unk0x178;                               // 0x178
 		rbx::signals::signal<void(std::string, shared_ptr<Instance>)> chattedSignal;  // 0x17c ctor 0x0052e7a0
@@ -169,6 +169,10 @@ namespace Network {
 
 		// iOS name; PLAYER 0x0053eab0 fires friendStatusChangedSignal. Called by Players::friendStatusChanged.
 		void onFriendStatusChanged(shared_ptr<Instance> otherPlayer, FriendService::FriendStatus status);
+
+		// iOS names; Players::onChildAdded 0x0056ff40 calls both (setUserId with ecx = player, one int).
+		void setUserId(int value);   // PLAYER 0x0053ace0
+		void rebuildGui();           // PLAYER 0x00551730
 	};
 
 } // namespace Network

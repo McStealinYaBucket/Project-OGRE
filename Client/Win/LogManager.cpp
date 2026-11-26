@@ -335,7 +335,7 @@ static void __cdecl purecallHandler()
      - mainLogManager, RBX::Log's provider, RBX's and G3D's assertion and failure hooks, the
        purecall handler and FastLog's external sink. */
 
-// STUB: PLAYER 0x0043fa50
+// FUNCTION: PLAYER 0x0043fa50
 // STUB: STUDIO 0x0041d5b0
 MainLogManager::MainLogManager(LPCTSTR productName, const char* crashExtention, const char* crashEventExtention)
 	: LogManager(productName)
@@ -378,7 +378,7 @@ struct olderthan
 };
 
 // Deletes the oldest files of logs\<folder> until filesRemaining are left.
-// STUB: PLAYER 0x004403a0
+// FUNCTION: PLAYER 0x004403a0
 // STUB: STUDIO 0x0041dd40
 void MainLogManager::CullLogs(const char* folder, int filesRemaining)
 {

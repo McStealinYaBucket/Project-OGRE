@@ -164,6 +164,13 @@ namespace Network {
 		void friendEventFired(int userId, int otherUserId, FriendService::FriendEventType friendEvent);
 		void friendStatusChanged(int userId, int otherUserId, FriendService::FriendStatus friendStatus);
 
+		// iOS names and signatures: the Player-signal slots onChildAdded 0x0056ff40 binds.
+		void friendServiceRequest(bool makeFriends, weak_ptr<Player> sourcePlayer, int otherUserId); // 0x0056b960
+		void reportScriptSecurityError(int userId, std::string hash, std::string error, std::string stack); // 0x0056bf20
+		void remoteInsert(int userId, std::string url, G3D::Vector3 position);                      // 0x0056bf90
+		void killPlayer(int userId);                                                                // 0x0056efe0
+		void onRemoteSysStats(int userId, const std::string& resolution, const std::string& stats, bool valid); // 0x0056f8f0
+
 		std::string getLoadDataUrl(int userId) const;
 		std::string getSaveDataUrl(int userId) const;
 		std::string getSaveLeaderboardDataUrl(int userId) const;
@@ -203,8 +210,8 @@ namespace Network {
 		ConcurrentRakPeer* rakPeer;                  // 0x1a4 ctor 0; setConnection 0x00559790; ~Players clears it
 		shared_ptr<Instance> m_unk0x1a8;             // 0x1a8 dtor releases +0x1ac; pointee unproven
 		undefined4 m_unk0x1b0;                       // 0x1b0 ctor 12
-		undefined4 m_unk0x1b4;                       // 0x1b4 ctor 0
-		undefined4 m_unk0x1b8;                       // 0x1b8 ctor 0
+		int testPlayerNameId;                        // 0x1b4 ctor 0; src2016:, onChildAdded 0x0056ff40 "Player%d" with ++
+		int testPlayerUserId;                        // 0x1b8 ctor 0; src2016:, onChildAdded 0x0056ff40 setUserId(--)
 		undefined4 m_unk0x1bc;                       // 0x1bc ctor 0
 		rbx::signal<void(shared_ptr<Instance>, shared_ptr<Instance>, FriendService::FriendEventType)> friendRequestEventSignal; // 0x1c0 "FriendRequestEvent"
 		rbx::signal<void(shared_ptr<Instance>)> playerAddedEarlySignal;    // 0x1c4 "PlayerAddedEarly"

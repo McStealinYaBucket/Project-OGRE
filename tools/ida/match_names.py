@@ -692,18 +692,156 @@ FACTS = [
      "FFlag::OverlayDataModelEnabled (iOS 1029) | registered by the initializer PLAYER 0x00a6a1f4 after the "
      "ConnectToGame flags; read by Game::Game (STUDIO `cmp bl,[0x00f8e390]` at 0x007cde3e); our "
      "OverlayDataModel.cpp GLOBAL (app-17)"),
-    (0x00653790, 0x007cc250, "comment", "", "guess:",
-     "Game::Unk0x30 ctor (our placeholder) | Game::Game's first call, on this+0x30; touches a SAFE_HEAP_STATIC "
-     "(getter 0x004265c0); class unknown (app-17)"),
-    (None, 0x007cc250, "unname", "", "guess:",
-     "not std::strstreambuf::~strstreambuf (a FLIRT false positive): Game::Game's first call, the Game::Unk0x30 "
-     "ctor (PLAYER 0x00653790, 84 bytes both; app-17)"),
-    (0x00654e80, 0x007cd5c0, "comment", "", "guess:",
-     "Game::Unk0x30 dtor (our placeholder) | Game::Game's unwind of this+0x30 (app-17)"),
+    # (wave18 sync: the Game::Unk0x30 ctor/dtor guess comments and the STUDIO 0x007cc250 unname are gone: Game+0x30
+    # is rbx::signals::signal<void(DataModel*)>, ctor 0x00653790 / 0x007cc250 and dtor 0x00654e80 / 0x007cd5c0 are
+    # reccmp 100% in sweep25 and take their names from the bulk rule, app-18.)
     (0x00652f00, 0x007cba50, "comment", "", "guess:",
      "OverlayDataModel, unnamed (our FUN_00652f00) | takes weak_ptr<DataModel>, stores the game DataModel; inline "
      "in 2013 with no iOS symbol, its copy sits in Game.obj (app-17)"),
+    # wave18 sync (app-18.md / shell-5k-9.md "IDA owner"; sweep25). Each checked from the exe bytes.
+    (0x00653600, 0, "rename", "??$shutdownDM@VDataModel@RBX@@@RBX@@YAXAAV?$shared_ptr@VDataModel@RBX@@@boost@@@Z",
+     "match:",
+     "void RBX::shutdownDM<DataModel>(shared_ptr<DataModel>&) (iOS 1029 has both spellings) | reccmp 100% (sweep25) vs "
+     "our Game.cpp.obj body 0x005d49f0, which folds the DataModel and OverlayDataModel spellings, as 2013 does: "
+     "~Game 0x00655d30 calls it twice (0x00655d73, 0x00655d83), first for the game DataModel (app-18). STUDIO keeps "
+     "two copies and takes both names from its own run"),
+    (0x00654400, 0, "rename", "?shutdownGameDataModel@Game@RBX@@QAEXXZ", "ios:",
+     "RBX::Game::shutdownGameDataModel() (iOS 1029) | only caller View::resetScheduler 0x00466e50 at 0x00466ed9; our "
+     "Game.cpp STUB pairs here (0.76, EH frame); STUDIO has no copy (app-18)"),
+    (0x00654dc0, 0, "rename",
+     "??R?$signal_with_args@$00$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAEXPAVDataModel@RBX@@@Z", "prior:",
+     "rbx::signals::signal_with_args<1, void(DataModel*)>::operator()(DataModel*) | only caller Game::setDataModel "
+     "0x00655bf0 (reccmp 100%) at 0x00655cc4; our Game.h TEMPLATE pairs here (0.62) (app-18)"),
+    (0x004265c0, 0x007cb980, "rename",
+     "?safe_static_do_get_mutex@?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@CAPAVmutex@boost@@XZ", "prior:",
+     "signal<void(DataModel*)>::safe_static_do_get_mutex | jumped to by safe_static_init_mutex 0x00426660 and called "
+     "by the signal ctor 0x00653790 / disconnectAll 0x00654790 (all reccmp 100%), which push its once flag "
+     "0x00e24fac; STUDIO 0x007cb980 is reccmp 100% (app-18)"),
+    (0x0041cf40, 0x00461ce0, "rename", "??0Impersonator@Security@RBX@@QAE@W4Identities@12@@Z", "ios:",
+     "RBX::Security::Impersonator::Impersonator(Identities) (iOS 1029 C2) | the shell copy; called by "
+     "Game::doClearVerbs 0x006542b0 (reccmp 100%), Players::createLocalPlayer, Players::onChildAdded, "
+     "ScriptContext::resume and five more; our SecurityContext.cpp STUB pairs here (app-18)"),
+    (0x0041cf80, 0x004619a0, "rename", "??1Impersonator@Security@RBX@@QAE@XZ", "src2016:",
+     "RBX::Security::Impersonator::~Impersonator() (2016 SecurityContext.h; inline in iOS) | the shell copy; called "
+     "after the ctor above by Game::doClearVerbs 0x006542b0 (reccmp 100%) and 14 more; our STUB pairs here (app-18)"),
+    (0x00526e10, 0, "rename", "?initWithPlayerSecurity@Network@RBX@@YAXXZ", "ios:",
+     "RBX::Network::initWithPlayerSecurity() (iOS 1029 0x00957b2c) | SecurePlayerGame's ctor 0x00656250 (reccmp "
+     "100%) does boost::call_once(&initWithPlayerSecurity, flag 0x00de68b4): `push 0x526e10; push 0xde68b4` at "
+     "0x00656283; calls initVersion1 0x00520790 and initWithoutSecurity; decoration from "
+     "Client/_generated/player/unresolved.txt (app-18)"),
+    (0x0072b220, 0x0082a210, "rename", "?wake@SleepingJob@RBX@@QAEXXZ", "src2016:",
+     "RBX::SleepingJob::wake() (2016 SleepingJob.cpp) | right after SleepingJob::error 0x0072b140 (ios:); takes the "
+     "tbb spin_mutex at this+0x218 (`lock xchg`); only caller UserInput::PostUserInputMessage 0x0045f1b0 at "
+     "0x0045f276 (View::HandleWindowsMessage reccmp 100%); decoration from Client/_generated/player/unresolved.txt, "
+     "so gen_link_stubs can bind it (shell-5k-9). STUDIO 0x0082a210: same 176 bytes right after SleepingJob::error "
+     "0x0082a130, instructions equal up to addresses"),
+    (0x0045e300, 0, "rename", "??0UserInput@RBX@@QAE@PAUHWND__@@PAVView@1@V?$shared_ptr@VGame@RBX@@@boost@@@Z",
+     "prior:",
+     "RBX::UserInput::UserInput(HWND, View*, shared_ptr<Game>) (2016 orders it (HWND, game, View*); ours from the "
+     "2013 LTCG frame, ret 0x10) | only caller View::initializeInput 0x00466840 at 0x004668ac, after new; calls "
+     "setGame 0x0045e630; our UserInput.cpp STUB pairs here (0.43) (shell-5k-9)"),
+    (0x0045e630, 0, "rename", "?setGame@UserInput@RBX@@QAEXV?$shared_ptr@VGame@RBX@@@boost@@@Z", "src2016:",
+     "RBX::UserInput::setGame(shared_ptr<Game>) (2016 UserInput.h) | only caller the ctor 0x0045e300 at 0x0045e482; "
+     "news 0x260 bytes and calls the UserInputSleepingJob ctor 0x004627b0 (shell-5k-9)"),
+    (0x004627b0, 0, "comment", "", "rtti:",
+     "RBX::UserInputSleepingJob ctor (parameters unproven, ret 0x10) | stores vftable ??_7UserInputSleepingJob@RBX@@6B@ "
+     "0x00be4e18 at 0x00462844 after the SleepingJob base ctor 0x0072b000; only caller UserInput::setGame 0x0045e630 "
+     "(shell-5k-9)"),
+    # the program_options utf8_codecvt_facet's own slots (vftable ??_7utf8_codecvt_facet@detail@program_options@boost@@
+    # 6B@ 0x00be64d0, slots 4/5/7); 2013 links no boost::filesystem facet (/OPT:REF), so the filesystem names that
+    # reccmp pairs (our link keeps both copies, same bytes) were wrong for these addresses
+    (0x00477aa0, 0, "rename",
+     "?do_in@utf8_codecvt_facet@detail@program_options@boost@@MBEHAAHPBD1AAPBDPA_W3AAPA_W@Z", "rtti:",
+     "boost::program_options::detail::utf8_codecvt_facet::do_in | slot 4 of the RTTI-named vftable 0x00be64d0; body "
+     "reccmp 100% vs the identical filesystem copy of our link, the program_options copy is 0x0044a310 in our map"),
+    (0x00477c30, 0, "rename",
+     "?do_out@utf8_codecvt_facet@detail@program_options@boost@@MBEHAAHPB_W1AAPB_WPAD3AAPAD@Z", "rtti:",
+     "boost::program_options::detail::utf8_codecvt_facet::do_out | slot 5 of vftable 0x00be64d0 (see do_in)"),
+    (0x00477dd0, 0, "rename", "?do_length@utf8_codecvt_facet@detail@program_options@boost@@MBEHABHPBD1I@Z", "rtti:",
+     "boost::program_options::detail::utf8_codecvt_facet::do_length | slot 7 of vftable 0x00be64d0 (see do_in)"),
+    (None, 0x004337a0, "rename",
+     "??0ContentId@RBX@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", "ios:",
+     "RBX::ContentId::ContentId(std::string const&) (iOS 1029) | STUDIO's /GS shell copy: string copy ctor "
+     "import, Name::getNullName 0x00703360 into +0x1c, ContentId::CorrectBackslash 0x00779ba0, as PLAYER's shell "
+     "copy 0x004c4780 (match:) does without the cookie; 59 call sites; reccmp pairs our ctor here at 0.64"),
+    (0x00e24fac, 0x00f8930c, "data8",
+     "?once_init_mutex@?1??mutex@?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@CAAAV1boost@@XZ@4Uonce_flag@5@A",
+     "prior:",
+     "signal<void(DataModel*)>'s mutex once_flag (boost 1.53 win32: {status, count}, 8 bytes) | pushed with "
+     "safe_static_init_mutex by the signal ctor 0x00653790 at 0x006537b8 (STUDIO 0x007cc278) (app-18)"),
+    (0x00de58b8, 0x00f84b4c, "data8",
+     "?once_init_currentJob@?1??currentJob@Implementation@LegacyLock@DataModel@RBX@@SAAAV?$thread_specific_reference"
+     "@VGenericJob@DataModel@RBX@@@rbx@@XZ@4Uonce_flag@boost@@A", "prior:",
+     "LegacyLock::Implementation::currentJob()'s once_flag | pushed with safe_static_init_currentJob 0x0063a370 by "
+     "~Implementation 0x0063a380 at 0x0063a3fd and the ctor 0x00641e60 (STUDIO ~Implementation 0x00758fd0 at "
+     "0x0075904d) (app-18)"),
+    # undo three wave18 STUDIO carries (applied before the RTTI guard above): STUDIO has no UserInputSleepingJob
+    (None, 0x0041a490, "unname", "", "guess:",
+     "not deque<UserInputSleepingJob::Message>::_Xlen (STUDIO has no UserInputSleepingJob; the body is identical to "
+     "PLAYER 0x00438030, a folded deque<T>::_Xlen of some other 12-byte element)"),
+    (None, 0x0048a260, "unname", "", "guess:",
+     "not safe_queue<UserInputSleepingJob::Message>::push (STUDIO has no UserInputSleepingJob; body-identical to a "
+     "PLAYER template copy of a 12-byte element)"),
+    (None, 0x00501f30, "unname", "", "guess:",
+     "not std::_Allocate<UserInputSleepingJob::Message> (STUDIO has no UserInputSleepingJob; body-identical to a "
+     "PLAYER template copy of a 12-byte element)"),
+    (0x00e0c968, 0x00f8330c, "data4", "?registrar@?$ClassRegistrar@VControllerService@RBX@@@Reflection@RBX@@2V123@A",
+     "prior:",
+     "Reflection::ClassRegistrar<ControllerService>::registrar | the operand of the `inc` in "
+     "DescribedNonCreatable<ControllerService>'s ctor (PLAYER 0x006e73b3, STUDIO 0x00814433); our GLOBAL markers "
+     "(UserController.cpp / FactoryRegistration.cpp, app-18)"),
+    (0x00e0c7ac, 0x00f8314c, "data4", "?registrar@?$ClassRegistrar@VFriendService@RBX@@@Reflection@RBX@@2V123@A",
+     "prior:",
+     "Reflection::ClassRegistrar<FriendService>::registrar | head of FactoryRegistration.obj's .bss registrar run "
+     "(PLAYER 0x00e0c7ac..0x00e0ce14), `inc dword` in the Described<FriendService> ctor 0x006b0460 (at 0x006b04b3); our GLOBAL markers (FriendService.cpp / FactoryRegistration.cpp, app-18)"),
 ]
+
+# wave18 sync (integrate.md: the Lua::*Bridge::classLibrary data rows pair the wrong arrays): each 2013
+# Bridge<T>::registerClassLibrary body is `mov eax,[className]; push esi; mov esi,[esp+8]; push classLibrary; ...`,
+# so the className global it reads (a const char* to the Lua class name) names the function, its luaL_Reg array
+# and the global itself (str:). 2013 order: Color3, Ray, Region3, Region3int16, Vector3 (the only array with
+# FromNormalId / FromAxis), Vector3int16, Vector2int16, Vector2, BrickColor, CFrame, UDim, UDim2, Faces, Axes,
+# CellId, InputObject. Our build lays them out in another order, so reccmp's position pairing named 10 of the 16
+# PLAYER functions after a neighbour. (Lua name, Bridge typedef, Bridge<T> argument, PLAYER fn / classLibrary /
+# className, STUDIO fn / classLibrary / className)
+BRIDGES = [
+    ("Color3", "Color3Bridge", "VColor3@G3D", 0x008819c0, 0x00b81694, 0x00d8f2e8, 0x0092ba90, 0x00c3d9d4, 0x00f0b970),
+    ("Ray", "RbxRayBridge", "VRbxRay@RBX", 0x00881b20, 0x00b816a4, 0x00d8f2ec, 0x0092bbf0, 0x00c3d9e4, 0x00f0b974),
+    ("Region3", "Region3Bridge", "VRegion3@RBX", 0x00881b50, 0x00b816b4, 0x00d8f2f0, 0x0092bc20, 0x00c3d9f4, 0x00f0b978),
+    ("Region3int16", "Region3int16Bridge", "VRegion3int16@RBX", 0x00881bb0, 0x00b816c4, 0x00d8f2f4, 0x0092bc50,
+     0x00c3da04, 0x00f0b97c),
+    ("Vector3", "Vector3Bridge", "VVector3@G3D", 0x00881be0, 0x00b816d4, 0x00d8f2f8, 0x0092bc80, 0x00c3da14, 0x00f0b980),
+    ("Vector3int16", "Vector3int16Bridge", "VVector3int16@G3D", 0x00881c10, 0x00b816f4, 0x00d8f2fc, 0x0092bcb0,
+     0x00c3da34, 0x00f0b984),
+    ("Vector2int16", "Vector2int16Bridge", "VVector2int16@G3D", 0x00881de0, 0x00b81704, 0x00d8f300, 0x0092be80,
+     0x00c3da44, 0x00f0b988),
+    ("Vector2", "Vector2Bridge", "VVector2@G3D", 0x00881f30, 0x00b81714, 0x00d8f304, 0x0092bfd0, 0x00c3da54, 0x00f0b98c),
+    ("BrickColor", "BrickColorBridge", "VBrickColor@RBX", 0x00881f60, 0x00b81728, 0x00d8f308, 0x0092c000, 0x00c3da68,
+     0x00f0b990),
+    ("CFrame", "CoordinateFrameBridge", "VCoordinateFrame@G3D", 0x00881f90, 0x00b81798, 0x00d8f30c, 0x0092c030,
+     0x00c3dad8, 0x00f0b994),
+    ("UDim", "UDimBridge", "VUDim@RBX", 0x00881fc0, 0x00b817c0, 0x00d8f310, 0x0092c060, 0x00c3db00, 0x00f0b998),
+    ("UDim2", "UDim2Bridge", "VUDim2@RBX", 0x00882100, 0x00b817d0, 0x00d8f314, 0x0092c1a0, 0x00c3db10, 0x00f0b99c),
+    ("Faces", "FacesBridge", "VFaces@RBX", 0x00882130, 0x00b817e0, 0x00d8f318, 0x0092c1d0, 0x00c3db20, 0x00f0b9a0),
+    ("Axes", "AxesBridge", "VAxes@RBX", 0x00882370, 0x00b817f0, 0x00d8f31c, 0x0092c440, 0x00c3db30, 0x00f0b9a4),
+    ("CellId", "CellIDBridge", "VCellID@RBX", 0x008826a0, 0x00b81800, 0x00d8f320, 0x0092c770, 0x00c3db40, 0x00f0b9a8),
+    ("InputObject", "InputObjectBridge", "VInputObject@RBX", 0x008826d0, 0x00b81810, 0x00d8f330, 0x0092c7a0, 0x00c3db50,
+     0x00f0b9b8),
+]
+for i, (lua, br, targ, pf, pa, pc, sf, sa, sc) in enumerate(BRIDGES):
+    why = (f"Bridge<{targ.split('@')[0][1:]}>: its registerClassLibrary (PLAYER 0x{pf:08x}, STUDIO 0x{sf:08x}) reads the "
+           f"className global 0x{pc:08x} / 0x{sc:08x} (-> '{lua}') and pushes this classLibrary 0x{pa:08x} / 0x{sa:08x}")
+    if i < 10:
+        FACTS.append((pf, sf, "rename", f"?registerClassLibrary@{br}@Lua@RBX@@SAXPAUlua_State@@@Z", "str:",
+                      f"{br}::registerClassLibrary | {why}"))
+    else:  # UDim .. InputObject already carry this name from a reccmp 100% sweep: keep match:, add the check
+        FACTS.append((pf, sf, "comment", "", "match:",
+                      f"{br}::registerClassLibrary (reccmp 100% in an earlier sweep) | {why}"))
+    FACTS += [
+        (pa, sa, "data4", f"?classLibrary@{br}@Lua@RBX@@0QBUluaL_Reg@@B", "str:", f"{br}::classLibrary (luaL_Reg[]) | {why}"),
+        (pc, sc, "data4", f"?className@?$Bridge@{targ}@@$00@Lua@RBX@@2PBDB", "str:", f"Bridge<>::className = '{lua}' | {why}"),
+    ]
+
 
 
 def read_csv(name):
@@ -955,6 +1093,10 @@ def plan(target, json_path, exe):
         # pairs its engine weak_ptr<DataModel> bind copies (0x0098a7b0 ...) with our DataModel spelling, while
         # PLAYER's engine copies took DebrisService's Instance spelling and its shell copies the DataModel one
         taken = {n for x, n in funcs.items() if not (x in updates and updates[x][0].startswith("rename"))}
+        # RTTI classes (??_R0?AV<key>@@@8 rows of the names export) PLAYER has and STUDIO lacks
+        rtti = lambda t: {m.group(1) for r in read_csv(f"{t}-names.csv")
+                          for m in [re.match(r"\?\?_R0\?A[UV](.+)@@@8$", r["name"])] if m}
+        player_only_rtti = rtti("PLAYER") - rtti("STUDIO")
         for r in read_csv("PLAYER-db-updates.csv"):
             pa = int(r["address"], 16)
             sa = pmap.get(pa)
@@ -964,6 +1106,11 @@ def plan(target, json_path, exe):
                 continue
             if r["name"] in taken:
                 stat["PLAYER name kept at another STUDIO address"] += 1
+                continue
+            if any(k + "@@" in r["name"] for k in player_only_rtti):
+                # wave18: a folded template body (deque<UserInputSleepingJob::Message>::_Xlen) whose PLAYER
+                # spelling names a class STUDIO does not have
+                stat["PLAYER name spells a class STUDIO lacks (RTTI)"] += 1
                 continue
             updates[sa] = ("rename", r["name"], "match:",
                            r["line"] + f" [STUDIO: body-identical to PLAYER 0x{pa:08x}, measured there]")

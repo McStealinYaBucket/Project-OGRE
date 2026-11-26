@@ -50,8 +50,8 @@ namespace RBX {
 		bool m_unk0x6c;					// 0x6c  false (one byte store each in the ctor)
 		bool m_unk0x6d;					// 0x6d  false (one byte store each in the ctor)
 		double m_unk0x70;				// 0x70  0
-		bool m_unk0x78;					// 0x78  true
 	public:
+		bool m_unk0x78;					// 0x78  true (2016 isQueueErrorComputed; PacketJob ctor 0x005c5610 reads it)
 		// Server::onServiceProvider 0x005b5310 reads 0x79/0x7a/0xdc (names: 2016, same use).
 		bool usePhysicsPacketCache;		// 0x79  false
 		bool useInstancePacketCache;	// 0x7a  false

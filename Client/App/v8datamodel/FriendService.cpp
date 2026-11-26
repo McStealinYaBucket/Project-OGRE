@@ -18,10 +18,17 @@ using namespace RBX;
 REFLECTION_BEGIN();
 REFLECTION_END();
 
-// Class registrar (see Instance.cpp/Service.cpp note).
+// Class registrar. 2013 defines it in FactoryRegistration.obj in both targets (its .bss run), but PLAYER
+// keeps this .obj's classDescriptor copy (0x006afe70 pushes the literal) and STUDIO keeps
+// FactoryRegistration.obj's (0x00734740 reads sFriendService), so PLAYER defines it here.
+#ifndef OGRE_TARGET_STUDIO
 namespace RBX {
-RBX_REGISTER_CLASS(RBX::FriendService);
+namespace Reflection {
+// GLOBAL: PLAYER 0x00e0c7ac
+template<> ClassRegistrar<FriendService> ClassRegistrar<FriendService>::registrar(0);
 }
+}
+#endif
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
 // at the end of the file so no 2013 assert line above them moves.

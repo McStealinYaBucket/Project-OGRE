@@ -1,4 +1,4 @@
-/* App/v8datamodel/Game.cpp -- October 2013, partial: the Game constructor and STUBs for the rest.
+/* App/v8datamodel/Game.cpp -- October 2013, partial: everything but setupDataModel (needs the Commands.h camera verbs).
    The 2013 ctor (PLAYER 0x00655e70, iOS callees) differs from 2016's: when the loading screen is
    asked for and FFlag::OverlayDataModelEnabled is set, it builds an OverlayDataModel first, hands it
    the game DataModel, and sets up the overlay's services under a write LegacyLock. */
@@ -17,30 +17,82 @@
 
 FASTFLAG(OverlayDataModelEnabled)
 
+#include "security/SecurityContext.h"
+#include "Network/API.h"
+
 #include "decomp.h"
 
+#ifndef OGRE_TARGET_STUDIO
+// iOS keeps it in __MergedGlobals (a file static).
+// GLOBAL: PLAYER 0x00de68b4
+static boost::once_flag initWithPlayerSecurityFlag = BOOST_ONCE_INIT;
+#else
+// GLOBAL: STUDIO 0x00f89340
+static boost::once_flag initWithoutSecurityFlag = BOOST_ONCE_INIT;
+#endif
+
 namespace RBX {
-
-	static void unk0x30Init() {}
-
-	// __declspec(noinline) is a stand-in until the real bodies land (VC9 inlines a same-TU STUB).
-	// STUB: PLAYER 0x00653790
-	// STUB: STUDIO 0x007cc250
-	__declspec(noinline) Game::Unk0x30::Unk0x30()
-		: m_unk0x00(0)
-	{
-		STUB(0x00653790);
-		// Also a stand-in: one opaque call (the real body makes a call_once too) so VC9 does not
-		// prove this stub nothrow and drop the Game ctor's EH state 3.
-		static boost::once_flag flag = BOOST_ONCE_INIT;
-		boost::call_once(&unk0x30Init, flag);
+	namespace Network {
+		// API.cpp, PLAYER 0x00526e10 (iOS 10-29 RBX::Network::initWithPlayerSecurity). Network/API.h does
+		// not declare it yet.
+		void initWithPlayerSecurity();
 	}
 
-	// STUB: PLAYER 0x00654e80
-	// STUB: STUDIO 0x007cd5c0
-	__declspec(noinline) Game::Unk0x30::~Unk0x30()
+
+
+	// iOS 10-29: void RBX::shutdownDM<DataModel>(shared_ptr<DataModel>&) and <OverlayDataModel>; the two
+	// PLAYER copies are byte-identical and fold (STUDIO keeps two: 0x007cc000, 0x007cc090).
+	// FUNCTION: PLAYER 0x00653600
+	template<class T>
+	void shutdownDM(shared_ptr<T>& dm)
 	{
-		STUB(0x00654e80);
+		if (dm)
+		{
+			{
+				DataModel::LegacyLock lock(dm.get(), DataModelJob::Write);
+				DataModel::closeDataModel(dm, true);
+			}
+			dm.reset();
+		}
+	}
+
+	// FUNCTION: PLAYER 0x006542b0
+	// FUNCTION: STUDIO 0x007ccca0
+	void Game::doClearVerbs()
+	{
+		if (dataModel)
+		{
+			Security::Impersonator impersonate(Security::COM);
+			commonVerbs.reset();
+			for (std::vector<Verb*>::iterator iter = verbs.begin(), end = verbs.end(); iter != end; ++iter)
+				delete *iter;
+			verbs.clear();
+		}
+	}
+
+	// FUNCTION: PLAYER 0x00654360
+	// FUNCTION: STUDIO 0x007ccd50
+	void Game::clearVerbs(bool useLock)
+	{
+		if (useLock)
+		{
+			DataModel::LegacyLock lock(dataModel, DataModelJob::Write);
+			doClearVerbs();
+		}
+		else
+			doClearVerbs();
+	}
+
+	// View::resetScheduler calls it (PLAYER 0x00466ed9); STUDIO has no copy.
+	// STUB: PLAYER 0x00654400
+	void Game::shutdownGameDataModel()
+	{
+		doClearVerbs();
+		if (dataModel)
+		{
+			DataModel::closeDataModel(dataModel, false);
+			dataModel.reset();
+		}
 	}
 
 	// Not written yet (1446 bytes). STUB body so the bind target pairs.
@@ -51,12 +103,40 @@ namespace RBX {
 		STUB(0x00655630);
 	}
 
-	// Not written yet (shutdown 0x00654360, then the members). STUB body.
-	// STUB: PLAYER 0x00655d30
+	// View::resetScheduler calls it (PLAYER 0x00466d48); STUDIO has no copy.
+	// FUNCTION: PLAYER 0x00655bf0
+	void Game::setDataModel(shared_ptr<DataModel> dataModel)
+	{
+		if (dataModel)
+		{
+			this->dataModel = dataModel;
+			if (overlayDataModel)
+			{
+				overlayDataModel->FUN_00652f00(dataModel);
+				if (ContentProvider* contentProvider = ServiceProvider::create<ContentProvider>(overlayDataModel.get()))
+					this->dataModel->submitTask(boost::bind(&Game::setupDataModel, this, contentProvider->getBaseUrl()), DataModelJob::Write);
+			}
+		}
+		m_unk0x30(dataModel.get());
+	}
+
+	// Inline into ~Game in 2013 (iOS keeps it out of line).
+	void Game::shutdown()
+	{
+		if (hasShutdown)
+			return;
+		hasShutdown = true;
+		clearVerbs(true);
+		shutdownDM(dataModel);
+		if (overlayDataModel)
+			shutdownDM(overlayDataModel);
+	}
+
+	// FUNCTION: PLAYER 0x00655d30
 	// STUB: STUDIO 0x007cdc90
 	Game::~Game()
 	{
-		STUB(0x00655d30);
+		shutdown();
 	}
 
 	// FUNCTION: PLAYER 0x00655e70
@@ -87,5 +167,22 @@ namespace RBX {
 
 		dataModel->submitTask(boost::bind(&Game::setupDataModel, this, std::string(baseUrl)), DataModelJob::Write);
 	}
+
+#ifndef OGRE_TARGET_STUDIO
+	// The shell's `new SecurePlayerGame` is the only caller.
+	// FUNCTION: PLAYER 0x00656250
+	SecurePlayerGame::SecurePlayerGame(Verb* lockVerb, const char* baseUrl, bool shouldShowLoadingScreen)
+		: Game(lockVerb, baseUrl, shouldShowLoadingScreen)
+	{
+		boost::call_once(&Network::initWithPlayerSecurity, initWithPlayerSecurityFlag);
+	}
+#else
+	// FUNCTION: STUDIO 0x007ce190
+	UnsecuredStudioGame::UnsecuredStudioGame(Verb* lockVerb, const char* baseUrl, bool shouldShowLoadingScreen)
+		: Game(lockVerb, baseUrl, shouldShowLoadingScreen)
+	{
+		boost::call_once(&Network::initWithoutSecurity, initWithoutSecurityFlag);
+	}
+#endif
 
 } // namespace RBX

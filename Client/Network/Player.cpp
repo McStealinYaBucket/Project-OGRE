@@ -270,6 +270,14 @@ namespace Network {
 		Instance::setName(value);
 	}
 
+	// Needs the "userId"/"UserId" descriptors (0x00dd8cf4, 0x00dd8f50); not written yet.
+	// STUB: PLAYER 0x0053ace0
+	// STUB: STUDIO 0x005e9d50
+	void Player::setUserId(int value)
+	{
+		STUB(0x0053ace0);
+	}
+
 	// FUNCTION: PLAYER 0x0053eab0
 	// FUNCTION: STUDIO 0x005ed850
 	void Player::onFriendStatusChanged(shared_ptr<Instance> otherPlayer, FriendService::FriendStatus status)
@@ -405,6 +413,13 @@ namespace Network {
 		setName(sPlayer);
 	}
 
+	// STUB: PLAYER 0x00551730
+	// STUB: STUDIO 0x005fd6b0
+	void Player::rebuildGui()
+	{
+		STUB(0x00551730);
+	}
+
 	// 765 bytes in 2013 (FastLogF, Humanoid::modelIsCharacter, rebuildBackpack/rebuildGui, the died
 	// connection); not written yet. __declspec(noinline) is a stand-in, not 2013 code: it keeps VC9
 	// from inlining this short stub into removeCharacter and onServiceProvider, as the real body is not.
@@ -498,21 +513,6 @@ template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
 // the blank lines hold it there until the functions between are written.
 namespace RBX {
 namespace Network {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

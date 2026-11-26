@@ -210,10 +210,19 @@ CLASSES = [
     "RBX::Network::ConcurrentRakPeer", "RBX::Network::ConcurrentRakPeer::PacketJob",
     "RBX::Network::Replicator::ReplicationData", "RBX::Network::Replicator::ClusterReplicationData",
     "RBX::Network::Replicator::ItemSender", "RBX::Game", "RBX::Network::InstancePacketCache",
+    # wave18 sync (sweep25, build/sweep25/P-final.json / S-final.json 100%; size = the tree's // SIZE = the PDB's),
+    # PLAYER / STUDIO: LuaAllocator (0x24) ctor 0x0086b300 / 0x009ad320, dtor 0x0086b240 / 0x009ad260, vftable
+    # 0x00b7f5f8 / 0x00c52fa8 (app-18); Network::PacketReceiveJob (0x230, Peer.cpp) ctor 0x005b92c0 (STUDIO 0.986),
+    # dtor 0x005b94b0 / 0x0064b220. PLAYER only: RobloxCriticalSection (0x54, the shell's; ctor 0x0045e190,
+    # shell-5k-9). Not yet: STUDIO Game (ctor 0.9965, dtor 0.9907), Application (0x140; ctor 0.505, dtor 0.559),
+    # UserInput (ctor 0.427), ConcurrentRakPeer::StatsUpdateJob (ctor 0.462, dtor 0.127), SecurePlayerGame /
+    # UnsecuredStudioGame / LegacyLock::Implementation / Lua::YieldingThreads (no size annotation)
+    "RBX::LuaAllocator", "RBX::Network::PacketReceiveJob", "RBX::RobloxCriticalSection",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
-               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb", "RBX::Game", "RBX::Network::InstancePacketCache"}
+               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb", "RBX::Game", "RBX::Network::InstancePacketCache",
+               "RBX::RobloxCriticalSection"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

@@ -155,20 +155,20 @@ namespace RBX { namespace Lua {
 		SharedPtrBridge<Instance>::push(L, created);
 		return 1;
 	}
-	// mac: 0x199134 (90B, batch518): {"new","Lock","Unlock"} + readonly + pop.
-	void ObjectBridge::registerInstanceClassLibrary(lua_State* L)
-	{
-		static const luaL_Reg classLibrary[] =
-		{
-			{ "new", newInstance },
-			{ "Lock", lockInstance },
-			{ "Unlock", unlockInstance },
-			{ NULL, NULL }
-		};
-		luaL_register(L, "Instance", classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
+	// registerInstanceClassLibrary (mac: 0x199134) is inline in LuaInstanceBridge.h: 2013 PLAYER inlines it
+	// into ScriptContext::openState (0x00688860) and has no out-of-line copy.
+
+
+
+
+
+
+
+
+
+
+
+
 	// isValueType<V> recheck (include/reflection/property.h:289, batch524).
 	// Spelled manually: the binary's FLog-gated ReleaseAssert is
 	// log-continue, while the in-tree RBXASSERT behind getValue<V>()

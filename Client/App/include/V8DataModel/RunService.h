@@ -87,7 +87,7 @@ namespace RBX {
 		void stop()  { setRunState(RS_STOPPED); }
 
 		// mac: 0x236DCE: set runState + fire runTransitionSignal.
-		void setRunState(int state);
+		void setRunState(RunState state);
 
 		void stopTasks();
 
@@ -122,6 +122,11 @@ namespace RBX {
 // TEMPLATE: STUDIO 0x0079bc30
 // ??0?$Described@VRunService@RBX@@$E?sRunService@2@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sRunService@2@3QBDB@2@$0BB@$0A@@Reflection@RBX@@QAE@XZ
 
+
+// runTransitionSignal's operator(), called by setRunState (PLAYER 0x0072dbc0, STUDIO 0x0079b840).
+// TEMPLATE: PLAYER 0x0072d780
+// TEMPLATE: STUDIO 0x0079b400
+// ??R?$signal_with_args@$00$$A6AXVRunTransition@RBX@@@Z@signals@rbx@@QAEXVRunTransition@RBX@@@Z
 
 // The six signal constructors RunService::RunService (PLAYER 0x0072efd0, STUDIO 0x0079cc10) calls,
 // in member order (+0x98/+0x9c share one).

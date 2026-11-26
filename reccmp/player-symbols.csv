@@ -1,7 +1,7 @@
 # Generated from ida/exports/PLAYER-names.csv. Do not edit.
 # symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on both sides; a static carries our proc name instead.
-# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 13, folded name: address claimed twice 14, kept over a twin-colliding position pair 0, name present, signature differs 18, not defined in our build 3355, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 62, paired by signature 1444, paired by static name 1.
-# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 5902, not in our link 6, paired 17, symbol paired elsewhere 1.
+# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 14, folded name: address claimed twice 13, kept over a twin-colliding position pair 0, name present, signature differs 17, not defined in our build 3352, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 61, paired by signature 1445, paired by static name 1.
+# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 6033, not in our link 6, paired 17, symbol paired elsewhere 1.
 address,name,symbol,type
 00402540,RBX::Reflection::ClassDescriptor::~ClassDescriptor(),??1ClassDescriptor@Reflection@RBX@@UAE@XZ,
 00402670,"RBX::Reflection::ClassDescriptor::~ClassDescriptor() [D0, deleting: the MSVC scalar deleting destructor]",??_EClassDescriptor@Reflection@RBX@@UAEPAXI@Z,
@@ -207,6 +207,7 @@ address,name,symbol,type
 00462060,"RBX::NonFactoryProduct<RBX::Instance, RBX::sRunService>::isNullClassName()",?isNullClassName@?$NonFactoryProduct@VInstance@RBX@@$E?sRunService@2@3QBDB@RBX@@SA_NXZ,
 00465a70,RBX::Tasks::ExclusiveSequence::onPostStep(RBX::TaskScheduler::Job*),,
 00469360,RBX::ControllerService* RBX::ServiceProvider::find<RBX::ControllerService>() const,??$find@VControllerService@RBX@@@ServiceProvider@RBX@@QBEPAVControllerService@1@XZ,
+00469490,public: static class boost::shared_ptr<class RBX::ControllerService> __cdecl RBX::Creatable<class RBX::Instance>::create<class RBX::ControllerService>(void),??$create@VControllerService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VControllerService@RBX@@@boost@@XZ,
 00469870,"RBX::NonFactoryProduct<RBX::Instance, RBX::sControllerService>::isNullClassName()",?isNullClassName@?$NonFactoryProduct@VInstance@RBX@@$E?sControllerService@2@3QBDB@RBX@@SA_NXZ,
 00469990,boost::detail::sp_counted_impl_p<RBX::Tasks::ExclusiveSequence>::dispose(),,
 0046c870,RBX::CoreGuiService* RBX::ServiceProvider::find<RBX::CoreGuiService>() const,??$find@VCoreGuiService@RBX@@@ServiceProvider@RBX@@QBEPAVCoreGuiService@1@XZ,
@@ -848,7 +849,6 @@ address,name,symbol,type
 0054b9e0,RBX::Network::Player::kick(),,
 00550810,"RBX::Reflection::Described<RBX::GuiButton, RBX::sGuiButton, RBX::NonFactoryProduct<RBX::GuiObject, RBX::sGuiButton>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VGuiButton@RBX@@$E?sGuiButton@2@3QBDBV?$NonFactoryProduct@VGuiObject@RBX@@$E?sGuiButton@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
 00551430,"doLoadAppearance(boost::weak_ptr<RBX::Network::Player>, RBX::AsyncHttpQueue::RequestResult, boost::shared_ptr<std::vector<boost::shared_ptr<RBX::Instance>, std::allocator<boost::shared_ptr<RBX::Instance>>>>, std::string, bool, double)",,
-00551730,RBX::Network::Player::rebuildGui(),,
 00551860,RBX::Network::Player::rebuildBackpack(),,
 00552cc0,"RBX::Reflection::Described<RBX::GuiTextButton, RBX::sGuiTextButton, RBX::FactoryProduct<RBX::GuiTextButton, RBX::GuiButton, RBX::sGuiTextButton, RBX::Instance>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VGuiTextButton@RBX@@$E?sGuiTextButton@2@3QBDBV?$FactoryProduct@VGuiTextButton@RBX@@VGuiButton@2@$E?sGuiTextButton@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
 00553480,boost::detail::sp_counted_impl_p<RBX::Network::PersistentDataStore>::dispose(),,
@@ -886,7 +886,6 @@ address,name,symbol,type
 0056dc20,RBX::Network::Players::createLocalPlayer(int),,
 0056df40,"RBX::Network::Players::whisperChat(std::string, boost::shared_ptr<RBX::Instance>)",,
 0056e700,"RBX::Network::Players::OnReceiveChat(RBX::Network::Player*, RakNet::RakPeerInterface*, RakNet::Packet*, unsigned char)",,
-0056f8f0,"RBX::Network::Players::onRemoteSysStats(int, std::string const&, std::string const&, bool)",,
 00570500,boost::detail::sp_counted_impl_p<RBX::Network::AbuseReporter::data>::dispose(),,
 00570ca0,RBX::Network::AbuseReporter::AbuseReporter(std::string),,
 005717c0,RBX::PolyContact::numConnectors() const,,
@@ -998,7 +997,6 @@ address,name,symbol,type
 00590c10,RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() const,??$find@VJointsService@RBX@@@ServiceProvider@RBX@@QBEPAVJointsService@1@XZ,
 005917d0,RBX::Network::Replicator::disconnectReplicationData(boost::shared_ptr<RBX::Instance>),,
 00591a10,RBX::Network::Replicator::updateStatsItem(RBX::Stats::StatsService*),,
-00591bc0,RBX::Network::Replicator::onParentChanged(boost::shared_ptr<RBX::Instance>),,
 005922c0,RBX::Network::Replicator::readChangedProperty(RakNet::BitStream&),,
 005925e0,RBX::Network::Replicator::readInstanceDelete(RakNet::BitStream&),,
 005929f0,"RBX::Network::Replicator::assignRef(RBX::Reflection::Property&, RBX::Guid::Data)",,
@@ -1452,7 +1450,6 @@ address,name,symbol,type
 00639800,RBX::FWService* RBX::ServiceProvider::find<RBX::FWService>() const,??$find@VFWService@RBX@@@ServiceProvider@RBX@@QBEPAVFWService@1@XZ,
 00639920,RBX::ContextActionService* RBX::ServiceProvider::find<RBX::ContextActionService>() const,??$find@VContextActionService@RBX@@@ServiceProvider@RBX@@QBEPAVContextActionService@1@XZ,
 00639a40,RBX::AssetService* RBX::ServiceProvider::find<RBX::AssetService>() const,??$find@VAssetService@RBX@@@ServiceProvider@RBX@@QBEPAVAssetService@1@XZ,
-0063a380,RBX::DataModel::LegacyLock::Implementation::~Implementation(),??1Implementation@LegacyLock@DataModel@RBX@@QAE@XZ,
 0063a4c0,RBX::DataModel::getRenderMouseCursor(),,
 0063aa80,"rbx::signals::signal_with_args<1, void (RBX::UIEvent const&)>::operator()(RBX::UIEvent const&)",,
 0063abd0,"rbx::signals::signal_with_args<2, void (boost::shared_ptr<RBX::Instance>, RBX::Reflection::PropertyDescriptor const*)>::operator()(boost::shared_ptr<RBX::Instance>, RBX::Reflection::PropertyDescriptor const*)",??R?$signal_with_args@$01$$A6AXV?$shared_ptr@VInstance@RBX@@@boost@@PBVPropertyDescriptor@Reflection@RBX@@@Z@signals@rbx@@QAEXV?$shared_ptr@VInstance@RBX@@@boost@@PBVPropertyDescriptor@Reflection@RBX@@@Z,
@@ -1480,7 +1477,6 @@ address,name,symbol,type
 006412e0,"RBX::Reflection::RefPropDescriptor<RBX::DataModel, RBX::Workspace>::setRefValue(RBX::Reflection::DescribedBase*, RBX::Reflection::DescribedBase*) const",,
 00641bd0,RBX::DataModel::MouseStats::MouseStats(void),??0MouseStats@DataModel@RBX@@QAE@XZ,
 00641c30,"RBX::UserInputServiceJob::~UserInputServiceJob() [D0, deleting: the MSVC scalar deleting destructor]",,
-00641e60,"RBX::DataModel::LegacyLock::Implementation::Implementation(RBX::DataModel*, boost::shared_ptr<RBX::DataModel::GenericJob>, boost::shared_ptr<RBX::Limits::Counter>)",,
 00642600,RBX::DataModel::get(RBX::ContentId),,
 006444f0,"RBX::Reflection::RefPropDescriptor<RBX::ObjectValue, RBX::Instance>::~RefPropDescriptor() [D0, deleting: the MSVC scalar deleting destructor]",,
 00644d90,RBX::DataModel::GenericJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),?stepDataModelJob@GenericJob@DataModel@RBX@@EAE?AW4StepResult@TaskScheduler@3@ABUStats@Job@53@@Z,
@@ -1579,7 +1575,7 @@ address,name,symbol,type
 00668c20,RBX::WordList::WordList(),,
 00668e40,RBX::ProfanityFilter::~ProfanityFilter(),,
 006694a0,RBX::Name const& RBX::Name::doDeclare<RBX::sBaseScript>(),??$doDeclare@$E?sBaseScript@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
-00669fd0,"RBX::Reflection::TypedPropertyDescriptor<RBX::ContentId>::copyValue(RBX::Reflection::DescribedBase const*, RBX::Reflection::DescribedBase*) const",?copyValue@?$TypedPropertyDescriptor@VSoundId@Soundscape@RBX@@@Reflection@RBX@@UBEXPBVDescribedBase@23@PAV423@@Z,
+00669fd0,"RBX::Reflection::TypedPropertyDescriptor<RBX::ContentId>::copyValue(RBX::Reflection::DescribedBase const*, RBX::Reflection::DescribedBase*) const",,
 0066a040,"RBX::Reflection::TypedPropertyDescriptor<RBX::ContentId>::equalValues(RBX::Reflection::DescribedBase const*, RBX::Reflection::DescribedBase const*) const",?equalValues@?$TypedPropertyDescriptor@VContentId@RBX@@@Reflection@RBX@@UBE_NPBVDescribedBase@23@0@Z,
 0066a3a0,"RBX::Reflection::PropDescriptor<RBX::Script, RBX::ProtectedString>::GetSetImpl<RBX::ProtectedString const& (RBX::Script::*)() const, void (RBX::Script::*)(RBX::ProtectedString const&)>::getValue(RBX::Reflection::DescribedBase const*) const",,
 0066a3e0,"RBX::NonFactoryProduct<RBX::Instance, RBX::sRuntimeScriptService>::isNullClassName()",?isNullClassName@?$NonFactoryProduct@VInstance@RBX@@$E?sRuntimeScriptService@2@3QBDB@RBX@@SA_NXZ,
@@ -1613,7 +1609,6 @@ address,name,symbol,type
 006714d0,"RBX::Intrusive::Set<RobloxExtraSpace, RobloxExtraSpace>::Iterator::operator->()",??CIterator@?$Set@VRobloxExtraSpace@@V1@@Intrusive@RBX@@QAEPAVRobloxExtraSpace@@XZ,
 006726e0,"boost::shared_ptr<RBX::Instance>* RBX::Lua::Bridge<boost::shared_ptr<RBX::Instance>, false>::pushNewObject<boost::shared_ptr<RBX::Instance>>(lua_State*, boost::shared_ptr<RBX::Instance>)",??$pushNewObject@V?$shared_ptr@VInstance@RBX@@@boost@@@?$Bridge@V?$shared_ptr@VInstance@RBX@@@boost@@$0A@@Lua@RBX@@SAPAV?$shared_ptr@VInstance@RBX@@@boost@@PAUlua_State@@V34@@Z,
 006727a0,"RBX::Reflection::BoundProp<RBX::BrickColor, (RBX::Reflection::Mutability)1>::BoundPropGetSet<RBX::BodyColors>::setValue(RBX::Reflection::DescribedBase*, RBX::BrickColor const&) const",,
-00672dc0,panic(lua_State*),,
 006739d0,"RBX::Lua::WeakThreadRef::~WeakThreadRef() [D0, deleting: the MSVC scalar deleting destructor]",??_EWeakThreadRef@Lua@RBX@@UAEPAXI@Z,
 006762f0,"public: void __thiscall boost::function1<void,class boost::shared_ptr<struct RBX::Reflection::Tuple const>>::operator()(class boost::shared_ptr<struct RBX::Reflection::Tuple const>)const",??R?$function1@XV?$shared_ptr@$$CBUTuple@Reflection@RBX@@@boost@@@boost@@QBEXV?$shared_ptr@$$CBUTuple@Reflection@RBX@@@1@@Z,
 00676530,"std::map<LuaProfiler::StringCache::Function, std::string, std::less<LuaProfiler::StringCache::Function>, std::allocator<std::pair<LuaProfiler::StringCache::Function const, std::string>>>::operator[](LuaProfiler::StringCache::Function const&)",??A?$map@UFunction@StringCache@LuaProfiler@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@U?$less@UFunction@StringCache@LuaProfiler@@@5@V?$allocator@U?$pair@$$CBUFunction@StringCache@LuaProfiler@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@std@@@5@@std@@QAEAAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@ABUFunction@StringCache@LuaProfiler@@@Z,

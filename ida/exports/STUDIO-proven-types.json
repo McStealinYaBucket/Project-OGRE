@@ -7451,7 +7451,7 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x168",
+     "name": "killPlayerSignal",
      "offset": 360,
      "size": 8,
      "kind": "class",
@@ -8201,20 +8201,20 @@
      "scalar": "T_UINT4"
     },
     {
-     "name": "m_unk0x1b4",
+     "name": "testPlayerNameId",
      "offset": 436,
      "size": 4,
      "kind": "scalar",
      "type": null,
-     "scalar": "T_UINT4"
+     "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0x1b8",
+     "name": "testPlayerUserId",
      "offset": 440,
      "size": 4,
      "kind": "scalar",
      "type": null,
-     "scalar": "T_UINT4"
+     "scalar": "T_INT4"
     },
     {
      "name": "m_unk0x1bc",
@@ -9099,12 +9099,12 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x128c",
+     "name": "removingInstance",
      "offset": 4748,
      "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_UINT4"
+     "kind": "ptr",
+     "type": "RBX::Instance",
+     "scalar": null
     },
     {
      "name": "defaultObjects",
@@ -9117,7 +9117,7 @@
     {
      "name": "replicatorStats",
      "offset": 4768,
-     "size": 3944,
+     "size": 2024,
      "kind": "structure",
      "type": "RBX::Network::ReplicatorStats",
      "scalar": null
@@ -9708,6 +9708,97 @@
    ],
    "base": false,
    "unique": "VItemSender@Replicator@Network@RBX@@"
+  },
+  "RBX::LuaAllocator": {
+   "size": 36,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "heapSize",
+     "offset": 4,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "heapCount",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "maxHeapSize",
+     "offset": 12,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "maxHeapCount",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "memPools",
+     "offset": 20,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<boost::pool<boost::default_user_allocator_new_delete> *,std::allocator<boost::pool<boost::default_user_allocator_new_delete> *> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VLuaAllocator@RBX@@"
+  },
+  "RBX::Network::PacketReceiveJob": {
+   "size": 560,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "receiveRate",
+     "offset": 544,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "rakPeer",
+     "offset": 552,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RBX::Network::ConcurrentRakPeer>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPacketReceiveJob@Network@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -14159,7 +14250,6 @@
  "missing": [],
  "fixups_2013": [
   "IFWHolder: 5 vftable slots (PLAYER 0x00b79100)",
-  "GuiBuilder 0x20 -> 0x1c (STUDIO: no networkStatsPage)",
   "RBX::DataModel_vtbl: 34 slots from S-final.json 0xbf607c"
  ]
 }

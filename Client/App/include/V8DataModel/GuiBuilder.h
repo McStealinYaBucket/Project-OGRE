@@ -20,7 +20,7 @@
      RakNet::BitStream::SetWriteOffset), 0x04 workspace (buildGui), 0x08 safeChatMenu
      (shared_ptr, zeroed by the ctor), 0x10 customStats map (head at 0x14, size at 0x18),
      0x1c networkStatsPage (nextNetworkStats PLAYER 0x007f2e80 reads/writes +0x1c).
-     PLAYER SIZE 0x20 (DataModel's parentDataModel follows at 0xe0c).
+     PLAYER SIZE 0x20 (DataModel's parentDataModel follows at 0xe0c; DataModel is 0xe10 in both).
      STUDIO (Oct 17) SIZE 0x1c: no networkStatsPage, a real source difference (the
      STUDIO DataModel stores parentDataModel at 0xe08 right after guiBuilder 0xdec,
      ctor 0x0076b720). This header follows PLAYER.

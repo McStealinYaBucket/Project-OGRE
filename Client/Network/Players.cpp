@@ -16,10 +16,10 @@ using namespace RBX;
 using namespace RBX::Network;
 REFLECTION_BEGIN();
 REFLECTION_END();
-// Class registrar (see Instance.cpp/Service.cpp note).
-namespace RBX {
-// Players is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
-}
+#include "V8DataModel/Teams.h"
+#include "V8DataModel/OverlayDataModel.h"
+#include "FastLog.h" // Players is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
+FASTFLAGVARIABLE(PreventRedundantRebuildLocalGui, true) // registration 0x00a60b00, byte 0x00d17b04 = 1
 namespace RBX {
 namespace Network {
 	void Players::chat(std::string message)
@@ -209,6 +209,14 @@ namespace Network {
 		return Instance::fastDynamicCast<Client>(instance) != NULL;
 	}
 
+	// Bound by onChildAdded to Player::remoteFriendServiceSignal; not written yet.
+	// STUB: PLAYER 0x0056b960
+	// STUB: STUDIO 0x005d0e10
+	void Players::friendServiceRequest(bool makeFriends, weak_ptr<Player> sourcePlayer, int otherUserId)
+	{
+		STUB(0x0056b960);
+	}
+
 	// FUNCTION: PLAYER 0x0056baa0
 	// FUNCTION: STUDIO 0x005d0f50
 	Player* Players::findLocalPlayer(const Instance* context)
@@ -239,6 +247,30 @@ namespace Network {
 		}
 	}
 
+} // namespace Network
+} // namespace RBX
+// Included here, below the 2013 assert lines (182/189).
+#include "V8DataModel/ScriptInformationProvider.h"
+namespace RBX {
+namespace Network {
+	// Bound by onChildAdded to Player::scriptSecurityErrorSignal. 2013 keeps only the service lookup (the
+	// out-of-line create<ScriptInformationProvider>(const Instance*) 0x0056b280; iOS 10-29 the same).
+	// FUNCTION: PLAYER 0x0056bf20
+	// FUNCTION: STUDIO 0x005d13d0
+	void Players::reportScriptSecurityError(int userId, std::string hash, std::string error, std::string stack)
+	{
+		ServiceProvider::create<ScriptInformationProvider>(this);
+	}
+
+	// Bound by onChildAdded to Player::remoteInsertSignal; not written yet.
+
+	// STUB: PLAYER 0x0056bf90
+	// STUB: STUDIO 0x005d1440
+	void Players::remoteInsert(int userId, std::string url, G3D::Vector3 position)
+	{
+		STUB(0x0056bf90);
+	}
+
 	// FUNCTION: PLAYER 0x0056efb0
 	const Instance* Players::findConstLocalCharacter(const Instance* context)
 	{
@@ -248,14 +280,74 @@ namespace Network {
 		return NULL;
 	}
 
-	// Player id lookup (getPlayerByID 0x0055dc60), the list append 0x00564bc0, FriendService::playerAdded
-	// 0x006b36a0, guest naming ("Player" + format, 0x00b17000), five connections into the Player's
-	// signals, Teams::assignNewPlayerToTeam, playerAddedEarly/playerAdded, Player::rebuildGui.
+	// Bound by onChildAdded to Player::killPlayerSignal / statsAvailableSignal; not written yet.
+	// STUB: PLAYER 0x0056efe0
+	// STUB: STUDIO 0x005d50e0
+	void Players::killPlayer(int userId)
+	{
+		STUB(0x0056efe0);
+	}
+
+	// STUB: PLAYER 0x0056f8f0
+	// STUB: STUDIO 0x005d59f0
+	void Players::onRemoteSysStats(int userId, const std::string& resolution, const std::string& stats, bool valid)
+	{
+		STUB(0x0056f8f0);
+	}
+
+	// 2013 has no createPlayerGui call, no isCloudEdit test and no FirePlayerAddedAndPlayerRemovingOnClient
+	// flag (2016); the rebuildGui tail under PreventRedundantRebuildLocalGui is 2013 only (iOS 10-29:
+	// fastDynamicCast<OverlayDataModel>, called out of line at the shell copy 0x0044fdf0). Byte-identical to
+	// 2013 in both targets (probe); STUB until App's Impersonator ctor/dtor markers (shell copies 0x0041cf40 /
+	// 0x0041cf80) pair, which the call sites need.
 	// STUB: PLAYER 0x0056ff40
 	// STUB: STUDIO 0x005d6040
 	void Players::onChildAdded(Instance* child)
 	{
-		STUB(0x0056ff40);
+		if (Player* player = Instance::fastDynamicCast<Player>(child))
+		{
+			int userId = player->userId;
+			if (userId > 0)
+			{
+				shared_ptr<Instance> otherPlayer = getPlayerByID(userId);
+				if (otherPlayer)
+					otherPlayer->setParent(NULL);
+			}
+
+			{
+				shared_ptr<Instances>& c = players.write();
+				c->push_back(shared_from(child));
+			}
+
+			if (FriendService* friendService = ServiceProvider::find<FriendService>(this))
+				friendService->playerAdded(userId);
+
+			if (Players::backendProcessing(this))
+			{
+				if (userId == 0 && player->getName() == "Player")
+				{
+					Security::Impersonator impersonate(Security::Replicator_);
+					player->setName(format("Player%d", ++testPlayerNameId));
+					player->setUserId(--testPlayerUserId);
+				}
+
+				player->scriptSecurityErrorSignal.connect(boost::bind(&Players::reportScriptSecurityError, this, userId, _1, _2, _3));
+				player->remoteInsertSignal.connect(boost::bind(&Players::remoteInsert, this, userId, _1, _2));
+				player->killPlayerSignal.connect(boost::bind(&Players::killPlayer, this, userId));
+				player->statsAvailableSignal.connect(boost::bind(&Players::onRemoteSysStats, this, userId, "1920x1200", _1, true));
+				player->remoteFriendServiceSignal.connect(boost::bind(&Players::friendServiceRequest, this, _1, weak_from(player), _2));
+
+				if (!player->calculatesSpawnLocationEarly())
+					if (Teams* teams = ServiceProvider::find<Teams>(this))
+						teams->assignNewPlayerToTeam(player);
+
+				playerAddedEarlySignal(shared_from(player));
+				playerAddedSignal(shared_from(player));
+
+				if (!FFlag::PreventRedundantRebuildLocalGui || Instance::fastDynamicCast<OverlayDataModel>(DataModel::get(this)))
+					player->rebuildGui();
+			}
+		}
 	}
 
 	// FUNCTION: PLAYER 0x005705c0
@@ -274,8 +366,8 @@ namespace Network {
 		, players(Instances())
 		, rakPeer(NULL)
 		, m_unk0x1b0(12)
-		, m_unk0x1b4(0)
-		, m_unk0x1b8(0)
+		, testPlayerNameId(0)
+		, testPlayerUserId(0)
 		, m_unk0x1bc(0)
 	{
 		setName("Players");
