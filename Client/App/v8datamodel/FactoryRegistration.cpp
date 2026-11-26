@@ -15,6 +15,8 @@
 #include "V8DataModel/PhysicsSettings.h"
 #include "V8DataModel/LuaSettings.h"
 #include "V8DataModel/TimerService.h"
+#include "Network/NetworkPacketCache.h"
+#include "Network/NetworkClusterPacketCache.h"
 
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::GlobalAdvancedSettings);
@@ -22,3 +24,19 @@ RBX_REGISTER_CLASS(RBX::PhysicsSettings);
 RBX_REGISTER_CLASS(RBX::LuaSettings);
 RBX_REGISTER_CLASS(RBX::TimerService);
 }
+
+// The packet caches register here in 2013 (initializers PLAYER 0x00a76660/0x00a76680/0x00a766a0,
+// between CharacterAppearance's and ChatFilter's).
+namespace RBX {
+namespace Reflection {
+// GLOBAL: PLAYER 0x00e0cbe8
+// GLOBAL: STUDIO 0x00f83598
+template<> ClassRegistrar<Network::PhysicsPacketCache> ClassRegistrar<Network::PhysicsPacketCache>::registrar(0);
+// GLOBAL: PLAYER 0x00e0ce14
+// GLOBAL: STUDIO 0x00f837c8
+template<> ClassRegistrar<Network::InstancePacketCache> ClassRegistrar<Network::InstancePacketCache>::registrar(0);
+// GLOBAL: PLAYER 0x00e0c8b8
+// GLOBAL: STUDIO 0x00f8325c
+template<> ClassRegistrar<Network::ClusterPacketCache> ClassRegistrar<Network::ClusterPacketCache>::registrar(0);
+} // namespace Reflection
+} // namespace RBX

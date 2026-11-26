@@ -70,7 +70,7 @@ public:
 	}
 };
 
-// DataModelJob (0x218), then dataModel 0x218, receiveRate 0x220, rakPeer 0x228; 0x230 bytes.
+// SIZE 0x230 (operator new(0x230) at 0x005ba3fa): DataModelJob, dataModel 0x218, receiveRate 0x220, rakPeer 0x228.
 // sleepTime and error fold with SoundService::SoundJob's (0x006f0680, 0x005b9480).
 class PacketReceiveJob : public DataModelJob
 {
@@ -248,3 +248,5 @@ void Peer::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newP
 namespace RBX {
 // Peer is registered in Network/API.cpp (2013 API.obj carries its classDescriptor copy).
 }
+
+DECOMP_SIZE_ASSERT(RBX::Network::PacketReceiveJob, 0x230);

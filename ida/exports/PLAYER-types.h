@@ -4076,7 +4076,7 @@ struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX:
   bool isGameLoaded;
   bool isPersonalServer;
   unsigned __int8 gap_C5A[2];
-  void *game;                           ///< RBX::Game *
+  RBX::Game *game;
   bool networkStatsWindowsOn;
   unsigned __int8 gap_C61[3];
   unsigned __int8 hackFlagSetMutex[8];  ///< boost::mutex
@@ -4218,7 +4218,7 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *canClientCreate;
+  void *isReadOnly;
   void *AASamples____0_;
   void *createChild;
   void *writeXml;
@@ -5636,7 +5636,7 @@ struct __cppobj RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const
 /* 686 */
 struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::NetworkSettings, char const *const RBX::sNetworkSettings>
 {
-  bool m_unk0x64;
+  bool printSplitMessages;
   bool m_unk0x65;
   bool m_unk0x66;
   bool m_unk0x67;
@@ -5665,7 +5665,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   int m_unk0xcc;
   int m_unk0xd0;
   int m_unk0xd4;
-  int m_unk0xd8;
+  int dataSendPriority;
   bool distributedPhysicsEnabled;
   unsigned __int8 gap_DD[3];
   int m_unk0xe0;
@@ -6130,7 +6130,7 @@ struct __cppobj RBX::Network::Player : RBX::DescribedCreatable<RBX::Network::Pla
   unsigned __int8 characterRemovingSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
   unsigned __int8 m_unk0x188[4];        ///< rbx::signals::signal<void __cdecl(G3D::Vector3)>
   unsigned __int8 idledSignal[4];       ///< rbx::signals::signal<void __cdecl(double)>
-  unsigned __int8 friendStatusChangedSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,int)>
+  unsigned __int8 friendStatusChangedSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::FriendService::FriendStatus)>
   unsigned __int8 gap_194[4];
   unsigned __int8 lastActivityTime[8];  ///< RBX::Time
   int membershipType;                   ///< enum RBX::Network::Player::MembershipType
@@ -6232,7 +6232,7 @@ struct __cppobj RBX::LeaveGameVerb : RBX::Verb
 struct __cppobj RBX::RecordToggleVerb : RBX::Verb
 {
   void *doc;                            ///< RBX::Document *
-  void *game;                           ///< RBX::Game *
+  RBX::Game *game;
   unsigned __int8 videoControl[4];      ///< boost::scoped_ptr<RBX::VideoControl>
   unsigned __int8 fileName[28];         ///< std::string
   bool videoUploadingEnabled;
@@ -6328,15 +6328,15 @@ struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network:
   unsigned __int8 abuseReporter[4];     ///< boost::scoped_ptr<RBX::Network::AbuseReporter>
   unsigned __int8 m_unk0x180[8];        ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
   unsigned __int8 chatHistory[12];      ///< std::list<RBX::Network::ChatMessage>
-  unsigned __int8 m_unk0x194[8];        ///< RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>> >
+  unsigned __int8 players[8];           ///< RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>> >
   unsigned __int8 localPlayer[8];       ///< boost::shared_ptr<RBX::Network::Player>
-  void *rakPeer;                        ///< RBX::Network::ConcurrentRakPeer *
+  RBX::Network::ConcurrentRakPeer *rakPeer;
   unsigned __int8 m_unk0x1a8[8];        ///< boost::shared_ptr<RBX::Instance>
   unsigned int m_unk0x1b0;
   unsigned int m_unk0x1b4;
   unsigned int m_unk0x1b8;
   unsigned int m_unk0x1bc;
-  unsigned __int8 friendRequestEventSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,int)>
+  unsigned __int8 friendRequestEventSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,RBX::FriendService::FriendEventType)>
   unsigned __int8 playerAddedEarlySignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
   unsigned __int8 playerAddedSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
   unsigned __int8 playerRemovingSignal[4]; ///< rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>)>
@@ -6429,7 +6429,7 @@ struct __cppobj RBX::Network::Server : RBX::DescribedCreatable<RBX::Network::Ser
   bool m_unk0xadc;
   unsigned __int8 m_unk0xadd[3];        ///< array
   RBX::Network::PhysicsPacketCache *physicsPacketCache;
-  void *instancePacketCache;            ///< RBX::Network::InstancePacketCache *
+  RBX::Network::InstancePacketCache *instancePacketCache;
   int m_unk0xae8;
   unsigned __int8 m_unk0xaec[16];       ///< std::vector<int>
   RBX::NetworkSettings *networkSettings;
@@ -6516,7 +6516,7 @@ struct __cppobj RBX::Network::Replicator : RBX::DescribedNonCreatable<RBX::Netwo
   unsigned __int8 typeDictionary[40];   ///< RBX::Network::DescriptorDictionary<RBX::Reflection::Type>
   unsigned __int8 replicationContainers[24]; ///< boost::unordered::unordered_map<RBX::Instance const *,RBX::Network::Replicator::ReplicationData,boost::hash<RBX::Instance const *>,std::equal_to<RBX::Instance const *>,std::allocator<std::pair<RBX::Instance const * const,RBX::Network::Replicator::ReplicationData> > >
   unsigned int m_unk0x2108;
-  unsigned __int8 clusterReplicationData[52]; ///< RBX::Network::Replicator::ClusterReplicationData
+  RBX::Network::Replicator::ClusterReplicationData clusterReplicationData;
   bool clusterDebounceEnabled;
   bool clusterDebounce;
   bool isClusterSpotted;
@@ -6640,5 +6640,92 @@ struct __cppobj RBX::Network::ClusterPacketCache : RBX::DescribedNonCreatable<RB
   unsigned __int8 streamCache[24];      ///< boost::unordered::unordered_map<int,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream>,boost::hash<int>,std::equal_to<int>,std::allocator<std::pair<int const,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream> > > >
   unsigned __int8 sharedMutex[16];      ///< boost::shared_mutex
   unsigned __int8 clusterInstance[8];   ///< boost::shared_ptr<void>
+};
+
+/* 798 */
+struct __cppobj RBX::Network::ConcurrentRakPeer
+{
+  unsigned __int8 peer[8];              ///< boost::shared_ptr<RakNet::RakPeerInterface>
+  unsigned __int8 packetJob[8];         ///< boost::shared_ptr<RBX::Network::ConcurrentRakPeer::PacketJob>
+  unsigned __int8 statsUpdateJob[8];    ///< boost::shared_ptr<RBX::Network::ConcurrentRakPeer::StatsUpdateJob>
+  RBX::DataModel *dataModel;
+};
+
+/* 799 */
+struct __cppobj RBX::Network::ConcurrentRakPeer::PacketJob : RBX::DataModelJob
+{
+  unsigned __int8 sendQueue[36];        ///< rbx::timestamped_safe_queue<RBX::Network::ConcurrentRakPeer::PacketJob::SendData>
+  bool isQueueErrorComputed;
+  unsigned __int8 gap_23D[3];
+  unsigned __int8 peer[8];              ///< boost::weak_ptr<RakNet::RakPeerInterface>
+};
+
+/* 800 */
+struct __cppobj RBX::Network::Replicator::ReplicationData
+{
+  unsigned __int8 instance[8];          ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 connection[4];        ///< rbx::signals::connection
+  bool deleteOnDisconnect;
+  bool replicateChildren;               ///< bitfields replicateChildren:1@0, listenToChanges:1@1
+  unsigned __int8 gap_E[2];
+};
+
+/* 801 */
+struct __cppobj RBX::Network::Replicator::ClusterReplicationData
+{
+  RBX::Network::Replicator::ReplicationData data;
+  unsigned __int8 updateBuffer[24];     ///< RBX::Network::ClusterUpdateBuffer
+  unsigned __int8 m_unk0x28[8];         ///< RBX::Network::Replicator::ClusterReplicationData::Unk0x28
+  bool readyToSendChunks;
+  unsigned __int8 gap_31[3];
+};
+
+/* 802 */
+struct __cppobj RBX::Network::Replicator::ItemSender
+{
+  RBX::Network::Replicator *replicator;
+  RBX::Network::ConcurrentRakPeer *rakPeer;
+  unsigned __int8 bitStream[8];         ///< boost::shared_ptr<RakNet::BitStream>
+  int packetPriority;                   ///< enum PacketPriority
+  unsigned int maxStreamSize;
+  bool sentItems;
+  unsigned __int8 gap_19[3];
+};
+
+/* 803 */
+struct __cppobj RBX::Game
+{
+  void **__vftable;
+  unsigned __int8 dataModel[8];         ///< boost::shared_ptr<RBX::DataModel>
+  unsigned __int8 overlayDataModel[8];  ///< boost::shared_ptr<RBX::OverlayDataModel>
+  bool hasShutdown;
+  unsigned __int8 gap_15[3];
+  unsigned __int8 verbs[16];            ///< std::vector<RBX::Verb *>
+  unsigned __int8 commonVerbs[8];       ///< boost::shared_ptr<RBX::CommonVerbs>
+  unsigned __int8 m_unk0x30[4];         ///< RBX::Game::Unk0x30
+};
+
+/* 804 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache> : RBX::Instance
+{
+};
+
+/* 805 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::InstancePacketCache, char const *const RBX::Network::sInstancePacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>
+{
+};
+
+/* 806 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::InstancePacketCache, RBX::Instance, char const *const RBX::Network::sInstancePacketCache, 27, 0> : RBX::Reflection::Described<RBX::Network::InstancePacketCache, char const *const RBX::Network::sInstancePacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>, 27, 0>
+{
+};
+
+/* 807 */
+struct __cppobj RBX::Network::InstancePacketCache : RBX::DescribedNonCreatable<RBX::Network::InstancePacketCache, RBX::Instance, char const *const RBX::Network::sInstancePacketCache, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 streamCache[24];      ///< boost::unordered::unordered_map<RBX::Instance const *,boost::shared_ptr<RBX::Network::InstancePacketCache::CachedBitStream>,boost::hash<RBX::Instance const *>,std::equal_to<RBX::Instance const *>,std::allocator<std::pair<RBX::Instance const * const,boost::shared_ptr<RBX::Network::InstancePacketCache::CachedBitStream> > > >
+  unsigned __int8 sharedMutex[16];      ///< boost::shared_mutex
+  unsigned __int8 connections[12];      ///< std::list<rbx::signals::connection>
 };
 

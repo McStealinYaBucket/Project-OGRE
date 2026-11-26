@@ -6,6 +6,10 @@
 #include "Replicator.ProcessPacketsJob.h"
 #include "V8DataModel/NetworkSettings.h"
 #include "FastLog.h"
+#include "Util/standardout.h"
+#include "InternalPacket.h"
+#include "Network/Players.h"
+#include "V8DataModel/TouchTransmitter.h"
 #include "decomp.h"
 #include <boost/bind.hpp>
 
@@ -47,6 +51,25 @@ void Replicator::setRefValue(WaitItem& wi, Instance* instance)
 	IdSerializer::setRefValue(wi, instance);
 }
 
+// FUNCTION: PLAYER 0x00581b50
+// FUNCTION: STUDIO 0x00623b00
+void Replicator::OnInternalPacket(RakNet::InternalPacket* internalPacket, unsigned frameNumber,
+	RakNet::SystemAddress remoteSystemAddress, RakNet::TimeMS time, int isSend)
+{
+	if (isSend)
+	{
+		if (internalPacket->splitPacketCount == 0)
+			replicatorStats.numberOfUnsplitMessages++;
+		else
+		{
+			if (settings().printSplitMessages && internalPacket->splitPacketIndex == 0)
+				StandardOut::singleton()->printf(MESSAGE_INFO, "split message, id %u, size %d, split count %d",
+					internalPacket->data[0], internalPacket->dataBitLength / 8, internalPacket->splitPacketCount);
+			replicatorStats.numberOfSplitMessages++;
+		}
+	}
+}
+
 // FUNCTION: PLAYER 0x00581d30
 // FUNCTION: STUDIO 0x00623ce0
 void Replicator::disableProcessPackets()
@@ -75,6 +98,60 @@ std::string Replicator::getRakStatsString(int verbosityLevel)
 	return buffer;
 }
 
+// STUB: PLAYER 0x00583ad0
+// STUB: STUDIO 0x00625cc0
+void Replicator::receiveCluster(RakNet::BitStream& inBitstream, Instance* instance)
+{
+	STUB(0x00583ad0);
+}
+
+// STUB: PLAYER 0x00589630
+// STUB: STUDIO 0x0062d8c0
+bool Replicator::sendItemsPacket()
+{
+	STUB(0x00589630);
+	return false;
+}
+
+// STUB: PLAYER 0x0058b3e0
+// STUB: STUDIO 0x0062fa50
+void Replicator::writeChangedProperty(const Instance* instance, const Reflection::PropertyDescriptor& desc,
+	RakNet::BitStream& outBitStream)
+{
+	STUB(0x0058b3e0);
+}
+
+// STUB: PLAYER 0x0058b640
+// STUB: STUDIO 0x0062fc70
+void Replicator::writeChangedRefProperty(const Instance* instance, const Reflection::RefPropertyDescriptor& desc,
+	const Guid::Data& id, RakNet::BitStream& outBitStream)
+{
+	STUB(0x0058b640);
+}
+
+// STUB: PLAYER 0x0058b970
+// STUB: STUDIO 0x0062ff20
+bool Replicator::sendClusterPacket()
+{
+	STUB(0x0058b970);
+	return false;
+}
+
+// STUB: PLAYER 0x0058d5f0
+// STUB: STUDIO 0x006328f0
+void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop)
+{
+	STUB(0x0058d5f0);
+}
+
+// STUB: PLAYER 0x00591f00
+// STUB: STUDIO 0x00638330
+FilterResult Replicator::filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc)
+{
+	STUB(0x00591f00);
+	return Accept;
+}
+
 // FUNCTION: PLAYER 0x00598da0
 // FUNCTION: STUDIO 0x0063be70
 Time::Interval Replicator::PingJob::sleepTime(const Stats& stats)
@@ -89,6 +166,52 @@ Replicator::PingJob::Error Replicator::PingJob::error(const Stats& stats)
 	return computeStandardError(stats, 2);
 }
 
+// STUB: PLAYER 0x0059a220
+// STUB: STUDIO 0x0063d2c0
+void Replicator::processPacket(RakNet::Packet* packet)
+{
+	STUB(0x0059a220);
+}
+
+// STUB: PLAYER 0x0059c060
+// STUB: STUDIO 0x0063f3b0
+void Replicator::dataOutStep()
+{
+	STUB(0x0059c060);
+}
+
+// FUNCTION: PLAYER 0x0059cc90
+// FUNCTION: STUDIO 0x0063ffe0
+bool Replicator::wantReplicate(const Instance* source) const
+{
+	switch (source->getDescriptor().getReplicationLevel())
+	{
+	case Reflection::PLAYER_REPLICATE:
+		if (const Player* player = Instance::fastDynamicCast<Player>(source->getParent()))
+			if (const Player* targetPlayer = findTargetPlayer())
+				return player->userId == targetPlayer->userId;
+		return false;
+	case Reflection::NEVER_REPLICATE:
+		return false;
+	case Reflection::STANDARD_REPLICATE:
+		return true;
+	}
+	return true;
+}
+
+// FUNCTION: PLAYER 0x0059cd20
+// FUNCTION: STUDIO 0x00640070
+bool Replicator::remoteDeleteOnDisconnect(const Instance* instance) const
+{
+	if (instance->isDescendantOf(players))
+		return true;
+	if (instance == Players::findConstLocalCharacter(instance))
+		return true;
+	if (Instance::fastDynamicCast<TouchTransmitter>(instance))
+		return true;
+	return false;
+}
+
 // VMProtect-mutated in PLAYER.
 // STUB: PLAYER 0x0059ea20
 // STUB: STUDIO 0x00642040
@@ -98,11 +221,22 @@ TaskScheduler::StepResult Replicator::PingJob::stepDataModelJob(const Stats& sta
 	return TaskScheduler::Done;
 }
 
-// STUB: PLAYER 0x005a0090
-// STUB: STUDIO 0x006438a0
+// FUNCTION: PLAYER 0x005a0090
+// FUNCTION: STUDIO 0x006438a0
 Replicator::ClusterReplicationData::ClusterReplicationData()
 {
-	STUB(0x005a0090);
+	data.deleteOnDisconnect = false;
+	data.replicateChildren = false;
+	data.listenToChanges = false;
+	readyToSendChunks = false;
+}
+
+// STUB: PLAYER 0x005a2680
+// STUB: STUDIO 0x00646370
+void Replicator::addTopReplicationContainer(Instance* instance, bool replicateProperties, bool replicateChildren,
+	boost::function<void(shared_ptr<Instance>)> replicationFilter)
+{
+	STUB(0x005a2680);
 }
 
 // Not written: 3492 bytes. The one statement here keeps ProcessPacketsJob's inline ctor (0x00598e00, called
@@ -114,169 +248,35 @@ void Replicator::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider
 	processPacketsJob.reset(new ProcessPacketsJob(*this));
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// STUB: PLAYER 0x005a3ae0
+// STUB: STUDIO 0x00647800
+void Replicator::serializePropertyValue(const Reflection::ConstProperty& property, RakNet::BitStream& outBitstream,
+	bool useDictionary)
+{
+	STUB(0x005a3ae0);
+}
+
+// STUB: PLAYER 0x005a4190
+// STUB: STUDIO 0x00647eb0
+void Replicator::deserializePropertyValue(RakNet::BitStream& inBitstream, Reflection::Property property,
+	bool useDictionary)
+{
+	STUB(0x005a4190);
+}
+
+// STUB: PLAYER 0x005a4b40
+// STUB: STUDIO 0x00648860
+void Replicator::readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType)
+{
+	STUB(0x005a4b40);
+}
+
+// STUB: PLAYER 0x005a4de0
+// STUB: STUDIO 0x00648ba0
+void Replicator::onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor)
+{
+	STUB(0x005a4de0);
+}
 
 
 
@@ -3427,3 +3427,6 @@ size_t Replicator::getPhysicsMtuSize() const {
 
 } // namespace Network
 } // namespace RBX
+
+DECOMP_SIZE_ASSERT(RBX::Network::Replicator::ReplicationData, 0x10);
+DECOMP_SIZE_ASSERT(RBX::Network::Replicator::ClusterReplicationData, 0x34);

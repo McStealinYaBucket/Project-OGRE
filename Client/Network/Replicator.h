@@ -19,6 +19,7 @@
 #include "ReplicatorStats.h"
 #include "ClusterUpdateBuffer.h"
 #include "Item.h"
+#include "Network/API.h"
 #include "rbx/threadsafe.h"
 #include "rbx/memory.h"
 #include "rbx/signal.h"
@@ -29,9 +30,11 @@
 #include <map>
 #include <queue>
 #include <vector>
+#include <stdexcept>
 
 namespace RBX {
 	class NetworkSettings;
+	class PartInstance;
 	namespace Reflection { class EventInvocation; }
 
 namespace Network {
@@ -41,6 +44,7 @@ namespace Network {
 extern const char* const sReplicator;
 
 class Players;
+class Player;
 class Marker;
 class InstancePacketCache;
 class ClusterPacketCache;
@@ -72,9 +76,11 @@ public:
 	class SendDataJob;
 	class ProcessPacketsJob;
 	class StreamJob;
+	class ItemSender;
+	class Stats;
 
 	// ~ReplicationData is out of line (PLAYER 0x005837d0): shared_ptr at 0x00, the connection's
-	// weak islot pointer at 0x08.
+	// weak islot pointer at 0x08. SIZE 0x10 (ClusterReplicationData's ctor puts updateBuffer at 0x10).
 	struct ReplicationData
 	{
 		shared_ptr<Instance> instance;                     // 0x00
@@ -85,16 +91,24 @@ public:
 	};
 
 	// SIZE 0x34. Ctor out of line (PLAYER 0x005a0090): zeroes the ReplicationData words, calls
-	// ClusterUpdateBuffer() on +0x10, stores 0 at +0x2c and 0x1000000 at +0x28, clears both
-	// bit-fields and the bytes at +0x0c and +0x30. The dtor is inline in ~Replicator.
+	// ClusterUpdateBuffer() on +0x10, constructs m_unk0x28, then its body clears both bit-fields and the
+	// bytes at +0x0c and +0x30. The dtor is inline in ~Replicator.
 	struct ClusterReplicationData
 	{
 		ClusterReplicationData();
 
 		ReplicationData data;                              // 0x00 placeholder name
 		ClusterUpdateBuffer updateBuffer;                  // 0x10
-		undefined4 m_unk0x28;                              // 0x28
-		undefined4 m_unk0x2c;                              // 0x2c
+		// An 8-byte member with an inline ctor: +4 zeroed in its init list, then +0 = 0x1000000 in its body
+		// (that order, then the outer body's stores, is what the 2013 ctor 0x005a0090 shows; plain ints in
+		// either the init list or the body schedule the bit-field store first). Type and names unknown.
+		struct Unk0x28
+		{
+			undefined4 m_unk0x00;                          // 0x00 ctor body 0x1000000
+			undefined4 m_unk0x04;                          // 0x04 ctor init list 0
+			Unk0x28() : m_unk0x04(0) { m_unk0x00 = 0x1000000; }
+		};
+		Unk0x28 m_unk0x28;                                 // 0x28
 		bool readyToSendChunks;                            // 0x30
 	};
 
@@ -123,6 +137,67 @@ public:
 protected:
 	/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider);
 	/*override*/ void setRefValue(WaitItem& wi, Instance* instance);
+
+	// The virtuals Replicator adds, in 2013 slot order: the Debugable-primary vftable (NonFactoryProduct
+	// 0x00b17a74, ServerReplicator 0x00b1848c) has them at slots 30..74 (vtable+0x78..+0x128). Names and
+	// order from the iOS 10-29 vftable (_ZTVN3RBX7Network10ReplicatorE: its slots 36..86, less the
+	// PluginInterface2/IMetric/CellChangeListener overriders Itanium repeats there); pure slots (_purecall
+	// 0x009ef960) are named from the ServerReplicator/ClientReplicator vftables. Return types from 2016,
+	// checked against the trivial 2013 bodies (mov al,1 / xor eax,eax and their ret sizes).
+	virtual bool checkDistributedReceive(PartInstance* part) = 0;                      // vtable+0x78
+	virtual bool checkDistributedSend(const PartInstance* part) = 0;                   // vtable+0x7c
+	virtual bool checkDistributedSendFast(const PartInstance* part) = 0;               // vtable+0x80
+	virtual void setPropSyncExpiration(double value) = 0;                              // vtable+0x84
+	virtual Player* findTargetPlayer() const = 0;                                      // vtable+0x88
+	virtual Player* getRemotePlayer() const = 0;                                       // vtable+0x8c
+	virtual void requestCharacter() { throw std::runtime_error(""); }                // vtable+0x90 (folded copy 0x005206d0)
+	virtual void requestInstances() { throw std::runtime_error(""); }                // vtable+0x94
+	virtual void postProcessPacket() {}                                                // vtable+0x98
+	virtual bool canUseProtocolVersion(int replicationProtocolVersion) const = 0;      // vtable+0x9c
+	virtual bool isProtectedStringEnabled() = 0;                                       // vtable+0xa0
+	virtual bool isLegalReceiveInstance(Instance* instance, Instance* parent) { return true; } // vtable+0xa4
+	virtual bool isLegalDeleteInstance(Instance* instance) { return true; }           // vtable+0xa8
+	virtual bool isLegalReceiveEvent(Instance* instance, const Reflection::EventDescriptor& desc) { return true; } // vtable+0xac
+	virtual bool isLegalReceiveProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) { return true; } // vtable+0xb0
+	virtual bool isLegalSendProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) = 0; // vtable+0xb4
+	virtual bool isLegalSendInstance(const Instance* instance) { return true; }       // vtable+0xb8
+	virtual bool shouldDelayAddingToWorld(shared_ptr<Instance> instance) { return false; } // vtable+0xbc (copy 0x00572a80)
+	virtual void rebroadcastEvent(Reflection::EventInvocation& eventInvocation) {}     // vtable+0xc0
+	virtual void readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop); // vtable+0xc4
+	virtual void writeChangedProperty(const Instance* instance, const Reflection::PropertyDescriptor& desc,
+		RakNet::BitStream& outBitStream);                                              // vtable+0xc8
+	virtual void writeChangedRefProperty(const Instance* instance, const Reflection::RefPropertyDescriptor& desc,
+		const Guid::Data& id, RakNet::BitStream& outBitStream);                       // vtable+0xcc
+	virtual FilterResult filterReceivedChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) { return Accept; } // vtable+0xd0
+	virtual FilterResult filterReceivedParent(Instance* instance, Instance* parent) { return Accept; } // vtable+0xd4
+	virtual FilterResult filterPhysics(PartInstance* instance) { return Accept; }      // vtable+0xd8
+	virtual FilterResult filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc); // vtable+0xdc
+	virtual void onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor); // vtable+0xe0
+	virtual shared_ptr<Stats> createStatsItem() = 0;                                   // vtable+0xe4
+	virtual void processPacket(RakNet::Packet* packet);                                // vtable+0xe8
+	virtual bool wantReplicate(const Instance* source) const;                          // vtable+0xec
+	virtual void onSentMarker(long id) {}                                              // vtable+0xf0
+	virtual bool canReplicateProperty(const Reflection::ConstProperty& prop) { return true; } // vtable+0xf4
+	virtual bool sendItemsPacket();                                                    // vtable+0xf8
+	virtual bool sendClusterPacket();                                                  // vtable+0xfc
+	virtual void readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType);    // vtable+0x100
+	virtual void addTopReplicationContainer(Instance* instance, bool replicateProperties, bool replicateChildren,
+		boost::function<void(shared_ptr<Instance>)> replicationFilter);                // vtable+0x104
+	virtual void dataOutStep();                                                        // vtable+0x108
+	virtual void processSendStats(unsigned int sendStats) {}                           // vtable+0x10c
+	virtual void serializePropertyValue(const Reflection::ConstProperty& property, RakNet::BitStream& outBitstream,
+		bool useDictionary);                                                           // vtable+0x110
+	virtual void deserializePropertyValue(RakNet::BitStream& inBitstream, Reflection::Property property,
+		bool useDictionary);                                                           // vtable+0x114
+	virtual void receiveCluster(RakNet::BitStream& inBitstream, Instance* instance);   // vtable+0x118
+	virtual bool canSendItems() = 0;                                                   // vtable+0x11c
+	virtual void serializeSFFlags(RakNet::BitStream& outBitStream) {}                  // vtable+0x120
+	virtual void deserializeSFFlags(RakNet::BitStream& inBitStream) {}                 // vtable+0x124
+	virtual bool remoteDeleteOnDisconnect(const Instance* instance) const;             // vtable+0x128 0x0059cd20
+
+	// RakNet::PluginInterface2 (this = Replicator+0x1094): counts split/unsplit sends.
+	/*override*/ void OnInternalPacket(RakNet::InternalPacket* internalPacket, unsigned frameNumber,
+		RakNet::SystemAddress remoteSystemAddress, RakNet::TimeMS time, int isSend);
 public:
 
 protected:

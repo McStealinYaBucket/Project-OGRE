@@ -102,6 +102,7 @@ namespace RBX {
 		bool IsFullscreen() const { return fullscreen; }
 		void SetFullscreen(bool value);
 		void HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		void AboutToShutdown(); // PLAYER 0x00465d60
 		void ShowWindow();
 	};
 

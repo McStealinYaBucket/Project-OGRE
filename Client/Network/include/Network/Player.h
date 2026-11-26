@@ -16,6 +16,7 @@
 
 #include "V8Tree/Instance.h"
 #include "Util/BrickColor.h"
+#include "V8DataModel/FriendService.h"
 #include "rbx/rbxtime.h"
 #include "decomp.h"
 #include <boost/function.hpp>
@@ -101,11 +102,7 @@ namespace Network {
 		rbx::signals::signal<void(shared_ptr<Instance>)> characterRemovingSignal;     // 0x184 ctor 0x005257e0
 		rbx::signals::signal<void(G3D::Vector3)> m_unk0x188;                          // 0x188 ctor 0x0052e800
 		rbx::signals::signal<void(double)> idledSignal;                               // 0x18c ctor 0x0052e6c0
-		// 0x190: iOS says signal<void(shared_ptr<Instance>, FriendService::FriendStatus)>. Spelled with int
-		// here: including V8DataModel/FriendService.h from Network TUs makes them supply
-		// FactoryProduct<FriendService>::Creator with Network's include\Util/Object.h spelling, and
-		// PLAYER 0x004200e0/0x00422ee0 (include\util/object.h) drop to 92% (measured 2026-11-24).
-		rbx::signals::signal<void(shared_ptr<Instance>, int)> friendStatusChangedSignal; // 0x190
+		rbx::signal<void(shared_ptr<Instance>, FriendService::FriendStatus)> friendStatusChangedSignal; // 0x190 iOS type; operator() 0x0053b500
 		Time lastActivityTime;              // 0x198 ctor fldz/fstp qword; src2016:, registerLocalPlayerNotIdle 0x005276b0 stores Time::now<0>
 		MembershipType membershipType;      // 0x1a0 ctor 0; get 0x00527440, set 0x00527800
 		int accountAge;                     // 0x1a4 ctor 0; setAccountAge 0x00527830
@@ -169,6 +166,9 @@ namespace Network {
 
 		void setSimulationRadius(float value);
 		void setMaxSimulationRadius(float value);
+
+		// iOS name; PLAYER 0x0053eab0 fires friendStatusChangedSignal. Called by Players::friendStatusChanged.
+		void onFriendStatusChanged(shared_ptr<Instance> otherPlayer, FriendService::FriendStatus status);
 	};
 
 } // namespace Network

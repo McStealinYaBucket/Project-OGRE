@@ -75,7 +75,7 @@ namespace RBX {
 // FUNCTION: PLAYER 0x005b7cf0
 // FUNCTION: STUDIO 0x00609e80
 NetworkSettings::NetworkSettings()
-	: m_unk0x64(false)
+	: printSplitMessages(false)
 	, m_unk0x65(false)
 	, m_unk0x66(false)
 	, m_unk0x67(false)
@@ -102,7 +102,7 @@ NetworkSettings::NetworkSettings()
 	, m_unk0xcc(0)
 	, m_unk0xd0(1)
 	, m_unk0xd4(1)
-	, m_unk0xd8(2)
+	, dataSendPriority(2)
 	, distributedPhysicsEnabled(true)
 	, m_unk0xe0(0)
 	, m_unk0xe4(10.0f)

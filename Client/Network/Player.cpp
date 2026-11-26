@@ -269,6 +269,13 @@ namespace Network {
 		Security::Context::current().requirePermission(Security::WritePlayer);
 		Instance::setName(value);
 	}
+
+	// FUNCTION: PLAYER 0x0053eab0
+	// FUNCTION: STUDIO 0x005ed850
+	void Player::onFriendStatusChanged(shared_ptr<Instance> otherPlayer, FriendService::FriendStatus status)
+	{
+		friendStatusChangedSignal(otherPlayer, status);
+	}
 }
 }
 
@@ -491,13 +498,6 @@ template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
 // the blank lines hold it there until the functions between are written.
 namespace RBX {
 namespace Network {
-
-
-
-
-
-
-
 
 
 

@@ -86,7 +86,9 @@ namespace RBX {
 		void addCustomStat(const std::string& name, const std::string& text);
 		void removeCustomStat(const std::string& name);
 		// mac: 0x3A5008: cycle networkStatsPage 1->2->3->1.
+#ifndef OGRE_TARGET_STUDIO
 		void nextNetworkStats();
+#endif
 		// mac: 0x39FAAC: FPS panel (1 EquationDisplay row + 400x22 restyle).
 		shared_ptr<RelativePanel> buildFPS();
 		// mac: 0x397F00: StatsHud1 panel (31 header/rows + 310x22 restyle; live values
@@ -152,7 +154,9 @@ namespace RBX {
 		void addSafeChatMenu();
 		// mac: 0x3A4FDA (45B): unparent the gb+8 holder if set.
 		void removeSafeChatMenu();
+#ifndef OGRE_TARGET_STUDIO
 		int getNetworkStatsPage() const { return networkStatsPage; }
+#endif
 		// mac: 0x3A4F38 — persists via CustomStatsGuiJSON::WriteFile (TODO: body).
 		void saveCustomStats();
 
@@ -166,7 +170,9 @@ namespace RBX {
 		Workspace* workspace;						// 0x04 buildGui
 		shared_ptr<TopMenuBar> safeChatMenu;		// 0x08 (2016 type; nothing in 2013 stores it)
 		std::map<std::string, Data> customStats;	// 0x10
+#ifndef OGRE_TARGET_STUDIO
 		int networkStatsPage;						// 0x1c PLAYER only (nextNetworkStats 0x007f2e80)
+#endif
 		// Bring-up factoring (binary inlines these writes in each restyle loop).
 		static void restyleStatRow(TextDisplay* row, int fontSize, float w, float h);
 	};

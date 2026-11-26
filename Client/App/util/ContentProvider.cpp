@@ -700,9 +700,9 @@ namespace RBX {
 		return result;
 	}
 
-	// ---------------------------------------------------------------- service
-	// plumbing
-
+	// ---------------------------------------------------------------- service plumbing
+	// STUB: PLAYER 0x0065fe50
+	// STUB: STUDIO 0x0078a2c0
 	void ContentProvider::setBaseUrl(std::string url)
 	{
 		if (url != baseUrl)

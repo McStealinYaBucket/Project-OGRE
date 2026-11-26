@@ -37,8 +37,9 @@ namespace RBX {
 
 		NetworkSettings();
 
+		// Replicator::OnInternalPacket 0x00581b50 reads 0x64 (2016 name).
+		bool printSplitMessages;		// 0x64  false (one byte store each in the ctor)
 	private:
-		bool m_unk0x64;					// 0x64  false (one byte store each in the ctor)
 		bool m_unk0x65;					// 0x65  false (one byte store each in the ctor)
 		bool m_unk0x66;					// 0x66  false (one byte store each in the ctor)
 		bool m_unk0x67;					// 0x67  false (one byte store each in the ctor)
@@ -66,8 +67,9 @@ namespace RBX {
 		int m_unk0xcc;					// 0xcc  0
 		int m_unk0xd0;					// 0xd0  1
 		int m_unk0xd4;					// 0xd4  1
-		int m_unk0xd8;					// 0xd8  2
 	public:
+		// ItemSender ctor 0x005da3f0 reads 0xd8 (2016: PacketPriority dataSendPriority).
+		int dataSendPriority;			// 0xd8  2
 		bool distributedPhysicsEnabled;	// 0xdc  true
 	private:
 		int m_unk0xe0;					// 0xe0  0
@@ -94,6 +96,7 @@ namespace RBX {
 		// Replicator::getPhysicsMtuSize 0x00581ca0 / getAdjustedMtuSize 0x00581c10: cmp [eax+0xfc|0x100],0.
 		int getPhysicsMtuAdjust() const { return physicsMtuAdjust; }
 		int getReplicationMtuAdjust() const { return replicationMtuAdjust; }
+		int getDataSendPriority() const { return dataSendPriority; }
 	};
 
 } // namespace RBX

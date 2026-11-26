@@ -58,10 +58,15 @@ namespace Network {
 		rakPeer->rawPeer()->SetIncomingPassword(versionB.c_str(), versionB.size());
 	}
 
-	// STUB: PLAYER 0x005b1dd0
-	__declspec(noinline) void Server::stop(int blockDuration)
+	// FUNCTION: PLAYER 0x005b1dd0
+	// FUNCTION: STUDIO 0x00610f70
+	void Server::stop(int blockDuration)
 	{
-		STUB(0x005b1dd0);
+		FASTLOG1(FLog::Network, "NetworkServer:Stop blockDuration(%d)", blockDuration);
+		visitChildren(boost::bind(&Instance::unlockParent, _1));
+		removeAllChildren();
+		if (rakPeer->rawPeer()->IsActive())
+			rakPeer->rawPeer()->Shutdown(blockDuration);
 	}
 
 	// FUNCTION: PLAYER 0x005b32b0
@@ -70,11 +75,6 @@ namespace Network {
 	{
 		FASTLOG(FLog::Network, "NetworkServer:Destroy");
 	}
-
-
-
-
-
 
 
 

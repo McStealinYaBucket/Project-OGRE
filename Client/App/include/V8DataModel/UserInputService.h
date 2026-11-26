@@ -28,6 +28,9 @@ namespace RBX {
 		};
 
 		UserInputService() {}
+
+		// iOS name and type; stores the bool at +0x80 (PLAYER 0x0069ff10).
+		void setProcessToolCommandsSeparately(bool value);
 	};
 
 } // namespace RBX

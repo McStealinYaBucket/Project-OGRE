@@ -40,6 +40,14 @@ protected:
 public:
 	RBX::Time timestamp;                    // 0x18
 
+	// iOS: writeItemType(BitStream&, Item::ItemType), PLAYER 0x005d3da0. Only the value the ItemSender
+	// writes is named so far.
+	enum ItemType
+	{
+		ItemTypeEnd = 0,
+	};
+	static void writeItemType(RakNet::BitStream& bitStream, ItemType type);
+
 	virtual ~Item() {}                                      // vtable+0x00
 	virtual bool write(RakNet::BitStream& bitStream) = 0;   // vtable+0x04
 };

@@ -157,6 +157,13 @@ namespace Network {
 		// Player::character is still a shared_ptr<Instance> here.
 		static const Instance* findConstLocalCharacter(const Instance* context);
 
+		// iOS names. getPlayerByID PLAYER 0x0055dc60; FriendService's replication handlers call
+		// friendEventFired 0x00566790 and friendStatusChanged 0x0055f070 (both: two getPlayerByID lookups,
+		// then the FriendRequestEvent signal / Player::onFriendStatusChanged when both players exist).
+		shared_ptr<Player> getPlayerByID(int userId);
+		void friendEventFired(int userId, int otherUserId, FriendService::FriendEventType friendEvent);
+		void friendStatusChanged(int userId, int otherUserId, FriendService::FriendStatus friendStatus);
+
 		std::string getLoadDataUrl(int userId) const;
 		std::string getSaveDataUrl(int userId) const;
 		std::string getSaveLeaderboardDataUrl(int userId) const;
@@ -191,7 +198,7 @@ namespace Network {
 		boost::scoped_ptr<AbuseReporter> abuseReporter; // 0x17c dtor: ~AbuseReporter 0x0055b8b0, operator delete
 		shared_ptr<GuidItem<Instance>::Registry> m_unk0x180; // 0x180 dtor releases +0x184; Registry per the task note (IdSerializer 0x107c has the same type)
 		std::list<ChatMessage> chatHistory;          // 0x188 node dtor ~ChatMessage 0x0055a560 (clear 0x0055f320)
-		copy_on_write_ptr<Instances> m_unk0x194;     // 0x194 ctor 0x00567c30
+		copy_on_write_ptr<Instances> players;        // 0x194 ctor 0x00567c30; 2016 name, getPlayerByID 0x0055dc60 walks it
 		shared_ptr<Player> localPlayer;              // 0x19c ChatOutput reads it (mac +188)
 		ConcurrentRakPeer* rakPeer;                  // 0x1a4 ctor 0; setConnection 0x00559790; ~Players clears it
 		shared_ptr<Instance> m_unk0x1a8;             // 0x1a8 dtor releases +0x1ac; pointee unproven
@@ -199,9 +206,7 @@ namespace Network {
 		undefined4 m_unk0x1b4;                       // 0x1b4 ctor 0
 		undefined4 m_unk0x1b8;                       // 0x1b8 ctor 0
 		undefined4 m_unk0x1bc;                       // 0x1bc ctor 0
-		// 0x1c0 "FriendRequestEvent": iOS says (..., FriendService::FriendEventType); int here for the
-		// include reason given at Player::friendStatusChangedSignal.
-		rbx::signal<void(shared_ptr<Instance>, shared_ptr<Instance>, int)> friendRequestEventSignal; // 0x1c0
+		rbx::signal<void(shared_ptr<Instance>, shared_ptr<Instance>, FriendService::FriendEventType)> friendRequestEventSignal; // 0x1c0 "FriendRequestEvent"
 		rbx::signal<void(shared_ptr<Instance>)> playerAddedEarlySignal;    // 0x1c4 "PlayerAddedEarly"
 		rbx::signal<void(shared_ptr<Instance>)> playerAddedSignal;         // 0x1c8 "PlayerAdded"
 		rbx::signal<void(shared_ptr<Instance>)> playerRemovingSignal;      // 0x1cc "PlayerRemoving"

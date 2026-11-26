@@ -26,10 +26,12 @@
 
 namespace RBX {
 
+	class CommonVerbs;
 	class DataModel;
-	class Instance;
+	class OverlayDataModel;
 	class Verb;
 
+	// VTABLE: PLAYER 0x00b31044
 	// SIZE 0x34
 	class Game : boost::noncopyable
 	{
@@ -39,19 +41,31 @@ namespace RBX {
 	public:
 		virtual ~Game();	// vtable+0x00
 
+		// SYNTHETIC: PLAYER 0x00656230
+		// RBX::Game::`scalar deleting destructor'
+
 		boost::shared_ptr<DataModel> getDataModel() const { return dataModel; }
 
 		void setupDataModel(const std::string& baseUrl);
 
 	protected:
-		boost::shared_ptr<DataModel> dataModel;			// 0x04
-		boost::shared_ptr<Instance> overlayDataModel;	// 0x0c  an OverlayDataModel
-		bool hasShutdown;								// 0x14
+		// The member at +0x30: a 4-byte object whose ctor (PLAYER 0x00653790) zeroes it and touches a
+		// SAFE_HEAP_STATIC (call_once 0x00426660, getter 0x004265c0); its dtor is 0x00654e80.
+		struct Unk0x30
+		{
+			undefined4 m_unk0x00;
+			Unk0x30();
+			~Unk0x30();
+		};
+
+		boost::shared_ptr<DataModel> dataModel;					// 0x04
+		boost::shared_ptr<OverlayDataModel> overlayDataModel;	// 0x0c
+		bool hasShutdown;										// 0x14
 	public:
-		std::vector<Verb*> verbs;						// 0x18
+		std::vector<Verb*> verbs;								// 0x18
 	protected:
-		undefined4 m_unk0x28[2];						// 0x28  a zeroed shared_ptr
-		undefined4 m_unk0x30;							// 0x30  ctor 0x00653790
+		boost::shared_ptr<CommonVerbs> commonVerbs;				// 0x28 (2016 name; the ctor only zeroes it)
+		Unk0x30 m_unk0x30;										// 0x30
 	};
 
 	class SecurePlayerGame : public Game

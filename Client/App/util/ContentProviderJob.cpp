@@ -12,8 +12,8 @@
 
 namespace RBX
 {
-// FUNCTION: PLAYER 0x008ef650
-// FUNCTION: STUDIO 0x00a0d3d0
+// FUNCTION: PLAYER 0x008ef650 FOLDED
+// FUNCTION: STUDIO 0x00a0d3d0 FOLDED
 Time::Interval ContentProviderJob::sleepTime(const Stats& stats)
 {
 	return computeStandardSleepTime(stats, 30);

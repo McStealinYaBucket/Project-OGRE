@@ -436,7 +436,7 @@ protected:
 public:
 
 	/* mac: 0x2D3742: createDataModel(bool, Verb*, DataModel*) — bool = ? (log "createDataModel") */
-	static shared_ptr<Instance> createDataModel(bool flag, Verb* lockVerb, DataModel* parentDM);
+	static shared_ptr<DataModel> createDataModel(bool flag, Verb* lockVerb, DataModel* parentDM);	// 2016 return type
 
 	/* Hack-flag telemetry (batch279: dm+0xC30 boost::mutex locked through
 	   boost::unique_lock + dm+0xC5C boost::unordered_set; ScriptContext
@@ -467,8 +467,8 @@ public:
 	// networkStatsWindowsOn (0xc60), so its members 0xc64..0xcac sit 4 bytes lower
 	// (STUDIO ctor 0x0076b720: mutex 0xc60, hackFlagSet 0xc68, jobId 0xc80, write_requested 0xc9c,
 	// itemChangedSignal 0xca8) and the 8-aligned boost::function at 0xcb0 absorbs the
-	// difference; its GuiBuilder is 4 bytes smaller (parentDataModel at 0xe08). This header
-	// follows PLAYER.
+	// difference; its GuiBuilder is 4 bytes smaller (parentDataModel at 0xe08). The offset
+	// comments are PLAYER's; OGRE_TARGET_STUDIO drops networkStatsWindowsOn.
 	struct MouseStats	// src2016: two RunningAverageTimeInterval<>(0.5), ctor 0x00641bd0
 	{
 		RunningAverageTimeInterval<> osMouseMove;	// 0x00
@@ -515,7 +515,9 @@ public:
 	bool				isGameLoaded;							// 0xc58
 	bool				isPersonalServer;						// 0xc59 getter 0x0062d240, setter 0x0062d250
 	Game*				game;									// 0xc5c Game::setupDataModel 0x006556b8
+#ifndef OGRE_TARGET_STUDIO
 	bool				networkStatsWindowsOn;					// 0xc60 PLAYER only (processAccelerators 0x0064fd1e)
+#endif
 	boost::mutex hackFlagSetMutex;								// 0xc64
 	boost::unordered_set<unsigned int> hackFlagSet;				// 0xc6c
 	std::string			jobId;									// 0xc84 getter 0x0062d1e0

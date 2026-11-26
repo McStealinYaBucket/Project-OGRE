@@ -63,6 +63,9 @@ namespace RBX {
 	private:
 		void friendEventReplicationChanged(int playerId, int otherPlayerId, FriendEventType eventType);
 		void friendStatusReplicationChanged(int playerId, int otherPlayerId, FriendStatus status);
+		void storeAndReplicateFriendStatus(int playerId, int otherPlayerId, FriendStatus status);
+		static void ProcessBulkFriendResponse(weak_ptr<FriendService> weakFriendService, int userId,
+			std::set<int> userIdsRequested, std::string* response, std::exception* error);
 
 		rbx::signals::scoped_connection friendStatusConnection;	// 0x74 [5]
 		rbx::signals::scoped_connection friendEventConnection;	// 0x78 [6]

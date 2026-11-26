@@ -70,59 +70,6 @@ namespace RBX {
 		this->dataModel = dataModel;
 	}
 
-	// STUB: PLAYER 0x007f29a0
-	// STUB: STUDIO 0x008b5780
-	void GuiBuilder::addCustomStat(const std::string& name, const std::string& text)
-	{
-		// mac: 0x3A436C: no-op when the name is already registered.
-		if (customStats.find(name) != customStats.end())
-			return;
-		// Gate: find "CustomStats" + isA GuiItem (Item shell), silent no-op else.
-		// Then EquationDisplay(label=name+" : ", value) + parent under panel
-		// (styling/positioning TODO — member map pending).
-		shared_ptr<EquationDisplay> eq;
-		if (dataModel != NULL)
-		{
-			const Instance* stats = dataModel->findConstFirstChildByName("CustomStats");
-			const GuiItem* panel = (stats != NULL) ? Instance::fastDynamicCast<GuiItem>(stats) : NULL;
-			if (panel != NULL)
-			{
-				eq = Creatable<Instance>::create<EquationDisplay>(name + " : ", text);
-				eq->setParent(const_cast<GuiItem*>(panel));
-			}
-		}
-		customStats[name] = Data(text, eq);
-	}
-
-	// STUB: PLAYER 0x007f2d40
-	// STUB: STUDIO 0x008b5b20
-	void GuiBuilder::removeCustomStat(const std::string& name)
-	{
-		// mac: 0x3A4DAC: unparent node (shared_ptr at Data+20 via setParent NULL, clear
-		// byte at node+156), then tree-erase (erases even when panel missing).
-		std::map<std::string, Data>::iterator it = customStats.find(name);
-		if (it == customStats.end())
-			return;
-		if (dataModel != NULL)
-		{
-			const Instance* stats = dataModel->findConstFirstChildByName("CustomStats");
-			(void)stats;
-		}
-		if (it->second.display != NULL)
-			it->second.display->setParent(NULL);
-		customStats.erase(it);
-	}
-
-	void GuiBuilder::restyleStatRow(TextDisplay* row, int fontSize, float w, float h)
-	{
-		row->fontSize = fontSize;
-		row->sizeX = w;
-		row->sizeY = h;
-		row->textColor = G3D::Color3(0.7f, 0.0f, 1.0f);
-		row->textAlpha = 1.0f;
-		row->backdrop = G3D::Color4::clear();
-	}
-
 	// mac: 0x3A230A (322B).  Layout ints verbatim: x=3 (RIGHT), y=1 (BOTTOM),
 	// offset (0,0) (one dword zero store over both words), style=1
 	// (VERTICAL), backdrop=clear.  Adorn* is never read -- NULL-safe.
@@ -165,6 +112,17 @@ namespace RBX {
 		chat->setParent(panel.get());
 		return panel;
 	}
+
+	void GuiBuilder::restyleStatRow(TextDisplay* row, int fontSize, float w, float h)
+	{
+		row->fontSize = fontSize;
+		row->sizeX = w;
+		row->sizeY = h;
+		row->textColor = G3D::Color3(0.7f, 0.0f, 1.0f);
+		row->textAlpha = 1.0f;
+		row->backdrop = G3D::Color4::clear();
+	}
+
 	// STUB: PLAYER 0x007e7260
 	// STUB: STUDIO 0x008aade0
 	shared_ptr<RelativePanel> GuiBuilder::buildStatsHud1()
@@ -264,7 +222,6 @@ namespace RBX {
 		}
 		return panel;
 	}
-
 	// STUB: PLAYER 0x007e9500
 	// STUB: STUDIO 0x008ad080
 	shared_ptr<RelativePanel> GuiBuilder::buildNetworkStats()
@@ -454,6 +411,7 @@ namespace RBX {
 		}
 		return panel;
 	}
+
 	// STUB: PLAYER 0x007eed30
 	// STUB: STUDIO 0x008b1d80
 	shared_ptr<RelativePanel> GuiBuilder::buildSummaryStats()
@@ -502,6 +460,7 @@ namespace RBX {
 		}
 		return panel;
 	}
+
 	// STUB: PLAYER 0x007f01a0
 	// STUB: STUDIO 0x008b31f0
 	shared_ptr<RelativePanel> GuiBuilder::buildPhysicsStats2()
@@ -528,7 +487,6 @@ namespace RBX {
 		}
 		return panel;
 	}
-
 	// STUB: PLAYER 0x007f14e0
 	// STUB: STUDIO 0x008b44f0
 	void GuiBuilder::saveCustomStats()
@@ -539,7 +497,6 @@ namespace RBX {
 		CustomStatsGuiJSON writer(this);
 		writer.WriteFile();
 	}
-
 	// STUB: PLAYER 0x007f1590
 	// STUB: STUDIO 0x008b45a0
 	shared_ptr<RelativePanel> GuiBuilder::buildCustomStats()
@@ -587,11 +544,54 @@ namespace RBX {
 			updateSummaryStats(const_cast<TopMenuBar*>(bar));
 	}
 
-	// STUB: PLAYER 0x007f2e80
-	void GuiBuilder::nextNetworkStats()
+	// STUB: PLAYER 0x007f29a0
+	// STUB: STUDIO 0x008b5780
+	void GuiBuilder::addCustomStat(const std::string& name, const std::string& text)
 	{
-		networkStatsPage = (networkStatsPage >= 3) ? 1 : networkStatsPage + 1;
+		// mac: 0x3A436C: no-op when the name is already registered.
+		if (customStats.find(name) != customStats.end())
+			return;
+		// Gate: find "CustomStats" + isA GuiItem (Item shell), silent no-op else.
+		// Then EquationDisplay(label=name+" : ", value) + parent under panel
+		// (styling/positioning TODO — member map pending).
+		shared_ptr<EquationDisplay> eq;
+		if (dataModel != NULL)
+		{
+			const Instance* stats = dataModel->findConstFirstChildByName("CustomStats");
+			const GuiItem* panel = (stats != NULL) ? Instance::fastDynamicCast<GuiItem>(stats) : NULL;
+			if (panel != NULL)
+			{
+				eq = Creatable<Instance>::create<EquationDisplay>(name + " : ", text);
+				eq->setParent(const_cast<GuiItem*>(panel));
+			}
+		}
+		customStats[name] = Data(text, eq);
 	}
+
+	// STUB: PLAYER 0x007f2d40
+	// STUB: STUDIO 0x008b5b20
+	void GuiBuilder::removeCustomStat(const std::string& name)
+	{
+		// mac: 0x3A4DAC: unparent node (shared_ptr at Data+20 via setParent NULL, clear
+		// byte at node+156), then tree-erase (erases even when panel missing).
+		std::map<std::string, Data>::iterator it = customStats.find(name);
+		if (it == customStats.end())
+			return;
+		if (dataModel != NULL)
+		{
+			const Instance* stats = dataModel->findConstFirstChildByName("CustomStats");
+			(void)stats;
+		}
+		if (it->second.display != NULL)
+			it->second.display->setParent(NULL);
+		customStats.erase(it);
+	}
+
+#ifndef OGRE_TARGET_STUDIO	// STUDIO (Oct 17) has no networkStatsPage and no nextNetworkStats
+	// STUB: PLAYER 0x007f2e80
+	void GuiBuilder::nextNetworkStats() { networkStatsPage = (networkStatsPage >= 3) ? 1 : networkStatsPage + 1; }
+#endif
+
 
 	// mac: 0x3A55E8 (250B).  Colors inlined as literals (Color3.cpp is NOT in
 	// the link -- see the TextDisplay link-debt note); values byte-proven

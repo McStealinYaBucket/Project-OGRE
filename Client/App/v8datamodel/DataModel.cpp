@@ -390,7 +390,7 @@ namespace RBX {
 	}
 
 	// FUNCTION: PLAYER 0x0064d850
-	// STUB: STUDIO 0x0076a340
+	// FUNCTION: STUDIO 0x0076a340
 	DataModel::~DataModel()
 	{
 		count--;
@@ -399,7 +399,7 @@ namespace RBX {
 	}
 
 	// FUNCTION: PLAYER 0x0064ec50
-	// STUB: STUDIO 0x0076b720
+	// FUNCTION: STUDIO 0x0076b720
 	DataModel::DataModel(Verb* lockVerb, DataModel* parentDM)
 		:DescribedNonCreatable<DataModel, ServiceProvider, sDataModel>()
 		,VerbContainer(NULL)
@@ -414,13 +414,13 @@ namespace RBX {
 		,dirtyFlag(false)
 		,isInitialized(false)
 		,isContentLoaded(false)
-		,numPartInstances(0)
-		,numInstances(0)
+		,numPartInstances(0), numInstances(0)
 		,shutdownRequestedCount(0)
 		,physicsStepID(0)
-		,isGameLoaded(false)
-		,game(NULL)
+		,isGameLoaded(false), game(NULL)
+#ifndef OGRE_TARGET_STUDIO	// STUDIO (Oct 17) has no networkStatsWindowsOn
 		,networkStatsWindowsOn(false)
+#endif
 		,write_requested(0)
 		,read_requested(0)
 		,writeRequestingThread(0)
@@ -455,9 +455,9 @@ namespace RBX {
 	}
 
 	/* mac: 0x2D3742 — creates via Creatable<Instance>::create<DataModel, Verb*, DataModel*> */
-	// STUB: PLAYER 0x0064fc30
-	// STUB: STUDIO 0x0076c6e0
-	shared_ptr<Instance> DataModel::createDataModel(bool flag, Verb* lockVerb, DataModel* parentDM)
+	// FUNCTION: PLAYER 0x0064fc30
+	// FUNCTION: STUDIO 0x0076c6e0
+	shared_ptr<DataModel> DataModel::createDataModel(bool flag, Verb* lockVerb, DataModel* parentDM)
 	{
 		FASTLOG1(FLog::CloseDataModel, "Create DataModel - heartbeat(%d)", flag);
 		shared_ptr<DataModel> dm = Creatable<Instance>::create<DataModel>(lockVerb, parentDM);
@@ -3174,9 +3174,13 @@ RBX_REGISTER_CLASS(RBX::Network::Players);
 }
 
 DECOMP_SIZE_ASSERT(RBX::DataModel::GenericJob, 0x248);
-// DataModel is 0xe10 in PLAYER (operator new in 0x0064f760); STUDIO's is 0xe0c (no
-// networkStatsWindowsOn, GuiBuilder 0x1c). GuiBuilder is 0x20 (ctor 0x00644f30).
-DECOMP_SIZE_ASSERT(RBX::GuiBuilder, 0x20);
+// DataModel is 0xe10 in both (operator new: PLAYER 0x0064f760, STUDIO 0x0076c210). STUDIO has no
+// networkStatsWindowsOn and a 0x1c GuiBuilder; parentDataModel ends at 0xe0c, padded to 8.
+#ifdef OGRE_TARGET_STUDIO
+DECOMP_SIZE_ASSERT(RBX::GuiBuilder, 0x1c);
+#else
+DECOMP_SIZE_ASSERT(RBX::GuiBuilder, 0x20);	// ctor 0x00644f30
+#endif
 DECOMP_SIZE_ASSERT(RBX::DataModel, 0xe10);
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit

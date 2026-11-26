@@ -14,7 +14,6 @@ address,type,size,symbol
 005ad4a1,library,6,__RTC_NumErrors_1
 005b1a30,library,5,?SpinYield@ExternalContextBase@details@Concurrency@@UAEXXZ
 005b7aa0,library,7,?Id@SchedulerBase@details@Concurrency@@UBEIXZ
-005d7940,library,225,??1CrashReporter@@QAE@XZ
 005d7f50,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ
 005d83d0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_0
 00607c10,library,7,?GetDefaultDestination@UMSThreadVirtualProcessor@details@Concurrency@@UAEPAUIExecutionContext@3@XZ
@@ -23,7 +22,6 @@ address,type,size,symbol
 0066cd10,library,15,??3@YAXPAX@Z_0
 006b03b0,library,101,??1filebuf@@UAE@XZ
 006b0480,library,30,??_Gfilebuf@@UAEPAXI@Z
-006c3e40,library,18,?ResetOverflow@TaskStack@details@Concurrency@@QAEXXZ_0
 0078a170,library,7,?GetLocation@VirtualProcessor@details@Concurrency@@QBEABVlocation@3@XZ
 00799640,library,33,??$shared_dynamic_cast@VDataModel@RBX@@VDescribedBase@Reflection@2@@RBX@@YA?AV?$shared_ptr@VDataModel@RBX@@@boost@@ABV?$shared_ptr@VDescribedBase@Reflection@RBX@@@2@@Z
 007b0ea0,library,7,?GetSchedulerProxy@SchedulerBase@details@Concurrency@@QBEPAUISchedulerProxy@3@XZ_1

@@ -24,6 +24,9 @@ namespace RBX {
 	public:
 		ScriptInformationProvider() {}
 
+		// iOS name and type; Game::Game calls it with baseUrl + "/asset/".
+		void setAssetUrl(std::string url);
+
 		// C1 additions (LOUD DELTA -- the 2013 async script-info path is only
 		// reflected by the decoded ES call shape: 0x181D86 SaveScriptInfoHelper /
 		// mac: 0x1821A2 EmbeddedSource::saveResult mangles; the parameter spellings of

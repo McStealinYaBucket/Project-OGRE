@@ -594,7 +594,7 @@ public:
 // ??$seek@V?$basic_null_device@DUinput@iostreams@boost@@@iostreams@boost@@V?$linked_streambuf@DU?$char_traits@D@std@@@detail@23@@?$device_wrapper_impl@Uany_tag@iostreams@boost@@@detail@iostreams@boost@@SA?AV?$fpos@H@std@@AAV?$basic_null_device@DUinput@iostreams@boost@@@23@PAV?$linked_streambuf@DU?$char_traits@D@std@@@123@_JHH@Z
 
 // TEMPLATE: STUDIO 0x006d13d0
-// ?_Buynode@?$list@PAV?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@V?$allocator@PAV?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@@std@@@std@@IAEPAU_Node@?$_List_nod@PAV?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@V?$allocator@PAV?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@@std@@@2@XZ
+// ?_Buynode@?$list@Vconnection@signals@rbx@@V?$allocator@Vconnection@signals@rbx@@@std@@@std@@IAEPAU_Node@?$_List_nod@Vconnection@signals@rbx@@V?$allocator@Vconnection@signals@rbx@@@std@@@2@XZ
 
 // TEMPLATE: STUDIO 0x0091aa50
 // ??$write@VWinHttpRequest_source@@V?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@@?$device_wrapper_impl@Uinput@iostreams@boost@@@detail@iostreams@boost@@SAHAAVWinHttpRequest_source@@PAV?$linked_streambuf@DU?$char_traits@D@std@@@123@PBDH@Z
@@ -655,7 +655,7 @@ public:
 // ??4?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@QAEAAV01@PB_W@Z
 
 // TEMPLATE: PLAYER 0x005e7920
-// ?_Buynode@?$list@PAV?$linked_streambuf@DU?$char_traits@D@std@@@detail@iostreams@boost@@V?$allocator@PAV?$linked_s
+// ?_Buynode@?$list@Vconnection@signals@rbx@@V?$allocator@Vconnection@signals@rbx@@@std@@@std@@IAEPAU_Node@?$_List_nod@Vconnection@signals@rbx@@V?$allocator@Vconnection@signals@rbx@@@std@@@2@XZ
 
 // TEMPLATE: PLAYER 0x005ecdd0
 // ??0gzip_header@detail@iostreams@boost@@QAE@XZ

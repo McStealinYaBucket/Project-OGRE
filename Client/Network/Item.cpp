@@ -4,6 +4,7 @@
 // calls pop_if_present, defined later, so it is compiled after it; the markers below follow the
 // source, not the address order, for those two.
 #include "Item.h"
+#include "decomp.h"
 
 namespace RBX {
 namespace Network {
@@ -38,13 +39,12 @@ namespace Network {
 
 
 
-
-
-
-
-
-
-
+// STUB: PLAYER 0x005d3da0
+// STUB: STUDIO 0x0066d120
+void Item::writeItemType(RakNet::BitStream& bitStream, ItemType type)
+{
+	STUB(0x005d3da0);
+}
 // FUNCTION: PLAYER 0x005d3e20
 // FUNCTION: STUDIO 0x0066d1a0
 bool ItemQueue::preValidate(int i)

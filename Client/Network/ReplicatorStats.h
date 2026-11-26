@@ -8,6 +8,7 @@
 // 0x00589100 / STUDIO 0x0062d510. Not written; the members are unproven.
 
 #include "ConcurrentRakPeer.h"
+#include "rbx/RunningAverage.h"
 #include "decomp.h"
 
 namespace RBX {
@@ -20,11 +21,27 @@ struct ReplicatorStats
 	~ReplicatorStats();
 
 #ifdef OGRE_TARGET_STUDIO
-	undefined m_unk0x000[0x6d8];                // 0x000
+	undefined m_unk0x000[0x300];                // 0x000
+	// ItemSender::closePacket STUDIO 0x006720a0 samples both (2016 names and types).
+	RunningAverageTimeInterval<> dataPacketsSent;  // 0x300
+	undefined m_unk0x340[0x370 - 0x340];        // 0x340
+	RunningAverage<int> dataPacketsSentSize;    // 0x370
+	undefined m_unk0x3a0[0x440 - 0x3a0];        // 0x3a0
+	int numberOfUnsplitMessages;                // 0x440 Replicator::OnInternalPacket STUDIO 0x00623b00 (2016 names)
+	int numberOfSplitMessages;                  // 0x444
+	undefined m_unk0x448[0x6d8 - 0x448];        // 0x448
 	ConcurrentRakPeerStats rakStats;            // 0x6d8 Replicator::onStatisticsChanged STUDIO 0x00622520
 	undefined m_unk0x7c8[0x7e8 - 0x7c8];        // 0x7c8
 #else
-	undefined m_unk0x000[0xe58];                // 0x000
+	undefined m_unk0x000[0x800];                // 0x000
+	// ItemSender::closePacket 0x005da460 samples both (2016 names and types).
+	RunningAverageTimeInterval<> dataPacketsSent;  // 0x800
+	undefined m_unk0x840[0x870 - 0x840];        // 0x840
+	RunningAverage<int> dataPacketsSentSize;    // 0x870
+	undefined m_unk0x8a0[0x940 - 0x8a0];        // 0x8a0
+	int numberOfUnsplitMessages;                // 0x940 Replicator::OnInternalPacket 0x00581b50 (2016 names)
+	int numberOfSplitMessages;                  // 0x944
+	undefined m_unk0x948[0xe58 - 0x948];        // 0x948
 	ConcurrentRakPeerStats rakStats;            // 0xe58 Replicator::onStatisticsChanged 0x005804f0
 	undefined m_unk0xf48[0xf68 - 0xf48];        // 0xf48
 #endif

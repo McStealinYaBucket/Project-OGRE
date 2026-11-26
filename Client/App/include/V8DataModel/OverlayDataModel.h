@@ -25,6 +25,13 @@ namespace RBX {
 		// never instantiates).
 		OverlayDataModel(Verb* lockVerb, DataModel* parentDM)
 			: DescribedNonCreatable<OverlayDataModel, DataModel, sOverlayDataModel>(lockVerb, parentDM) {}
+
+		// iOS name and arguments (PLAYER 0x00693310, called by Game::Game).
+		static shared_ptr<OverlayDataModel> createOverlayDataModel(bool flag, Verb* lockVerb);
+
+		// Unnamed (inline in 2013; its copy sits in Game.obj): stores the game DataModel (a weak_ptr
+		// argument, released at the end) at +0xe58. Game::Game calls it right after createDataModel.
+		void FUN_00652f00(weak_ptr<DataModel> dataModel);
 	};
 
 } // namespace RBX

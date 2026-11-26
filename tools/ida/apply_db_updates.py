@@ -82,6 +82,10 @@ for r in ROWS:
         STAT["comment only (%s)" % r["tag"]] += 1
         continue
     if act == "unname":
+        if fact and r["tag"] != "lib:" and f.flags & ida_funcs.FUNC_LIB:   # a FLIRT false positive
+            f.flags &= ~ida_funcs.FUNC_LIB
+            ida_funcs.update_func(f)
+            STAT["FUNC_LIB cleared"] += 1
         if ida_name.set_name(ea, "", ida_name.SN_NOWARN):
             STAT["unnamed"] += 1
             LOG.append((ea, "unname", ida_name.get_name(ea), cur))

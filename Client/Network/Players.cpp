@@ -1,10 +1,10 @@
 /* Network/Players.cpp -- October 2013, partial. Asserts sit on their 2013 lines (182, 189). */
-// (FriendService.h is not included: it would supply FriendService's Creator under include\Util/Object.h.)
 
 #include "stdafx.h"
 #include "Network/Players.h"
 #include "Network/Client.h"
 #include "Network/Server.h"
+#include "V8DataModel/FriendService.h"
 #include <sstream>
 DECOMP_SIZE_ASSERT(RBX::Network::Players, 0x1f8);
 namespace RBX {
@@ -218,18 +218,25 @@ namespace Network {
 		return NULL;
 	}
 
-	// Read off: if (Player* player = fastDynamicCast<Player>(child)) { if (FriendService* fs =
-	// ServiceProvider::find<FriendService>(this)) fs->playerRemoving(player->userId) (userId read inline);
-	// { shared_ptr<Instances>& c = m_unk0x194.write(); c->erase(std::find(c->begin(), c->end(),
-	// shared_from(child))); } if (backendProcessing(this, false)) { playerRemovingSignal(shared_from(player));
-	// playerRemovingLateSignal(shared_from(player)); } }. No FirePlayerAddedAndPlayerRemovingOnClient flag
-	// and no Http::playerCount (2016). Probed: same calls and stores, but eax/ecx/edx rotate from the
-	// write() result on (0x0056bd9e), and including FriendService.h here costs its Creator (see the top).
+	// No FirePlayerAddedAndPlayerRemovingOnClient flag and no Http::playerCount (2016).
 	// STUB: PLAYER 0x0056bd20
 	// STUB: STUDIO 0x005d11d0
 	void Players::onChildRemoving(Instance* child)
 	{
-		STUB(0x0056bd20);
+		if (Player* player = Instance::fastDynamicCast<Player>(child))
+		{
+			if (FriendService* friendService = ServiceProvider::find<FriendService>(this))
+				friendService->playerRemoving(player->userId);
+			{
+				shared_ptr<Instances>& c = players.write();
+				c->erase(std::find(c->begin(), c->end(), shared_from(child)));
+			}
+			if (Players::backendProcessing(this, false))
+			{
+				playerRemovingSignal(shared_from(player));
+				playerRemovingLateSignal(shared_from(player));
+			}
+		}
 	}
 
 	// FUNCTION: PLAYER 0x0056efb0
@@ -264,7 +271,7 @@ namespace Network {
 		: m_unk0x108("")
 		, m_unk0x178(false)
 		, m_unk0x179(true)
-		, m_unk0x194(Instances())
+		, players(Instances())
 		, rakPeer(NULL)
 		, m_unk0x1b0(12)
 		, m_unk0x1b4(0)
@@ -282,6 +289,33 @@ namespace Network {
 		return Instance::fastDynamicCast<Player>(instance) != NULL;
 	}
 
+	// getPlayerByID, friendStatusChanged and friendEventFired sit below the 2013 asserts (182/189) like
+	// onChildChanged: there is no room above them.
+	// FUNCTION: PLAYER 0x0055dc60
+	// FUNCTION: STUDIO 0x005bdce0
+	shared_ptr<Player> Players::getPlayerByID(int userId)
+	{
+		Instances::const_iterator iter = players->begin();
+		Instances::const_iterator end = players->end();
+		for (; iter != end; ++iter)
+		{
+			shared_ptr<Player> player = shared_polymorphic_downcast<Player>(*iter);
+			if (player->userId == userId)
+				return player;
+		}
+		return shared_ptr<Player>();
+	}
+
+	// FUNCTION: PLAYER 0x0055f070
+	// FUNCTION: STUDIO 0x005bf850
+	void Players::friendStatusChanged(int userId, int otherUserId, FriendService::FriendStatus friendStatus)
+	{
+		shared_ptr<Player> playerA = getPlayerByID(userId);
+		shared_ptr<Player> playerB = getPlayerByID(otherUserId);
+		if (playerA && playerB)
+			playerA->onFriendStatusChanged(playerB, friendStatus);
+	}
+
 	// Fires m_unk0x1d4 when the local player's SuperSafeChatReplicate changes. Below the 2013 asserts on
 	// purpose.
 	// FUNCTION: PLAYER 0x005661f0
@@ -292,6 +326,16 @@ namespace Network {
 		{
 			m_unk0x1d4(localPlayer ? Player::prop_SuperSafeChat.getValue(localPlayer.get()) : false);
 		}
+	}
+
+	// FUNCTION: PLAYER 0x00566790
+	// FUNCTION: STUDIO 0x005c9fb0
+	void Players::friendEventFired(int userId, int otherUserId, FriendService::FriendEventType friendEvent)
+	{
+		shared_ptr<Player> playerA = getPlayerByID(userId);
+		shared_ptr<Player> playerB = getPlayerByID(otherUserId);
+		if (playerA && playerB)
+			friendRequestEventSignal(playerA, playerB, friendEvent);
 	}
 
 } // namespace Network

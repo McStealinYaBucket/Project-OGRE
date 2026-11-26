@@ -1,5 +1,8 @@
 /* WindowsClient/main.cpp -- October 2013 client shell (PLAYER only). No 2013 __FILE__ string names this
-   file; the path is the 2016 tree's. Written so far: the window procedure, from the 2013 bytes.
+   file; the path is the 2016 tree's. Written so far: the window procedure, RegisterWindowClass and
+   WinMain, from the 2013 bytes. WinMain's catch needs Application::Initialize to be able to throw
+   (its stub does): without it LTCG drops the catch, aligns WinMain's frame (and esp,-8) and passes
+   AboutToShutdown nothing (it loads appPtr itself), which costs RegisterWindowClass its 100.
 
    Against 2016, 2013's WndProc:
      - forwards only WM_KEYDOWN, WM_MOUSEMOVE, WM_MOUSELEAVE, WM_MOUSEWHEEL, WM_SETFOCUS,
@@ -14,7 +17,10 @@
 
 #include "Application.h"
 
+#include <atlbase.h>
+
 LOGGROUP(HangDetection)
+LOGGROUP(RobloxWndInit)
 
 // Menu commands (2016 resource.h names; 40003 has no 2016 counterpart).
 #define ID_UPLOADSESSIONLOGS 33042
@@ -82,6 +88,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 #define MAX_LOADSTRING 100
+#define IDS_APP_TITLE 101
 #define IDC_WINDOWSCLIENT 102
 #define IDI_WINDOW_ICON 104
 
@@ -108,4 +115,65 @@ ATOM RegisterWindowClass(HINSTANCE hInstance)
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_WINDOW_ICON));
 
 	return RegisterClassEx(&wcex);
+}
+
+// Against 2016: no SSE2 test, no client settings fetch before the window, CreateWindow at
+// (CW_USEDEFAULT, 0) sized 800x600, Initialize takes only the window, and no VirtualProtect before
+// Shutdown. The catch is `const RBX::initialization_error&` (FuncInfo 0x00ce3e8c).
+// STUB: PLAYER 0x00442900
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+{
+	RBX::Application app;
+	appPtr = &app;
+	CComModule comModule; // Needed for ActiveX hosting of IWebBrowser2
+
+	if (!app.LoadAppSettings(hInstance))
+		return FALSE;
+	if (!app.ParseArguments(lpCmdLine))
+		return FALSE;
+
+	TCHAR szTitle[MAX_LOADSTRING];
+
+	// initialize global strings
+	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+	LoadString(hInstance, IDC_WINDOWSCLIENT, szWindowClass, MAX_LOADSTRING);
+
+	RegisterWindowClass(hInstance);
+
+	HWND hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, 800, 600, NULL,
+		NULL, hInstance, NULL);
+	if (!hWnd)
+		return FALSE;
+
+	try
+	{
+		if (!app.Initialize(hWnd))
+			return FALSE;
+	}
+	catch (const RBX::initialization_error& e)
+	{
+		const char* const errorMessage = e.what();
+		FASTLOGS(FLog::RobloxWndInit, "Error during initialization. User message = %s", errorMessage);
+		MessageBoxA(hWnd, errorMessage, "ROBLOX", MB_OK);
+		app.AboutToShutdown();
+		app.Shutdown();
+		return FALSE;
+	}
+
+	// keep-alive timer, see WM_TIMER
+	SetTimer(hWnd, NULL, 10 * 1000, NULL);
+
+	ShowWindow(hWnd, SW_HIDE);
+	UpdateWindow(hWnd);
+
+	MSG msg;
+	while (GetMessage(&msg, NULL, 0, 0))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	app.Shutdown();
+
+	return (int)msg.wParam;
 }

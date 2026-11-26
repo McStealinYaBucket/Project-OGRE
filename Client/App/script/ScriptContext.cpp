@@ -79,14 +79,14 @@ LOGVARIABLE(FullScriptCode, 255)
 // the span).
 LOGVARIABLE(LuaScriptTimeoutSeconds, 255)
 LOGVARIABLE(Network, 6)	// PLAYER byte 0x00d30f1b = 6 (datacmp); initializer 0x00a66090, after LuaScriptTimeoutSeconds's, before HttpQueue's
-// 0xFA9AFC/0xFA9B04 bytes = 0xFF in the 2013 PE (batch723/724; Initer
-// slots 0xFA9B00/0xFA9B08, registration InitFunc_480): attach/detach
-// script logging; declared byte-faithful for the provider-connection era.
+namespace FLog {	// NetworkCache: initializer 0x00a660f0, after Network's, HttpQueue's and Player's
+	// GLOBAL: PLAYER 0x00d30f1d
+	// GLOBAL: STUDIO 0x00ec1809
+	Channel NetworkCache = 1;
+	int NetworkCacheIniter = RegisterLogGroup("NetworkCache", &NetworkCache, NULL, FASTVARTYPE_STATIC); }
+// 0xFA9AFC/0xFA9B04 = 0xFF (batch723/724, InitFunc_480): attach/detach script logging.
 LOGVARIABLE(ScriptContextAdd, 255)
-// 0xF88531 byte = 1 in the 2013 PE (batch723/724; Initer slot 0xFA9B14,
-// registration InitFunc_480 0x670AFD): closeStates logging is ON at rest
-// (closeStates 0x18E9BC gates its ScriptCount/WaitingThreads/heap logs on
-// this).
+// 0xF88531 = 1 (batch723/724): closeStates logging is ON at rest (closeStates 0x18E9BC gates its logs on it).
 LOGVARIABLE(ScriptContextClose, 1)
 LOGVARIABLE(ScriptContextRemove, 255)
 
@@ -715,48 +715,48 @@ lua_State* ScriptContext::openState()
 	Lua::ObjectBridge::registerInstanceClassLibrary(L);
 	// Main-thread Node (binary slot 0x18BB63, batch477: sits between the InputObject library above and the game/app/Workspace globals + shared table below; the game/app/Workspace globals queue behind the DataModel era). closeState 0x18EE84 erases refs through every thread's node, so an openState'd state without one AVs on close (section 271 postmortem: intrusive_ptr px != 0 in eraseRefsFromAllNodes). Return discarded: the L-20 slot holds the ref, matching Node::create's contract.
 	Lua::WeakThreadRef::Node::create(L);
-	// game/Game/workspace/Workspace globals (0x18BB89-0x18BD7A, batches 632/668/669/671: +0x34 root-climb (getRootAncestor) pushed twice as the game/Game alias; Workspace pair via find<Workspace> (binary Instance overload -- climbs to the root provider, same call here). OverlayDataModel roots take the App-only arm instead -- queued with the overlay era. DELTA: binary pushes shared_from() unconditionally (throws/AVs for unmanaged roots); ours pushes nil when unresolvable so harness stack states stay green -- identical for heap states.
+	// game/Game (or App) and workspace/Workspace globals.
+	// 2013 (PLAYER 0x00688888-0x00688a81): no try/catch; the root is re-read through the inline
+	// getRootAncestor() for each push, and an OverlayDataModel root gets only the App global.
+	if (Instance::fastDynamicCast<OverlayDataModel>(getRootAncestor()))
 	{
-		shared_ptr<Instance> rootSp;
-		try { rootSp = shared_from(Instance::getRootAncestor(this)); }
-		catch (const std::exception&) { }
-		if (rootSp != NULL && rootSp->isA<OverlayDataModel>())
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "App");
-		}
-		else if (rootSp != NULL)
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "game");
-			Lua::SharedPtrBridge<Instance>::push(L, rootSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
-		}
-		else
-		{
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "game");
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Game");
-		}
-		shared_ptr<Instance> wsSp;
-		try { wsSp = shared_from(ServiceProvider::find<Workspace>(static_cast<Instance*>(this))); }
-		catch (const std::exception&) { }
-		if (wsSp != NULL)
-		{
-			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
-			Lua::SharedPtrBridge<Instance>::push(L, wsSp);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
-		}
-		else
-		{
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
-			lua_pushnil(L);
-			lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
-		}
+		Lua::SharedPtrBridge<Instance>::push(L, shared_from(getRootAncestor()));
+		lua_setfield(L, LUA_GLOBALSINDEX, "App");
 	}
+	else
+	{
+		Lua::SharedPtrBridge<Instance>::push(L, shared_from(getRootAncestor()));
+		lua_setfield(L, LUA_GLOBALSINDEX, "game");
+		Lua::SharedPtrBridge<Instance>::push(L, shared_from(getRootAncestor()));
+		lua_setfield(L, LUA_GLOBALSINDEX, "Game");
+	}
+	Lua::SharedPtrBridge<Instance>::push(L, shared_from(ServiceProvider::find<Workspace>(this)));
+	lua_setfield(L, LUA_GLOBALSINDEX, "workspace");
+	Lua::SharedPtrBridge<Instance>::push(L, shared_from(ServiceProvider::find<Workspace>(this)));
+	lua_setfield(L, LUA_GLOBALSINDEX, "Workspace");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// Globals batch 1 (batch320 tail: shared table + print + gated crash__ + tick + time + ElapsedTime + printidentity; the rest queue behind yield/bridge/service eras).
 	lua_createtable(L, 0, 0);
 	lua_setfield(L, LUA_GLOBALSINDEX, "shared");

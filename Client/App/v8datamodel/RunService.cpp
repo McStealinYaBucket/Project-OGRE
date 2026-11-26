@@ -212,41 +212,9 @@ namespace RBX {
 		totalGameTimeAtLastHeartbeat = totalGameTime;
 	}
 
-	// 2013 has no cyclic-executive branch: the heartbeat is raised once per step.
-	// FUNCTION: PLAYER 0x0072dc30
-	// FUNCTION: STUDIO 0x0079b850
-	TaskScheduler::StepResult HeartbeatTask::stepDataModelJob(const Stats& stats)
-	{
-		shared_ptr<DataModel> d(dataModel.lock());
-		if (!d)
-			return TaskScheduler::Done;
-		shared_ptr<RunService> r(runService.lock());
-		if (!r)
-			return TaskScheduler::Done;
-
-		FASTLOG1(FLog::DataModelJobs, "Heartbeat start, data model: %p", d.get());
-		DataModel::scoped_write_request request(d.get());
-
-		r->raiseHeartbeat(stats.timespanSinceLastStep.seconds(), stepBudget);
-
-		FASTLOG1(FLog::DataModelJobs, "Heartbeat finish, data model: %p", d.get());
-		return TaskScheduler::Stepped;
-	}
-
-	// FUNCTION: PLAYER 0x0072efd0
-	// STUB: STUDIO 0x0079cc10
-	RunService::RunService()
-		: runState(RS_STOPPED)
-		, totalGameTime(0.0)
-		, totalGameTimeAtLastHeartbeat(0.0)
-		, skippedTimeAccumulated(0.0)
-		, totalWallTime(0.0)
-	{
-		setName("Run Service");
-	}
-
-	// mac: 0x236DCE: set runState + fire runTransitionSignal.
-	void RunService::setRunState(int state)
+	// STUB: PLAYER 0x0072db60
+	// STUB: STUDIO 0x0079b7e0
+	void RunService::setRunState(int state)	// mac: 0x236DCE: set runState + fire runTransitionSignal.
 	{
 		if (state != RS_STOPPED)
 		{
@@ -276,6 +244,38 @@ namespace RBX {
 			runState = (RunState)state;
 			runTransitionSignal(RunTransition(oldState, (RunState)state));
 		}
+	}
+
+	// 2013 has no cyclic-executive branch: the heartbeat is raised once per step.
+	// FUNCTION: PLAYER 0x0072dc30
+	// FUNCTION: STUDIO 0x0079b850
+	TaskScheduler::StepResult HeartbeatTask::stepDataModelJob(const Stats& stats)
+	{
+		shared_ptr<DataModel> d(dataModel.lock());
+		if (!d)
+			return TaskScheduler::Done;
+		shared_ptr<RunService> r(runService.lock());
+		if (!r)
+			return TaskScheduler::Done;
+
+		FASTLOG1(FLog::DataModelJobs, "Heartbeat start, data model: %p", d.get());
+		DataModel::scoped_write_request request(d.get());
+
+		r->raiseHeartbeat(stats.timespanSinceLastStep.seconds(), stepBudget);
+
+		FASTLOG1(FLog::DataModelJobs, "Heartbeat finish, data model: %p", d.get());
+		return TaskScheduler::Stepped;
+	}
+	// FUNCTION: PLAYER 0x0072efd0
+	// STUB: STUDIO 0x0079cc10
+	RunService::RunService()
+		: runState(RS_STOPPED)
+		, totalGameTime(0.0)
+		, totalGameTimeAtLastHeartbeat(0.0)
+		, skippedTimeAccumulated(0.0)
+		, totalWallTime(0.0)
+	{
+		setName("Run Service");
 	}
 
 } // namespace RBX

@@ -1817,7 +1817,7 @@
     "void *luaClone",
     "void *setName",
     "void *getPersistentDataCost",
-    "void *canClientCreate",
+    "void *isReadOnly",
     "void *AASamples____0_",
     "void *createChild",
     "void *writeXml",
@@ -6053,7 +6053,7 @@
    ],
    "members": [
     {
-     "name": "m_unk0x64",
+     "name": "printSplitMessages",
      "offset": 100,
      "size": 1,
      "kind": "scalar",
@@ -6253,7 +6253,7 @@
      "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0xd8",
+     "name": "dataSendPriority",
      "offset": 216,
      "size": 4,
      "kind": "scalar",
@@ -7758,7 +7758,7 @@
      "offset": 400,
      "size": 4,
      "kind": "class",
-     "type": "rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,int)>",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::FriendService::FriendStatus)>",
      "scalar": null
     },
     {
@@ -8530,7 +8530,7 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x194",
+     "name": "players",
      "offset": 404,
      "size": 8,
      "kind": "class",
@@ -8598,7 +8598,7 @@
      "offset": 448,
      "size": 4,
      "kind": "class",
-     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,int)>",
+     "type": "rbx::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,boost::shared_ptr<RBX::Instance>,RBX::FriendService::FriendEventType)>",
      "scalar": null
     },
     {
@@ -9841,6 +9841,354 @@
    ],
    "base": false,
    "unique": "VClusterPacketCache@Network@RBX@@"
+  },
+  "RBX::Network::ConcurrentRakPeer": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "peer",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RakNet::RakPeerInterface>",
+     "scalar": null
+    },
+    {
+     "name": "packetJob",
+     "offset": 8,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Network::ConcurrentRakPeer::PacketJob>",
+     "scalar": null
+    },
+    {
+     "name": "statsUpdateJob",
+     "offset": 16,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Network::ConcurrentRakPeer::StatsUpdateJob>",
+     "scalar": null
+    },
+    {
+     "name": "dataModel",
+     "offset": 24,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VConcurrentRakPeer@Network@RBX@@"
+  },
+  "RBX::Network::ConcurrentRakPeer::PacketJob": {
+   "size": 584,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "sendQueue",
+     "offset": 536,
+     "size": 36,
+     "kind": "class",
+     "type": "rbx::timestamped_safe_queue<RBX::Network::ConcurrentRakPeer::PacketJob::SendData>",
+     "scalar": null
+    },
+    {
+     "name": "isQueueErrorComputed",
+     "offset": 572,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "peer",
+     "offset": 576,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RakNet::RakPeerInterface>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPacketJob@ConcurrentRakPeer@Network@RBX@@"
+  },
+  "RBX::Network::Replicator::ReplicationData": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "instance",
+     "offset": 0,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "connection",
+     "offset": 8,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::connection",
+     "scalar": null
+    },
+    {
+     "name": "deleteOnDisconnect",
+     "offset": 12,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "replicateChildren",
+     "offset": 13,
+     "size": 1,
+     "kind": "bitfield",
+     "type": null,
+     "scalar": "T_BOOL08",
+     "bits": [
+      "replicateChildren:1@0",
+      "listenToChanges:1@1"
+     ]
+    }
+   ],
+   "base": false,
+   "unique": "UReplicationData@Replicator@Network@RBX@@"
+  },
+  "RBX::Network::Replicator::ClusterReplicationData": {
+   "size": 52,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "data",
+     "offset": 0,
+     "size": 16,
+     "kind": "structure",
+     "type": "RBX::Network::Replicator::ReplicationData",
+     "scalar": null
+    },
+    {
+     "name": "updateBuffer",
+     "offset": 16,
+     "size": 24,
+     "kind": "class",
+     "type": "RBX::Network::ClusterUpdateBuffer",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x28",
+     "offset": 40,
+     "size": 8,
+     "kind": "structure",
+     "type": "RBX::Network::Replicator::ClusterReplicationData::Unk0x28",
+     "scalar": null
+    },
+    {
+     "name": "readyToSendChunks",
+     "offset": 48,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "UClusterReplicationData@Replicator@Network@RBX@@"
+  },
+  "RBX::Network::Replicator::ItemSender": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "replicator",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Network::Replicator",
+     "scalar": null
+    },
+    {
+     "name": "rakPeer",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Network::ConcurrentRakPeer",
+     "scalar": null
+    },
+    {
+     "name": "bitStream",
+     "offset": 8,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RakNet::BitStream>",
+     "scalar": null
+    },
+    {
+     "name": "packetPriority",
+     "offset": 16,
+     "size": 4,
+     "kind": "enum",
+     "type": "PacketPriority",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "maxStreamSize",
+     "offset": 20,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "sentItems",
+     "offset": 24,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VItemSender@Replicator@Network@RBX@@"
+  },
+  "RBX::Game": {
+   "size": 52,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 4,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 4,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::DataModel>",
+     "scalar": null
+    },
+    {
+     "name": "overlayDataModel",
+     "offset": 12,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::OverlayDataModel>",
+     "scalar": null
+    },
+    {
+     "name": "hasShutdown",
+     "offset": 20,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "verbs",
+     "offset": 24,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<RBX::Verb *,std::allocator<RBX::Verb *> >",
+     "scalar": null
+    },
+    {
+     "name": "commonVerbs",
+     "offset": 40,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::CommonVerbs>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x30",
+     "offset": 48,
+     "size": 4,
+     "kind": "structure",
+     "type": "RBX::Game::Unk0x30",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGame@RBX@@"
+  },
+  "RBX::Network::InstancePacketCache": {
+   "size": 152,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Network::InstancePacketCache, RBX::Instance, char const *const RBX::Network::sInstancePacketCache, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "streamCache",
+     "offset": 100,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RBX::Instance const *,boost::shared_ptr<RBX::Network::InstancePacketCache::CachedBitStream>,boost::hash<RBX::Instance const *>,std::equal_to<RBX::Instance const *>,std::allocator<std::pair<RBX::Instance const * const,boost::shared_ptr<RBX::Network::InstancePacketCache::CachedBitStream> > > >",
+     "scalar": null
+    },
+    {
+     "name": "sharedMutex",
+     "offset": 124,
+     "size": 16,
+     "kind": "class",
+     "type": "boost::shared_mutex",
+     "scalar": null
+    },
+    {
+     "name": "connections",
+     "offset": 140,
+     "size": 12,
+     "kind": "class",
+     "type": "std::list<rbx::signals::connection,std::allocator<rbx::signals::connection> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VInstancePacketCache@Network@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -12157,6 +12505,22 @@
    "base": true,
    "unique": "V?$DescribedNonCreatable@VClusterPacketCache@Network@RBX@@VInstance@3@$E?sClusterPacketCache@23@3QBDB$0BL@$0A@@RBX@@"
   },
+  "RBX::DescribedNonCreatable<RBX::Network::InstancePacketCache, RBX::Instance, char const *const RBX::Network::sInstancePacketCache, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::InstancePacketCache, char const *const RBX::Network::sInstancePacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VInstancePacketCache@Network@RBX@@VInstance@3@$E?sInstancePacketCache@23@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -13122,6 +13486,22 @@
    "base": true,
    "unique": "V?$Described@VClusterPacketCache@Network@RBX@@$E?sClusterPacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sClusterPacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::Network::InstancePacketCache, char const *const RBX::Network::sInstancePacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VInstancePacketCache@Network@RBX@@$E?sInstancePacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sInstancePacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -14036,6 +14416,22 @@
    "members": [],
    "base": true,
    "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sClusterPacketCache@Network@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sInstancePacketCache>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sInstancePacketCache@Network@2@3QBDB@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,

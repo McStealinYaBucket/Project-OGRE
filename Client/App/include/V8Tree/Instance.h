@@ -181,11 +181,11 @@ private:
 	// GuiObject::askSetParent 0x3AC1EA negates the parent's askForbidChild
 	// through the vtable (cross-object protected call, like the binary).
 	friend class GuiObject;
-
-
-	// 2013: NO isParentLocked member, NO lockParent()/unlockParent() (no
-	// mangles anywhere in the 2013 PEs). Lock state is FW b21: setParentInternal
-	// mac: 0x542D16 gates on it, setAndLockParent 0x5450AC sets it via FWValue<bool>.
+public:	// 2013 has unlockParent (iOS _ZN3RBX8Instance12unlockParentEv); the lock is FW b21, no member (setAndLockParent sets it)
+	// FUNCTION: PLAYER 0x00585ac0
+	// FUNCTION: STUDIO 0x0060af20
+	void unlockParent() { fw()->b21.set(false, fwRef()); }	// a Network COMDAT (Server::stop binds it)
+private:
 
 	// 2013 name storage (Instance ctors 0x54433A/0x5446CA, getName 0x545E5E):
 	// the name lives ONLY in the flyweight (FWInstance +24, default

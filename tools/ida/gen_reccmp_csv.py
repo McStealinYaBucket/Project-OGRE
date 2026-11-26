@@ -75,8 +75,9 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
     stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
   - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor);
     MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0) or a stale one
-    (FriendService's base D0 0x006aaf50); MATCH_DROP skips a /GL shell original's match: name while our shell
-    lacks that copy (STUDIO bind<weak_ptr<DataModel>> 0x0042b260). Drop an entry once names.csv agrees.
+    (_internal_accept_owner 0x005bd080); MATCH_DROP skips a /GL shell original's match: name while our shell
+    lacks that copy (STUDIO bind<weak_ptr<DataModel>> 0x0042b260). A MATCH_FIX entry with no names.csv row
+    adds one (PLAYER _internal_accept_owner 0x005baa50). Drop an entry once names.csv agrees.
   - A library row whose instantiation left our link falls back to the symbol the current <t>-<lib>.csv row
     carries (the body our link kept last time); if nothing resolves, position votes may name its address.
   - A position row never takes a library row's symbol to another original (twins: the library row wins).
@@ -144,25 +145,22 @@ _GUIMAIN_E28 = ("??_EGuiMain@RBX@@WBM@AEPAXI@Z",
                 "[thunk]:public: virtual void * __thiscall RBX::GuiMain::`vector deleting destructor'`adjustor{28}' "
                 "(unsigned int)")
 MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIMAIN_E28}
-# PLAYER 0x006aaf50 (STUDIO 0x00809d30) stores only FactoryProduct<FriendService>'s vftables (0x00b394c4/bc/b0/a0)
-# and calls ~Instance: it is the base-class deleting destructor, folded with DescribedCreatable<FriendService>'s
-# in both links. FriendService's own D0 is 0x006b2b30 (STUDIO 0x00811830), which calls the implicit dtor 0x006b2970
-# and carries a SYNTHETIC marker (app-16, wave 16). The match: name came from an earlier link without that dtor.
-_FP_FRIEND_D0 = (
-    "??_G?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@RBX@@MAEPAXI@Z",
-    "protected: virtual void * __thiscall RBX::FactoryProduct<class RBX::FriendService,class RBX::Instance,"
-    "char const * const RBX::sFriendService,class RBX::Instance>::`scalar deleting destructor'(unsigned int)")
-MATCH_FIX[("PLAYER", 0x006aaf50)] = _FP_FRIEND_D0
-MATCH_FIX[("STUDIO", 0x00809d30)] = _FP_FRIEND_D0
-# Its {24} adjustor thunk just before it (PLAYER 0x006aaf40, STUDIO 0x00809d20) is the base's too (FriendService's
-# own thunks are 0x006b2950/0x006b2960); misnamed, it pairs with FriendService's thunk and costs vftable 0x00b394b0.
-_FP_FRIEND_E24 = (
-    "??_E?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@RBX@@OBI@AEPAXI@Z",
-    "[thunk]:protected: virtual void * __thiscall RBX::FactoryProduct<class RBX::FriendService,class RBX::Instance,"
-    "char const * const RBX::sFriendService,class RBX::Instance>::`vector deleting destructor'`adjustor{24}' "
-    "(unsigned int)")
-MATCH_FIX[("PLAYER", 0x006aaf40)] = _FP_FRIEND_E24
-MATCH_FIX[("STUDIO", 0x00809d20)] = _FP_FRIEND_E24
+# PLAYER has four _internal_accept_owner bodies, told apart by their weak_ptr operator= and unwind ~shared_ptr
+# (native or /GL shell copy; shell-5k-8, wave 17): 0x005bd080 is shell/shell (the TaskScheduler::Job types),
+# 0x005baa50 native/native (Registry, Thread, FWBase, YieldFunctionStateObject). names.csv gives 0x005bd080 the
+# YieldFunctionStateObject name and has no row for 0x005baa50; an entry with no names.csv row adds one.
+MATCH_FIX[("PLAYER", 0x005bd080)] = (
+    "??$_internal_accept_owner@VNetworkOwnerJob@Network@RBX@@V123@@?$enable_shared_from_this@VJob@TaskScheduler@RBX@@"
+    "@boost@@QBEXPBV?$shared_ptr@VNetworkOwnerJob@Network@RBX@@@1@PAVNetworkOwnerJob@Network@RBX@@@Z",
+    "public: void __thiscall boost::enable_shared_from_this<class RBX::TaskScheduler::Job>::_internal_accept_owner"
+    "<class RBX::Network::NetworkOwnerJob,class RBX::Network::NetworkOwnerJob>(class boost::shared_ptr<class "
+    "RBX::Network::NetworkOwnerJob> const *,class RBX::Network::NetworkOwnerJob *)const ")
+MATCH_FIX[("PLAYER", 0x005baa50)] = (
+    "??$_internal_accept_owner@VYieldFunctionStateObject@@V1@@?$enable_shared_from_this@VYieldFunctionStateObject@@@"
+    "boost@@QBEXPBV?$shared_ptr@VYieldFunctionStateObject@@@1@PAVYieldFunctionStateObject@@@Z",
+    "public: void __thiscall boost::enable_shared_from_this<class YieldFunctionStateObject>::_internal_accept_owner"
+    "<class YieldFunctionStateObject,class YieldFunctionStateObject>(class boost::shared_ptr<class "
+    "YieldFunctionStateObject> const *,class YieldFunctionStateObject *)const")
 # MATCH_DROP: match: names of /GL shell originals whose shell copy our link does not have yet. The name is true,
 # but our only body under it is the engine fold, so the shell original takes it (at ~70%) from the engine original
 # it really is. STUDIO 0x0042b260/0x0042e370 are the shell's bind/list1<weak_ptr<DataModel>> (IDA sync, wave 15);
@@ -1089,7 +1087,11 @@ def gen(target, build=BUILD, json_path=None):
     names = {"symbols": [], "crt": [], "stl": [], "atl": []}
     oracle, labels, decorated, rtti_vt = {}, set(), {}, {}
     with open(os.path.join(exports, f"{target}-names.csv")) as f:
-        for r in csv.DictReader(f):
+        rows = list(csv.DictReader(f))
+        have = {int(r["address"], 16) for r in rows}
+        rows += [{"address": f"0x{a:08x}", "name": n, "demangled": d, "kind": "func", "size": "0", "source": "match:"}
+                 for (t, a), (n, d) in sorted(MATCH_FIX.items()) if t == target and a not in have]
+        for r in rows:
             a = int(r["address"], 16)
             if (target, a) in MATCH_FIX and r["source"] == "match:":
                 r = dict(r, name=MATCH_FIX[target, a][0], demangled=MATCH_FIX[target, a][1])

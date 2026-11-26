@@ -197,10 +197,23 @@ CLASSES = [
     # Replicator::ReplicationData / PacketReceiveJob (no size annotation), Game (ctor 0x00655e70 unpaired),
     # Selection (ctor/dtor STUB), ScreenshotVerb (ctor 0.759)
     "RBX::FriendService", "RBX::Network::PhysicsPacketCache", "RBX::Network::ClusterPacketCache",
+    # wave17 sync (sweep24, build/sweep24/P-final.json / S-final.json 100%; size = the tree's // SIZE /
+    # DECOMP_SIZE_ASSERT = the PDB's), PLAYER / STUDIO: Network::ConcurrentRakPeer (0x1c) ctor 0x005c6770 /
+    # 0x006219d0, dtor 0x005c4330 / 0x0061f1f0; ConcurrentRakPeer::PacketJob (0x248) dtor 0x005c5cc0 / 0x00620f20;
+    # Replicator::ReplicationData (0x10) dtor 0x005837d0 / 0x00625ad0; Replicator::ClusterReplicationData (0x34)
+    # ctor 0x005a0090 / 0x006438a0; Replicator::ItemSender (0x1c) ctor 0x005da3f0 / 0x00672030, dtor 0x005da520 /
+    # 0x00672160 (network-5f-8). PLAYER only: Game (0x34) ctor 0x00655e70 (STUDIO 0x007cddd0 at 0.9965, app-17);
+    # Network::InstancePacketCache (0x98) ctor 0x005d7cb0 (STUDIO 0x00669180 at 0.985). STUDIO's DataModel ctor
+    # 0x0076b720 / dtor 0x0076a340 are 100% now, so fix_2013's STUDIO DataModel/GuiBuilder cases no longer fire.
+    # Not yet: ControllerService (0x68; ctor STUB), ReplicatorStats (ctor/dtor STUB), Selection (ctor/dtor STUB),
+    # PacketReceiveJob (no size annotation), ScreenshotVerb (ctor 0.759), Application (0x140; ctor STUB)
+    "RBX::Network::ConcurrentRakPeer", "RBX::Network::ConcurrentRakPeer::PacketJob",
+    "RBX::Network::Replicator::ReplicationData", "RBX::Network::Replicator::ClusterReplicationData",
+    "RBX::Network::Replicator::ItemSender", "RBX::Game", "RBX::Network::InstancePacketCache",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
-               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb"}
+               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb", "RBX::Game", "RBX::Network::InstancePacketCache"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.
@@ -265,6 +278,10 @@ def fix_2013(res, target):
         # ctor 0x0076b720 stores parentDataModel at 0xe08 right after guiBuilder (0xdec)
         gb["members"] = [m for m in gb["members"] if m["offset"] < 0x1c]
         gb["size"] = 0x1c
+        if dm and dm["size"] == 0xe10:
+            # wave17: our STUDIO DataModel is 2013's (ctor/dtor 100%), but its guiBuilder member was read from
+            # the same 0x20 record (the tree's // SIZE is PLAYER's)
+            mem("RBX::DataModel", "guiBuilder")["size"] = 0x1c
         done.append("GuiBuilder 0x20 -> 0x1c (STUDIO: no networkStatsPage)")
     if (dm and target == "STUDIO" and dm["size"] == 0xe10
             and any(m["name"] == "networkStatsWindowsOn" for m in dm["members"])):

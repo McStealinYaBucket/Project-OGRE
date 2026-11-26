@@ -19,6 +19,20 @@ namespace RBX {
 RBX_REGISTER_CLASS(RBX::UserInputService);
 }
 
+#include "decomp.h"
+
+namespace RBX {
+
+	// Not written yet (the member at +0x80 is not declared). STUB body so callers pair.
+	// STUB: PLAYER 0x0069ff10
+	// STUB: STUDIO 0x0083c6d0
+	void UserInputService::setProcessToolCommandsSeparately(bool value)
+	{
+		STUB(0x0069ff10);
+	}
+
+} // namespace RBX
+
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit
 // at the end of the file so no 2013 assert line above them moves.
 #include "reflection/enumconverter.h"

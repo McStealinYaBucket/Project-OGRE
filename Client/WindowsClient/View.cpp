@@ -79,6 +79,41 @@ namespace {
 
 namespace RBX {
 
+// The window placement AboutToShutdown and ShowWindow use (the literal is pushed at each use).
+static const char* const windowPlacementKey =
+	"HKEY_CURRENT_USER\\Software\\ROBLOX Corporation\\Roblox\\Settings\\RobloxPlayerV4WindowSizeAndPosition";
+
+// 2016's rememberWindowSettings, inlined: no taskbar clamp, and without
+// FFlag::UseWindowPlacementToRememberNonFullscreenedState only GetWindowPlacement's placement is saved.
+// Application::AboutToShutdown tail-calls it (`this` in ecx).
+// FUNCTION: PLAYER 0x00465d60
+void View::AboutToShutdown()
+{
+	// try to save window size and position
+	if (HWND hWnd = GetHWnd())
+	{
+		WINDOWPLACEMENT placement;
+		placement.length = sizeof(WINDOWPLACEMENT);
+
+		if (FFlag::UseWindowPlacementToRememberNonFullscreenedState)
+		{
+			bool foundPlacement = false;
+			if (!fullscreen)
+				foundPlacement = GetWindowPlacement(hWnd, &placement) != 0;
+			else
+			{
+				foundPlacement = true;
+				placement = nonFullscreenPlacement;
+			}
+
+			if (foundPlacement)
+				RegistryUtil::writeBinaryData(windowPlacementKey, (const BYTE*)&placement, sizeof(WINDOWPLACEMENT));
+		}
+		else if (GetWindowPlacement(hWnd, &placement))
+			RegistryUtil::writeBinaryData(windowPlacementKey, (const BYTE*)&placement, sizeof(WINDOWPLACEMENT));
+	}
+}
+
 // 2016 adds only the render job. LTCG: `this` in eax (callers 0x0041d16d, 0x00466e37).
 // FUNCTION: PLAYER 0x00466460
 void View::resetScheduler()
@@ -682,41 +717,6 @@ std::vector<G3D::Vector2int16> View::getFullscreenSizes()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// The window placement saveWindowSettings stores (not written; the literal is pushed at each use).
-static const char* const windowPlacementKey =
-	"HKEY_CURRENT_USER\\Software\\ROBLOX Corporation\\Roblox\\Settings\\RobloxPlayerV4WindowSizeAndPosition";
 
 // 2013 against 2016: the placement comes from the registry (a WINDOWPLACEMENT blob), not from
 // GameBasicSettings; SetFocus is called directly; the TOPMOST toggle is behind

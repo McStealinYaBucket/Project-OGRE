@@ -139,6 +139,14 @@ extern "C" void ogre_stub_009c5e10()
 }
 #pragma comment(linker, "/alternatename:?getResolutionPreset@CRenderSettings@RBX@@QAEABURESOLUTIONENTRY@12@W4ResolutionPreset@12@@Z=_ogre_stub_009c5e10")
 
+// public: void __thiscall RBX::FrameRateManager::ResumeAutoAdjustment(void)
+// STUB: PLAYER 0x009c7ac0
+extern "C" void ogre_stub_009c7ac0()
+{
+	STUB(0x009c7ac0);
+}
+#pragma comment(linker, "/alternatename:?ResumeAutoAdjustment@FrameRateManager@RBX@@QAEXXZ=_ogre_stub_009c7ac0")
+
 // public: __thiscall G3D::Log::Log(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, int)
 // STUB: PLAYER 0x009d5b70
 extern "C" void ogre_stub_009d5b70()

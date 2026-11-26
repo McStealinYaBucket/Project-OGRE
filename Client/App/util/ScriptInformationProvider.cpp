@@ -18,3 +18,17 @@ REFLECTION_END();
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::ScriptInformationProvider);
 }
+
+#include "decomp.h"
+
+namespace RBX {
+
+	// Not written yet (assigns the string member at +0xac). STUB body so callers pair.
+	// STUB: PLAYER 0x00652d70
+	// STUB: STUDIO 0x007cb930
+	void ScriptInformationProvider::setAssetUrl(std::string url)
+	{
+		STUB(0x00652d70);
+	}
+
+} // namespace RBX

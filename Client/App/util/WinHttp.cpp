@@ -105,7 +105,7 @@ namespace RBX
 	}
 
 	// FUNCTION: PLAYER 0x00826990
-	// STUB: STUDIO 0x0091cd80
+	// FUNCTION: STUDIO 0x0091cd80
 	void Http::httpGetPostWinHttp(bool isPost, std::istream& data, bool compressData, const std::map<std::string, std::string>& additionalHeaders, bool externalRequest, std::string& response)
 	{
 		std::string theUrl = alternateUrl.empty() ? url : alternateUrl;

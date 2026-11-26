@@ -5,6 +5,9 @@
 
 #include "V8DataModel/FriendService.h"
 #include "Network/Players.h"
+#include "Util/Http.h"
+#include "RbxFormat.h"
+#include <sstream>
 
 namespace RBX {
 	const char* const sFriendService = "FriendService";
@@ -115,21 +118,48 @@ namespace RBX {
 		players.erase(userId);
 	}
 
-	// Not written yet: find<Network::Players>(this), then a Players call (PLAYER 0x00566790) that
-	// the Network headers do not declare yet. STUB body so the bind target pairs.
-	// STUB: PLAYER 0x006b14e0
-	// STUB: STUDIO 0x008101e0
+	// FUNCTION: PLAYER 0x006b14e0
+	// FUNCTION: STUDIO 0x008101e0
 	void FriendService::friendEventReplicationChanged(int playerId, int otherPlayerId, FriendEventType eventType)
 	{
-		STUB(0x006b14e0);
+		if (Network::Players* players = ServiceProvider::find<Network::Players>(this))
+			players->friendEventFired(playerId, otherPlayerId, eventType);
 	}
 
-	// Not written yet: backendProcessing gate, a store (0x006b1500), then Players calls (0x0055f070).
-	// STUB: PLAYER 0x006b2440
-	// STUB: STUDIO 0x00811140
+	// Not written yet (stores friendStatusTable[small][big] and replicates). STUB body so callers pair;
+	// __declspec(noinline) is a stand-in until the real body lands (VC9 inlines a same-TU STUB).
+	// STUB: PLAYER 0x006b1500
+	// STUB: STUDIO 0x00810200
+	__declspec(noinline) void FriendService::storeAndReplicateFriendStatus(int playerId, int otherPlayerId, FriendStatus status)
+	{
+		STUB(0x006b1500);
+	}
+
+	static FriendService::FriendStatus InvertFriendStatus(FriendService::FriendStatus status)
+	{
+		switch (status)
+		{
+		case FriendService::FRIEND_STATUS_FRIEND_REQUEST_SENT:
+			return FriendService::FRIEND_STATUS_FRIEND_REQUEST_RECEIVED;
+		case FriendService::FRIEND_STATUS_FRIEND_REQUEST_RECEIVED:
+			return FriendService::FRIEND_STATUS_FRIEND_REQUEST_SENT;
+		default:
+			return status;
+		}
+	}
+
+	// FUNCTION: PLAYER 0x006b2440
+	// FUNCTION: STUDIO 0x00811140
 	void FriendService::friendStatusReplicationChanged(int playerId, int otherPlayerId, FriendStatus status)
 	{
-		STUB(0x006b2440);
+		if (!Network::Players::backendProcessing(this, false))
+			storeAndReplicateFriendStatus(playerId, otherPlayerId, status);
+
+		if (Network::Players* players = ServiceProvider::find<Network::Players>(this))
+		{
+			players->friendStatusChanged(playerId, otherPlayerId, status);
+			players->friendStatusChanged(otherPlayerId, playerId, InvertFriendStatus(status));
+		}
 	}
 
 	// FUNCTION: PLAYER 0x006b2780
@@ -158,12 +188,51 @@ namespace RBX {
 		}
 	}
 
-	// Not written yet (773 bytes: builds the friend-status request URL). STUB body so callers pair.
-	// STUB: PLAYER 0x006b36a0
-	// STUB: STUDIO 0x008123a0
+	// Body not written (the async bulk-friends response handler). STUB body so callers pair.
+	// STUB: PLAYER 0x006b2c80
+	// STUB: STUDIO 0x00811980
+	void FriendService::ProcessBulkFriendResponse(weak_ptr<FriendService> weakFriendService, int userId,
+		std::set<int> userIdsRequested, std::string* response, std::exception* error)
+	{
+		STUB(0x006b2c80);
+	}
+
+	// FUNCTION: PLAYER 0x006b36a0
+	// FUNCTION: STUDIO 0x008123a0
 	void FriendService::playerAdded(int userId)
 	{
-		STUB(0x006b36a0);
+		if (Network::Players::backendProcessing(this, false))
+		{
+			if (players.size() > 0)
+			{
+				if (!m_unk0x7c.empty() && userId >= 0)
+				{
+					bool nonGuests = false;
+					std::ostringstream ostr;
+					ostr << RBX::format(m_unk0x7c.c_str(), userId);
+					for (std::set<int>::const_iterator iter = players.begin(), end = players.end(); iter != end; ++iter)
+					{
+						if (*iter >= 0)
+						{
+							ostr << "&otherUserIds=" << *iter;
+							nonGuests = true;
+						}
+					}
+
+					if (nonGuests)
+						Http(ostr.str()).get(boost::bind(&ProcessBulkFriendResponse, weak_from(this), userId, players, _1, _2));
+					else
+						ProcessBulkFriendResponse(weak_from(this), userId, players, NULL, NULL);
+				}
+				else
+				{
+					ProcessBulkFriendResponse(weak_from(this), userId, players, NULL, NULL);
+				}
+			}
+		}
+
+		if (players.count(userId) == 0)
+			players.insert(userId);
 	}
 
 } // namespace RBX

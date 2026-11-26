@@ -14,6 +14,7 @@
 #include "decomp.h"
 #include <boost/unordered_map.hpp>
 #include <boost/thread/shared_mutex.hpp>
+#include <list>
 
 namespace RBX {
 	class Assembly;
@@ -52,11 +53,8 @@ namespace Network {
 		typedef boost::unordered_map<const Instance*, boost::shared_ptr<CachedBitStream> > StreamCacheMap;
 		StreamCacheMap streamCache;                                     // 0x64
 		boost::shared_mutex sharedMutex;                                // 0x7c
-		// 2016: std::list<rbx::signals::connection> connections (ctor _Buynode, onServiceProvider
-		// disconnects each, then clear()). Not declared yet: our list<connection>::_Buynode folds with the
-		// iostreams list's and takes its name, which unpairs App's Util/Http.h TEMPLATE rows (PLAYER
-		// 0x005e7920, STUDIO 0x006d13d0) and four STUDIO callers. Measured 2026-11-26, network-5f-7.md.
-		undefined m_unk0x8c[0x98 - 0x8c];                               // 0x8c
+		std::list<rbx::signals::connection> connections;                // 0x8c 2016 name; ctor _Buynode 0x005e7920
+		typedef DescribedNonCreatable<InstancePacketCache, Instance, sInstancePacketCache> Super;
 	public:
 		InstancePacketCache();
 	protected:

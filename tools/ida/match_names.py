@@ -637,6 +637,72 @@ FACTS = [
      "RBX::FrameRateManager::ResumeAutoAdjustment() (2016 FrameRateManager.cpp: mAdjustmentOn = true) | /Od GfxBase "
      "body `mov byte [this+0Ch],1`; only caller 0x00439477 (STUDIO 0x004693e4), the VideoControl stop path; "
      "decoration from Client/_generated/player/unresolved.txt (shell-5k-7, VideoControl.h)"),
+    # wave17 sync (integrate.md / shell-5k-8.md / app-17.md "IDA owner"). STUDIO address 0 = PLAYER only.
+    # The two _internal_accept_owner bodies: reccmp 100% in sweep24 (P-final.json), each a fold of several
+    # spellings in both links; integrate's MATCH_FIX names, so the generator can drop those entries.
+    (0x005bd080, 0, "rename",
+     "??$_internal_accept_owner@VNetworkOwnerJob@Network@RBX@@V123@@?$enable_shared_from_this@VJob@TaskScheduler@RBX@@"
+     "@boost@@QBEXPBV?$shared_ptr@VNetworkOwnerJob@Network@RBX@@@1@PAVNetworkOwnerJob@Network@RBX@@@Z", "match:",
+     "enable_shared_from_this<TaskScheduler::Job>::_internal_accept_owner<NetworkOwnerJob> | reccmp 100% (sweep24) "
+     "with our /GL shell body 0x00494a30 (Server.cpp.obj; folded with the HeartbeatTask, PacketReceiveJob and "
+     "StatsUpdateJob spellings); the shell/shell copy of the Job types (shell-5k-8, integrate MATCH_FIX)"),
+    (0x005baa50, 0, "rename",
+     "??$_internal_accept_owner@VYieldFunctionStateObject@@V1@@?$enable_shared_from_this@VYieldFunctionStateObject@@@"
+     "boost@@QBEXPBV?$shared_ptr@VYieldFunctionStateObject@@@1@PAVYieldFunctionStateObject@@@Z", "match:",
+     "enable_shared_from_this<YieldFunctionStateObject>::_internal_accept_owner | reccmp 100% (sweep24) with our "
+     "native body 0x006be170 (folded with the Registry, Thread and FWBase spellings); the native/native copy "
+     "(shell-5k-8, integrate MATCH_FIX)"),
+    # Game::Game's callees (Game::Game 0x00655e70 is reccmp 100%, so each call target pairs with our STUB of that
+    # name; iOS 1029 names from its thumb callees, app-17); sizes equal in both targets
+    (0x00652d70, 0x007cb930, "rename",
+     "?setAssetUrl@ScriptInformationProvider@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z",
+     "ios:", "RBX::ScriptInformationProvider::setAssetUrl(std::string) (iOS 1029) | called by Game::Game with "
+     "baseUrl + '/asset/'; our ScriptInformationProvider.cpp STUB pairs here (app-17)"),
+    (0x0069ff10, 0x0083c6d0, "rename", "?setProcessToolCommandsSeparately@UserInputService@RBX@@QAEX_N@Z", "ios:",
+     "RBX::UserInputService::setProcessToolCommandsSeparately(bool) (iOS 1029) | 13 bytes, stores the bool at "
+     "+0x80; called by Game::Game with true; our UserInputService.cpp STUB pairs here (app-17)"),
+    (0x0065fe50, 0x0078a2c0, "rename",
+     "?setBaseUrl@ContentProvider@RBX@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z", "ios:",
+     "RBX::ContentProvider::setBaseUrl(std::string) (iOS 1029) | called by Game::Game; our ContentProvider.cpp "
+     "STUB pairs here (app-17)"),
+    (0x0072db60, 0x0079b7e0, "rename", "?setRunState@RunService@RBX@@QAEXW4RunState@2@@Z", "ios:",
+     "RBX::RunService::setRunState(RBX::RunState) (iOS 1029; our tree declares it (int)) | called by Game::Game "
+     "with RS_RUNNING; our RunService.cpp STUB pairs here (app-17)"),
+    (0x00655d30, 0x007cdc90, "rename", "??1Game@RBX@@UAE@XZ", "ios:",
+     "RBX::Game::~Game() (iOS 1029 D2) | called by the D0 0x00656230 (STUDIO 0x007ce200), reccmp 100%; calls "
+     "Game::shutdown 0x00654360 first; our Game.cpp STUB pairs here (app-17)"),
+    (0x006ea020, 0x00817010, "rename", "??0ControllerService@RBX@@QAE@XZ", "ios:",
+     "RBX::ControllerService::ControllerService() (iOS 1029) | only caller the shell's create<ControllerService> "
+     "0x00469490 after new(0x68); our UserController.cpp STUB pairs here (app-17)"),
+    (0x00469490, 0x004fa420, "rename",
+     "??$create@VControllerService@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VControllerService@RBX@@@"
+     "boost@@XZ", "ios:",
+     "RBX::Creatable<Instance>::create<ControllerService>() (iOS 1029) | the /GS shell copy: push 0x68, operator new, "
+     "the ControllerService ctor 0x006ea020 (STUDIO 0x00817010); its only one in 2013 (app-17)"),
+    (0x006b2c80, 0x00811980, "rename",
+     "?ProcessBulkFriendResponse@FriendService@RBX@@CAXV?$weak_ptr@VFriendService@RBX@@@boost@@HV?$set@HU?$less@H@std@@"
+     "V?$allocator@H@2@@std@@PAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@6@PAVexception@6@@Z", "ios:",
+     "RBX::FriendService::ProcessBulkFriendResponse(weak_ptr<FriendService>, int, set<int>, string*, exception*) "
+     "(iOS 1029) | bound and called by FriendService::playerAdded 0x006b36a0 (reccmp 100%); our STUB pairs here"),
+    (0x006b1500, 0x00810200, "rename",
+     "?storeAndReplicateFriendStatus@FriendService@RBX@@AAEXHHW4FriendStatus@12@@Z", "ios:",
+     "RBX::FriendService::storeAndReplicateFriendStatus(int, int, FriendStatus) (iOS 1029) | called by "
+     "friendStatusReplicationChanged 0x006b2440 (reccmp 100%); our STUB pairs here (app-17)"),
+    (0x00de98d0, 0x00f8e390, "data1", "_ZN5FFlag23OverlayDataModelEnabledE", "ios:",
+     "FFlag::OverlayDataModelEnabled (iOS 1029) | registered by the initializer PLAYER 0x00a6a1f4 after the "
+     "ConnectToGame flags; read by Game::Game (STUDIO `cmp bl,[0x00f8e390]` at 0x007cde3e); our "
+     "OverlayDataModel.cpp GLOBAL (app-17)"),
+    (0x00653790, 0x007cc250, "comment", "", "guess:",
+     "Game::Unk0x30 ctor (our placeholder) | Game::Game's first call, on this+0x30; touches a SAFE_HEAP_STATIC "
+     "(getter 0x004265c0); class unknown (app-17)"),
+    (None, 0x007cc250, "unname", "", "guess:",
+     "not std::strstreambuf::~strstreambuf (a FLIRT false positive): Game::Game's first call, the Game::Unk0x30 "
+     "ctor (PLAYER 0x00653790, 84 bytes both; app-17)"),
+    (0x00654e80, 0x007cd5c0, "comment", "", "guess:",
+     "Game::Unk0x30 dtor (our placeholder) | Game::Game's unwind of this+0x30 (app-17)"),
+    (0x00652f00, 0x007cba50, "comment", "", "guess:",
+     "OverlayDataModel, unnamed (our FUN_00652f00) | takes weak_ptr<DataModel>, stores the game DataModel; inline "
+     "in 2013 with no iOS symbol, its copy sits in Game.obj (app-17)"),
 ]
 
 
@@ -854,6 +920,8 @@ def plan(target, json_path, exe):
 
     for pa, sa, act, name, tag, ev in FACTS:
         if pa is None and target == "PLAYER":     # a STUDIO-only fact
+            continue
+        if sa == 0 and target == "STUDIO":        # a PLAYER-only fact
             continue
         a = pa if target == "PLAYER" else (sa or studio_of(pa))
         if a is None:

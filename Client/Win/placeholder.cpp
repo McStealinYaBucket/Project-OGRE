@@ -43,6 +43,7 @@
 #include "Util/Http.h"
 #include "V8DataModel/DebugSettings.h"
 #include "reflection/Property.h"
+#include "rbx/TaskScheduler.h"
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/recursive_mutex.hpp>
@@ -105,6 +106,12 @@ namespace OgreShellStandIn {
 #endif
 #ifndef RBX_STUDIO_BUILD
 		new (raw) boost::shared_ptr<RBX::Tasks::Coordinator>(v.coordinator); // copy ctor only
+		// weak_ptr<Job>::operator=(shared_ptr<Job>): 2013's _internal_accept_owner<T> copies come in
+		// four bodies by (weak_ptr operator=, unwind ~shared_ptr): native/native 0x005baa50, shell/shell
+		// 0x005bd080 and 0x007a2e50, native/shell 0x006678b0 (StandardOut). The Job types' copy is
+		// shell/shell (sp_pointer_construct<NetworkOwnerJob> ... call 0x005bd080); View.cpp gives Job its
+		// shell ~shared_ptr, and this the shell operator= (in 2013 the shell's job creation).
+		{ boost::weak_ptr<RBX::TaskScheduler::Job> w; w = *static_cast<boost::shared_ptr<RBX::TaskScheduler::Job>*>(raw); }
 #endif
 	}
 

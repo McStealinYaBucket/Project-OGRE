@@ -33,3 +33,11 @@ ReplicatorStats::ReplicatorStats()
 
 } // namespace Network
 } // namespace RBX
+
+#ifdef OGRE_TARGET_STUDIO
+DECOMP_SIZE_ASSERT(RBX::Network::ReplicatorStats, 0x7e8);
+DECOMP_STATIC_ASSERT(offsetof(RBX::Network::ReplicatorStats, numberOfUnsplitMessages) == 0x440);
+#else
+DECOMP_SIZE_ASSERT(RBX::Network::ReplicatorStats, 0xf68);
+DECOMP_STATIC_ASSERT(offsetof(RBX::Network::ReplicatorStats, numberOfUnsplitMessages) == 0x940);
+#endif
