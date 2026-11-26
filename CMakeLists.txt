@@ -293,7 +293,7 @@ target_link_options(boost PRIVATE /DEBUG /INCREMENTAL:NO)
 set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/ClientBase/ReflectionMetadata.cpp
     Client/Win/DumpErrorUploader.cpp Client/Win/LogManager.cpp Client/Win/VersionInfo.cpp Client/Win/VideoControl.cpp
     Client/Win/VistaTools.cpp Client/Win/placeholder.cpp Client/Win/placeholder_creators.cpp)
-ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp Client/WindowsClient/GameVerbs.cpp
+ogre_library(player_client SOURCES Client/WindowsClient/GameVerbs.cpp
     Client/WindowsClient/View.cpp Client/WindowsClient/main.cpp Client/WindowsClient/Application.cpp
     Client/WindowsClient/FunctionMarshaller.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
