@@ -399,7 +399,7 @@ public:
 	// (no bodies, no callers, no EA) -- do not call. computeGuiInset /
 	// getRenderMouseCursor below are likewise decl-only (queued behind
 	// the Adorn-layout era).
-	void TakeScreenshotTask();
+	static void TakeScreenshotTask(weak_ptr<DataModel> weakDataModel);	// 0x0063e240; the shell binds it
 	void ScreenshotUploadTask();
 	void setScreenshotSEOInfo(std::string info);
 	void setVideoSEOInfo(std::string info);

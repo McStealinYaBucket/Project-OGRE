@@ -46,8 +46,8 @@ namespace RBX {
 		}
 	}
 
-	// STUB: PLAYER 0x008e5fe0
-	// STUB: STUDIO 0x00a042e0
+	// FUNCTION: PLAYER 0x008e5fe0
+	// FUNCTION: STUDIO 0x00a042e0
 	void SendPhysics::onMovingAssemblyRootAdded(Assembly* a)
 	{
 		RBXASSERT(Mechanism::isMovingAssemblyRoot(a));
@@ -61,8 +61,8 @@ namespace RBX {
 		a->getSimJob()->useCount++;
 	}
 
-	// STUB: PLAYER 0x008e60b0
-	// STUB: STUDIO 0x00a043b0
+	// FUNCTION: PLAYER 0x008e60b0
+	// FUNCTION: STUDIO 0x00a043b0
 	void SendPhysics::onMovingAssemblyRootRemoving(Assembly* a)
 	{
 		SimJob* job = a->getSimJob();

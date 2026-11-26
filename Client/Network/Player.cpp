@@ -14,15 +14,15 @@ DECOMP_SIZE_ASSERT(RBX::Network::Player, 0x1d8);
 // Registration 0x00a5f330 (kind 0, static); the flag byte is PLAYER 0x00dd8bfb.
 FASTFLAGVARIABLE(CalculatePlayerSpawnLocationAsEarlyAsPossible, false)
 
-// Stand-in: 2013 registers it from App (initializer PLAYER 0x00a65c60, near FastLogSettings' block);
-// the .data byte starts at 1. The Player getters read it.
-namespace FFlag
-{
-	// GLOBAL: PLAYER 0x00d30f10
-	// GLOBAL: STUDIO 0x00ec17fc
-	bool CrispFilteringEnabled = true;
-	int CrispFilteringEnabledIniter = FLog::RegisterFlag("CrispFilteringEnabled", &CrispFilteringEnabled, NULL, FASTVARTYPE_STATIC);
-}
+// FFlag::CrispFilteringEnabled is defined in App's FastLogSettings.cpp (2013 initializer 0x00a65c60).
+FASTFLAG(CrispFilteringEnabled)
+
+
+
+
+
+
+
 
 // Defined by 2013's ScriptContext.obj (registration 0x00a66090, byte 0x00d30f1b, default 1).
 LOGGROUP(Network)

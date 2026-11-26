@@ -210,7 +210,7 @@ CRenderSettingsItem::CRenderSettingsItem()
 		width = 800;
 		height = 600;
 	}
-	windowSize = G3D::Vector2int16(width, height);
+	fullscreenSize = G3D::Vector2int16(width, height);
 }
 
 // FUNCTION: PLAYER 0x00456a00

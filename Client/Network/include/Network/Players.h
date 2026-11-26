@@ -186,7 +186,7 @@ namespace Network {
 		bool m_unk0x178;                             // 0x178 ctor false
 		bool m_unk0x179;                             // 0x179 ctor true
 		boost::scoped_ptr<AbuseReporter> abuseReporter; // 0x17c dtor: ~AbuseReporter 0x0055b8b0, operator delete
-		shared_ptr<Instance> m_unk0x180;             // 0x180 dtor releases +0x184; pointee unproven
+		shared_ptr<GuidItem<Instance>::Registry> m_unk0x180; // 0x180 dtor releases +0x184; Registry per the task note (IdSerializer 0x107c has the same type)
 		std::list<ChatMessage> chatHistory;          // 0x188 node dtor ~ChatMessage 0x0055a560 (clear 0x0055f320)
 		copy_on_write_ptr<Instances> m_unk0x194;     // 0x194 ctor 0x00567c30
 		shared_ptr<Player> localPlayer;              // 0x19c ChatOutput reads it (mac +188)

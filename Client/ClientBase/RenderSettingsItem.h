@@ -25,6 +25,8 @@
 #include "rbx/signal.h"
 #include "G3D/Vector2int16.h"
 
+#include "decomp.h"
+
 namespace RBX {
 
 	// GfxBase stand-in, see the header comment.
@@ -125,7 +127,10 @@ namespace RBX {
 			ResolutionMaxIndex
 		} ResolutionPreset;
 
-	protected:
+	// Data members are public in the stand-in: the shell reads them directly (RecordToggleVerb::doIt
+	// folds `[item+0x68]`, which only a direct member access gives; View's resolution code reads and
+	// stores the sizes inline). Whether GfxBase's 2013 header had them public is not known.
+	public:
 		GraphicsMode graphicsMode;                  // 0x04 (1)
 		AntialiasingMode antialiasingMode;          // 0x08 (2)
 		ShadowMode shadowMode;                      // 0x0c
@@ -139,8 +144,11 @@ namespace RBX {
 		bool enableFRM;                             // 0x29
 		G3D::Vector2int16 m_unk0x2a;                // 0x2a (0,0)
 		G3D::Vector2int16 m_unk0x2e;                // 0x2e (0,0)
-		G3D::Vector2int16 windowSize;               // 0x32 (800,600); the item ctor stores it
-		G3D::Vector2int16 m_unk0x36;                // 0x36 (800,600)
+		// View::initializeSizes (PLAYER 0x004678e0) stores 0x2e, 0x36 (its size clamped to the desktop)
+		// and 0x32 in that order; View::changeResolution (0x00467ae0) asks the monitor for 0x32. That
+		// and 2016's member order name 0x32 fullscreenSize and 0x36 windowSize.
+		G3D::Vector2int16 fullscreenSize;           // 0x32 (800,600); the item ctor stores it
+		G3D::Vector2int16 windowSize;               // 0x36 (800,600)
 		bool showAggregation;                       // 0x3a
 		bool drawConnectors;                        // 0x3b
 		bool m_unk0x3c;                             // 0x3c (true); ORed with drawConnectors
@@ -150,8 +158,18 @@ namespace RBX {
 
 		static AASamples aaSamples;                 // PLAYER 0x00db4d34
 
-	public:
+		// A preset's size: View::initializeSizes reads width at +4 and height at +8.
+		struct RESOLUTIONENTRY
+		{
+			undefined4 m_unk0x00; // 0x00
+			int width;            // 0x04
+			int height;           // 0x08
+		};
+
 		CRenderSettings();  // PLAYER 0x009c5ce0 (GfxBase)
+
+		// PLAYER 0x009c5e10 (GfxBase, __thiscall, one argument).
+		const RESOLUTIONENTRY& getResolutionPreset(ResolutionPreset preset);
 
 		// FRM reports its latest setting. vtable+0x00, PLAYER 0x009c5ed0 (GfxBase).
 		virtual void setAutoQualityLevel(int level);
@@ -165,6 +183,7 @@ namespace RBX {
 		ShadowMode getShadowMode() const { return shadowMode; }
 		QualityLevel getQualityLevel() const { return qualityLevel; }
 		ResolutionPreset getResolutionPreference() const { return resolutionPreference; }
+		G3D::Vector2int16 getFullscreenSize() const { return fullscreenSize; }
 		int getMaxQualityLevel() { return maxQualityLevel; }
 		int getAutoQualityLevel() const { return autoQualityLevel; }
 		bool getDrawConnectors() const { return drawConnectors; }  // 2016 name; the shell copy 0x004558f0

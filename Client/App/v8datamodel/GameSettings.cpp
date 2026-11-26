@@ -1,20 +1,62 @@
-/* App/v8datamodel/GameSettings.cpp -- October 2013 STUB. TODO: full decompile. */
+/* App/v8datamodel/GameSettings.cpp -- October 2013. Descriptor order, kinds, attributes and
+   security from the static initializers PLAYER 0x00a6f690..0x00a6fa50 (no 2013 property here is
+   deprecated yet; VideoRecordingChangeRequest is RobloxScript). GameBasicSettings is its own object,
+   see GameBasicSettings.cpp. */
 
 #include "stdafx.h"
 
 #include "V8DataModel/GameSettings.h"
-#include "V8DataModel/GameBasicSettings.h"
 #include "decomp.h"
 
 namespace RBX {
 	const char* const sGameSettings = "GameSettings";
-	const char* const sGameBasicSettings = "UserGameSettings";
 }
 
 using namespace RBX;
 
 REFLECTION_BEGIN();
+static Reflection::BoundProp<int> prop_ChatHistory("ChatHistory", "Online", &GameSettings::chatHistory);
+static Reflection::BoundProp<int> prop_ReportAbuseChatHistory("ReportAbuseChatHistory", "Online", &GameSettings::reportAbuseChatHistory);
+static Reflection::BoundProp<int> prop_ChatScrollLength("ChatScrollLength", "Online", &GameSettings::chatLinesShown);
+static Reflection::BoundProp<bool> prop_SoundEnabled("SoundEnabled", "Sound", &GameSettings::soundEnabled);
+static Reflection::BoundProp<bool> prop_SoftwareSound("SoftwareSound", "Sound", &GameSettings::highQualitySound);
+static Reflection::BoundProp<bool> prop_CollisionSoundEnabled("CollisionSoundEnabled", "Sound", &GameSettings::collisionSoundEnabled);
+static Reflection::BoundProp<float> prop_CollisionSoundVolume("CollisionSoundVolume", "Sound", &GameSettings::collisionSoundVolume);
+static Reflection::BoundProp<int> prop_MaxCollisionSounds("MaxCollisionSounds", "Sound", &GameSettings::maxCollisionSounds);
+static Reflection::BoundProp<int> prop_bubbleChatMaxBubbles("BubbleChatMaxBubbles", "Online", &GameSettings::chatLinesMax);
+static Reflection::BoundProp<float> prop_bubbleChatLifetime("BubbleChatLifetime", "Online", &GameSettings::bubbleChatLifetime);
+static Reflection::BoundProp<bool> prop_hardwareMouse("HardwareMouse", "Input", &GameSettings::hardwareMouse);
+static const Reflection::EnumPropDescriptor<GameSettings, GameSettings::VideoQuality> prop_videoSettings("VideoQuality", category_Video, &GameSettings::getVideoQualitySetting, &GameSettings::setVideoQualitySetting);
+static const Reflection::EnumPropDescriptor<GameSettings, GameSettings::UploadSetting> prop_uploadScreenshots("ImageUploadPromptBehavior", "Screenshots", &GameSettings::getPostImageSetting, &GameSettings::setPostImageSetting);
+static Reflection::EventDesc<GameSettings, void(bool)> event_videoRecordingRequest(&GameSettings::videoRecordingSignal, "VideoRecordingChangeRequest", "recording", Security::RobloxScript);
+static Reflection::BoundProp<bool> prop_videoCaptureEnabled("VideoCaptureEnabled", category_Video, &GameSettings::videoCaptureEnabled);
 REFLECTION_END();
+
+namespace RBX {
+
+	// FUNCTION: PLAYER 0x006f4810
+	// FUNCTION: STUDIO 0x00791df0
+	void GameSettings::setPostImageSetting(UploadSetting value)
+	{
+		if (postImageSetting != value)
+		{
+			postImageSetting = value;
+			raisePropertyChanged(prop_uploadScreenshots);
+		}
+	}
+
+	// FUNCTION: PLAYER 0x006f4840
+	// FUNCTION: STUDIO 0x00791e20
+	void GameSettings::setVideoQualitySetting(VideoQuality value)
+	{
+		if (videoQuality != value)
+		{
+			videoQuality = value;
+			raisePropertyChanged(prop_videoSettings);
+		}
+	}
+
+} // namespace RBX
 
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
@@ -102,75 +144,4 @@ GameSettings::GameSettings()
 
 } // namespace RBX
 
-namespace RBX {
-namespace Reflection {
-
-// FUNCTION: PLAYER 0x006f7c20
-// FUNCTION: STUDIO 0x00793de0
-template<>
-EnumDesc<GameBasicSettings::ControlMode>::EnumDesc()
-	: EnumDescriptor("ControlMode", typeid(GameBasicSettings::ControlMode))
-{
-	addPair(GameBasicSettings::CONTROL_MOUSELOCK, "MouseLockSwitch");
-	addLegacyName("Mouse Lock Switch", GameBasicSettings::CONTROL_MOUSELOCK);
-	addPair(GameBasicSettings::CONTROL_CLASSIC, "Classic");
-}
-
-template<>
-const Type& Type::getSingleton<GameBasicSettings::ControlMode>()
-{
-	return EnumDesc<GameBasicSettings::ControlMode>::singleton();
-}
-
-// FUNCTION: PLAYER 0x006f7d60
-// FUNCTION: STUDIO 0x00793f20
-template<>
-EnumDesc<GameBasicSettings::RenderQualitySetting>::EnumDesc()
-	: EnumDescriptor("SavedQualitySetting", typeid(GameBasicSettings::RenderQualitySetting))
-{
-	addPair(GameBasicSettings::QUALITY_AUTO, "Automatic");
-	addPair(GameBasicSettings::QUALITY_1, "QualityLevel1");
-	addPair(GameBasicSettings::QUALITY_2, "QualityLevel2");
-	addPair(GameBasicSettings::QUALITY_3, "QualityLevel3");
-	addPair(GameBasicSettings::QUALITY_4, "QualityLevel4");
-	addPair(GameBasicSettings::QUALITY_5, "QualityLevel5");
-	addPair(GameBasicSettings::QUALITY_6, "QualityLevel6");
-	addPair(GameBasicSettings::QUALITY_7, "QualityLevel7");
-	addPair(GameBasicSettings::QUALITY_8, "QualityLevel8");
-	addPair(GameBasicSettings::QUALITY_9, "QualityLevel9");
-	addPair(GameBasicSettings::QUALITY_10, "QualityLevel10");
-}
-
-template<>
-const Type& Type::getSingleton<GameBasicSettings::RenderQualitySetting>()
-{
-	return EnumDesc<GameBasicSettings::RenderQualitySetting>::singleton();
-}
-
-} // namespace Reflection
-} // namespace RBX
-
-namespace RBX {
-
-// The base GlobalBasicSettingsItem ctor stays out of line (PLAYER 0x006f8550); the instance is
-// renamed "GameSettings" after the members are built.
-// FUNCTION: PLAYER 0x006f8e70
-// FUNCTION: STUDIO 0x00794e10
-GameBasicSettings::GameBasicSettings()
-	: controlMode(CONTROL_CLASSIC)
-	, renderQualitySetting(QUALITY_AUTO)
-	, mouseLocked(false)
-	, canMousePan(true)
-	, freeLook(false)
-	, uploadVideos(GameSettings::ASK)
-	, fullscreen(false)
-	, studio(false)
-	, allTutorialsDisabled(false)
-{
-	Instance::setName("GameSettings");
-}
-
-} // namespace RBX
-
 DECOMP_SIZE_ASSERT(RBX::GameSettings, 0x94);
-DECOMP_SIZE_ASSERT(RBX::GameBasicSettings, 0x90);

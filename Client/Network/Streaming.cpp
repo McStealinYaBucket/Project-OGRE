@@ -342,6 +342,8 @@ RakNet::BitStream& operator>>(RakNet::BitStream& stream, G3D::CoordinateFrame& v
 
 } // namespace RBX
 
+#include "GuidRegistryService.h"
+
 namespace RBX {
 namespace Network {
 
@@ -360,6 +362,15 @@ void IdSerializer::setMaxGuidIndexBit(int bits)
 void IdSerializer::setRefValue(WaitItem& wi, Instance* instance)
 {
 	wi.desc->setRefValue(wi.instance.get(), instance);
+}
+
+// FUNCTION: PLAYER 0x005aaa00
+// FUNCTION: STUDIO 0x0061a8c0
+void IdSerializer::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+{
+	guidRegistry.reset();
+	if (newProvider)
+		guidRegistry = ServiceProvider::create<GuidRegistryService>(newProvider)->registry;
 }
 
 // FUNCTION: PLAYER 0x005aafd0

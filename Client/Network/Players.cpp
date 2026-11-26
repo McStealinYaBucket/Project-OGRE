@@ -1,5 +1,5 @@
-/* Network/Players.cpp -- October 2013 STUB (sName + empty reflection).
-   TODO: full decompile. */
+/* Network/Players.cpp -- October 2013, partial. Asserts sit on their 2013 lines (182, 189). */
+// (FriendService.h is not included: it would supply FriendService's Creator under include\Util/Object.h.)
 
 #include "stdafx.h"
 #include "Network/Players.h"
@@ -218,9 +218,13 @@ namespace Network {
 		return NULL;
 	}
 
-	// Callees: ServiceProvider::find<FriendService> 0x00548490 (cdecl), FriendService::playerRemoving
-	// 0x006afb40 (not declared by App's FriendService.h), the erase from the players list 0x0055fbb0,
-	// then playerRemovingSignal (0x1cc) and playerRemovingLateSignal (0x1d0) when backendProcessing.
+	// Read off: if (Player* player = fastDynamicCast<Player>(child)) { if (FriendService* fs =
+	// ServiceProvider::find<FriendService>(this)) fs->playerRemoving(player->userId) (userId read inline);
+	// { shared_ptr<Instances>& c = m_unk0x194.write(); c->erase(std::find(c->begin(), c->end(),
+	// shared_from(child))); } if (backendProcessing(this, false)) { playerRemovingSignal(shared_from(player));
+	// playerRemovingLateSignal(shared_from(player)); } }. No FirePlayerAddedAndPlayerRemovingOnClient flag
+	// and no Http::playerCount (2016). Probed: same calls and stores, but eax/ecx/edx rotate from the
+	// write() result on (0x0056bd9e), and including FriendService.h here costs its Creator (see the top).
 	// STUB: PLAYER 0x0056bd20
 	// STUB: STUDIO 0x005d11d0
 	void Players::onChildRemoving(Instance* child)

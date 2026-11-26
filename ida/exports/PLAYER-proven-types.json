@@ -1817,8 +1817,8 @@
     "void *luaClone",
     "void *setName",
     "void *getPersistentDataCost",
-    "void *isReadOnly",
-    "void *allocator_char__________0_",
+    "void *canClientCreate",
+    "void *AASamples____0_",
     "void *createChild",
     "void *writeXml",
     "void *verifySetParent",
@@ -8518,7 +8518,7 @@
      "offset": 384,
      "size": 8,
      "kind": "class",
-     "type": "boost::shared_ptr<RBX::Instance>",
+     "type": "boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>",
      "scalar": null
     },
     {
@@ -8741,6 +8741,314 @@
    ],
    "base": false,
    "unique": "VIdSerializer@Network@RBX@@"
+  },
+  "RBX::GlobalBasicSettings": {
+   "size": 180,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::GlobalBasicSettings, RBX::Settings, char const *const RBX::sGlobalBasicSettings, 27, 0>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "mutex",
+     "offset": 172,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::mutex",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGlobalBasicSettings@RBX@@"
+  },
+  "RBX::Network::Server": {
+   "size": 2936,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, 1, 0>",
+     "offset": 0,
+     "size": 2752,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 2752,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0xac4",
+     "offset": 2756,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0xac8",
+     "offset": 2760,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xad0",
+     "offset": 2768,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Instance>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xad8",
+     "offset": 2776,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xadc",
+     "offset": 2780,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "m_unk0xadd",
+     "offset": 2781,
+     "size": 11,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xae8",
+     "offset": 2792,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "m_unk0xaec",
+     "offset": 2796,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<int,std::allocator<int> >",
+     "scalar": null
+    },
+    {
+     "name": "networkSettings",
+     "offset": 2812,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::NetworkSettings",
+     "scalar": null
+    },
+    {
+     "name": "usedTickets",
+     "offset": 2816,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >",
+     "scalar": null
+    },
+    {
+     "name": "preusedTickets",
+     "offset": 2828,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xb18",
+     "offset": 2840,
+     "size": 84,
+     "kind": "class",
+     "type": "boost::bimaps::bimap<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,long,boost::mpl::na,boost::mpl::na,boost::mpl::na>",
+     "scalar": null
+    },
+    {
+     "name": "dataBasicFilteredSignal",
+     "offset": 2924,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Network::FilterResult,boost::shared_ptr<RBX::Instance>,std::basic_string<char,std::char_traits<char>,std::allocator<char> >)>",
+     "scalar": null
+    },
+    {
+     "name": "dataCustomFilteredSignal",
+     "offset": 2928,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Network::FilterResult,boost::shared_ptr<RBX::Instance>,std::basic_string<char,std::char_traits<char>,std::allocator<char> >)>",
+     "scalar": null
+    },
+    {
+     "name": "incommingConnectionSignal",
+     "offset": 2932,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::signal<void __cdecl(std::basic_string<char,std::char_traits<char>,std::allocator<char> >,boost::shared_ptr<RBX::Instance>)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VServer@Network@RBX@@"
+  },
+  "RBX::UserInputBase": {
+   "size": 56,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "currentCursorId",
+     "offset": 4,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::ContentId",
+     "scalar": null
+    },
+    {
+     "name": "currentCursor",
+     "offset": 36,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TextureProxyBase>",
+     "scalar": null
+    },
+    {
+     "name": "fallbackCursor",
+     "offset": 44,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TextureProxyBase>",
+     "scalar": null
+    },
+    {
+     "name": "cursorIdChangedSignal",
+     "offset": 52,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VUserInputBase@RBX@@"
+  },
+  "XmlNameValuePair": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "tag",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "valueType",
+     "offset": 4,
+     "size": 4,
+     "kind": "enum",
+     "type": "XmlNameValuePair::ValueType",
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "stringValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "contentIdValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ContentId",
+     "scalar": null
+    },
+    {
+     "name": "boolValue",
+     "offset": 8,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "intValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "uintValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "floatValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL32"
+    },
+    {
+     "name": "doubleValue",
+     "offset": 8,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "nameValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    },
+    {
+     "name": "handleValue",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::InstanceHandle",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VXmlNameValuePair@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -9851,7 +10159,7 @@
      "scalar": null
     },
     {
-     "name": "windowSize",
+     "name": "fullscreenSize",
      "offset": 50,
      "size": 4,
      "kind": "class",
@@ -9859,7 +10167,7 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x36",
+     "name": "windowSize",
      "offset": 54,
      "size": 4,
      "kind": "class",
@@ -10414,104 +10722,6 @@
    "base": true,
    "unique": "V?$Parent@VXmlElement@@@RBX@@"
   },
-  "XmlNameValuePair": {
-   "size": 16,
-   "vftable": false,
-   "virtual_bases": false,
-   "bases": [],
-   "members": [
-    {
-     "name": "tag",
-     "offset": 0,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Name",
-     "scalar": null
-    },
-    {
-     "name": "valueType",
-     "offset": 4,
-     "size": 4,
-     "kind": "enum",
-     "type": "XmlNameValuePair::ValueType",
-     "scalar": "T_INT4"
-    },
-    {
-     "name": "stringValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
-     "scalar": null
-    },
-    {
-     "name": "contentIdValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::ContentId",
-     "scalar": null
-    },
-    {
-     "name": "boolValue",
-     "offset": 8,
-     "size": 1,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_BOOL08"
-    },
-    {
-     "name": "intValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_INT4"
-    },
-    {
-     "name": "uintValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_UINT4"
-    },
-    {
-     "name": "floatValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_REAL32"
-    },
-    {
-     "name": "doubleValue",
-     "offset": 8,
-     "size": 8,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_REAL64"
-    },
-    {
-     "name": "nameValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::Name",
-     "scalar": null
-    },
-    {
-     "name": "handleValue",
-     "offset": 8,
-     "size": 4,
-     "kind": "ptr",
-     "type": "RBX::InstanceHandle",
-     "scalar": null
-    }
-   ],
-   "base": true,
-   "unique": "VXmlNameValuePair@@"
-  },
   "RBX::Allocator<XmlElement>": {
    "size": 1,
    "vftable": false,
@@ -11042,6 +11252,38 @@
    "members": [],
    "base": true,
    "unique": "V?$DescribedNonCreatable@VPlayers@Network@RBX@@VInstance@3@$E?sPlayers@23@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::GlobalBasicSettings, RBX::Settings, char const *const RBX::sGlobalBasicSettings, 27, 0>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::GlobalBasicSettings, char const *const RBX::sGlobalBasicSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>, 27, 0>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGlobalBasicSettings@RBX@@VSettings@2@$E?sGlobalBasicSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedCreatable<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, 1, 0>": {
+   "size": 2752,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::Server, char const *const RBX::Network::sServer, RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>, 1, 0>",
+     "offset": 0,
+     "size": 2752,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDB$00$0A@@RBX@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
@@ -11896,6 +12138,38 @@
    "base": true,
    "unique": "V?$Described@VPlayers@Network@RBX@@$E?sPlayers@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPlayers@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::GlobalBasicSettings, char const *const RBX::sGlobalBasicSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>, 27, 0>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGlobalBasicSettings@RBX@@$E?sGlobalBasicSettings@2@3QBDBV?$NonFactoryProduct@VSettings@RBX@@$E?sGlobalBasicSettings@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Network::Server, char const *const RBX::Network::sServer, RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>, 1, 0>": {
+   "size": 2752,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>",
+     "offset": 0,
+     "size": 2752,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VServer@Network@RBX@@$E?sServer@23@3QBDBV?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -12699,6 +12973,38 @@
    "base": true,
    "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sPlayers@Network@2@3QBDB@RBX@@"
   },
+  "RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Settings",
+     "offset": 0,
+     "size": 172,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VSettings@RBX@@$E?sGlobalBasicSettings@2@3QBDB@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>": {
+   "size": 2752,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Network::Peer",
+     "offset": 0,
+     "size": 2752,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@RBX@@"
+  },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,
    "vftable": false,
@@ -12917,6 +13223,39 @@
    "base": true,
    "unique": "V?$FactoryProduct@VGameBasicSettings@RBX@@VItem@GlobalBasicSettings@2@$E?sGameBasicSettings@2@3QBDBVInstance@2@@RBX@@"
   },
+  "RBX::Settings": {
+   "size": 172,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Settings, RBX::ServiceProvider, char const *const RBX::sSettings, 27, 0>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "settingsFile",
+     "offset": 140,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "settingsErased",
+     "offset": 168,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": true,
+   "unique": "VSettings@RBX@@"
+  },
   "RBX::GlobalAdvancedSettings::Item": {
    "size": 96,
    "vftable": false,
@@ -12949,6 +13288,22 @@
    "base": true,
    "unique": "VItem@GlobalBasicSettings@RBX@@"
   },
+  "RBX::DescribedNonCreatable<RBX::Settings, RBX::ServiceProvider, char const *const RBX::sSettings, 27, 0>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Settings, char const *const RBX::sSettings, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>, 27, 0>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VSettings@RBX@@VServiceProvider@2@$E?sSettings@2@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sSettingsItem>": {
    "size": 96,
    "vftable": false,
@@ -12964,6 +13319,38 @@
    "members": [],
    "base": true,
    "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sSettingsItem@2@3QBDB@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Settings, char const *const RBX::sSettings, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>, 27, 0>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VSettings@RBX@@$E?sSettings@2@3QBDBV?$NonFactoryProduct@VServiceProvider@RBX@@$E?sSettings@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>": {
+   "size": 140,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::ServiceProvider",
+     "offset": 0,
+     "size": 140,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VServiceProvider@RBX@@$E?sSettings@2@3QBDB@RBX@@"
   }
  },
  "missing": [],

@@ -71,3 +71,25 @@ template<> TypeRegistrar<FriendService::FriendEventType> TypeRegistrar<FriendSer
 
 } // namespace Reflection
 } // namespace RBX
+
+#include "decomp.h"
+
+namespace RBX {
+
+	// Not written yet (441 bytes: walks the player map at +0x134). STUB body so callers pair.
+	// STUB: PLAYER 0x006afb40
+	// STUB: STUDIO 0x0080e860
+	void FriendService::playerRemoving(int userId)
+	{
+		STUB(0x006afb40);
+	}
+
+	// Not written yet (773 bytes: builds the friend-status request URL). STUB body so callers pair.
+	// STUB: PLAYER 0x006b36a0
+	// STUB: STUDIO 0x008123a0
+	void FriendService::playerAdded(int userId)
+	{
+		STUB(0x006b36a0);
+	}
+
+} // namespace RBX

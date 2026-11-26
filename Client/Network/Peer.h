@@ -30,7 +30,7 @@ namespace Network {
 	{
 	private:
 		typedef Reflection::Described<Peer, sPeer, Instance> Super;
-		shared_ptr<PacketReceiveJob> receiveJob;    // 0x6c
+		shared_ptr<PacketReceiveJob> receiveJob;    // 0x6c (PacketReceiveJob is local to Peer.cpp)
 		static unsigned char aesKey[16];            // PLAYER 0x00ddf950
 		RakNet::RakNetRandom rnr;                   // 0x74
 

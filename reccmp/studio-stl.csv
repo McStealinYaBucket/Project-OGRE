@@ -5,9 +5,6 @@ address,type,size,symbol
 0053b290,library,154,??1strstreambuf@std@@UAE@XZ
 00569ea0,library,194,??1ios_base@std@@UAE@XZ_0
 005b78b0,library,111,??1ios_base@std@@UAE@XZ_1
-005bc4e0,library,84,??1strstreambuf@std@@UAE@XZ_0
-005bc5a0,library,84,??1strstreambuf@std@@UAE@XZ_1
-005bc660,library,84,??1strstreambuf@std@@UAE@XZ_2
 005de760,library,84,??1strstreambuf@std@@UAE@XZ_3
 006102f0,library,84,??1strstreambuf@std@@UAE@XZ_6
 0061cf70,library,146,??1strstreambuf@std@@UAE@XZ_7

@@ -138,6 +138,17 @@ namespace Reflection
 		return result;
 	}
 
+	// 2013 (PLAYER 0x0066f460, between fromTrustedSource 0x0066f320 and genericConvert 0x0066f7f0):
+	// operator= is inlined here.
+	// STUB: PLAYER 0x0066f460
+	// STUB: STUDIO 0x00780050
+	template<>
+	bool StringConverter<ProtectedString>::convertToValue(const std::string& text, ProtectedString& value)
+	{
+		value = ProtectedString::fromTrustedSource(text);
+		return true;
+	}
+
 	// 2013 (PLAYER 0x0066f960, after genericConvert<ProtectedString> 0x0066f7f0): a string source is
 	// stored as the string itself (placement_any::operator=<std::string> 0x0044c6c0) under the
 	// ProtectedString type, then genericConvert.

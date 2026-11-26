@@ -28,19 +28,19 @@
 LOGGROUP(Crash)
 LOGGROUP(HangDetection)
 
-// Stand-ins: 2013 registers both from App's FastLogSettings.cpp block (initializers PLAYER
-// 0x00a65ca0 / 0x00a65cc0); move them there when that file defines its flags.
-namespace FFlag
-{
-	// GLOBAL: PLAYER 0x00de3f6c
-	// GLOBAL: STUDIO 0x00f84e45
-	bool ImmediateCrashUploadEnabled = false;
-	int ImmediateCrashUploadEnabledIniter = FLog::RegisterFlag("ImmediateCrashUploadEnabled", &ImmediateCrashUploadEnabled, NULL, FASTVARTYPE_STATIC);
-	// GLOBAL: PLAYER 0x00de3f6d
-	// GLOBAL: STUDIO 0x00f84e46
-	bool ImmediateHangUploadEnabled = false;
-	int ImmediateHangUploadEnabledIniter = FLog::RegisterFlag("ImmediateHangUploadEnabled", &ImmediateHangUploadEnabled, NULL, FASTVARTYPE_STATIC);
-}
+// FFlag::ImmediateCrashUploadEnabled / ImmediateHangUploadEnabled are defined in App's FastLogSettings.cpp.
+FASTFLAG(ImmediateCrashUploadEnabled)
+FASTFLAG(ImmediateHangUploadEnabled)
+
+
+
+
+
+
+
+
+
+
 
 // GLOBAL: PLAYER 0x00dd6638
 // GLOBAL: STUDIO 0x00f5b2d8

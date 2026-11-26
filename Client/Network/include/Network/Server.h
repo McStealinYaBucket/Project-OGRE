@@ -13,6 +13,8 @@
 #include "V8Tree/Service.h"
 #include "../../Peer.h"
 #include "decomp.h"
+#include "Network/API.h"
+#include <boost/bimap.hpp>
 #include <set>
 #include <vector>
 
@@ -49,17 +51,19 @@ namespace Network {
 		rbx::signals::scoped_connection m_unk0xad8;     // 0xad8 dtor 0x00483de0
 		bool m_unk0xadc;                                // 0xadc ctor false
 		undefined m_unk0xadd[0xae8 - 0xadd];            // 0xadd not stored by the ctor
-		int m_unk0xae8;                                 // 0xae8 ctor 1; the ctor reads and increments it
-		std::vector<int> m_unk0xaec;                    // 0xaec element type unproven (dtor frees +0xaf0)
+		long m_unk0xae8;                                // 0xae8 ctor 1; the next script id (registerLegalScript)
+		std::vector<int> m_unk0xaec;                    // 0xaec the ctor assigns the ints 1..17 (_Assign 0x005b20c0)
 		NetworkSettings* networkSettings;               // 0xafc ctor GlobalAdvancedSettingsItem<NetworkSettings>::singleton()
-		std::set<int> m_unk0xb00;                       // 0xb00 _Buynode 0x00473930 (folded); key unproven
-		std::set<int> m_unk0xb0c;                       // 0xb0c same
-		// 0xb18: a boost::multi_index_container (ctor 0x005b36e0 allocates a 0x38-byte header node,
-		// index headers at +0x18/+0x34/+0x48 of it). Placeholder bytes until its type is known.
-		undefined m_unk0xb18[0xb6c - 0xb18];            // 0xb18
-		rbx::signals::signal<void()> m_unk0xb6c;        // 0xb6c ctor 0x005b14d0, dtor 0x005b27e0; signature unproven
-		rbx::signals::signal<void()> m_unk0xb70;        // 0xb70 same
-		rbx::signals::signal<void(std::string, shared_ptr<Instance>)> m_unk0xb74; // 0xb74 ctor 0x0052e7a0, dtor 0x0053b310
+		std::set<std::string> usedTickets;              // 0xb00 2016 name; set<string> by the dtor's erase 0x0040a6a0
+		std::set<std::string> preusedTickets;           // 0xb0c same
+		// 0xb18: iOS 10-29 instantiates bimap_core<std::string, long> for Server only (left and right
+		// ordered_unique); the ctor inserts ("", id) (2016: registerLegalScript("")). Its core is at 0xb30
+		// (dtor 0x005b32b0 frees the 0x38-byte header node from 0xb34).
+		boost::bimap<std::string, long> m_unk0xb18;     // 0xb18 (0x54)
+		// iOS EventDesc types; 2016 names and order.
+		rbx::signals::signal<void(shared_ptr<Instance>, FilterResult, shared_ptr<Instance>, std::string)> dataBasicFilteredSignal;  // 0xb6c dtor 0x005b27e0
+		rbx::signals::signal<void(shared_ptr<Instance>, FilterResult, shared_ptr<Instance>, std::string)> dataCustomFilteredSignal; // 0xb70
+		rbx::signals::signal<void(std::string, shared_ptr<Instance>)> incommingConnectionSignal;                                     // 0xb74 ctor 0x0052e7a0, dtor 0x0053b310
 	};
 
 } // namespace Network

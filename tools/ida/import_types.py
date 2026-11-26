@@ -173,6 +173,13 @@ CLASSES = [
     # unpaired, no App code includes Game.h), GlobalBasicSettings (0xb4; ctor 0x00658640 unpaired), Network::Server
     # (ctor 0.51, dtor 0.91), MainLogManager's ctor (0.886 / 0.61), VistaAPIs (no size annotation)
     "RBX::GameBasicSettings", "RBX::Network::Players", "RBX::Network::IdSerializer",
+    # wave14 sync (sweep21, build/sweep21/P-final.json / S-final.json 100%; size = the tree's DECOMP_SIZE_ASSERT /
+    # // SIZE = the PDB's), PLAYER / STUDIO: GlobalBasicSettings (0xb4) ctor 0x00658640 / 0x00740dd0 (app-14);
+    # Network::Server (0xb78) ctor 0x005b4fd0 / 0x00615420, dtor 0x005b32b0 / 0x006132b0 (network-5f-5);
+    # UserInputBase (0x38) ctor 0x0072af80 / 0x0082a870 (app-14); XmlNameValuePair (0x10) ctors 0x00558f00 /
+    # 0x00627be0, STUDIO 0x005b79c0 / 0x00748d10. Not yet: Game (0x34; ctor 0x00655e70 unpaired), Replicator
+    # (ctor/dtor not paired), ScreenshotVerb (ctor 0.759), VistaAPIs (no size annotation)
+    "RBX::GlobalBasicSettings", "RBX::Network::Server", "RBX::UserInputBase", "XmlNameValuePair",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",

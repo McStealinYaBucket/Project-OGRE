@@ -99,14 +99,6 @@ extern "C" void ogre_stub_007600d0()
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_007600d0")
 
-// public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
-// STUB: STUDIO 0x00780050
-extern "C" void ogre_stub_00780050()
-{
-	STUB(0x00780050);
-}
-#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z=_ogre_stub_00780050")
-
 // public: void __thiscall RBX::RootInstance::publicInsertRaw(class std::vector<class boost::shared_ptr<class RBX::Instance>, class std::allocator<class boost::shared_ptr<class RBX::Instance>>> const &, class RBX::Instance *, class std::vector<class boost::weak_ptr<class RBX::PartInstance>, class std::allocator<class boost::weak_ptr<class RBX::PartInstance>>> &, bool, bool)
 // STUB: STUDIO 0x00789030
 extern "C" void ogre_stub_00789030()
@@ -130,14 +122,6 @@ extern "C" void ogre_stub_007f27e0()
 	STUB(0x007f27e0);
 }
 #pragma comment(linker, "/alternatename:?format_string@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDZZ=_ogre_stub_007f27e0")
-
-// public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
-// STUB: STUDIO 0x00846e30
-extern "C" void ogre_stub_00846e30()
-{
-	STUB(0x00846e30);
-}
-#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z=_ogre_stub_00846e30")
 
 // public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
 // STUB: STUDIO 0x00a68030

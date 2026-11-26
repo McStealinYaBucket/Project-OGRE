@@ -47,6 +47,10 @@ namespace RBX {
 	class Verb;
 	class ViewBase;
 	class FrameRateManager;
+	namespace Soundscape
+	{
+		class SoundService;
+	}
 
 	// The sound callbacks the recording loop uses (startRecording binds three SoundService
 	// members). Its dtor is out of line: PLAYER 0x00464b60, STUDIO 0x0048c6e0.
@@ -73,7 +77,7 @@ namespace RBX {
 		virtual void setVideoQuality(int videoQuality) = 0;             // vtable+0x10
 		virtual void VTable0x14(void* p_unk, Verb* verb) = 0;           // vtable+0x14
 		virtual void VTable0x18(void* p_unk, Verb* verb) = 0;           // vtable+0x18
-		virtual void VTable0x1c() = 0;                                  // vtable+0x1c
+		virtual std::string& getFileName() = 0;                         // vtable+0x1c (RecordToggleVerb::startAction)
 		virtual void VTable0x20() = 0;                                  // vtable+0x20
 		virtual void VTable0x24() = 0;                                  // vtable+0x24
 	};
@@ -104,6 +108,11 @@ namespace RBX {
 		/*override*/ void VTable0x10();                 // vtable+0x10
 
 		bool isVideoRecording() { return capture->isRunning(); }
+		std::string& getFileName() { return capture->getFileName(); }
+
+		// PLAYER 0x00464f30, not written (asserts 111/127; needs SoundService's 2013 callbacks and
+		// two ViewBase virtuals). LTCG passes soundService in ecx and `this` in edi.
+		void startRecording(Soundscape::SoundService* soundService);
 		// 2013 only forwards (the ctor calls the capture slot directly, no store to videoQuality).
 		void setVideoQuality(int quality) { capture->setVideoQuality(quality); }
 

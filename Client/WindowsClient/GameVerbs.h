@@ -3,8 +3,8 @@
    0x00be1bcc..0x00be1c2c, seven slots each: dump, dtor, isEnabled, isChecked, isSelected, getText,
    doIt). No 2013 __FILE__ string names this file (none of its code asserts), so the path is the
    2016 tree's (WindowsClient/GameVerbs.cpp).
-   Written so far: LeaveGameVerb, ToggleFullscreenVerb, RecordToggleVerb's dtor, state queries and
-   doIt (its two actions are still STUBs). */
+   Written: LeaveGameVerb, ToggleFullscreenVerb, ScreenshotVerb's ctor, RecordToggleVerb's dtor, startAction, state
+   queries and doIt (ScreenshotVerb::doIt and RecordToggleVerb::action: see GameVerbs.cpp). */
 
 #pragma once
 
@@ -24,6 +24,7 @@ namespace RBX {
 	class Document;
 	class Game;
 	class View;
+	class ViewBase;
 	class VideoControl;
 
 	// VTABLE: PLAYER 0x00be1bcc
@@ -37,6 +38,24 @@ namespace RBX {
 
 	public:
 		LeaveGameVerb(Document& doc, VerbContainer* container);
+		/*override*/ void doIt(IDataState* dataState); // vtable+0x18
+	};
+
+	// VTABLE: PLAYER 0x00be1c0c
+	// Ctor PLAYER 0x004382f0 (LTCG: `game` in ecx; `this`, doc and view on the stack, ret 0xc).
+	// Members in 2016's order (screenshotFinished calls view's slot 0x70). Its scalar deleting
+	// destructor is LeaveGameVerb's (0x004382b0).
+	class ScreenshotVerb : public Verb
+	{
+		Game* game;          // 0x0c
+		ViewBase* view;      // 0x10
+		const Document& doc; // 0x14
+
+		// Connected to DataModel::screenshotReadySignal by the ctor.
+		void screenshotFinished(const std::string& filename); // PLAYER 0x004385c0
+
+	public:
+		ScreenshotVerb(const Document& doc, ViewBase* view, Game* game);
 		/*override*/ void doIt(IDataState* dataState); // vtable+0x18
 	};
 
@@ -80,6 +99,9 @@ namespace RBX {
 
 		bool isUploadingVideo() const { return videoUploadingEnabled; }
 
+		// The helper thread's loop (the ctor starts it).
+		void action();      // PLAYER 0x00438fa0
+
 		// Run on the helper thread; doIt binds one of them into `job`.
 		void startAction(); // PLAYER 0x00439370
 		void stopAction();  // PLAYER 0x00439450
@@ -94,5 +116,12 @@ namespace RBX {
 		// SYNTHETIC: PLAYER 0x00439210
 		// RBX::RecordToggleVerb::`scalar deleting destructor'
 	};
+
+	// doIt's `job = bind(...)`, the shell's copy (it calls function0<void>::swap 0x0043b140, which
+	// engine code calls too, so swap keeps __thiscall).
+	// clang-format off
+	// TEMPLATE: PLAYER 0x0043af20
+	// ??$?4V?$bind_t@XV?$mf0@XVRecordToggleVerb@RBX@@@_mfi@boost@@V?$list1@V?$value@PAVRecordToggleVerb@RBX@@@_bi@boost@@@_bi@3@@_bi@boost@@@?$function@$$A6AXXZ@boost@@QAEAAV01@V?$bind_t@XV?$mf0@XVRecordToggleVerb@RBX@@@_mfi@boost@@V?$list1@V?$value@PAVRecordToggleVerb@RBX@@@_bi@boost@@@_bi@3@@_bi@1@@Z
+	// clang-format on
 
 } // namespace RBX

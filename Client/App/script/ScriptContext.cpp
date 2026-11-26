@@ -584,10 +584,8 @@ void ScriptContext::onCamelCaseViolation(boost::shared_ptr<Instance> object, std
 	else
 		StandardOut::singleton()->printf(MESSAGE_WARNING, "\"%s.%s\" should be \"%s\"", object->getClassNameStr().c_str(), memberName.c_str(), trueName.c_str());
 }
-
-
-
-
+// openState's debug-API keep-alive gate: one read (PLAYER 0x0068838a), no writer, .bss (0x00de8bd9).
+bool g_unk0x00de8bd9 = false;
 static void openScriptLibrary(lua_State* L, const char* libName, lua_CFunction open);
 static int scriptPanic(lua_State* L);
 // mac: 0x18B5AC core (batch320: allocator + newstate + atpanic + context link + 4 locked libs + string-metatable lock + _G table; returns the state for the caller to store. gc tuning, Bridges, globals and jobs queue in later parts).
@@ -595,6 +593,8 @@ static int scriptPanic(lua_State* L);
 // STUB: STUDIO 0x007edad0
 lua_State* ScriptContext::openState()
 {
+	if (g_unk0x00de8bd9)
+	{ lua_getstack(NULL, 0, NULL); lua_getinfo(NULL, NULL, NULL); lua_getlocal(NULL, NULL, 0); lua_setlocal(NULL, NULL, 0); lua_getupvalue(NULL, 0, 0); lua_setupvalue(NULL, 0, 0); lua_gethook(NULL); lua_gethookmask(NULL); lua_gethookcount(NULL); }
 	if (luaAllocator.get() == NULL)
 		luaAllocator.reset(new LuaAllocator(FLog::UseLuaMemoryPool != 0));
 	lua_State* L = lua_newstate(LuaAllocator::alloc, luaAllocator.get());

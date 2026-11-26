@@ -62,7 +62,9 @@ namespace RBX {
 		// IVideoCapture::setVideoQuality.
 		VideoQuality videoQuality;		// 0x90  MEDIUM_RES
 		VideoQuality getVideoQualitySetting() const { return videoQuality; }
+		void setVideoQualitySetting(VideoQuality value);	// 0x006f4840
 		UploadSetting getPostImageSetting() const { return postImageSetting; }
+		void setPostImageSetting(UploadSetting value);		// 0x006f4810
 	};
 
 } // namespace RBX

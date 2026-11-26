@@ -121,9 +121,9 @@ namespace RBX { namespace Lua {
 		return name;
 	}
 	// mac: 0x173774 (526B, batch516): Instance.new(className[, parent]).
-	// probe_compare: identical; reccmp 99.2 (its getPtr call is the unpaired wrapper 0x00877530).
-	// STUB: PLAYER 0x0087af00
-	// STUB: STUDIO 0x009df580
+	// 100% once the getInstance wrapper (0x00877530) is its own out-of-line call.
+	// FUNCTION: PLAYER 0x0087af00
+	// FUNCTION: STUDIO 0x009df580
 	int ObjectBridge::newInstance(lua_State* L)
 	{
 		const char* className = throwable_lua_tostring(L, 1);
@@ -143,7 +143,7 @@ namespace RBX { namespace Lua {
 		if (lua_gettop(L) >= 2)
 		{
 			boost::shared_ptr<Instance> parent =
-				SharedPtrBridge<Instance>::getPtr(L, 2);
+				ObjectBridge::getInstance(L, 2);
 			if (parent.get() != NULL)
 			{
 				// 2013: a RobloxLocked parent (fw+0x19) needs LocalUser.
@@ -640,7 +640,7 @@ namespace RBX { namespace Lua {
 			if (type == Reflection::Type::singleton<boost::shared_ptr<Instance> >())
 			{
 				writeValue<boost::shared_ptr<Instance> >(prop, described,
-					SharedPtrBridge<Instance>::getPtr(L, 3));
+					ObjectBridge::getInstance(L, 3));
 				return;
 			}
 			if (type == Reflection::Type::singleton<G3D::Vector3>())
@@ -788,7 +788,7 @@ namespace RBX { namespace Lua {
 				if (refProp != NULL)
 				{
 					boost::shared_ptr<Instance> value =
-						SharedPtrBridge<Instance>::getPtr(L, 3);
+						ObjectBridge::getInstance(L, 3);
 					Reflection::DescribedBase* refValue =
 						value.get() != NULL
 							? static_cast<Reflection::DescribedBase*>(value.get())

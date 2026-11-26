@@ -23,6 +23,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <new>
 #include <typeinfo>
 
@@ -51,8 +52,11 @@ namespace RBX
 		delete t;
 	}
 
-	bool isFinite(double value);
-	bool isFinite(int value);
+	// Inline in 2013 (no out-of-line copy in any build; ios has no symbol): the 64-bit exponent
+	// test of boost::math::isfinite (and 0x7ff00000 on the high word, cmp of the low words;
+	// RunningAverage<double,double>::sample PLAYER 0x004612a0).
+	inline bool isFinite(double value) { return (boost::math::isfinite)(value); }
+	inline bool isFinite(int value) { return true; }
 }
 
 namespace rbx

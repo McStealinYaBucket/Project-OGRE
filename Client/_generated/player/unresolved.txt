@@ -5,22 +5,23 @@ data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
 data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
+data	?RobloxWndInit@FLog@@3EA	unsigned char FLog::RobloxWndInit
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
-data	?aaSamples@CRenderSettings@RBX@@1W4AASamples@12@A	protected: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
+data	?aaSamples@CRenderSettings@RBX@@2W4AASamples@12@A	public: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
-data	?registrar@?$ClassRegistrar@VGameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings> RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings>::registrar
-data	?registrar@?$EnumRegistrar@W4ControlMode@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode>::registrar
-data	?registrar@?$EnumRegistrar@W4RenderQualitySetting@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting>::registrar
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
 unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void __thiscall RakNet::TCPInterface::DeallocatePacket(struct RakNet::Packet *)
 unknown	?Final@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Final(void)
 unknown	?GetHash@CSHA1@@QBEPAEXZ	public: unsigned char * __thiscall CSHA1::GetHash(void) const
+unknown	?PostUserInputMessage@UserInput@RBX@@QAEXIIJ@Z	public: void __thiscall RBX::UserInput::PostUserInputMessage(unsigned int, unsigned int, long)
 unknown	?Reset@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Reset(void)
 unknown	?Send@PacketizedTCP@RakNet@@QAEXPBDIABUSystemAddress@2@_N@Z	public: void __thiscall RakNet::PacketizedTCP::Send(char const *, unsigned int, struct RakNet::SystemAddress const &, bool)
 unknown	?SendList@PacketizedTCP@RakNet@@QAE_NPAPBDPBHHABUSystemAddress@2@_N@Z	public: bool __thiscall RakNet::PacketizedTCP::SendList(char const **, int const *, int, struct RakNet::SystemAddress const &, bool)
 unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned char *, unsigned int)
+unknown	?getResolutionPreset@CRenderSettings@RBX@@QAEABURESOLUTIONENTRY@12@W4ResolutionPreset@12@@Z	public: struct RBX::CRenderSettings::RESOLUTIONENTRY const & __thiscall RBX::CRenderSettings::getResolutionPreset(enum RBX::CRenderSettings::ResolutionPreset)
+unknown	?startRecording@VideoControl@RBX@@QAEXPAVSoundService@Soundscape@2@@Z	public: void __thiscall RBX::VideoControl::startRecording(class RBX::Soundscape::SoundService *)
 unparsed	?slot_exception_handler@signals@rbx@@3V?$function@$$A6AXAAVexception@std@@@Z@boost@@A	class boost::function<void __cdecl(class std::exception &)> rbx::signals::slot_exception_handler
 unparsed	_LZ4_compressHC_limitedOutput	
 unparsed	_LZ4_compress_limitedOutput	

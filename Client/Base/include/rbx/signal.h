@@ -371,35 +371,18 @@ namespace rbx
 				if (slot_exception_handler)
 					slot_exception_handler(e);
 			}
+			// 2013 advances under the signature's mutex and keeps the old item alive until the lock
+			// is gone (out of line per signature: PLAYER 0x00439fe0 for void(bool), 0x00459dd0 for
+			// void(const PropertyDescriptor*), which differ only in their mutex statics).
 			bool next(boost::intrusive_ptr<slot>& item)
 			{
+				boost::intrusive_ptr<slot> current(item);
+				boost::mutex::scoped_lock lock(mutex());
+				item = item ? item->next : head;
 				if (!item)
-				{
-					// Start iterating; this is safe to read from
-					// If another thread is in the process of prepending, we can get old head or new head
-					// If we do get the new head it should already have the new next so this is race-free
-					item = this->head;
-				}
-				else
-				{
-					// Advance the iterator; we keep item alive so next is safe to read from
-					// If another thread is in the process of removing the 'item->next' connection we may see
-					// the next pointer either pointing to the element that's being removed or to the next one
-					// Since replacing next is atomic and we can't observe any other values than these two this is
-					// also race-free.
-					item = item->next;
-				}
-
-				if (!item)
-				{
-					// Done iterating
 					return false;
-				}
 				else
-				{
-					// Iteration succeeded
 					return true;
-				}
 			}
 
 		};

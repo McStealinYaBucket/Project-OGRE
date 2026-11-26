@@ -6,7 +6,15 @@
 #include "Peer.h"
 #include "ConcurrentRakPeer.h"
 #include "Replicator.h"
+#include "RakPeer.h"
 #include "RakPeerInterface.h"
+#include "V8DataModel/DataModel.h"
+#include "V8DataModel/DataModelJob.h"
+#include "V8DataModel/NetworkSettings.h"
+#include "V8DataModel/StatsItem.h"
+#include "V8DataModel/StatsService.h"
+#include "rbx/rbxtime.h"
+#include "FastLog.h"
 #include "decomp.h"
 
 namespace RBX {
@@ -38,6 +46,82 @@ Peer::~Peer()
 {
 }
 
+// RakPeer plus the owning Peer (0x5e8), 0x5f0 bytes; vftable 0x00b1f0cc (STUDIO 0x00bd4dcc) has
+// RakPeer's 83 slots and this class's own RunUpdateCycle at slot 83.
+class ProfiledRakPeer : public RakNet::RakPeer
+{
+private:
+	Peer& peer;	// 0x5e8
+	typedef RakNet::RakPeer Super;
+
+public:
+	ProfiledRakPeer(Peer& peer):peer(peer) {}
+
+	// FUNCTION: PLAYER 0x005b8e80
+	// FUNCTION: STUDIO 0x0064adf0
+	virtual bool RunUpdateCycle(RakNet::TimeUS timeNS, RakNet::Time timeMS)
+	{
+		Timer<Time::Benchmark> timer;
+		RakNet::BitStream updateBitStream(MAXIMUM_MTU_SIZE);
+		bool result = Super::RunUpdateCycle(timeNS, timeMS, updateBitStream);
+		peer.rakDutyCycle.sample(timer.delta());
+		return result;
+	}
+};
+
+// DataModelJob (0x218), then dataModel 0x218, receiveRate 0x220, rakPeer 0x228; 0x230 bytes.
+// sleepTime and error fold with SoundService::SoundJob's (0x006f0680, 0x005b9480).
+class PacketReceiveJob : public DataModelJob
+{
+	weak_ptr<DataModel> dataModel;	// 0x218
+	double receiveRate;				// 0x220
+public:
+	weak_ptr<ConcurrentRakPeer> rakPeer;	// 0x228
+
+	// receiveRate is NetworkSettings+0x110 (2016: getReceiveRate()), private in App's
+	// NetworkSettings.h until it gets an accessor; the rest of the body is final.
+	// STUB: PLAYER 0x005b92c0
+	// STUB: STUDIO 0x0064b030
+	PacketReceiveJob(shared_ptr<ConcurrentRakPeer> rakPeer, DataModel* dataModel)
+		:DataModelJob("Net PacketReceive", DataModelJob::DataIn, false, shared_from(dataModel), Time::Interval(0))
+		,dataModel(shared_from(dataModel))
+		,receiveRate(0)
+		,rakPeer(rakPeer)
+	{
+		NetworkSettings::singleton();
+	}
+
+private:
+	Time::Interval sleepTime(const Stats& stats)
+	{
+		return computeStandardSleepTime(stats, receiveRate);
+	}
+
+	virtual Job::Error error(const Stats& stats)
+	{
+		return computeStandardError(stats, receiveRate);
+	}
+
+	// FUNCTION: PLAYER 0x005b9560
+	// FUNCTION: STUDIO 0x0064b2d0
+	virtual TaskScheduler::StepResult stepDataModelJob(const Stats& stats)
+	{
+		if (shared_ptr<DataModel> safeDataModel = dataModel.lock())
+		{
+			FASTLOG1(FLog::DataModelJobs, "Packet receive start, data model: %p", safeDataModel.get());
+			DataModel::scoped_write_request request(safeDataModel.get());
+
+			if (shared_ptr<ConcurrentRakPeer> safeRakPeer = rakPeer.lock())
+				while (RakNet::Packet* packet = safeRakPeer->rawPeer()->Receive())
+					safeRakPeer->DeallocatePacket(packet);
+
+			FASTLOG1(FLog::DataModelJobs, "Packet receive finish, data model: %p", safeDataModel.get());
+			return TaskScheduler::Stepped;
+		}
+		return TaskScheduler::Done;
+	}
+};
+
 // FUNCTION: PLAYER 0x005b9960
 // FUNCTION: STUDIO 0x0064b5b0
 bool Peer::askAddChild(const Instance* instance) const
@@ -56,14 +140,106 @@ Peer::Peer()
 	protocolVersion = 18;
 }
 
-// Removes the old StatsService "Network" item and the PacketReceiveJob, drops the RakPeer; on a new
-// provider builds ProfiledRakPeer (0x5f0) in a ConcurrentRakPeer, calls onCreateRakPeer, adds a
-// PacketReceiveJob (0x230) and a PeerStatsItem named "Network" (assert line 238).
-// STUB: PLAYER 0x005ba1d0
-// STUB: STUDIO 0x0064be30
+// Stats::Item (0x88), then peer 0x88 and four child items 0x8c..0x98; 0xa0 bytes (new in
+// Creatable<Instance>::create<PeerStatsItem> 0x005ba150).
+class PeerStatsItem : public Stats::Item
+{
+	Peer* peer;
+	Stats::Item* rakRate;
+	Stats::Item* rakActivity;
+	Stats::Item* physicsSenders;
+	Stats::Item* bufferHealth;
+
+public:
+	// FUNCTION: PLAYER 0x005b9bb0
+	// FUNCTION: STUDIO 0x0064b800
+	PeerStatsItem(Peer* peer):peer(peer)
+	{
+		Stats::Item* item = createChildItem("Packets Thread");
+		rakRate = item->createChildItem("Rate");
+		rakActivity = item->createChildItem("Activity");
+		physicsSenders = item->createChildItem("Physics Senders");
+		bufferHealth = item->createChildItem("Send Buffer Health");
+	}
+
+	// Duty cycle "%.1f%%", rate "%.2g/s", PhysicsService senders (+0x64), the peer's buffer health
+	// (ConcurrentRakPeer 0x005c5070) "%.4g".
+	// STUB: PLAYER 0x005ba060
+	// STUB: STUDIO 0x0064bcc0
+	/*override*/ void update()
+	{
+		STUB(0x005ba060);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTION: PLAYER 0x005ba1d0
+// FUNCTION: STUDIO 0x0064be30
 void Peer::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
 {
-	STUB(0x005ba1d0);
+	Stats::StatsService* stats = ServiceProvider::find<Stats::StatsService>(oldProvider);
+	if (stats)
+	{
+		shared_ptr<Stats::Item> network = shared_from_polymorphic_downcast<Stats::Item>(stats->findFirstChildByName("Network"));
+		if (network)
+			network->setParent(NULL);
+	}
+
+	if (receiveJob)
+	{
+		receiveJob->rakPeer.reset();
+		TaskScheduler::singleton().remove(receiveJob);
+		receiveJob.reset();
+	}
+
+	this->removeAllChildren();
+
+	if (rakPeer)
+	{
+		rakPeer->rawPeer()->DetachPlugin(this);
+		rakPeer.reset();
+	}
+
+	Super::onServiceProvider(oldProvider, newProvider);
+
+	if (newProvider)
+	{
+		rakPeer.reset(new ConcurrentRakPeer(
+			new ProfiledRakPeer(*this),
+			boost::polymorphic_downcast<DataModel*>(newProvider)
+		));
+		rakPeer->rawPeer()->AttachPlugin(this);
+		onCreateRakPeer();
+
+		receiveJob = shared_ptr<PacketReceiveJob>(new PacketReceiveJob(rakPeer, boost::polymorphic_downcast<DataModel*>(newProvider)));
+		TaskScheduler::singleton().add(receiveJob);
+	}
+
+	stats = ServiceProvider::find<Stats::StatsService>(newProvider);
+	if (stats)
+	{
+		RBXASSERT(!shared_from_polymorphic_downcast<Stats::Item>(stats->findFirstChildByName("Network")));
+		shared_ptr<Stats::Item> network = Creatable<Instance>::create<PeerStatsItem>(this);
+		network->setName("Network");
+		network->setParent(stats);
+	}
 }
 
 } }

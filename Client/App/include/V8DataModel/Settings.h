@@ -17,6 +17,7 @@ namespace RBX {
 	{
 	public:
 		Settings() {}
+		Settings(const std::string& settingsFile);	// PLAYER 0x00657f60, out of line
 
 	protected:
 		// 0x8c..0xac: GlobalAdvancedSettings' mutex sits at +0xac (ctor PLAYER 0x00658580), so Settings

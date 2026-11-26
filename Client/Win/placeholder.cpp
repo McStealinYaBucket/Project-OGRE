@@ -42,11 +42,14 @@
 #include "rbx/RunningAverage.h"
 #include "Util/Http.h"
 #include "V8DataModel/DebugSettings.h"
+#include "reflection/Property.h"
 
 #include <boost/thread/thread.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 
 #include <atlstr.h>
 
+#include <locale>
 #include <new>
 #include <vector>
 
@@ -87,6 +90,19 @@ namespace OgreShellStandIn {
 		RBX::DebugSettings::singleton();                                     // 7/0 0x00407700
 		RBX::Http http("");                                                  // ctor 5/0 0x00402b50
 		static_cast<RBX::RunningAverage<double, double>*>(raw)->sample(1.0); // 5/0 0x004612a0
+		// function0<void>::swap 2/0: the engine's 0x00540fd0 and 0x0069c690 call the shell copy
+		// 0x0043b140, so LTCG keeps it __thiscall (ecx + stack). Those engine functions are not
+		// written; taking the address stands in for them (RecordToggleVerb::doIt's operator=).
+#ifndef RBX_STUDIO_BUILD
+		static void (boost::function0<void>::*volatile swapFn)(boost::function0<void>&) = &boost::function0<void>::swap;
+		// Wave-13 twins list (build-sh/w13/twins-D.csv), PLAYER: unique_lock<recursive_mutex>::lock
+		// 8/0 -> 0x004366c0, the ConstProperty ctor 3/0 -> 0x00441d40 (its assert spells
+		// reflection/Property.h), use_facet<numpunct<char>> 3/0 -> 0x0041aaa0.
+		boost::unique_lock<boost::recursive_mutex> recursiveLock(*static_cast<boost::recursive_mutex*>(raw));
+		RBX::Reflection::ConstProperty constProperty(*static_cast<const RBX::Reflection::PropertyDescriptor*>(raw),
+			static_cast<const RBX::Reflection::DescribedBase*>(raw));
+		std::use_facet<std::numpunct<char> >(std::locale());
+#endif
 #ifndef RBX_STUDIO_BUILD
 		new (raw) boost::shared_ptr<RBX::Tasks::Coordinator>(v.coordinator); // copy ctor only
 #endif
@@ -96,3 +112,4 @@ namespace OgreShellStandIn {
 
 // Keep it through /OPT:REF so its instantiations stay in the LTCG set.
 #pragma comment(linker, "/include:_ogreShellStandInUse")
+

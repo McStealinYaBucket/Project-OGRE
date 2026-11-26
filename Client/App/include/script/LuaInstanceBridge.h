@@ -41,6 +41,14 @@ namespace RBX { namespace Lua {
 		static int callMemberFunction(lua_State* L);
 		static int callMemberYieldFunction(lua_State* L);
 		static void registerInstanceClassLibrary(lua_State* L);
+
+		// Out of line in 2013 (newInstance and on_newindex call it).
+		// FUNCTION: PLAYER 0x00877530
+		// FUNCTION: STUDIO 0x009dbc30
+		static boost::shared_ptr<Instance> getInstance(lua_State* L, unsigned int index)
+		{
+			return SharedPtrBridge<Instance>::getPtr(L, index);
+		}
 	};
 
 	template<> void Bridge<boost::shared_ptr<Instance>, false>::registerClass(lua_State* L,

@@ -3208,3 +3208,13 @@ template<> TypeRegistrar<Instance::SaveFilter> TypeRegistrar<Instance::SaveFilte
 
 } // namespace Reflection
 } // namespace RBX
+
+// 2013: a static task the shell binds with a weak_ptr (PLAYER 0x00438460); it fires
+// screenshotSignal (+0xacc) when the DataModel is still alive.
+// FUNCTION: PLAYER 0x0063e240
+// FUNCTION: STUDIO 0x0075c0f0
+void RBX::DataModel::TakeScreenshotTask(weak_ptr<DataModel> weakDataModel)
+{
+	if (shared_ptr<DataModel> dataModel = weakDataModel.lock())
+		dataModel->screenshotSignal();
+}

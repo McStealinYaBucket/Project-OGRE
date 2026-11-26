@@ -3,8 +3,7 @@
    (GlobalAdvancedSettingsItem<T>::singleton, PLAYER 0x00654600) and :176
    (GlobalBasicSettingsItem<T>::singleton, PLAYER 0x00439bf0). GlobalAdvancedSettings.h only forwards here.
 
-   GlobalAdvancedSettings (ctor PLAYER 0x00658580): Settings (0xac), then a boost::mutex at
-   +0xac/+0xb0 (both zeroed in the ctor; singleton() locks it through lea ecx,[gs+0xac]).
+   GlobalAdvancedSettings (ctor PLAYER 0x00658580): Settings (0xac), then a boost::mutex at +0xac/+0xb0 (both zeroed in the ctor; singleton() locks it through lea ecx,[gs+0xac]).
 
    GlobalAdvancedSettings::Item is NonFactoryProduct<Instance, sSettingsItem> (RTTI
    .?AV?$NonFactoryProduct@VInstance@RBX@@$E?sSettingsItem@2@3QBDB@RBX@@). Its askAddChild override
@@ -36,6 +35,7 @@ namespace RBX {
 	{
 	public:
 		GlobalAdvancedSettings() {}
+		~GlobalAdvancedSettings() {}	// user-declared: the deleting dtor 0x00658430 stores the vptrs
 		static boost::shared_ptr<GlobalAdvancedSettings> singleton();
 
 		class Item : public NonFactoryProduct<Instance, sSettingsItem>
@@ -59,7 +59,7 @@ namespace RBX {
 		: public DescribedNonCreatable<GlobalBasicSettings, Settings, sGlobalBasicSettings>
 	{
 	public:
-		GlobalBasicSettings() {}
+		GlobalBasicSettings();	// PLAYER 0x00658640
 		static boost::shared_ptr<GlobalBasicSettings> singleton();
 
 		class Item : public NonFactoryProduct<Instance, sSettingsItem>

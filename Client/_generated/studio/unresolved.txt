@@ -6,11 +6,8 @@ data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
-data	?aaSamples@CRenderSettings@RBX@@1W4AASamples@12@A	protected: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
+data	?aaSamples@CRenderSettings@RBX@@2W4AASamples@12@A	public: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
-data	?registrar@?$ClassRegistrar@VGameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings> RBX::Reflection::ClassRegistrar<class RBX::GameBasicSettings>::registrar
-data	?registrar@?$EnumRegistrar@W4ControlMode@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::ControlMode>::registrar
-data	?registrar@?$EnumRegistrar@W4RenderQualitySetting@GameBasicSettings@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting> RBX::Reflection::EnumRegistrar<enum RBX::GameBasicSettings::RenderQualitySetting>::registrar
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)

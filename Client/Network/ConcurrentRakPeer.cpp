@@ -14,5 +14,19 @@ RakNet::RakPeerInterface* ConcurrentRakPeer::rawPeer()
 	return 0;
 }
 
+// STUB: PLAYER 0x005c4330
+// STUB: STUDIO 0x0061f1f0
+ConcurrentRakPeer::~ConcurrentRakPeer()
+{
+	STUB(0x005c4330);
+}
+
+// STUB: PLAYER 0x005c6770
+// STUB: STUDIO 0x006219d0
+ConcurrentRakPeer::ConcurrentRakPeer(RakNet::RakPeerInterface* peer, DataModel* dataModel)
+{
+	STUB(0x005c6770);
+}
+
 } // namespace Network
 } // namespace RBX

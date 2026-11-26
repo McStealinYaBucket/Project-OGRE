@@ -517,9 +517,12 @@ FACTS = [
     # wave13 sync (app-13.md "IDA owner (names)"): the GameBasicSettings / GameSettings property accessors our
     # tree does not declare yet (so no decoration to copy); iOS 1029 symbols, each checked from the exe bytes
     # (PLAYER and STUDIO bodies identical, raise target PLAYER 0x0061c750 / STUDIO 0x006f1260).
-    (0x006f61f0, 0x00792fd0, "rename", "_ZNK3RBX17GameBasicSettings13getFullScreenEv", "ios:",
-     "RBX::GameBasicSettings::getFullScreen() const (iOS 1029) | `mov al,[ecx+7Ch]; ret`, fullscreen +0x7c "
-     "(GameBasicSettings ctor 0x006f8e70); first of GameBasicSettings' accessors in GameSettings.obj"),
+    # wave14 sync (app-14.md "IDA owner (names)"): 0x006f61f0 is inFullScreen(), not getFullScreen (wave 13): the
+    # "InFullScreen" BoundFuncDesc stores it; getFullScreen() const / setFullScreen are inline (the Fullscreen
+    # descriptor stores the shell copies 0x004659c0 / 0x004659d0). reccmp 100% in sweep21 (P and S).
+    (0x006f61f0, 0x00792fd0, "rename", "?inFullScreen@GameBasicSettings@RBX@@QAE_NXZ", "match:",
+     "RBX::GameBasicSettings::inFullScreen() (iOS 1029 has the non-const inFullScreen()) | `mov al,[ecx+7Ch]; "
+     "ret`, stored by the InFullScreen BoundFuncDesc; reccmp 100% vs our GameBasicSettings.cpp (sweep21)"),
     (0x006f6200, 0x00792fe0, "rename", "_ZN3RBX17GameBasicSettings14setControlModeENS0_11ControlModeE", "ios:",
      "RBX::GameBasicSettings::setControlMode(ControlMode) (iOS 1029) | if [+0x6c] != v: store, raisePropertyChanged "
      "desc 0x00df2628 ('ControlMode')"),
@@ -544,6 +547,51 @@ FACTS = [
      "_ZN3RBX12GameSettings22setVideoQualitySettingENS0_12VideoQualityE", "ios:",
      "RBX::GameSettings::setVideoQualitySetting(VideoQuality) (iOS 1029) | if [+0x90] != v: store, "
      "raisePropertyChanged desc 0x00df207c ('VideoQuality', category 'Video')"),
+    (0x00656320, 0x0073ee60, "rename", "globalAdvancedSettingsFile", "src2016:",
+     "static globalAdvancedSettingsFile() (2016 GlobalSettings.cpp) | getUserDirectory(true, DirAppData, NULL) "
+     "0x006ea4c0, append '\\GlobalSettings_13.xml' 0x00b31094 when not empty; twin of the basic-settings file "
+     "helper 0x00656390 (our basicSettingsFile, 2016 globalBasicSettingsFile)"),
+    (0x0072aaf0, 0x0082a3e0, "rename", "?renderGameCursor@UserInputBase@RBX@@UAEXPAVAdorn@2@@Z", "rtti:",
+     "RBX::UserInputBase::renderGameCursor(Adorn*) (iOS 1029) | slot 7 of UserInput's vftable 0x00be4d9c (not "
+     "overridden); our Util/UserInputBase.cpp STUB pairs here"),
+    (0x006afb40, 0x0080e860, "rename", "?playerRemoving@FriendService@RBX@@QAEXH@Z", "ios:",
+     "RBX::FriendService::playerRemoving(int) (iOS 1021/1029) | only caller Network::Players::onChildRemoving "
+     "0x0056bd8e (STUDIO 0x005d123e): find<FriendService> 0x00548490, then playerRemoving(player->userId [+0xc8]); "
+     "our FriendService.cpp STUB pairs here"),
+    # shell-5k-5.md item 3: the engine bind chain next to DebrisService is weak_ptr<Instance>, not weak_ptr<DataModel>
+    # (2013's weak_ptr<DataModel> bind is the shell copy 0x0043a480, called from 0x00526859 / 0x005a42ba / 0x0066e277 /
+    # 0x006a9290). Our build folds both instantiations into one body (reccmp 100%, it picked the DataModel spelling);
+    # the Instance spelling is the DebrisService.cpp.obj name at the same recomp address. The function1 /
+    # basic_vtable rows 0x00844de0 / 0x00844f60 / 0x0073da60 / 0x0073db90 keep their names: our build has no
+    # Instance spelling at their recomp addresses, and 0x0073db90 has five callers (an ICF-folded body).
+    (0x008445f0, 0x0098a120, "rename",
+     "??0?$list1@V?$value@V?$weak_ptr@VInstance@RBX@@@boost@@@_bi@boost@@@_bi@boost@@QAE@V?$value@V?$weak_ptr@"
+     "VInstance@RBX@@@boost@@@12@@Z", "match:",
+     "boost::_bi::list1<value<weak_ptr<Instance>>> ctor | only caller the bind 0x008447e0 (STUDIO 0x0098a310); "
+     "reccmp 100% vs our DebrisService.cpp.obj copy (folded with Script.cpp's weak_ptr<DataModel> twin)"),
+    (0x008447e0, 0x0098a310, "rename",
+     "??$bind@XV?$weak_ptr@VInstance@RBX@@@boost@@V12@@boost@@YA?AV?$bind_t@XP6AXV?$weak_ptr@VInstance@RBX@@@boost@@"
+     "@ZV?$list1@V?$value@V?$weak_ptr@VInstance@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@0@P6AXV?$weak_ptr@VInstance@RBX@@"
+     "@0@@Z0@Z", "match:",
+     "boost::bind<void, weak_ptr<Instance>>(&cleanup, weak_ptr<Instance>) | only caller DebrisService::addItem "
+     "0x00845087 (STUDIO 0x0098aa57); reccmp 100% vs our DebrisService.cpp.obj copy (folded with Script.cpp's "
+     "weak_ptr<DataModel> twin)"),
+    # wave14 sync: three of integrate.md's "gen_link_stubs can find no address" callees, located from the 2013 call
+    # sites of our own shell functions (decorations as Client/_generated/player/unresolved.txt spells them).
+    (0x0045f1b0, None, "rename", "?PostUserInputMessage@UserInput@RBX@@QAEXIIJ@Z", "src2016:",
+     "RBX::UserInput::PostUserInputMessage(UINT, WPARAM, LPARAM) | only caller View::HandleWindowsMessage 0x00466510 "
+     "at 0x004665e1: `mov edi,[edi+0B0h]` (View+0xb0 userInput), push lParam/wParam, push edi (/GL shell, this on "
+     "the stack) (shell-5k-5)"),
+    (0x009c5e10, None, "rename",
+     "?getResolutionPreset@CRenderSettings@RBX@@QAEABURESOLUTIONENTRY@12@W4ResolutionPreset@12@@Z", "str:",
+     "RBX::CRenderSettings::getResolutionPreset(ResolutionPreset) | assert 'preset < ResolutionMaxIndex' "
+     "(Rendering\\GfxBase\\RenderSettings.cpp:66, /Od frame); only caller View::initializeSizes 0x004679d1 with "
+     "ecx = CRenderSettingsItem::singleton()+0x64, the preference pushed"),
+    (0x00464f30, 0x0048caa0, "rename", "?startRecording@VideoControl@RBX@@QAEXPAVSoundService@Soundscape@2@@Z", "src2016:",
+     "RBX::VideoControl::startRecording(Soundscape::SoundService*) | only caller RecordToggleVerb::startAction "
+     "0x00439402: ecx = ServiceProvider::create<SoundService> result, edi = videoControl [this+0x14] (/GL shell "
+     "registers); right after VideoControl's slot functions (STUDIO 0x0048caa0: same position after ~VideoControl "
+     "0x0048c940, same 625 bytes, 199 of 199 mnemonics equal)"),
 ]
 
 

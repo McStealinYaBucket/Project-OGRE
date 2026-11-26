@@ -197,8 +197,8 @@ namespace RBX {
 	}
 
 	// 2013 has no FASTLOG here, and the script heartbeat gets gameStep (2016: wallStep).
-	// STUB: PLAYER 0x0072da30
-	// STUB: STUDIO 0x0079b6b0
+	// FUNCTION: PLAYER 0x0072da30
+	// FUNCTION: STUDIO 0x0079b6b0
 	void RunService::raiseHeartbeat(double wallStep, const Time::Interval& stepBudget)
 	{
 		totalWallTime += wallStep;

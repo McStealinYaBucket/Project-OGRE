@@ -2,11 +2,23 @@
 
 #include "Util/UDim.h"
 #include "util/Utilities.h"
+#include "Util/ContentId.h"
 
 using namespace RBX;
 
 namespace RBX
 {
+	// 2013 sits just ahead of the UDim converters (PLAYER 0x008d3540; ContentId(const std::string&)
+	// is called out of line there, 0x004c4780).
+	// FUNCTION: PLAYER 0x008d3540
+	// FUNCTION: STUDIO 0x00846e30
+	template<>
+	bool StringConverter<ContentId>::convertToValue(const std::string& text, ContentId& value)
+	{
+		value = ContentId(text);
+		return true;
+	}
+
 	// mac: 0x2580CA
 	template<>
 	std::string StringConverter<UDim>::convertToString(const UDim& value)

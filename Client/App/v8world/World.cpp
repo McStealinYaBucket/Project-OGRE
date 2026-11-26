@@ -799,8 +799,8 @@ namespace RBX {
 
 
 
-	// STUB: PLAYER 0x007492d0
-	// STUB: STUDIO 0x00889c20
+	// FUNCTION: PLAYER 0x007492d0
+	// FUNCTION: STUDIO 0x00889c20
 	void World::destroyJoint(Joint* j)
 	{
 		RBXASSERT(j);
@@ -991,8 +991,8 @@ namespace RBX {
 	}
 
 
-	// STUB: PLAYER 0x0074aa80
-	// STUB: STUDIO 0x0088b3d0
+	// FUNCTION: PLAYER 0x0074aa80
+	// FUNCTION: STUDIO 0x0088b3d0
 	void World::createAutoJoints(Primitive* prim,
 		std::set<Primitive*>* ignorePrims, std::set<Primitive*>* includePrims)
 	{

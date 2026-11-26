@@ -37,6 +37,11 @@ namespace RBX {
 		};
 
 		FriendService() {}
+
+		// Players' onChildAdded/onChildRemoving call these with the player's userId; both start
+		// with Players::backendProcessing(this, false) (PLAYER 0x006b36a0 / 0x006afb40).
+		void playerAdded(int userId);
+		void playerRemoving(int userId);
 	};
 
 } // namespace RBX

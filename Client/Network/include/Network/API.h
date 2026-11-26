@@ -22,6 +22,9 @@ namespace RBX
 	class DataModel;
 	namespace Network
 	{
+		// RBX::Network::FilterResult (W4FilterResult@Network@RBX in Server's EventDesc vftable 0x00b1e4f8).
+		typedef enum { Accept, Reject } FilterResult;
+
 		bool isTrustedContent(const char* url);
 		void initWithoutSecurity();
 	}

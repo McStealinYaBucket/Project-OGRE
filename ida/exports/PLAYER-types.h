@@ -4218,8 +4218,8 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *isReadOnly;
-  void *allocator_char__________0_;
+  void *canClientCreate;
+  void *AASamples____0_;
   void *createChild;
   void *writeXml;
   void *verifySetParent;
@@ -4785,8 +4785,8 @@ struct __cppobj RBX::CRenderSettings
   bool enableFRM;
   unsigned __int8 m_unk0x2a[4];         ///< G3D::Vector2int16
   unsigned __int8 m_unk0x2e[4];         ///< G3D::Vector2int16
+  unsigned __int8 fullscreenSize[4];    ///< G3D::Vector2int16
   unsigned __int8 windowSize[4];        ///< G3D::Vector2int16
-  unsigned __int8 m_unk0x36[4];         ///< G3D::Vector2int16
   bool showAggregation;
   bool drawConnectors;
   bool m_unk0x3c;
@@ -6326,7 +6326,7 @@ struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network:
   bool m_unk0x179;
   unsigned __int8 gap_17A[2];
   unsigned __int8 abuseReporter[4];     ///< boost::scoped_ptr<RBX::Network::AbuseReporter>
-  unsigned __int8 m_unk0x180[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 m_unk0x180[8];        ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
   unsigned __int8 chatHistory[12];      ///< std::list<RBX::Network::ChatMessage>
   unsigned __int8 m_unk0x194[8];        ///< RBX::copy_on_write_ptr<std::vector<boost::shared_ptr<RBX::Instance>> >
   unsigned __int8 localPlayer[8];       ///< boost::shared_ptr<RBX::Network::Player>
@@ -6357,5 +6357,95 @@ struct __cppobj RBX::Network::IdSerializer : RBX::Instance
   unsigned __int8 guidRegistry[8];      ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
   unsigned __int8 waitItems[12];        ///< std::map<RBX::Guid::Data,std::vector<RBX::Network::IdSerializer::WaitItem>>
   int guidIndexBits;
+};
+
+/* 764 */
+struct __cppobj RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings> : RBX::ServiceProvider
+{
+};
+
+/* 765 */
+struct __cppobj RBX::Reflection::Described<RBX::Settings, char const *const RBX::sSettings, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>, 27, 0> : RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>
+{
+};
+
+/* 766 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Settings, RBX::ServiceProvider, char const *const RBX::sSettings, 27, 0> : RBX::Reflection::Described<RBX::Settings, char const *const RBX::sSettings, RBX::NonFactoryProduct<RBX::ServiceProvider, char const *const RBX::sSettings>, 27, 0>
+{
+};
+
+/* 767 */
+struct __cppobj RBX::Settings : RBX::DescribedNonCreatable<RBX::Settings, RBX::ServiceProvider, char const *const RBX::sSettings, 27, 0>
+{
+  unsigned __int8 settingsFile[28];     ///< std::string
+  bool settingsErased;
+  unsigned __int8 gap_A9[3];
+};
+
+/* 768 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings> : RBX::Settings
+{
+};
+
+/* 769 */
+struct __cppobj RBX::Reflection::Described<RBX::GlobalBasicSettings, char const *const RBX::sGlobalBasicSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>, 27, 0> : RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>
+{
+};
+
+/* 770 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::GlobalBasicSettings, RBX::Settings, char const *const RBX::sGlobalBasicSettings, 27, 0> : RBX::Reflection::Described<RBX::GlobalBasicSettings, char const *const RBX::sGlobalBasicSettings, RBX::NonFactoryProduct<RBX::Settings, char const *const RBX::sGlobalBasicSettings>, 27, 0>
+{
+};
+
+/* 771 */
+struct __cppobj RBX::GlobalBasicSettings : RBX::DescribedNonCreatable<RBX::GlobalBasicSettings, RBX::Settings, char const *const RBX::sGlobalBasicSettings, 27, 0>
+{
+  unsigned __int8 mutex[8];             ///< boost::mutex
+};
+
+/* 772 */
+struct __cppobj RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance> : RBX::Network::Peer
+{
+};
+
+/* 773 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::Server, char const *const RBX::Network::sServer, RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>, 1, 0> : RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>
+{
+};
+
+/* 774 */
+struct __cppobj RBX::DescribedCreatable<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, 1, 0> : RBX::Reflection::Described<RBX::Network::Server, char const *const RBX::Network::sServer, RBX::FactoryProduct<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, RBX::Instance>, 1, 0>
+{
+};
+
+/* 775 */
+struct __cppobj RBX::Network::Server : RBX::DescribedCreatable<RBX::Network::Server, RBX::Network::Peer, char const *const RBX::Network::sServer, 1, 0>, RBX::Service
+{
+  unsigned __int8 gap_AC1[3];
+  unsigned int m_unk0xac4;
+  unsigned __int8 m_unk0xac8[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 m_unk0xad0[8];        ///< boost::shared_ptr<RBX::Instance>
+  unsigned __int8 m_unk0xad8[4];        ///< rbx::signals::scoped_connection
+  bool m_unk0xadc;
+  unsigned __int8 m_unk0xadd[11];       ///< array
+  int m_unk0xae8;
+  unsigned __int8 m_unk0xaec[16];       ///< std::vector<int>
+  RBX::NetworkSettings *networkSettings;
+  unsigned __int8 usedTickets[12];      ///< std::set<std::string>
+  unsigned __int8 preusedTickets[12];   ///< std::set<std::string>
+  unsigned __int8 m_unk0xb18[84];       ///< boost::bimaps::bimap<std::string,long,boost::mpl::na,boost::mpl::na,boost::mpl::na>
+  unsigned __int8 dataBasicFilteredSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Network::FilterResult,boost::shared_ptr<RBX::Instance>,std::string)>
+  unsigned __int8 dataCustomFilteredSignal[4]; ///< rbx::signals::signal<void __cdecl(boost::shared_ptr<RBX::Instance>,RBX::Network::FilterResult,boost::shared_ptr<RBX::Instance>,std::string)>
+  unsigned __int8 incommingConnectionSignal[4]; ///< rbx::signals::signal<void __cdecl(std::string,boost::shared_ptr<RBX::Instance>)>
+};
+
+/* 776 */
+struct __cppobj RBX::UserInputBase
+{
+  void **__vftable;
+  unsigned __int8 currentCursorId[32];  ///< RBX::ContentId
+  unsigned __int8 currentCursor[8];     ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 fallbackCursor[8];    ///< boost::shared_ptr<RBX::TextureProxyBase>
+  unsigned __int8 cursorIdChangedSignal[4]; ///< rbx::signal<void __cdecl(void)>
 };
 

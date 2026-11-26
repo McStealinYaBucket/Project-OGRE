@@ -3,14 +3,6 @@
 // yet, so that calls to it pair with the original callee.
 #include "decomp.h"
 
-// public: void __thiscall RBX::View::SetFullscreen(bool)
-// STUB: PLAYER 0x00467880
-extern "C" void ogre_stub_00467880()
-{
-	STUB(0x00467880);
-}
-#pragma comment(linker, "/alternatename:?SetFullscreen@View@RBX@@QAEX_N@Z=_ogre_stub_00467880")
-
 // class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl format_string(char const *, ...)
 // STUB: PLAYER 0x00629910
 extern "C" void ogre_stub_00629910()
@@ -26,14 +18,6 @@ extern "C" void ogre_stub_00642850()
 	STUB(0x00642850);
 }
 #pragma comment(linker, "/alternatename:?physicsStep@DataModel@RBX@@QAEXMNNH@Z=_ogre_stub_00642850")
-
-// public: static bool __cdecl RBX::StringConverter<class RBX::ProtectedString>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ProtectedString &)
-// STUB: PLAYER 0x0066f460
-extern "C" void ogre_stub_0066f460()
-{
-	STUB(0x0066f460);
-}
-#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VProtectedString@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVProtectedString@2@@Z=_ogre_stub_0066f460")
 
 // public: virtual class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __thiscall RBX::Reflection::TypedPropertyDescriptor<class G3D::Vector2int16>::getStringValue(class RBX::Reflection::DescribedBase const *) const
 // STUB: PLAYER 0x006fffc0
@@ -82,14 +66,6 @@ extern "C" void ogre_stub_007e33f0()
 	STUB(0x007e33f0);
 }
 #pragma comment(linker, "/alternatename:?publicInsertRaw@RootInstance@RBX@@QAEXABV?$vector@V?$shared_ptr@VInstance@RBX@@@boost@@V?$allocator@V?$shared_ptr@VInstance@RBX@@@boost@@@std@@@std@@PAVInstance@2@AAV?$vector@V?$weak_ptr@VPartInstance@RBX@@@boost@@V?$allocator@V?$weak_ptr@VPartInstance@RBX@@@boost@@@std@@@4@_N3@Z=_ogre_stub_007e33f0")
-
-// public: static bool __cdecl RBX::StringConverter<class RBX::ContentId>::convertToValue(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> const &, class RBX::ContentId &)
-// STUB: PLAYER 0x008d3540
-extern "C" void ogre_stub_008d3540()
-{
-	STUB(0x008d3540);
-}
-#pragma comment(linker, "/alternatename:?convertToValue@?$StringConverter@VContentId@RBX@@@RBX@@SA_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAVContentId@2@@Z=_ogre_stub_008d3540")
 
 // public: static void __cdecl RBX::Log::setLogProvider(class RBX::ILogProvider *)
 // STUB: PLAYER 0x009b0f40

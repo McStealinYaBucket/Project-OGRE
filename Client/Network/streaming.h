@@ -74,6 +74,9 @@ protected:
 
 	virtual void setRefValue(WaitItem& wi, Instance* instance);        // vtable+0x70
 
+	// Drops the registry; a new provider's GuidRegistryService supplies it (create 0x00563c50).
+	/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider); // vtable+0x20
+
 public:
 	IdSerializer();
 

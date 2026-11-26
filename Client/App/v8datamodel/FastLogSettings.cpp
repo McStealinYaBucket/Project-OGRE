@@ -35,7 +35,32 @@ namespace FLog {
 	// GLOBAL: STUDIO 0x00ec17d5
 	Channel DataModelJobs = 2;
 	int DataModelJobsIniter = RegisterLogGroup("DataModelJobs", &DataModelJobs, NULL, FASTVARTYPE_STATIC);
+}
 
+// The fast flags 2013 registers from this block, in initializer order (PLAYER DebugLocalRcc
+// 0x00a65800, CrispFiltering 0x00a65c60, ImmediateCrash 0x00a65ca0, ImmediateHang 0x00a65cc0);
+// Network's Server, Player and CrashReporter read them.
+namespace FFlag {
+	// GLOBAL: PLAYER 0x00de3f5f
+	// GLOBAL: STUDIO 0x00f84e38
+	bool DebugLocalRccServerConnection = false;
+	int DebugLocalRccServerConnectionIniter = FLog::RegisterFlag("DebugLocalRccServerConnection", &DebugLocalRccServerConnection, NULL, FASTVARTYPE_STATIC);
+	// .data byte starts at 1.
+	// GLOBAL: PLAYER 0x00d30f10
+	// GLOBAL: STUDIO 0x00ec17fc
+	bool CrispFilteringEnabled = true;
+	int CrispFilteringEnabledIniter = FLog::RegisterFlag("CrispFilteringEnabled", &CrispFilteringEnabled, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00de3f6c
+	// GLOBAL: STUDIO 0x00f84e45
+	bool ImmediateCrashUploadEnabled = false;
+	int ImmediateCrashUploadEnabledIniter = FLog::RegisterFlag("ImmediateCrashUploadEnabled", &ImmediateCrashUploadEnabled, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00de3f6d
+	// GLOBAL: STUDIO 0x00f84e46
+	bool ImmediateHangUploadEnabled = false;
+	int ImmediateHangUploadEnabledIniter = FLog::RegisterFlag("ImmediateHangUploadEnabled", &ImmediateHangUploadEnabled, NULL, FASTVARTYPE_STATIC);
+}
+
+namespace FLog {
 	// GLOBAL: PLAYER 0x00d30f17
 	// GLOBAL: STUDIO 0x00ec1803
 	Channel CloseDataModel = 1;
