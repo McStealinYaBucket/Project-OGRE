@@ -7,11 +7,8 @@ data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
 data	?aaSamples@CRenderSettings@RBX@@2W4AASamples@12@A	public: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples
+data	?minGameWindowSize@CRenderSettings@RBX@@2VVector2int16@G3D@@B	public: static class G3D::Vector2int16 const RBX::CRenderSettings::minGameWindowSize
 data	?provider@Log@RBX@@0PAVILogProvider@2@A	private: static class RBX::ILogProvider *RBX::Log::provider
-data	?registrar@?$ClassRegistrar@VClusterPacketCache@Network@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::Network::ClusterPacketCache> RBX::Reflection::ClassRegistrar<class RBX::Network::ClusterPacketCache>::registrar
-data	?registrar@?$ClassRegistrar@VInstancePacketCache@Network@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::Network::InstancePacketCache> RBX::Reflection::ClassRegistrar<class RBX::Network::InstancePacketCache>::registrar
-data	?registrar@?$ClassRegistrar@VPhysicsPacketCache@Network@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::Network::PhysicsPacketCache> RBX::Reflection::ClassRegistrar<class RBX::Network::PhysicsPacketCache>::registrar
-data	?registrar@?$ClassRegistrar@VReplicator@Network@RBX@@@Reflection@RBX@@2V123@A	public: static class RBX::Reflection::ClassRegistrar<class RBX::Network::Replicator> RBX::Reflection::ClassRegistrar<class RBX::Network::Replicator>::registrar
 unknown	??0CSHA1@@QAE@XZ	public: __thiscall CSHA1::CSHA1(void)
 unknown	??1CSHA1@@UAE@XZ	public: virtual __thiscall CSHA1::~CSHA1(void)
 unknown	?AllocatePacket@TCPInterface@RakNet@@QAEPAUPacket@2@I@Z	public: struct RakNet::Packet * __thiscall RakNet::TCPInterface::AllocatePacket(unsigned int)
@@ -19,6 +16,7 @@ unknown	?DeallocatePacket@TCPInterface@RakNet@@QAEXPAUPacket@2@@Z	public: void _
 unknown	?Final@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Final(void)
 unknown	?GetHash@CSHA1@@QBEPAEXZ	public: unsigned char * __thiscall CSHA1::GetHash(void) const
 unknown	?Reset@CSHA1@@QAEXXZ	public: void __thiscall CSHA1::Reset(void)
+unknown	?ResumeAutoAdjustment@FrameRateManager@RBX@@QAEXXZ	public: void __thiscall RBX::FrameRateManager::ResumeAutoAdjustment(void)
 unknown	?Send@PacketizedTCP@RakNet@@QAEXPBDIABUSystemAddress@2@_N@Z	public: void __thiscall RakNet::PacketizedTCP::Send(char const *, unsigned int, struct RakNet::SystemAddress const &, bool)
 unknown	?SendList@PacketizedTCP@RakNet@@QAE_NPAPBDPBHHABUSystemAddress@2@_N@Z	public: bool __thiscall RakNet::PacketizedTCP::SendList(char const **, int const *, int, struct RakNet::SystemAddress const &, bool)
 unknown	?Update@CSHA1@@QAEXPAEI@Z	public: void __thiscall CSHA1::Update(unsigned char *, unsigned int)

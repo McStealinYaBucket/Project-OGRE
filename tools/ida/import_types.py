@@ -188,11 +188,19 @@ CLASSES = [
     # Game (ctor 0x00655e70 unpaired), Selection (0x90; ctor/dtor STUB), PacketReceiveJob (ctor 0x005b92c0 100%,
     # no size annotation), ScreenshotVerb (ctor 0.759), VistaAPIs (no size annotation)
     "RBX::GlobalAdvancedSettings", "RBX::Network::NetworkOwnerJob", "RBX::Network::Replicator",
+    # wave16 sync (sweep23, build/sweep23/P-final.json / S-final.json 100%; size = the tree's // SIZE = the PDB's),
+    # PLAYER / STUDIO: FriendService (0x14c) ctor 0x006b2780 / 0x00811480, dtor 0x006b2970 / 0x00811670 (app-16);
+    # Network::PhysicsPacketCache (0x94) ctor 0x005d74c0 / 0x00668990 and Network::ClusterPacketCache (0x98) ctor
+    # 0x005d9a10 / 0x00669e30 (network-5f-7). Network::Replicator is now proven in STUDIO too (ctor 0x0064a0f0, dtor
+    # 0x006497b0 100%; 0x2328 there, PLAYER 0x2aa8 after network-5f-7's ReplicatorStats fix), so it leaves
+    # PLAYER_ONLY. Not yet: InstancePacketCache (ctor 0.655), ReplicatorStats (0xf68 / 0x7e8; ctor/dtor STUB),
+    # Replicator::ReplicationData / PacketReceiveJob (no size annotation), Game (ctor 0x00655e70 unpaired),
+    # Selection (ctor/dtor STUB), ScreenshotVerb (ctor 0.759)
+    "RBX::FriendService", "RBX::Network::PhysicsPacketCache", "RBX::Network::ClusterPacketCache",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
-               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb",
-               "RBX::Network::Replicator"}
+               "RBX::LeaveGameVerb", "RBX::RecordToggleVerb"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

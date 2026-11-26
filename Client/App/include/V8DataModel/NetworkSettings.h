@@ -80,8 +80,8 @@ namespace RBX {
 		bool m_unk0xf4;					// 0xf4  false
 		bool m_unk0xf5;					// 0xf5  false
 		undefined4 m_unk0xf8;			// 0xf8  not stored by the ctor
-		int m_unk0xfc;					// 0xfc  -200
-		int m_unk0x100;					// 0x100 -200
+		int physicsMtuAdjust;			// 0xfc  -200 (assert Replicator.cpp:3424)
+		int replicationMtuAdjust;		// 0x100 -200 (assert Replicator.cpp:3418)
 		float m_unk0x104;				// 0x104 30.0f
 		float m_unk0x108;				// 0x108 (0x00b1ec54)
 		float m_unk0x10c;				// 0x10c (0x00b1ec54)
@@ -91,6 +91,9 @@ namespace RBX {
 	public:
 		// PacketReceiveJob ctor 0x005b92c0: fld qword [eax+0x110].
 		double getReceiveRate() const { return receiveRate; }
+		// Replicator::getPhysicsMtuSize 0x00581ca0 / getAdjustedMtuSize 0x00581c10: cmp [eax+0xfc|0x100],0.
+		int getPhysicsMtuAdjust() const { return physicsMtuAdjust; }
+		int getReplicationMtuAdjust() const { return replicationMtuAdjust; }
 	};
 
 } // namespace RBX

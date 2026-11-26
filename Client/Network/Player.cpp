@@ -482,7 +482,7 @@ template RBX::StarterPackService* RBX::ServiceProvider::find<RBX::StarterPackSer
 template RBX::PersonalServerService* RBX::ServiceProvider::find<RBX::PersonalServerService>() const;
 template RBX::SocialService* RBX::ServiceProvider::find<RBX::SocialService>() const;
 template RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() const;
-template RBX::PhysicsService* RBX::ServiceProvider::find<RBX::PhysicsService>() const;
+// find<PhysicsService>() const: dropped, PeerStatsItem::update's find<PhysicsService>(const Instance*) instantiates it.
 template RBX::ScriptService* RBX::ServiceProvider::find<RBX::ScriptService>() const;
 template RBX::MarketplaceService* RBX::ServiceProvider::create<RBX::MarketplaceService>() const;
 template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;

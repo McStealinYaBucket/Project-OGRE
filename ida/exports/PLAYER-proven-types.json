@@ -6333,7 +6333,7 @@
      "scalar": "T_UINT4"
     },
     {
-     "name": "m_unk0xfc",
+     "name": "physicsMtuAdjust",
      "offset": 252,
      "size": 4,
      "kind": "scalar",
@@ -6341,7 +6341,7 @@
      "scalar": "T_INT4"
     },
     {
-     "name": "m_unk0x100",
+     "name": "replicationMtuAdjust",
      "offset": 256,
      "size": 4,
      "kind": "scalar",
@@ -9133,7 +9133,7 @@
    "unique": "VNetworkOwnerJob@Network@RBX@@"
   },
   "RBX::Network::Replicator": {
-   "size": 10916,
+   "size": 10920,
    "vftable": false,
    "virtual_bases": false,
    "bases": [
@@ -9598,6 +9598,249 @@
    ],
    "base": false,
    "unique": "VReplicator@Network@RBX@@"
+  },
+  "RBX::FriendService": {
+   "size": 332,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedCreatable<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, 3, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "friendEventReplicatingSignal",
+     "offset": 100,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int,RBX::FriendService::FriendEventType)>",
+     "scalar": null
+    },
+    {
+     "name": "friendStatusReplicatingSignal",
+     "offset": 108,
+     "size": 8,
+     "kind": "class",
+     "type": "rbx::remote_signal<void __cdecl(int,int,RBX::FriendService::FriendStatus)>",
+     "scalar": null
+    },
+    {
+     "name": "friendStatusConnection",
+     "offset": 116,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    },
+    {
+     "name": "friendEventConnection",
+     "offset": 120,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x7c",
+     "offset": 124,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x98",
+     "offset": 152,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xb4",
+     "offset": 180,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xd0",
+     "offset": 208,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xec",
+     "offset": 236,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x108",
+     "offset": 264,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "friendStatusTable",
+     "offset": 292,
+     "size": 12,
+     "kind": "class",
+     "type": "std::map<int,std::map<int,RBX::FriendService::FriendStatus,std::less<int>,std::allocator<std::pair<int const,RBX::FriendService::FriendStatus> > >,std::less<int>,std::allocator<std::pair<int const,std::map<int,RBX::FriendService::FriendStatus,std::less<int>,std::allocator<std::pair<int const,RBX::FriendService::FriendStatus> > > > > >",
+     "scalar": null
+    },
+    {
+     "name": "friendRequestSet",
+     "offset": 304,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<std::pair<int,int>,std::less<std::pair<int,int> >,std::allocator<std::pair<int,int> > >",
+     "scalar": null
+    },
+    {
+     "name": "players",
+     "offset": 316,
+     "size": 12,
+     "kind": "class",
+     "type": "std::set<int,std::less<int>,std::allocator<int> >",
+     "scalar": null
+    },
+    {
+     "name": "enable",
+     "offset": 328,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VFriendService@RBX@@"
+  },
+  "RBX::Network::PhysicsPacketCache": {
+   "size": 148,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Network::PhysicsPacketCache, RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "streamCache",
+     "offset": 100,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RBX::Assembly const *,boost::unordered::unordered_map<unsigned char,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream>,boost::hash<unsigned char>,std::equal_to<unsigned char>,std::allocator<std::pair<unsigned char const,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream> > > >,boost::hash<RBX::Assembly const *>,std::equal_to<RBX::Assembly const *>,std::allocator<std::pair<RBX::Assembly const * const,boost::unordered::unordered_map<unsigned char,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream>,boost::hash<unsigned char>,std::equal_to<unsigned char>,std::allocator<std::pair<unsigned char const,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream> > > > > > >",
+     "scalar": null
+    },
+    {
+     "name": "sharedMutex",
+     "offset": 124,
+     "size": 16,
+     "kind": "class",
+     "type": "boost::shared_mutex",
+     "scalar": null
+    },
+    {
+     "name": "addingAssemblyConnection",
+     "offset": 140,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    },
+    {
+     "name": "removedAssemblyConnection",
+     "offset": 144,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signals::scoped_connection",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VPhysicsPacketCache@Network@RBX@@"
+  },
+  "RBX::Network::ClusterPacketCache": {
+   "size": 152,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Network::ClusterPacketCache, RBX::Instance, char const *const RBX::Network::sClusterPacketCache, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Voxel::CellChangeListener",
+     "offset": 96,
+     "size": 4,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 100,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "streamCache",
+     "offset": 104,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<int,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream>,boost::hash<int>,std::equal_to<int>,std::allocator<std::pair<int const,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream> > > >",
+     "scalar": null
+    },
+    {
+     "name": "sharedMutex",
+     "offset": 128,
+     "size": 16,
+     "kind": "class",
+     "type": "boost::shared_mutex",
+     "scalar": null
+    },
+    {
+     "name": "clusterInstance",
+     "offset": 144,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<void>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VClusterPacketCache@Network@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -11866,6 +12109,54 @@
    "base": true,
    "unique": "V?$DescribedNonCreatable@VReplicator@Network@RBX@@VIdSerializer@23@$E?sReplicator@23@3QBDB$00$0A@@RBX@@"
   },
+  "RBX::DescribedCreatable<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, 3, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::FriendService, char const *const RBX::sFriendService, RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>, 3, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedCreatable@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDB$02$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::Network::PhysicsPacketCache, RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::PhysicsPacketCache, char const *const RBX::Network::sPhysicsPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VPhysicsPacketCache@Network@RBX@@VInstance@3@$E?sPhysicsPacketCache@23@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::Network::ClusterPacketCache, RBX::Instance, char const *const RBX::Network::sClusterPacketCache, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::ClusterPacketCache, char const *const RBX::Network::sClusterPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VClusterPacketCache@Network@RBX@@VInstance@3@$E?sClusterPacketCache@23@3QBDB$0BL@$0A@@RBX@@"
+  },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
    "vftable": false,
@@ -12783,6 +13074,54 @@
    "base": true,
    "unique": "V?$Described@VReplicator@Network@RBX@@$E?sReplicator@23@3QBDBV?$NonFactoryProduct@VIdSerializer@Network@RBX@@$E?sReplicator@23@3QBDB@3@$00$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::FriendService, char const *const RBX::sFriendService, RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>, 3, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VFriendService@RBX@@$E?sFriendService@2@3QBDBV?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@2@$02$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Network::PhysicsPacketCache, char const *const RBX::Network::sPhysicsPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VPhysicsPacketCache@Network@RBX@@$E?sPhysicsPacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsPacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
+  },
+  "RBX::Reflection::Described<RBX::Network::ClusterPacketCache, char const *const RBX::Network::sClusterPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VClusterPacketCache@Network@RBX@@$E?sClusterPacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sClusterPacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -13649,6 +13988,54 @@
    "members": [],
    "base": true,
    "unique": "V?$NonFactoryProduct@VIdSerializer@Network@RBX@@$E?sReplicator@23@3QBDB@RBX@@"
+  },
+  "RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsPacketCache@Network@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sClusterPacketCache@Network@2@3QBDB@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,

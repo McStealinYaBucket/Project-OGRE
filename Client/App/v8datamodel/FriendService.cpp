@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/FriendService.h"
+#include "Network/Players.h"
 
 namespace RBX {
 	const char* const sFriendService = "FriendService";
@@ -76,12 +77,85 @@ template<> TypeRegistrar<FriendService::FriendEventType> TypeRegistrar<FriendSer
 
 namespace RBX {
 
-	// Not written yet (441 bytes: walks the player map at +0x134). STUB body so callers pair.
-	// STUB: PLAYER 0x006afb40
-	// STUB: STUDIO 0x0080e860
+	// FUNCTION: PLAYER 0x006afb40
+	// FUNCTION: STUDIO 0x0080e860
 	void FriendService::playerRemoving(int userId)
 	{
-		STUB(0x006afb40);
+		if (Network::Players::backendProcessing(this, false))
+		{
+			FriendRequestSet::iterator iter = friendRequestSet.begin();
+			FriendRequestSet::iterator end = friendRequestSet.end();
+			while (iter != end)
+			{
+				if (iter->first == userId || iter->second == userId)
+					friendRequestSet.erase(iter++);
+				else
+					++iter;
+			}
+		}
+
+		FriendStatusMap::iterator iter = friendStatusTable.begin();
+		FriendStatusMap::iterator end = friendStatusTable.end();
+		while (iter != end)
+		{
+			if (iter->first == userId)
+				friendStatusTable.erase(iter++);
+			else
+			{
+				if (iter->first < userId)
+				{
+					FriendStatusInternalMap::iterator f = iter->second.find(userId);
+					if (f != iter->second.end())
+						iter->second.erase(f);
+				}
+				++iter;
+			}
+		}
+
+		players.erase(userId);
+	}
+
+	// Not written yet: find<Network::Players>(this), then a Players call (PLAYER 0x00566790) that
+	// the Network headers do not declare yet. STUB body so the bind target pairs.
+	// STUB: PLAYER 0x006b14e0
+	// STUB: STUDIO 0x008101e0
+	void FriendService::friendEventReplicationChanged(int playerId, int otherPlayerId, FriendEventType eventType)
+	{
+		STUB(0x006b14e0);
+	}
+
+	// Not written yet: backendProcessing gate, a store (0x006b1500), then Players calls (0x0055f070).
+	// STUB: PLAYER 0x006b2440
+	// STUB: STUDIO 0x00811140
+	void FriendService::friendStatusReplicationChanged(int playerId, int otherPlayerId, FriendStatus status)
+	{
+		STUB(0x006b2440);
+	}
+
+	// FUNCTION: PLAYER 0x006b2780
+	// FUNCTION: STUDIO 0x00811480
+	FriendService::FriendService()
+		: enable(false)
+	{
+		setName("FriendService");
+	}
+
+	// FUNCTION: PLAYER 0x006b2b50
+	// FUNCTION: STUDIO 0x00811850
+	void FriendService::onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider)
+	{
+		if (friendStatusConnection.connected())
+			friendStatusConnection.disconnect();
+		if (friendEventConnection.connected())
+			friendEventConnection.disconnect();
+
+		if (newProvider)
+		{
+			friendStatusConnection = friendStatusReplicatingSignal.connect(
+				boost::bind(&FriendService::friendStatusReplicationChanged, this, _1, _2, _3));
+			friendEventConnection = friendEventReplicatingSignal.connect(
+				boost::bind(&FriendService::friendEventReplicationChanged, this, _1, _2, _3));
+		}
 	}
 
 	// Not written yet (773 bytes: builds the friend-status request URL). STUB body so callers pair.

@@ -153,6 +153,9 @@ namespace Network {
 		// Sound era (0x244B9A): local-player detection stub.
 		static const Instance* findConstLocalPlayer(const Instance* context);
 		static Player* findLocalPlayer(const Instance* context);
+		// iOS: findConstLocalCharacter(RBX::Instance const*). 2016 returns const ModelInstance*;
+		// Player::character is still a shared_ptr<Instance> here.
+		static const Instance* findConstLocalCharacter(const Instance* context);
 
 		std::string getLoadDataUrl(int userId) const;
 		std::string getSaveDataUrl(int userId) const;

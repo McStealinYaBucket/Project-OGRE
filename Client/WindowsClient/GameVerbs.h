@@ -105,6 +105,8 @@ namespace RBX {
 		// Run on the helper thread; doIt binds one of them into `job`.
 		void startAction(); // PLAYER 0x00439370
 		void stopAction();  // PLAYER 0x00439450
+		// Submitted to the document's FunctionMarshaller by stopAction.
+		void uploadVideo(); // PLAYER 0x004394f0
 
 	public:
 		~RecordToggleVerb();

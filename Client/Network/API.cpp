@@ -19,6 +19,7 @@
 #include "Network/Player.h"
 #include "Network/Players.h"
 #include "Peer.h"
+#include "Replicator.h"
 #include "GuidRegistryService.h"
 #include "V8DataModel/ContentProvider.h"
 #include "V8DataModel/GlobalAdvancedSettings.h"
@@ -89,6 +90,12 @@ RBX_REGISTER_CLASS(RBX::Network::Player);
 RBX_REGISTER_CLASS(RBX::Network::Players);
 RBX_REGISTER_CLASS(RBX::NetworkSettings);
 RBX_REGISTER_CLASS(RBX::Network::Peer);
+// 2013 order: Marker (not written yet), then Replicator (initializer PLAYER 0x00a5ee00), ServerReplicator.
+namespace RBX { namespace Reflection {
+// GLOBAL: PLAYER 0x00dd8bac
+// GLOBAL: STUDIO 0x00f5f98c
+template<> ClassRegistrar<Network::Replicator> ClassRegistrar<Network::Replicator>::registrar(0);
+} }
 RBX_REGISTER_CLASS(RBX::Network::GuidRegistryService);
 
 // ios: 0x00957740. Holds a VMProtect marker region in both builds (PLAYER 0x00526c6a, 137 B), so it stays a STUB; kept for

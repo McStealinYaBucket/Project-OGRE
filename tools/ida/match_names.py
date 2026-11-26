@@ -610,6 +610,33 @@ FACTS = [
      "DFFlag::UseClusterCache (iOS 1029, a DFFlag not an FFlag) | registered 'UseClusterCache' with kind 1 "
      "(dynamic) by the initializer PLAYER 0x00a661d0 / STUDIO 0x00b1d3e0; read by Network::Server::onServiceProvider; "
      "our FastLogSettings.cpp GLOBAL (app-15)"),
+    # wave16 sync (app-16.md / integrate.md "IDA owner"): FriendService's {24}/{28} adjustor thunks (reccmp does not
+    # score them), its two replication handlers (STUBs in our FriendService.cpp) and the two GfxBase
+    # FrameRateManager toggles the shell calls (ResumeAutoAdjustment is a gen_link_stubs "unknown" callee).
+    (0x006b2950, 0x00811650, "rename", "??_EFriendService@RBX@@WBI@AEPAXI@Z", "match:",
+     "RBX::FriendService `vector deleting destructor'`adjustor{24}' | `sub ecx,18h; jmp` the D0 0x006b2b30 (STUDIO "
+     "0x00811830); vftable slot 0x00b39754; 8 bytes equal our FriendService.cpp.obj thunk (jmp offset included)"),
+    (0x006b2960, 0x00811660, "rename", "??_EFriendService@RBX@@WBM@AEPAXI@Z", "match:",
+     "RBX::FriendService `vector deleting destructor'`adjustor{28}' | `sub ecx,1Ch; jmp` the D0 0x006b2b30 (STUDIO "
+     "0x00811830); vftable slot 0x00b39744; 8 bytes equal our FriendService.cpp.obj thunk (jmp offset included)"),
+    (0x006b14e0, 0x008101e0, "rename",
+     "?friendEventReplicationChanged@FriendService@RBX@@AAEXHHW4FriendEventType@12@@Z", "ios:",
+     "RBX::FriendService::friendEventReplicationChanged(int, int, FriendEventType) (iOS 1029) | bound in "
+     "onServiceProvider 0x006b2b50 (push at 0x006b2c09); finds Players and jumps to its 0x00566790; our "
+     "FriendService.cpp STUB pairs here (app-16)"),
+    (0x006b2440, 0x00811140, "rename",
+     "?friendStatusReplicationChanged@FriendService@RBX@@AAEXHHW4FriendStatus@12@@Z", "ios:",
+     "RBX::FriendService::friendStatusReplicationChanged(int, int, FriendStatus) (iOS 1029) | bound in "
+     "onServiceProvider 0x006b2b50 (push at 0x006b2ba4); calls Players 0x0055f070 with the status remapped 3<->4; "
+     "our FriendService.cpp STUB pairs here (app-16)"),
+    (0x009c7aa0, 0x006c3e40, "rename", "?PauseAutoAdjustment@FrameRateManager@RBX@@QAEXXZ", "src2016:",
+     "RBX::FrameRateManager::PauseAutoAdjustment() (2016 FrameRateManager.cpp: mAdjustmentOn = false) | /Od GfxBase "
+     "body `mov byte [this+0Ch],0`; only caller VideoControl::startRecording 0x00464f30 at 0x00465186 (STUDIO "
+     "0x0048ccf6), as 2016 VideoControl.cpp; next to ResumeAutoAdjustment"),
+    (0x009c7ac0, 0x006c3e60, "rename", "?ResumeAutoAdjustment@FrameRateManager@RBX@@QAEXXZ", "src2016:",
+     "RBX::FrameRateManager::ResumeAutoAdjustment() (2016 FrameRateManager.cpp: mAdjustmentOn = true) | /Od GfxBase "
+     "body `mov byte [this+0Ch],1`; only caller 0x00439477 (STUDIO 0x004693e4), the VideoControl stop path; "
+     "decoration from Client/_generated/player/unresolved.txt (shell-5k-7, VideoControl.h)"),
 ]
 
 
@@ -846,6 +873,8 @@ def plan(target, json_path, exe):
         elif act == "comment" and a in updates:     # keep the reccmp line (and its source) and add the fact
             updates[a] = updates[a][:3] + (updates[a][3] + "; " + ev + where,)
         else:
+            if act == "rename" and (names.get(a) or {}).get("source") == "flirt:":
+                act = "rename-lib"  # a FLIRT false positive: also clear FUNC_LIB (STUDIO 0x006c3e40, ConcRT name)
             updates[a] = (act, name, tag, f"p4 {tag} {ev}{where}")
         stat[f"fact {act} ({tag})"] += 1
 

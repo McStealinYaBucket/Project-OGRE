@@ -36,7 +36,7 @@ namespace RBX {
 // "<user directory>\GlobalSettings_13.xml", or "" when there is no user directory.
 // FUNCTION: PLAYER 0x00656320
 // FUNCTION: STUDIO 0x0073ee60
-static std::string advancedSettingsFile()
+static std::string globalAdvancedSettingsFile()
 {
 	std::string result = FileSystem::getUserDirectory(true, DirAppData, NULL);
 	if (result.size() > 0)
@@ -48,7 +48,7 @@ static std::string advancedSettingsFile()
 // FUNCTION: PLAYER 0x00658580
 // FUNCTION: STUDIO 0x00740d10
 GlobalAdvancedSettings::GlobalAdvancedSettings()
-	: DescribedNonCreatable<GlobalAdvancedSettings, Settings, sGlobalAdvancedSettings>(advancedSettingsFile())
+	: DescribedNonCreatable<GlobalAdvancedSettings, Settings, sGlobalAdvancedSettings>(globalAdvancedSettingsFile())
 {
 	setName("Global Settings");
 	create<Selection>();

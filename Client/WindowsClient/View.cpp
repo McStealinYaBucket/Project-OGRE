@@ -79,9 +79,19 @@ namespace {
 
 namespace RBX {
 
+// 2016 adds only the render job. LTCG: `this` in eax (callers 0x0041d16d, 0x00466e37).
+// FUNCTION: PLAYER 0x00466460
+void View::resetScheduler()
+{
+	TaskScheduler& taskScheduler = TaskScheduler::singleton();
+	taskScheduler.add(m_unk0xc4);
+	taskScheduler.add(m_unk0xbc);
+	taskScheduler.add(m_unk0xa8);
+}
+
 // 2013 against 2016: activation restores the fullscreen mode for any non-zero wParam and then
 // shows the window SW_RESTORE; deactivation restores the desktop resolution and minimizes
-// (SW_SHOWMINNOACTIVE). The GetParent test is gated by FFlag::OpenNativeBrowserWindowFromLua.
+// (SW_SHOWMINNOACTIVE). FFlag::OpenNativeBrowserWindowFromLua gates the GetParent test as a ternary (setne/test).
 // STUB: PLAYER 0x00466510
 void View::HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -96,7 +106,7 @@ void View::HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		}
 		else if (fullscreen && !changingResolution && wParam == WA_INACTIVE
-			&& (!FFlag::OpenNativeBrowserWindowFromLua || ::GetParent((HWND)lParam) != GetHWnd()))
+			&& (FFlag::OpenNativeBrowserWindowFromLua ? ::GetParent((HWND)lParam) != GetHWnd() : true))
 		{
 			restoreResolution();
 			HWND hWnd = GetHWnd();
@@ -447,16 +457,6 @@ std::vector<G3D::Vector2int16> View::getFullscreenSizes()
 
 // View.cpp lines up to 739 hold code that is not written yet (the 2013 assert below is on line
 // 739); keep this function at the end until the rest of the file is laid out.
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 # Generated from ida/exports/STUDIO-names.csv. Do not edit.
 # symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on both sides; a static carries our proc name instead.
-# Signature pairing: ambiguous signature 4, ambiguous static name 1, dropped: a position pair contradicts it 18, folded name: address claimed twice 20, kept over a twin-colliding position pair 0, name present, signature differs 20, not defined in our build 3472, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 60, paired by signature 1489, paired by static name 1.
-# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 5375, not in our link 8, paired 26, symbol paired elsewhere 3.
+# Signature pairing: ambiguous signature 4, ambiguous static name 1, dropped: a position pair contradicts it 18, folded name: address claimed twice 20, kept over a twin-colliding position pair 0, name present, signature differs 20, not defined in our build 3459, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 60, paired by signature 1489, paired by static name 1.
+# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 5541, not in our link 8, paired 27, symbol paired elsewhere 4.
 address,name,symbol,type
 00402940,"public: class std::_Tree<class std::_Tmap_traits<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,struct std::less<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>>,0>>::iterator __thiscall std::_Tree<class std::_Tmap_traits<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,struct std::less<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>>,0>>::insert(class std::_Tree<class std::_Tmap_traits<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>,struct std::less<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>,class std::allocator<struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>>,0>>::const_iterator,struct std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>> const &)",?insert@?$_Tree@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@ABU?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@2@@Z,library
 00402af0,"public: __thiscall std::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>::pair<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>>>(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char>> const &)",??0?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@0@Z,library
@@ -91,6 +91,7 @@ address,name,symbol,type
 00429e10,"RBX::FactoryProduct<RBX::Seat, RBX::SeatImpl<RBX::BasicPartInstance>, RBX::sSeat, RBX::Instance>::Creator::create() const",,
 00429f20,"RBX::FactoryProduct<RBX::VehicleSeat, RBX::SeatImpl<RBX::PartInstance>, RBX::sVehicleSeat, RBX::Instance>::Creator::create() const",,
 0042ae50,RBX::CoreGuiService* RBX::ServiceProvider::find<RBX::CoreGuiService>() const,??$find@VCoreGuiService@RBX@@@ServiceProvider@RBX@@QBEPAVCoreGuiService@1@XZ,
+0042b350,"public: __thiscall boost::function<void __cdecl (class RBX::DataModel *)>::function<void __cdecl (class RBX::DataModel *)>(class boost::_bi::bind_t<void,void (__cdecl *)(class boost::weak_ptr<class RBX::DataModel>),class boost::_bi::list1<class boost::_bi::value<class boost::weak_ptr<class RBX::DataModel>>>>,int)",??$?0V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@QAE@V?$bind_t@XP6AXV?$weak_ptr@VDataModel@RBX@@@boost@@@ZV?$list1@V?$value@V?$weak_ptr@VDataModel@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z,
 0042bb40,boost::shared_ptr<RBX::Seat> RBX::Creatable<RBX::Instance>::create<RBX::Seat>(),??$create@VSeat@RBX@@@?$Creatable@VInstance@RBX@@@RBX@@SA?AV?$shared_ptr@VSeat@RBX@@@boost@@XZ,
 0042bed0,"RBX::Reflection::Described<RBX::Tool, RBX::sTool, RBX::FactoryProduct<RBX::Tool, RBX::BackpackItem, RBX::sTool, RBX::Instance>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VTool@RBX@@$E?sTool@2@3QBDBV?$FactoryProduct@VTool@RBX@@VBackpackItem@2@$E?sTool@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
 0042bf60,"RBX::NonFactoryProduct<RBX::BasePlayerGui, RBX::sCoreGuiService>::isNullClassName()",?isNullClassName@?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sCoreGuiService@2@3QBDB@RBX@@SA_NXZ,
@@ -1086,15 +1087,10 @@ address,name,symbol,type
 00622e50,RBX::Name const& RBX::Name::doDeclare<RBX::sFunctionalTest>(),??$doDeclare@$E?sFunctionalTest@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
 00622ec0,RBX::Name const& RBX::Name::doDeclare<RBX::sTouchTransmitter>(),??$doDeclare@$E?sTouchTransmitter@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
 00623760,"boost::detail::sp_counted_impl_pd<boost::io::basic_altstringbuf<char, std::char_traits<char>, std::allocator<char>>*, boost::io::basic_oaltstringstream<char, std::char_traits<char>, std::allocator<char>>::No_Op>::get_deleter(std::type_info const&)",,
-00623980,"RBX::Network::Replicator::setRefValue(RBX::Network::IdSerializer::WaitItem&, RBX::Instance*)",,
 00623a10,RBX::Network::Replicator::terrainCellChanged(RBX::Voxel::CellChangeInfo const&),,
 00623b00,"RBX::Network::Replicator::OnInternalPacket(RakNet::InternalPacket*, unsigned int, RakNet::SystemAddress, unsigned int, int)",,
-00623bc0,RBX::Network::Replicator::getAdjustedMtuSize() const,,
-00623c50,RBX::Network::Replicator::getPhysicsMtuSize() const,,
-00623d00,RBX::Network::Replicator::getMetricValue(std::string const&) const,?getMetricValue@Replicator@Network@RBX@@UBENABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z,
 00625210,boost::detail::sp_counted_impl_p<DummyJob>::dispose(),,
 00625880,boost::detail::sp_counted_impl_p<RBX::Network::DirectPhysicsReceiver>::dispose(),,
-00625c50,RBX::Network::Replicator::getRakStatsString(int),,
 00625cc0,"RBX::Network::Replicator::receiveCluster(RakNet::BitStream&, RBX::Instance*)",,
 00626680,boost::exception_detail::error_info_injector<boost::io::bad_format_string>::~error_info_injector(),,
 00626c00,void RBX::Reflection::Property::setValue<G3D::CoordinateFrame>(G3D::CoordinateFrame const&),??$setValue@VCoordinateFrame@G3D@@@Property@Reflection@RBX@@QAEXABVCoordinateFrame@G3D@@@Z,
@@ -1144,7 +1140,7 @@ address,name,symbol,type
 00635960,RBX::Network::Replicator::receiveData(RakNet::BitStream&),,
 00635a60,RBX::Network::Replicator::sendMarker(),,
 00636ef0,RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() const,??$find@VJointsService@RBX@@@ServiceProvider@RBX@@QBEPAVJointsService@1@XZ,
-006379c0,"RBX::Network::ReplicatorJob::ReplicatorJob(char const*, RBX::Network::Replicator&, RBX::DataModelJob::TaskType)",,
+006379c0,"RBX::Network::ReplicatorJob::ReplicatorJob(char const*, RBX::Network::Replicator&, RBX::DataModelJob::TaskType)",??0ReplicatorJob@Network@RBX@@IAE@PBDAAVReplicator@12@W4TaskType@DataModelJob@2@@Z,
 00637bd0,RBX::Network::Replicator::disconnectReplicationData(boost::shared_ptr<RBX::Instance>),,
 00637ff0,RBX::Network::Replicator::onParentChanged(boost::shared_ptr<RBX::Instance>),,
 006386f0,RBX::Network::Replicator::readChangedProperty(RakNet::BitStream&),,
@@ -1161,10 +1157,6 @@ address,name,symbol,type
 0063acb0,"RBX::FactoryProduct<RBX::TouchTransmitter, RBX::Instance, RBX::sTouchTransmitter, RBX::Instance>::Creator::create() const",?create@Creator@?$FactoryProduct@VTouchTransmitter@RBX@@VInstance@2@$E?sTouchTransmitter@2@3QBDBV32@@RBX@@UBE?AV?$shared_ptr@VObject@RBX@@@boost@@XZ,
 0063bd60,RBX::Network::Replicator::PingJob::PingJob(RBX::Network::Replicator&),,
 0063bed0,"RBX::Network::Replicator::SendDataJob::~SendDataJob() [D0, deleting: the MSVC scalar deleting destructor]",,
-0063bef0,RBX::Network::Replicator::ProcessPacketsJob::ProcessPacketsJob(RBX::Network::Replicator&),,
-0063c020,RBX::Network::Replicator::ProcessPacketsJob::sleepTime(RBX::TaskScheduler::Job::Stats const&),,
-0063c0c0,RBX::Network::Replicator::ProcessPacketsJob::error(RBX::TaskScheduler::Job::Stats const&),,
-0063c240,RBX::Network::Replicator::SendDataJob::sleepTime(RBX::TaskScheduler::Job::Stats const&),,
 0063ced0,"RBX::Network::LogError(RBX::Network::Replicator*, std::string const&)",,
 0063d2c0,RBX::Network::Replicator::processPacket(RakNet::Packet*),,
 0063d790,"RBX::Reflection::Described<RBX::MarketplaceService, RBX::sMarketplaceService, RBX::FactoryProduct<RBX::MarketplaceService, RBX::Instance, RBX::sMarketplaceService, RBX::Instance>, (RBX::Reflection::ClassDescriptor::Functionality)19, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VMarketplaceService@RBX@@$E?sMarketplaceService@2@3QBDBV?$FactoryProduct@VMarketplaceService@RBX@@VInstance@2@$E?sMarketplaceService@2@3QBDBV32@@2@$0BD@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
@@ -1192,7 +1184,7 @@ address,name,symbol,type
 006410e0,"RBX::Reflection::EventDescImpl<2, RBX::Network::Replicator, void (std::string, bool), rbx::signal<void (std::string, bool)>, rbx::signal<void (std::string, bool)> RBX::Network::Replicator::*>::fireEvent(RBX::Reflection::EventSource*, std::vector<RBX::Reflection::Variant, std::allocator<RBX::Reflection::Variant>> const&) const",,
 00641cd0,RBX::Network::Replicator::JoinDataItem::writeInstances(RakNet::BitStream&),,
 00641f60,RBX::Network::Replicator::JoinDataItem::write(RakNet::BitStream&),,
-006420d0,RBX::Network::Replicator::ProcessPacketsJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
+006420d0,RBX::Network::Replicator::ProcessPacketsJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),?stepDataModelJob@ProcessPacketsJob@Replicator@Network@RBX@@EAE?AW4StepResult@TaskScheduler@4@ABUStats@Job@64@@Z,
 00642240,RBX::Network::Replicator::SendClusterJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
 00642700,"RBX::Network::Replicator::onChildAdded(boost::shared_ptr<RBX::Instance>, boost::function<void (boost::shared_ptr<RBX::Instance>)>)",,
 00642b10,RBX::Network::Replicator::readMarker(RakNet::BitStream&),,
@@ -1203,7 +1195,7 @@ address,name,symbol,type
 00645580,"RBX::Network::Replicator::readInstanceNew(RakNet::BitStream&, bool)",,
 00645f30,RBX::Network::Replicator::readJoinData(RakNet::BitStream&),,
 00646370,"RBX::Network::Replicator::addTopReplicationContainer(RBX::Instance*, bool, bool, boost::function<void (boost::shared_ptr<RBX::Instance>)>)",,
-00646560,"RBX::Network::Replicator::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",,
+00646560,"RBX::Network::Replicator::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",?onServiceProvider@Replicator@Network@RBX@@MAEXPAVServiceProvider@3@0@Z,
 006476a0,"RBX::Network::Replicator::serializeEventInvocation(RBX::Reflection::EventInvocation const&, RakNet::BitStream&)",,
 00647800,"RBX::Network::Replicator::serializePropertyValue(RBX::Reflection::ConstProperty const&, RakNet::BitStream&, bool)",,
 00647ce0,"RBX::Network::Replicator::deserializeEventInvocation(RakNet::BitStream&, RBX::Reflection::EventInvocation&)",,
@@ -1298,7 +1290,6 @@ address,name,symbol,type
 00666c20,boost::upgrade_lock<boost::shared_mutex>::lock(),,
 00667150,RBX::Network::PhysicsPacketCache::removeChildAssembly(RBX::Assembly const*),,
 006671b0,"RBX::Network::PhysicsPacketCache::update(RBX::Assembly const*, RakNet::BitStream&, unsigned int, bool)",,
-006673c0,"RBX::Network::InstancePacketCache::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",?onServiceProvider@InstancePacketCache@Network@RBX@@MAEXPAVServiceProvider@3@0@Z,
 00667f70,RBX::Network::PhysicsPacketCache::insertChildAssembly(RBX::Assembly const*),,
 00668480,"RBX::Reflection::Described<RBX::Network::PhysicsPacketCache, RBX::Network::sPhysicsPacketCache, RBX::NonFactoryProduct<RBX::Instance, RBX::Network::sPhysicsPacketCache>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VPhysicsPacketCache@Network@RBX@@$E?sPhysicsPacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sPhysicsPacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
 00668500,"RBX::Reflection::Described<RBX::Network::InstancePacketCache, RBX::Network::sInstancePacketCache, RBX::NonFactoryProduct<RBX::Instance, RBX::Network::sInstancePacketCache>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VInstancePacketCache@Network@RBX@@$E?sInstancePacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sInstancePacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
@@ -1313,7 +1304,6 @@ address,name,symbol,type
 00669bd0,"RBX::Network::ClusterPacketCache::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",?onServiceProvider@ClusterPacketCache@Network@RBX@@MAEXPAVServiceProvider@3@0@Z,
 00669d40,"RBX::Reflection::Described<RBX::Network::ClusterPacketCache, RBX::Network::sClusterPacketCache, RBX::NonFactoryProduct<RBX::Instance, RBX::Network::sClusterPacketCache>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VClusterPacketCache@Network@RBX@@$E?sClusterPacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sClusterPacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
 0066a200,RBX::SpatialFilter::getAssemblies(RBX::Assembly::FilterPhase),,
-0066a260,RBX::Network::NetworkOwnerJob::error(RBX::TaskScheduler::Job::Stats const&),?error@NetworkOwnerJob@Network@RBX@@EAE?AUError@Job@TaskScheduler@3@ABUStats@563@@Z,
 0066af00,RBX::Network::NetworkOwnerJob::NetworkOwnerJob(boost::shared_ptr<RBX::DataModel>),??0NetworkOwnerJob@Network@RBX@@QAE@V?$shared_ptr@VDataModel@RBX@@@boost@@@Z,
 0066b0e0,"RBX::Network::NetworkOwnerJob::~NetworkOwnerJob() [D0, deleting: the MSVC scalar deleting destructor]",??_GNetworkOwnerJob@Network@RBX@@UAEPAXI@Z,
 0066b310,RBX::Network::NetworkOwnerJob::updateNetworkOwner(RBX::PartInstance*),,
@@ -2460,7 +2450,6 @@ address,name,symbol,type
 0073ef40,RBX::GlobalAdvancedSettings::getFFlag(std::string),,
 0073f050,RBX::GlobalAdvancedSettings::getFVariable(std::string),,
 0073f140,RBX::Name const& RBX::Name::doDeclare<RBX::sServiceProvider>(),??$doDeclare@$E?sServiceProvider@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
-0073f440,"RBX::Settings::verifyAddDescendant(RBX::Instance const*, RBX::Instance const*) const",,
 0073f8c0,RBX::Settings::loadState(std::string const&),,
 0073fd60,"boost::detail::sp_counted_impl_pd<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>>*, rbx::detail::sp_ms_deleter<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>>>>::get_deleter(std::type_info const&)",?get_deleter@?$sp_counted_impl_pd@PAV?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@V?$sp_ms_deleter@V?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@@detail@rbx@@@detail@boost@@UAEPAXABVtype_info@@@Z,
 0073fd90,"boost::detail::sp_counted_impl_pd<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>>*, rbx::detail::sp_ms_deleter<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>>>>::dispose()",?dispose@?$sp_counted_impl_pd@PAV?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@V?$sp_ms_deleter@V?$unordered_map@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@U?$hash@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@boost@@U?$equal_to@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VVariant@Reflection@RBX@@@std@@@2@@unordered@boost@@@detail@rbx@@@detail@boost@@UAEXXZ,
@@ -3094,7 +3083,6 @@ address,name,symbol,type
 00809aa0,RBX::FriendService::setBreakFriendUrl(std::string),,
 00809b40,RBX::FriendService::setGetFriendsUrl(std::string),,
 0080d2d0,"boost::detail::sp_counted_impl_p<std::map<int, RBX::FriendService::FriendStatus, std::less<int>, std::allocator<std::pair<int const, RBX::FriendService::FriendStatus>>>>::dispose()",,
-00811850,"RBX::FriendService::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",,
 00811df0,"RBX::FriendService::processServiceResults(int, std::string*, std::exception const*, boost::function<void (boost::shared_ptr<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>> const>)>, boost::function<void (std::string)>)",,
 00812740,"RBX::StringConverter<RBX::Controller::Button>::convertToValue(std::string const&, RBX::Controller::Button&)",,
 008127a0,RBX::ButtonBindingWidget::getSize(RBX::Canvas) const,,

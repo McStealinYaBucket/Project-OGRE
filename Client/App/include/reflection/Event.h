@@ -320,7 +320,7 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 1);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1) const
@@ -349,8 +349,8 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 2);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-					args[1].cast<typename boost::function_traits<Signature>::arg2_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+					args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2) const
@@ -380,9 +380,9 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 3);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
-					args[2].cast<typename boost::function_traits<Signature>::arg3_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+					args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>(),
+					args[2].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg3_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2, typename boost::function_traits<Signature>::arg3_type arg3) const
@@ -413,10 +413,10 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 4);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
-					args[2].cast<typename boost::function_traits<Signature>::arg3_type>(),
-					args[3].cast<typename boost::function_traits<Signature>::arg4_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+					args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>(),
+					args[2].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg3_type>(),
+					args[3].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg4_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2, typename boost::function_traits<Signature>::arg3_type arg3, typename boost::function_traits<Signature>::arg4_type arg4) const
@@ -448,11 +448,11 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 5);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-                                   args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-                                   args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
-                                   args[2].cast<typename boost::function_traits<Signature>::arg3_type>(),
-                                   args[3].cast<typename boost::function_traits<Signature>::arg4_type>(),
-                                   args[4].cast<typename boost::function_traits<Signature>::arg5_type>()
+                                   args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+                                   args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>(),
+                                   args[2].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg3_type>(),
+                                   args[3].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg4_type>(),
+                                   args[4].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg5_type>()
                                    );
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2, typename boost::function_traits<Signature>::arg3_type arg3, typename boost::function_traits<Signature>::arg4_type arg4, typename boost::function_traits<Signature>::arg5_type arg5) const
@@ -485,12 +485,12 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 6);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
-					args[2].cast<typename boost::function_traits<Signature>::arg3_type>(),
-					args[3].cast<typename boost::function_traits<Signature>::arg4_type>(),
-					args[4].cast<typename boost::function_traits<Signature>::arg5_type>(),
-					args[5].cast<typename boost::function_traits<Signature>::arg6_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+					args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>(),
+					args[2].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg3_type>(),
+					args[3].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg4_type>(),
+					args[4].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg5_type>(),
+					args[5].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg6_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2, typename boost::function_traits<Signature>::arg3_type arg3, typename boost::function_traits<Signature>::arg4_type arg4, typename boost::function_traits<Signature>::arg5_type arg5, typename boost::function_traits<Signature>::arg6_type arg6) const
@@ -524,13 +524,13 @@ namespace RBX
 				RBX_SIGNALS_ASSERT(args.size() == 7);
 				EventClass* e = static_cast<EventClass*>(source);
 				this->getSignal(e)(
-					args[0].cast<typename boost::function_traits<Signature>::arg1_type>(),
-					args[1].cast<typename boost::function_traits<Signature>::arg2_type>(),
-					args[2].cast<typename boost::function_traits<Signature>::arg3_type>(),
-					args[3].cast<typename boost::function_traits<Signature>::arg4_type>(),
-					args[4].cast<typename boost::function_traits<Signature>::arg5_type>(),
-					args[5].cast<typename boost::function_traits<Signature>::arg6_type>(),
-					args[6].cast<typename boost::function_traits<Signature>::arg7_type>()
+					args[0].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg1_type>(),
+					args[1].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg2_type>(),
+					args[2].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg3_type>(),
+					args[3].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg4_type>(),
+					args[4].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg5_type>(),
+					args[5].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg6_type>(),
+					args[6].cast_unk0x0058f560<typename boost::function_traits<Signature>::arg7_type>()
 					);
 			}
 			void fireEvent(EventClass* instance, typename boost::function_traits<Signature>::arg1_type arg1, typename boost::function_traits<Signature>::arg2_type arg2, typename boost::function_traits<Signature>::arg3_type arg3, typename boost::function_traits<Signature>::arg4_type arg4, typename boost::function_traits<Signature>::arg5_type arg5, typename boost::function_traits<Signature>::arg6_type arg6, typename boost::function_traits<Signature>::arg7_type arg7) const

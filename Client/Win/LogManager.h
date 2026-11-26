@@ -73,6 +73,8 @@ public:
 
 	static const ATL::CPath& GetLogPath();
 
+	static MainLogManager* getMainLogManager() { return mainLogManager; } // inlined into WndProc (PLAYER 0x00442744)
+
 	virtual ~LogManager();
 	virtual std::string getLogFileName() = 0;
 
@@ -124,6 +126,12 @@ public:
 
 	void WriteCrashDump();
 	bool CreateFakeCrashDump();
+	// Notifies the crash reporter that the main thread is still responsive (inlined into WndProc).
+	void NotifyFGThreadAlive()
+	{
+		if (crashReporter)
+			crashReporter->NotifyAlive();
+	}
 
 	static void fastLogMessage(FLog::Channel id, const char* message);
 

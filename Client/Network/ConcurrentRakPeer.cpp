@@ -1,33 +1,278 @@
 // Network/ConcurrentRakPeer.cpp -- October 2013, partial (see ConcurrentRakPeer.h).
 
 #include "ConcurrentRakPeer.h"
+#include "V8DataModel/DataModel.h"
+#include "rbx/TaskScheduler.h"
 #include "decomp.h"
 
 namespace RBX {
 namespace Network {
 
-// STUB: PLAYER 0x005c3a10
+// Blank lines: rawPeer's assert sits on its 2013 line (257).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// STUDIO reads write_requested at DataModel+0xc9c (its DataModel lacks networkStatsWindowsOn); this
+// tree's DataModel.h has PLAYER's layout only, so STUDIO stays a STUB.
+// FUNCTION: PLAYER 0x005c3a10
 // STUB: STUDIO 0x0061e8d0
 RakNet::RakPeerInterface* ConcurrentRakPeer::rawPeer()
 {
-	STUB(0x005c3a10);
-	return 0;
+	RBXASSERT(dataModel->write_requested);
+	return peer.get();
 }
 
-// STUB: PLAYER 0x005c4330
-// STUB: STUDIO 0x0061f1f0
+// FUNCTION: PLAYER 0x005c4330
+// FUNCTION: STUDIO 0x0061f1f0
 ConcurrentRakPeer::~ConcurrentRakPeer()
 {
-	STUB(0x005c4330);
+	TaskScheduler::singleton().remove(packetJob);
+	TaskScheduler::singleton().remove(statsUpdateJob);
 }
 
 // iOS: GetBufferHealth(). PeerStatsItem::update 0x005ba060 calls it.
-// STUB: PLAYER 0x005c5070
-// STUB: STUDIO 0x006201b0
+// FUNCTION: PLAYER 0x005c5070
+// FUNCTION: STUDIO 0x006201b0
 double ConcurrentRakPeer::GetBufferHealth()
 {
-	STUB(0x005c5070);
-	return 0;
+	boost::mutex::scoped_lock lock(statsUpdateJob->mapMutex);
+	return statsUpdateJob->bufferHealth;
 }
 
 // STUB: PLAYER 0x005c6580

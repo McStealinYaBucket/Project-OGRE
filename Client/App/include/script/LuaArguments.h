@@ -223,39 +223,39 @@ namespace RBX {
 			return 0;
 		if (ti == &typeid(bool) || !strcmp(ti->name(), "b"))
 		{
-			lua_pushboolean(L, *rbx::any_cast<const bool, RBX::Region3>(value.value));
+			lua_pushboolean(L, rbx::any_cast<const bool&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(int) || !strcmp(ti->name(), "i"))
 		{
-			lua_pushnumber(L, (double)*rbx::any_cast<const int, RBX::Region3>(value.value));
+			lua_pushnumber(L, (double)rbx::any_cast<const int&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(long) || !strcmp(ti->name(), "l"))
 		{
-			lua_pushnumber(L, (double)*rbx::any_cast<const long, RBX::Region3>(value.value));
+			lua_pushnumber(L, (double)rbx::any_cast<const long&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(float) || !strcmp(ti->name(), "f"))
 		{
-			lua_pushnumber(L, (double)*rbx::any_cast<const float, RBX::Region3>(value.value));
+			lua_pushnumber(L, (double)rbx::any_cast<const float&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(double) || !strcmp(ti->name(), "d"))
 		{
-			lua_pushnumber(L, *rbx::any_cast<const double, RBX::Region3>(value.value));
+			lua_pushnumber(L, rbx::any_cast<const double&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(std::string) || !strcmp(ti->name(), "Ss"))
 		{
-			const std::string& s = *rbx::any_cast<const std::string, RBX::Region3>(value.value);
+			const std::string& s = rbx::any_cast<const std::string&>(value.value);
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}
 		if (ti == &typeid(RBX::ProtectedString) || !strcmp(ti->name(), "N3RBX15ProtectedStringE"))
 		{
-			const std::string& s = rbx::any_cast<const RBX::ProtectedString, RBX::Region3>(
-				value.value)->getStringForImmediateUse();
+			const std::string& s = rbx::any_cast<const RBX::ProtectedString&>(
+				value.value).getStringForImmediateUse();
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}
@@ -271,136 +271,136 @@ namespace RBX {
 		}
 		if (ti == &typeid(Lua::WeakFunctionRef) || !strcmp(ti->name(), "N3RBX3Lua15WeakFunctionRefE"))
 		{
-			Lua::lua_pushfunction(L, *rbx::any_cast<const Lua::WeakFunctionRef, RBX::Region3>(value.value));
+			Lua::lua_pushfunction(L, rbx::any_cast<const Lua::WeakFunctionRef&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(boost::shared_ptr<const Reflection::ValueArray>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrIKSt6vectorIN3RBX10Reflection7VariantESaIS4_EEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<const Reflection::ValueArray>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<const Reflection::ValueArray>&>(value.value));
 		if (ti == &typeid(boost::shared_ptr<const Reflection::ValueMap>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrIKSt3mapISsN3RBX10Reflection7VariantESt4lessISsESaISt4pairIKSsS4_EEEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<const Reflection::ValueMap>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<const Reflection::ValueMap>&>(value.value));
 		if (ti == &typeid(boost::shared_ptr<const Reflection::ValueTable>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrIKNS_9unordered13unordered_mapISsN3RBX10Reflection7VariantENS_4hashISsEESt8equal_toISsESaISt4pairIKSsS5_EEEEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<const Reflection::ValueTable>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<const Reflection::ValueTable>&>(value.value));
 		// (Instances-vector queues behind the Instance bridge era.)
 		if (ti == &typeid(boost::shared_ptr<const Reflection::Tuple>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrIKN3RBX10Reflection5TupleEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<const Reflection::Tuple>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<const Reflection::Tuple>&>(value.value));
 		// mac: 0x163828 sync-function arm (batch462: non-const shared_ptr
 		// element, GCC name pinned). The async twin queues behind
 		// scheduleResume (yield era).
 		if (ti == &typeid(boost::shared_ptr<Lua::GenericFunction>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrINS_8functionIFNS0_IKN3RBX10Reflection5TupleEEES6_EEEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<Lua::GenericFunction>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<Lua::GenericFunction>&>(value.value));
 		// Async-function arm (batch462: same non-const shape; the closure
 		// needs onAsyncResult/scheduleResume, both landed).
 		if (ti == &typeid(boost::shared_ptr<Lua::GenericAsyncFunction>)
 			|| !strcmp(ti->name(), "N5boost10shared_ptrINS_8functionIFvNS0_IKN3RBX10Reflection5TupleEEENS1_IFvPNS2_3Lua12IAsyncResultEEEEEEEEE"))
-			return f(*rbx::any_cast<const boost::shared_ptr<Lua::GenericAsyncFunction>, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const boost::shared_ptr<Lua::GenericAsyncFunction>&>(value.value));
 		if (ti == &typeid(G3D::Vector3int16) || !strcmp(ti->name(), "N3G3D12Vector3int16E"))
 		{
 			Lua::Vector3int16Bridge::pushVector3int16(L,
-				*rbx::any_cast<const G3D::Vector3int16, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::Vector3int16&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(G3D::Vector2int16) || !strcmp(ti->name(), "N3G3D12Vector2int16E"))
 		{
 			Lua::Vector2int16Bridge::pushVector2int16(L,
-				*rbx::any_cast<const G3D::Vector2int16, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::Vector2int16&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(G3D::Vector3) || !strcmp(ti->name(), "N3G3D7Vector3E"))
 		{
 			Lua::Vector3Bridge::pushVector3(L,
-				*rbx::any_cast<const G3D::Vector3, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::Vector3&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(G3D::Vector2) || !strcmp(ti->name(), "N3G3D7Vector2E"))
 		{
 			Lua::Vector2Bridge::pushVector2(L,
-				*rbx::any_cast<const G3D::Vector2, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::Vector2&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::RbxRay) || !strcmp(ti->name(), "N3RBX6RbxRayE"))
 		{
 			Lua::RbxRayBridge::pushRbxRay(L,
-				*rbx::any_cast<const RBX::RbxRay, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::RbxRay&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(G3D::CoordinateFrame) || !strcmp(ti->name(), "N3G3D15CoordinateFrameE"))
 		{
 			Lua::CoordinateFrameBridge::pushCoordinateFrame(L,
-				*rbx::any_cast<const G3D::CoordinateFrame, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::CoordinateFrame&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(G3D::Color3) || !strcmp(ti->name(), "N3G3D6Color3E"))
 		{
 			Lua::Color3Bridge::pushColor3(L,
-				*rbx::any_cast<const G3D::Color3, RBX::Region3>(value.value));
+				rbx::any_cast<const G3D::Color3&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::BrickColor) || !strcmp(ti->name(), "N3RBX10BrickColorE"))
 		{
 			Lua::BrickColorBridge::pushBrickColor(L,
-				*rbx::any_cast<const RBX::BrickColor, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::BrickColor&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::Region3) || !strcmp(ti->name(), "N3RBX7Region3E"))
 		{
 			Lua::Region3Bridge::pushRegion3(L,
-				*rbx::any_cast<const RBX::Region3, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::Region3&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::Region3int16) || !strcmp(ti->name(), "N3RBX12Region3int16E"))
 		{
 			Lua::Region3int16Bridge::pushRegion3int16(L,
-				*rbx::any_cast<const RBX::Region3int16, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::Region3int16&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::UDim) || !strcmp(ti->name(), "N3RBX4UDimE"))
 		{
 			Lua::UDimBridge::pushUDim(L,
-				*rbx::any_cast<const RBX::UDim, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::UDim&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::UDim2) || !strcmp(ti->name(), "N3RBX5UDim2E"))
 		{
 			Lua::UDim2Bridge::pushUDim2(L,
-				*rbx::any_cast<const RBX::UDim2, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::UDim2&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::Faces) || !strcmp(ti->name(), "N3RBX5FacesE"))
 		{
 			Lua::FacesBridge::pushFaces(L,
-				*rbx::any_cast<const RBX::Faces, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::Faces&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::Axes) || !strcmp(ti->name(), "N3RBX4AxesE"))
 		{
 			Lua::AxesBridge::pushAxes(L,
-				*rbx::any_cast<const RBX::Axes, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::Axes&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(RBX::CellID) || !strcmp(ti->name(), "N3RBX6CellIDE"))
-			return f(*rbx::any_cast<const RBX::CellID, RBX::Region3>(value.value));
+			return f(rbx::any_cast<const RBX::CellID&>(value.value));
 		if (ti == &typeid(RBX::ContentId) || !strcmp(ti->name(), "N3RBX9ContentIdE"))
 		{
-			const std::string& s = rbx::any_cast<const RBX::ContentId, RBX::Region3>(
-				value.value)->toString();
+			const std::string& s = rbx::any_cast<const RBX::ContentId&>(
+				value.value).toString();
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;
 		}
 		if (ti == &typeid(RBX::InputObject) || !strcmp(ti->name(), "N3RBX11InputObjectE"))
 		{
 			Lua::InputObjectBridge::pushInputObject(L,
-				*rbx::any_cast<const RBX::InputObject, RBX::Region3>(value.value));
+				rbx::any_cast<const RBX::InputObject&>(value.value));
 			return 1;
 		}
 		if (ti == &typeid(const RBX::Reflection::PropertyDescriptor*)
 			|| !strcmp(ti->name(), "PKN3RBX10Reflection18PropertyDescriptorE"))
 		{
-			const std::string& s = (*rbx::any_cast<const RBX::Reflection::PropertyDescriptor* const, RBX::Region3>(
+			const std::string& s = (rbx::any_cast<const RBX::Reflection::PropertyDescriptor* const&>(
 				value.value))->name.str;
 			lua_pushlstring(L, s.c_str(), s.size());
 			return 1;

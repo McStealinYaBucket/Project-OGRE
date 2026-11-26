@@ -25,7 +25,7 @@ namespace RBX {
 // "<user directory>\GlobalBasicSettings_13.xml", or "" when there is no user directory.
 // FUNCTION: PLAYER 0x00656390
 // FUNCTION: STUDIO 0x0073eed0
-static std::string basicSettingsFile()
+static std::string globalBasicSettingsFile()
 {
 	std::string result = FileSystem::getUserDirectory(true, DirAppData, NULL);
 	if (result.size() > 0)
@@ -38,7 +38,7 @@ static std::string basicSettingsFile()
 // FUNCTION: PLAYER 0x00658640
 // FUNCTION: STUDIO 0x00740dd0
 GlobalBasicSettings::GlobalBasicSettings()
-	: DescribedNonCreatable<GlobalBasicSettings, Settings, sGlobalBasicSettings>(basicSettingsFile())
+	: DescribedNonCreatable<GlobalBasicSettings, Settings, sGlobalBasicSettings>(globalBasicSettingsFile())
 {
 	setName("GlobalBasicSettings");
 }

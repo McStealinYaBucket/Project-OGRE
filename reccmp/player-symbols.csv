@@ -1,7 +1,7 @@
 # Generated from ida/exports/PLAYER-names.csv. Do not edit.
 # symbol: our PUBLICS name for an oracle name whose signature (norm_sig) is unique on both sides; a static carries our proc name instead.
-# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 13, folded name: address claimed twice 14, kept over a twin-colliding position pair 0, name present, signature differs 16, not defined in our build 3402, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 62, paired by signature 1437, paired by static name 1.
-# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 5647, not in our link 5, paired 17, symbol paired elsewhere 1.
+# Signature pairing: ambiguous signature 5, ambiguous static name 1, dropped: a position pair contradicts it 13, folded name: address claimed twice 14, kept over a twin-colliding position pair 0, name present, signature differs 16, not defined in our build 3390, oracle name not a plain function 1, ours already paired by a library row 1, paired by a folded name 62, paired by signature 1437, paired by static name 1.
+# MSVC-named rows (match:/lib:/rtti:/str:): held by another row 5843, not in our link 6, paired 18, symbol paired elsewhere 1.
 address,name,symbol,type
 00402540,RBX::Reflection::ClassDescriptor::~ClassDescriptor(),??1ClassDescriptor@Reflection@RBX@@UAE@XZ,
 00402670,"RBX::Reflection::ClassDescriptor::~ClassDescriptor() [D0, deleting: the MSVC scalar deleting destructor]",??_EClassDescriptor@Reflection@RBX@@UAEPAXI@Z,
@@ -957,14 +957,10 @@ address,name,symbol,type
 00580da0,RBX::Name const& RBX::Name::doDeclare<RBX::sTestService>(),??$doDeclare@$E?sTestService@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
 00580e10,RBX::Name const& RBX::Name::doDeclare<RBX::sFunctionalTest>(),??$doDeclare@$E?sFunctionalTest@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
 00580e80,RBX::Name const& RBX::Name::doDeclare<RBX::sTouchTransmitter>(),??$doDeclare@$E?sTouchTransmitter@RBX@@3QBDB@Name@RBX@@SAABV01@XZ,
-005819d0,"RBX::Network::Replicator::setRefValue(RBX::Network::IdSerializer::WaitItem&, RBX::Instance*)",,
 00581a60,RBX::Network::Replicator::terrainCellChanged(RBX::Voxel::CellChangeInfo const&),,
 00581b50,"RBX::Network::Replicator::OnInternalPacket(RakNet::InternalPacket*, unsigned int, RakNet::SystemAddress, unsigned int, int)",,
-00581c10,RBX::Network::Replicator::getAdjustedMtuSize() const,,
-00581ca0,RBX::Network::Replicator::getPhysicsMtuSize() const,,
 005830c0,"boost::detail::sp_counted_impl_p<DummyArbiter>::~sp_counted_impl_p() [D0, deleting: the MSVC scalar deleting destructor]",,
 00583540,boost::detail::sp_counted_impl_p<RBX::Network::DirectPhysicsReceiver>::dispose(),,
-00583a60,RBX::Network::Replicator::getRakStatsString(int),,
 00583ad0,"RBX::Network::Replicator::receiveCluster(RakNet::BitStream&, RBX::Instance*)",,
 00584fb0,"void RBX::Voxel::Serializer::encodeFromPosition<RBX::ClusterCellIterator, RakNet::BitStream>(RBX::Voxel::Grid const*, G3D::Vector3int16&, RBX::SpatialRegion::Id const&, RBX::Voxel::Region<RBX::Voxel::Grid::Chunk> const&, RBX::FixedSizeCircularBuffer<unsigned int, 8>&, RBX::ClusterCellIterator&, RakNet::BitStream*) const",,
 00585370,"void RBX::Voxel::Serializer::encodeFromPosition<RBX::Network::ClusterUpdateBuffer, RakNet::BitStream>(RBX::Voxel::Grid const*, G3D::Vector3int16&, RBX::SpatialRegion::Id const&, RBX::Voxel::Region<RBX::Voxel::Grid::Chunk> const&, RBX::FixedSizeCircularBuffer<unsigned int, 8>&, RBX::Network::ClusterUpdateBuffer&, RakNet::BitStream*) const",,
@@ -1006,7 +1002,6 @@ address,name,symbol,type
 0058fa10,RBX::Network::Replicator::receiveData(RakNet::BitStream&),,
 0058fb10,RBX::Network::Replicator::sendMarker(),,
 00590c10,RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() const,??$find@VJointsService@RBX@@@ServiceProvider@RBX@@QBEPAVJointsService@1@XZ,
-00591550,"RBX::Network::ReplicatorJob::ReplicatorJob(char const*, RBX::Network::Replicator&, RBX::DataModelJob::TaskType)",,
 005917d0,RBX::Network::Replicator::disconnectReplicationData(boost::shared_ptr<RBX::Instance>),,
 00591a10,RBX::Network::Replicator::updateStatsItem(RBX::Stats::StatsService*),,
 00591bc0,RBX::Network::Replicator::onParentChanged(boost::shared_ptr<RBX::Instance>),,
@@ -1033,9 +1028,6 @@ address,name,symbol,type
 00597530,"RBX::FactoryProduct<RBX::FunctionalTest, RBX::Instance, RBX::sFunctionalTest, RBX::Instance>::Creator::create() const",?create@Creator@?$FactoryProduct@VFunctionalTest@RBX@@VInstance@2@$E?sFunctionalTest@2@3QBDBV32@@RBX@@UBE?AV?$shared_ptr@VObject@RBX@@@boost@@XZ,
 00597a00,"RBX::FactoryProduct<RBX::TouchTransmitter, RBX::Instance, RBX::sTouchTransmitter, RBX::Instance>::Creator::create() const",?create@Creator@?$FactoryProduct@VTouchTransmitter@RBX@@VInstance@2@$E?sTouchTransmitter@2@3QBDBV32@@RBX@@UBE?AV?$shared_ptr@VObject@RBX@@@boost@@XZ,
 00598c90,RBX::Network::Replicator::PingJob::PingJob(RBX::Network::Replicator&),,
-00598e00,RBX::Network::Replicator::ProcessPacketsJob::ProcessPacketsJob(RBX::Network::Replicator&),,
-00598f20,RBX::Network::Replicator::ProcessPacketsJob::sleepTime(RBX::TaskScheduler::Job::Stats const&),,
-00598fc0,RBX::Network::Replicator::ProcessPacketsJob::error(RBX::TaskScheduler::Job::Stats const&),,
 00599e30,"RBX::Network::LogError(RBX::Network::Replicator*, std::string const&)",,
 0059a220,RBX::Network::Replicator::processPacket(RakNet::Packet*),,
 0059a5e0,"RBX::AbstractFactoryProduct<RBX::Instance>::create(RBX::Name const&, RBX::CreatorRole)",,
@@ -1059,7 +1051,6 @@ address,name,symbol,type
 0059dd40,"RBX::Reflection::EventDescImpl<2, RBX::Network::Replicator, void (std::string, bool), rbx::signal<void (std::string, bool)>, rbx::signal<void (std::string, bool)> RBX::Network::Replicator::*>::fireEvent(RBX::Reflection::EventSource*, std::vector<RBX::Reflection::Variant, std::allocator<RBX::Reflection::Variant>> const&) const",,
 0059e6b0,RBX::Network::Replicator::JoinDataItem::writeInstances(RakNet::BitStream&),,
 0059e940,RBX::Network::Replicator::JoinDataItem::write(RakNet::BitStream&),,
-0059eab0,RBX::Network::Replicator::ProcessPacketsJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
 0059ec20,RBX::Network::Replicator::SendClusterJob::stepDataModelJob(RBX::TaskScheduler::Job::Stats const&),,
 0059f0e0,"RBX::Network::Replicator::onChildAdded(boost::shared_ptr<RBX::Instance>, boost::function<void (boost::shared_ptr<RBX::Instance>)>)",,
 0059f3a0,"RBX::Network::Replicator::onCombinedSignal(RBX::Network::Replicator::ReplicationData*, RBX::Instance::CombinedSignalType, RBX::Instance::ICombinedSignalData const*)",,
@@ -1071,7 +1062,6 @@ address,name,symbol,type
 005a16d0,"RBX::Network::Replicator::readInstanceNew(RakNet::BitStream&, bool)",,
 005a20a0,RBX::Network::Replicator::readJoinData(RakNet::BitStream&),,
 005a2680,"RBX::Network::Replicator::addTopReplicationContainer(RBX::Instance*, bool, bool, boost::function<void (boost::shared_ptr<RBX::Instance>)>)",,
-005a2870,"RBX::Network::Replicator::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",,
 005a3980,"RBX::Network::Replicator::serializeEventInvocation(RBX::Reflection::EventInvocation const&, RakNet::BitStream&)",,
 005a3ae0,"RBX::Network::Replicator::serializePropertyValue(RBX::Reflection::ConstProperty const&, RakNet::BitStream&, bool)",,
 005a3fc0,"RBX::Network::Replicator::deserializeEventInvocation(RakNet::BitStream&, RBX::Reflection::EventInvocation&)",,
@@ -1128,6 +1118,7 @@ address,name,symbol,type
 005bcb40,"boost::detail::sp_counted_impl_pd<ProfilingItem*, RBX::Creatable<RBX::Instance>::Deleter>::get_deleter(std::type_info const&)",,
 005bcf50,boost::detail::sp_counted_impl_p<DummyJob>::dispose(),,
 005bcf60,RBX::Network::ClientReplicator::deserializeSFFlags(RakNet::BitStream&),,
+005bd080,"public: void __thiscall boost::enable_shared_from_this<class YieldFunctionStateObject>::_internal_accept_owner<class YieldFunctionStateObject,class YieldFunctionStateObject>(class boost::shared_ptr<class YieldFunctionStateObject> const *,class YieldFunctionStateObject *)const",??$_internal_accept_owner@VRegistry@?$GuidItem@VInstance@RBX@@@RBX@@V123@@?$enable_shared_from_this@VRegistry@?$GuidItem@VInstance@RBX@@@RBX@@@boost@@QBEXPBV?$shared_ptr@VRegistry@?$GuidItem@VInstance@RBX@@@RBX@@@1@PAVRegistry@?$GuidItem@VInstance@RBX@@@RBX@@@Z,library
 005bd170,RBX::Network::ClientReplicator::readStreamData(RakNet::BitStream&),,
 005bd830,"RBX::Network::ClientReplicator::readItem(RakNet::BitStream&, RBX::Network::Item::ItemType)",,
 005bd850,RBX::Network::ClientReplicator::RequestCharacterItem::write(RakNet::BitStream&),,
@@ -1545,7 +1536,6 @@ address,name,symbol,type
 00656230,"RBX::Game::~Game() [D0, deleting: the MSVC scalar deleting destructor]",,
 00656400,RBX::GlobalAdvancedSettings::getFFlag(std::string),,
 00656510,RBX::GlobalAdvancedSettings::getFVariable(std::string),,
-00656a80,"RBX::Settings::verifyAddDescendant(RBX::Instance const*, RBX::Instance const*) const",,
 00656b50,"RBX::NonFactoryProduct<RBX::Instance, RBX::sSelection>::isNullClassName()",?isNullClassName@?$NonFactoryProduct@VInstance@RBX@@$E?sSelection@2@3QBDB@RBX@@SA_NXZ,
 00656dc0,RBX::Selection* RBX::ServiceProvider::find<RBX::Selection>() const,??$find@VSelection@RBX@@@ServiceProvider@RBX@@QBEPAVSelection@1@XZ,
 00657150,"RBX::Reflection::Described<RBX::GlobalBasicSettings, RBX::sGlobalBasicSettings, RBX::NonFactoryProduct<RBX::Settings, RBX::sGlobalBasicSettings>, (RBX::Reflection::ClassDescriptor::Functionality)27, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VGlobalBasicSettings@RBX@@$E?sGlobalBasicSettings@2@3QBDBV?$NonFactoryProduct@VSettings@RBX@@$E?sGlobalBasicSettings@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
@@ -1746,7 +1736,6 @@ address,name,symbol,type
 006af870,RBX::Reflection::Singleton<RBX::Reflection::EnumDesc<RBX::FriendService::FriendStatus> const>::doGetSingleton(),?doGetSingleton@?$Singleton@$$CBV?$EnumDesc@W4FriendStatus@FriendService@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAABV?$EnumDesc@W4FriendStatus@FriendService@RBX@@@23@XZ,
 006af8e0,RBX::Reflection::Singleton<RBX::Reflection::EnumDesc<RBX::FriendService::FriendEventType> const>::doGetSingleton(),?doGetSingleton@?$Singleton@$$CBV?$EnumDesc@W4FriendEventType@FriendService@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAABV?$EnumDesc@W4FriendEventType@FriendService@RBX@@@23@XZ,
 006afe70,"RBX::Reflection::Described<RBX::FriendService, RBX::sFriendService, RBX::FactoryProduct<RBX::FriendService, RBX::Instance, RBX::sFriendService, RBX::Instance>, (RBX::Reflection::ClassDescriptor::Functionality)3, (RBX::Security::Permissions)0>::classDescriptor()",?classDescriptor@?$Described@VFriendService@RBX@@$E?sFriendService@2@3QBDBV?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@2@$02$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ,
-006b2b50,"RBX::FriendService::onServiceProvider(RBX::ServiceProvider*, RBX::ServiceProvider*)",,
 006b30f0,"RBX::FriendService::processServiceResults(int, std::string*, std::exception const*, boost::function<void (boost::shared_ptr<boost::unordered::unordered_map<std::string, RBX::Reflection::Variant, boost::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, RBX::Reflection::Variant>>> const>)>, boost::function<void (std::string)>)",,
 006b39b0,G3D::Matrix3::operator==(G3D::Matrix3 const&) const,??8Matrix3@G3D@@QBE_NABV01@@Z,
 006b3ca0,"RBX::StringConverter<RBX::Camera::CameraPanMode>::convertToValue(std::string const&, RBX::Camera::CameraPanMode&)",,

@@ -3,9 +3,11 @@
 // Network/Replicator.h -- October 2013, partial. PLAYER layout from the ctor (0x005a5e70) and the
 // dtor (0x005a55a0); member names are 2016's where the type and position agree, placeholders
 // otherwise. The virtuals Replicator adds are not declared yet, so its vftables are incomplete.
-// STUDIO (Oct 17) is a different revision: no disconnectionSignal, no removingInstance, a 4-byte
-// object at 0x10c4 (ctor STUDIO 0x00629520) and a different tail (ctor STUDIO 0x0064a0f0), so this
-// layout is PLAYER's only.
+// STUDIO (Oct 17) is a different revision (ctor STUDIO 0x0064a0f0, dtor 0x006497b0): no
+// removingInstance at 0x10c4, the signal sits there instead (ctor 0x00629520, dtor 0x00639040), the
+// pools follow at 0x10c8, a fourth zeroed pointer (0x128c) follows deserializingEventInvocation, and
+// ReplicatorStats (0x7e8 there, 8-aligned) sits at 0x12a0 between defaultObjects and incomingPackets. From the pools on, STUDIO offsets are PLAYER's minus 0xf6c up to
+// defaultObjects and minus 0xf7c from incomingPackets on. SIZE 0x2328 (STUDIO).
 
 #include "V8DataModel/DataModelJob.h"
 #include "V8Tree/Instance.h"
@@ -47,12 +49,15 @@ class ClusterPacketCache;
 // weak_ptr<Replicator>) are not proven yet; the ctor (PingJob() PLAYER 0x00598c90) is not written.
 class ReplicatorJob : public DataModelJob
 {
+protected:
+	shared_ptr<Replicator> replicator;                 // 0x218 ProcessPacketsJob::sleepTime 0x00598f20
+	ReplicatorJob(const char* name, Replicator& replicator, TaskType taskType);
 };
 
 // RTTI: DescribedNonCreatable<Replicator, IdSerializer, sReplicator, 1 (INTERNAL_LOCAL)> (classDescriptor
 // PLAYER 0x00525e20, its ctor 0x005a5510), then RakNet::PluginInterface2 at 0x1094, IMetric 0x10a0
 // (novtable: only Replicator's vftable is stored there) and CellChangeListener 0x10a4.
-// SIZE 0x2aa4 (PLAYER)
+// SIZE 0x2aa8 (PLAYER)
 class Replicator
 	: public DescribedNonCreatable<Replicator, IdSerializer, sReplicator, Reflection::ClassDescriptor::INTERNAL_LOCAL>
 	, public RakNet::PluginInterface2
@@ -102,15 +107,35 @@ public:
 
 	/*override*/ double getMetricValue(const std::string& metric) const;
 
+	// iOS: both const. max(0, mtu + adjust), asserts at Replicator.cpp 3418/3424.
+	size_t getAdjustedMtuSize() const;
+	size_t getPhysicsMtuSize() const;
+
+	const NetworkSettings& settings() const { return *networkSettings; }
+
+	// Bound as "DisableProcessPackets" (BoundFuncDesc initializer PLAYER 0x00a61a20).
+	void disableProcessPackets();
+
+	std::string getRakStatsString(int verbosityLevel);
+
+	size_t incomingPacketsCount() const { return incomingPackets.size(); }
+
+protected:
+	/*override*/ void onServiceProvider(ServiceProvider* oldProvider, ServiceProvider* newProvider);
+	/*override*/ void setRefValue(WaitItem& wi, Instance* instance);
+public:
+
 protected:
 	boost::shared_ptr<ConcurrentRakPeer> rakPeer;          // 0x10a8
 	const RakNet::SystemAddress remotePlayerId;            // 0x10b0
+#ifndef OGRE_TARGET_STUDIO
 	Instance* removingInstance;                            // 0x10c4
 	ReplicatorStats replicatorStats;                       // 0x10c8
+#endif
 
 public:
 	// 2016 declares a disconnectionSignal here; this signal's signature is unproven (2016's).
-	rbx::signal<void(std::string, bool)> disconnectionSignal; // 0x2030 ctor 0x005862e0, dtor 0x00592c60
+	rbx::signal<void(std::string, bool)> disconnectionSignal; // 0x2030 ctor 0x005862e0, dtor 0x00592c60 (STUDIO 0x10c4)
 
 protected:
 	// Item pools; ~AutoMemPool is inline (purge_memory 0x004128e0, then delete).
@@ -168,9 +193,15 @@ protected:
 
 	const Reflection::Property* deserializingProperty;     // 0x21f0
 	const Reflection::EventInvocation* deserializingEventInvocation; // 0x21f4
+#ifdef OGRE_TARGET_STUDIO
+	undefined4 m_unk0x128c;                                // STUDIO 0x128c, zeroed by the ctor
+#endif
 
 	typedef std::map<const RBX::Name*, shared_ptr<Instance> > DefaultObjects;
 	DefaultObjects defaultObjects;                         // 0x21f8
+#ifdef OGRE_TARGET_STUDIO
+	ReplicatorStats replicatorStats;                       // STUDIO 0x12a0 (ctor 0x00681bd0, dtor 0x0062d510)
+#endif
 
 	rbx::timestamped_safe_queue<RakNet::Packet*> incomingPackets; // 0x2204
 

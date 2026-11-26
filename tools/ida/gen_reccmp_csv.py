@@ -74,9 +74,9 @@ Rules that keep a regeneration from undoing the last one (2026-11-12):
   - Pool only --json runs of the build being regenerated against: a run from an earlier link pairs
     stale recompiled addresses (2026-11-13: VerbContainer D0 0x006f9250 got Assembly::onLowersChanged).
   - LIB_FIX corrects a matcher name that is a masked-callee twin (unique_lock<recursive_mutex> ctor);
-    MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0) or a fold whose other
-    name pairs with an unreferenced shell copy (SoundService className 0x006ee210); MATCH_SUB rewrites a
-    folded match: name to the twin our link keeps (the DebrisService binds 0x0073da60 &c.).
+    MATCH_FIX a match: name an adjustor-thunk twin gave (GuiMain's {28} thunk 0x008b2ea0) or a stale one
+    (FriendService's base D0 0x006aaf50); MATCH_DROP skips a /GL shell original's match: name while our shell
+    lacks that copy (STUDIO bind<weak_ptr<DataModel>> 0x0042b260). Drop an entry once names.csv agrees.
   - A library row whose instantiation left our link falls back to the symbol the current <t>-<lib>.csv row
     carries (the body our link kept last time); if nothing resolves, position votes may name its address.
   - A position row never takes a library row's symbol to another original (twins: the library row wins).
@@ -144,36 +144,32 @@ _GUIMAIN_E28 = ("??_EGuiMain@RBX@@WBM@AEPAXI@Z",
                 "[thunk]:public: virtual void * __thiscall RBX::GuiMain::`vector deleting destructor'`adjustor{28}' "
                 "(unsigned int)")
 MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIMAIN_E28}
-# PLAYER 0x006ee210 is the folded className/getClassName body of FactoryProduct<SoundService>. Our /OPT:NOREF
-# link keeps an unreferenced /GL shell copy of className (2013's /OPT:REF does not), so the className name
-# paired with that copy and left the engine getClassName the vftables 0x00b44908/0x00b451d0 point to
-# unpaired (50%). The virtual's name is as true for the folded body (shell-5k-6, wave 15).
-MATCH_FIX[("PLAYER", 0x006ee210)] = (
-    "?getClassName@?$FactoryProduct@VSoundService@Soundscape@RBX@@VInstance@3@$E?sSoundService@23@3QBDBV43@@RBX@@"
-    "UBEABVName@2@XZ",
-    "public: virtual class RBX::Name const & __thiscall RBX::FactoryProduct<class RBX::Soundscape::SoundService,"
-    "class RBX::Instance,char const * const RBX::Soundscape::sSoundService,class RBX::Instance>::getClassName(void)const")
-# PLAYER 0x0041c8b0 is a /GL shell copy of the folded boost::function destructor body. Its only paired caller,
-# AsyncHttpQueue::dispatchGenericCallback 0x0086d480, is engine code routed to the shell copy; ours goes to the
-# shell's ~function<void()> 0x0042a950 (GameVerbs.cpp) once the shell instantiates it (wave 15). With the
-# match: name (a native folded alias) it paired with the native copy and that caller fell to 98.9%.
-MATCH_FIX[("PLAYER", 0x0041c8b0)] = (
-    "??1?$function@$$A6AXXZ@boost@@QAE@XZ",
-    "public: __thiscall boost::function<void __cdecl(void)>::~function<void __cdecl(void)>(void)")
-# PLAYER 0x0073da60/0x0073db90/0x0074c040/0x00844de0/0x00844f60 are engine bind/function copies ICF-folded across
-# Script.cpp's function1<void,DataModel*>(bind(f, weak_ptr<DataModel>)) and DebrisService::addItem 0x00845000's
-# bind(cleanup, weak_ptr<Instance>) (shell-5k-6, wave 15). In our link the /GL shell's GameVerbs.cpp now owns the
-# DataModel symbols (ScreenshotVerb::doIt 0x00438460 pairs with those shell copies), so the engine body survives
-# only as DebrisService's function0/weak_ptr<Instance> copies (identical code: folded with Script's at sweep21).
-# MATCH_SUB rewrites the match: name to that symbol (pairs of (old, new) on the mangled and demangled names).
-_DEBRIS = (("weak_ptr@VDataModel@RBX@@", "weak_ptr@VInstance@RBX@@"),
-           ("?$basic_vtable1@XPAVDataModel@RBX@@@function", "?$basic_vtable0@X@function"),
-           ("?$function1@XPAVDataModel@RBX@@@boost@@", "?$function0@X@boost@@"),
-           ("weak_ptr<class RBX::DataModel>", "weak_ptr<class RBX::Instance>"),
-           ("basic_vtable1<void,class RBX::DataModel *>", "basic_vtable0<void>"),
-           ("function1<void,class RBX::DataModel *>", "function0<void>"))
-MATCH_SUB = {("PLAYER", a): _DEBRIS
-             for a in (0x0073da60, 0x0073db90, 0x0074c040, 0x00844de0, 0x00844f60)}
+# PLAYER 0x006aaf50 (STUDIO 0x00809d30) stores only FactoryProduct<FriendService>'s vftables (0x00b394c4/bc/b0/a0)
+# and calls ~Instance: it is the base-class deleting destructor, folded with DescribedCreatable<FriendService>'s
+# in both links. FriendService's own D0 is 0x006b2b30 (STUDIO 0x00811830), which calls the implicit dtor 0x006b2970
+# and carries a SYNTHETIC marker (app-16, wave 16). The match: name came from an earlier link without that dtor.
+_FP_FRIEND_D0 = (
+    "??_G?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@RBX@@MAEPAXI@Z",
+    "protected: virtual void * __thiscall RBX::FactoryProduct<class RBX::FriendService,class RBX::Instance,"
+    "char const * const RBX::sFriendService,class RBX::Instance>::`scalar deleting destructor'(unsigned int)")
+MATCH_FIX[("PLAYER", 0x006aaf50)] = _FP_FRIEND_D0
+MATCH_FIX[("STUDIO", 0x00809d30)] = _FP_FRIEND_D0
+# Its {24} adjustor thunk just before it (PLAYER 0x006aaf40, STUDIO 0x00809d20) is the base's too (FriendService's
+# own thunks are 0x006b2950/0x006b2960); misnamed, it pairs with FriendService's thunk and costs vftable 0x00b394b0.
+_FP_FRIEND_E24 = (
+    "??_E?$FactoryProduct@VFriendService@RBX@@VInstance@2@$E?sFriendService@2@3QBDBV32@@RBX@@OBI@AEPAXI@Z",
+    "[thunk]:protected: virtual void * __thiscall RBX::FactoryProduct<class RBX::FriendService,class RBX::Instance,"
+    "char const * const RBX::sFriendService,class RBX::Instance>::`vector deleting destructor'`adjustor{24}' "
+    "(unsigned int)")
+MATCH_FIX[("PLAYER", 0x006aaf40)] = _FP_FRIEND_E24
+MATCH_FIX[("STUDIO", 0x00809d20)] = _FP_FRIEND_E24
+# MATCH_DROP: match: names of /GL shell originals whose shell copy our link does not have yet. The name is true,
+# but our only body under it is the engine fold, so the shell original takes it (at ~70%) from the engine original
+# it really is. STUDIO 0x0042b260/0x0042e370 are the shell's bind/list1<weak_ptr<DataModel>> (IDA sync, wave 15);
+# our STUDIO shell has no GameVerbs.cpp, so the names fell on the engine copies folded with DebrisService's
+# weak_ptr<Instance> binds and left the engine originals 0x0098a310/0x0098a120 unpaired (sweep22: 100). Drop an
+# entry once the STUDIO shell instantiates the symbol.
+MATCH_DROP = {("STUDIO", 0x0042b260), ("STUDIO", 0x0042e370)}
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")
@@ -1097,9 +1093,8 @@ def gen(target, build=BUILD, json_path=None):
             a = int(r["address"], 16)
             if (target, a) in MATCH_FIX and r["source"] == "match:":
                 r = dict(r, name=MATCH_FIX[target, a][0], demangled=MATCH_FIX[target, a][1])
-            if (target, a) in MATCH_SUB and r["source"] == "match:":
-                for x, y in MATCH_SUB[target, a]:
-                    r = dict(r, name=r["name"].replace(x, y), demangled=r["demangled"].replace(x, y))
+            if (target, a) in MATCH_DROP and r["source"] == "match:":
+                continue
             if r["kind"] != "func":
                 labels.add(a)
                 if r["source"] == "rtti:" and r["name"].startswith("??_7"):

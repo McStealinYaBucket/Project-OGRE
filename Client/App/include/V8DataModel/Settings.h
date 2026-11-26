@@ -19,6 +19,23 @@ namespace RBX {
 		Settings() {}
 		Settings(const std::string& settingsFile);	// PLAYER 0x00657f60, out of line
 
+	private:
+		typedef DescribedNonCreatable<Settings, ServiceProvider, sSettings> Super;
+
+		// One byte: operator() ORs into it (`or byte [esi],al`, PLAYER 0x006566d0). invalid() is a cdecl
+		// static of three RTTI tests (0x006562c0).
+		struct InvalidDescendentDetector
+		{
+			bool anyInvalid;
+			InvalidDescendentDetector() : anyInvalid(false) {}
+			static bool invalid(const Instance* instance);
+			void operator()(shared_ptr<Instance> descendant);
+		};
+
+	protected:
+		// Instance vtable+0x38 (GlobalAdvancedSettings vftable slot 0x38).
+		virtual void verifyAddDescendant(const Instance* newParent, const Instance* instanceGettingNewParent) const;
+
 	protected:
 		// 0x8c..0xac: GlobalAdvancedSettings' mutex sits at +0xac (ctor PLAYER 0x00658580), so Settings
 		// is 0xac. The Settings ctors take a std::string by value (PLAYER 0x00658480 chain).

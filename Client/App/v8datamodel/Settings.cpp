@@ -3,6 +3,8 @@
 #include "stdafx.h"
 
 #include "V8DataModel/Settings.h"
+#include "V8DataModel/GlobalSettings.h"
+#include "V8DataModel/Selection.h"
 
 namespace RBX {
 	const char* const sSettings = "Settings";
@@ -19,6 +21,39 @@ RBX_REGISTER_CLASS(RBX::Settings);
 }
 
 namespace RBX {
+	// FUNCTION: PLAYER 0x006562c0
+	// FUNCTION: STUDIO 0x0073edd0
+	bool Settings::InvalidDescendentDetector::invalid(const Instance* instance)
+	{
+		return !dynamic_cast<const GlobalBasicSettings::Item*>(instance)
+			&& !dynamic_cast<const GlobalAdvancedSettings::Item*>(instance)
+			&& !dynamic_cast<const Selection*>(instance);
+	}
+
+	// FUNCTION: PLAYER 0x006566d0
+	// FUNCTION: STUDIO 0x0073f1b0
+	void Settings::InvalidDescendentDetector::operator()(shared_ptr<Instance> descendant)
+	{
+		anyInvalid |= invalid(descendant.get());
+	}
+
+	// Instance::visitDescendants<InvalidDescendentDetector> stays out of line (PLAYER 0x006569a0, STUDIO 0x0073f360).
+	// FUNCTION: PLAYER 0x00656a80
+	// FUNCTION: STUDIO 0x0073f440
+	void Settings::verifyAddDescendant(const Instance* newParent, const Instance* instanceGettingNewParent) const
+	{
+		bool invalid = InvalidDescendentDetector::invalid(instanceGettingNewParent);
+		if (!invalid)
+		{
+			InvalidDescendentDetector detector;
+			instanceGettingNewParent->visitDescendants(detector);
+			invalid = detector.anyInvalid;
+		}
+		if (invalid)
+			throw RBX::runtime_error("Not allowed to add that under settings");
+		Super::verifyAddDescendant(newParent, instanceGettingNewParent);
+	}
+
 	// The base DescribedNonCreatable<Settings, ServiceProvider, sSettings> ctor stays out of line
 	// (PLAYER 0x00657cf0).
 	// FUNCTION: PLAYER 0x00657f60

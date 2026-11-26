@@ -27,10 +27,33 @@
 #include "G3D/Vector2int16.h"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include "rbx/TaskScheduler.h"
 
 #include "decomp.h"
 
 namespace RBX {
+
+	// GfxBase's ViewBase (Rendering) is not declared in this tree yet; only the slot the shell calls.
+	// Delete this when GfxBase/ViewBase.h lands and include that instead.
+	class ViewBase
+	{
+	public:
+		virtual void VTable0x00(); // vtable+0x00
+		virtual void VTable0x04(); // vtable+0x04
+		virtual void VTable0x08(); // vtable+0x08
+		virtual void VTable0x0c(); // vtable+0x0c
+		virtual void VTable0x10(); // vtable+0x10
+		virtual void VTable0x14(); // vtable+0x14
+		virtual void VTable0x18(); // vtable+0x18
+		virtual void VTable0x1c(); // vtable+0x1c
+		virtual void VTable0x20(); // vtable+0x20
+		virtual void VTable0x24(); // vtable+0x24
+		virtual void VTable0x28(); // vtable+0x28
+		virtual void VTable0x2c(); // vtable+0x2c
+		virtual void onResize(int cx, int cy) = 0; // vtable+0x30 (WndProc's WM_SIZE, PLAYER 0x00442718)
+	};
 
 	// WindowsClient/UserInput.cpp is not written; only the call View makes is declared.
 	class UserInput
@@ -53,8 +76,14 @@ namespace RBX {
 		DWORD restoreWindowStyle;                     // 0x94
 		bool changingResolution;                      // 0x98
 		HMONITOR hMonitor;                            // 0x9c
-		undefined m_unk0xa0[0xb0 - 0xa0];             // 0xa0
+		ViewBase* view;                               // 0xa0 (2016: scoped_ptr<ViewBase>)
+		undefined m_unk0xa4[0xa8 - 0xa4];             // 0xa4
+		// The three jobs resetScheduler (0x00466460) adds and RemoveJobs (0x00466a30) removes.
+		boost::shared_ptr<TaskScheduler::Job> m_unk0xa8; // 0xa8
 		boost::scoped_ptr<UserInput> userInput;       // 0xb0 HandleWindowsMessage forwards to it
+		undefined m_unk0xb4[0xbc - 0xb4];             // 0xb4
+		boost::shared_ptr<TaskScheduler::Job> m_unk0xbc; // 0xbc
+		boost::shared_ptr<TaskScheduler::Job> m_unk0xc4; // 0xc4
 
 		void modifyWindow(DWORD argMask, const RECT& area);
 		bool findBestMonitorMatch(LPCTSTR szDevice, int desiredX, int desiredY, bool resolutionAuto, DEVMODE& dmBest);
@@ -64,9 +93,11 @@ namespace RBX {
 		G3D::Vector2int16 getCurrentDesktopResolution();
 		std::vector<G3D::Vector2int16> getFullscreenSizes();
 		void initializeSizes();
+		void resetScheduler();
 
 	public:
 		HWND GetHWnd() const { return hWnd; }
+		ViewBase* GetGfxView() const { return view; }
 		void CloseWindow() { ::PostMessage(GetHWnd(), WM_CLOSE, 0, 0); }
 		bool IsFullscreen() const { return fullscreen; }
 		void SetFullscreen(bool value);

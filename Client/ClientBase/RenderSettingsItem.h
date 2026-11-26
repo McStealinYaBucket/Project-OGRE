@@ -157,6 +157,7 @@ namespace RBX {
 		unsigned int meshCacheSize;                 // 0x44 (0x2000000)
 
 		static AASamples aaSamples;                 // PLAYER 0x00db4d34
+		static const G3D::Vector2int16 minGameWindowSize; // PLAYER 0x00e1bbf0 (GfxBase; Application::OnGetMinMaxInfo)
 
 		// A preset's size: View::initializeSizes reads width at +4 and height at +8.
 		struct RESOLUTIONENTRY
@@ -184,6 +185,9 @@ namespace RBX {
 		QualityLevel getQualityLevel() const { return qualityLevel; }
 		ResolutionPreset getResolutionPreference() const { return resolutionPreference; }
 		G3D::Vector2int16 getFullscreenSize() const { return fullscreenSize; }
+		G3D::Vector2int16 getWindowSize() const { return windowSize; }
+		// Application::OnGetMinMaxInfo reads it through an inline getter (`add eax,0x64` first, 0x0040403a).
+		G3D::Vector2int16 getUnk0x2e() const { return m_unk0x2e; }
 		int getMaxQualityLevel() { return maxQualityLevel; }
 		int getAutoQualityLevel() const { return autoQualityLevel; }
 		bool getDrawConnectors() const { return drawConnectors; }  // 2016 name; the shell copy 0x004558f0

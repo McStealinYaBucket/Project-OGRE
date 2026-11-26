@@ -9,10 +9,21 @@
 #include "../Win/VideoControl.h"
 #include "../ClientBase/RenderSettingsItem.h"
 #include "V8DataModel/GameSettings.h"
+#include "V8DataModel/GameBasicSettings.h"
+#include "FunctionMarshaller.h"
 #include "V8DataModel/Game.h"
 #include "V8DataModel/DataModel.h"
 #include "Util/SoundService.h"
 #include "FastLog.h"
+
+// RegisterFlag without FASTFLAGVARIABLE's PlaceFilter string, as in View.cpp.
+namespace FFlag {
+	// Initializer PLAYER 0x00a5b510 (.data, default on)
+	// GLOBAL: PLAYER 0x00dc6c65
+	bool FixStopButtonStayingOnScreen = true;
+	int FixStopButtonStayingOnScreenIniter = FLog::RegisterFlag(
+		"FixStopButtonStayingOnScreen", &FixStopButtonStayingOnScreen, NULL, FASTVARTYPE_STATIC);
+}
 
 namespace RBX {
 
@@ -115,10 +126,34 @@ void RecordToggleVerb::startAction()
 	GameSettings::singleton().videoRecordingSignal(true);
 }
 
+// Against 2016, FFlag::FixStopButtonStayingOnScreen moves videoRecordingSignal(false) ahead of the
+// upload test; with the flag off it fires only after a submitted upload. VideoControl::stopRecording
+// is inlined.
 // STUB: PLAYER 0x00439450
 void RecordToggleVerb::stopAction()
 {
-	STUB(0x00439450);
+	videoControl->stopRecording();
+
+	GameBasicSettings& settings = GameBasicSettings::singleton();
+
+	if (FFlag::FixStopButtonStayingOnScreen)
+		GameSettings::singleton().videoRecordingSignal(false);
+
+	if (settings.getUploadVideoSetting() == GameSettings::NEVER)
+		return;
+
+	doc.m_unk0x1c->Submit(boost::bind(&RecordToggleVerb::uploadVideo, this));
+
+	if (!FFlag::FixStopButtonStayingOnScreen)
+		GameSettings::singleton().videoRecordingSignal(false);
+}
+
+// "%s/UploadMedia/UploadVideo.aspx?from=client&videodir=%s&rand=" with a random number (_itoa), the
+// user's video directory, under a CRITICAL_SECTION.
+// STUB: PLAYER 0x004394f0
+void RecordToggleVerb::uploadVideo()
+{
+	STUB(0x004394f0);
 }
 
 // Against 2016, recording starts only under the Direct3D or automatic graphics mode; otherwise the

@@ -46,7 +46,13 @@ namespace RBX {
 
 	class Verb;
 	class ViewBase;
-	class FrameRateManager;
+	// GfxBase's FrameRateManager (Rendering): GfxBase/FrameRateManager.h is still empty, so only the call
+	// the shell makes is declared here. Delete this when that header declares the class.
+	class FrameRateManager
+	{
+	public:
+		void ResumeAutoAdjustment(); // PLAYER 0x009c7ac0 (GfxBase, __thiscall; stores [this+0xc] = 1)
+	};
 	namespace Soundscape
 	{
 		class SoundService;
@@ -109,6 +115,14 @@ namespace RBX {
 
 		bool isVideoRecording() { return capture->isRunning(); }
 		std::string& getFileName() { return capture->getFileName(); }
+		// Inlined into RecordToggleVerb::stopAction (PLAYER 0x00439450); 2013 does not clear the view's
+		// frame-data callback here (2016 does).
+		void stopRecording()
+		{
+			recorded = true;
+			capture->stop();
+			frameRateManager->ResumeAutoAdjustment();
+		}
 
 		// PLAYER 0x00464f30, not written (asserts 111/127; needs SoundService's 2013 callbacks and
 		// two ViewBase virtuals). LTCG passes soundService in ecx and `this` in edi.

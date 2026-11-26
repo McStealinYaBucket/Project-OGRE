@@ -1,4 +1,4 @@
-// Network/NetworkOwnerJob.cpp -- October 2013, partial (see NetworkOwnerJob.h): STUBs only.
+// Network/NetworkOwnerJob.cpp -- October 2013, partial (see NetworkOwnerJob.h).
 
 #include "NetworkOwnerJob.h"
 #include "V8DataModel/DataModel.h"
@@ -8,18 +8,18 @@ namespace RBX {
 namespace Network {
 
 // Folded with Replicator::SendDataJob::sleepTime.
-// STUB: PLAYER 0x005f65c0
+// FUNCTION: PLAYER 0x005f65c0
+// FUNCTION: STUDIO 0x0063c240
 Time::Interval NetworkOwnerJob::sleepTime(const Stats& stats)
 {
-	STUB(0x005f65c0);
-	return Time::Interval(0);
+	return computeStandardSleepTime(stats, networkOwnerRate);
 }
 
-// STUB: PLAYER 0x005f65f0
+// FUNCTION: PLAYER 0x005f65f0
+// FUNCTION: STUDIO 0x0066a260
 TaskScheduler::Job::Error NetworkOwnerJob::error(const Stats& stats)
 {
-	STUB(0x005f65f0);
-	return Job::Error();
+	return computeStandardError(stats, networkOwnerRate);
 }
 
 // FUNCTION: PLAYER 0x005f7370

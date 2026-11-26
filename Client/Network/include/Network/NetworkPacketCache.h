@@ -3,14 +3,21 @@
 // Network/NetworkPacketCache.h -- October 2013, partial: the base chains, sizes and the out-of-line
 // functions Server::onServiceProvider (PLAYER 0x005b5310) needs. RTTI: DescribedNonCreatable<T,
 // Instance, sT> plus Service at 0x60. Sizes from Creatable<Instance>::create<T>'s operator new
-// (PLAYER 0x005b2120: 0x94, 0x005b21a0: 0x98). Members past 0x64 are unproven. No 2013 __FILE__
-// names this header; the path is 2016's.
+// (PLAYER 0x005b2120: 0x94, 0x005b21a0: 0x98). Members from the ctors (PLAYER 0x005d74c0,
+// 0x005d7cb0): the stream cache unordered_map at 0x64, boost::shared_mutex at 0x7c (its out-of-line
+// ctor 0x005d5480), then two scoped_connections (Physics) or a std::list of connections (Instance;
+// _Buynode 0x005e7920). Names are 2016's. No 2013 __FILE__ names this header; the path is 2016's.
 
 #include "V8Tree/Instance.h"
 #include "V8Tree/Service.h"
+#include "rbx/signal.h"
 #include "decomp.h"
+#include <boost/unordered_map.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
 namespace RBX {
+	class Assembly;
+
 namespace Network {
 
 	extern const char* const sPhysicsPacketCache;
@@ -21,7 +28,15 @@ namespace Network {
 		: public DescribedNonCreatable<PhysicsPacketCache, Instance, sPhysicsPacketCache>
 		, public Service
 	{
-		undefined m_unk0x64[0x94 - 0x64];               // 0x64
+	public:
+		class CachedBitStream;
+	private:
+		typedef boost::unordered_map<unsigned char, boost::shared_ptr<CachedBitStream> > InnerMap;
+		typedef boost::unordered_map<const Assembly*, InnerMap> StreamCacheMap;
+		StreamCacheMap streamCache;                                     // 0x64
+		boost::shared_mutex sharedMutex;                                // 0x7c
+		rbx::signals::scoped_connection addingAssemblyConnection;       // 0x8c
+		rbx::signals::scoped_connection removedAssemblyConnection;      // 0x90
 	public:
 		PhysicsPacketCache();
 	protected:
@@ -33,7 +48,15 @@ namespace Network {
 		: public DescribedNonCreatable<InstancePacketCache, Instance, sInstancePacketCache>
 		, public Service
 	{
-		undefined m_unk0x64[0x98 - 0x64];               // 0x64
+		class CachedBitStream;
+		typedef boost::unordered_map<const Instance*, boost::shared_ptr<CachedBitStream> > StreamCacheMap;
+		StreamCacheMap streamCache;                                     // 0x64
+		boost::shared_mutex sharedMutex;                                // 0x7c
+		// 2016: std::list<rbx::signals::connection> connections (ctor _Buynode, onServiceProvider
+		// disconnects each, then clear()). Not declared yet: our list<connection>::_Buynode folds with the
+		// iostreams list's and takes its name, which unpairs App's Util/Http.h TEMPLATE rows (PLAYER
+		// 0x005e7920, STUDIO 0x006d13d0) and four STUDIO callers. Measured 2026-11-26, network-5f-7.md.
+		undefined m_unk0x8c[0x98 - 0x8c];                               // 0x8c
 	public:
 		InstancePacketCache();
 	protected:

@@ -235,6 +235,15 @@ namespace RBX
 				return rbx::any_cast<T&>(value);
 			}
 
+			// The by-value fetch EventDescImpl::fireEvent uses: CFrame's out-of-line copy is PLAYER
+			// 0x0058f560 (calls the by-value any_cast<CoordinateFrame> 0x0058ebd0); bool inlines it and
+			// copies through a stack temp (GameBasicSettings fireEvent 0x00643ea0). No symbol names it
+			// (inline on iOS), so the name is a placeholder.
+			template<typename T>
+			inline T cast_unk0x0058f560() const {
+				return rbx::any_cast<T>(value);
+			}
+
 			template<typename T>
 			inline const T* tryCast() const {
 				return rbx::any_cast<T>(&value);

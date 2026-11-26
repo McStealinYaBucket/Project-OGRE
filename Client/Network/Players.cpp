@@ -232,6 +232,15 @@ namespace Network {
 		STUB(0x0056bd20);
 	}
 
+	// FUNCTION: PLAYER 0x0056efb0
+	const Instance* Players::findConstLocalCharacter(const Instance* context)
+	{
+		if (Players* players = ServiceProvider::find<Players>(context))
+			if (Player* player = players->localPlayer.get())
+				return player->character.get();
+		return NULL;
+	}
+
 	// Player id lookup (getPlayerByID 0x0055dc60), the list append 0x00564bc0, FriendService::playerAdded
 	// 0x006b36a0, guest naming ("Player" + format, 0x00b17000), five connections into the Player's
 	// signals, Teams::assignNewPlayerToTeam, playerAddedEarly/playerAdded, Player::rebuildGui.

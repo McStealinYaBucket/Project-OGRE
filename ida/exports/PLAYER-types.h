@@ -5677,8 +5677,8 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   bool m_unk0xf5;
   unsigned __int8 gap_F6[2];
   unsigned int m_unk0xf8;
-  int m_unk0xfc;
-  int m_unk0x100;
+  int physicsMtuAdjust;
+  int replicationMtuAdjust;
   float m_unk0x104;
   float m_unk0x108;
   float m_unk0x10c;
@@ -6428,7 +6428,7 @@ struct __cppobj RBX::Network::Server : RBX::DescribedCreatable<RBX::Network::Ser
   unsigned __int8 itemAddedConnection[4]; ///< rbx::signals::scoped_connection
   bool m_unk0xadc;
   unsigned __int8 m_unk0xadd[3];        ///< array
-  void *physicsPacketCache;             ///< RBX::Network::PhysicsPacketCache *
+  RBX::Network::PhysicsPacketCache *physicsPacketCache;
   void *instancePacketCache;            ///< RBX::Network::InstancePacketCache *
   int m_unk0xae8;
   unsigned __int8 m_unk0xaec[16];       ///< std::vector<int>
@@ -6554,5 +6554,91 @@ struct __cppobj RBX::Network::Replicator : RBX::DescribedNonCreatable<RBX::Netwo
   unsigned __int8 eventStrings[12];     ///< std::map<RBX::Reflection::EventDescriptor const *,boost::shared_ptr<void>>
   unsigned __int8 systemAddressDictionary[2064]; ///< RBX::Network::SharedDictionary<RBX::SystemAddress>
   unsigned __int8 m_unk0x2aa0[4];       ///< rbx::signals::scoped_connection
+  unsigned __int8 gap_2AA4[4];
+};
+
+/* 786 */
+struct __cppobj RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance> : RBX::Instance
+{
+};
+
+/* 787 */
+struct __cppobj RBX::Reflection::Described<RBX::FriendService, char const *const RBX::sFriendService, RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>, 3, 0> : RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>
+{
+};
+
+/* 788 */
+struct __cppobj RBX::DescribedCreatable<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, 3, 0> : RBX::Reflection::Described<RBX::FriendService, char const *const RBX::sFriendService, RBX::FactoryProduct<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, RBX::Instance>, 3, 0>
+{
+};
+
+/* 789 */
+struct __cppobj RBX::FriendService : RBX::DescribedCreatable<RBX::FriendService, RBX::Instance, char const *const RBX::sFriendService, 3, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 friendEventReplicatingSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int,RBX::FriendService::FriendEventType)>
+  unsigned __int8 friendStatusReplicatingSignal[8]; ///< rbx::remote_signal<void __cdecl(int,int,RBX::FriendService::FriendStatus)>
+  unsigned __int8 friendStatusConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 friendEventConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 m_unk0x7c[28];        ///< std::string
+  unsigned __int8 m_unk0x98[28];        ///< std::string
+  unsigned __int8 m_unk0xb4[28];        ///< std::string
+  unsigned __int8 m_unk0xd0[28];        ///< std::string
+  unsigned __int8 m_unk0xec[28];        ///< std::string
+  unsigned __int8 m_unk0x108[28];       ///< std::string
+  unsigned __int8 friendStatusTable[12]; ///< std::map<int,std::map<int,RBX::FriendService::FriendStatus>>
+  unsigned __int8 friendRequestSet[12]; ///< std::set<std::pair<int,int>>
+  unsigned __int8 players[12];          ///< std::set<int>
+  bool enable;
+  unsigned __int8 gap_149[3];
+};
+
+/* 790 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache> : RBX::Instance
+{
+};
+
+/* 791 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::PhysicsPacketCache, char const *const RBX::Network::sPhysicsPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>
+{
+};
+
+/* 792 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::PhysicsPacketCache, RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache, 27, 0> : RBX::Reflection::Described<RBX::Network::PhysicsPacketCache, char const *const RBX::Network::sPhysicsPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache>, 27, 0>
+{
+};
+
+/* 793 */
+struct __cppobj RBX::Network::PhysicsPacketCache : RBX::DescribedNonCreatable<RBX::Network::PhysicsPacketCache, RBX::Instance, char const *const RBX::Network::sPhysicsPacketCache, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 streamCache[24];      ///< boost::unordered::unordered_map<RBX::Assembly const *,boost::unordered::unordered_map<unsigned char,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream>,boost::hash<unsigned char>,std::equal_to<unsigned char>,std::allocator<std::pair<unsigned char const,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream> > > >,boost::hash<RBX::Assembly const *>,std::equal_to<RBX::Assembly const *>,std::allocator<std::pair<RBX::Assembly const * const,boost::unordered::unordered_map<unsigned char,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream>,boost::hash<unsigned char>,std::equal_to<unsigned char>,std::allocator<std::pair<unsigned char const,boost::shared_ptr<RBX::Network::PhysicsPacketCache::CachedBitStream> > > > > > >
+  unsigned __int8 sharedMutex[16];      ///< boost::shared_mutex
+  unsigned __int8 addingAssemblyConnection[4]; ///< rbx::signals::scoped_connection
+  unsigned __int8 removedAssemblyConnection[4]; ///< rbx::signals::scoped_connection
+};
+
+/* 794 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache> : RBX::Instance
+{
+};
+
+/* 795 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::ClusterPacketCache, char const *const RBX::Network::sClusterPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>
+{
+};
+
+/* 796 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::ClusterPacketCache, RBX::Instance, char const *const RBX::Network::sClusterPacketCache, 27, 0> : RBX::Reflection::Described<RBX::Network::ClusterPacketCache, char const *const RBX::Network::sClusterPacketCache, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sClusterPacketCache>, 27, 0>
+{
+};
+
+/* 797 */
+struct __cppobj RBX::Network::ClusterPacketCache : RBX::DescribedNonCreatable<RBX::Network::ClusterPacketCache, RBX::Instance, char const *const RBX::Network::sClusterPacketCache, 27, 0>, RBX::Voxel::CellChangeListener, RBX::Service
+{
+  unsigned __int8 gap_65[3];
+  unsigned __int8 streamCache[24];      ///< boost::unordered::unordered_map<int,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream>,boost::hash<int>,std::equal_to<int>,std::allocator<std::pair<int const,boost::shared_ptr<RBX::Network::ClusterPacketCache::CachedBitStream> > > >
+  unsigned __int8 sharedMutex[16];      ///< boost::shared_mutex
+  unsigned __int8 clusterInstance[8];   ///< boost::shared_ptr<void>
 };
 

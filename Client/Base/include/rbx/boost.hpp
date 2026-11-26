@@ -233,26 +233,7 @@ namespace rbx
 		const implementation::type_holder* holder;
 		char data[sizeof(SizeType)];
 
-	public: // checked cast (used by withVariantValue)
-		template<typename V, typename S>
-		friend const typename boost::remove_cv<typename boost::remove_reference<V>::type>::type* any_cast(const ::rbx::placement_any<S>& operand);
     };
-
-	// Checked cast out of a placement_any (holder-identity verified;
-	// throws on mismatch like boost::any_cast). The reference is
-	// stripped for the holder lookup (a holder can't construct a
-	// const-qualified or reference type -- the remove_reference /
-	// is_reference includes above exist for exactly this). All 2013 call
-	// sites pass reference types (any_cast<bool const&, Region3>) and
-	// pre-verify the typeinfo, so the throw is unreachable in practice.
-	template<typename ValueType, typename SizeType>
-	const typename boost::remove_cv<typename boost::remove_reference<ValueType>::type>::type* any_cast(const placement_any<SizeType>& operand)
-	{
-		typedef typename boost::remove_cv<typename boost::remove_reference<ValueType>::type>::type Stripped;
-		if (operand.holder != implementation::typed_holder<Stripped>::singleton())
-			throw boost::bad_any_cast();
-		return reinterpret_cast<const Stripped*>(operand.data);
-	}
 
 	// 2013 boost::any_cast-style pointer cast: the type_info address is compared first, then
 	// type_info::operator== (out of line: PLAYER 0x0079f730 for ValueTable, 0x006fdad0 for ValueArray;
@@ -290,6 +271,16 @@ namespace rbx
 		if (&operand.type() != &typeid(nonref) && operand.type() != typeid(nonref))
 			boost::throw_exception(bad_placement_any_cast());
 		return *reinterpret_cast<nonref*>(operand.data);
+	}
+
+	// boost::any_cast's const overload: forwards to the reference cast. The by-value
+	// any_cast<CoordinateFrame> PLAYER 0x0058ebd0 calls any_cast<CoordinateFrame const&> 0x00701380
+	// and copies; withVariantValue 0x008a67b0 calls any_cast<bool const&> 0x0044d360.
+	template<typename ValueType, typename SizeType>
+	inline ValueType any_cast(const placement_any<SizeType>& operand)
+	{
+		typedef typename boost::remove_reference<ValueType>::type nonref;
+		return any_cast<const nonref&>(const_cast<placement_any<SizeType>&>(operand));
 	}
 }
 
