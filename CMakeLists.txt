@@ -87,12 +87,12 @@ set(OGRE_APP_FLAGS /O2 /Ob2 /Oi /Oy /GS- /arch:SSE /fp:fast /GR /EHsc /D_SECURE_
 #   /Oi: census only (no strlen/strcmp import). TODO prove.
 #   The _WIN32_WINNT/NTDDI_VERSION/_CRT_SECURE_NO_WARNINGS defines are 2016 values. TODO prove.
 set(OGRE_BASE_FLAGS /O2 /Ob2 /Oi /Oy /GS- /arch:SSE /fp:fast /GR /EHsc /D_SECURE_SCL=0
-    /DWIN32 /DNDEBUG /D_LIB /D_WIN32_WINNT=0x0501 /DNTDDI_VERSION=0x05010100 /D_CRT_SECURE_NO_WARNINGS)
+    /DWIN32 /DNDEBUG /D_LIB /D_WIN32_WINNT=0x0501 /DNTDDI_VERSION=0x05010100 /D_CRT_SECURE_NO_WARNINGS /D_MBCS)
 
 # Network, which also compiles RakNet 4.036. Proven = the App set: 566 of 567 RakNet functions
 # identical (tools/lib/raknet_match.py); /Oy- keeps 108, /arch:SSE2 496, /GS 424. /fp:fast:
 # RakNet::BitStream::ReadFloat16 0x005c3910; /arch:SSE: RakNet::SystemAddress::operator= 0x005710d0.
-set(OGRE_NETWORK_FLAGS ${OGRE_APP_FLAGS} /D_CRT_SECURE_NO_WARNINGS)
+set(OGRE_NETWORK_FLAGS ${OGRE_APP_FLAGS} /D_CRT_SECURE_NO_WARNINGS /D_MBCS)
 
 # Rendering/AppDraw: the App set. CircleRadialNormal::eval 0x009c2900, evalTangent 0x009c2990,
 #   evalNormal 0x009c2a10 decide /Oy (2016 said /Oy-; all 4 probes lost), /arch:SSE (lost with none
@@ -221,7 +221,10 @@ list(APPEND OGRE_G3D_CPP "${OGRE_G3D}/shim/png_absent.cpp")
 file(GLOB OGRE_G3D_C CONFIGURE_DEPENDS "${OGRE_G3D}/zlib/*.c" "${OGRE_G3D}/zip/*.c" "${OGRE_G3D}/ijg/*.c")
 
 ogre_library(decomp_util SOURCES util/decomp.cpp FLAGS ${OGRE_APP_FLAGS})
-ogre_library(App SOURCES ${OGRE_LUA_SOURCES} FLAGS ${OGRE_APP_FLAGS})
+# /D_MBCS on App, Base and Network only (the 2016 vcxprojs are CharacterSet=MultiByte): ATL::CUrl::CUrl
+# 0x00401930 reaches 100% and Http::isMoneySite 0x00623bb0 calls _mbsnbcpy_s only with it (wave 14).
+# Not in OGRE_APP_FLAGS, which the Rendering libraries and g3d inherit (unmeasured there).
+ogre_library(App SOURCES ${OGRE_LUA_SOURCES} FLAGS ${OGRE_APP_FLAGS} /D_MBCS)
 ogre_library(Base SOURCES Client/Base/placeholder.cpp FLAGS ${OGRE_BASE_FLAGS})
 ogre_library(Network SOURCES Client/Network/placeholder.cpp ${OGRE_RAKNET_SOURCES} FLAGS ${OGRE_NETWORK_FLAGS})
 # RakNet's Roblox edits (patch 0002) use FastLog.h from the Log library.
@@ -290,7 +293,8 @@ target_link_options(boost PRIVATE /DEBUG /INCREMENTAL:NO)
 set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/ClientBase/ReflectionMetadata.cpp
     Client/Win/DumpErrorUploader.cpp Client/Win/LogManager.cpp Client/Win/VersionInfo.cpp Client/Win/VideoControl.cpp
     Client/Win/VistaTools.cpp Client/Win/placeholder.cpp)
-ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp Client/WindowsClient/GameVerbs.cpp ${OGRE_CLIENT_COMMON_SOURCES}
+ogre_library(player_client SOURCES Client/WindowsClient/placeholder.cpp Client/WindowsClient/GameVerbs.cpp
+    Client/WindowsClient/View.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
 ogre_library(studio_client SOURCES Client/RobloxStudio/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     Client/ClientShared/placeholder.cpp FLAGS ${OGRE_STUDIO_FLAGS})
