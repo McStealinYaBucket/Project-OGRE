@@ -32,6 +32,7 @@
 #include "V8DataModel/Game.h"
 #include "V8DataModel/GameBasicSettings.h"
 #include "V8DataModel/OverlayDataModel.h"
+#include "V8DataModel/RunService.h"
 #include "V8DataModel/UserController.h"
 #include "../Win/LogManager.h"
 #include "FastLog.h"
@@ -127,6 +128,13 @@ void View::AboutToShutdown()
 	}
 }
 
+// STUB: PLAYER 0x00465e70
+__declspec(noinline) void View::FUN_00465e70()
+{
+	STUB(0x00465e70);
+	TaskScheduler::singleton(); // an engine call: Document::Shutdown keeps its EH states (a nothrow stub drops them)
+}
+
 // 2016 adds only the render job. LTCG: `this` in eax (callers 0x0041d16d, 0x00466e37).
 // FUNCTION: PLAYER 0x00466460
 void View::resetScheduler()
@@ -169,6 +177,13 @@ void View::HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
+// STUB: PLAYER 0x004665f0
+__declspec(noinline) void View::FUN_004665f0()
+{
+	STUB(0x004665f0);
+	TaskScheduler::singleton().add(m_unk0xa8);
+}
+
 // Against 2016: no `if (userInput)` test after the reset, and the overlay DataModel's
 // ControllerService gets the same hardware device. LTCG passes `this` in edi and builds the
 // UserInput with `this` in esi.
@@ -188,6 +203,56 @@ void View::initializeInput()
 		ControllerService* service = ServiceProvider::create<ControllerService>(game->getOverlayDataModel().get());
 		service->setHardwareDevice(userInput.get());
 	}
+}
+
+// STUB: PLAYER 0x00466a30
+__declspec(noinline) void View::RemoveJobs()
+{
+	STUB(0x00466a30);
+	TaskScheduler::singleton().removeBlocking(m_unk0xa8);
+}
+
+// Against 2016's Start: the ControllerService is created under the lock and the keyboard is
+// wanted without a userInput test.
+// STUB: PLAYER 0x00466cf0
+void View::FUN_00466cf0()
+{
+	game->setDataModel(DataModel::createDataModel(true, NULL, game->getOverlayDataModel().get()));
+	FUN_00468730();
+	{
+		DataModel::LegacyLock lock(game->getDataModel(), DataModelJob::Write);
+		ServiceProvider::create<ControllerService>(game->getDataModel().get());
+	}
+	initializeInput();
+	FUN_004665f0();
+	userInput->setKeyboardDesired(true);
+	FUN_004684b0();
+	resetScheduler();
+}
+
+// STUB: PLAYER 0x00466e50
+void View::FUN_00466e50()
+{
+	{
+		OverlayDataModel::DualLegacyLock lock(game->getOverlayDataModel(), game->getDataModel(), DataModelJob::Write);
+		view->VTable0x0c(shared_ptr<DataModel>());
+		game->shutdownGameDataModel();
+	}
+
+	FUN_00466cf0();
+
+	{
+		DataModel::LegacyLock lock(game->getOverlayDataModel(), DataModelJob::Write);
+		if (shared_ptr<OverlayDataModel> overlay = game->getOverlayDataModel())
+		{
+			if (RunService* runService = ServiceProvider::find<RunService>(overlay.get()))
+				runService->start();
+			// then overlay->dataModelShutdownFinished() (0x00691310), which App's OverlayDataModel.h does not declare yet
+		}
+	}
+
+	m_unk0x44 = false;
+	m_unk0x00();
 }
 
 // STUB: PLAYER 0x00467410
@@ -653,71 +718,6 @@ std::vector<G3D::Vector2int16> View::getFullscreenSizes()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 2013 against 2016: the placement comes from the registry (a WINDOWPLACEMENT blob), not from
 // GameBasicSettings; SetFocus is called directly; the TOPMOST toggle is behind
 // FFlag::UseTopmostSettingToBringWindowToFront (HWND_TOP otherwise). SetFullscreen(true) is inlined.
@@ -753,6 +753,20 @@ void View::ShowWindow()
 
 	if (GameBasicSettings::singleton().getFullScreen())
 		SetFullscreen(true);
+}
+
+// STUB: PLAYER 0x004684b0
+__declspec(noinline) void View::FUN_004684b0()
+{
+	STUB(0x004684b0);
+	TaskScheduler::singleton().add(m_unk0xbc);
+}
+
+// STUB: PLAYER 0x00468730
+__declspec(noinline) void View::FUN_00468730()
+{
+	STUB(0x00468730);
+	TaskScheduler::singleton().add(m_unk0xc4);
 }
 
 } // namespace RBX

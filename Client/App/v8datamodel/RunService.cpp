@@ -187,7 +187,7 @@ namespace RBX {
 	// because our linker folds shared_from<RunService> into shared_from<GuiItem> and the call
 	// pairs with the GuiItem copy (STUDIO pairs it and is at 100%).
 	// FUNCTION: PLAYER 0x0072d300
-	// STUB: STUDIO 0x0079af80
+	// FUNCTION: STUDIO 0x0079af80
 	void RunService::start()
 	{
 		physicsJob = shared_ptr<PhysicsJob>(new PhysicsJob(shared_from_dynamic_cast<DataModel>(getParent())));

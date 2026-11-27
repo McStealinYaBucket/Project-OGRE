@@ -64,7 +64,7 @@ namespace RBX {
 		std::string m_unk0xa0;			// 0xa0  ""
 		double m_unk0xc0;				// 0xc0  0
 		bool m_unk0xc8;					// 0xc8  true
-		int m_unk0xcc;					// 0xcc  0
+		PhysicsSendMethod physicsSendMethod;	// 0xcc  ErrorComputation (2016 name; ServerReplicator::onSentMarker 0x00572270)
 		int m_unk0xd0;					// 0xd0  1
 		int m_unk0xd4;					// 0xd4  1
 	public:
@@ -97,6 +97,8 @@ namespace RBX {
 		int getPhysicsMtuAdjust() const { return physicsMtuAdjust; }
 		int getReplicationMtuAdjust() const { return replicationMtuAdjust; }
 		int getDataSendPriority() const { return dataSendPriority; }
+		// ServerReplicator::onSentMarker 0x00572270 passes it to Replicator::createPhysicsSender 0x0058b260.
+		PhysicsSendMethod getPhysicsSendMethod() const { return physicsSendMethod; }
 	};
 
 } // namespace RBX

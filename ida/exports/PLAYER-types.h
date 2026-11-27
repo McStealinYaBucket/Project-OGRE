@@ -5662,7 +5662,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   double m_unk0xc0;
   bool m_unk0xc8;
   unsigned __int8 gap_C9[3];
-  int m_unk0xcc;
+  int physicsSendMethod;                ///< enum RBX::NetworkSettings::PhysicsSendMethod
   int m_unk0xd0;
   int m_unk0xd4;
   int dataSendPriority;
@@ -6053,7 +6053,7 @@ struct __cppobj XmlAttribute : RBX::Sibling<XmlAttribute>, XmlNameValuePair
 struct __cppobj RBX::ToggleFullscreenVerb : RBX::Verb
 {
   RBX::VideoControl *videoControl;
-  void *view;                           ///< RBX::View *
+  RBX::View *view;
 };
 
 /* 737 */
@@ -6223,13 +6223,13 @@ struct __cppobj RBX::SoundState
 /* 751 */
 struct __cppobj RBX::LeaveGameVerb : RBX::Verb
 {
-  void *doc;                            ///< RBX::Document *
+  RBX::Document *doc;
 };
 
 /* 752 */
 struct __cppobj RBX::RecordToggleVerb : RBX::Verb
 {
-  void *doc;                            ///< RBX::Document *
+  RBX::Document *doc;
   RBX::Game *game;
   unsigned __int8 videoControl[4];      ///< boost::scoped_ptr<RBX::VideoControl>
   unsigned __int8 fileName[28];         ///< std::string
@@ -6966,7 +6966,7 @@ struct __cppobj RBX::ToggleViewMode : RBX::Verb
 struct __cppobj RBX::Network::ConcurrentRakPeer::StatsUpdateJob : RBX::DataModelJob
 {
   unsigned __int8 mapMutex[8];          ///< boost::mutex
-  unsigned __int8 statsMap[24];         ///< boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >
+  unsigned __int8 statsMap[24];         ///< boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats> > >
   unsigned __int8 updateCallbackMap[24]; ///< boost::unordered::unordered_map<RakNet::SystemAddress,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)>,boost::hash<RakNet::SystemAddress>,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)> > > >
   RBX::RunningAverage<double,double> bufferHealth;
   int prevBufferSize;
@@ -7013,5 +7013,61 @@ struct __cppobj RBX::Network::ReceiverDictionary<std::string >
 /* 835 */
 struct __cppobj RBX::Network::SharedScopeDictionary : RBX::Network::SenderDictionary<RBX::Name const *>, RBX::Network::ReceiverDictionary<std::string >
 {
+};
+
+/* 836 */
+struct __cppobj RBX::OverlayDataModel::DualLegacyLock
+{
+  unsigned __int8 legacyLock[4];        ///< RBX::DataModel::LegacyLock
+  unsigned __int8 writeRequest[4];      ///< RBX::DataModel::scoped_write_request
+  unsigned __int8 readRequest[4];       ///< RBX::DataModel::scoped_read_request
+};
+
+/* 837 */
+struct __cppobj RBX::BoolPropertyVerb : RBX::EditSelectionVerb
+{
+  RBX::Name *propertyName;
+};
+
+/* 838 */
+struct __cppobj RBX::Document
+{
+  unsigned __int8 m_unk0x00[4];         ///< boost::scoped_ptr<RBX::View>
+  unsigned __int8 game[8];              ///< boost::shared_ptr<RBX::Game>
+  unsigned __int8 m_unk0x0c[4];         ///< boost::scoped_ptr<RBX::ToggleFullscreenVerb>
+  unsigned __int8 m_unk0x10[4];         ///< boost::scoped_ptr<RBX::LeaveGameVerb>
+  unsigned __int8 m_unk0x14[4];         ///< boost::scoped_ptr<RBX::RecordToggleVerb>
+  unsigned __int8 m_unk0x18[4];         ///< boost::scoped_ptr<RBX::ScreenshotVerb>
+  void *marshaller;                     ///< RBX::FunctionMarshaller *
+  unsigned __int8 m_unk0x20[8];         ///< boost::shared_ptr<void>
+};
+
+/* 839 */
+struct __cppobj RBX::View
+{
+  unsigned __int8 m_unk0x00[4];         ///< rbx::signal<void __cdecl(void)>
+  unsigned __int8 game[8];              ///< boost::shared_ptr<RBX::Game>
+  void *hWnd;                           ///< HWND__ *
+  unsigned __int8 m_unk0x10[8];         ///< array
+  unsigned __int8 m_unk0x18[28];        ///< std::string
+  unsigned __int8 m_unk0x34[16];        ///< array
+  bool m_unk0x44;
+  bool fullscreen;
+  bool desireFullscreen;
+  bool changedResolution;
+  unsigned __int8 fullScreenSizes[16];  ///< std::vector<G3D::Vector2int16>
+  unsigned __int8 nonFullscreenRect[16]; ///< tagRECT
+  unsigned __int8 nonFullscreenPlacement[44]; ///< tagWINDOWPLACEMENT
+  unsigned int restoreWindowStyle;
+  bool changingResolution;
+  unsigned __int8 gap_99[3];
+  void *hMonitor;                       ///< HMONITOR__ *
+  unsigned __int8 view[4];              ///< boost::scoped_ptr<RBX::ViewBase>
+  unsigned __int8 m_unk0xa4[4];         ///< array
+  unsigned __int8 m_unk0xa8[8];         ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  unsigned __int8 userInput[4];         ///< boost::scoped_ptr<RBX::UserInput>
+  unsigned __int8 m_unk0xb4[8];         ///< boost::shared_ptr<void>
+  unsigned __int8 m_unk0xbc[8];         ///< boost::shared_ptr<RBX::TaskScheduler::Job>
+  unsigned __int8 m_unk0xc4[8];         ///< boost::shared_ptr<RBX::TaskScheduler::Job>
 };
 

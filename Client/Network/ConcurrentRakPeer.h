@@ -18,15 +18,25 @@
 #include "rbx/RunningAverage.h"
 #include <string>
 
+// boost::hash<RakNet::SystemAddress> for StatsUpdateJob's callback map (2016 puts it in RakNetTypes.h as a
+// Roblox edit, a friend of SystemAddress). Inlined into the map's find (PLAYER 0x005c61d0): the dotted
+// address through inet_addr (WS2_32 ordinal 11), then the port.
+namespace RakNet {
+	inline std::size_t hash_value(const SystemAddress& systemAddress)
+	{
+		std::size_t seed = 0;
+		boost::hash_combine(seed, inet_addr(systemAddress.ToString(false)));
+		boost::hash_combine(seed, systemAddress.GetPort());
+		return seed;
+	}
+}
+
 namespace RBX {
 	class DataModel;
 }
 
 namespace RBX {
 namespace Network {
-
-	// iOS: RakNetAddressToString(RakNet::SystemAddress const&, bool, char) (PLAYER 0x005c6c80).
-	std::string RakNetAddressToString(const RakNet::SystemAddress& raknetAddress, bool writePort = true, char portDelineator = '|');
 
 	// 0xf0 bytes: Replicator::onStatisticsChanged (PLAYER 0x005804f0) copies it with 0x3c dwords.
 	// 8-aligned through RakNetStatistics: Replicator is 0x2aa8 (ServerReplicator's members start at
@@ -108,7 +118,16 @@ namespace Network {
 		};
 	public:
 		boost::mutex mapMutex;                              // 0x218
-		typedef boost::unordered_map<RakNet::SystemAddress, ConcurrentRakPeerStats, SystemAddressHasher> StatsMap;
+		// iOS: StatsUpdateJob::ConnectionStats, 0x150 bytes (map node link at +0x168 in stepDataModelJob
+		// 0x005c6240). The callbacks get its first 0xf0 bytes as a ConcurrentRakPeerStats. Ctor PLAYER
+		// 0x005c5d70 (not written): mtuSize 1492, the pings 0, both averages weight 0.1. Member names 2016's.
+		struct ConnectionStats : public ConcurrentRakPeerStats
+		{
+			RunningAverage<> averageBandwidthExceeded;          // 0xf0
+			RunningAverage<> averageCongestionControlExceeded;  // 0x120
+			ConnectionStats();
+		};
+		typedef boost::unordered_map<RakNet::SystemAddress, ConnectionStats, SystemAddressHasher> StatsMap;
 		StatsMap statsMap;                                  // 0x220
 		typedef boost::unordered_map<RakNet::SystemAddress, boost::function<void(const ConcurrentRakPeerStats&)> > UpdateCallbackMap;
 		UpdateCallbackMap updateCallbackMap;                // 0x238
@@ -120,6 +139,10 @@ namespace Network {
 		/*override*/ Time::Interval sleepTime(const Stats& stats);                       // vtable+0x04
 		/*override*/ Error error(const Stats& stats);                                    // vtable+0x08
 		/*override*/ TaskScheduler::StepResult stepDataModelJob(const Stats& stats);     // vtable+0x18
+
+	private:
+		// 2016 name; PLAYER 0x005c4190 / STUDIO 0x0061f050, not written yet.
+		void updateStats(StatsMap::value_type& x, RakNet::RakPeerInterface* peer);
 	};
 
 } // namespace Network

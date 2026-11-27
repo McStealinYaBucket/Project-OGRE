@@ -8,9 +8,12 @@
 
 #include "rbx/Debug.h"
 #include "Util/SystemAddress.h"
+#include "Util/Guid.h"
 #include <boost/unordered_map.hpp>
 #include <map>
 #include <string>
+
+namespace RakNet { class BitStream; }
 
 namespace RBX {
 	class Name;
@@ -77,6 +80,9 @@ namespace Network {
 		: public SenderDictionary<const RBX::Name*>
 		, public ReceiverDictionary<std::string>
 	{
+	public:
+		// IdSerializer::deserializeId 0x005a8ce0 reads a scope through it (2016: SharedDictionary::receive).
+		void receive(RakNet::BitStream& stream, RBX::Guid::Scope& scope);
 	};
 
 } // namespace Network

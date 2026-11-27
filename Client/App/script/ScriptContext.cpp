@@ -84,17 +84,17 @@ namespace FLog {	// then ReplicationDataLifetime's and NetworkInstances's, then 
 	// GLOBAL: STUDIO 0x00ec180a
 	Channel JoinSendExtraItemCount = 1;
 	int JoinSendExtraItemCountIniter = RegisterLogGroup("JoinSendExtraItemCount", &JoinSendExtraItemCount, NULL, FASTVARTYPE_STATIC); }
-// 0xFA9AFC/0xFA9B04 = 0xFF (batch723/724, InitFunc_480): attach/detach script logging.
-LOGVARIABLE(ScriptContextAdd, 255)
+namespace DFLog {	// dynamic (kind 1), initializer 0x00a66270, after JoinSendExtraItemCount's
+	// GLOBAL: PLAYER 0x00de3f8b
+	// GLOBAL: STUDIO 0x00f84e65
+	FLog::Channel NetworkJoin = 0;
+	int NetworkJoinIniter = FLog::RegisterLogGroup("NetworkJoin", &NetworkJoin, NULL, FASTVARTYPE_DYNAMIC); }
+LOGVARIABLE(ScriptContextAdd, 255)	// 0xFA9AFC/0xFA9B04 = 0xFF (batch723/724, InitFunc_480): attach/detach script logging.
 // 0xF88531 = 1 (batch723/724): closeStates logging is ON at rest (closeStates 0x18E9BC gates its logs on it).
 LOGVARIABLE(ScriptContextClose, 1)
 LOGVARIABLE(ScriptContextRemove, 255)
 
-// Start-script settings-byte gates read through the pointer-table
-// slots (batch741: dword_D1A07D/09D/0A5 regions -- the pointed bytes
-// never resolved to named variables in the dumped material; rest
-// values unknown). Port stand-ins, default OFF so the deferred arms
-// stay inert; LOUD DELTA (stand-in names, cited at each use).
+// Start-script gates (batch741 pointer-table slots; rest values unknown): stand-ins, default OFF, LOUD DELTA.
 LOGVARIABLE(StartScriptSourceDump, 0);         // batch741:229 -- gates the start-script source printf
 LOGVARIABLE(StartScriptSourceTransform, 0);    // batch741:348-351 -- gates the sourceTransform apply
 LOGVARIABLE(StartScriptErrorContinuation, 0);  // batch741:387-391 -- gates the error-continuation call
@@ -3298,7 +3298,7 @@ std::string ScriptContext::extractCallStack(lua_State* thread,
 }
 
 // mac: 0x18A30C-0x18A54B (batch719; 2016 ScriptContext.cpp:1192 matches modulo branch order).  The binary tests `timeoutThread != 0` first and kicks the running monitor (checkTimeout.Set); the spawn path is identical outright.
-// STUB: PLAYER 0x0067eee0
+// FUNCTION: PLAYER 0x0067eee0
 // STUB: STUDIO 0x007e4db0
 void ScriptContext::setTimeout(double seconds)
 {

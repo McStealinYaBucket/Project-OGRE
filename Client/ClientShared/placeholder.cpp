@@ -8,6 +8,7 @@
 // Client/WindowsClient/placeholder.cpp). Delete it when FrameRateManagerStatsItem is written.
 
 #include "V8DataModel/StatsItem.h"
+#include "V8DataModel/DataModel.h"
 
 #include <new>
 
@@ -27,8 +28,15 @@ static void ogreStudioWeakDataModelUse(boost::weak_ptr<RBX::DataModel>)
 {
 }
 
+// Wave 21: shared_from<DataModel> and shared_from<Instance> are shell-owned in STUDIO: 2013's engine callers
+// (filterChangedProperty 0x00638330, the PacketJob ctor 0x00620870, Instance::onDescendantAdded 0x006f11e0,
+// ServiceProvider::onChildAdded 0x0076f7b0, ...) reach the shell's folded shared_from body 0x00445440, which
+// RunService::start 0x0079af80 also calls as shared_from<RunService>. Without the shell copies our engine
+// fold 0x00539ef0 takes those callers (the generator's STUDIO MATCH_DROP, which this retires).
 extern "C" void ogreStudioShellStandInUse(void* raw)
 {
+	new (raw) boost::shared_ptr<RBX::DataModel>(RBX::shared_from(static_cast<RBX::DataModel*>(raw))); // no operator=/dtor
+	new (raw) boost::shared_ptr<RBX::Instance>(RBX::shared_from(static_cast<RBX::Instance*>(raw)));   // same body, same copy
 	new (raw) RBX::Stats::Item();
 	boost::bind(&ogreStudioWeakDataModelUse, *static_cast<boost::weak_ptr<RBX::DataModel>*>(raw));
 }

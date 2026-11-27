@@ -917,190 +917,190 @@ namespace RBX {
 			verb->doIt(NULL);
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// Contents (clearContents 0x2CF1D0)
-	//////////////////////////////////////////////////////////////////////////////////
 
-	// One 0x2CF1D0 "find + log + removeAllChildren" block. The binary logs the
-	// service subtree size (1 for self + countDescendantsOfType over children =
-	// countDescendantsOfType<Instance> on the service) then removes all children.
-	// Exact log literals are TODO (address-evidenced VA names in comments).
-	template<class ServiceClass>
-	static void clearFoundService(DataModel* dataModel, const char* logFormat)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// GLOBAL: PLAYER 0x00d314c8
+	// GLOBAL: STUDIO 0x00ebd70c
+	int DataModel::LegacyLock::mainThreadId = ~0;
+	// SIZE 0x20
+	struct DataModel::LegacyLock::Implementation : boost::noncopyable
 	{
-		if (ServiceClass* service = dataModel->find<ServiceClass>())
+		// To marshal the task to this thread we use a pair of locks (acquire and release)
+		// Since creating mutexes are expensive, we push spent Events into a pool
+		// for re-use
+		struct Events
 		{
-			if (FLog::CloseDataModel)
+			CEvent acquiredLock;
+			CEvent releasedLock;
+			Events()
+				:acquiredLock(false)
+				,releasedLock(false)
+			{}
+		};
+		SAFE_STATIC(rbx::safe_queue< shared_ptr<Events> >, eventsPool)
+
+		// The job in this thread that has currently acquired a lock (if any)
+		// This thread specific pointer is used to re-entrancy checks
+		SAFE_STATIC(rbx::thread_specific_reference<GenericJob>, currentJob)
+
+		// 2013 layout (ctor PLAYER 0x00641e60, dtor 0x0063a380; operator new 0x20 at 0x006421eb):
+		DataModel* const dataModel;				// 0x00
+		GenericJob* job;						// 0x04 the job being used for scheduling
+		GenericJob* previousJob;				// 0x08 the previous job, if any
+		shared_ptr<Events> events;				// 0x0c the mutexes used to marshal the task across threads
+		Limits::Counter::Activator activator;	// 0x14 (ctor 0x009b96b0, dtor 0x009b97f0)
+		DWORD m_unk0x1c;						// 0x1c dataModel->writeRequestingThread on entry, restored on exit
+
+		static void task(shared_ptr<Events> events)
+		{
+			RBXPROFILER_SCOPE("Jobs", "LegacyLock");
+
+			// Signal the thread that constructed the Implementation object to proceed
+			events->acquiredLock.Set();
+
+			// Wait for Implementation object to go out of scope (task complete)
+			events->releasedLock.Wait();
+
+			// Recycle the events pair
+			eventsPool().push(events);
+		}
+
+		// FUNCTION: PLAYER 0x0063a380
+		// FUNCTION: STUDIO 0x00758fd0
+		~Implementation()
+		{
+			FASTLOG2(FLog::LegacyLock, "LegacyLock::~Implementation type(%d), events (%p)", job->taskType, events.get());
+
+			if (job->taskType == DataModelJob::Write)
+				dataModel->writeRequestingThread = m_unk0x1c;
+
+			if (job != previousJob)
 			{
-				int count = service->template countDescendantsOfType<Instance>();
-				FLog::FastLog(FLog::CloseDataModel, logFormat,
-					reinterpret_cast<const void*>(static_cast<size_t>(count)));
+				// The task has completed, so undo state
+				currentJob().reset(previousJob);
+				// Signal the proxy task that we're done
+				events->releasedLock.Set();
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::Released type(%d)", job->taskType);
 			}
-			service->removeAllChildren();
-		}
-	}
-
-	// Same for a cached member service (starterPack +2952, starterGui +2960,
-	// coreGuiService +2920).
-	static void clearMemberService(Instance* service, const char* logFormat)
-	{
-		if (service == NULL)
-			return;
-		if (FLog::CloseDataModel)
-		{
-			int count = service->countDescendantsOfType<Instance>();
-			FLog::FastLog(FLog::CloseDataModel, logFormat,
-				reinterpret_cast<const void*>(static_cast<size_t>(count)));
-		}
-		service->removeAllChildren();
-	}
-
-	/* mac: 0x2CF1D0 — evidence: F:\2013Decompile\exports\decomp\Refl_DataModel.cpp.txt
-	   (C:\tmp\clearcontents.txt work extract).
-	   Shape: ScriptContext flag (byte +247 = 1, identity TODO) -> workspace block
-	   (terrain FW b21=0 via FWValue<bool>::set; setMouseCommand(null);
-	   ContactManager::fastClear + World stats logs; "Clearing workspace" counts
-	   (Instances/Parts/BaseScripts); removeAllChildren; setCurrentCamera(null)) ->
-	   cached members starterPack/starterGui/coreGuiService (log + clear) ->
-	   find<> blocks Teams (log + clear), SpawnerService (ClearContents),
-	   ChangeHistoryService (waypoint count log + clearWaypoints), Lighting,
-	   JointsService, TestService, ServerScriptService, ReplicatedStorage,
-	   ServerStorage (each log + clear) -> ScriptContext::closeStates(reset) +
-	   trailing global emit (TODO below).
-	   Log-literal TODOs: exact 2013 format strings unknown (VA-evidenced names:
-	   aClearingWorldD ×3, aClearingWorksp, aClearingStarte ×2, aClearingCoregu,
-	   aClearingTeamsD, aClearingChange, aClearingLighti, aClearingJoints,
-	   aClearingTestse, aClearingServer, aClearingReplic, aClearingServer_0,
-	   aClosingScriptC). Counts/sequence are binary-exact. */
-	// STUB: PLAYER 0x006458d0
-	// STUB: STUDIO 0x00762890
-	void DataModel::clearContents(bool resettingSimulation)
-	{
-		ScriptContext* scriptContext = find<ScriptContext>();
-		if (scriptContext != NULL)
-			scriptContext->contentClearing = true;
-
-		if (workspace)
-		{
-			if (Instance* terrain = workspace->getTerrain())
+			else
 			{
-				// Binary: FWValue<bool>::set(fw+21, false, Terrain+68) — dict
-				// write-through; the holder dict is null in bring-up, so the
-				// observable effect is the plain store (b21 = 0).
-				if (terrain->fw())
-					terrain->fw()->b21 = 0;
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyReleased type(%d)", job->taskType);
 			}
-			workspace->setMouseCommand(shared_ptr<MouseCommand>());
-			// TODO(decompile): ContactManager::fastClear + World stat logs
-			// (getNumBodies/getNumPoints/getNumConstraints/getNumHashNodes/
-			// getMaxBucketSize — v8world, not in tree).
-			if (FLog::CloseDataModel)
+		}
+
+		// The assert sits on 2013 line 1054.
+		// FUNCTION: PLAYER 0x00641e60
+		// FUNCTION: STUDIO 0x0075f6e0
+		Implementation(DataModel* dataModel, boost::shared_ptr<GenericJob> job, boost::shared_ptr<Limits::Counter> counter)
+			:dataModel(dataModel)
+			,job(job.get())
+			,activator(counter)
+			,m_unk0x1c(dataModel->writeRequestingThread)
+		{
+			RBXASSERT(job);
+
+			previousJob = currentJob().get();
+			// Re-entrancy test. No need to wait if we're recursively locked on this DataModel
+			if (this->job != previousJob)
 			{
-				// aClearingWorksp: (instances, parts, scripts).
-				int instances = workspace->countDescendantsOfType<Instance>();
-				int parts = workspace->countDescendantsOfType<PartInstance>();
-				int scripts = workspace->countDescendantsOfType<BaseScript>();
-				FLog::FastLog(FLog::CloseDataModel, "Clearing workspace",
-					reinterpret_cast<const void*>(static_cast<size_t>(instances)),
-					reinterpret_cast<const void*>(static_cast<size_t>(parts)),
-					reinterpret_cast<const void*>(static_cast<size_t>(scripts)));
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::Begin type(%d)", job->taskType);
+				// Set the current job for this thread
+				currentJob().reset(this->job);
+
+				// Get/create a pair of events for marshalling
+				if (!eventsPool().pop_if_present(events))
+					events.reset(new Events());
+
+				// Submit the proxy task for scheduling.
+				job->tasks.push(boost::bind(&Implementation::task, events));
+				TaskScheduler::singleton().reschedule(job);
+
+				// Wait for the task to signal acquiredLock
+				events->acquiredLock.Wait();
+
+				if (job->taskType == DataModelJob::Write)
+					dataModel->writeRequestingThread = GetCurrentThreadId();
+
+				// 2013 passes two arguments to the three-argument format (PLAYER 0x006420f6).
+				FASTLOG2(FLog::LegacyLock, "LegacyLock::Acquired type(%d), job (%s), events (%p)", job->taskType, events.get());
 			}
-			workspace->removeAllChildren();
-			workspace->setCurrentCamera(NULL);
+			else
+			{
+				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyAcquired type(%d)", job->taskType);
+			}
 		}
-
-		// aClearingStarte ×2, aClearingCoregu.
-		clearMemberService(starterPack.get(), "Clearing starter pack");
-		clearMemberService(starterGui.get(), "Clearing starter gui");
-		clearMemberService(coreGuiService.get(), "Clearing core gui");
-
-		// aClearingTeamsD.
-		clearFoundService<Teams>(this, "Clearing teams");
-
-		if (SpawnerService* spawner = find<SpawnerService>())
-			spawner->ClearContents();
-
-		if (ChangeHistoryService* history = find<ChangeHistoryService>())
-		{
-			// aClearingChange: waypoint-list length (list at +29/+116 — layout
-			// TODO; count available once the member lands).
-			if (FLog::CloseDataModel)
-				FLog::FastLog(FLog::CloseDataModel, "Clearing change history", 0);
-			history->clearWaypoints();
-		}
-
-		// aClearingLighti, aClearingJoints, aClearingTestse, aClearingServer,
-		// aClearingReplic, aClearingServer_0.
-		clearFoundService<Lighting>(this, "Clearing lighting");
-		clearFoundService<JointsService>(this, "Clearing joints");
-		clearFoundService<TestService>(this, "Clearing test service");
-		clearFoundService<ServerScriptService>(this, "Clearing server scripts");
-		clearFoundService<ReplicatedStorage>(this, "Clearing replicated storage");
-		clearFoundService<ServerStorage>(this, "Clearing server storage");
-
-		if (scriptContext != NULL)
-		{
-			// aClosingScriptC.
-			if (FLog::CloseDataModel)
-				FLog::FastLog(FLog::CloseDataModel, "Closing script context", 0);
-			scriptContext->closeStates(resettingSimulation);
-			// TODO(decompile): trailing global emit —
-			// (*(void(__cdecl**)(_DWORD*,int,char*))(*dword_FA65C4 + 12))(
-			//   dword_FA65C4, (int)scriptContext + 36, &localFalse).
-			// Target global + callee (signal disconnect/fire on ScriptContext+36?)
-			// unidentified; body pending.
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////
-	// HTTP (EAs from Refl_DataModel.cpp.txt; structure mirrors 2016, 2013 asserts kept)
-	//////////////////////////////////////////////////////////////////////////////////
-
-	/* mac: 0x2D735A — matches 2016 HttpHelper exactly */
-	void DataModel::HttpHelper(std::string* response, std::exception* exception, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
+	};
+	// FUNCTION: PLAYER 0x006421c0
+	// FUNCTION: STUDIO 0x0075fa40
+	DataModel::LegacyLock::LegacyLock(boost::shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType)
+		:implementation(dataModel ? new Implementation(dataModel.get(), dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
 	{
-		if (response)
-			resumeFunction(*response);
-		else
-			errorFunction(exception->what());
 	}
 
-	/* mac: 0x2D7778 — Http(url).get(response, false) */
-	std::string DataModel::doHttpGet(const std::string& url)
+	// FUNCTION: PLAYER 0x006422c0
+	// FUNCTION: STUDIO 0x0075fb40
+	DataModel::LegacyLock::LegacyLock(DataModel* dataModel, DataModelJob::TaskType taskType)
+		:implementation(dataModel ? new Implementation(dataModel, dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
 	{
-		std::string response;
-		RBX::Http(url).get(response, false);
-		return response;
 	}
 
-	/* mac: 0x2D7470 — Http(url).get(bind(&HttpHelper, resume, error)) */
-	void DataModel::doHttpGet(const std::string& url, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
+	DataModel::LegacyLock::~LegacyLock()
 	{
-		RBX::Http(url).get(boost::bind(&DataModel::HttpHelper, _1, _2, resumeFunction, errorFunction));
 	}
-
-	/* mac: 0x2D79B8 — compress flag is size > 0x100 (same value as 2016's > 256);
-	   2013 has NO contentType param (2-string form) */
-	std::string DataModel::doHttpPost(const std::string& url, const std::string& data)
-	{
-		std::string response;
-		std::istringstream stream(data);
-		RBX::Http(url).post(stream, data.size() > 0x100, response, false);
-		return response;
-	}
-
-	/* mac: 0x2D7CCE — Http(url).post(data, size > 0x100, bind(&HttpHelper), false) */
-	void DataModel::doHttpPost(const std::string& url, const std::string& data, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
-	{
-		RBX::Http(url).post(data, data.size() > 0x100,
-			boost::bind(&DataModel::HttpHelper, _1, _2, resumeFunction, errorFunction), false);
-	}
-
-
-
-
-
-
 
 
 
@@ -1444,133 +1444,183 @@ namespace RBX {
 		FASTLOG(FLog::DataModelJobs, "Process tasks finish");
 	}
 
-	// GLOBAL: PLAYER 0x00d314c8
-	// GLOBAL: STUDIO 0x00ebd70c
-	int DataModel::LegacyLock::mainThreadId = ~0;
-	// SIZE 0x20
-	struct DataModel::LegacyLock::Implementation : boost::noncopyable
+	//////////////////////////////////////////////////////////////////////////////////
+	// Contents (clearContents 0x2CF1D0)
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// One 0x2CF1D0 "find + log + removeAllChildren" block. The binary logs the
+	// service subtree size (1 for self + countDescendantsOfType over children =
+	// countDescendantsOfType<Instance> on the service) then removes all children.
+	// Exact log literals are TODO (address-evidenced VA names in comments).
+	template<class ServiceClass>
+	static void clearFoundService(DataModel* dataModel, const char* logFormat)
 	{
-		// To marshal the task to this thread we use a pair of locks (acquire and release)
-		// Since creating mutexes are expensive, we push spent Events into a pool
-		// for re-use
-		struct Events
+		if (ServiceClass* service = dataModel->find<ServiceClass>())
 		{
-			CEvent acquiredLock;
-			CEvent releasedLock;
-			Events()
-				:acquiredLock(false)
-				,releasedLock(false)
-			{}
-		};
-		SAFE_STATIC(rbx::safe_queue< shared_ptr<Events> >, eventsPool)
-
-		// The job in this thread that has currently acquired a lock (if any)
-		// This thread specific pointer is used to re-entrancy checks
-		SAFE_STATIC(rbx::thread_specific_reference<GenericJob>, currentJob)
-
-		// 2013 layout (ctor PLAYER 0x00641e60, dtor 0x0063a380; operator new 0x20 at 0x006421eb):
-		DataModel* const dataModel;				// 0x00
-		GenericJob* job;						// 0x04 the job being used for scheduling
-		GenericJob* previousJob;				// 0x08 the previous job, if any
-		shared_ptr<Events> events;				// 0x0c the mutexes used to marshal the task across threads
-		Limits::Counter::Activator activator;	// 0x14 (ctor 0x009b96b0, dtor 0x009b97f0)
-		DWORD m_unk0x1c;						// 0x1c dataModel->writeRequestingThread on entry, restored on exit
-
-		static void task(shared_ptr<Events> events)
-		{
-			RBXPROFILER_SCOPE("Jobs", "LegacyLock");
-
-			// Signal the thread that constructed the Implementation object to proceed
-			events->acquiredLock.Set();
-
-			// Wait for Implementation object to go out of scope (task complete)
-			events->releasedLock.Wait();
-
-			// Recycle the events pair
-			eventsPool().push(events);
+			if (FLog::CloseDataModel)
+			{
+				int count = service->template countDescendantsOfType<Instance>();
+				FLog::FastLog(FLog::CloseDataModel, logFormat,
+					reinterpret_cast<const void*>(static_cast<size_t>(count)));
+			}
+			service->removeAllChildren();
 		}
-
-		// FUNCTION: PLAYER 0x0063a380
-		// FUNCTION: STUDIO 0x00758fd0
-		~Implementation()
-		{
-			FASTLOG2(FLog::LegacyLock, "LegacyLock::~Implementation type(%d), events (%p)", job->taskType, events.get());
-
-			if (job->taskType == DataModelJob::Write)
-				dataModel->writeRequestingThread = m_unk0x1c;
-
-			if (job != previousJob)
-			{
-				// The task has completed, so undo state
-				currentJob().reset(previousJob);
-				// Signal the proxy task that we're done
-				events->releasedLock.Set();
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::Released type(%d)", job->taskType);
-			}
-			else
-			{
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyReleased type(%d)", job->taskType);
-			}
-		}
-
-		// The 2013 assert sits at DataModel.cpp:1054, so this STUB's assert string differs.
-		// STUB: PLAYER 0x00641e60
-		// STUB: STUDIO 0x0075f6e0
-		Implementation(DataModel* dataModel, boost::shared_ptr<GenericJob> job, boost::shared_ptr<Limits::Counter> counter)
-			:dataModel(dataModel)
-			,job(job.get())
-			,activator(counter)
-			,m_unk0x1c(dataModel->writeRequestingThread)
-		{
-			RBXASSERT(job);
-
-			previousJob = currentJob().get();
-			// Re-entrancy test. No need to wait if we're recursively locked on this DataModel
-			if (this->job != previousJob)
-			{
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::Begin type(%d)", job->taskType);
-				// Set the current job for this thread
-				currentJob().reset(this->job);
-
-				// Get/create a pair of events for marshalling
-				if (!eventsPool().pop_if_present(events))
-					events.reset(new Events());
-
-				// Submit the proxy task for scheduling.
-				job->tasks.push(boost::bind(&Implementation::task, events));
-				TaskScheduler::singleton().reschedule(job);
-
-				// Wait for the task to signal acquiredLock
-				events->acquiredLock.Wait();
-
-				if (job->taskType == DataModelJob::Write)
-					dataModel->writeRequestingThread = GetCurrentThreadId();
-
-				// 2013 passes two arguments to the three-argument format (PLAYER 0x006420f6).
-				FASTLOG2(FLog::LegacyLock, "LegacyLock::Acquired type(%d), job (%s), events (%p)", job->taskType, events.get());
-			}
-			else
-			{
-				FASTLOG1(FLog::LegacyLock, "LegacyLock::RecursivelyAcquired type(%d)", job->taskType);
-			}
-		}
-	};
-	// FUNCTION: PLAYER 0x006421c0
-	// FUNCTION: STUDIO 0x0075fa40
-	DataModel::LegacyLock::LegacyLock(boost::shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType)
-		:implementation(dataModel ? new Implementation(dataModel.get(), dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
-	{
 	}
 
-	// FUNCTION: PLAYER 0x006422c0
-	// FUNCTION: STUDIO 0x0075fb40
-	DataModel::LegacyLock::LegacyLock(DataModel* dataModel, DataModelJob::TaskType taskType)
-		:implementation(dataModel ? new Implementation(dataModel, dataModel->getGenericJob(taskType), dataModel->m_unk0x830) : 0)
+	// Same for a cached member service (starterPack +2952, starterGui +2960,
+	// coreGuiService +2920).
+	static void clearMemberService(Instance* service, const char* logFormat)
 	{
+		if (service == NULL)
+			return;
+		if (FLog::CloseDataModel)
+		{
+			int count = service->countDescendantsOfType<Instance>();
+			FLog::FastLog(FLog::CloseDataModel, logFormat,
+				reinterpret_cast<const void*>(static_cast<size_t>(count)));
+		}
+		service->removeAllChildren();
 	}
 
-	DataModel::LegacyLock::~LegacyLock()
+	/* mac: 0x2CF1D0 — evidence: F:\2013Decompile\exports\decomp\Refl_DataModel.cpp.txt
+	   (C:\tmp\clearcontents.txt work extract).
+	   Shape: ScriptContext flag (byte +247 = 1, identity TODO) -> workspace block
+	   (terrain FW b21=0 via FWValue<bool>::set; setMouseCommand(null);
+	   ContactManager::fastClear + World stats logs; "Clearing workspace" counts
+	   (Instances/Parts/BaseScripts); removeAllChildren; setCurrentCamera(null)) ->
+	   cached members starterPack/starterGui/coreGuiService (log + clear) ->
+	   find<> blocks Teams (log + clear), SpawnerService (ClearContents),
+	   ChangeHistoryService (waypoint count log + clearWaypoints), Lighting,
+	   JointsService, TestService, ServerScriptService, ReplicatedStorage,
+	   ServerStorage (each log + clear) -> ScriptContext::closeStates(reset) +
+	   trailing global emit (TODO below).
+	   Log-literal TODOs: exact 2013 format strings unknown (VA-evidenced names:
+	   aClearingWorldD ×3, aClearingWorksp, aClearingStarte ×2, aClearingCoregu,
+	   aClearingTeamsD, aClearingChange, aClearingLighti, aClearingJoints,
+	   aClearingTestse, aClearingServer, aClearingReplic, aClearingServer_0,
+	   aClosingScriptC). Counts/sequence are binary-exact. */
+	// STUB: PLAYER 0x006458d0
+	// STUB: STUDIO 0x00762890
+	void DataModel::clearContents(bool resettingSimulation)
 	{
+		ScriptContext* scriptContext = find<ScriptContext>();
+		if (scriptContext != NULL)
+			scriptContext->contentClearing = true;
+
+		if (workspace)
+		{
+			if (Instance* terrain = workspace->getTerrain())
+			{
+				// Binary: FWValue<bool>::set(fw+21, false, Terrain+68) — dict
+				// write-through; the holder dict is null in bring-up, so the
+				// observable effect is the plain store (b21 = 0).
+				if (terrain->fw())
+					terrain->fw()->b21 = 0;
+			}
+			workspace->setMouseCommand(shared_ptr<MouseCommand>());
+			// TODO(decompile): ContactManager::fastClear + World stat logs
+			// (getNumBodies/getNumPoints/getNumConstraints/getNumHashNodes/
+			// getMaxBucketSize — v8world, not in tree).
+			if (FLog::CloseDataModel)
+			{
+				// aClearingWorksp: (instances, parts, scripts).
+				int instances = workspace->countDescendantsOfType<Instance>();
+				int parts = workspace->countDescendantsOfType<PartInstance>();
+				int scripts = workspace->countDescendantsOfType<BaseScript>();
+				FLog::FastLog(FLog::CloseDataModel, "Clearing workspace",
+					reinterpret_cast<const void*>(static_cast<size_t>(instances)),
+					reinterpret_cast<const void*>(static_cast<size_t>(parts)),
+					reinterpret_cast<const void*>(static_cast<size_t>(scripts)));
+			}
+			workspace->removeAllChildren();
+			workspace->setCurrentCamera(NULL);
+		}
+
+		// aClearingStarte ×2, aClearingCoregu.
+		clearMemberService(starterPack.get(), "Clearing starter pack");
+		clearMemberService(starterGui.get(), "Clearing starter gui");
+		clearMemberService(coreGuiService.get(), "Clearing core gui");
+
+		// aClearingTeamsD.
+		clearFoundService<Teams>(this, "Clearing teams");
+
+		if (SpawnerService* spawner = find<SpawnerService>())
+			spawner->ClearContents();
+
+		if (ChangeHistoryService* history = find<ChangeHistoryService>())
+		{
+			// aClearingChange: waypoint-list length (list at +29/+116 — layout
+			// TODO; count available once the member lands).
+			if (FLog::CloseDataModel)
+				FLog::FastLog(FLog::CloseDataModel, "Clearing change history", 0);
+			history->clearWaypoints();
+		}
+
+		// aClearingLighti, aClearingJoints, aClearingTestse, aClearingServer,
+		// aClearingReplic, aClearingServer_0.
+		clearFoundService<Lighting>(this, "Clearing lighting");
+		clearFoundService<JointsService>(this, "Clearing joints");
+		clearFoundService<TestService>(this, "Clearing test service");
+		clearFoundService<ServerScriptService>(this, "Clearing server scripts");
+		clearFoundService<ReplicatedStorage>(this, "Clearing replicated storage");
+		clearFoundService<ServerStorage>(this, "Clearing server storage");
+
+		if (scriptContext != NULL)
+		{
+			// aClosingScriptC.
+			if (FLog::CloseDataModel)
+				FLog::FastLog(FLog::CloseDataModel, "Closing script context", 0);
+			scriptContext->closeStates(resettingSimulation);
+			// TODO(decompile): trailing global emit —
+			// (*(void(__cdecl**)(_DWORD*,int,char*))(*dword_FA65C4 + 12))(
+			//   dword_FA65C4, (int)scriptContext + 36, &localFalse).
+			// Target global + callee (signal disconnect/fire on ScriptContext+36?)
+			// unidentified; body pending.
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// HTTP (EAs from Refl_DataModel.cpp.txt; structure mirrors 2016, 2013 asserts kept)
+	//////////////////////////////////////////////////////////////////////////////////
+
+	/* mac: 0x2D735A — matches 2016 HttpHelper exactly */
+	void DataModel::HttpHelper(std::string* response, std::exception* exception, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
+	{
+		if (response)
+			resumeFunction(*response);
+		else
+			errorFunction(exception->what());
+	}
+
+	/* mac: 0x2D7778 — Http(url).get(response, false) */
+	std::string DataModel::doHttpGet(const std::string& url)
+	{
+		std::string response;
+		RBX::Http(url).get(response, false);
+		return response;
+	}
+
+	/* mac: 0x2D7470 — Http(url).get(bind(&HttpHelper, resume, error)) */
+	void DataModel::doHttpGet(const std::string& url, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
+	{
+		RBX::Http(url).get(boost::bind(&DataModel::HttpHelper, _1, _2, resumeFunction, errorFunction));
+	}
+
+	/* mac: 0x2D79B8 — compress flag is size > 0x100 (same value as 2016's > 256);
+	   2013 has NO contentType param (2-string form) */
+	std::string DataModel::doHttpPost(const std::string& url, const std::string& data)
+	{
+		std::string response;
+		std::istringstream stream(data);
+		RBX::Http(url).post(stream, data.size() > 0x100, response, false);
+		return response;
+	}
+
+	/* mac: 0x2D7CCE — Http(url).post(data, size > 0x100, bind(&HttpHelper), false) */
+	void DataModel::doHttpPost(const std::string& url, const std::string& data, boost::function<void(std::string)> resumeFunction, boost::function<void(std::string)> errorFunction)
+	{
+		RBX::Http(url).post(data, data.size() > 0x100,
+			boost::bind(&DataModel::HttpHelper, _1, _2, resumeFunction, errorFunction), false);
 	}
 
 	shared_ptr<DataModel::GenericJob> DataModel::tryGetGenericJob(DataModelJob::TaskType taskType)
@@ -1807,56 +1857,6 @@ RBXASSERT(dataModel->onlyJobsLeftForThisArbiterAreGenericJobs());
 	{
 		guiBuilder.saveCustomStats();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

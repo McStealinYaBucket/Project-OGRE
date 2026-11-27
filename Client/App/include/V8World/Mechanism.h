@@ -52,6 +52,10 @@ namespace RBX {
 		static bool isMovingAssemblyRoot(const Assembly* assembly);
 		static Assembly* getMovingAssemblyRoot(Assembly* assembly);
 		static const Assembly* getConstMovingAssemblyRoot(const Assembly* assembly);
+		// PLAYER 0x007f9f90 / 0x007fa010 (a tail jump to the const one); ServerReplicator's
+		// checkDistributed* (0x00572050..) call the non-const one.
+		static const Primitive* getConstRootMovingPrimitive(const Primitive* p);
+		static Primitive* getRootMovingPrimitive(Primitive* p);
 		// mac: 0x57E11E (batch281: lower-mesh -8 container + :127 answer
 		// assert. Asserts on fresh mechanisms (no lower) -- link-covered;
 		// runs with staged mechanisms).

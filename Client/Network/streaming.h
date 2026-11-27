@@ -81,6 +81,8 @@ protected:
 public:
 	IdSerializer();
 
+	void deserializeId(RakNet::BitStream& stream, RBX::Guid::Data& id);
+
 	virtual void setMaxGuidIndexBit(int bits);                         // vtable+0x74
 };
 

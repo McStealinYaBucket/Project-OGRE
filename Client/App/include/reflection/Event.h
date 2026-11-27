@@ -691,6 +691,8 @@ namespace RBX
 			inline const EventDescriptor* getDescriptor() const { 
 				return descriptor; 
 			}
+			// FUNCTION: PLAYER 0x00572d90
+			// FUNCTION: STUDIO 0x00654d90
 			inline shared_ptr<DescribedBase> getInstance() const
 			{
 				return instance;
@@ -702,10 +704,7 @@ namespace RBX
 			bool operator!=(const Event& other) const {
 				return !operator==(other);
 			}
-
-
 		};
-
 
 		std::size_t hash_value(const Event& prop);
 
@@ -730,6 +729,8 @@ namespace RBX
 				event.getDescriptor()->fireEvent(event.getInstance().get(), args);
 			}
 
+			// FUNCTION: PLAYER 0x00572dc0
+			// FUNCTION: STUDIO 0x00654dc0
 			void replicateEvent()
 			{
 				event.getDescriptor()->sendEvent(event.getInstance().get(), args);
@@ -743,7 +744,6 @@ namespace RBX
 			}
 
 		};
-
 
 		template<int arity, class EventClass, typename Signature, typename SignalType, typename SignalGetter>
 		class RemoteEventDescImpl;

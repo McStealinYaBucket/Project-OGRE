@@ -159,10 +159,15 @@ MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIM
 # the name kept the original on the shell copy and left filterChangedProperty 0x00638330, the PacketJob ctor
 # 0x00620870 and the StatsUpdateJob ctor 0x006211c0 below 100. Measured +8/-2 (RunService::start 0x0079af80 now
 # calls the unpaired shell twin). Drop it once the shell instantiates DataModel's.
+# Wave 21: dropped. Client/ClientShared/placeholder.cpp instantiates shared_from<DataModel> and <Instance>, which
+# fold with shared_from<RunService> into one shell body as in 2013 (shell-5k-12: 12,307 without vs 12,298 with).
 # PLAYER 0x0070fb30 is the engine's shared_ptr<RunService>(p, Creatable<Instance>::Deleter); our link keeps only the
 # shell's /GS copy (UserInput::setGame creates the RunService in the shell, as 2013 does), whose original is
 # the shell's 0x00462100 (called by the shell's create<RunService> 0x00461f60). Measured +1/-0. Drop it once the engine copy returns.
-MATCH_DROP = {("STUDIO", 0x00445440), ("PLAYER", 0x0070fb30)}
+# STUDIO 0x00431860 is the shell's shared_count<RunService*, Creatable<Instance>::Deleter> (match:, IDA sync wave 20).
+# Our STUDIO shell has no copy, so the name fell on the engine body (ChatOutput.obj) and left its engine original
+# 0x0082bf00 unpaired: shared_ptr<RunService>(p, Deleter) 0x0082cdf0 dropped to 96.97 (wave 21).
+MATCH_DROP = {("PLAYER", 0x0070fb30), ("STUDIO", 0x00431860)}
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")

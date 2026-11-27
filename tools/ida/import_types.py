@@ -241,12 +241,21 @@ CLASSES = [
     "RBX::CommonVerbs", "RBX::RunStateVerb", "RBX::EditSelectionVerb", "RBX::DeleteBase", "RBX::RotateAxisCommand",
     "RBX::ToggleViewMode", "RBX::Network::ConcurrentRakPeer::StatsUpdateJob", "RBX::Network::GuidRegistryService",
     "RBX::Network::SharedScopeDictionary", "RBX::Profiling::Profiler",
+    # wave21 sync (sweep28, build/sweep28/P-final.json / S-final.json 100%; size = the tree's = the PDB's),
+    # PLAYER / STUDIO: OverlayDataModel::DualLegacyLock (0xc, DECOMP_SIZE_ASSERT) ctor 0x0068c1f0 / 0x0084b050 (app-21;
+    # the shell's /GS dtor copy 0x0041d550 is 0.63); BoolPropertyVerb (0x28) ctor 0x00859130 / 0x007839f0 (app-20/21).
+    # PLAYER only (the shell's): Document (0x28, Document.h's SIZE comment: operator new(0x28) at 0x00406600) dtor
+    # 0x0041d020; View (0xcc, View.h: operator new(0xcc) at 0x0041dc45) dtor 0x00465b90 (shell-5k-11/12).
+    # Not yet: STUDIO Game (ctor 0.9965, dtor 0.9907), UserInput (0x2f8; ctor 0.46, dtor 0.991), PropSync::Master
+    # (0x50; inline ctor, no ctor/dtor of its own at 100%, Base<MasterItem> ctor 0x005becb0 not matched),
+    # LegacyLock::Implementation::Events (ctor 100%, but `Events` 0x60 is ReflectionMetadata.h's size, not its own)
+    "RBX::OverlayDataModel::DualLegacyLock", "RBX::BoolPropertyVerb", "RBX::Document", "RBX::View",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
                "RBX::LeaveGameVerb", "RBX::RecordToggleVerb", "RBX::Game", "RBX::Network::InstancePacketCache",
                "RBX::RobloxCriticalSection", "RBX::Application", "RBX::SecurePlayerGame",
-               "RBX::UserInputSleepingJob"}
+               "RBX::UserInputSleepingJob", "RBX::Document", "RBX::View"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

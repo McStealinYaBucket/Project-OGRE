@@ -4024,7 +4024,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   double m_unk0xc0;
   bool m_unk0xc8;
   unsigned __int8 gap_C9[3];
-  int m_unk0xcc;
+  int physicsSendMethod;                ///< enum RBX::NetworkSettings::PhysicsSendMethod
   int m_unk0xd0;
   int m_unk0xd4;
   int dataSendPriority;
@@ -5203,7 +5203,7 @@ struct __cppobj RBX::ToggleViewMode : RBX::Verb
 struct __cppobj RBX::Network::ConcurrentRakPeer::StatsUpdateJob : RBX::DataModelJob
 {
   unsigned __int8 mapMutex[8];          ///< boost::mutex
-  unsigned __int8 statsMap[24];         ///< boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >
+  unsigned __int8 statsMap[24];         ///< boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats> > >
   unsigned __int8 updateCallbackMap[24]; ///< boost::unordered::unordered_map<RakNet::SystemAddress,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)>,boost::hash<RakNet::SystemAddress>,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)> > > >
   RBX::RunningAverage<double,double> bufferHealth;
   int prevBufferSize;
@@ -5250,5 +5250,19 @@ struct __cppobj RBX::Network::ReceiverDictionary<std::string >
 /* 721 */
 struct __cppobj RBX::Network::SharedScopeDictionary : RBX::Network::SenderDictionary<RBX::Name const *>, RBX::Network::ReceiverDictionary<std::string >
 {
+};
+
+/* 722 */
+struct __cppobj RBX::OverlayDataModel::DualLegacyLock
+{
+  unsigned __int8 legacyLock[4];        ///< RBX::DataModel::LegacyLock
+  unsigned __int8 writeRequest[4];      ///< RBX::DataModel::scoped_write_request
+  unsigned __int8 readRequest[4];       ///< RBX::DataModel::scoped_read_request
+};
+
+/* 723 */
+struct __cppobj RBX::BoolPropertyVerb : RBX::EditSelectionVerb
+{
+  RBX::Name *propertyName;
 };
 

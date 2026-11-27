@@ -24,6 +24,8 @@ FASTFLAGVARIABLE(OverlayDataModelEnabled, false)	// PLAYER 0x00de98d0
 
 #include "decomp.h"
 
+DECOMP_SIZE_ASSERT(RBX::OverlayDataModel::DualLegacyLock, 0xc);
+
 namespace RBX {
 
 	// Not written yet (weak_ptr store at +0xe58). STUB body so callers pair.
@@ -32,6 +34,15 @@ namespace RBX {
 	void OverlayDataModel::FUN_00652f00(weak_ptr<DataModel> dataModel)
 	{
 		STUB(0x00652f00);
+	}
+
+	// FUNCTION: PLAYER 0x0068c1f0
+	// FUNCTION: STUDIO 0x0084b050
+	OverlayDataModel::DualLegacyLock::DualLegacyLock(shared_ptr<OverlayDataModel> overlay, shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType)
+		: legacyLock(dataModel, taskType)
+		, writeRequest(taskType == DataModelJob::Write ? overlay.get() : NULL)
+		, readRequest(taskType == DataModelJob::Read ? overlay.get() : NULL)
+	{
 	}
 
 	// Not written yet (FASTLOG, Creatable::create<OverlayDataModel>, doDataModelSetup). STUB body so

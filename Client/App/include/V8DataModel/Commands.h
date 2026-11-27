@@ -171,6 +171,7 @@ namespace RBX {
 		EditSelectionVerb(std::string name, DataModel* dataModel);
 	public:
 		virtual ~EditSelectionVerb();	// vtable+0x04
+		/*override*/ virtual bool isEnabled() const;	// vtable+0x08 (selection->size() != 0)
 	};
 
 	// SIZE 0x28
@@ -186,10 +187,11 @@ namespace RBX {
 	// SIZE 0x28
 	class BoolPropertyVerb : public EditSelectionVerb
 	{
-		undefined4 m_unk0x24;	// 0x24
+		const Name* propertyName;	// 0x24 Name::declare(propertyName) 0x006138c0 (ctor 0x00859130)
 	protected:
 		BoolPropertyVerb(const std::string& name, DataModel* dataModel, const char* propertyName);	// the callers destroy the name temporary
 	public:
+		/*override*/ virtual bool isChecked() const;	// vtable+0x0c
 		/*override*/ virtual void doIt(IDataState* dataState);	// vtable+0x18
 	};
 
@@ -452,33 +454,63 @@ namespace RBX {
 		/*override*/ virtual void doIt(IDataState* dataState);	// vtable+0x18
 	};
 	// The CommonVerbs tool verbs: RTTI TToolVerb<Tool, RunStateVerb>. 2013 ctors are out-of-line COMDATs in
-	// CommonVerbs.obj (PLAYER 0x00861c70..0x00864320); here they are STUB stand-ins without markers.
-	class AxisRotateTool;
-	class AdvMoveTool;
-	class AdvRotateTool;
-	class AdvArrowTool;
-	class MoveResizeJoinTool;
-	class FlatTool;
-	class GlueTool;
-	class WeldTool;
-	class StudsTool;
-	class InletTool;
-	class UniversalTool;
-	class HingeTool;
-	class RightMotorTool;
-	class LeftMotorTool;
-	class OscillateMotorTool;
-	class SmoothNoOutlinesTool;
-	class AnchorTool;
-	class LockTool;
-	class FillTool;
-	class MaterialTool;
-	class DropperTool;
-	class NullTool;
-	class GameTool;
-	class GrabTool;
-	class CloneTool;
-	class HammerTool;
+	// CommonVerbs.obj (PLAYER 0x00861c70..0x00864320).
+	// Tool name globals (iOS RBX::sXTool), defined with their tools (ToolsSurface.cpp, tool/*.cpp, ...).
+	extern const char* const sAxisRotateTool;
+	extern const char* const sAdvMoveTool;
+	extern const char* const sAdvRotateTool;
+	extern const char* const sAdvArrowTool;
+	extern const char* const sMoveResizeJoinTool;
+	extern const char* const sFlatTool;
+	extern const char* const sGlueTool;
+	extern const char* const sWeldTool;
+	extern const char* const sStudsTool;
+	extern const char* const sInletTool;
+	extern const char* const sUniversalTool;
+	extern const char* const sHingeTool;
+	extern const char* const sRightMotorTool;
+	extern const char* const sLeftMotorTool;
+	extern const char* const sOscillateMotorTool;
+	extern const char* const sSmoothNoOutlinesTool;
+	extern const char* const sAnchorTool;
+	extern const char* const sLockTool;
+	extern const char* const sFillTool;
+	extern const char* const sMaterialTool;
+	extern const char* const sDropperTool;
+	extern const char* const sNullTool;
+	extern const char* const sGameTool;
+	extern const char* const sGrabTool;
+	extern const char* const sCloneTool;
+	extern const char* const sHammerTool;
+
+	// Partial tool classes: 2013's derive Named<..., sXTool> (2016 shape); only the inline static name()
+	// is written, which every TToolVerb ctor inlines (Name::declare<sXTool>(), PLAYER 0x00861c70..).
+	class AxisRotateTool { public: static const Name& name() { return Name::declare<sAxisRotateTool>(); } };
+	class AdvMoveTool { public: static const Name& name() { return Name::declare<sAdvMoveTool>(); } };
+	class AdvRotateTool { public: static const Name& name() { return Name::declare<sAdvRotateTool>(); } };
+	class AdvArrowTool { public: static const Name& name() { return Name::declare<sAdvArrowTool>(); } };
+	class MoveResizeJoinTool { public: static const Name& name() { return Name::declare<sMoveResizeJoinTool>(); } };
+	class FlatTool { public: static const Name& name() { return Name::declare<sFlatTool>(); } };
+	class GlueTool { public: static const Name& name() { return Name::declare<sGlueTool>(); } };
+	class WeldTool { public: static const Name& name() { return Name::declare<sWeldTool>(); } };
+	class StudsTool { public: static const Name& name() { return Name::declare<sStudsTool>(); } };
+	class InletTool { public: static const Name& name() { return Name::declare<sInletTool>(); } };
+	class UniversalTool { public: static const Name& name() { return Name::declare<sUniversalTool>(); } };
+	class HingeTool { public: static const Name& name() { return Name::declare<sHingeTool>(); } };
+	class RightMotorTool { public: static const Name& name() { return Name::declare<sRightMotorTool>(); } };
+	class LeftMotorTool { public: static const Name& name() { return Name::declare<sLeftMotorTool>(); } };
+	class OscillateMotorTool { public: static const Name& name() { return Name::declare<sOscillateMotorTool>(); } };
+	class SmoothNoOutlinesTool { public: static const Name& name() { return Name::declare<sSmoothNoOutlinesTool>(); } };
+	class AnchorTool { public: static const Name& name() { return Name::declare<sAnchorTool>(); } };
+	class LockTool { public: static const Name& name() { return Name::declare<sLockTool>(); } };
+	class FillTool { public: static const Name& name() { return Name::declare<sFillTool>(); } };
+	class MaterialTool { public: static const Name& name() { return Name::declare<sMaterialTool>(); } };
+	class DropperTool { public: static const Name& name() { return Name::declare<sDropperTool>(); } };
+	class NullTool { public: static const Name& name() { return Name::declare<sNullTool>(); } };
+	class GameTool { public: static const Name& name() { return Name::declare<sGameTool>(); } };
+	class GrabTool { public: static const Name& name() { return Name::declare<sGrabTool>(); } };
+	class CloneTool { public: static const Name& name() { return Name::declare<sCloneTool>(); } };
+	class HammerTool { public: static const Name& name() { return Name::declare<sHammerTool>(); } };
 
 	// SIZE 0x20
 	template<class Tool, class Base = RunStateVerb>
@@ -490,14 +522,11 @@ namespace RBX {
 		/*override*/ virtual void doIt(IDataState* dataState);	// vtable+0x18
 	};
 
-	// __declspec(noinline) is a stand-in until the real (larger) bodies are written.
 	template<class Tool, class Base>
-	__declspec(noinline) TToolVerb<Tool, Base>::TToolVerb(DataModel* dataModel, bool toggle)
-		: Base("Tool", dataModel)
+	TToolVerb<Tool, Base>::TToolVerb(DataModel* dataModel, bool toggle)
+		: Base(Tool::name().toString() + "Tool", dataModel)
 		, toggle(toggle)
 	{
-		static int unfold;	// stand-in: keeps the STUB instantiations apart under /OPT:ICF
-		g_foldingDummyVariable = (int)&unfold;
 	}
 
 	template<class Tool, class Base>

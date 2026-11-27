@@ -40,6 +40,7 @@
 
 namespace RBX {
 
+	class DataModel;
 	class Game;
 
 	// GfxBase's ViewBase (Rendering) is not declared in this tree yet; only the slot the shell calls.
@@ -50,7 +51,7 @@ namespace RBX {
 		virtual void VTable0x00(); // vtable+0x00
 		virtual void VTable0x04(); // vtable+0x04
 		virtual void VTable0x08(); // vtable+0x08
-		virtual void VTable0x0c(); // vtable+0x0c
+		virtual void VTable0x0c(boost::shared_ptr<DataModel> dataModel); // vtable+0x0c (2016: bindWorkspace; View 0x00466ebe passes an empty one)
 		virtual void VTable0x10(); // vtable+0x10
 		virtual void VTable0x14(); // vtable+0x14
 		virtual void VTable0x18(); // vtable+0x18
@@ -83,6 +84,7 @@ namespace RBX {
 	};
 
 	// Members with destructors from ~View (0x00465b90), which destroys them in reverse order.
+	// SIZE 0xcc (Document::Initialize 0x0041dc45: operator new(0xcc), then the View ctor 0x00465a80)
 	class View
 	{
 		rbx::signal<void()> m_unk0x00;                // 0x00 ~View's last call (~signal 0x00460d60)
@@ -90,7 +92,8 @@ namespace RBX {
 		HWND hWnd;                                    // 0x0c
 		undefined m_unk0x10[0x18 - 0x10];             // 0x10
 		std::string m_unk0x18;                        // 0x18
-		undefined m_unk0x34[0x45 - 0x34];             // 0x34
+		undefined m_unk0x34[0x44 - 0x34];             // 0x34
+		bool m_unk0x44;                               // 0x44 FUN_00466e50 clears it before firing m_unk0x00
 		bool fullscreen;                              // 0x45
 		bool desireFullscreen;                        // 0x46
 		bool changedResolution;                       // 0x47
@@ -117,8 +120,16 @@ namespace RBX {
 		G3D::Vector2int16 getCurrentDesktopResolution();
 		std::vector<G3D::Vector2int16> getFullscreenSizes();
 		void initializeSizes();
+		void FUN_004665f0();    // PLAYER 0x004665f0 (LTCG: `this` pushed)
 		void initializeInput(); // PLAYER 0x00466840 (LTCG: `this` in edi)
 		void resetScheduler();
+		// A new game DataModel: created on the overlay, its ControllerService made, input and jobs set up.
+		void FUN_00466cf0();    // PLAYER 0x00466cf0 (its caller is FUN_00466e50)
+		// Marshalled from 0x00467010 (PrepareShutdown's View call): shuts the game DataModel down under
+		// both locks, starts a new one, restarts the overlay's RunService.
+		void FUN_00466e50();    // PLAYER 0x00466e50
+		void FUN_004684b0();    // PLAYER 0x004684b0 (LTCG: `this` in ecx)
+		void FUN_00468730();    // PLAYER 0x00468730 (LTCG: `this` in esi)
 
 	public:
 		~View(); // PLAYER 0x00465b90 (LTCG: `this` pushed)
@@ -130,6 +141,10 @@ namespace RBX {
 		void SetFullscreen(bool value);
 		void HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		void AboutToShutdown(); // PLAYER 0x00465d60
+		// Unnamed (2016's Stop has its shape: the ControllerServices lose their hardware device, the
+		// UserInput goes, the gfx view unbinds). Document::Shutdown calls it under the DataModel lock.
+		void FUN_00465e70(); // PLAYER 0x00465e70 (LTCG: `this` pushed)
+		void RemoveJobs();   // PLAYER 0x00466a30 (2016 name; LTCG: `this` pushed)
 		void ShowWindow();
 	};
 

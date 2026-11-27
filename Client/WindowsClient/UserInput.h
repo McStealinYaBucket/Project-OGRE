@@ -23,6 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "G3D/Rect2D.h"
 #include "rbx/threadsafe.h"
 #include "Util/UserInputBase.h"
 #include "V8DataModel/SleepingJob.h"
@@ -67,7 +68,13 @@ struct IDirectInputDevice8A : public IUnknown
 	virtual HRESULT STDMETHODCALLTYPE GetDeviceData(DWORD cbObjectData, void* rgdod, LPDWORD pdwInOut,
 		DWORD dwFlags) = 0;                                                                        // vtable+0x28
 	virtual HRESULT STDMETHODCALLTYPE SetDataFormat(const DIDATAFORMAT* lpdf) = 0;                 // vtable+0x2c
+	virtual HRESULT STDMETHODCALLTYPE SetEventNotification(HANDLE hEvent) = 0;                    // vtable+0x30
+	virtual HRESULT STDMETHODCALLTYPE SetCooperativeLevel(HWND hwnd, DWORD dwFlags) = 0;           // vtable+0x34
 };
+#define DISCL_EXCLUSIVE 0x00000001
+#define DISCL_NONEXCLUSIVE 0x00000002
+#define DISCL_FOREGROUND 0x00000004
+#define DI_OK S_OK
 extern "C" const IID IID_IDirectInput8A;
 extern "C" const GUID GUID_SysKeyboard;
 extern "C" const GUID GUID_SysMouse;
@@ -137,6 +144,21 @@ namespace RBX {
 		~RobloxCriticalSection(); // PLAYER 0x0045e5c0 (LTCG: `this` pushed, ret 4)
 	};
 
+	// 2016's lock helper, inline in 2013: the location string is a temporary destroyed right after the
+	// lock is taken (setKeyboardDesired 0x0045ee20), and nothing records it.
+	class RobloxCritSecLoc
+	{
+		RobloxCriticalSection& robloxCriticalSection;
+		ATL::CCritSecLock lock;
+
+	public:
+		RobloxCritSecLoc(RobloxCriticalSection& cs, const std::string& location)
+			: robloxCriticalSection(cs)
+			, lock(cs.diSection)
+		{
+		}
+	};
+
 	// VTABLE: PLAYER 0x00be4d9c
 	// SIZE 0x2f8
 	class UserInput : public UserInputBase
@@ -194,10 +216,31 @@ namespace RBX {
 		// UserInputSleepingJob::stepDataModelJob (0x00462920) calls it for each queued message.
 		void ProcessUserInputMessage(UINT uMsg, WPARAM wParam, LPARAM lParam); // PLAYER 0x0045f2a0
 
+		// Called by Document 0x0041d17c and View 0x00466e29, both with true (LTCG propagates it).
+		void setKeyboardDesired(bool set); // PLAYER 0x0045ee20
+
 	private:
 		void createMouse();        // PLAYER 0x0045ec60
 		void createKeyboard();     // PLAYER 0x0045ecf0
 		void createAccelerators(); // PLAYER 0x0045ed80 (LTCG: `this` pushed)
+
+		// LTCG conventions noted from the 2013 bytes; the callers decide them.
+		void setKeyboardDesiredInternal(bool set);              // PLAYER 0x0045edf0 (`this` in eax)
+		void updateKeyboard();                                  // inline everywhere in 2013
+		void updateMouse();                                     // inline (ProcessUserInputMessage)
+		void acquireMouseInternal();                            // PLAYER 0x0045eec0 (`this` pushed)
+		void acquireMouseInternalBase(const G3D::Vector2& pos); // PLAYER 0x0045ef20 (`this` in edi, pos in ebx)
+		void unAcquireMouse();                                  // PLAYER 0x0045f050 (`this` in eax)
+		void acquireKeyboard();                                 // PLAYER 0x0045f120 (`this` in esi)
+		void unAcquireKeyboard();                               // inline (0x00460a55)
+		void sendMouseEvent(int type, const G3D::Vector2& pos); // PLAYER 0x004601c0 (`this` in ecx, pos in eax)
+		G3D::Rect2D getWindowRect() const;                      // PLAYER 0x00460320 (`this` in ecx, result in esi)
+		G3D::Vector2 getCursorPositionInternal();               // inline
+		G3D::Vector2 getGameCursorPositionInternal();           // PLAYER 0x00460510 (`this` in esi, result in edi)
+		G3D::Vector2 getGameCursorPositionExpandedInternal();   // PLAYER 0x004605f0 (`this` in edi, result in esi)
+		void onMouseInside();                                   // PLAYER 0x004606e0 (`this` in esi)
+		void onMouseLeave();                                    // inline (ProcessUserInputMessage)
+		G3D::Vector2 getWindowsCursorPositionInternal();        // PLAYER 0x00460780 (`this` in edi, result in esi)
 	};
 
 } // namespace RBX

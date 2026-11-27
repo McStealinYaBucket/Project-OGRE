@@ -9,6 +9,8 @@
 
 #include "Replicator.h"
 #include "PropertySynchronization.h"
+#include "NetworkFilter.h"
+#include <boost/scoped_ptr.hpp>
 
 namespace RBX {
 namespace Network {
@@ -20,7 +22,7 @@ class ServerReplicator : public DescribedNonCreatable<ServerReplicator, Replicat
 	typedef Replicator Super;
 
 	PropSync::Master propSync;                // +0x00 (Base ctor 0x005becb0)
-	undefined4 m_unk0x2af8;                   // +0x50 ctor 0
+	boost::scoped_ptr<NetworkFilter> basicFilter; // +0x50 (2016 name) ctor 0; setBasicFilteringEnabled 0x00573350
 	bool acceptsTerrainChanges;               // +0x54 ctor true; receiveCluster 0x005718b0
 	// +0x58..+0x64: the ctor stores the Lighting service found through the Server (helper 0x0057be00,
 	// adjusted to its DescribedBase) and three of its property descriptors (trie lookups); the
@@ -47,6 +49,10 @@ protected:
 	/*override*/ FilterResult filterPhysics(PartInstance* instance);                  // vtable+0xd8
 	/*override*/ void onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor); // vtable+0xe0
 	/*override*/ void dataOutStep();                                                  // vtable+0x108
+	/*override*/ void onSentMarker(long id);                                          // vtable+0xf0
+	/*override*/ bool checkDistributedReceive(PartInstance* part);                    // vtable+0x78
+	/*override*/ bool checkDistributedSend(const PartInstance* part);                 // vtable+0x7c
+	/*override*/ bool checkDistributedSendFast(const PartInstance* part);             // vtable+0x80
 
 	/*override*/ void readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType); // vtable+0x100
 
@@ -55,6 +61,11 @@ protected:
 	void readRequestCharacter(RakNet::BitStream& bitStream);
 	void readPropAcknowledgement(RakNet::BitStream& bitStream);
 
+public:
+	// Bound as a Lua function (iOS BoundFuncDesc<ServerReplicator, void (bool), 1>; 2016 name).
+	void setBasicFilteringEnabled(bool value);
+
+protected:
 	// The one virtual ServerReplicator adds (vtable+0x12c); 2013 takes the name by value (ret 0x1c).
 	virtual void installRemotePlayer(std::string preferedSpawnName);
 

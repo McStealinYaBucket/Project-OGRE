@@ -258,6 +258,14 @@ RakNet::RakPeerInterface* ConcurrentRakPeer::rawPeer()
 	return peer.get();
 }
 
+// STUB: PLAYER 0x005c4190
+// STUB: STUDIO 0x0061f050
+__declspec(noinline) void ConcurrentRakPeer::StatsUpdateJob::updateStats(StatsMap::value_type& x, RakNet::RakPeerInterface* peer)
+{
+	STUB(0x005c4190);
+	RBX::Time::now<RBX::Time::Fast>(); // stand-in cross-TU call: a same-TU STUB that clobbers nothing changes the caller's registers
+}
+
 // FUNCTION: PLAYER 0x005c4330
 // FUNCTION: STUDIO 0x0061f1f0
 ConcurrentRakPeer::~ConcurrentRakPeer()
@@ -348,12 +356,38 @@ TaskScheduler::Job::Error ConcurrentRakPeer::StatsUpdateJob::error(const Stats& 
 	return computeStandardError(stats, 30);
 }
 
-// STUB: PLAYER 0x005c6240
-// STUB: STUDIO 0x006214a0
+// 2013 does not store prevBufferSize after sampling (2016's calcBufferHealth does).
+// FUNCTION: PLAYER 0x005c6240
+// FUNCTION: STUDIO 0x006214a0
 TaskScheduler::StepResult ConcurrentRakPeer::StatsUpdateJob::stepDataModelJob(const Stats& stats)
 {
-	STUB(0x005c6240);
-	return TaskScheduler::Stepped;
+	if (shared_ptr<RakNet::RakPeerInterface> safePeer = peer.lock())
+	{
+		boost::mutex::scoped_lock lock(mapMutex);
+
+		int bufferSize = 0;
+		for (StatsMap::iterator iter = statsMap.begin(); iter != statsMap.end(); iter++)
+		{
+			updateStats(*iter, safePeer.get());
+			RakNet::RakNetStatistics& rakStats = iter->second.rakStats;
+			bufferSize += rakStats.messageInSendBuffer[IMMEDIATE_PRIORITY] + rakStats.messageInSendBuffer[HIGH_PRIORITY]
+				+ rakStats.messageInSendBuffer[MEDIUM_PRIORITY] + rakStats.messageInSendBuffer[LOW_PRIORITY];
+
+			UpdateCallbackMap::iterator callback = updateCallbackMap.find(iter->first);
+			if (callback != updateCallbackMap.end())
+				callback->second(iter->second);
+		}
+
+		if (bufferSize > prevBufferSize)
+			bufferHealth.sample(0.0);
+		else if (bufferSize == 0)
+			bufferHealth.sample(1);
+		else
+			bufferHealth.sample(0.5);
+
+		return TaskScheduler::Stepped;
+	}
+	return TaskScheduler::Done;
 }
 
 // STUB: PLAYER 0x005c6580
@@ -373,15 +407,6 @@ ConcurrentRakPeer::ConcurrentRakPeer(RakNet::RakPeerInterface* peer, DataModel* 
 	statsUpdateJob.reset(new StatsUpdateJob(this->peer, dataModel));
 	TaskScheduler::singleton().add(packetJob);
 	TaskScheduler::singleton().add(statsUpdateJob);
-}
-
-// FUNCTION: PLAYER 0x005c6c80
-// FUNCTION: STUDIO 0x0064c380
-std::string RakNetAddressToString(const RakNet::SystemAddress& raknetAddress, bool writePort, char portDelineator)
-{
-	char buffer[32];
-	raknetAddress.ToString(writePort, buffer, portDelineator);
-	return buffer;
 }
 
 } // namespace Network

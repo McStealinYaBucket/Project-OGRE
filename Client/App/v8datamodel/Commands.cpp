@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 
+#include "Tool/ToolsArrow.h"
 #include "V8DataModel/Commands.h"
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/Workspace.h"
@@ -116,13 +117,12 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856580
+	// FUNCTION: PLAYER 0x00856580
+	// FUNCTION: STUDIO 0x00780bb0
 	G3D::Matrix3 RotateSelectionVerb::getRotationAxis()
 	{
-		STUB(0x00856580);
-		return G3D::Matrix3::identity();
+		return Math::matrixRotateY();
 	}
-
 
 
 
@@ -1157,10 +1157,20 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856900
+	// FUNCTION: PLAYER 0x00856900
+	// FUNCTION: STUDIO 0x00780f40
 	void TurnOnManualJointCreation::doIt(IDataState* dataState)
 	{
-		STUB(0x00856900);
+		if (AdvArrowToolBase::advManualJointMode)
+		{
+			FASTLOG(FLog::Verbs, "Gui:TurnOffManualJointCreation");
+			AdvArrowToolBase::advManualJointMode = false;
+		}
+		else
+		{
+			FASTLOG(FLog::Verbs, "Gui:TurnOnManualJointCreation");
+			AdvArrowToolBase::advManualJointMode = true;
+		}
 	}
 
 	// FUNCTION: PLAYER 0x00856950
@@ -1171,10 +1181,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x008569e0
+	// FUNCTION: PLAYER 0x008569e0
+	// FUNCTION: STUDIO 0x00781020
 	void SetGridToOne::doIt(IDataState* dataState)
 	{
-		STUB(0x008569e0);
+		AdvArrowToolBase::advGridMode = DRAG::ONE_STUD;
 	}
 
 	// FUNCTION: PLAYER 0x008569f0
@@ -1185,10 +1196,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856a80
+	// FUNCTION: PLAYER 0x00856a80
+	// FUNCTION: STUDIO 0x007810c0
 	void SetGridToOneFifth::doIt(IDataState* dataState)
 	{
-		STUB(0x00856a80);
+		AdvArrowToolBase::advGridMode = DRAG::QUARTER_STUD;
 	}
 
 	// FUNCTION: PLAYER 0x00856a90
@@ -1199,10 +1211,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856b20
+	// FUNCTION: PLAYER 0x00856b20
+	// FUNCTION: STUDIO 0x00781160
 	void SetGridToOff::doIt(IDataState* dataState)
 	{
-		STUB(0x00856b20);
+		AdvArrowToolBase::advGridMode = DRAG::OFF;
 	}
 
 	// FUNCTION: PLAYER 0x00856b30
@@ -1213,10 +1226,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856bb0
+	// FUNCTION: PLAYER 0x00856bb0
+	// FUNCTION: STUDIO 0x007811f0
 	void SetManualJointToWeak::doIt(IDataState* dataState)
 	{
-		STUB(0x00856bb0);
+		AdvArrowToolBase::advManualJointType = DRAG::WEAK_MANUAL_JOINT;
 	}
 
 	// FUNCTION: PLAYER 0x00856bc0
@@ -1227,10 +1241,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856c60
+	// FUNCTION: PLAYER 0x00856c60
+	// FUNCTION: STUDIO 0x00781290
 	void SetManualJointToStrong::doIt(IDataState* dataState)
 	{
-		STUB(0x00856c60);
+		AdvArrowToolBase::advManualJointType = DRAG::STRONG_MANUAL_JOINT;
 	}
 
 	// FUNCTION: PLAYER 0x00856c70
@@ -1241,10 +1256,11 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00856cf0
+	// FUNCTION: PLAYER 0x00856cf0
+	// FUNCTION: STUDIO 0x00781320
 	void SetManualJointToInfinite::doIt(IDataState* dataState)
 	{
-		STUB(0x00856cf0);
+		AdvArrowToolBase::advManualJointType = DRAG::INFINITE_MANUAL_JOINT;
 	}
 
 	// STUB: PLAYER 0x00856e20
@@ -1364,11 +1380,12 @@ namespace RBX {
 	{
 	}
 
-	// STUB: PLAYER 0x00859130
+	// FUNCTION: PLAYER 0x00859130
+	// FUNCTION: STUDIO 0x007839f0
 	BoolPropertyVerb::BoolPropertyVerb(const std::string& name, DataModel* dataModel, const char* propertyName)
 		: EditSelectionVerb(name, dataModel)
+		, propertyName(Name::declare(propertyName))
 	{
-		STUB(0x00859130);
 	}
 
 	// STUB: PLAYER 0x00859280
@@ -1501,6 +1518,14 @@ namespace RBX {
 		STUB(0x0085b9a0);
 	}
 
+	// STUB: PLAYER 0x0085bbd0
+	// STUB: STUDIO 0x007864c0
+	bool BoolPropertyVerb::isChecked() const
+	{
+		STUB(0x0085bbd0);
+		return false;
+	}
+
 	// STUB: PLAYER 0x0085bc60
 	void BoolPropertyVerb::doIt(IDataState* dataState)
 	{
@@ -1546,6 +1571,14 @@ namespace RBX {
 		STUB(0x0085c3f0);
 	}
 
+	// STUB: PLAYER 0x0085c480
+	// STUB: STUDIO 0x00786d70
+	bool EditSelectionVerb::isEnabled() const
+	{
+		STUB(0x0085c480);
+		return false;
+	}
+
 	// STUB: PLAYER 0x0085c530
 	void SnapSelectionVerb::doIt(IDataState* dataState)
 	{
@@ -1567,20 +1600,6 @@ namespace RBX {
 		STUB(0x0085c830);
 	}
 
-	// STUB: PLAYER 0x00860d10
-	// STUB: STUDIO 0x009d28c0
-	TranslucentVerb::TranslucentVerb(DataModel* dataModel)
-		: BoolPropertyVerb("TranslucentVerb", dataModel, "Transparent")
-	{
-	}
-
-	// STUB: PLAYER 0x00860d90
-	// STUB: STUDIO 0x009d2940
-	CanCollideVerb::CanCollideVerb(DataModel* dataModel)
-		: BoolPropertyVerb("CanCollideVerb", dataModel, "CanCollide")
-	{
-	}
-
 	// FUNCTION: PLAYER 0x00860e10
 	// FUNCTION: STUDIO 0x009d29c0
 	MoveUpPlateVerb::MoveUpPlateVerb(DataModel* dataModel)
@@ -1592,13 +1611,6 @@ namespace RBX {
 	// FUNCTION: STUDIO 0x009d2a60
 	MoveUpBrickVerb::MoveUpBrickVerb(DataModel* dataModel)
 		: MoveUpSelectionVerb(dataModel, "SelectionUpBrick", 1.2f)
-	{
-	}
-
-	// STUB: PLAYER 0x00861a40
-	// STUB: STUDIO 0x009d3580
-	AnchorVerb::AnchorVerb(DataModel* dataModel)
-		: BoolPropertyVerb("AnchorVerb", dataModel, "Anchored")
 	{
 	}
 

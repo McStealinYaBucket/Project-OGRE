@@ -1,7 +1,4 @@
-/* App/v8world/Mechanism.cpp -- October 2013 (C2 + null-safe lookups).
-   Bodies: C2 0x57DDB4 / getPrimitiveMechanism 0x57E0BA /
-     getConstPrimitiveMechanism 0x57E0EC (batch202) / isMovingAssemblyRoot
-     0x57DF74 / getMovingAssemblyRoot 0x57DFAC (batch269). */
+/* App/v8world/Mechanism.cpp -- October 2013 (lookups: mac 0x57DDB4 0x57E0BA 0x57E0EC 0x57DF74 0x57DFAC). */
 
 #include "stdafx.h"
 
@@ -11,12 +8,10 @@
 
 namespace RBX {
 
-	// mac: 0x57DDB4 (96B: IPipelined C2 zeroes +4/currentStage; mesh C2).
 	Mechanism::Mechanism()
 	{
 	}
 
-	// mac: 0x57E0BA (50B).
 	Mechanism* Mechanism::getPrimitiveMechanism(Primitive* prim)
 	{
 		if (prim == NULL)
@@ -27,11 +22,9 @@ namespace RBX {
 		IndexedMesh* computed = assembly->getMesh()->getComputedUpper();
 		if (computed == NULL)
 			return NULL;
-		return reinterpret_cast<Mechanism*>(
-			reinterpret_cast<char*>(computed) - 8);
+		return reinterpret_cast<Mechanism*>(reinterpret_cast<char*>(computed) - 8);
 	}
 
-	// mac: 0x57E0EC (50B, symmetric).
 	const Mechanism* Mechanism::getConstPrimitiveMechanism(const Primitive* prim)
 	{
 		if (prim == NULL)
@@ -42,11 +35,9 @@ namespace RBX {
 		const IndexedMesh* computed = assembly->getMesh()->getConstComputedUpper();
 		if (computed == NULL)
 			return NULL;
-		return reinterpret_cast<const Mechanism*>(
-			reinterpret_cast<const char*>(computed) - 8);
+		return reinterpret_cast<const Mechanism*>(reinterpret_cast<const char*>(computed) - 8);
 	}
 
-	// mac: 0x57DF74 (batch269).
 	bool Mechanism::isMovingAssemblyRoot(const Assembly* assembly)
 	{
 		if (assembly->computeIsGrounded())
@@ -54,21 +45,17 @@ namespace RBX {
 		const IndexedMesh* meshParent = assembly->getMesh()->getConstTypedParent<IndexedMesh>();
 		if (meshParent == NULL)
 			return true;
-		const Assembly* parent = reinterpret_cast<const Assembly*>(
-			reinterpret_cast<const char*>(meshParent) - 8);
+		const Assembly* parent = reinterpret_cast<const Assembly*>(reinterpret_cast<const char*>(meshParent) - 8);
 		return parent == NULL || parent->computeIsGrounded();
 	}
 
-	// mac: 0x57DFAC (batch269: climb while the parent link is live and
-	// ungrounded; null links and grounded parents stop the walk).
 	Assembly* Mechanism::getMovingAssemblyRoot(Assembly* assembly)
 	{
 		Assembly* current = assembly;
 		IndexedMesh* up = current->getMesh()->getTypedParent<IndexedMesh>();
 		while (up != NULL)
 		{
-			Assembly* parent = reinterpret_cast<Assembly*>(
-				reinterpret_cast<char*>(up) - 8);
+			Assembly* parent = reinterpret_cast<Assembly*>(reinterpret_cast<char*>(up) - 8);
 			if (parent == NULL || parent->computeIsGrounded())
 				break;
 			current = parent;
@@ -77,15 +64,13 @@ namespace RBX {
 		return current;
 	}
 
-	// Const mirror (2016 shape).
 	const Assembly* Mechanism::getConstMovingAssemblyRoot(const Assembly* assembly)
 	{
 		const Assembly* current = assembly;
 		const IndexedMesh* up = current->getMesh()->getConstTypedParent<IndexedMesh>();
 		while (up != NULL)
 		{
-			const Assembly* parent = reinterpret_cast<const Assembly*>(
-				reinterpret_cast<const char*>(up) - 8);
+			const Assembly* parent = reinterpret_cast<const Assembly*>(reinterpret_cast<const char*>(up) - 8);
 			if (parent == NULL || parent->computeIsGrounded())
 				break;
 			current = parent;
@@ -95,10 +80,25 @@ namespace RBX {
 	}
 
 
+	// FUNCTION: PLAYER 0x007f9f90
+	// FUNCTION: STUDIO 0x00915520
+	const Primitive* Mechanism::getConstRootMovingPrimitive(const Primitive* p)
+	{
+		const Assembly* a = p->getConstAssembly();
+		RBXASSERT(a);
+		if (!a)
+			return NULL;
+		if (a->computeIsGrounded())
+			return NULL;
+		return getConstMovingAssemblyRoot(a)->getConstAssemblyPrimitive();
+	}
 
-
-
-
+	// FUNCTION: PLAYER 0x007fa010
+	// FUNCTION: STUDIO 0x009155a0
+	Primitive* Mechanism::getRootMovingPrimitive(Primitive* p)
+	{
+		return const_cast<Primitive*>(getConstRootMovingPrimitive(p));
+	}
 
 
 

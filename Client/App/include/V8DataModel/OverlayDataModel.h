@@ -32,6 +32,19 @@ namespace RBX {
 		// Unnamed (inline in 2013; its copy sits in Game.obj): stores the game DataModel (a weak_ptr
 		// argument, released at the end) at +0xe58. Game::Game calls it right after createDataModel.
 		void FUN_00652f00(weak_ptr<DataModel> dataModel);
+
+		// iOS 10-29 name (there it takes raw pointers). Windows 2013 takes both shared_ptrs by value
+		// (ctor PLAYER 0x0068c1f0). The dtor is implicit: the shell's /GS copy 0x0041d550 destroys
+		// +8 (~scoped_read_request 0x0062db70), +4 (~scoped_write_request 0x0062daf0), +0 (~LegacyLock).
+		// SIZE 0xc
+		class DualLegacyLock
+		{
+			DataModel::LegacyLock legacyLock;					// 0x0  LegacyLock(dataModel, taskType) 0x006421c0
+			DataModel::scoped_write_request writeRequest;		// 0x4  overlay when taskType == Write (0x00643100)
+			DataModel::scoped_read_request readRequest;		// 0x8  overlay when taskType == Read (0x006431d0)
+		public:
+			DualLegacyLock(shared_ptr<OverlayDataModel> overlay, shared_ptr<DataModel> dataModel, DataModelJob::TaskType taskType);
+		};
 	};
 
 } // namespace RBX

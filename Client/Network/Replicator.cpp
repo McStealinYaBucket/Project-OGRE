@@ -3,6 +3,7 @@
 #include "Replicator.h"
 #include "Replicator.PingJob.h"
 #include "Replicator.ProcessPacketsJob.h"
+#include "Util.h"
 #include "V8DataModel/NetworkSettings.h"
 #include "FastLog.h"
 #include "Util/standardout.h"
@@ -326,7 +327,6 @@ void Replicator::deserializePropertyValue(RakNet::BitStream& inBitstream, Reflec
 	STUB(0x005a4190);
 }
 
-
 // Layout note: ~Replicator's asserts must stay on lines 348/350 (STUDIO 349/351). Room above them is
 // tight, so the STUBs listed after the dtor sit there as descents; a new function above this point needs
 // the same number of lines removed (or another STUB moved below the dtor).
@@ -355,6 +355,13 @@ Replicator::~Replicator()
 // readChangedProperty, onParentChanged and onPropertyChanged precede ~Replicator in 2013; they sit here
 // (descents) because the functions above it no longer fit before its assert lines (348/350). readItem
 // sits after the ctor, on its assert line (2750; STUDIO 2769).
+// STUB: PLAYER 0x0058b260
+// STUB: STUDIO 0x0062f8d0
+void Replicator::createPhysicsSender(NetworkSettings::PhysicsSendMethod method)
+{
+	STUB(0x0058b260);
+}
+
 // STUB: PLAYER 0x0058d5f0
 // STUB: STUDIO 0x006328f0
 void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop)
@@ -421,13 +428,6 @@ Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<C
 }
 
 // Blank lines: the two MTU asserts sit on their 2013 lines (3418, 3424).
-
-
-
-
-
-
-
 
 
 

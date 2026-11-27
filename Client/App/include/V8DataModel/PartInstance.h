@@ -456,6 +456,9 @@ public:
 		// The PartInstance.cpp:1161 assert reads this+0xAC directly, so the
 		// accessor is header-inline in 2013.
 		Primitive* getPartPrimitive() const { return primitive.get(); }
+		// PLAYER 0x0071b970 (fromConstPrimitive folds with it): p ? owner(+0x10c) - 0x68 : NULL.
+		static PartInstance* fromPrimitive(Primitive* p);
+		static const PartInstance* fromConstPrimitive(const Primitive* p);
 		// mac: 0x442830 (batch284: :1615 prim assert + prim+92 owner read).
 		SystemAddress getNetworkOwner() const;
 		// mac: 0x44562A (batch284: on-demand +196 byte, NULL-safe).

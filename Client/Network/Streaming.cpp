@@ -311,6 +311,17 @@ void readBrickVector(RakNet::BitStream& stream, G3D::Vector3& value)
 
 } // namespace Network
 
+// No throw: the result of Read is ignored. Code identical (88.9%): 2013 calls Read<unsigned short> 0x005a7080, with
+// Read<short> ICF-folded into it; our link keeps a separate Read<short>, so the call does not pair.
+// STUB: PLAYER 0x005a8030
+// STUB: STUDIO 0x00617cb0
+template<>
+RakNet::BitStream& operator>>(RakNet::BitStream& stream, short& value)
+{
+	stream.Read(value);
+	return stream;
+}
+
 // FUNCTION: PLAYER 0x005a82b0
 // FUNCTION: STUDIO 0x00617f30
 template<>
@@ -364,6 +375,29 @@ void IdSerializer::setMaxGuidIndexBit(int bits)
 void IdSerializer::setRefValue(WaitItem& wi, Instance* instance)
 {
 	wi.desc->setRefValue(wi.instance.get(), instance);
+}
+
+// STUB: PLAYER 0x005a8bd0
+// STUB: STUDIO 0x00618890
+__declspec(noinline) void SharedScopeDictionary::receive(RakNet::BitStream& stream, RBX::Guid::Scope& scope)
+{
+	STUB(0x005a8bd0);
+	RBX::Name::getNullName(); // stand-in cross-TU call: a same-TU STUB that clobbers nothing changes the caller's registers
+}
+
+// FUNCTION: PLAYER 0x005a8ce0
+// FUNCTION: STUDIO 0x006189a0
+void IdSerializer::deserializeId(RakNet::BitStream& stream, RBX::Guid::Data& id)
+{
+	scopeNames.receive(stream, id.scope);
+	if (!id.scope.isNull())
+	{
+		id.index = 0;
+		if (!stream.ReadBits((unsigned char*)&id.index, guidIndexBits))
+			throw std::runtime_error("BitStream >> RBX::Guid::Data failed");
+	}
+	else
+		id.index = 0;
 }
 
 // FUNCTION: PLAYER 0x005a9b30

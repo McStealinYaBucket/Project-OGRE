@@ -6229,11 +6229,11 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0xcc",
+     "name": "physicsSendMethod",
      "offset": 204,
      "size": 4,
-     "kind": "scalar",
-     "type": null,
+     "kind": "enum",
+     "type": "RBX::NetworkSettings::PhysicsSendMethod",
      "scalar": "T_INT4"
     },
     {
@@ -11419,7 +11419,7 @@
      "offset": 544,
      "size": 24,
      "kind": "class",
-     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >",
+     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats> > >",
      "scalar": null
     },
     {
@@ -11560,6 +11560,333 @@
    ],
    "base": false,
    "unique": "VProfiler@Profiling@RBX@@"
+  },
+  "RBX::OverlayDataModel::DualLegacyLock": {
+   "size": 12,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "legacyLock",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::LegacyLock",
+     "scalar": null
+    },
+    {
+     "name": "writeRequest",
+     "offset": 4,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::scoped_write_request",
+     "scalar": null
+    },
+    {
+     "name": "readRequest",
+     "offset": 8,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::scoped_read_request",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDualLegacyLock@OverlayDataModel@RBX@@"
+  },
+  "RBX::BoolPropertyVerb": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::EditSelectionVerb",
+     "offset": 0,
+     "size": 36,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "propertyName",
+     "offset": 36,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VBoolPropertyVerb@RBX@@"
+  },
+  "RBX::Document": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "m_unk0x00",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::View>",
+     "scalar": null
+    },
+    {
+     "name": "game",
+     "offset": 4,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Game>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x0c",
+     "offset": 12,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::ToggleFullscreenVerb>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x10",
+     "offset": 16,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::LeaveGameVerb>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x14",
+     "offset": 20,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::RecordToggleVerb>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x18",
+     "offset": 24,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::ScreenshotVerb>",
+     "scalar": null
+    },
+    {
+     "name": "marshaller",
+     "offset": 28,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::FunctionMarshaller",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x20",
+     "offset": 32,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<void>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDocument@RBX@@"
+  },
+  "RBX::View": {
+   "size": 204,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "m_unk0x00",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::signal<void __cdecl(void)>",
+     "scalar": null
+    },
+    {
+     "name": "game",
+     "offset": 4,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Game>",
+     "scalar": null
+    },
+    {
+     "name": "hWnd",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "HWND__",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x10",
+     "offset": 16,
+     "size": 8,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x18",
+     "offset": 24,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x34",
+     "offset": 52,
+     "size": 16,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x44",
+     "offset": 68,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "fullscreen",
+     "offset": 69,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "desireFullscreen",
+     "offset": 70,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "changedResolution",
+     "offset": 71,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "fullScreenSizes",
+     "offset": 72,
+     "size": 16,
+     "kind": "class",
+     "type": "std::vector<G3D::Vector2int16,std::allocator<G3D::Vector2int16> >",
+     "scalar": null
+    },
+    {
+     "name": "nonFullscreenRect",
+     "offset": 88,
+     "size": 16,
+     "kind": "structure",
+     "type": "tagRECT",
+     "scalar": null
+    },
+    {
+     "name": "nonFullscreenPlacement",
+     "offset": 104,
+     "size": 44,
+     "kind": "structure",
+     "type": "tagWINDOWPLACEMENT",
+     "scalar": null
+    },
+    {
+     "name": "restoreWindowStyle",
+     "offset": 148,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_ULONG"
+    },
+    {
+     "name": "changingResolution",
+     "offset": 152,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "hMonitor",
+     "offset": 156,
+     "size": 4,
+     "kind": "ptr",
+     "type": "HMONITOR__",
+     "scalar": null
+    },
+    {
+     "name": "view",
+     "offset": 160,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::ViewBase>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xa4",
+     "offset": 164,
+     "size": 4,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xa8",
+     "offset": 168,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "userInput",
+     "offset": 176,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::UserInput>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xb4",
+     "offset": 180,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<void>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xbc",
+     "offset": 188,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0xc4",
+     "offset": 196,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::TaskScheduler::Job>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VView@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,

@@ -8,6 +8,7 @@
 #include "Network/Players.h"
 #include "Network/Player.h"
 #include "V8DataModel/PartInstance.h"
+#include "V8World/Mechanism.h"
 #include "Replicator.StreamJob.h"
 #include "Util/standardout.h"
 
@@ -15,13 +16,8 @@
 LOGGROUP(JoinSendExtraItemCount)
 LOGGROUP(Network)
 
-// A dynamic group (kind 1). 2013 registers it in App's ScriptContext.obj (initializer PLAYER 0x00a66270,
-// after JoinSendExtraItemCount's); defined here until that file carries it. Default 0 (.bss).
-namespace DFLog {
-	// GLOBAL: PLAYER 0x00de3f8b
-	// GLOBAL: STUDIO 0x00f84e65
-	FLog::Channel NetworkJoin = 0;
-	int NetworkJoinIniter = FLog::RegisterLogGroup("NetworkJoin", &NetworkJoin, NULL, FASTVARTYPE_DYNAMIC); }
+// DFLog::NetworkJoin is App's too (dynamic, kind 1; ScriptContext.obj initializer PLAYER 0x00a66270).
+DYNAMIC_LOGGROUP(NetworkJoin)
 
 namespace RBX {
 namespace Network {
@@ -116,6 +112,154 @@ static void serializeSFFlag(const std::string& name, const std::string& value, v
 	STUB(0x00571af0);
 }
 
+// File statics (2016 names; the 2013 assert at line 244 spells the const one), inlined.
+static PartInstance* getMechanismRootMovingPart(PartInstance* part)
+{
+	Primitive* p = Mechanism::getRootMovingPrimitive(part->getPartPrimitive());
+	return PartInstance::fromPrimitive(p);
+}
+
+static const PartInstance* getConstMechanismRootMovingPart(const PartInstance* part)
+{
+	const Primitive* p = Mechanism::getConstRootMovingPrimitive(part->getPartPrimitive());
+	return PartInstance::fromConstPrimitive(p);
+}
+
+// Accept physics from the client only for a root part it owns. The three checkDistributed* bodies differ
+// from 2013 only in PartInstance::primitive's offset (2013 +0xb8, ours +0xb0: App's PartInstance layout).
+// STUB: PLAYER 0x00572050
+// STUB: STUDIO 0x00654490
+bool ServerReplicator::checkDistributedReceive(PartInstance* part)
+{
+	PartInstance* rootMoving = getMechanismRootMovingPart(part);
+	bool isRootPart = (rootMoving == part);
+	bool fromOwner = (rootMoving->getNetworkOwner() == RakNetToRbxAddress(remotePlayerId));
+
+	return (isRootPart && fromOwner);
+}
+
+// Blank lines: the asserts below sit on their 2013 lines (231, 243, 244).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 2013 tests the owner itself (no call to checkDistributedSendFast) and allows a NULL root.
+// STUB: PLAYER 0x005720c0
+// STUB: STUDIO 0x00654500
+bool ServerReplicator::checkDistributedSend(const PartInstance* part)
+{
+	RBXASSERT(part);
+
+	const PartInstance* rootMoving = getConstMechanismRootMovingPart(part);
+	bool isRootPart = (rootMoving == part);
+	bool toOwner = rootMoving && (rootMoving->getNetworkOwner() == RakNetToRbxAddress(remotePlayerId));
+	return (isRootPart && !toOwner);
+}
+// assumes part is root
+// STUB: PLAYER 0x00572190
+// STUB: STUDIO 0x006545d0
+bool ServerReplicator::checkDistributedSendFast(const PartInstance* part)
+{
+	RBXASSERT(part);
+	RBXASSERT(getConstMechanismRootMovingPart(part) == part);
+
+	return part->getNetworkOwner() != RakNetToRbxAddress(remotePlayerId);
+}
+
+// The first marker went out: physics replication starts, and so does streaming.
+// FUNCTION: PLAYER 0x00572270
+// FUNCTION: STUDIO 0x006546b0
+void ServerReplicator::onSentMarker(long id)
+{
+	createPhysicsSender(settings().getPhysicsSendMethod());
+	if (streamJob)
+	{
+		streamJob->sendPackets(-1);
+		streamJob->setReady(true);
+	}
+	waitingForMarker = false;
+}
+
 // FUNCTION: PLAYER 0x005722b0
 // FUNCTION: STUDIO 0x006546f0
 void ServerReplicator::installRemotePlayer(std::string preferedSpawnName)
@@ -127,10 +271,18 @@ void ServerReplicator::installRemotePlayer(std::string preferedSpawnName)
 		remotePlayer->loadCharacter(true, preferedSpawnName);
 }
 
-// STUB: PLAYER 0x00572390
+// noinline: 2013's readItem calls it out of line.
+// FUNCTION: PLAYER 0x00572390
+// FUNCTION: STUDIO 0x006547d0
 __declspec(noinline) void ServerReplicator::readClientQuotaUpdate(RakNet::BitStream& bitStream)
 {
-	STUB(0x00572390);
+	int diff;
+	short maxRegionRadius;
+	RBX::operator>>(bitStream, diff);
+	RBX::operator>>(bitStream, maxRegionRadius);
+
+	if (streamJob)
+		streamJob->updateClientQuota(diff, maxRegionRadius);
 }
 
 // FUNCTION: PLAYER 0x00572ec0
@@ -152,6 +304,14 @@ void ServerReplicator::serializeSFFlags(RakNet::BitStream& outBitStream)
 {
 	outBitStream.Write(FLog::GetNumSynchronizedVariable());
 	FLog::ForEachVariable(&serializeSFFlag, &outBitStream, FASTVARTYPE_SYNC);
+}
+
+// 97.6%, pairing only: ~NetworkFilter folds with another empty-body twin in our link (2013 0x00528720).
+// STUB: PLAYER 0x00573350
+// STUB: STUDIO 0x006551c0
+void ServerReplicator::setBasicFilteringEnabled(bool value)
+{
+	basicFilter.reset(value ? new NetworkFilter(this) : NULL);
 }
 
 // 2016 inlines this template member in PropertySynchronization.h; 2013's copy sits in ServerReplicator.obj.

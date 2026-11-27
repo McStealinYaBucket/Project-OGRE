@@ -4,6 +4,7 @@ data	?JointLifetime@FLog@@3EA	unsigned char FLog::JointLifetime
 data	?LuaMemoryPool@FLog@@3EA	unsigned char FLog::LuaMemoryPool
 data	?MarkRakNetSocketOnDelete@FFlag@@3_NA	bool FFlag::MarkRakNetSocketOnDelete
 data	?MegaClusterInit@FLog@@3EA	unsigned char FLog::MegaClusterInit
+data	?PlayerShutdownLuaTimeoutSeconds@FLog@@3EA	unsigned char FLog::PlayerShutdownLuaTimeoutSeconds
 data	?RakNetDisconnect@FLog@@3EA	unsigned char FLog::RakNetDisconnect
 data	?UseLuaMemoryPool@FLog@@3EA	unsigned char FLog::UseLuaMemoryPool
 data	?aaSamples@CRenderSettings@RBX@@2W4AASamples@12@A	public: static enum RBX::CRenderSettings::AASamples RBX::CRenderSettings::aaSamples

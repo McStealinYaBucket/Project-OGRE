@@ -20,6 +20,7 @@
 #include "ClusterUpdateBuffer.h"
 #include "Item.h"
 #include "Network/API.h"
+#include "V8DataModel/NetworkSettings.h"
 #include "rbx/threadsafe.h"
 #include "rbx/memory.h"
 #include "rbx/signal.h"
@@ -206,6 +207,9 @@ protected:
 	virtual void serializeSFFlags(RakNet::BitStream& outBitStream) {}                  // vtable+0x120
 	virtual void deserializeSFFlags(RakNet::BitStream& inBitStream) {}                 // vtable+0x124
 	virtual bool remoteDeleteOnDisconnect(const Instance* instance) const;             // vtable+0x128 0x0059cd20
+
+	// iOS name; PLAYER 0x0058b260 / STUDIO 0x0062f8d0, not written yet (ServerReplicator::onSentMarker calls it).
+	void createPhysicsSender(NetworkSettings::PhysicsSendMethod method);
 
 	// RakNet::PluginInterface2 (this = Replicator+0x1094). OnReceive: PLAYER 0x0059d0e0, not written yet.
 	/*override*/ RakNet::PluginReceiveResult OnReceive(RakNet::Packet* packet);

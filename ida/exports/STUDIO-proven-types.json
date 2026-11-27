@@ -6023,11 +6023,11 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0xcc",
+     "name": "physicsSendMethod",
      "offset": 204,
      "size": 4,
-     "kind": "scalar",
-     "type": null,
+     "kind": "enum",
+     "type": "RBX::NetworkSettings::PhysicsSendMethod",
      "scalar": "T_INT4"
     },
     {
@@ -10645,7 +10645,7 @@
      "offset": 544,
      "size": 24,
      "kind": "class",
-     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >",
+     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats> > >",
      "scalar": null
     },
     {
@@ -10786,6 +10786,65 @@
    ],
    "base": false,
    "unique": "VProfiler@Profiling@RBX@@"
+  },
+  "RBX::OverlayDataModel::DualLegacyLock": {
+   "size": 12,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "legacyLock",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::LegacyLock",
+     "scalar": null
+    },
+    {
+     "name": "writeRequest",
+     "offset": 4,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::scoped_write_request",
+     "scalar": null
+    },
+    {
+     "name": "readRequest",
+     "offset": 8,
+     "size": 4,
+     "kind": "class",
+     "type": "RBX::DataModel::scoped_read_request",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VDualLegacyLock@OverlayDataModel@RBX@@"
+  },
+  "RBX::BoolPropertyVerb": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::EditSelectionVerb",
+     "offset": 0,
+     "size": 36,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "propertyName",
+     "offset": 36,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Name",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VBoolPropertyVerb@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,

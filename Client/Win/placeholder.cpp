@@ -42,6 +42,8 @@
 
 #include "V8Tree/Instance.h"
 #include "V8DataModel/DataModel.h"
+#include "V8DataModel/Game.h"
+#include "V8DataModel/OverlayDataModel.h"
 #include "V8DataModel/RunService.h"
 #include "V8DataModel/Script.h"
 #include "rbx/Tasks/Coordinator.h"
@@ -107,6 +109,11 @@ namespace OgreShellStandIn {
 		// written; taking the address stands in for them (RecordToggleVerb::doIt's operator=).
 #ifndef RBX_STUDIO_BUILD
 		static void (boost::function0<void>::*volatile swapFn)(boost::function0<void>&) = &boost::function0<void>::swap;
+		// Game::getOverlayDataModel: 2013's shell copy 0x0041ce60 keeps the plain __thiscall (return
+		// slot pushed) because an engine function calls it too (DataModel::renderPass2d 0x00645847, not
+		// written). Without that caller LTCG passes the return slot in eax (View 0x00466d1f, Document
+		// 0x0041d3ab); the address-take stands in for it.
+		static boost::shared_ptr<RBX::OverlayDataModel> (RBX::Game::*volatile overlayFn)() const = &RBX::Game::getOverlayDataModel;
 		// Wave-13 twins list (build-sh/w13/twins-D.csv), PLAYER: unique_lock<recursive_mutex>::lock
 		// 8/0 -> 0x004366c0, the ConstProperty ctor 3/0 -> 0x00441d40 (its assert spells
 		// reflection/Property.h), use_facet<numpunct<char>> 3/0 -> 0x0041aaa0.

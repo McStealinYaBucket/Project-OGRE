@@ -1499,4 +1499,17 @@ namespace RBX {
 		STUB(0x007235c0);
 	}
 
+	// FUNCTION: PLAYER 0x0071b970
+	// FUNCTION: STUDIO 0x007b8f90
+	PartInstance* PartInstance::fromPrimitive(Primitive* p)
+	{
+		return p ? static_cast<PartInstance*>(p->getOwner()) : NULL;
+	}
+
+	// Folds into fromPrimitive (PLAYER 0x0071b970).
+	const PartInstance* PartInstance::fromConstPrimitive(const Primitive* p)
+	{
+		return p ? static_cast<const PartInstance*>(p->getOwner()) : NULL;
+	}
+
 } // namespace RBX

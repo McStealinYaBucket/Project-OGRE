@@ -1002,6 +1002,95 @@ FACTS = [
      "RBX::Network::ServerReplicator::checkDistributedReceive(PartInstance*) (iOS 1029) | calls "
      "getRootMovingPrimitive 0x007fa010, fromPrimitive 0x0071b970, RakNetToRbxAddress 0x005c6c50; next to "
      "checkDistributedSend 0x005720c0 (network-5f-11)"),
+    # wave21 sync (shell-5k-12.md / app-21.md / network-5f-12.md "IDA owner"; sweep28). Each checked from the exe bytes.
+    (0x004601c0, 0, "rename", "?sendMouseEvent@UserInput@RBX@@AAEXHABVVector2@G3D@@@Z", "src2016:",
+     "RBX::UserInput::sendMouseEvent(int, const Vector2&) (2016 name, our UserInput.h decoration) | Vector2int16 "
+     "from the position, getWindowSize 0x00460370, then sendEvent 0x00460210 (shell-5k-12)"),
+    (0x00460210, 0, "rename", "RBX::UserInput::sendEvent", "src2016:",
+     "RBX::UserInput::sendEvent (2016 name; takes a UIEvent, 2013 parameters not proven) | passes the event to "
+     "DataModel::processUiEvent 0x0063df50 of the overlay DataModel (Game::getOverlayDataModel 0x0041ce60), then of "
+     "the game DataModel (getDataModel 0x0041ce40) (shell-5k-12)"),
+    (0x00460370, 0, "rename", "RBX::UserInput::getWindowSize", "src2016:",
+     "RBX::UserInput::getWindowSize (2016 name, shape matches) | GetClientRect, Rect2D::xyxy 0x0045df70, two "
+     "__ftol2_sse (shell-5k-12)"),
+    (0x004609d0, 0, "rename", "RBX::UserInput::processInput", "str:",
+     "RBX::UserInput::processInput | RobloxCritSecLoc on the string \"processInput\" 0x00be4d20 (0x004609f7), "
+     "lock at +0x7c; calls acquireKeyboard 0x0045f120 when the keyboard state changed (shell-5k-12)"),
+    (0x0041d1c0, 0, "rename", "RBX::Document::PrepareShutdown", "src2016:",
+     "RBX::Document::PrepareShutdown (2016 name) | View::RemoveJobs 0x00466a30, getDataModel, the verb release "
+     "0x0041df60, then 0x00467010 (submits View 0x00466e50 to the marshaller) (shell-5k-12)"),
+    (0x00466a30, 0, "rename", "?RemoveJobs@View@RBX@@QAEXXZ", "src2016:",
+     "RBX::View::RemoveJobs() (2016 name, our View.h decoration) | three times: TaskScheduler::remove of a job "
+     "under a boost::function, then shared_ptr reset; called first by PrepareShutdown 0x0041d1c0 (shell-5k-12)"),
+    (0x00465e70, 0, "comment", "", "guess:",
+     "our View::FUN_00465e70; 2016's View::Stop has its shape; called by Document::Shutdown 0x0041d270 under the "
+     "DualLegacyLock (shell-5k-12)"),
+    (0x00466cf0, 0, "comment", "", "guess:",
+     "our View::FUN_00466cf0: game->setDataModel(DataModel::createDataModel(true, NULL, overlay)), 0x00468730, "
+     "create<ControllerService> under a LegacyLock, initializeInput, 0x004665f0, setKeyboardDesired(true), "
+     "0x004684b0, resetScheduler (shell-5k-12; STUB 98.2%)"),
+    (0x00466e50, 0, "comment", "", "guess:",
+     "our View::FUN_00466e50: marshalled DataModel restart (bindWorkspace(null) + Game::shutdownGameDataModel under "
+     "the DualLegacyLock, then 0x00466cf0, RunService::start on the overlay, dataModelShutdownFinished); bound and "
+     "submitted by 0x00467010 (shell-5k-12; STUB 74%)"),
+    (0x00467010, 0, "comment", "", "guess:",
+     "PrepareShutdown's View call: binds View 0x00466e50 and submits it to the FunctionMarshaller (shell-5k-12)"),
+    (0x007145b0, 0, "rename", "_ZNK3RBX13ServiceClientINS_9SelectionEE13createServiceEv", "ios:",
+     "RBX::ServiceClient<Selection>::createService() const (iOS 1029) | if the cached shared_ptr at +4 is empty: "
+     "ServiceProvider::create<Selection>(const Instance*) 0x006de0b0 on [this], shared_from, assign; called by "
+     "EditSelectionVerb::isEnabled and BoolPropertyVerb::isChecked (app-21)"),
+    (0x006de0b0, 0, "rename", "_ZN3RBX15ServiceProvider6createINS_9SelectionEEEPT_PKNS_8InstanceE", "ios:",
+     "RBX::ServiceProvider::create<Selection>(const Instance*) (iOS 1029) | root ancestor, isA ServiceProvider "
+     "(0x00614c50), then `jmp ServiceProvider::create<Selection>() const 0x00656f10` (app-21)"),
+    (0x0070eb00, 0, "comment", "", "guess:",
+     "Selection size helper (app-21): asserts `object.get() != 0` at include\\util/utilities.h:71, returns "
+     "([[this+0x64]+8] - [+4]) >> 3 (a vector of shared_ptr); no oracle name (no Selection::size in iOS 1029)"),
+    (0x00d98b40, 0x00eb3b94, "data1", "?advManualJointMode@AdvArrowToolBase@RBX@@2_NA", "ios:",
+     "RBX::AdvArrowToolBase::advManualJointMode (iOS 1029) | .data, initial true; TurnOnManualJointCreation::doIt "
+     "0x00856900 / 0x00780f40 tests and stores it (app-21)"),
+    (0x00d98b44, 0x00eb3b98, "data4", "?advManualJointType@AdvArrowToolBase@RBX@@2W4ManualJointType@DRAG@2@A", "ios:",
+     "RBX::AdvArrowToolBase::advManualJointType (iOS 1029) | .data, STRONG_MANUAL_JOINT; the SetManualJoint doIts "
+     "(0x00856bb0) compare and store it (app-21)"),
+    (0x00e14628, 0x00f694f0, "data4", "?advGridMode@AdvArrowToolBase@RBX@@2W4DraggerGridMode@DRAG@2@A", "ios:",
+     "RBX::AdvArrowToolBase::advGridMode (iOS 1029) | .bss, ONE_STUD; the SetGrid doIts (0x008569d2 / 0x00781012) "
+     "compare and store 0/1/2 (app-21)"),
+    (0x005d25f0, 0x00670da0, "rename",
+     "_ZN3RBX7Network10Replicator9StreamJob24receiveInstanceGcMessageERKNS_4Guid4DataE", "ios:",
+     "RBX::Network::Replicator::StreamJob::receiveInstanceGcMessage(const Guid::Data&) (iOS 1029) | "
+     "GuidItem<Instance>::Registry::lookupByGuid, then the region and DataModel work, ret 4 (network-5f-12)"),
+    (0x005a8bd0, 0x00618890, "rename",
+     "?receive@SharedScopeDictionary@Network@RBX@@QAEXAAVBitStream@RakNet@@AAUScope@Guid@3@@Z", "prior:",
+     "RBX::Network::SharedScopeDictionary::receive(BitStream&, Guid::Scope&) (our Dictionary.h) | reads into a "
+     "std::string (0x005a8aa0), Name::declare, ret 8; called by IdSerializer::deserializeId (network-5f-12)"),
+    (0x005c5d70, None, "rename", "??0ConnectionStats@StatsUpdateJob@ConcurrentRakPeer@Network@RBX@@QAE@XZ", "ios:",
+     "RBX::Network::ConcurrentRakPeer::StatsUpdateJob::ConnectionStats::ConnectionStats() (class from iOS 1029, our "
+     "ConcurrentRakPeer.h decoration) | stores mtuSize 0x5d4 (1492) at +0, zeroes the pings, the two "
+     "RunningAverage<> at +0xf0 / +0x120 with weight 0.1 (0x00be6af0) and their flags (network-5f-12)"),
+    (0x005c4050, 0x0061ef10, "rename",
+     "??0ConnectionStats@StatsUpdateJob@ConcurrentRakPeer@Network@RBX@@QAE@ABU01234@@Z", "ios:",
+     "ConnectionStats's implicit copy ctor (class from iOS 1029) | rep movsd 0x3c dwords (the 0xf0-byte "
+     "ConcurrentRakPeerStats base), then the two RunningAverage<> members with their shared_ptr add-ref; STUDIO "
+     "0x0061ef10 by position before updateStats, size 224 equal (network-5f-12)"),
+    (0x005c4190, 0x0061f050, "rename",
+     "?updateStats@StatsUpdateJob@ConcurrentRakPeer@Network@RBX@@AAEXAAU?$pair@$$CBUSystemAddress@RakNet@@"
+     "UConnectionStats@StatsUpdateJob@ConcurrentRakPeer@Network@RBX@@@std@@PAVRakPeerInterface@RakNet@@@Z", "ios:",
+     "RBX::Network::ConcurrentRakPeer::StatsUpdateJob::updateStats(pair<const SystemAddress, ConnectionStats>&, "
+     "RakPeerInterface*) (iOS 1029, our decoration) | three RakPeer virtual calls with RakNetGUID/SystemAddress "
+     "temporaries, then two RunningAverage<double,double>::sample 0x004612a0 (network-5f-12)"),
+    (0x00573350, 0x006551c0, "rename", "?setBasicFilteringEnabled@ServerReplicator@Network@RBX@@QAEX_N@Z", "ios:",
+     "RBX::Network::ServerReplicator::setBasicFilteringEnabled(bool) (iOS 1029) | basicFilter.reset(value ? new "
+     "NetworkFilter(this) : NULL): new(4), the NetworkFilter ctor folded into Faces::Faces(int) 0x0081c670, the dtor "
+     "folded into the engine `ret` 0x00528720 (network-5f-12)"),
+    (0x005a8030, 0x00617cb0, "rename", "_ZN3RBXrsIsEERN6RakNet9BitStreamES3_RT_", "ios:",
+     "RakNet::BitStream& RBX::operator>><short>(BitStream&, short&) (iOS 1029) | `stream.Read(value); return "
+     "stream;` calling Read<unsigned short> 0x005a7080, into which 2013 folded Read<short> (network-5f-12)"),
+    (0x005733e0, 0, "comment", "", "guess:",
+     "the out-of-line ctor of the rbx::signal at ServerReplicator+0x88 (iOS: EventDesc<ServerReplicator, "
+     "void(int,bool,int)>, so 2016's remoteTicketProcessedSignal): call_once(0x00ddc9cc, 0x00571c40) for its "
+     "safe_static mutex (network-5f-12)"),
+    (0x0057bcd0, 0, "comment", "", "guess:",
+     "the DescribedNonCreatable<ServerReplicator, Replicator, ...> base ctor the ServerReplicator ctor 0x0057c3b0 "
+     "calls (server+0xab0 shared_ptr, 0, the settings; ret 0x24) (network-5f-12)"),
 ]
 
 # wave20 sync (app-20.md): the 26 TToolVerb<T, RunStateVerb> ctors, each identified by the RTTI-named vftable it
@@ -1025,6 +1114,30 @@ for tool, pa, sa in TTOOLS:
     FACTS.append((pa, sa, "rename", f"_ZN3RBX9TToolVerbINS_{len(tool)}{tool}ENS_12RunStateVerbEEC2EPNS_9DataModelEb",
                   "rtti:", f"RBX::TToolVerb<{tool}, RunStateVerb>::TToolVerb(DataModel*, bool) (iOS 1029) | stores "
                   f".?AV?$TToolVerb@V{tool}@RBX@@VRunStateVerb@2@@RBX@@'s vftable (app-20)"))
+
+# wave21 sync (app-21.md): the 26 `const char* const RBX::sXTool` name globals (.rdata), each holding the pointer to
+# its tool name string and read by the reccmp-100% Name::doDeclare<&sXTool> (e.g. 0x0070d920 pushes 0x00b8d590).
+# (tool, PLAYER global, STUDIO global, string), checked against both exes.
+TTOOL_NAMES = [
+    ("AxisRotateTool", 0x00bb0220, 0x00c72460, "AxisRotate"), ("AdvMoveTool", 0x00bb0380, 0x00c725b0, "AdvMove"),
+    ("AdvRotateTool", 0x00bb0668, 0x00c72898, "AdvRotate"), ("AdvArrowTool", 0x00b8d590, 0x00beec18, "AdvArrow"),
+    ("MoveResizeJoinTool", 0x00bb0238, 0x00c72478, "MoveResizeJoin"), ("FlatTool", 0x00b8d388, 0x00c637a8, "Flat"),
+    ("GlueTool", 0x00b8d38c, 0x00c637ac, "Glue"), ("WeldTool", 0x00b8d390, 0x00c637b0, "Weld"),
+    ("StudsTool", 0x00b8d394, 0x00c637b4, "Studs"), ("InletTool", 0x00b8d398, 0x00c637b8, "Inlet"),
+    ("UniversalTool", 0x00b8d39c, 0x00c637bc, "Universal"), ("HingeTool", 0x00b8d3a0, 0x00c637c0, "Hinge"),
+    ("RightMotorTool", 0x00b8d3a4, 0x00c637c4, "RightMotor"), ("LeftMotorTool", 0x00b8d3a8, 0x00c637c8, "LeftMotor"),
+    ("OscillateMotorTool", 0x00b8d3ac, 0x00c637cc, "OscillateMotor"),
+    ("SmoothNoOutlinesTool", 0x00b8d3b0, 0x00c637d0, "SmoothNoOutlines"),
+    ("AnchorTool", 0x00bafd68, 0x00c71fac, "Anchor"), ("LockTool", 0x00bafd6c, 0x00c71fb0, "Lock"),
+    ("FillTool", 0x00bafc88, 0x00c1c2bc, "Fill"), ("MaterialTool", 0x00bafc8c, 0x00c1c2c0, "Material"),
+    ("DropperTool", 0x00bafc90, 0x00c1c2c4, "Dropper"), ("NullTool", 0x00b8e450, 0x00c639ac, "NullTool"),
+    ("GameTool", 0x00bb014c, 0x00c7238c, "GameTool"), ("GrabTool", 0x00baff74, 0x00c721b4, "Grab"),
+    ("CloneTool", 0x00bb0048, 0x00c72288, "Clone"), ("HammerTool", 0x00bafe7c, 0x00c720bc, "Hammer"),
+]
+for tool, pa, sa, s in TTOOL_NAMES:
+    FACTS.append((pa, sa, "data4", f"?s{tool}@RBX@@3QBDB", "str:",
+                  f"const char* const RBX::s{tool} = \"{s}\" (our tool/*.cpp) | points to the string \"{s}\"; read by "
+                  f"Name::doDeclare<&s{tool}> (app-21)"))
 
 # wave18 sync (integrate.md: the Lua::*Bridge::classLibrary data rows pair the wrong arrays): each 2013
 # Bridge<T>::registerClassLibrary body is `mov eax,[className]; push esi; mov esi,[esp+8]; push classLibrary; ...`,

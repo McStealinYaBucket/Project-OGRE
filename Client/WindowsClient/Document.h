@@ -29,11 +29,19 @@ namespace RBX {
 	class ScreenshotVerb;
 	class ToggleFullscreenVerb;
 
+	// SIZE 0x28 (PLAYER 0x00406600: operator new(0x28), ten zeroed dwords, stored in the Application at +0x24)
 	class Document
 	{
 	public:
 		~Document();     // PLAYER 0x0041d020 (LTCG: `this` pushed, ret 4)
 		void Shutdown(); // PLAYER 0x0041d270 (Application::Shutdown calls it before deleting the document)
+
+	private:
+		// Deletes the four verbs (+0xc, +0x10, +0x18, +0x14 in that order). Callers: PrepareShutdown
+		// (0x0041d249) and Shutdown, under the DataModel lock. LTCG: `this` in esi.
+		void FUN_0041df60(); // PLAYER 0x0041df60
+
+	public:
 
 		boost::scoped_ptr<View> m_unk0x00;                    // 0x00
 		boost::shared_ptr<Game> game;                         // 0x04
