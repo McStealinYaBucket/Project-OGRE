@@ -296,8 +296,11 @@ set(OGRE_CLIENT_COMMON_SOURCES Client/ClientBase/RenderSettingsItem.cpp Client/C
 ogre_library(player_client SOURCES Client/WindowsClient/GameVerbs.cpp
     Client/WindowsClient/View.cpp Client/WindowsClient/main.cpp Client/WindowsClient/Application.cpp
     Client/WindowsClient/FunctionMarshaller.cpp Client/WindowsClient/UserInput.cpp
-    Client/WindowsClient/Teleporter.cpp ${OGRE_CLIENT_COMMON_SOURCES}
+    Client/WindowsClient/Teleporter.cpp Client/WindowsClient/Document.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     FLAGS ${OGRE_WINDOWSCLIENT_FLAGS})
+# Stand-in (rbx/atomic.h): the /GL shell keeps rbx::atomic<int>() out of line (0x004022d0) only when
+# every shell TU sees it noinline (Application ctor 0x00403000 50.5% -> 96.7%, 0x0040eb40 -> 100%).
+target_compile_definitions(player_client PRIVATE OGRE_ATOMIC_CTOR_NOINLINE)
 ogre_library(studio_client SOURCES Client/RobloxStudio/placeholder.cpp ${OGRE_CLIENT_COMMON_SOURCES}
     Client/ClientShared/placeholder.cpp FLAGS ${OGRE_STUDIO_FLAGS})
 
