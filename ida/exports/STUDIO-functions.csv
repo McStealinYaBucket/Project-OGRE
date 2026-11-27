@@ -191,7 +191,7 @@ address,size,flags,name
 0x00408430,46,0x5400,sub_408430
 0x00408460,424,0x5400,?_Insert_n@?$vector@PBVItem@EnumDescriptor@Reflection@RBX@@V?$allocator@PBVItem@EnumDescriptor@Reflection@RBX@@@std@@@std@@IAEXV?$_Vector_const_iterator@PBVItem@EnumDescriptor@Reflection@RBX@@V?$allocator@PBVItem@EnumDescriptor@Reflection@RBX@@@std@@@2@IABQBVItem@EnumDescriptor@Reflection@RBX@@@Z
 0x00408610,164,0x5400,?resize@?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@QAEXIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z
-0x004086c0,116,0x5000,sub_4086C0
+0x004086c0,116,0x5400,sub_4086C0
 0x00408740,188,0x5c10,?erase@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@W4AASamples@CRenderSettings@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@W4AASamples@CRenderSettings@2@@std@@@6@$0A@@std@@@std@@QAE?AViterator@12@Vconst_iterator@12@0@Z
 0x00408800,90,0x5400,?find@?$_Tree@V?$_Tmap_traits@PBVName@RBX@@W4AntialiasingMode@CRenderSettings@2@U?$less@PBVName@RBX@@@std@@V?$allocator@U?$pair@QBVName@RBX@@W4AntialiasingMode@CRenderSettings@2@@std@@@6@$0A@@std@@@std@@QBE?AVconst_iterator@12@ABQBVName@RBX@@@Z
 0x00408860,99,0x5400,sub_408860
@@ -787,7 +787,7 @@ address,size,flags,name
 0x0041e900,25,0x5400,sub_41E900
 0x0041e920,71,0x5400,sub_41E920
 0x0041e970,95,0x5400,?AddBackslash@?$CPathT@V?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@@ATL@@QAEXXZ
-0x0041e9d0,22,0x5400,sub_41E9D0
+0x0041e9d0,22,0x5400,??0?$list@U_WIN32_FIND_DATAA@@V?$allocator@U_WIN32_FIND_DATAA@@@std@@@std@@QAE@XZ
 0x0041e9f0,10,0x5400,??1?$list@U_WIN32_FIND_DATAA@@V?$allocator@U_WIN32_FIND_DATAA@@@std@@@std@@QAE@XZ
 0x0041ea00,169,0x5400,??1?$thread_specific_ptr@VThreadLogManager@@@boost@@QAE@XZ
 0x0041eab0,73,0x5400,?reset@?$thread_specific_ptr@VThreadLogManager@@@boost@@QAEXPAVThreadLogManager@@@Z
@@ -1246,7 +1246,7 @@ address,size,flags,name
 0x00432210,136,0x5400,_ZN3RBX10Reflection9DescribedINS_7GuiItemELZNS_8sGuiItemEENS_17NonFactoryProductINS_8InstanceELZNS_8sGuiItemEEEELNS0_15ClassDescriptor13FunctionalityE27ELNS_8Security11PermissionsE0EE15classDescriptorEv
 0x004322a0,172,0x5400,_ZN5boost26intrusive_ptr_add_weak_refIN3rbx7signals10connection5islotEiLi0ELi0EEEvPKNS1_20intrusive_ptr_targetIT_T0_XT1_EXT2_EEE
 0x00432350,81,0x5400,??0?$atomic@H@rbx@@QAE@XZ
-0x004323b0,124,0x5400,sub_4323B0
+0x004323b0,124,0x5400,??2?$intrusive_ptr_target@Vislot@connection@signals@rbx@@H$0A@$0A@@rbx@@SAPAXI@Z
 0x00432430,5,0x5480,??$callDoDeclare@$E?sCoreGuiService@RBX@@3QBDB@Name@RBX@@SAXXZ
 0x00432440,114,0x5400,sub_432440
 0x004324c0,5,0x5480,??$callDoDeclare@$E?sRunService@RBX@@3QBDB@Name@RBX@@SAXXZ
@@ -1512,7 +1512,7 @@ address,size,flags,name
 0x0043b580,151,0x5400,?safe_static_do_get_mutex@?$signal@$$A6AXPBVPropertyDescriptor@Reflection@RBX@@@Z@signals@rbx@@CAPAVmutex@boost@@XZ
 0x0043b620,5,0x54c0,?safe_static_init_mutex@?$signal@$$A6AXPBVPropertyDescriptor@Reflection@RBX@@@Z@signals@rbx@@CAXXZ
 0x0043b630,97,0x5400,sub_43B630
-0x0043b6a0,116,0x5000,??0?$Described@VCRenderSettingsItem@@$E?sRenderSettings@@3QBDBV?$FactoryProduct@VCRenderSettingsItem@@VItem@GlobalAdvancedSettings@RBX@@$E?sRenderSettings@@3QBDBVInstance@4@@RBX@@$0BL@$0A@@Reflection@RBX@@QAE@XZ
+0x0043b6a0,116,0x5400,??0?$Described@VCRenderSettingsItem@@$E?sRenderSettings@@3QBDBV?$FactoryProduct@VCRenderSettingsItem@@VItem@GlobalAdvancedSettings@RBX@@$E?sRenderSettings@@3QBDBVInstance@4@@RBX@@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 0x0043b720,598,0x5410,sub_43B720
 0x0043b980,645,0x5410,sub_43B980
 0x0043bc10,99,0x5400,?doGetSingleton@?$Singleton@$$CBV?$EnumDesc@W4AASamples@CRenderSettings@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAABV?$EnumDesc@W4AASamples@CRenderSettings@RBX@@@23@XZ
@@ -2143,7 +2143,7 @@ address,size,flags,name
 0x00468f70,75,0x5c10,sub_468F70
 0x00468fc0,492,0x5400,sub_468FC0
 0x004691b0,31,0x5400,sub_4691B0
-0x004691d0,252,0x5000,sub_4691D0
+0x004691d0,252,0x5400,sub_4691D0
 0x004692d0,43,0x5400,sub_4692D0
 0x00469300,16,0x1400,sub_469300
 0x00469310,163,0x5c10,sub_469310
@@ -2508,7 +2508,7 @@ address,size,flags,name
 0x00476b90,112,0x5400,?getClassName@Creator@?$FactoryProduct@VTool@RBX@@VBackpackItem@2@$E?sTool@2@3QBDBVInstance@2@@RBX@@QBEABVName@3@XZ
 0x00476c00,112,0x5400,?getClassName@Creator@?$FactoryProduct@VModelInstance@RBX@@VPVInstance@2@$E?sModel@2@3QBDBVInstance@2@@RBX@@QBEABVName@3@XZ
 0x00476c70,112,0x5400,sub_476C70
-0x00476ce0,112,0x5400,sub_476CE0
+0x00476ce0,112,0x5400,?getClassName@Creator@?$FactoryProduct@VHumanoid@RBX@@VInstance@2@$E?sHumanoid@2@3QBDBV32@@RBX@@QBEABVName@3@XZ
 0x00476d50,112,0x5400,sub_476D50
 0x00476dc0,112,0x5400,sub_476DC0
 0x00476e30,112,0x5400,sub_476E30
@@ -2706,7 +2706,7 @@ address,size,flags,name
 0x0047ef80,114,0x5400,sub_47EF80
 0x0047f000,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_15sStatusInstanceEEEERKS0_v
 0x0047f010,114,0x5400,_ZN3RBX4Name9doDeclareILZNS_15sStatusInstanceEEEERKS0_v
-0x0047f090,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_9sHumanoidEEEERKS0_v
+0x0047f090,5,0x54c0,??$callDoDeclare@$E?sHumanoid@RBX@@3QBDB@Name@RBX@@SAXXZ
 0x0047f0a0,114,0x5400,_ZN3RBX4Name9doDeclareILZNS_9sHumanoidEEEERKS0_v
 0x0047f120,5,0x54c0,j__ZN3RBX4Name9doDeclareILZNS_19sHumanoidControllerEEEERKS0_v
 0x0047f130,114,0x5400,_ZN3RBX4Name9doDeclareILZNS_19sHumanoidControllerEEEERKS0_v
@@ -3037,7 +3037,7 @@ address,size,flags,name
 0x0048b4e0,53,0x5400,sub_48B4E0
 0x0048b520,26,0x5400,sub_48B520
 0x0048b540,52,0x5400,sub_48B540
-0x0048b580,183,0x5400,sub_48B580
+0x0048b580,183,0x5400,?removeBlocking@TaskScheduler@RBX@@QAEXV?$shared_ptr@VJob@TaskScheduler@RBX@@@boost@@@Z
 0x0048b640,10,0x5400,sub_48B640
 0x0048b650,304,0x5400,sub_48B650
 0x0048b780,31,0x5400,sub_48B780
@@ -4249,7 +4249,7 @@ address,size,flags,name
 0x004d5270,8,0x5400,sub_4D5270
 0x004d5280,8,0x5400,sub_4D5280
 0x004d5290,31,0x5400,sub_4D5290
-0x004d52b0,237,0x5000,sub_4D52B0
+0x004d52b0,237,0x5400,sub_4D52B0
 0x004d53a0,24,0x5400,sub_4D53A0
 0x004d53c0,24,0x5400,sub_4D53C0
 0x004d53e0,163,0x5400,sub_4D53E0
@@ -4257,9 +4257,9 @@ address,size,flags,name
 0x004d54d0,107,0x5c10,sub_4D54D0
 0x004d5540,35,0x5400,sub_4D5540
 0x004d5570,82,0x5400,sub_4D5570
-0x004d55d0,395,0x5000,sub_4D55D0
+0x004d55d0,395,0x5400,sub_4D55D0
 0x004d5760,12,0x5400,sub_4D5760
-0x004d5770,34,0x5400,sub_4D5770
+0x004d5770,34,0x5400,?getOverlayDataModel@Game@RBX@@QBE?AV?$shared_ptr@VOverlayDataModel@RBX@@@boost@@XZ
 0x004d57a0,43,0x5400,sub_4D57A0
 0x004d57d0,49,0x5400,sub_4D57D0
 0x004d5810,4,0x5400,sub_4D5810
@@ -4931,7 +4931,7 @@ address,size,flags,name
 0x004f9ad0,98,0x5400,sub_4F9AD0
 0x004f9b40,98,0x5400,sub_4F9B40
 0x004f9bb0,98,0x5400,sub_4F9BB0
-0x004f9c20,358,0x5c10,sub_4F9C20
+0x004f9c20,358,0x5c10,??$create@VControllerService@RBX@@@ServiceProvider@RBX@@QBEPAVControllerService@1@XZ
 0x004f9d90,358,0x5c10,sub_4F9D90
 0x004f9f00,334,0x5c10,sub_4F9F00
 0x004fa050,92,0x5400,sub_4FA050
@@ -7303,7 +7303,7 @@ address,size,flags,name
 0x00542160,164,0x1400,_ZN4Ogre15RbxSceneManager10clearSceneEv
 0x00542210,1370,0x5400,_ZN4Ogre15RbxSceneManager12_renderSceneEPNS_6CameraEPNS_8ViewportEb
 0x00542770,169,0x5400,sub_542770
-0x00542820,400,0x5000,_ZN4Ogre15RbxSceneManagerD2Ev
+0x00542820,400,0x5400,_ZN4Ogre15RbxSceneManagerD2Ev
 0x005429b0,116,0x5400,sub_5429B0
 0x00542a30,31,0x5400,_ZN4Ogre15RbxSceneManagerD0Ev
 0x00542a50,309,0x5400,sub_542A50
@@ -9234,7 +9234,7 @@ address,size,flags,name
 0x005d45f0,519,0x5400,sub_5D45F0
 0x005d4800,2217,0x5400,_ZN3RBX7Network7Players13OnReceiveChatEPNS0_6PlayerEPN6RakNet16RakPeerInterfaceEPNS4_6PacketEh
 0x005d50b0,34,0x5400,?findConstLocalCharacter@Players@Network@RBX@@SAPBVInstance@3@PBV43@@Z
-0x005d50e0,191,0x5400,sub_5D50E0
+0x005d50e0,191,0x5400,?killPlayer@Players@Network@RBX@@QAEXH@Z
 0x005d51a0,305,0x5400,sub_5D51A0
 0x005d52e0,354,0x5400,sub_5D52E0
 0x005d5450,178,0x5400,sub_5D5450
@@ -10036,7 +10036,7 @@ address,size,flags,name
 0x005f0870,261,0x5400,_ZN3RBX7Network6Player31doFirstSpawnLocationCalculationEPKNS_15ServiceProviderERKSs
 0x005f0980,80,0x5400,_ZNK3RBX7Network6Player15verifySetParentEPKNS_8InstanceE
 0x005f09d0,103,0x5000,??0?$Described@VPlayer@Network@RBX@@$E?sPlayer@23@3QBDBV?$FactoryProduct@VPlayer@Network@RBX@@VInstance@3@$E?sPlayer@23@3QBDBV43@@3@$0BD@$0A@@Reflection@RBX@@QAE@XZ
-0x005f0a40,103,0x5000,??0?$Described@VStringValue@RBX@@$E?sStringValue@2@3QBDBV?$FactoryProduct@VStringValue@RBX@@VInstance@2@$E?sStringValue@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
+0x005f0a40,103,0x5400,??0?$Described@VStringValue@RBX@@$E?sStringValue@2@3QBDBV?$FactoryProduct@VStringValue@RBX@@VInstance@2@$E?sStringValue@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 0x005f0ab0,103,0x5000,??0?$Described@VObjectValue@RBX@@$E?sObjectValue@2@3QBDBV?$FactoryProduct@VObjectValue@RBX@@VInstance@2@$E?sObjectValue@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 0x005f0b20,179,0x5400,sub_5F0B20
 0x005f0be0,179,0x5400,sub_5F0BE0
@@ -10675,7 +10675,7 @@ address,size,flags,name
 0x0060c820,369,0x5400,sub_60C820
 0x0060c9a0,517,0x5400,sub_60C9A0
 0x0060cbb0,1232,0x5410,_ZN3RBX7Network6Client9OnReceiveEPN6RakNet6PacketE
-0x0060d0a0,108,0x5000,??0?$Described@VClient@Network@RBX@@$E?sClient@23@3QBDBV?$FactoryProduct@VClient@Network@RBX@@VPeer@23@$E?sClient@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@QAE@XZ
+0x0060d0a0,108,0x5400,??0?$Described@VClient@Network@RBX@@$E?sClient@23@3QBDBV?$FactoryProduct@VClient@Network@RBX@@VPeer@23@$E?sClient@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@QAE@XZ
 0x0060d110,179,0x5400,sub_60D110
 0x0060d1d0,61,0x5400,sub_60D1D0
 0x0060d210,61,0x5400,?connect@?$EventDescBase@VStringValue@RBX@@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@ZV?$signal@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@rbx@@PQ12@V56@@Reflection@RBX@@QBE?AVconnection@signals@rbx@@PAVDescribedBase@23@ABV?$function@$$A6AXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z@boost@@@Z
@@ -10844,7 +10844,7 @@ address,size,flags,name
 0x00613650,53,0x5400,sub_613650
 0x00613690,69,0x5400,_ZNK3RBX7Network6Server11askAddChildEPKNS_8InstanceE
 0x006136e0,103,0x5400,??0?$bimap@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@JUna@mpl@boost@@U345@U345@@bimaps@boost@@QAE@ABV?$allocator@V?$mutant_relation@U?$tagged@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@Uleft@member_at@relation@bimaps@boost@@@tags@bimaps@boost@@U?$tagged@$$CBJUright@member_at@relation@bimaps@boost@@@234@Una@mpl@4@$00@relation@bimaps@boost@@@std@@@Z
-0x00613750,108,0x5000,??0?$Described@VServer@Network@RBX@@$E?sServer@23@3QBDBV?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@QAE@XZ
+0x00613750,108,0x5400,??0?$Described@VServer@Network@RBX@@$E?sServer@23@3QBDBV?$FactoryProduct@VServer@Network@RBX@@VPeer@23@$E?sServer@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@QAE@XZ
 0x006137c0,179,0x5400,sub_6137C0
 0x00613880,303,0x5400,sub_613880
 0x006139b0,43,0x5400,sub_6139B0
@@ -11209,10 +11209,10 @@ address,size,flags,name
 0x00620720,328,0x5400,sub_620720
 0x00620870,377,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJobC2EN5boost10shared_ptrIN6RakNet16RakPeerInterfaceEEEPNS_9DataModelE
 0x006209f0,48,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJob9sleepTimeERKNS_13TaskScheduler3Job5StatsE
-0x00620a20,104,0x5400,sub_620A20
+0x00620a20,104,0x5400,?pop_front@?$deque@U?$timestamped_safe_queue_item@USendData@PacketJob@ConcurrentRakPeer@Network@RBX@@@implementation@rbx@@V?$allocator@U?$timestamped_safe_queue_item@USendData@PacketJob@ConcurrentRakPeer@Network@RBX@@@implementation@rbx@@@std@@@std@@QAEXXZ
 0x00620a90,207,0x5400,_ZN3rbx22timestamped_safe_queueIN3RBX7Network17ConcurrentRakPeer9PacketJob8SendDataEE13head_waittimeEv
 0x00620b60,176,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJob5errorERKNS_13TaskScheduler3Job5StatsE
-0x00620c10,233,0x5400,sub_620C10
+0x00620c10,233,0x5400,?pop_if_present@?$timestamped_safe_queue@USendData@PacketJob@ConcurrentRakPeer@Network@RBX@@@rbx@@QAE_NAAUSendData@PacketJob@ConcurrentRakPeer@Network@RBX@@@Z
 0x00620d00,529,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJob16stepDataModelJobERKNS_13TaskScheduler3Job5StatsE
 0x00620f20,134,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJobD2Ev
 0x00620fb0,30,0x5400,_ZN3RBX7Network17ConcurrentRakPeer9PacketJobD0Ev
@@ -11223,7 +11223,7 @@ address,size,flags,name
 0x00621400,34,0x5400,_ZN3RBX7Network17ConcurrentRakPeer14StatsUpdateJob5errorERKNS_13TaskScheduler3Job5StatsE
 0x00621430,112,0x5400,sub_621430
 0x006214a0,521,0x5400,_ZN3RBX7Network17ConcurrentRakPeer14StatsUpdateJob16stepDataModelJobERKNS_13TaskScheduler3Job5StatsE
-0x006216b0,299,0x5000,_ZN3RBX7Network17ConcurrentRakPeer14StatsUpdateJobD2Ev
+0x006216b0,299,0x5400,_ZN3RBX7Network17ConcurrentRakPeer14StatsUpdateJobD2Ev
 0x006217e0,492,0x5000,_ZN3RBX7Network17ConcurrentRakPeer8addStatsEN6RakNet13SystemAddressEN5boost8functionIFvRKNS0_22ConcurrentRakPeerStatsEEEE
 0x006219d0,388,0x5400,_ZN3RBX7Network17ConcurrentRakPeerC2EPN6RakNet16RakPeerInterfaceEPNS_9DataModelE
 0x00621b60,106,0x5400,sub_621B60
@@ -11809,8 +11809,8 @@ address,size,flags,name
 0x00637110,253,0x5400,??$find@VMarketplaceService@RBX@@@ServiceProvider@RBX@@QBEPAVMarketplaceService@1@XZ
 0x00637210,253,0x5400,sub_637210
 0x00637310,253,0x5400,sub_637310
-0x00637410,188,0x5400,sub_637410
-0x006374d0,261,0x5000,sub_6374D0
+0x00637410,188,0x5400,??$assign_to@V?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@AAEXV?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@@Z
+0x006374d0,261,0x5400,sub_6374D0
 0x006375e0,236,0x5400,sub_6375E0
 0x006376d0,205,0x5400,sub_6376D0
 0x006377a0,194,0x5400,sub_6377A0
@@ -11877,7 +11877,7 @@ address,size,flags,name
 0x0063b690,316,0x5400,??$create@VMarketplaceService@RBX@@@ServiceProvider@RBX@@QBEPAVMarketplaceService@1@XZ
 0x0063b7d0,316,0x5400,sub_63B7D0
 0x0063b910,316,0x5400,sub_63B910
-0x0063ba50,175,0x5400,sub_63BA50
+0x0063ba50,175,0x5400,??$?0V?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@QAE@V?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
 0x0063bb00,59,0x5400,sub_63BB00
 0x0063bb40,43,0x5400,sub_63BB40
 0x0063bb70,120,0x5400,sub_63BB70
@@ -11905,7 +11905,7 @@ address,size,flags,name
 0x0063d5b0,137,0x5400,?push_back@?$vector@VVariant@Reflection@RBX@@V?$allocator@VVariant@Reflection@RBX@@@std@@@std@@QAEXABVVariant@Reflection@RBX@@@Z
 0x0063d640,43,0x5400,sub_63D640
 0x0063d670,97,0x5400,sub_63D670
-0x0063d6e0,171,0x5400,sub_63D6E0
+0x0063d6e0,171,0x5400,??$?0V?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@boost@@@?$function@$$A6AXPAVDataModel@RBX@@@Z@boost@@QAE@V?$bind_t@XP6AXV?$shared_ptr@VInstance@RBX@@@boost@@@ZV?$list1@V?$value@V?$shared_ptr@VReplicator@Network@RBX@@@boost@@@_bi@boost@@@_bi@2@@_bi@1@H@Z
 0x0063d790,124,0x5400,_ZN3RBX10Reflection9DescribedINS_18MarketplaceServiceELZNS_19sMarketplaceServiceEENS_14FactoryProductIS2_NS_8InstanceELZNS_19sMarketplaceServiceEES4_EELNS0_15ClassDescriptor13FunctionalityE19ELNS_8Security11PermissionsE0EE15classDescriptorEv
 0x0063d810,124,0x5400,_ZN3RBX10Reflection9DescribedINS_12BadgeServiceELZNS_13sBadgeServiceEENS_14FactoryProductIS2_NS_8InstanceELZNS_13sBadgeServiceEES4_EELNS0_15ClassDescriptor13FunctionalityE27ELNS_8Security11PermissionsE0EE15classDescriptorEv
 0x0063d890,124,0x5400,_ZN3RBX10Reflection9DescribedINS_11TestServiceELZNS_12sTestServiceEENS_14FactoryProductIS2_NS_8InstanceELZNS_12sTestServiceEES4_EELNS0_15ClassDescriptor13FunctionalityE27ELNS_8Security11PermissionsE0EE15classDescriptorEv
@@ -11926,7 +11926,7 @@ address,size,flags,name
 0x0063e520,5,0x5480,sub_63E520
 0x0063e530,92,0x5400,sub_63E530
 0x0063e590,380,0x5400,_ZN3RBX7Network10Replicator10getDefaultERKNS_4NameE
-0x0063e710,141,0x5400,sub_63E710
+0x0063e710,141,0x5400,?requestDisconnect@Replicator@Network@RBX@@QAEXXZ
 0x0063e7a0,27,0x5400,sub_63E7A0
 0x0063e7c0,63,0x5400,sub_63E7C0
 0x0063e800,86,0x5400,sub_63E800
@@ -12199,7 +12199,7 @@ address,size,flags,name
 0x0064f510,184,0x5400,sub_64F510
 0x0064f5d0,322,0x5400,sub_64F5D0
 0x0064f720,97,0x5400,sub_64F720
-0x0064f790,379,0x5000,_ZN3RBX7Network16ClientReplicator16MemoryCheckerJobC2EN5boost10shared_ptrIS1_EE
+0x0064f790,379,0x5400,_ZN3RBX7Network16ClientReplicator16MemoryCheckerJobC2EN5boost10shared_ptrIS1_EE
 0x0064f910,34,0x5400,_ZN3RBX7Network16ClientReplicator16MemoryCheckerJob9sleepTimeERKNS_13TaskScheduler3Job5StatsE
 0x0064f940,34,0x5400,_ZN3RBX7Network16ClientReplicator16MemoryCheckerJob5errorERKNS_13TaskScheduler3Job5StatsE
 0x0064f970,145,0x5400,sub_64F970
@@ -12215,7 +12215,7 @@ address,size,flags,name
 0x00650210,186,0x5000,sub_650210
 0x006502d0,490,0x5800,sub_6502D0
 0x006504c0,141,0x5400,sub_6504C0
-0x00650550,534,0x5044,??1strstreambuf@std@@UAE@XZ_8
+0x00650550,534,0x5444,??1strstreambuf@std@@UAE@XZ_8
 0x00650770,11,0x5400,sub_650770
 0x00650780,8,0x5400,sub_650780
 0x00650790,11,0x5400,sub_650790
@@ -12271,7 +12271,7 @@ address,size,flags,name
 0x00653e00,305,0x5400,sub_653E00
 0x00653f40,183,0x5400,_ZN3RBX7Network16ClientReplicator15createStatsItemEv
 0x00654000,7,0x5400,sub_654000
-0x00654010,29,0x5400,sub_654010
+0x00654010,29,0x5400,?canUseProtocolVersion@ServerReplicator@Network@RBX@@MBE_NH@Z
 0x00654030,5,0x54c0,j__ZN3RBX7Network10ReplicatorD2Ev
 0x00654040,8,0x5400,sub_654040
 0x00654050,17,0x5400,_ZN3RBX7Network16ServerReplicator14receiveClusterERN6RakNet9BitStreamEPNS_8InstanceE
@@ -12358,7 +12358,7 @@ address,size,flags,name
 0x006580a0,125,0x5400,sub_6580A0
 0x00658120,143,0x5400,sub_658120
 0x006581b0,5,0x5480,sub_6581B0
-0x006581c0,457,0x5000,sub_6581C0
+0x006581c0,457,0x5400,sub_6581C0
 0x00658390,11,0x5400,sub_658390
 0x006583a0,8,0x5400,sub_6583A0
 0x006583b0,11,0x5400,sub_6583B0
@@ -14531,7 +14531,7 @@ address,size,flags,name
 0x006a4a70,238,0x5400,sub_6A4A70
 0x006a4b60,5,0x5480,sub_6A4B60
 0x006a4b70,156,0x5400,sub_6A4B70
-0x006a4c10,339,0x5000,_ZN3RBX12SceneUpdater18updateDynamicPartsEv
+0x006a4c10,339,0x5400,_ZN3RBX12SceneUpdater18updateDynamicPartsEv
 0x006a4d70,283,0x5000,_ZN3RBX12SceneUpdater25updateDynamicAttachementsEv
 0x006a4e90,166,0x5400,sub_6A4E90
 0x006a4f40,199,0x5400,sub_6A4F40
@@ -15797,7 +15797,7 @@ address,size,flags,name
 0x006e65e0,139,0x5400,_ZNK3RBX9Scripting18DebuggerBreakpoint15verifySetParentEPKNS_8InstanceE
 0x006e6670,139,0x5400,_ZNK3RBX9Scripting13DebuggerWatch15verifySetParentEPKNS_8InstanceE
 0x006e6700,103,0x5400,sub_6E6700
-0x006e6770,103,0x5000,sub_6E6770
+0x006e6770,103,0x5400,sub_6E6770
 0x006e67e0,179,0x5400,sub_6E67E0
 0x006e68a0,179,0x5400,sub_6E68A0
 0x006e6960,100,0x5400,??$?0PAV?$signal@$$A6AXH@Z@signals@rbx@@@?$callable@Vslot@?$signal@$$A6AXH@Z@signals@rbx@@V?$function@$$A6AXH@Z@boost@@$00$$A6AXH@Z@rbx@@QAE@ABV?$function@$$A6AXH@Z@boost@@PAV?$signal@$$A6AXH@Z@signals@1@@Z
@@ -16056,7 +16056,7 @@ address,size,flags,name
 0x006f1e70,167,0x5000,sub_6F1E70
 0x006f1f20,5,0x54c0,j_??1?$signal@$$A6AXW4CombinedSignalType@Instance@RBX@@PBVICombinedSignalData@23@@Z@signals@rbx@@QAE@XZ
 0x006f1f30,5,0x54c0,j_??1?$signal@$$A6AXV?$shared_ptr@VInstance@RBX@@@boost@@0@Z@signals@rbx@@QAE@XZ
-0x006f1f40,440,0x5000,_ZN3RBX8InstanceD2Ev
+0x006f1f40,440,0x5400,_ZN3RBX8InstanceD2Ev
 0x006f2100,166,0x5400,_ZN3RBX8Instance7setNameERKSs
 0x006f21b0,48,0x5400,_ZN3RBX8Instance15setRobloxLockedEb
 0x006f21e0,48,0x5400,_ZN3RBX8Instance15setIsArchivableEb
@@ -16282,7 +16282,7 @@ address,size,flags,name
 0x006fc770,311,0x5400,sub_6FC770
 0x006fc8b0,1600,0x5400,sub_6FC8B0
 0x006fcef0,443,0x5400,_ZN3RBX6Camera16setCameraSubjectEPNS_8InstanceE
-0x006fd0b0,103,0x5000,sub_6FD0B0
+0x006fd0b0,103,0x5400,sub_6FD0B0
 0x006fd120,179,0x5400,sub_6FD120
 0x006fd1e0,100,0x5400,sub_6FD1E0
 0x006fd250,8,0x5400,sub_6FD250
@@ -19160,7 +19160,7 @@ address,size,flags,name
 0x0076a110,288,0x5400,??$getArg@W4GearType@DataModel@RBX@@$00@ArgHelper@Reflection@RBX@@SA?AW4GearType@DataModel@2@AAVArguments@FunctionDescriptor@12@ABV?$scoped_ptr@W4GearType@DataModel@RBX@@@boost@@PAX@Z
 0x0076a240,119,0x5400,_ZN3RBX9CreatableINS_8InstanceEE6createINS_14PhysicsServiceEEEN5boost10shared_ptrIT_EEv
 0x0076a2c0,116,0x5400,sub_76A2C0
-0x0076a340,1436,0x5000,_ZN3RBX9DataModelD2Ev
+0x0076a340,1436,0x5400,_ZN3RBX9DataModelD2Ev
 0x0076a8e0,13,0x5400,?setDirty@DataModel@RBX@@UAEX_N@Z
 0x0076a8f0,7,0x5400,?isDirty@DataModel@RBX@@UBE_NXZ
 0x0076a900,11,0x5400,??_EDataModel@RBX@@WKI@AEPAXI@Z
@@ -19760,7 +19760,7 @@ address,size,flags,name
 0x00781af0,179,0x5444,sub_781AF0
 0x00781bb0,46,0x5400,sub_781BB0
 0x00781be0,150,0x5400,sub_781BE0
-0x00781c80,119,0x5400,sub_781C80
+0x00781c80,119,0x5400,??1CameraVerb@RBX@@UAE@XZ
 0x00781d00,230,0x5400,sub_781D00
 0x00781df0,237,0x5400,sub_781DF0
 0x00781ee0,129,0x5400,sub_781EE0
@@ -20265,7 +20265,7 @@ address,size,flags,name
 0x007983f0,288,0x5400,sub_7983F0
 0x00798520,94,0x5400,sub_798520
 0x00798580,79,0x5400,sub_798580
-0x007985d0,115,0x5000,??0?$Described@VPlayerGui@RBX@@$E?sPlayerGui@2@3QBDBV?$FactoryProduct@VPlayerGui@RBX@@VBasePlayerGui@2@$E?sPlayerGui@2@3QBDBVInstance@2@@2@$04$0A@@Reflection@RBX@@QAE@XZ
+0x007985d0,115,0x5400,??0?$Described@VPlayerGui@RBX@@$E?sPlayerGui@2@3QBDBV?$FactoryProduct@VPlayerGui@RBX@@VBasePlayerGui@2@$E?sPlayerGui@2@3QBDBVInstance@2@@2@$04$0A@@Reflection@RBX@@QAE@XZ
 0x00798650,115,0x5400,??0?$Described@VStarterGuiService@RBX@@$E?sStarterGuiService@2@3QBDBV?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sStarterGuiService@2@3QBDB@2@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 0x007986d0,115,0x5400,??0?$Described@VCoreGuiService@RBX@@$E?sCoreGuiService@2@3QBDBV?$NonFactoryProduct@VBasePlayerGui@RBX@@$E?sCoreGuiService@2@3QBDB@2@$00$01@Reflection@RBX@@QAE@XZ
 0x00798750,150,0x5000,_ZN3RBX9PlayerGuiC2Ev
@@ -20275,7 +20275,7 @@ address,size,flags,name
 0x00798860,295,0x5000,??0StarterGuiService@RBX@@QAE@XZ
 0x00798990,8,0x5400,sub_798990
 0x007989a0,8,0x5400,sub_7989A0
-0x007989b0,142,0x5000,sub_7989B0
+0x007989b0,142,0x5400,sub_7989B0
 0x00798a40,30,0x5400,sub_798A40
 0x00798a60,214,0x5400,_ZN3RBX14CoreGuiServiceC2Ev
 0x00798b40,8,0x5400,sub_798B40
@@ -21370,7 +21370,7 @@ address,size,flags,name
 0x007be810,49,0x5400,sub_7BE810
 0x007be850,107,0x5400,??$?0M@XmlElement@@QAE@ABVName@RBX@@M@Z
 0x007be8c0,5,0x5480,sub_7BE8C0
-0x007be8d0,675,0x5000,_ZN3RBX12PartInstanceD2Ev
+0x007be8d0,675,0x5400,_ZN3RBX12PartInstanceD2Ev
 0x007beb80,11,0x5400,sub_7BEB80
 0x007beb90,8,0x5400,sub_7BEB90
 0x007beba0,8,0x5400,sub_7BEBA0
@@ -21652,7 +21652,7 @@ address,size,flags,name
 0x007cc120,103,0x5400,??0?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@boost@@QAE@V?$value@PAVGame@RBX@@@12@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@12@@Z
 0x007cc190,131,0x5410,sub_7CC190
 0x007cc220,26,0x5400,_ZN5boost6detail17sp_counted_impl_pIN3RBX15ProfanityFilterEE7disposeEv
-0x007cc240,10,0x5400,sub_7CC240
+0x007cc240,10,0x5400,?globalExit@Game@RBX@@SAXXZ
 0x007cc250,84,0x5440,??0?$signal@$$A6AXPAVDataModel@RBX@@@Z@signals@rbx@@QAE@XZ
 0x007cc2b0,68,0x5444,sub_7CC2B0
 0x007cc300,179,0x5000,??$bind@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAV12@V34@@boost@@YA?AV?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@0@P8Game@RBX@@AEXABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@ZPAV34@V56@@Z
@@ -21663,17 +21663,17 @@ address,size,flags,name
 0x007cc500,83,0x5400,sub_7CC500
 0x007cc560,21,0x5400,sub_7CC560
 0x007cc580,347,0x5400,sub_7CC580
-0x007cc6e0,131,0x5410,sub_7CC6E0
+0x007cc6e0,131,0x5410,??$?0VCommonVerbs@RBX@@@shared_count@detail@boost@@QAE@PAVCommonVerbs@RBX@@@Z
 0x007cc770,26,0x5400,_ZN5boost6detail17sp_counted_impl_pIN3RBX11CommonVerbsEE7disposeEv
 0x007cc790,190,0x5000,??$assign_to@V?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@boost@@@?$basic_vtable1@XPAVDataModel@RBX@@@function@detail@boost@@ABE_NV?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@3@AATfunction_buffer@123@Ufunction_obj_tag@123@@Z
 0x007cc850,356,0x5000,sub_7CC850
-0x007cc9c0,98,0x5400,sub_7CC9C0
+0x007cc9c0,98,0x5400,??$sp_pointer_construct@VCommonVerbs@RBX@@V12@@detail@boost@@YAXPAV?$shared_ptr@VCommonVerbs@RBX@@@1@PAVCommonVerbs@RBX@@AAVshared_count@01@@Z
 0x007cca30,137,0x5400,??$assign_to@V?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@boost@@@?$basic_vtable1@XPAVDataModel@RBX@@@function@detail@boost@@QBE_NV?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@3@AATfunction_buffer@123@@Z
-0x007ccac0,83,0x5400,sub_7CCAC0
+0x007ccac0,83,0x5400,??$?0VCommonVerbs@RBX@@@?$shared_ptr@VCommonVerbs@RBX@@@boost@@QAE@PAVCommonVerbs@RBX@@@Z
 0x007ccb20,58,0x5400,sub_7CCB20
 0x007ccb60,28,0x5400,?createInstance@?$FactoryProduct@VPhysicsSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sPhysicsSettings@2@3QBDBVInstance@2@@RBX@@SA?AV?$shared_ptr@VPhysicsSettings@RBX@@@boost@@XZ
 0x007ccb80,28,0x5400,?createInstance@?$FactoryProduct@VLuaSettings@RBX@@VItem@GlobalAdvancedSettings@2@$E?sLuaSettings@2@3QBDBVInstance@2@@RBX@@SA?AV?$shared_ptr@VLuaSettings@RBX@@@boost@@XZ
-0x007ccba0,101,0x5400,sub_7CCBA0
+0x007ccba0,101,0x5400,??$reset@VCommonVerbs@RBX@@@?$shared_ptr@VCommonVerbs@RBX@@@boost@@QAEXPAVCommonVerbs@RBX@@@Z
 0x007ccc10,140,0x5400,??$assign_to@V?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@boost@@@?$function1@XPAVDataModel@RBX@@@boost@@AAEXV?$bind_t@XV?$mf1@XVGame@RBX@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@_mfi@boost@@V?$list2@V?$value@PAVGame@RBX@@@_bi@boost@@V?$value@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@23@@_bi@3@@_bi@1@@Z
 0x007ccca0,174,0x5400,?doClearVerbs@Game@RBX@@IAEXXZ
 0x007ccd50,151,0x5400,?clearVerbs@Game@RBX@@QAEX_N@Z
@@ -21839,7 +21839,7 @@ address,size,flags,name
 0x007d4540,270,0x5400,_ZN3RBX10Reflection8EnumDescINS_11HttpService15HttpContentTypeEEC2Ev
 0x007d4650,94,0x5400,sub_7D4650
 0x007d46b0,348,0x5400,sub_7D46B0
-0x007d4810,103,0x5000,sub_7D4810
+0x007d4810,103,0x5400,sub_7D4810
 0x007d4880,179,0x5400,sub_7D4880
 0x007d4940,179,0x5400,sub_7D4940
 0x007d4a00,76,0x5400,sub_7D4A00
@@ -22421,7 +22421,7 @@ address,size,flags,name
 0x007f0340,101,0x5400,sub_7F0340
 0x007f03b0,164,0x5400,sub_7F03B0
 0x007f0460,25,0x5400,sub_7F0460
-0x007f0480,1105,0x5800,_ZN3RBX13ScriptContextC2Ev
+0x007f0480,1105,0x5c00,_ZN3RBX13ScriptContextC2Ev
 0x007f08e0,8,0x5400,sub_7F08E0
 0x007f08f0,8,0x5400,sub_7F08F0
 0x007f0900,1099,0x5400,_ZN3RBX13ScriptContextD2Ev
@@ -22965,14 +22965,14 @@ address,size,flags,name
 0x008066e0,89,0x5400,sub_8066E0
 0x00806740,62,0x5400,sub_806740
 0x00806780,97,0x5400,_ZN3RBX10Soundscape5SoundD2Ev
-0x008067f0,103,0x5000,??0?$Described@VSoundService@Soundscape@RBX@@$E?sSoundService@23@3QBDBV?$FactoryProduct@VSoundService@Soundscape@RBX@@VInstance@3@$E?sSoundService@23@3QBDBV43@@3@$0L@$0A@@Reflection@RBX@@QAE@XZ
+0x008067f0,103,0x5400,??0?$Described@VSoundService@Soundscape@RBX@@$E?sSoundService@23@3QBDBV?$FactoryProduct@VSoundService@Soundscape@RBX@@VInstance@3@$E?sSoundService@23@3QBDBV43@@3@$0L@$0A@@Reflection@RBX@@QAE@XZ
 0x00806860,179,0x5400,sub_806860
 0x00806920,90,0x5400,_ZN3RBX10Reflection9SingletonIKNS0_8EnumDescINS_10Soundscape10ReverbTypeEEEE14doGetSingletonEv
 0x00806980,5,0x54c0,?initSingleton@?$Singleton@$$CBV?$EnumDesc@W4ReverbType@Soundscape@RBX@@@Reflection@RBX@@@Reflection@RBX@@CAXXZ
 0x00806990,352,0x5400,sub_806990
 0x00806af0,123,0x5400,_ZN3RBX10Reflection9DescribedINS_10Soundscape12SoundChannelELZNS2_13sSoundChannelEENS_14FactoryProductIS3_NS_8InstanceELZNS2_13sSoundChannelEES5_EELNS0_15ClassDescriptor13FunctionalityE27ELNS_8Security11PermissionsE0EE15classDescriptorEv
 0x00806b70,153,0x5400,sub_806B70
-0x00806c10,103,0x5000,??0?$Described@VSoundChannel@Soundscape@RBX@@$E?sSoundChannel@23@3QBDBV?$FactoryProduct@VSoundChannel@Soundscape@RBX@@VInstance@3@$E?sSoundChannel@23@3QBDBV43@@3@$0BL@$0A@@Reflection@RBX@@QAE@XZ
+0x00806c10,103,0x5400,??0?$Described@VSoundChannel@Soundscape@RBX@@$E?sSoundChannel@23@3QBDBV?$FactoryProduct@VSoundChannel@Soundscape@RBX@@VInstance@3@$E?sSoundChannel@23@3QBDBV43@@3@$0BL@$0A@@Reflection@RBX@@QAE@XZ
 0x00806c80,123,0x5400,_ZN3RBX10Reflection9DescribedINS_10StockSoundELZNS_11sStockSoundEENS_14FactoryProductIS2_NS_10Soundscape12SoundChannelELZNS_11sStockSoundEENS_8InstanceEEELNS0_15ClassDescriptor13FunctionalityE17ELNS_8Security11PermissionsE0EE15classDescriptorEv
 0x00806d00,179,0x5400,sub_806D00
 0x00806dc0,278,0x5400,sub_806DC0
@@ -23324,7 +23324,7 @@ address,size,flags,name
 0x00815530,127,0x5400,sub_815530
 0x008155b0,30,0x5400,sub_8155B0
 0x008155d0,987,0x5400,_ZN3RBX19ButtonBindingWidget8render2dEPNS_5AdornE
-0x008159b0,262,0x5000,_ZN3RBX10ControllerC2Ev
+0x008159b0,262,0x5400,_ZN3RBX10ControllerC2Ev
 0x00815ac0,39,0x5400,sub_815AC0
 0x00815af0,470,0x5400,sub_815AF0
 0x00815cd0,381,0x5400,sub_815CD0
@@ -23599,7 +23599,7 @@ address,size,flags,name
 0x0081eeb0,308,0x5400,sub_81EEB0
 0x0081eff0,308,0x5400,sub_81EFF0
 0x0081f130,30,0x5400,_ZN3RBX8HumanoidD0Ev
-0x0081f150,103,0x5000,sub_81F150
+0x0081f150,103,0x5400,sub_81F150
 0x0081f1c0,179,0x5400,sub_81F1C0
 0x0081f280,141,0x5400,sub_81F280
 0x0081f310,47,0x5400,sub_81F310
@@ -23860,8 +23860,8 @@ address,size,flags,name
 0x00829eb0,173,0x5400,?lua_pushfunction@Lua@RBX@@YAXPAUlua_State@@V?$shared_ptr@V?$function@$$A6AXV?$shared_ptr@$$CBUTuple@Reflection@RBX@@@boost@@V?$function@$$A6AXPAVIAsyncResult@Lua@RBX@@@Z@2@@Z@boost@@@boost@@@Z
 0x00829f60,79,0x5400,sub_829F60
 0x00829fb0,49,0x5400,_ZN3RBX4Hash4hashERKSs
-0x00829ff0,218,0x5400,sub_829FF0
-0x0082a0d0,8,0x5400,sub_82A0D0
+0x00829ff0,218,0x5400,??0SleepingJob@RBX@@QAE@PBDW4TaskType@DataModelJob@1@_NV?$shared_ptr@VDataModelArbiter@RBX@@@boost@@VInterval@Time@1@N@Z
+0x0082a0d0,8,0x5400,?sleep@SleepingJob@RBX@@QAEXXZ
 0x0082a0e0,75,0x5400,_ZN3RBX11SleepingJob9sleepTimeERKNS_13TaskScheduler3Job5StatsE
 0x0082a130,216,0x5400,_ZN3RBX11SleepingJob5errorERKNS_13TaskScheduler3Job5StatsE
 0x0082a210,176,0x5400,?wake@SleepingJob@RBX@@QAEXXZ
@@ -24008,7 +24008,7 @@ address,size,flags,name
 0x0082e650,153,0x5400,sub_82E650
 0x0082e6f0,15,0x5400,sub_82E6F0
 0x0082e700,5,0x5480,sub_82E700
-0x0082e710,875,0x5000,_ZN3RBX9WorkspaceD2Ev
+0x0082e710,875,0x5400,_ZN3RBX9WorkspaceD2Ev
 0x0082ea80,7,0x5400,sub_82EA80
 0x0082ea90,11,0x5400,sub_82EA90
 0x0082eaa0,11,0x5400,sub_82EAA0
@@ -24831,12 +24831,12 @@ address,size,flags,name
 0x00855fc0,81,0x5400,?static_getCreator@?$FactoryProduct@VNotificationObject@RBX@@VFrame@2@$E?sNotificationObject@2@3QBDBVInstance@2@@RBX@@KAABVCreator@12@XZ
 0x00856020,12,0x5400,?getClassName@?$FactoryProduct@VNotificationObject@RBX@@VFrame@2@$E?sNotificationObject@2@3QBDBVInstance@2@@RBX@@UBEABVName@2@XZ
 0x00856030,71,0x5400,sub_856030
-0x00856080,115,0x5000,sub_856080
+0x00856080,115,0x5400,sub_856080
 0x00856100,46,0x5400,sub_856100
 0x00856130,360,0x5000,sub_856130
 0x008562a0,8,0x5400,sub_8562A0
 0x008562b0,8,0x5400,sub_8562B0
-0x008562c0,387,0x5000,sub_8562C0
+0x008562c0,387,0x5400,sub_8562C0
 0x00856450,30,0x5400,sub_856450
 0x00856470,7,0x5400,sub_856470
 0x00856480,42,0x5400,sub_856480
@@ -25856,7 +25856,7 @@ address,size,flags,name
 0x0088a400,5,0x54c0,j_??1?$signal@$$A6AXPAVJoint@RBX@@@Z@signals@rbx@@QAE@XZ
 0x0088a410,5,0x54c0,j_??1?$signal@$$A6AXU?$pair@PAVPrimitive@RBX@@PAV12@@std@@@Z@signals@rbx@@QAE@XZ
 0x0088a420,5,0x54c0,j_??1?$signal@$$A6AXPAVPrimitive@RBX@@@Z@signals@rbx@@QAE@XZ
-0x0088a430,808,0x5000,_ZN3RBX5WorldD2Ev
+0x0088a430,808,0x5400,_ZN3RBX5WorldD2Ev
 0x0088a760,688,0x5400,_ZN3RBX5World6uiStepEbd
 0x0088aa10,1288,0x5400,_ZN3RBX5World4stepEbdfi
 0x0088af20,443,0x5400,_ZN3RBX5World11insertJointEPNS_5JointE
@@ -26167,7 +26167,7 @@ address,size,flags,name
 0x00895c40,77,0x5400,?free@?$singleton_pool@VBody@RBX@@$0OM@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAXQAX@Z
 0x00895c90,87,0x5400,??2?$Allocator@VBody@RBX@@@RBX@@SAPAXI@Z
 0x00895cf0,24,0x5400,sub_895CF0
-0x00895d10,591,0x5000,_ZN3RBX9PrimitiveC2ENS_8Geometry12GeometryTypeE
+0x00895d10,591,0x5400,_ZN3RBX9PrimitiveC2ENS_8Geometry12GeometryTypeE
 0x00895f60,53,0x5400,sub_895F60
 0x00895fa0,259,0x5400,?sumDeltaAxis@Math@RBX@@YAMABVMatrix3@G3D@@0@Z
 0x008960b0,143,0x5400,?mulMatrixDiagVector@Math@RBX@@YAXABVMatrix3@G3D@@ABVVector3@4@AAV34@@Z
@@ -26799,7 +26799,7 @@ address,size,flags,name
 0x008b7a40,12,0x5400,?getClassName@?$FactoryProduct@VGuiTextButton@RBX@@VGuiButton@2@$E?sGuiTextButton@2@3QBDBVInstance@2@@RBX@@UBEABVName@2@XZ
 0x008b7a50,46,0x5400,sub_8B7A50
 0x008b7a80,71,0x5400,sub_8B7A80
-0x008b7ad0,122,0x5001,??$?0PBD@?$Described@VGuiTextButton@RBX@@$E?sGuiTextButton@2@3QBDBV?$FactoryProduct@VGuiTextButton@RBX@@VGuiButton@2@$E?sGuiTextButton@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
+0x008b7ad0,122,0x5401,??$?0PBD@?$Described@VGuiTextButton@RBX@@$E?sGuiTextButton@2@3QBDBV?$FactoryProduct@VGuiTextButton@RBX@@VGuiButton@2@$E?sGuiTextButton@2@3QBDBVInstance@2@@2@$0BL@$0A@@Reflection@RBX@@QAE@PBD@Z
 0x008b7b50,8,0x5400,sub_8B7B50
 0x008b7b60,8,0x5400,sub_8B7B60
 0x008b7b70,121,0x5400,sub_8B7B70
@@ -27382,7 +27382,7 @@ address,size,flags,name
 0x008d2370,283,0x5400,sub_8D2370
 0x008d2490,90,0x5400,sub_8D2490
 0x008d24f0,90,0x5400,sub_8D24F0
-0x008d2550,329,0x5000,??0ContactManager@RBX@@QAE@PAVWorld@1@@Z
+0x008d2550,329,0x5400,??0ContactManager@RBX@@QAE@PAVWorld@1@@Z
 0x008d26a0,90,0x5400,?malloc@?$singleton_pool@VBallBallContact@RBX@@$0DA@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAPAXXZ
 0x008d2700,77,0x5400,?free@?$singleton_pool@VBallBallContact@RBX@@$0DA@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAXQAX@Z
 0x008d2750,90,0x5400,?malloc@?$singleton_pool@VBallBlockContact@RBX@@$0DA@Udefault_user_allocator_malloc_free@boost@@Vmutex@4@$0CA@$0A@@boost@@SAPAXXZ
@@ -27906,7 +27906,7 @@ address,size,flags,name
 0x008ecdb0,565,0x5400,_ZN3RBX7Message17renderPersonalMsgEPNS_5AdornE
 0x008ecff0,455,0x5400,sub_8ECFF0
 0x008ed1c0,83,0x5400,sub_8ED1C0
-0x008ed220,110,0x5000,sub_8ED220
+0x008ed220,110,0x5400,sub_8ED220
 0x008ed290,278,0x5400,sub_8ED290
 0x008ed3b0,134,0x5000,sub_8ED3B0
 0x008ed440,8,0x5400,sub_8ED440
@@ -28116,7 +28116,7 @@ address,size,flags,name
 0x008f6ad0,76,0x5400,sub_8F6AD0
 0x008f6b20,76,0x5400,sub_8F6B20
 0x008f6b70,1018,0x5400,_ZN3RBX18MarketplaceService13isValidPlayerEN5boost10shared_ptrINS_8InstanceEEERKSsNS1_8functionIFvSsEEE
-0x008f6f70,103,0x5000,sub_8F6F70
+0x008f6f70,103,0x5400,sub_8F6F70
 0x008f6fe0,179,0x5400,sub_8F6FE0
 0x008f70a0,179,0x5400,sub_8F70A0
 0x008f7160,43,0x5400,sub_8F7160
@@ -28656,8 +28656,8 @@ address,size,flags,name
 0x009147f0,645,0x5400,_ZN3RBX5Joint13canBuildJointEPNS_9PrimitiveES2_NS_8NormalIdES3_ff
 0x00914a80,45,0x5400,sub_914A80
 0x00914ab0,45,0x5400,sub_914AB0
-0x00914ae0,417,0x5000,_ZN3RBX5JointC2Ev
-0x00914c90,548,0x5000,_ZN3RBX5JointC2EPNS_9PrimitiveES2_RKN3G3D15CoordinateFrameES6_
+0x00914ae0,417,0x5400,_ZN3RBX5JointC2Ev
+0x00914c90,548,0x5400,_ZN3RBX5JointC2EPNS_9PrimitiveES2_RKN3G3D15CoordinateFrameES6_
 0x00914ec0,818,0x5400,_ZN3RBX10Reflection8EnumDescINS_5Joint9JointTypeEE7addPairES3_PKc
 0x00915200,341,0x5400,_ZN3RBX10Reflection8EnumDescINS_5Joint9JointTypeEEC2Ev
 0x00915360,80,0x5400,sub_915360
@@ -32171,7 +32171,7 @@ address,size,flags,name
 0x009a1780,983,0x5400,_ZN3RBX10KernelDataD2Ev
 0x009a1b60,65,0x5400,sub_9A1B60
 0x009a1bb0,101,0x5400,?append@?$Array@PAVConnector@RBX@@$09$0CA@@G3D@@QAEXABQAVConnector@RBX@@@Z
-0x009a1c20,219,0x5000,_ZN3RBX6KernelD2Ev
+0x009a1c20,219,0x5400,_ZN3RBX6KernelD2Ev
 0x009a1d00,6,0x5400,_ZNK3RBX5HUMAN4Dead12getStateTypeEv
 0x009a1d10,167,0x5400,?fastAppend@?$IndexArray@VSimBody@RBX@@$1?getFreeFallBodyIndex@12@QAEAAHXZ@RBX@@QAEXPAVSimBody@2@@Z
 0x009a1dc0,194,0x5400,_ZN3RBX10IndexArrayINS_7SimBodyEXadL_ZNS1_20getFreeFallBodyIndexEvEEE10fastRemoveEPS1_
@@ -32578,7 +32578,7 @@ address,size,flags,name
 0x009c0010,147,0x5400,sub_9C0010
 0x009c00b0,401,0x5400,sub_9C00B0
 0x009c0250,83,0x5400,_ZN3RBX11RotateJoint16removeFromKernelEv
-0x009c02b0,166,0x5000,_ZN3RBX18DynamicRotateJointD2Ev
+0x009c02b0,166,0x5400,_ZN3RBX18DynamicRotateJointD2Ev
 0x009c0360,16,0x5400,_ZN3RBX18DynamicRotateJoint10setPhysicsEv
 0x009c0370,209,0x5400,_ZN3RBX18DynamicRotateJoint16removeFromKernelEv
 0x009c0450,154,0x5400,_ZN3RBX18DynamicRotateJoint15getChannelValueEd
@@ -33237,7 +33237,7 @@ address,size,flags,name
 0x009db830,31,0x5400,_ZN3RBX6EffectD0Ev
 0x009db850,54,0x5400,_ZNK3RBX10Reflection22EnumPropertyDescriptor11setEnumItemEPNS0_13DescribedBaseERKNS0_14EnumDescriptor4ItemE
 0x009db890,68,0x5400,_ZN3RBX3Lua12newweaktableEP9lua_StatePKc
-0x009db8e0,21,0x5400,sub_9DB8E0
+0x009db8e0,21,0x5400,?lockInstance@ObjectBridge@Lua@RBX@@SAHPAUlua_State@@@Z
 0x009db900,79,0x5400,sub_9DB900
 0x009db950,41,0x5400,sub_9DB950
 0x009db980,71,0x5400,sub_9DB980
@@ -33621,21 +33621,21 @@ address,size,flags,name
 0x009ecba0,26,0x5400,_ZN3RBX3Lua6BridgeIN5boost10shared_ptrINS2_8functionIFNS3_IKNS_10Reflection5TupleEEES8_EEEEELb1EE11on_tostringERKSB_P9lua_State
 0x009ecbc0,26,0x5400,_ZN3RBX3Lua6BridgeIN5boost10shared_ptrINS2_8functionIFvNS3_IKNS_10Reflection5TupleEEENS4_IFvPNS0_12IAsyncResultEEEEEEEEELb1EE11on_tostringERKSF_P9lua_State
 0x009ecbe0,24,0x5400,?waiterCount@YieldingThreads@Lua@RBX@@QBEIXZ
-0x009ecc00,147,0x5000,sub_9ECC00
-0x009ecca0,55,0x5400,sub_9ECCA0
-0x009ecce0,299,0x5000,sub_9ECCE0
-0x009ece10,126,0x5400,sub_9ECE10
-0x009ece90,380,0x5400,sub_9ECE90
-0x009ed010,114,0x5400,sub_9ED010
-0x009ed090,99,0x5400,sub_9ED090
-0x009ed100,254,0x5400,sub_9ED100
-0x009ed200,131,0x5400,sub_9ED200
+0x009ecc00,147,0x5000,??0WaitingThread@YieldingThreads@Lua@RBX@@QAE@PAUlua_State@@VInterval@Time@3@@Z
+0x009ecca0,55,0x5400,??0WaitingThread@YieldingThreads@Lua@RBX@@QAE@ABU0123@@Z
+0x009ecce0,299,0x5000,??$_Push_heap@V?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@HUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@2@@std@@YAXV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@0@HHUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@0@@Z
+0x009ece10,126,0x5400,??$_Copy_backward_opt@PAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@Urandom_access_iterator_tag@std@@@std@@YAPAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@00Urandom_access_iterator_tag@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
+0x009ece90,380,0x5400,??$_Adjust_heap@V?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@HUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@2@@std@@YAXV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@0@HHUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@0@@Z
+0x009ed010,114,0x5400,??$_Push_heap_0@V?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@HUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@2@@std@@YAXV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@0@0U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@0@PAHPAUWaitingThread@YieldingThreads@Lua@RBX@@@Z
+0x009ed090,99,0x5400,??$_Fill@PAUWaitingThread@YieldingThreads@Lua@RBX@@U1234@@std@@YAXPAUWaitingThread@YieldingThreads@Lua@RBX@@0ABU1234@@Z
+0x009ed100,254,0x5400,??$_Pop_heap@V?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@HUWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@2@@std@@YAXV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@0@00UWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@0@PAH@Z
+0x009ed200,131,0x5400,??$_Uninit_copy@PAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@YAPAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@00AAV?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
 0x009ed290,43,0x5400,??$_Unchecked_move_backward@PAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@@stdext@@YAPAUWaitingThread@YieldingThreads@Lua@RBX@@PAU1234@00@Z
-0x009ed2c0,95,0x5400,sub_9ED2C0
-0x009ed320,124,0x5400,sub_9ED320
+0x009ed2c0,95,0x5400,??$_Pop_heap_0@V?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@UWaitingThread@YieldingThreads@Lua@RBX@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@2@@std@@YAXV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@0@0U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@0@PAUWaitingThread@YieldingThreads@Lua@RBX@@@Z
+0x009ed320,124,0x5400,??$_Uninit_fill_n@PAUWaitingThread@YieldingThreads@Lua@RBX@@IU1234@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@YAXPAUWaitingThread@YieldingThreads@Lua@RBX@@IABU1234@AAV?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z
 0x009ed3a0,54,0x5400,?_Ufill@?$vector@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@IAEPAUWaitingThread@YieldingThreads@Lua@RBX@@PAU3456@IABU3456@@Z
 0x009ed3e0,41,0x5400,??$_Umove@PAUWaitingThread@YieldingThreads@Lua@RBX@@@?$vector@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@IAEPAUWaitingThread@YieldingThreads@Lua@RBX@@PAU2345@00@Z
-0x009ed410,110,0x5400,sub_9ED410
+0x009ed410,110,0x5400,?pop@?$priority_queue@UWaitingThread@YieldingThreads@Lua@RBX@@V?$vector@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@U?$less@UWaitingThread@YieldingThreads@Lua@RBX@@@6@@std@@QAEXXZ
 0x009ed480,846,0x5010,?_Insert_n@?$vector@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@IAEXV?$_Vector_const_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@2@IABUWaitingThread@YieldingThreads@Lua@RBX@@@Z
 0x009ed7d0,510,0x5810,_ZN3RBX3Lua15YieldingThreads6resumeEdNS_4TimeERb
 0x009ed9d0,97,0x5400,?insert@?$vector@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@std@@QAE?AV?$_Vector_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@2@V?$_Vector_const_iterator@UWaitingThread@YieldingThreads@Lua@RBX@@V?$allocator@UWaitingThread@YieldingThreads@Lua@RBX@@@std@@@2@ABUWaitingThread@YieldingThreads@Lua@RBX@@@Z
@@ -34059,7 +34059,7 @@ address,size,flags,name
 0x00a073a0,1685,0x5400,_ZN3RBX10SleepStage12stepContactsERNS_10IndexArrayINS_7ContactEXadL_ZNS2_17steppingIndexFuncEvEEEE
 0x00a07a50,410,0x5400,_ZN3RBX10SleepStage8traverseEPNS_8AssemblyERSt5dequeIS2_SaIS2_EEi
 0x00a07bf0,124,0x5400,_ZN3RBX10SleepStage10doContactsERA2_NS_10IndexArrayINS_7ContactEXadL_ZNS2_17steppingIndexFuncEvEEEE
-0x00a07c70,838,0x5000,_ZN3RBX10SleepStage14wakeAssembliesERSt3setIPNS_8AssemblyESt4lessIS3_ESaIS3_EEiNS_3Sim13AssemblyStateE
+0x00a07c70,838,0x5400,_ZN3RBX10SleepStage14wakeAssembliesERSt3setIPNS_8AssemblyESt4lessIS3_ESaIS3_EEiNS_3Sim13AssemblyStateE
 0x00a07fc0,1411,0x5400,_ZN3RBX10SleepStage14stepSleepStageEiib
 0x00a08550,29,0x5400,sub_A08550
 0x00a08570,27,0x5400,sub_A08570
@@ -35490,7 +35490,7 @@ address,size,flags,name
 0x00a59190,140,0x5400,_ZN3RBX13SimulateStage18onAssemblyRemovingEPNS_8AssemblyE
 0x00a59220,366,0x5000,_ZN3RBX13SimulateStageD2Ev
 0x00a59390,6,0x5400,_ZNK3RBX13SimulateStage12getStageTypeEv
-0x00a593a0,181,0x5000,_ZN3RBX13SimulateStageC2EPNS_6IStageEPNS_5WorldE
+0x00a593a0,181,0x5400,_ZN3RBX13SimulateStageC2EPNS_6IStageEPNS_5WorldE
 0x00a59460,30,0x5400,_ZN3RBX13SimulateStageD0Ev
 0x00a59480,189,0x5400,_ZN3RBX10EdgeBuffer12pushSpringOkEPNS_4EdgeE
 0x00a59540,260,0x5400,_ZN3RBX10EdgeBuffer15pushKinematicOkEPNS_4EdgeE
@@ -42015,7 +42015,7 @@ address,size,flags,name
 0x00b3e1d0,10,0x5400,??__FdescribedClassDescriptor@?1??classDescriptor@?$Described@VClient@Network@RBX@@$E?sClient@23@3QBDBV?$FactoryProduct@VClient@Network@RBX@@VPeer@23@$E?sClient@23@3QBDBVInstance@3@@3@$00$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@YAXXZ
 0x00b3e1e0,10,0x5400,??__FdescribedClassDescriptor@?1??classDescriptor@?$Described@VReplicator@Network@RBX@@$E?sReplicator@23@3QBDBV?$NonFactoryProduct@VIdSerializer@Network@RBX@@$E?sReplicator@23@3QBDB@3@$00$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@YAXXZ
 0x00b3e1f0,10,0x5400,??__FdescribedClassDescriptor@?1??classDescriptor@?$Described@VPeer@Network@RBX@@$E?sPeer@23@3QBDBVInstance@3@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@YAXXZ
-0x00b3e200,10,0x5400,sub_B3E200
+0x00b3e200,10,0x5400,??__FdescribedClassDescriptor@?1??classDescriptor@?$Described@VHumanoid@RBX@@$E?sHumanoid@2@3QBDBV?$FactoryProduct@VHumanoid@RBX@@VInstance@2@$E?sHumanoid@2@3QBDBV32@@2@$0BL@$0A@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@YAXXZ
 0x00b3e210,10,0x5400,sub_B3E210
 0x00b3e220,10,0x5400,sub_B3E220
 0x00b3e230,10,0x5400,sub_B3E230

@@ -32,14 +32,16 @@ namespace RBX {
 
 	namespace Lua {
 
+		// openState news 0x18 (PLAYER 0x00688db7); the ctor 0x008a9e20 zeroes the vector at +8..+0x10.
+		// SIZE 0x18
 		class YieldingThreads
 		{
 		public:
 			struct WaitingThread
 			{
 				boost::intrusive_ptr<WeakThreadRef> thread;
-				double startTime;
-				double resumeTime;
+				Time startTime;		// 0x08 (2013: Time objects; the copy ctor 0x008a9080 moves dwords)
+				Time resumeTime;	// 0x10
 				WaitingThread(lua_State* thread, Time::Interval timeout);
 				// Inverted: the priority_queue (std::less) pops the
 				// earliest deadline first.

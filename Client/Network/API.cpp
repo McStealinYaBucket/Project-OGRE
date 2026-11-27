@@ -24,11 +24,26 @@
 #include "V8DataModel/ContentProvider.h"
 #include "V8DataModel/GlobalAdvancedSettings.h"
 #include "V8DataModel/NetworkSettings.h"
+#include "Util/utilities.h"
 
 #include <boost/algorithm/string.hpp>
 
 #define ROBLOX_URL_IDENTIFIER "roblox.com/"
 #define ROBLOXLABS_URL_IDENTIFIER ".robloxlabs.com/"
+
+namespace RBX { namespace Network { extern std::string versionB; extern std::string securityKey; } }
+
+#ifndef OGRE_TARGET_STUDIO
+// The player's half of the RakNet password and the security key (2016 name initVersion1; static, so no
+// oracle name). PLAYER only: STUDIO links initWithoutSecurity alone.
+// FUNCTION: PLAYER 0x00520790
+static void initVersion1()
+{
+	RBX::Network::securityKey = RBX::rot13("1s4q19np6n7nnr823oq2507or2o48oq53r40np59");
+	RBX::Network::versionB += '7';
+	RBX::Network::versionB += 'O';
+}
+#endif
 
 // FUNCTION: PLAYER 0x00521620
 // FUNCTION: STUDIO 0x00605950
@@ -103,7 +118,7 @@ RBX_REGISTER_CLASS(RBX::Network::GuidRegistryService);
 // GlobalAdvancedSettingsItem<NetworkSettings>::singleton (0x00521d60) come from API.obj in 2013.
 // STUB: PLAYER 0x00526c50
 // STUB: STUDIO 0x006079c0
-void RBX::Network::initWithoutSecurity()
+__declspec(noinline) void RBX::Network::initWithoutSecurity()
 {
 	Client::classDescriptor();
 	Server::classDescriptor();
@@ -119,3 +134,22 @@ void RBX::Network::initWithoutSecurity()
 // GLOBAL: PLAYER 0x00dd6670
 // GLOBAL: STUDIO 0x00f5e690
 namespace RBX { namespace Network { std::string versionB; } }
+
+// Assigned by initVersion1 (rot13 of a literal). Default-constructed by the API.obj initializer PLAYER
+// 0x00a5ed00, right after versionB's (STUDIO's second API.obj string initializer, 0x00b0e000, builds
+// 0x00f5e6d4: the same slot, not yet paired by a use).
+// GLOBAL: PLAYER 0x00dd66b0
+namespace RBX { namespace Network { std::string securityKey; } }
+
+#ifndef OGRE_TARGET_STUDIO
+// iOS 10-29 RBX::Network::initWithPlayerSecurity(). The second half of the password is inline (2016's
+// static initVersion2).
+// FUNCTION: PLAYER 0x00526e10
+void RBX::Network::initWithPlayerSecurity()
+{
+	initVersion1();
+	initWithoutSecurity();
+	versionB += "l";
+	versionB += 'E';
+}
+#endif

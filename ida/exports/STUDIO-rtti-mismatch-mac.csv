@@ -72,6 +72,8 @@ RBX::BodyThrust,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
 RBX::BodyVelocity,"slot count, vftable 4",30 1 2 3 19 6 8,38 1 3 4 27 7 9
 RBX::BoundVerb,"slot count, vftable 0",7,8
 RBX::DataModel::SerializationException,"slot count, vftable 0",2,3
+"RBX::DescribedCreatable<RBX::GuiTextButton,RBX::GuiButton,RBX::sGuiTextButton,27,0>","slot count, vftable 0",1 1 2 3 1 12,49 1 3 4 1 12
+RBX::GuiTextButton,"slot count, vftable 0",1 1 2 3 1 12,50 1 3 4 1 12
 RBX::Humanoid,"slot count, vftable 4",28 1 2 3 19 6 8 12 17 1 2 1,53 1 3 4 27 7 9 12 19 2 3
 "RBX::Reflection::BoundProp<QDir,1>","slot count, vftable 0",14,15
 "RBX::Reflection::BoundProp<QFont,1>","slot count, vftable 0",14,15

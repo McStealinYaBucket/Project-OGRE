@@ -43,7 +43,8 @@ bool SegregatedLuaEnvironments = false;
 // GLOBAL: PLAYER 0x00e12ec8
 // GLOBAL: STUDIO 0x00f67698
 bool LuaDebugger = false;
-bool DebugCrashEnabled = false;
+// Default true: .data byte 1 at PLAYER 0x00d3ae00 (registered at 0x00a69b70).
+bool DebugCrashEnabled = true;
 // AllowYieldInHooks is defined in script/ThreadRef.cpp (FASTFLAGVARIABLE, as 2013's ThreadRef.obj).
 bool CamelCaseHackEnabled = false;
 

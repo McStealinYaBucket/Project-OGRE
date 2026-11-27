@@ -1,10 +1,12 @@
-/* WindowsClient/UserInput.cpp -- October 2013 client shell (PLAYER only; path from the 2016 tree, see
-   UserInput.h). Written so far: PostUserInputMessage, which View::HandleWindowsMessage (0x00466510)
-   calls for every message but WM_ACTIVATE. */
+/* WindowsClient/UserInput.cpp -- October 2013 client shell (PLAYER only; the path is the 2013 __FILE__
+   of ~UserInput's asserts, lines 148-150). Written so far: PostUserInputMessage, which
+   View::HandleWindowsMessage (0x00466510) calls for every message but WM_ACTIVATE, and ~UserInput. */
 
 // App's headers first: they include winsock2.h ahead of windows.h.
 #include "V8DataModel/DataModel.h"
 #include "V8DataModel/Game.h"
+#include "V8DataModel/OverlayDataModel.h"
+#include "V8DataModel/RunService.h"
 
 #include "UserInput.h"
 
@@ -72,42 +74,155 @@ namespace RBX {
 		layout = GetKeyboardLayout(0);
 	}
 
-	// Creates the UserInputSleepingJob (0x260 bytes, ctor 0x004627b0) into +0x38 and adds it to the
-	// TaskScheduler. The body here is a stand-in (it must use `this`, or LTCG drops it).
-	// STUB: PLAYER 0x0045e630
-	__declspec(noinline) void UserInput::setGame(boost::shared_ptr<RBX::Game> game)
+	// FUNCTION: PLAYER 0x0045e5c0
+	RobloxCriticalSection::~RobloxCriticalSection()
 	{
+	}
+
+	// Against 2016: the job runs on the overlay DataModel when there is one. The written body needs
+	// Game::getOverlayDataModel (App, the shell's copy 0x0041ce60); until App declares it, the stand-in
+	// below is compiled (it must use `this`, or LTCG drops it).
+	// STUB: PLAYER 0x0045e630
+	void UserInput::setGame(boost::shared_ptr<RBX::Game> game)
+	{
+#ifdef OGRE_APP_INPUT_ACCESSORS
+		this->game = game;
+		runService = shared_from(ServiceProvider::create<RunService>(game->getDataModel().get()));
+
+		shared_ptr<DataModel> dataModel = game->getDataModel();
+		if (game->getOverlayDataModel())
+			dataModel = game->getOverlayDataModel();
+
+		m_unk0x38.reset(new UserInputSleepingJob(this, dataModel));
+		TaskScheduler::singleton().add(m_unk0x38);
+#else
 		STUB(0x0045e630);
 		this->game = game;
+		m_unk0x38.reset();
+#endif
 	}
 
-	// STUB: PLAYER 0x0045e900
+	// FUNCTION: PLAYER 0x0045e900
 	void UserInput::removeJobs()
 	{
-		STUB(0x0045e900);
-		m_unk0x38.reset();
+		if (m_unk0x38)
+		{
+			TaskScheduler::singleton().removeBlocking(m_unk0x38);
+			m_unk0x38.reset();
+		}
 	}
 
-	// Stand-in bodies below: each touches a member so LTCG keeps `this`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// Non-virtual (UserInputBase declares no virtual destructor); View::initializeInput (0x00466840) is
+	// its caller, through scoped_ptr::reset. The asserts must stay on lines 148-150.
+	// Left (93.5%): 2013's frame has one more dword (`push ecx`), so every stack offset is 4 higher.
+	// STUB: PLAYER 0x0045e990
+	UserInput::~UserInput()
+	{
+		removeJobs();
+
+		RBXASSERT(diMousePtr);
+		RBXASSERT(diKeyboardPtr);
+		RBXASSERT(diPtr);
+
+		if (diMousePtr)
+		{
+			diMousePtr->Unacquire();
+			diMousePtr = NULL;
+		}
+		if (diKeyboardPtr)
+		{
+			diKeyboardPtr->Unacquire();
+			diKeyboardPtr = NULL;
+		}
+		if (diPtr)
+			diPtr = NULL;
+	}
+
+	// 100% when the DirectX SDK's dinput8.lib/dxguid.lib are linked and the five DirectInput data rows
+	// are paired (measured with the November 2007 SDK); 97.8% while GUID_SysMouse and c_dfDIMouse2
+	// stay unresolved.
 	// STUB: PLAYER 0x0045ec60
-	__declspec(noinline) void UserInput::createMouse()
+	void UserInput::createMouse()
 	{
-		STUB(0x0045ec60);
-		isMouseAcquired = false;
+		HRESULT hr = diPtr->CreateDevice(GUID_SysMouse, &diMousePtr, NULL);
+		if (FAILED(hr))
+			AtlThrow(hr);
+
+		hr = diMousePtr->SetDataFormat(&c_dfDIMouse2);
+		if (FAILED(hr))
+			AtlThrow(hr);
+
+		DIPROPDWORD dipdw;
+		dipdw.diph.dwSize = sizeof(DIPROPDWORD);
+		dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+		dipdw.diph.dwObj = 0;
+		dipdw.diph.dwHow = DIPH_DEVICE;
+		dipdw.dwData = 0x800;
+		hr = diMousePtr->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph);
+		if (FAILED(hr))
+			AtlThrow(hr);
 	}
 
+	// As createMouse: 100% with the SDK libraries, 97.8% without.
 	// STUB: PLAYER 0x0045ecf0
-	__declspec(noinline) void UserInput::createKeyboard()
+	void UserInput::createKeyboard()
 	{
-		STUB(0x0045ecf0);
-		isKeyboardAcquired = false;
+		HRESULT hr = diPtr->CreateDevice(GUID_SysKeyboard, &diKeyboardPtr, NULL);
+		if (FAILED(hr))
+			AtlThrow(hr);
+
+		hr = diKeyboardPtr->SetDataFormat(&c_dfDIKeyboard);
+		if (FAILED(hr))
+			AtlThrow(hr);
+
+		DIPROPDWORD dipdw;
+		dipdw.diph.dwSize = sizeof(DIPROPDWORD);
+		dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+		dipdw.diph.dwObj = 0;
+		dipdw.diph.dwHow = DIPH_DEVICE;
+		dipdw.dwData = 0x800;
+		hr = diKeyboardPtr->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph);
+		if (FAILED(hr))
+			AtlThrow(hr);
 	}
 
+	// The window's accelerator table (resource 255), copied into accelerators.
 	// STUB: PLAYER 0x0045ed80
-	__declspec(noinline) void UserInput::createAccelerators()
+	void UserInput::createAccelerators()
 	{
-		STUB(0x0045ed80);
-		accelerators.clear();
+		HACCEL hAccel = LoadAccelerators(GetModuleHandle(NULL), MAKEINTRESOURCE(255));
+		if (hAccel)
+		{
+			int count = CopyAcceleratorTable(hAccel, NULL, 0);
+			accelerators.resize(count);
+			if (count)
+				CopyAcceleratorTable(hAccel, &accelerators[0], count);
+		}
 	}
 
 	// Against 2016: the message is not handled here but queued on the UserInputSleepingJob, which is
@@ -152,6 +267,24 @@ namespace RBX {
 	void UserInput::setKeyState(KeyCode code, ModCode modCode, char modifiedKey, bool isDown)
 	{
 		STUB(0x00460940);
+	}
+
+	// 81.3%: 2013 keeps an EH slot for the by-value arbiter argument (8 more bytes of frame). With
+	// setGame's written body as its caller (App accessor probe) it scores 98.9%, the EH table aside.
+	// STUB: PLAYER 0x004627b0
+	UserInputSleepingJob::UserInputSleepingJob(UserInput* userInput, shared_ptr<DataModelArbiter> arbiter)
+		: SleepingJob("UserInputSleeping", DataModelJob::Write, false, arbiter, Time::Interval(0.01), 60.0)
+		, userInput(userInput)
+	{
+	}
+
+	// Handles the queued messages on the DataModel's write job.
+	// STUB: PLAYER 0x00462920
+	TaskScheduler::StepResult UserInputSleepingJob::stepDataModelJob(const Stats& stats)
+	{
+		STUB(0x00462920);
+		messages.clear();
+		return TaskScheduler::Stepped;
 	}
 
 } // namespace RBX

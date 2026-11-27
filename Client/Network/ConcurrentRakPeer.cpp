@@ -54,25 +54,25 @@ namespace Network {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// 2013 defines the job classes inline near the top of this file; its assert sits on line 70 (both targets),
+// so the body is here, ahead of the functions it follows in .text.
+// FUNCTION: PLAYER 0x005c5aa0
+// FUNCTION: STUDIO 0x00620d00
+TaskScheduler::StepResult ConcurrentRakPeer::PacketJob::stepDataModelJob(const Stats& stats)
+{
+	if (shared_ptr<RakNet::RakPeerInterface> safePeer = peer.lock())
+	{
+		SendData data;
+		while (sendQueue.pop_if_present(data))
+		{
+			bool result = safePeer->Send(data.bitStream.get(), data.priority, data.reliability, data.orderingChannel,
+				data.systemAddress, data.broadcast) != 0;
+			RBXASSERT(result);
+		}
+		return TaskScheduler::Stepped;
+	}
+	return TaskScheduler::Done;
+}
 
 
 
@@ -285,12 +285,12 @@ void ConcurrentRakPeer::Send(boost::shared_ptr<const RakNet::BitStream> data, Pa
 	TaskScheduler::singleton().reschedule(packetJob);
 }
 
-// NetworkSettings+0x78 is 2016's isQueueErrorComputed (App's header: m_unk0x78).
+// NetworkSettings+0x78 is 2016's isQueueErrorComputed (PacketJob copies it here).
 // FUNCTION: PLAYER 0x005c5610
 // STUB: STUDIO 0x00620870
 ConcurrentRakPeer::PacketJob::PacketJob(boost::shared_ptr<RakNet::RakPeerInterface> peer, DataModel* dataModel)
 	: DataModelJob("Net Peer Send", DataModelJob::RaknetPeer, false, shared_from(dataModel), Time::Interval(0))
-	, isQueueErrorComputed(NetworkSettings::singleton().m_unk0x78)
+	, isQueueErrorComputed(NetworkSettings::singleton().isQueueErrorComputed)
 	, peer(peer)
 {
 }
@@ -322,14 +322,6 @@ TaskScheduler::Job::Error ConcurrentRakPeer::PacketJob::error(const Stats& stats
 			result.error = 0;
 	}
 	return result;
-}
-
-// STUB: PLAYER 0x005c5aa0
-// STUB: STUDIO 0x00620d00
-TaskScheduler::StepResult ConcurrentRakPeer::PacketJob::stepDataModelJob(const Stats& stats)
-{
-	STUB(0x005c5aa0);
-	return TaskScheduler::Stepped;
 }
 
 // STUB: PLAYER 0x005c5f60

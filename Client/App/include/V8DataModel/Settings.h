@@ -19,6 +19,8 @@ namespace RBX {
 		Settings() {}
 		Settings(const std::string& settingsFile);	// PLAYER 0x00657f60, out of line
 
+		void saveState();	// PLAYER 0x006576d0 (2016 name; the shell's Application::Shutdown calls it)
+
 	private:
 		typedef DescribedNonCreatable<Settings, ServiceProvider, sSettings> Super;
 

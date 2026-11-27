@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "V8DataModel/Humanoid.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sHumanoid = "Humanoid";
@@ -16,6 +17,14 @@ REFLECTION_END();
 // Class registrar (see Instance.cpp/Service.cpp note).
 namespace RBX {
 RBX_REGISTER_CLASS(RBX::Humanoid);
+
+// Body not written yet. STUB body so Players::killPlayer pairs its call.
+// STUB: PLAYER 0x006db0e0
+// STUB: STUDIO 0x0081dd80
+void Humanoid::setHealth(float value)
+{
+	STUB(0x006db0e0);
+}
 }
 
 // EnumDesc<T> ctors, 2013 bytes (registration order, values and legacy names); they sit

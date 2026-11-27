@@ -49,7 +49,6 @@ address,type,size,symbol
 00995fd0,library,84,??1strstreambuf@std@@UAE@XZ_60
 009c7320,library,152,??1strstreambuf@std@@UAE@XZ_63
 009d0370,library,18,??0facet@locale@std@@IAE@I@Z
-009eda40,library,22,??0?$fpos@H@std@@QAE@J@Z
 009f9fc0,library,172,?_Addfac@_Locimp@locale@std@@AAEXPAVfacet@23@I@Z
 009fca40,library,10,?size@?$vector@PAXV?$allocator@PAX@std@@@std@@QBEIXZ
 00a1ab60,library,102,??1ios_base@std@@UAE@XZ_5

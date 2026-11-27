@@ -94,23 +94,41 @@ namespace RBX
 
 			static bool isInRole(Identities identity, Permissions permission);
 
-			static void tssCleanup(Context*);
-
 		private:
 			Context(Identities identity):identity(identity) {}
-			static boost::thread_specific_ptr<Context>& ptr();
+			// 2013: inline, default (delete) cleanup, no tssCleanup (iOS 10-29 has neither). The kept copy is
+			// the /GL shell's (PLAYER 0x0041ceb0); every engine caller calls it there.
+			static boost::thread_specific_ptr<Context>& ptr()
+			{
+				static boost::thread_specific_ptr<Context> value;
+				return value;
+			}
 		};
 
 		// Impersonates an identity for the lifetime of the object
 		// 2013: one member (PLAYER 0x0041cf40 stores only `previous`). Its out-of-line bodies sit in the /GL
 		// shell (PLAYER 0x0041cf40 / 0x0041cf80, STUDIO 0x00461ce0 / 0x004619a0) and the engine calls them
-		// (Game::doClearVerbs 0x006542d7), so they are not inline here.
+		// (Game::doClearVerbs 0x006542d7) and never inline them. Inline here so a shell TU can emit them;
+		// __declspec(noinline) is a stand-in for whatever kept 2013's engine TUs from inlining them.
 		class Impersonator
 		{
 			Context* previous;
 		public:
-			Impersonator(Identities identity);
-			~Impersonator();
+			// STUB: PLAYER 0x0041cf40
+			// STUB: STUDIO 0x00461ce0
+			__declspec(noinline) Impersonator(Identities identity)
+			{
+				Context* context = new Context(identity);
+				previous = Context::ptr().release();
+				Context::ptr().reset(context);
+			}
+
+			// STUB: PLAYER 0x0041cf80
+			// STUB: STUDIO 0x004619a0
+			__declspec(noinline) ~Impersonator()
+			{
+				Context::ptr().reset(previous);
+			}
 		};
 	}
 }

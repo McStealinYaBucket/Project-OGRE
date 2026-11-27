@@ -1,5 +1,5 @@
-/* WindowsClient/UserInput.h -- October 2013 client shell (PLAYER only). No 2013 __FILE__ string names
-   UserInput.cpp; the path is the 2016 tree's. The game window's input (RTTI .?AVUserInput@RBX@@,
+/* WindowsClient/UserInput.h -- October 2013 client shell (PLAYER only). ~UserInput's asserts name
+   WindowsClient\UserInput.cpp (lines 148-150). The game window's input (RTTI .?AVUserInput@RBX@@,
    vftable PLAYER 0x00be4d9c, base UserInputBase whose ctor is App's 0x0072af80).
    Layout from the ctor (PLAYER 0x0045e300; LTCG: `this` in esi, ret 0x10 for (HWND, View*,
    shared_ptr<Game>)) and PostUserInputMessage:
@@ -9,7 +9,8 @@
      +0x40  RobloxCriticalSection (ctor 0x0045e190, dtor 0x0045e5c0), +0xa4 diKeys[256],
      +0x2bc wnd, +0x2d4 the View, +0x2e4 hArrow, +0x2f4 hInvisibleCursor (all from the ctor);
      +0x2ec shared_ptr<Game> game  setGame assigns it; PostUserInputMessage calls getDataModel on it.
-   Only what PostUserInputMessage uses is declared so far. */
+   Written so far: the ctor, the dtor, removeJobs, setGame (its body needs an App accessor),
+   createMouse/createKeyboard/createAccelerators and PostUserInputMessage. */
 
 #pragma once
 
@@ -24,18 +25,54 @@
 
 #include "rbx/threadsafe.h"
 #include "Util/UserInputBase.h"
+#include "V8DataModel/SleepingJob.h"
 
 #include "decomp.h"
 
 // No DirectX SDK in this tree: the DirectInput 8 names UserInput uses (dinput.h, DIRECTINPUT_VERSION
-// 0x0800). PLAYER: DirectInput8Create 0x009f09da, IID_IDirectInput8A 0x00bc3628.
+// 0x0800), with the dinput.h slot order. PLAYER: DirectInput8Create 0x009f09da (import thunk),
+// IID_IDirectInput8A 0x00bc3628, GUID_SysKeyboard 0x00bc35c8, GUID_SysMouse 0x00bc35d8 (dxguid.lib),
+// c_dfDIMouse2 0x00bc3824, c_dfDIKeyboard 0x00bc3a2c (dinput8.lib).
+struct IDirectInputDevice8A;
+struct DIDATAFORMAT;
+struct DIPROPHEADER
+{
+	DWORD dwSize;
+	DWORD dwHeaderSize;
+	DWORD dwObj;
+	DWORD dwHow;
+};
+struct DIPROPDWORD
+{
+	DIPROPHEADER diph;
+	DWORD dwData;
+};
+#define DIPH_DEVICE 0
+#define DIPROP_BUFFERSIZE (*(const GUID*)1)
+
 struct IDirectInput8A : public IUnknown
 {
+	virtual HRESULT STDMETHODCALLTYPE CreateDevice(REFGUID rguid, IDirectInputDevice8A** lplpDirectInputDevice,
+		LPUNKNOWN pUnkOuter) = 0; // vtable+0x0c
 };
 struct IDirectInputDevice8A : public IUnknown
 {
+	virtual HRESULT STDMETHODCALLTYPE GetCapabilities(void* lpDIDevCaps) = 0;                       // vtable+0x0c
+	virtual HRESULT STDMETHODCALLTYPE EnumObjects(void* lpCallback, LPVOID pvRef, DWORD dwFlags) = 0; // vtable+0x10
+	virtual HRESULT STDMETHODCALLTYPE GetProperty(REFGUID rguidProp, DIPROPHEADER* pdiph) = 0;     // vtable+0x14
+	virtual HRESULT STDMETHODCALLTYPE SetProperty(REFGUID rguidProp, const DIPROPHEADER* pdiph) = 0; // vtable+0x18
+	virtual HRESULT STDMETHODCALLTYPE Acquire() = 0;                                               // vtable+0x1c
+	virtual HRESULT STDMETHODCALLTYPE Unacquire() = 0;                                             // vtable+0x20 (~UserInput)
+	virtual HRESULT STDMETHODCALLTYPE GetDeviceState(DWORD cbData, LPVOID lpvData) = 0;            // vtable+0x24
+	virtual HRESULT STDMETHODCALLTYPE GetDeviceData(DWORD cbObjectData, void* rgdod, LPDWORD pdwInOut,
+		DWORD dwFlags) = 0;                                                                        // vtable+0x28
+	virtual HRESULT STDMETHODCALLTYPE SetDataFormat(const DIDATAFORMAT* lpdf) = 0;                 // vtable+0x2c
 };
 extern "C" const IID IID_IDirectInput8A;
+extern "C" const GUID GUID_SysKeyboard;
+extern "C" const GUID GUID_SysMouse;
+extern "C" const DIDATAFORMAT c_dfDIMouse2;
+extern "C" const DIDATAFORMAT c_dfDIKeyboard;
 extern "C" HRESULT WINAPI DirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut,
 	LPUNKNOWN punkOuter);
 
@@ -43,16 +80,13 @@ namespace RBX {
 
 	class Game;
 	class RunService;
+	class UserInput;
 	class View;
 
-	// App's v8datamodel/SleepingJob.h is not in this tree yet: only the call UserInput makes.
-	class SleepingJob
-	{
-	public:
-		void wake(); // PLAYER 0x0072b220 (after SleepingJob::error)
-	};
-
-	// RTTI .?AVUserInputSleepingJob@RBX@@ (vftable 0x00be4e18, ctor 0x004627b0, SIZE 0x260).
+	// RTTI .?AVUserInputSleepingJob@RBX@@ (vftable 0x00be4e18: SleepingJob's slots plus
+	// stepDataModelJob 0x00462920). setGame (0x0045e630) creates it and adds it to the TaskScheduler.
+	// VTABLE: PLAYER 0x00be4e18
+	// SIZE 0x260
 	class UserInputSleepingJob : public SleepingJob
 	{
 	public:
@@ -64,13 +98,20 @@ namespace RBX {
 			LPARAM lParam;
 		};
 
+		UserInputSleepingJob(UserInput* userInput, shared_ptr<DataModelArbiter> arbiter); // PLAYER 0x004627b0
+
+		/*override*/ TaskScheduler::StepResult stepDataModelJob(const Stats& stats); // vtable+0x18 PLAYER 0x00462920
+
+		// SYNTHETIC: PLAYER 0x004628d0
+		// RBX::UserInputSleepingJob::`scalar deleting destructor'
+
 	private:
-		undefined m_unk0x00[0x238 - 0x00]; // 0x00
+		undefined4 m_unk0x230; // 0x230 not written by the ctor
+		UserInput* userInput;  // 0x234
 
 	public:
 		// Pushed through the shell's safe_queue::push (lock at +0x258).
 		rbx::safe_queue<Message> messages; // 0x238
-		undefined4 m_unk0x25c;             // 0x25c the ctor's UserInput*
 	};
 
 	// clang-format off
@@ -93,6 +134,7 @@ namespace RBX {
 		ATL::CCriticalSection diSection; // 0x3c
 
 		RobloxCriticalSection(); // PLAYER 0x0045e190
+		~RobloxCriticalSection(); // PLAYER 0x0045e5c0 (LTCG: `this` pushed, ret 4)
 	};
 
 	// VTABLE: PLAYER 0x00be4d9c
@@ -134,6 +176,7 @@ namespace RBX {
 
 		// LTCG: `this` in esi, ret 0x10.
 		UserInput(HWND wnd, View* view, boost::shared_ptr<RBX::Game> game); // PLAYER 0x0045e300
+		~UserInput(); // PLAYER 0x0045e990 (LTCG: `this` pushed, ret 4)
 
 		// UserInputBase's slots; 2013 has no destructor slot (UserInputBase declares none).
 		/*implement*/ G3D::Vector2 getCursorPosition();                // vtable+0x00 PLAYER 0x00460800

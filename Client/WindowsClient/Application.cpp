@@ -4,8 +4,11 @@
    partial bodies into their callers, which 2013 calls. */
 
 #include "../ClientBase/RenderSettingsItem.h"
+#include "V8DataModel/Game.h"
+#include "V8DataModel/GlobalSettings.h"
 
 #include "Application.h"
+#include "FunctionMarshaller.h"
 
 #include <algorithm>
 
@@ -16,8 +19,11 @@ DECOMP_SIZE_ASSERT(RBX::Application, 0x140);
 namespace RBX {
 
 	// Against 2016: no mainWindow store. LTCG: `this` on the stack (ret 4); MainLogManager's ctor
-	// takes its constant arguments folded in (`this` in esi only).
-	// STUB: PLAYER 0x00403000
+	// takes its constant arguments folded in (`this` in esi only). 2013 calls rbx::atomic<int>()
+	// out of line (0x004022d0): that needs OGRE_ATOMIC_CTOR_NOINLINE defined for every shell TU (one
+	// TU alone does not do it, LTCG keeps the other TUs' inline definition); then this scores 96.7%,
+	// the rest being three callees that pair once the CSVs are regenerated (100% in sweep26).
+	// FUNCTION: PLAYER 0x00403000
 	Application::Application()
 		: processLocal_stopPreventMultipleJobsThread(NULL)
 		, processLocal_stopWaitForVideoPrerollThread(NULL)
@@ -148,10 +154,27 @@ namespace RBX {
 		}
 	}
 
+	// Against 2016: no mainWindow or web view to tear down; the Document is shut down and deleted here,
+	// and the marshaller's window released last.
 	// STUB: PLAYER 0x00404f10
-	__declspec(noinline) void Application::Shutdown()
+	void Application::Shutdown()
 	{
-		STUB(0x00404f10);
+		if (processLocal_stopWaitForVideoPrerollThread)
+			SetEvent(processLocal_stopWaitForVideoPrerollThread);
+		if (m_unk0x128)
+			m_unk0x128->join();
+		m_unk0x128.reset();
+
+		m_unk0x24->Shutdown();
+		m_unk0x24.reset();
+
+		GlobalBasicSettings::singleton()->saveState();
+		GlobalAdvancedSettings::singleton()->saveState();
+
+		Game::globalExit();
+
+		if (marshaller)
+			FunctionMarshaller::ReleaseWindow(marshaller);
 	}
 
 	// STUB: PLAYER 0x00405070

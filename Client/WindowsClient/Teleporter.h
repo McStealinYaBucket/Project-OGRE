@@ -9,21 +9,15 @@
 
 #include <string>
 
+// App's TeleportCallback.h carries no marker: this TU emits TeleportCallback's vftable.
+// VTABLE: PLAYER 0x00bd93ac
+// class RBX::TeleportCallback
+#include "V8DataModel/TeleportCallback.h"
+
 namespace RBX {
 
 	class Application;
 	class FunctionMarshaller;
-
-	// App's v8datamodel/TeleportCallback.h is not in this tree yet: the slots the shell overrides.
-	// VTABLE: PLAYER 0x00bd93ac
-	class TeleportCallback
-	{
-	public:
-		virtual ~TeleportCallback() {} // vtable+0x00
-		virtual void doTeleport(const std::string& url, const std::string& ticket,
-			const std::string& script) = 0; // vtable+0x04
-		virtual bool isTeleportEnabled() const = 0; // vtable+0x08
-	};
 
 	// VTABLE: PLAYER 0x00bd93bc
 	// SIZE 0xc

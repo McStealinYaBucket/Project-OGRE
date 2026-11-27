@@ -40,11 +40,20 @@ protected:
 public:
 	RBX::Time timestamp;                    // 0x18
 
-	// iOS: writeItemType(BitStream&, Item::ItemType), PLAYER 0x005d3da0. Only the value the ItemSender
-	// writes is named so far.
+	// iOS: writeItemType(BitStream&, Item::ItemType), PLAYER 0x005d3da0. Values 1-7 and 11 are proven by
+	// Replicator::readItem's switch (PLAYER 0x005a4b40: a jump table over 1..11, 8-10 to the default);
+	// names from 2016.
 	enum ItemType
 	{
 		ItemTypeEnd = 0,
+		ItemTypeDelete = 1,
+		ItemTypeNew = 2,
+		ItemTypeChangeProperty = 3,
+		ItemTypeMarker = 4,
+		ItemTypePing = 5,
+		ItemTypePingBack = 6,
+		ItemTypeEventInvocation = 7,
+		ItemTypeJoinData = 11,
 	};
 	static void writeItemType(RakNet::BitStream& bitStream, ItemType type);
 

@@ -137,7 +137,7 @@ public:
 	// Inline in 2013 (getRakStatsString 0x00583a60, dataOutStep 0x0059c060); 2016 name.
 	const RakNet::RakNetStatistics* getRakNetStats() const { return rakPeer ? &replicatorStats.rakStats.rakStats : NULL; }
 
-	// iOS: requestDisconnect() (no reason in 2013). PLAYER 0x0059b770, not written yet.
+	// iOS: requestDisconnect() (no reason in 2013): submits scheduledRemove as a DataModel write task.
 	void requestDisconnect();
 
 	// iOS names; out of line in 2013 (PLAYER 0x0058d3d0 / 0x0058d430, filterChangedProperty calls both).
@@ -210,6 +210,19 @@ protected:
 	// RakNet::PluginInterface2 (this = Replicator+0x1094): counts split/unsplit sends.
 	/*override*/ void OnInternalPacket(RakNet::InternalPacket* internalPacket, unsigned frameNumber,
 		RakNet::SystemAddress remoteSystemAddress, RakNet::TimeMS time, int isSend);
+
+	// readItem's callees (iOS names; PLAYER 0x005925e0, 0x005a16d0, 0x005922c0, 0x0059f4f0, 0x0058d4d0,
+	// 0x005a4780, 0x005a20a0), not written yet.
+	// Declared after the virtuals: VC9 puts an overloaded virtual's slot at the name's first declaration,
+	// so the non-virtual readChangedProperty overload above them moved every slot from +0x78 on.
+	// readJoinData returns a value in eax (2016: unsigned int).
+	void readInstanceDelete(RakNet::BitStream& bitStream);
+	void readInstanceNew(RakNet::BitStream& bitStream, bool isJoinData);
+	void readChangedProperty(RakNet::BitStream& bitStream);
+	void readMarker(RakNet::BitStream& bitStream);
+	void readDataPing(RakNet::BitStream& bitStream);
+	void readEventInvocation(RakNet::BitStream& bitStream);
+	unsigned int readJoinData(RakNet::BitStream& bitStream);
 public:
 
 protected:

@@ -5,6 +5,7 @@
 #include "V8DataModel/Settings.h"
 #include "V8DataModel/GlobalSettings.h"
 #include "V8DataModel/Selection.h"
+#include "decomp.h"
 
 namespace RBX {
 	const char* const sSettings = "Settings";
@@ -52,6 +53,15 @@ namespace RBX {
 		if (invalid)
 			throw RBX::runtime_error("Not allowed to add that under settings");
 		Super::verifyAddDescendant(newParent, instanceGettingNewParent);
+	}
+
+	// Body not written yet (visitDescendants<InvalidDescendentDetector>, then writes settingsFile unless
+	// settingsErased). STUB body so the shell's Application::Shutdown pairs its call.
+	// STUB: PLAYER 0x006576d0
+	// STUB: STUDIO 0x0073fe60
+	void Settings::saveState()
+	{
+		STUB(0x006576d0);
 	}
 
 	// The base DescribedNonCreatable<Settings, ServiceProvider, sSettings> ctor stays out of line

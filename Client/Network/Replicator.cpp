@@ -9,6 +9,7 @@
 #include "InternalPacket.h"
 #include "Network/Players.h"
 #include "V8DataModel/TouchTransmitter.h"
+#include "V8DataModel/DataModel.h"
 #include "decomp.h"
 #include <boost/bind.hpp>
 
@@ -102,6 +103,15 @@ void Replicator::receiveCluster(RakNet::BitStream& inBitstream, Instance* instan
 	STUB(0x00583ad0);
 }
 
+// FUNCTION: PLAYER 0x005861a0
+// FUNCTION: STUDIO 0x006293e0
+static void scheduledRemove(shared_ptr<Instance> instance)
+{
+	FASTLOG1(FLog::Network, "Removing replicator instance: %p", instance.get());
+	instance->unlockParent();
+	instance->remove();
+}
+
 // STUB: PLAYER 0x00589630
 // STUB: STUDIO 0x0062d8c0
 bool Replicator::sendItemsPacket()
@@ -151,20 +161,6 @@ bool Replicator::isPropertyChangedPending(const Reflection::ConstProperty& prop)
 	return false;
 }
 
-// STUB: PLAYER 0x0058d5f0
-// STUB: STUDIO 0x006328f0
-void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop)
-{
-	STUB(0x0058d5f0);
-}
-
-// STUB: PLAYER 0x00591bc0
-// STUB: STUDIO 0x00637ff0
-void Replicator::onParentChanged(shared_ptr<Instance> instance)
-{
-	STUB(0x00591bc0);
-}
-
 // FUNCTION: PLAYER 0x00591f00
 // STUB: STUDIO 0x00638330
 FilterResult Replicator::filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) // STUDIO: byte-identical (probe); 98.8 on a shared_from twin pairing
@@ -212,11 +208,11 @@ void Replicator::processPacket(RakNet::Packet* packet)
 	STUB(0x0059a220);
 }
 
-// STUB: PLAYER 0x0059b770
-// STUB: STUDIO 0x0063e710
-__declspec(noinline) void Replicator::requestDisconnect() // noinline: stand-in (VC9 inlines a same-TU STUB)
+// FUNCTION: PLAYER 0x0059b770
+// FUNCTION: STUDIO 0x0063e710
+void Replicator::requestDisconnect()
 {
-	STUB(0x0059b770);
+	DataModel::get(this)->submitTask(boost::bind(&scheduledRemove, shared_from(this)), DataModelJob::Write);
 }
 
 // FUNCTION: PLAYER 0x0059c060
@@ -331,6 +327,10 @@ void Replicator::deserializePropertyValue(RakNet::BitStream& inBitstream, Reflec
 }
 
 
+// Layout note: ~Replicator's asserts must stay on lines 348/350 (STUDIO 349/351). Room above them is
+// tight, so the STUBs listed after the dtor sit there as descents; a new function above this point needs
+// the same number of lines removed (or another STUB moved below the dtor).
+
 // The STUDIO revision's ~Replicator asserts sit one line lower (349/351 against PLAYER's 348/350).
 #ifdef OGRE_TARGET_STUDIO
 #define OGRE_PLAYER_ASSERT(e)
@@ -352,13 +352,21 @@ Replicator::~Replicator()
 	FASTLOG1(FLog::Network, "Replicator destroyed: %p", this);
 }
 
-// readItem and onPropertyChanged precede ~Replicator in 2013; they sit here (a descent) because the
-// functions above it no longer fit before its assert lines (348/350).
-// STUB: PLAYER 0x005a4b40
-// STUB: STUDIO 0x00648860
-void Replicator::readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType)
+// readChangedProperty, onParentChanged and onPropertyChanged precede ~Replicator in 2013; they sit here
+// (descents) because the functions above it no longer fit before its assert lines (348/350). readItem
+// sits after the ctor, on its assert line (2750; STUDIO 2769).
+// STUB: PLAYER 0x0058d5f0
+// STUB: STUDIO 0x006328f0
+void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::Property prop)
 {
-	STUB(0x005a4b40);
+	STUB(0x0058d5f0);
+}
+
+// STUB: PLAYER 0x00591bc0
+// STUB: STUDIO 0x00637ff0
+void Replicator::onParentChanged(shared_ptr<Instance> instance)
+{
+	STUB(0x00591bc0);
 }
 
 // STUB: PLAYER 0x005a4de0
@@ -2700,128 +2708,120 @@ Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// 2013 registers it with the other Network channels in App's ScriptContext.obj (initializer PLAYER
+// 0x00a66150, after Network's 0x00a66090); defined here until that file carries it.
+} } namespace FLog {
+	// GLOBAL: PLAYER 0x00de3f85
+	// GLOBAL: STUDIO 0x00f84e5e
+	Channel NetworkReadItem = 0;
+	int NetworkReadItemIniter = RegisterLogGroup("NetworkReadItem", &NetworkReadItem, NULL, FASTVARTYPE_STATIC); } namespace RBX { namespace Network {
+
+// FUNCTION: PLAYER 0x005a4b40
+// FUNCTION: STUDIO 0x00648860
+void Replicator::readItem(RakNet::BitStream& inBitstream, Item::ItemType itemType)
+{
+	FASTLOG3(FLog::NetworkReadItem, "readItem %d, bitStream %p, offset %d", (int)itemType, inBitstream.GetData(),
+		inBitstream.GetReadOffset());
+	switch (itemType)
+	{
+	case Item::ItemTypeDelete:
+		readInstanceDelete(inBitstream);
+		break;
+	case Item::ItemTypeNew:
+		readInstanceNew(inBitstream, false);
+		break;
+	case Item::ItemTypeChangeProperty:
+		readChangedProperty(inBitstream);
+		break;
+	case Item::ItemTypeMarker:
+		readMarker(inBitstream);
+		break;
+	case Item::ItemTypePing:
+	case Item::ItemTypePingBack:
+		readDataPing(inBitstream);
+		break;
+	case Item::ItemTypeEventInvocation:
+		readEventInvocation(inBitstream);
+		break;
+	case Item::ItemTypeJoinData:
+		readJoinData(inBitstream);
+		break;
+	default:
+		OGRE_PLAYER_ASSERT(false);
+		// The STUDIO revision asserts 19 lines lower (2769 against PLAYER's 2750).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		OGRE_STUDIO_ASSERT(false);
+		throw std::runtime_error("");
+	}
+}
+
+// readItem's callees, not written yet (they precede readItem in .text; here for room). noinline: VC9
+// inlines a same-TU STUB into its caller.
+// STUB: PLAYER 0x0058d4d0
+// STUB: STUDIO 0x006327e0
+__declspec(noinline) void Replicator::readDataPing(RakNet::BitStream& bitStream)
+{
+	STUB(0x0058d4d0);
+}
+
+// STUB: PLAYER 0x005922c0
+// STUB: STUDIO 0x006386f0
+__declspec(noinline) void Replicator::readChangedProperty(RakNet::BitStream& bitStream)
+{
+	STUB(0x005922c0);
+}
+
+// STUB: PLAYER 0x005925e0
+// STUB: STUDIO 0x006389f0
+__declspec(noinline) void Replicator::readInstanceDelete(RakNet::BitStream& bitStream)
+{
+	STUB(0x005925e0);
+}
+
+// STUB: PLAYER 0x0059f4f0
+// STUB: STUDIO 0x00642b10
+__declspec(noinline) void Replicator::readMarker(RakNet::BitStream& bitStream)
+{
+	STUB(0x0059f4f0);
+}
+
+// STUB: PLAYER 0x005a16d0
+// STUB: STUDIO 0x00645580
+__declspec(noinline) void Replicator::readInstanceNew(RakNet::BitStream& bitStream, bool isJoinData)
+{
+	STUB(0x005a16d0);
+}
+
+// STUB: PLAYER 0x005a20a0
+// STUB: STUDIO 0x00645f30
+__declspec(noinline) unsigned int Replicator::readJoinData(RakNet::BitStream& bitStream)
+{
+	STUB(0x005a20a0);
+	return 0;
+}
+
+// STUB: PLAYER 0x005a4780
+// STUB: STUDIO 0x006484a0
+__declspec(noinline) void Replicator::readEventInvocation(RakNet::BitStream& bitStream)
+{
+	STUB(0x005a4780);
+}
 
 
 

@@ -354,10 +354,13 @@ FACTS = [
      "6 are the program_options do_max_length/do_unshift); the windows_file_codecvt name moves to 0x009befb0"),
     # wave9 sync: sweep16 pairs vector<shared_ptr<Instance>>::push_back with 0x00564bc0 at 100%; the Thread.obj
     # copy that held the name since an earlier sweep has no row now (shell-base.md, wave9).
-    (0x009b7020, None, "unname", "", "match:",
-     "not vector<shared_ptr<Instance>>::push_back (that name is reccmp 100% at 0x00564bc0 in sweep16): the "
-     "Thread.obj push_back chain next to 0x009b6af0 (vector<shared_ptr<boost::thread>>), element type unproven "
-     "(shell-base.md, wave9)"),
+    # (wave19 sync: was an unname; now named with one of the folded spellings)
+    (0x009b7020, 0, "rename",
+     "?push_back@?$vector@V?$shared_ptr@VThread@TaskScheduler@RBX@@@boost@@V?$allocator@V?$shared_ptr@VThread@TaskScheduler@RBX@@@boost@@@std@@@std@@QAEXABV?$shared_ptr@VThread@TaskScheduler@RBX@@@boost@@@Z", "prior:",
+     "std::vector<shared_ptr<T>>::push_back, a folded body (Thread spelling: TaskScheduler::disableThreads 0x009b7140 "
+     "calls it at 0x009b7180, our TaskScheduler.h TEMPLATE) | other callers getJobsByName (shared_ptr<const Job>) "
+     "0x009b7979, GuiLayerCollector::LoadZ 0x008b3b0c, TextureCompositor 0x004c013c; the Instance spelling is "
+     "reccmp 100% at 0x00564bc0; 0x009ba960 is the Coordinator copy whose callees differ only in EH (wave 8)"),
     # wave10 sync (integrate.md, wave10): the boost::throw_exception chain at PLAYER 0x0044d400..0x0044db50 is the
     # rbx::bad_placement_any_cast instance. lib-resolved matched its bodies "identical" to boost-iostreams'
     # std::exception copies (the bodies differ only in vftable and throw-info addresses), so they carried
@@ -794,6 +797,100 @@ FACTS = [
      "prior:",
      "Reflection::ClassRegistrar<FriendService>::registrar | head of FactoryRegistration.obj's .bss registrar run "
      "(PLAYER 0x00e0c7ac..0x00e0ce14), `inc dword` in the Described<FriendService> ctor 0x006b0460 (at 0x006b04b3); our GLOBAL markers (FriendService.cpp / FactoryRegistration.cpp, app-18)"),
+    # wave19 sync (app-19.md / shell-5k-10.md / integrate.md "IDA owner"; sweep26). Each checked from the exe bytes.
+    (0x004627b0, 0,
+     "rename", "??0UserInputSleepingJob@RBX@@QAE@PAVUserInput@1@V?$shared_ptr@VDataModelArbiter@RBX@@@boost@@@Z",
+     "prior:",
+     "RBX::UserInputSleepingJob(UserInput*, shared_ptr<DataModelArbiter>) | LTCG frame, `this` on the stack: "
+     "[esp+0x30] = this, [esp+0x34] stored to +0x234 after the vftable 0x00be4e18 store, the shared_ptr at "
+     "[esp+0x38]/[esp+0x3c] passed to the SleepingJob base ctor 0x0072b000 and released at the end; ret 0x10 = "
+     "this + pointer + shared_ptr; only caller UserInput::setGame 0x0045e630; our UserInput.cpp STUB (0.81) "
+     "(shell-5k-10)"),
+    (0x0045e990, 0, "rename", "??1UserInput@RBX@@QAE@XZ", "rtti:",
+     "RBX::UserInput::~UserInput() | stores ??_7UserInput@RBX@@6B@ 0x00be4d9c at 0x0045e9b8, then calls removeJobs "
+     "0x0045e900 (rtti:); deleted after construction failure in View::initializeInput 0x004668cd; our STUB pairs "
+     "here at 0.935 (shell-5k-10)"),
+    (0x0041d020, 0, "rename", "??1Document@RBX@@QAE@XZ", "src2016:",
+     "RBX::Document::~Document() (2016 WindowsClient/Document.cpp) | Application::Shutdown 0x00404f10 calls "
+     "Document::Shutdown at 0x00404f82 and then this at 0x00404f92; deletes the View (0x00465b90 + operator "
+     "delete); our Document.cpp STUB pairs here (shell-5k-10)"),
+    (0x0041d270, 0, "rename", "?Shutdown@Document@RBX@@QAEXXZ", "src2016:",
+     "RBX::Document::Shutdown() (2016 WindowsClient/Document.cpp) | called right before ~Document by "
+     "Application::Shutdown (0x00404f82) and 0x0040653d; 64-byte aligned frame; calls Game::getDataModel "
+     "0x0041ce40 and getOverlayDataModel 0x0041ce60 (shell-5k-10)"),
+    (0x00437180, 0, "rename", "?ReleaseWindow@FunctionMarshaller@RBX@@SAXPAV12@@Z", "ios:",
+     "RBX::FunctionMarshaller::ReleaseWindow(FunctionMarshaller*) (iOS 1029) | static mutex through call_once "
+     "0x0040c2c0 (flag 0x00e2502c, init 0x00436ce0), window map erase 0x004377e0, DestroyWindow import; callers "
+     "0x0040504c (Application::Shutdown), 0x0041d52b, 0x0046609d (shell-5k-10)"),
+    (0x00466840, 0, "rename", "?initializeInput@View@RBX@@AAEXXZ", "src2016:",
+     "RBX::View::initializeInput() (2016 WindowsClient/View.h) | news a UserInput and calls its ctor 0x0045e300 "
+     "(~UserInput 0x0045e990 on failure), then ServiceProvider::create<ControllerService> 0x00468f30 on the "
+     "overlay DataModel; callers 0x0041dcbb, 0x00466e18 (shell-5k-10)"),
+    (0x0041ce60, None, "rename", "?getOverlayDataModel@Game@RBX@@QBE?AV?$shared_ptr@VOverlayDataModel@RBX@@@boost@@XZ",
+     "prior:",
+     "RBX::Game::getOverlayDataModel() const (our tree's name, View.cpp / UserInput.cpp) | the /GL shell's "
+     "out-of-line copy: returns a shared_ptr copy of Game+0x0c, the overlayDataModel member of the proven Game "
+     "layout (ctor 0x00655e70 100%), as getDataModel 0x0041ce40 returns +0x04; 28 call sites (shell-5k-10)"),
+    (0x00468f30, None, "rename", "??$create@VControllerService@RBX@@@ServiceProvider@RBX@@QBEPAVControllerService@1@XZ",
+     "ios:",
+     "RBX::ServiceProvider::create<ControllerService>() const (iOS 1029) | the shell copy: this in ecx, calls "
+     "find<ControllerService> 0x00469360 and Creatable<Instance>::create<ControllerService> 0x00469490; 9 call "
+     "sites, View::initializeInput among them (shell-5k-10)"),
+    (0x0047b790, 0, "rename", "??0variables_map@program_options@boost@@QAE@XZ", "rtti:",
+     "boost::program_options::variables_map::variables_map() | stores ??_7abstract_variables_map 0x00bda328 then "
+     "??_7variables_map 0x00be6a30; only caller the Application ctor 0x00403000 (reccmp 100%) at 0x0040305f "
+     "(shell-5k-10)"),
+    (0x0074fcc0, 0, "rename",
+     "?rot13@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@@Z", "ios:",
+     "RBX::rot13(std::string) (iOS 1029, by value) | per character: isalpha import, then tolower - 'a' < 13 ? "
+     "+13 : -13 (`sub eax,0x61; cmp eax,0xd`); only caller initVersion1 0x00520790 at 0x005207c1; decoration "
+     "from Client/_generated/player/unresolved.txt, so gen_link_stubs can bind it. STUDIO has no copy (no "
+     "such loop in its .text) (integrate)"),
+    (0x00876cc0, None, "rename", "?lockInstance@ObjectBridge@Lua@RBX@@SAHPAUlua_State@@@Z", "ios:",
+     "RBX::Lua::ObjectBridge::lockInstance(lua_State*) (iOS 1029) | lua_pushboolean(L, 1); return 1; slot "
+     "\"Lock\" of the Instance classLibrary 0x00b80464 (integrate)"),
+    # (comment facts: the tag becomes the export's source, so each keeps the source of the name it sits on)
+    (0x0096bde0, 0, "comment", "", "ios:",
+     "also RBX::Lua::ObjectBridge::unlockInstance (`xor eax,eax; ret`, folded): slot \"Unlock\" of the Instance "
+     "classLibrary 0x00b80464. Our link folds it with RakNet's _DLRealloc_Ex instead, which is the name "
+     "integrate's datacmp showed"),
+    (None, 0x00a150d0, "comment", "", "match:",
+     "also RBX::Lua::ObjectBridge::unlockInstance (`xor eax,eax; ret`, folded): slot \"Unlock\" of the Instance "
+     "classLibrary 0x00c5f184"),
+    (0x00b80464, 0x00c5f184, "data4",
+     "?classLibrary@?1??registerInstanceClassLibrary@ObjectBridge@Lua@RBX@@SAXPAUlua_State@@@Z@4QBUluaL_Reg@@B",
+     "str:",
+     "ObjectBridge::registerInstanceClassLibrary's classLibrary {\"new\" newInstance 0x0087af00, \"Lock\" "
+     "lockInstance 0x00876cc0, \"Unlock\" unlockInstance 0x0096bde0, {0,0}} | inline in ScriptContext::openState "
+     "0x00688370: `push 0xb80464; push \"Instance\"; call luaL_register` at 0x00688860 (integrate)"),
+    (0x00de68d0, 0x00f8935c, "data8", "?s_profanityFilter@RBX@@3V?$shared_ptr@VProfanityFilter@RBX@@@boost@@A",
+     "src2016:",
+     "RBX::s_profanityFilter (static shared_ptr<ProfanityFilter>, 2016 Game.cpp) | Game::globalExit 0x00653780 "
+     "is `mov ecx,0xde68d0; jmp reset` (STUDIO 0x007cc240 `mov ecx,0xf8935c`); globalInit 0x00654ca0 assigns it "
+     "(0x00654d02); our Game.cpp GLOBAL (app-19)"),
+    (0x00df4e48, 0x00f8d5b8, "data1", "?LastWakeTimeSleepingJobError@FFlag@@3_NA", "str:",
+     "FFlag::LastWakeTimeSleepingJobError (string \"LastWakeTimeSleepingJobError\" in .rdata) | read by "
+     "SleepingJob::error 0x0072b163 and wake 0x0072b26c (STUDIO 0x0082a153 / 0x0082a25c); our SleepingJob.cpp "
+     "FASTFLAGVARIABLE (app-19)"),
+    (0x0041c8a0, 0, "comment", "", "ida:",
+     "the shell's import thunk `jmp [~basic_string import 0x00aa12fc]`: 265 EH funclets jump here, ContentId's "
+     "and SoundId's copyValue funclets among them (app-19)"),
+    # DirectInput data from dxguid.lib / dinput8.lib (bytes equal the DirectX SDK values); pushed by
+    # UserInput::createMouse 0x0045ec60 / createKeyboard 0x0045ecf0 and the ctor's DirectInput8Create (0x0045e49e)
+    (0x00bc3628, 0, "data16", "_IID_IDirectInput8A", "lib:",
+     "IID_IDirectInput8A {BF798030-483A-4DA2-AA99-5D64ED369700} (dxguid.lib) | pushed at 0x0045e49e for "
+     "DirectInput8Create (shell-5k-10)"),
+    (0x00bc35c8, 0, "data16", "_GUID_SysKeyboard", "lib:",
+     "GUID_SysKeyboard {6F1D2B61-D5A0-11CF-BFC7-444553540000} (dxguid.lib) | pushed at 0x0045ed08 by "
+     "createKeyboard (shell-5k-10)"),
+    (0x00bc35d8, 0, "data16", "_GUID_SysMouse", "lib:",
+     "GUID_SysMouse {6F1D2B60-D5A0-11CF-BFC7-444553540000} (dxguid.lib) | used by createMouse (shell-5k-10)"),
+    (0x00bc3824, 0, "data24", "_c_dfDIMouse2", "lib:",
+     "c_dfDIMouse2 (dinput8.lib dilib5.obj): DIDATAFORMAT {0x18, 0x10, 2, 0x14, 11 objects, 0x009f09e0} | pushed at "
+     "0x0045ec91 by createMouse (shell-5k-10)"),
+    (0x00bc3a2c, 0, "data24", "_c_dfDIKeyboard", "lib:",
+     "c_dfDIKeyboard (dinput8.lib dilib2.obj): DIDATAFORMAT {0x18, 0x10, 2, 0x100, 256 objects, 0x009f0a90} | "
+     "pushed at 0x0045ed21 by createKeyboard (shell-5k-10)"),
 ]
 
 # wave18 sync (integrate.md: the Lua::*Bridge::classLibrary data rows pair the wrong arrays): each 2013

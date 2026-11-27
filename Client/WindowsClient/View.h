@@ -15,7 +15,8 @@
      userInput  +0xb0  HandleWindowsMessage (0x00466510) forwards other messages to it
                        (UserInput 0x0045f1b0, `this` pushed, the message in ecx).
    Names from the 2016 View.h where the 2013 code uses the member the same way.
-   2016's View starts with shared_ptr<Game> and an OSContext; 2013's first 0xc bytes are not proven.
+     game       +0x4   shared_ptr<Game>: initializeInput (0x00466840) copies it into the UserInput ctor
+                       and calls getDataModel on it. +0x0 is not proven (2016: an OSContext after game).
    CloseWindow is inlined into LeaveGameVerb::doIt; it is written inline here. */
 
 #pragma once
@@ -36,6 +37,8 @@
 #include "decomp.h"
 
 namespace RBX {
+
+	class Game;
 
 	// GfxBase's ViewBase (Rendering) is not declared in this tree yet; only the slot the shell calls.
 	// Delete this when GfxBase/ViewBase.h lands and include that instead.
@@ -62,7 +65,8 @@ namespace RBX {
 
 	class View
 	{
-		undefined m_unk0x00[0x0c - 0x00];             // 0x00
+		undefined4 m_unk0x00;                         // 0x00
+		boost::shared_ptr<Game> game;                 // 0x04 initializeInput passes it to UserInput
 		HWND hWnd;                                    // 0x0c
 		undefined m_unk0x10[0x45 - 0x10];             // 0x10
 		bool fullscreen;                              // 0x45
@@ -91,6 +95,7 @@ namespace RBX {
 		G3D::Vector2int16 getCurrentDesktopResolution();
 		std::vector<G3D::Vector2int16> getFullscreenSizes();
 		void initializeSizes();
+		void initializeInput(); // PLAYER 0x00466840 (LTCG: `this` in edi)
 		void resetScheduler();
 
 	public:

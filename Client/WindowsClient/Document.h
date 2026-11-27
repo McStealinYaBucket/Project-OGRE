@@ -19,6 +19,9 @@ namespace RBX {
 	class Document
 	{
 	public:
+		~Document();     // PLAYER 0x0041d020 (LTCG: `this` pushed, ret 4)
+		void Shutdown(); // PLAYER 0x0041d270 (Application::Shutdown calls it before deleting the document)
+
 		View* m_unk0x00; // 0x00
 		undefined m_unk0x04[0x1c - 0x04]; // 0x04
 		FunctionMarshaller* m_unk0x1c;    // 0x1c

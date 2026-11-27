@@ -218,11 +218,22 @@ CLASSES = [
     # UserInput (ctor 0.427), ConcurrentRakPeer::StatsUpdateJob (ctor 0.462, dtor 0.127), SecurePlayerGame /
     # UnsecuredStudioGame / LegacyLock::Implementation / Lua::YieldingThreads (no size annotation)
     "RBX::LuaAllocator", "RBX::Network::PacketReceiveJob", "RBX::RobloxCriticalSection",
+    # wave19 sync (sweep26, build/sweep26/P-final.json / S-final.json 100%; size = the tree's // SIZE = the PDB's),
+    # PLAYER / STUDIO: LegacyLock::Implementation (0x20) dtor 0x0063a380 / 0x00758fd0 (ctor 0.9925);
+    # Lua::YieldingThreads (0x18) ctor 0x008a9e20 / 0x009eda40; SleepingJob (0x230) ctor 0x0072b000 / 0x00829ff0;
+    # CameraVerb (0x1c) dtor 0x00653700 / 0x00781c80 (app-19); UnsecuredStudioGame (0x34) STUDIO ctor 0x007ce190.
+    # PLAYER only: Application (0x140, the shell's) ctor 0x00403000 (integrate); SecurePlayerGame (0x34) ctor
+    # 0x00656250; UserInputSleepingJob (0x260) D0 0x004628d0 and vftable 0x00be4e18 (ctor 0.81, shell-5k-10).
+    # Not yet: STUDIO Game (ctor 0.9965, dtor 0.9907), UserInput (0x2f8; ctor 0.46, dtor 0.935), ToggleViewMode
+    # (ctor 0.986), CommonVerbs (opaque), ConcurrentRakPeer::StatsUpdateJob (not declared yet)
+    "RBX::DataModel::LegacyLock::Implementation", "RBX::Lua::YieldingThreads", "RBX::SleepingJob", "RBX::CameraVerb",
+    "RBX::UnsecuredStudioGame", "RBX::Application", "RBX::SecurePlayerGame", "RBX::UserInputSleepingJob",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",
                "RBX::LeaveGameVerb", "RBX::RecordToggleVerb", "RBX::Game", "RBX::Network::InstancePacketCache",
-               "RBX::RobloxCriticalSection"}
+               "RBX::RobloxCriticalSection", "RBX::Application", "RBX::SecurePlayerGame",
+               "RBX::UserInputSleepingJob"}
 
 # vftable slot names for a class whose vfptr sits in a base (no own __vftable member): the reccmp --json
 # vtable entry that lists them (dump's optional JSON argument); written as the local type <Class>_vtbl.

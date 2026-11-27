@@ -142,6 +142,21 @@ namespace RBX {
 		STUB(0x006b1500);
 	}
 
+	// Bodies not written yet. STUB bodies so Players::friendServiceRequest pairs its calls.
+	// STUB: PLAYER 0x006b1d30
+	// STUB: STUDIO 0x00810a30
+	void FriendService::issueFriendRequestOrMakeFriendship(int userId, int otherUserId)
+	{
+		STUB(0x006b1d30);
+	}
+
+	// STUB: PLAYER 0x006b2040
+	// STUB: STUDIO 0x00810d40
+	void FriendService::rejectFriendRequestOrBreakFriendship(int userId, int otherUserId)
+	{
+		STUB(0x006b2040);
+	}
+
 	static FriendService::FriendStatus InvertFriendStatus(FriendService::FriendStatus status)
 	{
 		switch (status)

@@ -311,9 +311,9 @@ namespace rbx
 		RBX::Time::Interval head_waittime()
 		{
 			mutex::scoped_lock lock(this->m);
-			if (this->queue.empty())
-				return RBX::Time::Interval(0);
-			return RBX::Time::now<RBX::Time::Fast>() - this->queue.front().timestamp;
+			if (!this->queue.empty())
+				return RBX::Time::now<RBX::Time::Fast>() - this->queue.front().timestamp;
+			return RBX::Time::Interval(0);
 		}
 
 		inline size_t size() const { return this->queue.size(); }

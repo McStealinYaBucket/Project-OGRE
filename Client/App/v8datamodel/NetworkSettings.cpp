@@ -88,7 +88,7 @@ NetworkSettings::NetworkSettings()
 	, m_unk0x6d(false)
 #endif
 	, m_unk0x70(0)
-	, m_unk0x78(true)
+	, isQueueErrorComputed(true)
 	, usePhysicsPacketCache(false)
 	, useInstancePacketCache(false)
 	, m_unk0x7b(false)

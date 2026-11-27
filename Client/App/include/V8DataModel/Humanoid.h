@@ -30,6 +30,9 @@ namespace RBX {
 		};
 
 		Humanoid() {}
+
+		// iOS name; Players::killPlayer 0x0056efe0 calls it with 0.0f.
+		void setHealth(float value);
 	};
 
 } // namespace RBX

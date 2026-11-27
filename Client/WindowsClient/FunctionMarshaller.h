@@ -24,6 +24,10 @@ namespace RBX {
 		rbx::atomic<LONG> postedAsyncMessage;                 // 0x48
 
 	public:
+		// Drops a reference to the marshaller's window and destroys it with the last one (+0x4c is the
+		// count; the windows map is locked through a static recursive_mutex). LTCG: marshaller in esi.
+		static void ReleaseWindow(FunctionMarshaller* marshaller); // PLAYER 0x00437180
+
 		// Submits a function to be executed by the window's thread.
 		void Submit(boost::function<void()> job);
 	};

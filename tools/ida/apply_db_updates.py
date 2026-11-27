@@ -6,7 +6,7 @@ Per row (address,action,name,tag,line):
               clears FUNC_LIB (a FLIRT false positive); so does any match: rename (a dummy FLIRT flagged)
   unname      give the function back its dummy name
   comment     name untouched
-  data1/data4/data8 a global: define a byte/dword/qword at the address, set `name`, `line` as its repeatable comment
+  data1/data4/data8/dataN a global: define a byte/dword/qword (dataN: an N-byte array) at the address, set `name`, `line` as its repeatable comment
 Every row writes `line` into the repeatable function comment; lines starting "p4 " are this script's and
 are replaced on a rerun, so a second run changes nothing. A fact row (not a "p4 match: reccmp" line) that
 renames or unnames also drops the apply_lib_names.py lines ("match: ", "lib: ") it contradicts.
@@ -42,13 +42,13 @@ PLANNED = {int(r["address"], 16): r["name"] for r in ROWS if r["action"].startsw
 
 for r in ROWS:
     ea, act, want, line = int(r["address"], 16), r["action"], r["name"], r["line"]
-    if act in ("data1", "data4", "data8"):
-        # a global: define it as a byte/dword/qword (when it is not data of that size yet), name it, and keep
-        # the evidence as its repeatable comment (non-"p4 " lines kept)
+    if act.startswith("data") and act[4:].isdigit():
+        # a global: define it as a byte/dword/qword, any other size as a byte array (a GUID, a struct), when it
+        # is not data of that size yet; name it, and keep the evidence as its repeatable comment (non-"p4 " kept)
         n = int(act[4:])
         if not ida_bytes.is_data(ida_bytes.get_flags(ea)) or ida_bytes.get_item_size(ea) != n:
             ida_bytes.del_items(ea, ida_bytes.DELIT_SIMPLE, n)
-            {1: ida_bytes.create_byte, 4: ida_bytes.create_dword, 8: ida_bytes.create_qword}[n](ea, n)
+            {4: ida_bytes.create_dword, 8: ida_bytes.create_qword}.get(n, ida_bytes.create_byte)(ea, n)
         old = idc.get_cmt(ea, 1) or ""
         new = "\n".join([line[:900]] + [l for l in old.split("\n") if l and not l.startswith("p4 ")])
         if new != old:

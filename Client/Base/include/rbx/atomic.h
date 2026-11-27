@@ -201,14 +201,14 @@ namespace rbx
         }
     };
 } // namespace rbx
-
-
-
-
-
-
-
-
+// OGRE_ATOMIC_CTOR_NOINLINE (stand-in, not 2013 code): 2013's /GL shell keeps atomic() out of line
+// (Application ctor 0x00403000 calls 0x004022d0); a shell TU defines it before its first include.
+// Engine code inlines it once (0x006c3d31), so it stays opt-in.
+#ifdef OGRE_ATOMIC_CTOR_NOINLINE
+#define OGRE_ATOMIC_CTOR_SPEC __declspec(noinline)
+#else
+#define OGRE_ATOMIC_CTOR_SPEC
+#endif
 namespace rbx
 {
     template <typename T>
@@ -219,7 +219,7 @@ namespace rbx
 
     public:
         // Out of line in 2013 (PLAYER 0x004022d0 for atomic<int>; Name::Name 0x006136c0 calls it).
-        atomic() : v(0)
+        OGRE_ATOMIC_CTOR_SPEC atomic() : v(0)
         {
             RBXASSERT((((long)(&(this->v))) & 0x3) == 0);
         }

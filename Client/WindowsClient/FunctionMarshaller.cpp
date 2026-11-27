@@ -3,7 +3,16 @@
 
 #include "FunctionMarshaller.h"
 
+#include "decomp.h"
+
 namespace RBX {
+
+	// STUB: PLAYER 0x00437180
+	__declspec(noinline) void FunctionMarshaller::ReleaseWindow(FunctionMarshaller* marshaller)
+	{
+		STUB(0x00437180);
+		::DestroyWindow(marshaller->m_hWnd);
+	}
 
 	// Left (74-75%): 2013 inlines function0's copy ctor (`[esi]=0; call assign_to_own` 0x00437a90) where
 	// our LTCG inlines assign_to_own into an out-of-line copy ctor. The assign_to_own bodies are byte-

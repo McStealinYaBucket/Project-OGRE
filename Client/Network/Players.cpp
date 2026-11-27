@@ -209,12 +209,23 @@ namespace Network {
 		return Instance::fastDynamicCast<Client>(instance) != NULL;
 	}
 
-	// Bound by onChildAdded to Player::remoteFriendServiceSignal; not written yet.
+	// Bound by onChildAdded to Player::remoteFriendServiceSignal. Calls, stack slots and branch order match
+	// (reject falls through); 2013 keeps `this` in ebp and pushes ebp/esi/edi up front, ours shrink-wraps
+	// ebp. Probed 7 shapes (early returns, a ternary either way, raw-pointer locals, a `self` copy): none moves it.
 	// STUB: PLAYER 0x0056b960
 	// STUB: STUDIO 0x005d0e10
 	void Players::friendServiceRequest(bool makeFriends, weak_ptr<Player> sourcePlayer, int otherUserId)
 	{
-		STUB(0x0056b960);
+		shared_ptr<Player> source = sourcePlayer.lock();
+		shared_ptr<Player> other = getPlayerByID(otherUserId);
+		if (source && other)
+			if (FriendService* friendService = ServiceProvider::find<FriendService>(this))
+			{
+				if (!makeFriends)
+					friendService->rejectFriendRequestOrBreakFriendship(source->userId, other->userId);
+				else
+					friendService->issueFriendRequestOrMakeFriendship(source->userId, other->userId);
+			}
 	}
 
 	// FUNCTION: PLAYER 0x0056baa0
@@ -251,6 +262,7 @@ namespace Network {
 } // namespace RBX
 // Included here, below the 2013 assert lines (182/189).
 #include "V8DataModel/ScriptInformationProvider.h"
+#include "V8DataModel/Humanoid.h"
 namespace RBX {
 namespace Network {
 	// Bound by onChildAdded to Player::scriptSecurityErrorSignal. 2013 keeps only the service lookup (the
@@ -280,12 +292,13 @@ namespace Network {
 		return NULL;
 	}
 
-	// Bound by onChildAdded to Player::killPlayerSignal / statsAvailableSignal; not written yet.
-	// STUB: PLAYER 0x0056efe0
-	// STUB: STUDIO 0x005d50e0
+	// Bound by onChildAdded to Player::killPlayerSignal. No null tests past the player (2013 has none).
+	// FUNCTION: PLAYER 0x0056efe0
+	// FUNCTION: STUDIO 0x005d50e0
 	void Players::killPlayer(int userId)
 	{
-		STUB(0x0056efe0);
+		if (Player* player = Instance::fastDynamicCast<Player>(getPlayerByID(userId).get()))
+			player->character->findFirstChildOfType<Humanoid>()->setHealth(0.0f);
 	}
 
 	// STUB: PLAYER 0x0056f8f0

@@ -1,4 +1,4 @@
-/* App/v8datamodel/Game.cpp -- October 2013, partial: everything but setupDataModel (needs the Commands.h camera verbs).
+/* App/v8datamodel/Game.cpp -- October 2013, partial (globalInit not written; CommonVerbs is opaque).
    The 2013 ctor (PLAYER 0x00655e70, iOS callees) differs from 2016's: when the loading screen is
    asked for and FFlag::OverlayDataModelEnabled is set, it builds an OverlayDataModel first, hands it
    the game DataModel, and sets up the overlay's services under a write LegacyLock. */
@@ -14,6 +14,9 @@
 #include "V8DataModel/UserController.h"
 #include "V8DataModel/RunService.h"
 #include "V8Tree/Verb.h"
+#include "V8DataModel/Commands.h"
+#include "V8DataModel/CommonVerbs.h"
+#include "V8DataModel/Workspace.h"
 
 FASTFLAG(OverlayDataModelEnabled)
 
@@ -32,13 +35,17 @@ static boost::once_flag initWithoutSecurityFlag = BOOST_ONCE_INIT;
 #endif
 
 namespace RBX {
-	namespace Network {
-		// API.cpp, PLAYER 0x00526e10 (iOS 10-29 RBX::Network::initWithPlayerSecurity). Network/API.h does
-		// not declare it yet.
-		void initWithPlayerSecurity();
+
+
+
+	// CommonVerbs' implicit destructor, emitted here in 2013 (Game.obj). STUB until CommonVerbs.h has
+	// its members (CommonVerbs.h).
+	// STUB: PLAYER 0x006531e0
+	// STUB: STUDIO 0x007cbbb0
+	CommonVerbs::~CommonVerbs()
+	{
+		STUB(0x006531e0);
 	}
-
-
 
 	// iOS 10-29: void RBX::shutdownDM<DataModel>(shared_ptr<DataModel>&) and <OverlayDataModel>; the two
 	// PLAYER copies are byte-identical and fold (STUDIO keeps two: 0x007cc000, 0x007cc090).
@@ -54,6 +61,18 @@ namespace RBX {
 			}
 			dm.reset();
 		}
+	}
+
+	// 2016 name; globalInit (PLAYER 0x00654ca0, not written) assigns ScopedSingleton<ProfanityFilter>::getInstance().
+	// GLOBAL: PLAYER 0x00de68d0
+	// GLOBAL: STUDIO 0x00f8935c
+	static boost::shared_ptr<ProfanityFilter> s_profanityFilter;
+
+	// FUNCTION: PLAYER 0x00653780
+	// FUNCTION: STUDIO 0x007cc240
+	void Game::globalExit()
+	{
+		s_profanityFilter.reset();
 	}
 
 	// FUNCTION: PLAYER 0x006542b0
@@ -95,12 +114,26 @@ namespace RBX {
 		}
 	}
 
-	// Not written yet (1446 bytes). STUB body so the bind target pairs.
-	// STUB: PLAYER 0x00655630
+	// iOS 10-29 setupDataModel(std::string const&); the camera verbs' ctors are inline (Commands.h).
+	// FUNCTION: PLAYER 0x00655630
 	// STUB: STUDIO 0x007cd6d0
 	void Game::setupDataModel(const std::string& baseUrl)
 	{
-		STUB(0x00655630);
+		dataModel->create<ScriptInformationProvider>()->setAssetUrl(baseUrl + "/asset/");
+		dataModel->create<ContentProvider>()->setBaseUrl(baseUrl);
+		dataModel->game = this;
+
+		commonVerbs.reset(new CommonVerbs(dataModel.get()));
+
+		verbs.push_back(new CameraPanLeftCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraPanRightCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraTiltUpCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraTiltDownCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraZoomInCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraZoomOutCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraCenterCommand(dataModel->getWorkspace()));
+		verbs.push_back(new CameraZoomExtentsCommand(dataModel->getWorkspace()));
+		verbs.push_back(new ToggleViewMode(dataModel.get()));
 	}
 
 	// View::resetScheduler calls it (PLAYER 0x00466d48); STUDIO has no copy.
@@ -186,3 +219,9 @@ namespace RBX {
 #endif
 
 } // namespace RBX
+
+#ifdef OGRE_TARGET_STUDIO
+DECOMP_SIZE_ASSERT(RBX::UnsecuredStudioGame, 0x34);
+#else
+DECOMP_SIZE_ASSERT(RBX::SecurePlayerGame, 0x34);
+#endif

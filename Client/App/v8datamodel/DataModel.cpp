@@ -1447,7 +1447,7 @@ namespace RBX {
 	// GLOBAL: PLAYER 0x00d314c8
 	// GLOBAL: STUDIO 0x00ebd70c
 	int DataModel::LegacyLock::mainThreadId = ~0;
-
+	// SIZE 0x20
 	struct DataModel::LegacyLock::Implementation : boost::noncopyable
 	{
 		// To marshal the task to this thread we use a pair of locks (acquire and release)

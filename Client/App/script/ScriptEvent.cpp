@@ -43,9 +43,9 @@ YieldingThreads::YieldingThreads(ScriptContext* context)
 // binary's manual addref/release dance is observably identical.
 YieldingThreads::WaitingThread::WaitingThread(lua_State* thread, Time::Interval timeout)
 	: thread(new WeakThreadRef(thread))
-	, startTime(Time::now<Time::Precise>().timestampSeconds())
-	, resumeTime(startTime + timeout.seconds())
+	, startTime(Time::now<Time::Precise>())
 {
+	resumeTime = startTime + timeout;	// 2013: resumeTime is zeroed first (fldz), then assigned
 }
 
 // mac: 0x1AB2D4 (45B, batch473): immediate waiter.
@@ -105,34 +105,31 @@ int Bridge<boost::shared_ptr<GenericAsyncFunction>, true>::on_tostring(
 // mac: 0x1AB3FA (652B, batch473): pop every due waiter, push (elapsed, now),
 // and run it via ScriptContext::resume#2 (2 results). Stops early with
 // maxed=true past the limit.
-// DELTA: the +620 running-average sample is skipped (pure telemetry;
-// the member queues behind the layout audit).
-// STUB: PLAYER 0x008a9bb0
-// STUB: STUDIO 0x009ed7d0
+// FUNCTION: PLAYER 0x008a9bb0
+// FUNCTION: STUDIO 0x009ed7d0
 void YieldingThreads::resume(double now, Time limit, bool& maxed)
 {
-	if (FLog::ScriptContext != 0)
-		FLog::FastLog(FLog::ScriptContext, "Resuming waiting threads", NULL);
+	FASTLOG(FLog::ScriptContext, "Resuming waiting threads");
 	while (!waiters.empty())
 	{
 		Time current = Time::now<Time::Precise>();
 		const WaitingThread& top = waiters.top();
-		if (top.resumeTime > current.timestampSeconds())
+		if (top.resumeTime > current)
 			break;
-		double elapsed = current.timestampSeconds() - top.startTime;
-		WaitingThread due = top;
+		Time::Interval elapsed = current - top.startTime;
+		Lua::ThreadRef thread = top.thread->lock();
 		waiters.pop();
-		Lua::ThreadRef thread = due.thread->lock();
-		lua_State* live = thread.get();
-		if (live != NULL)
+		if (thread)
 		{
-			int outerTop = lua_gettop(live);
-			lua_pushnumber(live, elapsed);
-			lua_pushnumber(live, now);
+			int oldTop = lua_gettop(thread);
+			lua_pushnumber(thread, elapsed.seconds());
+			lua_pushnumber(thread, now);
 			context->resume(thread, 2);
-			lua_settop(live, outerTop);
+			lua_settop(thread, oldTop);
+			ScriptContext* sc = context;	// 2013 reloads context into eax here (lea ecx,[eax+0x1e0])
+			sc->threadsResumedRate.sample();
 		}
-		if (current.timestampSeconds() > limit.timestampSeconds())
+		if (current > limit)
 		{
 			maxed = true;
 			return;
@@ -141,3 +138,6 @@ void YieldingThreads::resume(double now, Time limit, bool& maxed)
 }
 
 } }
+
+#include "decomp.h"
+DECOMP_SIZE_ASSERT(RBX::Lua::YieldingThreads, 0x18);

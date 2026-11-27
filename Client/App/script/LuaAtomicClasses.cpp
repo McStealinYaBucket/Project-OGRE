@@ -865,6 +865,8 @@ namespace RBX { namespace Lua {
 	};
 
 	// mac: 0x16BE02 (90B, batch421): standard library-table registration.
+	// FUNCTION: PLAYER 0x00882130
+	// FUNCTION: STUDIO 0x0092c1d0
 	void FacesBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -1076,6 +1078,8 @@ namespace RBX { namespace Lua {
 	};
 
 	// mac: 0x16C1C0 (90B, batch422): standard library-table registration.
+	// FUNCTION: PLAYER 0x00882370
+	// FUNCTION: STUDIO 0x0092c440
 	void AxesBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -1423,6 +1427,8 @@ namespace RBX { namespace Lua {
 	};
 
 	// mac: 0x16CA10 (90B, batch423): standard library-table registration.
+	// FUNCTION: PLAYER 0x008826d0
+	// FUNCTION: STUDIO 0x0092c7a0
 	void InputObjectBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -1845,6 +1851,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881f60
+	// FUNCTION: STUDIO 0x0092c000
 	void BrickColorBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -1873,6 +1881,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x008826a0
+	// FUNCTION: STUDIO 0x0092c770
 	void CellIDBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3216,6 +3226,8 @@ namespace RBX { namespace Lua {
 	};
 
 	// mac: 0x168B3A (batch355-banked shape): luaL_register + readonly + pop.
+	// FUNCTION: PLAYER 0x00881f30
+	// FUNCTION: STUDIO 0x0092bfd0
 	void Vector2Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3240,6 +3252,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x008819c0
+	// FUNCTION: STUDIO 0x0092ba90
 	void Color3Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3264,6 +3278,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881b20
+	// FUNCTION: STUDIO 0x0092bbf0
 	void RbxRayBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3296,6 +3312,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881b50
+	// FUNCTION: STUDIO 0x0092bc20
 	void Region3Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3320,6 +3338,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881bb0
+	// FUNCTION: STUDIO 0x0092bc50
 	void Region3int16Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3345,6 +3365,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881c10
+	// FUNCTION: STUDIO 0x0092bcb0
 	void Vector3int16Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3369,6 +3391,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881de0
+	// FUNCTION: STUDIO 0x0092be80
 	void Vector2int16Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3479,6 +3503,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881be0
+	// FUNCTION: STUDIO 0x0092bc80
 	void Vector3Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3564,6 +3590,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881f90
+	// FUNCTION: STUDIO 0x0092c030
 	void CoordinateFrameBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3594,6 +3622,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00881fc0
+	// FUNCTION: STUDIO 0x0092c060
 	void UDimBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
@@ -3635,6 +3665,8 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
+	// FUNCTION: PLAYER 0x00882100
+	// FUNCTION: STUDIO 0x0092c1a0
 	void UDim2Bridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);

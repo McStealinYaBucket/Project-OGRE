@@ -12,6 +12,9 @@
        fullscreen size from calcDefaultResolution, not from the desktop;
      - SetFullscreen's GameBasicSettings::setFullScreen fires its signal before it stores.
 
+   initializeInput (0x00466840) needs two App accessors that are not declared yet
+   (Game::getOverlayDataModel, the shell's copy 0x0041ce60, and ControllerService::setHardwareDevice
+   for +0x64); its written body is compiled under OGRE_APP_INPUT_ACCESSORS until they exist.
    HandleWindowsMessage (0x00466510) and ShowWindow (0x004682c0) are the other callers of the
    resolution code; its caller is main.cpp's WndProc (0x004426a0, not written). ShowWindow's assert
    must stay on line 739, so the file keeps a blank gap above it until the rest of View.cpp is laid
@@ -25,8 +28,12 @@
 
 // App's headers first: they include winsock2.h ahead of windows.h.
 #include "../ClientBase/RenderSettingsItem.h"
+#include "V8DataModel/DataModel.h"
 #include "V8DataModel/DebugSettings.h"
+#include "V8DataModel/Game.h"
 #include "V8DataModel/GameBasicSettings.h"
+#include "V8DataModel/OverlayDataModel.h"
+#include "V8DataModel/UserController.h"
 #include "../Win/LogManager.h"
 #include "FastLog.h"
 #include "RbxFormat.h"
@@ -154,6 +161,31 @@ void View::HandleWindowsMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		userInput->PostUserInputMessage(uMsg, wParam, lParam);
 	}
+}
+
+// Against 2016: no `if (userInput)` test after the reset, and the overlay DataModel's
+// ControllerService gets the same hardware device. LTCG passes `this` in edi and builds the
+// UserInput with `this` in esi.
+// STUB: PLAYER 0x00466840
+void View::initializeInput()
+{
+	userInput.reset(new UserInput(hWnd, this, game));
+#ifdef OGRE_APP_INPUT_ACCESSORS
+
+	{
+		DataModel::LegacyLock lock(game->getDataModel(), DataModelJob::Write);
+		ControllerService* service = ServiceProvider::create<ControllerService>(game->getDataModel().get());
+		service->setHardwareDevice(userInput.get());
+	}
+
+	if (game->getOverlayDataModel())
+	{
+		ControllerService* service = ServiceProvider::create<ControllerService>(game->getOverlayDataModel().get());
+		service->setHardwareDevice(userInput.get());
+	}
+#else
+	STUB(0x00466840);
+#endif
 }
 
 // STUB: PLAYER 0x00467410
@@ -492,38 +524,6 @@ std::vector<G3D::Vector2int16> View::getFullscreenSizes()
 
 // View.cpp lines up to 739 hold code that is not written yet (the 2013 assert below is on line
 // 739); keep this function at the end until the rest of the file is laid out.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

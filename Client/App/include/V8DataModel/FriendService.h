@@ -51,6 +51,10 @@ namespace RBX {
 		void playerAdded(int userId);
 		void playerRemoving(int userId);
 
+		// iOS names; Players::friendServiceRequest 0x0056b960 calls one or the other.
+		void issueFriendRequestOrMakeFriendship(int userId, int otherUserId);
+		void rejectFriendRequestOrBreakFriendship(int userId, int otherUserId);
+
 		// Layout from the 2013 ctor 0x006b2780 (EH states in brackets). Names are 2016's where the
 		// 2013 node shapes agree (map node isnil at +0x1d/+0x15/+0x11 fixes each value type).
 		rbx::remote_signal<void(int, int, FriendEventType)> friendEventReplicatingSignal;	// 0x64 [1-2]

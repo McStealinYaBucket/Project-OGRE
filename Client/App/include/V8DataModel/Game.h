@@ -33,6 +33,7 @@ namespace RBX {
 	class CommonVerbs;
 	class DataModel;
 	class OverlayDataModel;
+	class ProfanityFilter;
 	class Verb;
 
 	// VTABLE: PLAYER 0x00b31044
@@ -50,6 +51,8 @@ namespace RBX {
 		// UnsecuredStudioGame's (STUDIO 0x007ce200); the PDB keeps the subclass name, so they carry the markers.
 
 		boost::shared_ptr<DataModel> getDataModel() const { return dataModel; }
+
+		static void globalExit();
 
 		void setupDataModel(const std::string& baseUrl);
 		void setDataModel(boost::shared_ptr<DataModel> dataModel);
@@ -72,6 +75,7 @@ namespace RBX {
 
 	// PLAYER only: its deleting destructor folds with Game's (both vftable slots are 0x00656230).
 	// VTABLE: PLAYER 0x00b3104c
+	// SIZE 0x34
 	class SecurePlayerGame : public Game
 	{
 	public:
@@ -84,6 +88,7 @@ namespace RBX {
 	// STUDIO only (RTTI .?AVUnsecuredStudioGame@RBX@@; iOS 10-29 has it too). Its deleting destructor
 	// folds with Game's, as SecurePlayerGame's does in PLAYER.
 	// VTABLE: STUDIO 0x00c0a928
+	// SIZE 0x34
 	class UnsecuredStudioGame : public Game
 	{
 	public:

@@ -4218,8 +4218,8 @@ struct RBX::DataModel_vtbl
   void *luaClone;
   void *setName;
   void *getPersistentDataCost;
-  void *isReadOnly;
-  void *variable_value____0_;
+  void *canClientCreate;
+  void *AASamples____0_;
   void *createChild;
   void *writeXml;
   void *verifySetParent;
@@ -5648,7 +5648,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   bool m_unk0x6d;
   unsigned __int8 gap_6E[2];
   double m_unk0x70;
-  bool m_unk0x78;
+  bool isQueueErrorComputed;
   bool usePhysicsPacketCache;
   bool useInstancePacketCache;
   bool m_unk0x7b;
@@ -6755,5 +6755,111 @@ struct __cppobj RBX::RobloxCriticalSection
   unsigned __int8 recentCaller[28];     ///< std::string
   unsigned __int8 olderCaller[28];      ///< std::string
   unsigned __int8 diSection[24];        ///< ATL::CCriticalSection
+};
+
+/* 811 */
+typedef struct _DIDATAFORMAT DIDATAFORMAT;
+
+/* 812 */
+struct _DIDATAFORMAT
+{
+  DWORD dwSize;
+  DWORD dwObjSize;
+  DWORD dwFlags;
+  DWORD dwDataSize;
+  DWORD dwNumObjs;
+  LPDIOBJECTDATAFORMAT rgodf;
+};
+
+/* 813 */
+typedef struct _DIOBJECTDATAFORMAT *LPDIOBJECTDATAFORMAT;
+
+/* 814 */
+struct _DIOBJECTDATAFORMAT
+{
+  const GUID *pguid;
+  DWORD dwOfs;
+  DWORD dwType;
+  DWORD dwFlags;
+};
+
+/* 815 */
+struct __cppobj RBX::DataModel::LegacyLock::Implementation
+{
+  RBX::DataModel *dataModel;
+  RBX::DataModel::GenericJob *job;
+  RBX::DataModel::GenericJob *previousJob;
+  unsigned __int8 events[8];            ///< boost::shared_ptr<RBX::DataModel::LegacyLock::Implementation::Events>
+  RBX::Limits::Counter::Activator activator;
+  unsigned int m_unk0x1c;
+};
+
+/* 816 */
+struct __cppobj RBX::Lua::YieldingThreads
+{
+  RBX::ScriptContext *context;
+  unsigned __int8 waiters[20];          ///< std::priority_queue<RBX::Lua::YieldingThreads::WaitingThread>
+};
+
+/* 817 */
+struct __cppobj RBX::SleepingJob : RBX::DataModelJob
+{
+  unsigned __int8 isAwake[1];           ///< tbb::atomic<bool>
+  unsigned __int8 gap_219[7];
+  double desiredFps;
+  unsigned __int8 lastWakeTime[8];      ///< RBX::Time
+};
+
+/* 818 */
+struct __cppobj RBX::CameraVerb : RBX::Verb
+{
+  void *workspace;                      ///< RBX::Workspace *
+  unsigned __int8 selection[12];        ///< RBX::ServiceClient<RBX::Selection>
+};
+
+/* 819 */
+struct __cppobj RBX::Application
+{
+  unsigned __int8 enteredShutdown[4];   ///< rbx::atomic<int>
+  void *processLocal_stopPreventMultipleJobsThread; ///< ? *
+  void *processLocal_stopWaitForVideoPrerollThread; ///< ? *
+  void *mapFileForWnd;                  ///< ? *
+  void *bufForWnd;                      ///< ? *
+  int stopLogsCleanup;
+  unsigned __int8 clenupFinishedEvent[4]; ///< ATL::CEvent
+  unsigned __int8 logsCleanUpThread[4]; ///< boost::scoped_ptr<boost::thread>
+  unsigned int m_unk0x20;
+  unsigned __int8 m_unk0x24[4];         ///< boost::scoped_ptr<RBX::Document>
+  unsigned __int8 vm[44];               ///< boost::program_options::variables_map
+  unsigned __int8 moduleFilename[28];   ///< std::string
+  unsigned __int8 globalBasicSettingsPath[28]; ///< std::string
+  unsigned __int8 waitEventName[28];    ///< std::string
+  bool crashReportEnabled;
+  bool hideChat;
+  unsigned __int8 gap_AA[2];
+  MainLogManager logManager;
+  unsigned __int8 dumpErrorUploader[4]; ///< boost::scoped_ptr<DumpErrorUploader>
+  unsigned __int8 processPerfCounter[8]; ///< boost::shared_ptr<CProcessPerfCounter>
+  unsigned __int8 profanityFilter[8];   ///< boost::shared_ptr<RBX::ProfanityFilter>
+  unsigned __int8 m_unk0x124[4];        ///< boost::scoped_ptr<boost::thread>
+  unsigned __int8 m_unk0x128[4];        ///< boost::scoped_ptr<boost::thread>
+  unsigned __int8 teleporter[12];       ///< RBX::Teleporter
+  void *marshaller;                     ///< RBX::FunctionMarshaller *
+  bool spoofMD5;
+  unsigned __int8 gap_13D[3];
+};
+
+/* 820 */
+struct __cppobj RBX::SecurePlayerGame : RBX::Game
+{
+};
+
+/* 821 */
+struct __cppobj RBX::UserInputSleepingJob : RBX::SleepingJob
+{
+  unsigned int m_unk0x230;
+  void *userInput;                      ///< RBX::UserInput *
+  unsigned __int8 messages[36];         ///< rbx::safe_queue<RBX::UserInputSleepingJob::Message>
+  unsigned __int8 gap_25C[4];
 };
 

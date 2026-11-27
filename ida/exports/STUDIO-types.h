@@ -2506,7 +2506,7 @@ struct __cppobj RBX::DataModel : RBX::DescribedNonCreatable<RBX::DataModel, RBX:
   bool isGameLoaded;
   bool isPersonalServer;
   unsigned __int8 gap_C5A[2];
-  void *game;                           ///< RBX::Game *
+  RBX::Game *game;
   unsigned __int8 hackFlagSetMutex[8];  ///< boost::mutex
   unsigned __int8 hackFlagSet[24];      ///< boost::unordered::unordered_set<unsigned int,boost::hash<unsigned int>,std::equal_to<unsigned int>,std::allocator<unsigned int> >
   unsigned __int8 jobId[28];            ///< std::string
@@ -4010,7 +4010,7 @@ struct __cppobj RBX::NetworkSettings : RBX::GlobalAdvancedSettingsItem<RBX::Netw
   bool m_unk0x6d;
   unsigned __int8 gap_6E[2];
   double m_unk0x70;
-  bool m_unk0x78;
+  bool isQueueErrorComputed;
   bool usePhysicsPacketCache;
   bool useInstancePacketCache;
   bool m_unk0x7b;
@@ -5046,5 +5046,57 @@ struct __cppobj RBX::Network::PacketReceiveJob : RBX::DataModelJob
   unsigned __int8 dataModel[8];         ///< boost::weak_ptr<RBX::DataModel>
   double receiveRate;
   unsigned __int8 rakPeer[8];           ///< boost::weak_ptr<RBX::Network::ConcurrentRakPeer>
+};
+
+/* 702 */
+struct __cppobj RBX::DataModel::LegacyLock::Implementation
+{
+  RBX::DataModel *dataModel;
+  RBX::DataModel::GenericJob *job;
+  RBX::DataModel::GenericJob *previousJob;
+  unsigned __int8 events[8];            ///< boost::shared_ptr<RBX::DataModel::LegacyLock::Implementation::Events>
+  RBX::Limits::Counter::Activator activator;
+  unsigned int m_unk0x1c;
+};
+
+/* 703 */
+struct __cppobj RBX::Lua::YieldingThreads
+{
+  RBX::ScriptContext *context;
+  unsigned __int8 waiters[20];          ///< std::priority_queue<RBX::Lua::YieldingThreads::WaitingThread>
+};
+
+/* 704 */
+struct __cppobj RBX::SleepingJob : RBX::DataModelJob
+{
+  unsigned __int8 isAwake[1];           ///< tbb::atomic<bool>
+  unsigned __int8 gap_219[7];
+  double desiredFps;
+  unsigned __int8 lastWakeTime[8];      ///< RBX::Time
+};
+
+/* 705 */
+struct __cppobj RBX::CameraVerb : RBX::Verb
+{
+  void *workspace;                      ///< RBX::Workspace *
+  unsigned __int8 selection[12];        ///< RBX::ServiceClient<RBX::Selection>
+};
+
+/* 706 */
+struct __cppobj RBX::Game
+{
+  void **__vftable;
+  unsigned __int8 dataModel[8];         ///< boost::shared_ptr<RBX::DataModel>
+  unsigned __int8 overlayDataModel[8];  ///< boost::shared_ptr<RBX::OverlayDataModel>
+  bool hasShutdown;
+  unsigned __int8 gap_15[3];
+  unsigned __int8 verbs[16];            ///< std::vector<RBX::Verb *>
+  unsigned __int8 commonVerbs[8];       ///< boost::shared_ptr<RBX::CommonVerbs>
+  unsigned __int8 m_unk0x30[4];         ///< rbx::signal<void __cdecl(RBX::DataModel *)>
+};
+
+/* 707 */
+struct __cppobj RBX::UnsecuredStudioGame : RBX::Game
+{
 };
 

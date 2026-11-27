@@ -27,5 +27,6 @@ namespace RBX
 
 		bool isTrustedContent(const char* url);
 		void initWithoutSecurity();
+		void initWithPlayerSecurity();
 	}
 }

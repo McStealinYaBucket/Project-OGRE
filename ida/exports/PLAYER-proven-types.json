@@ -1817,8 +1817,8 @@
     "void *luaClone",
     "void *setName",
     "void *getPersistentDataCost",
-    "void *isReadOnly",
-    "void *variable_value____0_",
+    "void *canClientCreate",
+    "void *AASamples____0_",
     "void *createChild",
     "void *writeXml",
     "void *verifySetParent",
@@ -6141,7 +6141,7 @@
      "scalar": "T_REAL64"
     },
     {
-     "name": "m_unk0x78",
+     "name": "isQueueErrorComputed",
      "offset": 120,
      "size": 1,
      "kind": "scalar",
@@ -10322,6 +10322,438 @@
    ],
    "base": false,
    "unique": "VRobloxCriticalSection@RBX@@"
+  },
+  "RBX::DataModel::LegacyLock::Implementation": {
+   "size": 32,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "boost::noncopyable_::noncopyable",
+     "offset": 0,
+     "size": 1,
+     "empty": true
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    },
+    {
+     "name": "job",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel::GenericJob",
+     "scalar": null
+    },
+    {
+     "name": "previousJob",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel::GenericJob",
+     "scalar": null
+    },
+    {
+     "name": "events",
+     "offset": 12,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::DataModel::LegacyLock::Implementation::Events>",
+     "scalar": null
+    },
+    {
+     "name": "activator",
+     "offset": 20,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Limits::Counter::Activator",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x1c",
+     "offset": 28,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_ULONG"
+    }
+   ],
+   "base": false,
+   "unique": "UImplementation@LegacyLock@DataModel@RBX@@"
+  },
+  "RBX::Lua::YieldingThreads": {
+   "size": 24,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "context",
+     "offset": 0,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::ScriptContext",
+     "scalar": null
+    },
+    {
+     "name": "waiters",
+     "offset": 4,
+     "size": 20,
+     "kind": "class",
+     "type": "std::priority_queue<RBX::Lua::YieldingThreads::WaitingThread,std::vector<RBX::Lua::YieldingThreads::WaitingThread,std::allocator<RBX::Lua::YieldingThreads::WaitingThread> >,std::less<RBX::Lua::YieldingThreads::WaitingThread> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VYieldingThreads@Lua@RBX@@"
+  },
+  "RBX::SleepingJob": {
+   "size": 560,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "isAwake",
+     "offset": 536,
+     "size": 1,
+     "kind": "structure",
+     "type": "tbb::atomic<bool>",
+     "scalar": null
+    },
+    {
+     "name": "desiredFps",
+     "offset": 544,
+     "size": 8,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_REAL64"
+    },
+    {
+     "name": "lastWakeTime",
+     "offset": 552,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VSleepingJob@RBX@@"
+  },
+  "RBX::CameraVerb": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "workspace",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::Workspace",
+     "scalar": null
+    },
+    {
+     "name": "selection",
+     "offset": 16,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::ServiceClient<RBX::Selection>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VCameraVerb@RBX@@"
+  },
+  "RBX::Application": {
+   "size": 320,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "enteredShutdown",
+     "offset": 0,
+     "size": 4,
+     "kind": "class",
+     "type": "rbx::atomic<int>",
+     "scalar": null
+    },
+    {
+     "name": "processLocal_stopPreventMultipleJobsThread",
+     "offset": 4,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "processLocal_stopWaitForVideoPrerollThread",
+     "offset": 8,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "mapFileForWnd",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "bufForWnd",
+     "offset": 16,
+     "size": 4,
+     "kind": "ptr",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "stopLogsCleanup",
+     "offset": 20,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_LONG"
+    },
+    {
+     "name": "clenupFinishedEvent",
+     "offset": 24,
+     "size": 4,
+     "kind": "class",
+     "type": "ATL::CEvent",
+     "scalar": null
+    },
+    {
+     "name": "logsCleanUpThread",
+     "offset": 28,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x20",
+     "offset": 32,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "m_unk0x24",
+     "offset": 36,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<RBX::Document>",
+     "scalar": null
+    },
+    {
+     "name": "vm",
+     "offset": 40,
+     "size": 44,
+     "kind": "class",
+     "type": "boost::program_options::variables_map",
+     "scalar": null
+    },
+    {
+     "name": "moduleFilename",
+     "offset": 84,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "globalBasicSettingsPath",
+     "offset": 112,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "waitEventName",
+     "offset": 140,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    },
+    {
+     "name": "crashReportEnabled",
+     "offset": 168,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "hideChat",
+     "offset": 169,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    },
+    {
+     "name": "logManager",
+     "offset": 172,
+     "size": 100,
+     "kind": "class",
+     "type": "MainLogManager",
+     "scalar": null
+    },
+    {
+     "name": "dumpErrorUploader",
+     "offset": 272,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<DumpErrorUploader>",
+     "scalar": null
+    },
+    {
+     "name": "processPerfCounter",
+     "offset": 276,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<CProcessPerfCounter>",
+     "scalar": null
+    },
+    {
+     "name": "profanityFilter",
+     "offset": 284,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::ProfanityFilter>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x124",
+     "offset": 292,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "m_unk0x128",
+     "offset": 296,
+     "size": 4,
+     "kind": "class",
+     "type": "boost::scoped_ptr<boost::thread>",
+     "scalar": null
+    },
+    {
+     "name": "teleporter",
+     "offset": 300,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::Teleporter",
+     "scalar": null
+    },
+    {
+     "name": "marshaller",
+     "offset": 312,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::FunctionMarshaller",
+     "scalar": null
+    },
+    {
+     "name": "spoofMD5",
+     "offset": 316,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VApplication@RBX@@"
+  },
+  "RBX::SecurePlayerGame": {
+   "size": 52,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Game",
+     "offset": 0,
+     "size": 52,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VSecurePlayerGame@RBX@@"
+  },
+  "RBX::UserInputSleepingJob": {
+   "size": 608,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::SleepingJob",
+     "offset": 0,
+     "size": 560,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "m_unk0x230",
+     "offset": 560,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_UINT4"
+    },
+    {
+     "name": "userInput",
+     "offset": 564,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::UserInput",
+     "scalar": null
+    },
+    {
+     "name": "messages",
+     "offset": 568,
+     "size": 36,
+     "kind": "class",
+     "type": "rbx::safe_queue<RBX::UserInputSleepingJob::Message>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VUserInputSleepingJob@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -14914,7 +15346,9 @@
    "unique": "V?$NonFactoryProduct@VServiceProvider@RBX@@$E?sSettings@2@3QBDB@RBX@@"
   }
  },
- "missing": [],
+ "missing": [
+  "RBX::UnsecuredStudioGame"
+ ],
  "fixups_2013": [
   "IFWHolder: 5 vftable slots (PLAYER 0x00b79100)",
   "RBX::DataModel_vtbl: 34 slots from P-final.json 0xb2ffec"

@@ -51,7 +51,7 @@ namespace RBX {
 		bool m_unk0x6d;					// 0x6d  false (one byte store each in the ctor)
 		double m_unk0x70;				// 0x70  0
 	public:
-		bool m_unk0x78;					// 0x78  true (2016 isQueueErrorComputed; PacketJob ctor 0x005c5610 reads it)
+		bool isQueueErrorComputed;		// 0x78  true (src2016 name; PacketJob ctor 0x005c5610 copies it)
 		// Server::onServiceProvider 0x005b5310 reads 0x79/0x7a/0xdc (names: 2016, same use).
 		bool usePhysicsPacketCache;		// 0x79  false
 		bool useInstancePacketCache;	// 0x7a  false
@@ -75,8 +75,8 @@ namespace RBX {
 		int m_unk0xe0;					// 0xe0  0
 		float m_unk0xe4;				// 0xe4  10.0f
 		int m_unk0xe8;					// 0xe8  1
-		int m_unk0xec;					// 0xec  -1
 	public:
+		int m_unk0xec;					// 0xec  -1 (ServerReplicator::sendItemsPacket reads it)
 		float networkOwnerRate;			// 0xf0  10.0f (NetworkOwnerJob ctor 0x005f7370)
 	private:
 		bool m_unk0xf4;					// 0xf4  false
