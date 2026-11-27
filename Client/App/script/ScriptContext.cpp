@@ -59,24 +59,15 @@
 #include <algorithm>
 
 // Laid out on the 2013 assert lines (tools/assert_lines.py); every RBXASSERT sits on its 2013 line.
-
-
-
-
-
 LOGGROUP(UseLuaMemoryPool);
 LOGVARIABLE(ScriptContext, 0);
 LOGVARIABLE(LuaProfiler, 0);
 // 0xFA9B20 byte = 0xFF in the 2013 PE (batch703; registration InitFunc_480
 // mac: 0x670B59): gates the loadfile/executeInNewThread source dumps.
 LOGVARIABLE(FullScriptCode, 255)
-// 0xFA9B44 byte = 0xFF in the 2013 PE (batch720; Initer slot 0xFA9B48,
-// registration InitFunc_480 0x670C67; read through the pointer-table
-// slot off_EADEC8): lua script-timeout span in seconds (Channel =
-// unsigned char; the decompiler shows the [0] registration-array form).
-// 0xFF = 255 -- the shipped default arms a 255 s monitor at every
-// provider attach (the arm gates on != 0 and passes the byte value as
-// the span).
+// 0xFA9B44 byte = 0xFF in the 2013 PE (batch720, InitFunc_480 0x670C67): lua script-timeout span in
+// seconds. The shipped default 255 arms a 255 s monitor at every provider attach (the arm gates on
+// != 0 and passes the byte value as the span).
 LOGVARIABLE(LuaScriptTimeoutSeconds, 255)
 LOGVARIABLE(Network, 6)	// PLAYER byte 0x00d30f1b = 6 (datacmp); initializer 0x00a66090, after LuaScriptTimeoutSeconds's, before HttpQueue's
 namespace FLog {	// NetworkCache: initializer 0x00a660f0, after Network's, HttpQueue's and Player's
@@ -84,6 +75,15 @@ namespace FLog {	// NetworkCache: initializer 0x00a660f0, after Network's, HttpQ
 	// GLOBAL: STUDIO 0x00ec1809
 	Channel NetworkCache = 1;
 	int NetworkCacheIniter = RegisterLogGroup("NetworkCache", &NetworkCache, NULL, FASTVARTYPE_STATIC); }
+namespace FLog {	// then ReplicationDataLifetime's and NetworkInstances's, then these two: 0x00a66150 and 0x00a66170
+	// GLOBAL: PLAYER 0x00de3f85
+	// GLOBAL: STUDIO 0x00f84e5e
+	Channel NetworkReadItem = 0;
+	int NetworkReadItemIniter = RegisterLogGroup("NetworkReadItem", &NetworkReadItem, NULL, FASTVARTYPE_STATIC);
+	// GLOBAL: PLAYER 0x00d30f1e
+	// GLOBAL: STUDIO 0x00ec180a
+	Channel JoinSendExtraItemCount = 1;
+	int JoinSendExtraItemCountIniter = RegisterLogGroup("JoinSendExtraItemCount", &JoinSendExtraItemCount, NULL, FASTVARTYPE_STATIC); }
 // 0xFA9AFC/0xFA9B04 = 0xFF (batch723/724, InitFunc_480): attach/detach script logging.
 LOGVARIABLE(ScriptContextAdd, 255)
 // 0xF88531 = 1 (batch723/724): closeStates logging is ON at rest (closeStates 0x18E9BC gates its logs on it).

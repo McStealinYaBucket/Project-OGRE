@@ -209,23 +209,23 @@ namespace Network {
 		return Instance::fastDynamicCast<Client>(instance) != NULL;
 	}
 
-	// Bound by onChildAdded to Player::remoteFriendServiceSignal. Calls, stack slots and branch order match
-	// (reject falls through); 2013 keeps `this` in ebp and pushes ebp/esi/edi up front, ours shrink-wraps
-	// ebp. Probed 7 shapes (early returns, a ternary either way, raw-pointer locals, a `self` copy): none moves it.
-	// STUB: PLAYER 0x0056b960
-	// STUB: STUDIO 0x005d0e10
+	// Bound by onChildAdded to Player::remoteFriendServiceSignal. The early return and the inline
+	// getUserID() give 2013's register assignment (this in ebp).
+	// FUNCTION: PLAYER 0x0056b960
+	// FUNCTION: STUDIO 0x005d0e10
 	void Players::friendServiceRequest(bool makeFriends, weak_ptr<Player> sourcePlayer, int otherUserId)
 	{
 		shared_ptr<Player> source = sourcePlayer.lock();
 		shared_ptr<Player> other = getPlayerByID(otherUserId);
-		if (source && other)
-			if (FriendService* friendService = ServiceProvider::find<FriendService>(this))
-			{
-				if (!makeFriends)
-					friendService->rejectFriendRequestOrBreakFriendship(source->userId, other->userId);
-				else
-					friendService->issueFriendRequestOrMakeFriendship(source->userId, other->userId);
-			}
+		if (!source || !other)
+			return;
+		if (FriendService* friendService = ServiceProvider::find<FriendService>(this))
+		{
+			if (!makeFriends)
+				friendService->rejectFriendRequestOrBreakFriendship(source->getUserID(), other->getUserID());
+			else
+				friendService->issueFriendRequestOrMakeFriendship(source->getUserID(), other->getUserID());
+		}
 	}
 
 	// FUNCTION: PLAYER 0x0056baa0
@@ -375,7 +375,7 @@ namespace Network {
 	Players::Players()
 		: m_unk0x108("")
 		, m_unk0x178(false)
-		, m_unk0x179(true)
+		, characterAutoSpawn(true)
 		, players(Instances())
 		, rakPeer(NULL)
 		, m_unk0x1b0(12)

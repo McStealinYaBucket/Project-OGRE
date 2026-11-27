@@ -12,6 +12,7 @@
 namespace RBX {
 
 	extern const char* const sControllerService;
+	class UserInputBase;
 
 	// SIZE 0x68
 	class ControllerService
@@ -21,8 +22,11 @@ namespace RBX {
 	public:
 		ControllerService();
 
+		// 2016 names; View::initializeInput (shell 0x00466840) stores the shell's UserInput here.
+		void setHardwareDevice(UserInputBase* value) { hardwareDevice = value; }
+
 	private:
-		undefined4 m_unk0x64;	// 0x64 zeroed by the ctor
+		UserInputBase* hardwareDevice;	// 0x64 zeroed by the ctor
 	};
 
 } // namespace RBX

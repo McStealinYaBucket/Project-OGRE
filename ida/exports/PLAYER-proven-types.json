@@ -7580,26 +7580,10 @@
     {
      "name": "m_unk0x100",
      "offset": 256,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_UINT4"
-    },
-    {
-     "name": "m_unk0x104",
-     "offset": 260,
-     "size": 2,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_USHORT"
-    },
-    {
-     "name": "m_unk0x106",
-     "offset": 262,
-     "size": 2,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_USHORT"
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::SystemAddress",
+     "scalar": null
     },
     {
      "name": "forceEarlySpawnLocationCalculation",
@@ -8498,7 +8482,7 @@
      "scalar": "T_BOOL08"
     },
     {
-     "name": "m_unk0x179",
+     "name": "characterAutoSpawn",
      "offset": 377,
      "size": 1,
      "kind": "scalar",
@@ -9412,11 +9396,11 @@
      "scalar": null
     },
     {
-     "name": "m_unk0x2184",
+     "name": "streamJob",
      "offset": 8580,
      "size": 8,
      "kind": "class",
-     "type": "boost::shared_ptr<void>",
+     "type": "boost::shared_ptr<RBX::Network::Replicator::StreamJob>",
      "scalar": null
     },
     {
@@ -10754,6 +10738,828 @@
    ],
    "base": false,
    "unique": "VUserInputSleepingJob@RBX@@"
+  },
+  "RBX::CommonVerbs": {
+   "size": 1828,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "playDeleteSelectionVerb",
+     "offset": 0,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::PlayDeleteSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "deleteSelectionVerb",
+     "offset": 40,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::DeleteSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "selectAllCommand",
+     "offset": 80,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::SelectAllCommand",
+     "scalar": null
+    },
+    {
+     "name": "groupSelectionVerb",
+     "offset": 108,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::GroupSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "ungroupSelectionVerb",
+     "offset": 144,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::UngroupSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "selectChildrenVerb",
+     "offset": 180,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::SelectChildrenVerb",
+     "scalar": null
+    },
+    {
+     "name": "snapSelectionVerb",
+     "offset": 216,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::SnapSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "unlockAllVerb",
+     "offset": 252,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::UnlockAllVerb",
+     "scalar": null
+    },
+    {
+     "name": "anchorVerb",
+     "offset": 280,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::AnchorVerb",
+     "scalar": null
+    },
+    {
+     "name": "translucentVerb",
+     "offset": 320,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::TranslucentVerb",
+     "scalar": null
+    },
+    {
+     "name": "canCollideVerb",
+     "offset": 360,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::CanCollideVerb",
+     "scalar": null
+    },
+    {
+     "name": "canNotSelectCommand",
+     "offset": 400,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::CanNotSelectCommand",
+     "scalar": null
+    },
+    {
+     "name": "allCanSelectCommand",
+     "offset": 436,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::AllCanSelectCommand",
+     "scalar": null
+    },
+    {
+     "name": "moveUpPlateVerb",
+     "offset": 464,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::MoveUpPlateVerb",
+     "scalar": null
+    },
+    {
+     "name": "moveUpBrickVerb",
+     "offset": 504,
+     "size": 40,
+     "kind": "class",
+     "type": "RBX::MoveUpBrickVerb",
+     "scalar": null
+    },
+    {
+     "name": "moveDownSelectionVerb",
+     "offset": 544,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::MoveDownSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "rotateSelectionVerb",
+     "offset": 580,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::RotateSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "tiltSelectionVerb",
+     "offset": 616,
+     "size": 36,
+     "kind": "class",
+     "type": "RBX::TiltSelectionVerb",
+     "scalar": null
+    },
+    {
+     "name": "runCommand",
+     "offset": 652,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::RunCommand",
+     "scalar": null
+    },
+    {
+     "name": "stopCommand",
+     "offset": 680,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::StopCommand",
+     "scalar": null
+    },
+    {
+     "name": "resetCommand",
+     "offset": 708,
+     "size": 28,
+     "kind": "class",
+     "type": "RBX::ResetCommand",
+     "scalar": null
+    },
+    {
+     "name": "firstPersonCommand",
+     "offset": 736,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::FirstPersonCommand",
+     "scalar": null
+    },
+    {
+     "name": "statsCommand",
+     "offset": 752,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::StatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "renderStatsCommand",
+     "offset": 768,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::RenderStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "engineStatsCommand",
+     "offset": 784,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::EngineStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "networkStatsCommand",
+     "offset": 800,
+     "size": 20,
+     "kind": "class",
+     "type": "RBX::NetworkStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "physicsStatsCommand",
+     "offset": 820,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::PhysicsStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "summaryStatsCommand",
+     "offset": 836,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SummaryStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "customStatsCommand",
+     "offset": 852,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::CustomStatsCommand",
+     "scalar": null
+    },
+    {
+     "name": "joinCommand",
+     "offset": 868,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::JoinCommand",
+     "scalar": null
+    },
+    {
+     "name": "turnOnManualJointCreation",
+     "offset": 884,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::TurnOnManualJointCreation",
+     "scalar": null
+    },
+    {
+     "name": "setGridToOne",
+     "offset": 900,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetGridToOne",
+     "scalar": null
+    },
+    {
+     "name": "setGridToOneFifth",
+     "offset": 916,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetGridToOneFifth",
+     "scalar": null
+    },
+    {
+     "name": "setGridToOff",
+     "offset": 932,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetGridToOff",
+     "scalar": null
+    },
+    {
+     "name": "setManualJointToWeak",
+     "offset": 948,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetManualJointToWeak",
+     "scalar": null
+    },
+    {
+     "name": "setManualJointToStrong",
+     "offset": 964,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetManualJointToStrong",
+     "scalar": null
+    },
+    {
+     "name": "setManualJointToInfinite",
+     "offset": 980,
+     "size": 16,
+     "kind": "class",
+     "type": "RBX::SetManualJointToInfinite",
+     "scalar": null
+    },
+    {
+     "name": "axisRotateToolVerb",
+     "offset": 996,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::AxisRotateTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "advMoveToolVerb",
+     "offset": 1028,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::AdvMoveTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "advRotateToolVerb",
+     "offset": 1060,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::AdvRotateTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "advArrowToolVerb",
+     "offset": 1092,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::AdvArrowTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "moveResizeJoinToolVerb",
+     "offset": 1124,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::MoveResizeJoinTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "flatToolVerb",
+     "offset": 1156,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::FlatTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "glueToolVerb",
+     "offset": 1188,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::GlueTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "weldToolVerb",
+     "offset": 1220,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::WeldTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "studsToolVerb",
+     "offset": 1252,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::StudsTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "inletToolVerb",
+     "offset": 1284,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::InletTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "universalToolVerb",
+     "offset": 1316,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::UniversalTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "hingeToolVerb",
+     "offset": 1348,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::HingeTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "rightMotorToolVerb",
+     "offset": 1380,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::RightMotorTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "leftMotorToolVerb",
+     "offset": 1412,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::LeftMotorTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "oscillateMotorToolVerb",
+     "offset": 1444,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::OscillateMotorTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "smoothNoOutlinesToolVerb",
+     "offset": 1476,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::SmoothNoOutlinesTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "anchorToolVerb",
+     "offset": 1508,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::AnchorTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "lockToolVerb",
+     "offset": 1540,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::LockTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "fillToolVerb",
+     "offset": 1572,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::FillTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "materialToolVerb",
+     "offset": 1604,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::MaterialTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "dropperToolVerb",
+     "offset": 1636,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::DropperTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "nullToolVerb",
+     "offset": 1668,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::NullTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "gameToolVerb",
+     "offset": 1700,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::GameTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "grabToolVerb",
+     "offset": 1732,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::GrabTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "cloneToolVerb",
+     "offset": 1764,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::CloneTool,RBX::RunStateVerb>",
+     "scalar": null
+    },
+    {
+     "name": "hammerToolVerb",
+     "offset": 1796,
+     "size": 32,
+     "kind": "class",
+     "type": "RBX::TToolVerb<RBX::HammerTool,RBX::RunStateVerb>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VCommonVerbs@RBX@@"
+  },
+  "RBX::RunStateVerb": {
+   "size": 28,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    },
+    {
+     "name": "runService",
+     "offset": 16,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::ServiceClient<RBX::RunService>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VRunStateVerb@RBX@@"
+  },
+  "RBX::EditSelectionVerb": {
+   "size": 36,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "workspace",
+     "offset": 12,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::Workspace>",
+     "scalar": null
+    },
+    {
+     "name": "selection",
+     "offset": 20,
+     "size": 12,
+     "kind": "class",
+     "type": "RBX::ServiceClient<RBX::Selection>",
+     "scalar": null
+    },
+    {
+     "name": "dataModel",
+     "offset": 32,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VEditSelectionVerb@RBX@@"
+  },
+  "RBX::DeleteBase": {
+   "size": 40,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::EditSelectionVerb",
+     "offset": 0,
+     "size": 36,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "rewardHopper",
+     "offset": 36,
+     "size": 1,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_BOOL08"
+    }
+   ],
+   "base": false,
+   "unique": "VDeleteBase@RBX@@"
+  },
+  "RBX::RotateAxisCommand": {
+   "size": 36,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::EditSelectionVerb",
+     "offset": 0,
+     "size": 36,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VRotateAxisCommand@RBX@@"
+  },
+  "RBX::ToggleViewMode": {
+   "size": 16,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Verb",
+     "offset": 0,
+     "size": 12,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "dataModel",
+     "offset": 12,
+     "size": 4,
+     "kind": "ptr",
+     "type": "RBX::DataModel",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VToggleViewMode@RBX@@"
+  },
+  "RBX::Network::ConcurrentRakPeer::StatsUpdateJob": {
+   "size": 656,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DataModelJob",
+     "offset": 0,
+     "size": 536,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "mapMutex",
+     "offset": 536,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::mutex",
+     "scalar": null
+    },
+    {
+     "name": "statsMap",
+     "offset": 544,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >",
+     "scalar": null
+    },
+    {
+     "name": "updateCallbackMap",
+     "offset": 568,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RakNet::SystemAddress,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)>,boost::hash<RakNet::SystemAddress>,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)> > > >",
+     "scalar": null
+    },
+    {
+     "name": "bufferHealth",
+     "offset": 592,
+     "size": 48,
+     "kind": "class",
+     "type": "RBX::RunningAverage<double,double>",
+     "scalar": null
+    },
+    {
+     "name": "prevBufferSize",
+     "offset": 640,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "peer",
+     "offset": 644,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::weak_ptr<RakNet::RakPeerInterface>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VStatsUpdateJob@ConcurrentRakPeer@Network@RBX@@"
+  },
+  "RBX::Network::GuidRegistryService": {
+   "size": 108,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::DescribedNonCreatable<RBX::Network::GuidRegistryService, RBX::Instance, char const *const RBX::Network::sGuidRegistryService, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    },
+    {
+     "name": "RBX::Service",
+     "offset": 96,
+     "size": 1,
+     "empty": false
+    }
+   ],
+   "members": [
+    {
+     "name": "registry",
+     "offset": 100,
+     "size": 8,
+     "kind": "class",
+     "type": "boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VGuidRegistryService@Network@RBX@@"
+  },
+  "RBX::Network::SharedScopeDictionary": {
+   "size": 4124,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Network::SenderDictionary<RBX::Name const *>",
+     "offset": 0,
+     "size": 540,
+     "empty": false
+    },
+    {
+     "name": "RBX::Network::ReceiverDictionary<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >",
+     "offset": 540,
+     "size": 3584,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": false,
+   "unique": "VSharedScopeDictionary@Network@RBX@@"
+  },
+  "RBX::Profiling::Profiler": {
+   "size": 49216,
+   "vftable": true,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "bucketTimeSpan",
+     "offset": 8,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time::Interval",
+     "scalar": null
+    },
+    {
+     "name": "currentBucket",
+     "offset": 16,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    },
+    {
+     "name": "buckets",
+     "offset": 24,
+     "size": 49152,
+     "kind": "class",
+     "type": "boost::array<RBX::Profiling::Bucket,2048>",
+     "scalar": null
+    },
+    {
+     "name": "lastSampleTime",
+     "offset": 49176,
+     "size": 8,
+     "kind": "class",
+     "type": "RBX::Time",
+     "scalar": null
+    },
+    {
+     "name": "name",
+     "offset": 49184,
+     "size": 28,
+     "kind": "class",
+     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
+     "scalar": null
+    }
+   ],
+   "base": false,
+   "unique": "VProfiler@Profiling@RBX@@"
   },
   "boost::enable_shared_from_this<RBX::Reflection::DescribedBase>": {
    "size": 8,
@@ -12474,56 +13280,6 @@
    "base": true,
    "unique": "V?$DescribedCreatable@VInsertService@RBX@@VInstance@2@$E?sInsertService@2@3QBDB$02$0A@@RBX@@"
   },
-  "RBX::Profiling::Profiler": {
-   "size": 49216,
-   "vftable": true,
-   "virtual_bases": false,
-   "bases": [],
-   "members": [
-    {
-     "name": "bucketTimeSpan",
-     "offset": 8,
-     "size": 8,
-     "kind": "class",
-     "type": "RBX::Time::Interval",
-     "scalar": null
-    },
-    {
-     "name": "currentBucket",
-     "offset": 16,
-     "size": 4,
-     "kind": "scalar",
-     "type": null,
-     "scalar": "T_INT4"
-    },
-    {
-     "name": "buckets",
-     "offset": 24,
-     "size": 49152,
-     "kind": "class",
-     "type": "boost::array<RBX::Profiling::Bucket,2048>",
-     "scalar": null
-    },
-    {
-     "name": "lastSampleTime",
-     "offset": 49176,
-     "size": 8,
-     "kind": "class",
-     "type": "RBX::Time",
-     "scalar": null
-    },
-    {
-     "name": "name",
-     "offset": 49184,
-     "size": 28,
-     "kind": "class",
-     "type": "std::basic_string<char,std::char_traits<char>,std::allocator<char> >",
-     "scalar": null
-    }
-   ],
-   "base": true,
-   "unique": "VProfiler@Profiling@RBX@@"
-  },
   "RBX::NodeBase": {
    "size": 20,
    "vftable": false,
@@ -13085,6 +13841,74 @@
    "members": [],
    "base": true,
    "unique": "V?$DescribedNonCreatable@VInstancePacketCache@Network@RBX@@VInstance@3@$E?sInstancePacketCache@23@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::DescribedNonCreatable<RBX::Network::GuidRegistryService, RBX::Instance, char const *const RBX::Network::sGuidRegistryService, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Reflection::Described<RBX::Network::GuidRegistryService, char const *const RBX::Network::sGuidRegistryService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>, 27, 0>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$DescribedNonCreatable@VGuidRegistryService@Network@RBX@@VInstance@3@$E?sGuidRegistryService@23@3QBDB$0BL@$0A@@RBX@@"
+  },
+  "RBX::Network::SenderDictionary<RBX::Name const *>": {
+   "size": 540,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "dictionary",
+     "offset": 0,
+     "size": 24,
+     "kind": "class",
+     "type": "boost::unordered::unordered_map<RBX::Name const *,unsigned char,boost::hash<RBX::Name const *>,std::equal_to<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,unsigned char> > >",
+     "scalar": null
+    },
+    {
+     "name": "items",
+     "offset": 24,
+     "size": 512,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    },
+    {
+     "name": "nextIndex",
+     "offset": 536,
+     "size": 4,
+     "kind": "scalar",
+     "type": null,
+     "scalar": "T_INT4"
+    }
+   ],
+   "base": true,
+   "unique": "V?$SenderDictionary@PBVName@RBX@@@Network@RBX@@"
+  },
+  "RBX::Network::ReceiverDictionary<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >": {
+   "size": 3584,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [],
+   "members": [
+    {
+     "name": "dictionary",
+     "offset": 0,
+     "size": 3584,
+     "kind": "array",
+     "type": null,
+     "scalar": null
+    }
+   ],
+   "base": true,
+   "unique": "V?$ReceiverDictionary@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Network@RBX@@"
   },
   "RBX::Creatable<RBX::Instance>": {
    "size": 4,
@@ -14067,6 +14891,22 @@
    "base": true,
    "unique": "V?$Described@VInstancePacketCache@Network@RBX@@$E?sInstancePacketCache@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sInstancePacketCache@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
   },
+  "RBX::Reflection::Described<RBX::Network::GuidRegistryService, char const *const RBX::Network::sGuidRegistryService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>, 27, 0>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$Described@VGuidRegistryService@Network@RBX@@$E?sGuidRegistryService@23@3QBDBV?$NonFactoryProduct@VInstance@RBX@@$E?sGuidRegistryService@Network@2@3QBDB@3@$0BL@$0A@@Reflection@RBX@@"
+  },
   "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::sServiceProvider>": {
    "size": 96,
    "vftable": false,
@@ -14997,6 +15837,22 @@
    "members": [],
    "base": true,
    "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sInstancePacketCache@Network@2@3QBDB@RBX@@"
+  },
+  "RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>": {
+   "size": 96,
+   "vftable": false,
+   "virtual_bases": false,
+   "bases": [
+    {
+     "name": "RBX::Instance",
+     "offset": 0,
+     "size": 96,
+     "empty": false
+    }
+   ],
+   "members": [],
+   "base": true,
+   "unique": "V?$NonFactoryProduct@VInstance@RBX@@$E?sGuidRegistryService@Network@2@3QBDB@RBX@@"
   },
   "boost::intrusive::detail::node_holder<boost::intrusive::list_node<void *>,RBX::TaskScheduler::SleepingTag,1,1>": {
    "size": 8,

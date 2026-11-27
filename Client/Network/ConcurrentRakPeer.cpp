@@ -272,7 +272,7 @@ ConcurrentRakPeer::~ConcurrentRakPeer()
 double ConcurrentRakPeer::GetBufferHealth()
 {
 	boost::mutex::scoped_lock lock(statsUpdateJob->mapMutex);
-	return statsUpdateJob->bufferHealth;
+	return statsUpdateJob->bufferHealth.value();
 }
 
 // FUNCTION: PLAYER 0x005c5360
@@ -287,7 +287,7 @@ void ConcurrentRakPeer::Send(boost::shared_ptr<const RakNet::BitStream> data, Pa
 
 // NetworkSettings+0x78 is 2016's isQueueErrorComputed (PacketJob copies it here).
 // FUNCTION: PLAYER 0x005c5610
-// STUB: STUDIO 0x00620870
+// FUNCTION: STUDIO 0x00620870
 ConcurrentRakPeer::PacketJob::PacketJob(boost::shared_ptr<RakNet::RakPeerInterface> peer, DataModel* dataModel)
 	: DataModelJob("Net Peer Send", DataModelJob::RaknetPeer, false, shared_from(dataModel), Time::Interval(0))
 	, isQueueErrorComputed(NetworkSettings::singleton().isQueueErrorComputed)
@@ -324,12 +324,13 @@ TaskScheduler::Job::Error ConcurrentRakPeer::PacketJob::error(const Stats& stats
 	return result;
 }
 
-// STUB: PLAYER 0x005c5f60
-// STUB: STUDIO 0x006211c0
+// FUNCTION: PLAYER 0x005c5f60
+// FUNCTION: STUDIO 0x006211c0
 ConcurrentRakPeer::StatsUpdateJob::StatsUpdateJob(boost::shared_ptr<RakNet::RakPeerInterface> peer, DataModel* dataModel)
 	: DataModelJob("Net Peer Stats", DataModelJob::RaknetPeer, false, shared_from(dataModel), Time::Interval(0))
+	, prevBufferSize(0)
+	, peer(peer)
 {
-	STUB(0x005c5f60);
 }
 
 // Folded with ContentProviderJob::sleepTime.

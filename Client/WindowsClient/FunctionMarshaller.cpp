@@ -1,5 +1,5 @@
 /* WindowsClient/FunctionMarshaller.cpp -- October 2013 client shell (PLAYER only; path from the 2016
-   tree, see FunctionMarshaller.h). Written so far: Submit, from the 2013 bytes. */
+   tree, see FunctionMarshaller.h). Written so far: ReleaseWindow and Submit, from the 2013 bytes. */
 
 #include "FunctionMarshaller.h"
 
@@ -7,11 +7,17 @@
 
 namespace RBX {
 
-	// STUB: PLAYER 0x00437180
-	__declspec(noinline) void FunctionMarshaller::ReleaseWindow(FunctionMarshaller* marshaller)
+	// FUNCTION: PLAYER 0x00437180
+	void FunctionMarshaller::ReleaseWindow(FunctionMarshaller* window)
 	{
-		STUB(0x00437180);
-		::DestroyWindow(marshaller->m_hWnd);
+		boost::recursive_mutex::scoped_lock lock(staticData().windowsCriticalSection);
+		window->refCount--;
+		if (window->refCount == 0)
+		{
+			// Nobody is using this window
+			staticData().windows.erase(window->threadID);
+			window->DestroyWindow();
+		}
 	}
 
 	// Left (74-75%): 2013 inlines function0's copy ctor (`[esi]=0; call assign_to_own` 0x00437a90) where
@@ -26,6 +32,13 @@ namespace RBX {
 		asyncCalls.push(f);
 		if (postedAsyncMessage.swap(1) == 0)
 			PostMessage(WM_ASYNCEVENT, 0, 0);
+	}
+
+	// Inlined into the static's atexit destructor (0x00437690).
+	FunctionMarshaller::StaticData::~StaticData()
+	{
+		for (std::map<DWORD, FunctionMarshaller*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
+			iter->second->DestroyWindow();
 	}
 
 } // namespace RBX

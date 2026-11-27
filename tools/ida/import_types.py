@@ -228,6 +228,19 @@ CLASSES = [
     # (ctor 0.986), CommonVerbs (opaque), ConcurrentRakPeer::StatsUpdateJob (not declared yet)
     "RBX::DataModel::LegacyLock::Implementation", "RBX::Lua::YieldingThreads", "RBX::SleepingJob", "RBX::CameraVerb",
     "RBX::UnsecuredStudioGame", "RBX::Application", "RBX::SecurePlayerGame", "RBX::UserInputSleepingJob",
+    # wave20 sync (sweep27, build/sweep27/P-final.json / S-final.json 100%; size = the tree's // SIZE /
+    # DECOMP_SIZE_ASSERT = the PDB's), PLAYER / STUDIO: CommonVerbs (0x724) ctor 0x00864450 / 0x009d5e90, dtor
+    # 0x006531e0 / 0x007cbbb0; RunStateVerb (0x1c) ctor 0x00857780 / 0x00781ee0, dtor 0x00857430 / 0x00781a70;
+    # EditSelectionVerb (0x24) dtor 0x008574b0 / 0x00781af0 (ctor 0x00858c10, STUDIO 0.977); DeleteBase (0x28) ctor
+    # 0x00858d10 / 0x00783740; RotateAxisCommand (0x24) ctor 0x008590c0 / 0x00783980; ToggleViewMode (0x10) ctor
+    # 0x00856130 / 0x00780750 (app-20); ConcurrentRakPeer::StatsUpdateJob (0x290) ctor 0x005c5f60 / 0x006211c0
+    # (network-5f-11); Network::GuidRegistryService (0x6c) ctor 0x005baf10 / 0x0061d900, dtor 0x005ba990 /
+    # 0x0061cf70; Network::SharedScopeDictionary (0x101c) ctor 0x005aa320 / 0x0061a150, dtor 0x00599140 /
+    # 0x0061a1b0; Profiling::Profiler (0xc040) ctor 0x007451d0 / 0x007d7a30. Not yet: STUDIO Game (ctor 0.9965,
+    # dtor 0.9907), UserInput (ctor 0.46, dtor 0.987), Document / View (dtor 100%, no size assertion in the tree)
+    "RBX::CommonVerbs", "RBX::RunStateVerb", "RBX::EditSelectionVerb", "RBX::DeleteBase", "RBX::RotateAxisCommand",
+    "RBX::ToggleViewMode", "RBX::Network::ConcurrentRakPeer::StatsUpdateJob", "RBX::Network::GuidRegistryService",
+    "RBX::Network::SharedScopeDictionary", "RBX::Profiling::Profiler",
 ]
 # proven in PLAYER only (STUDIO ctor/dtor below 100%, or the class is not in the STUDIO build)
 PLAYER_ONLY = {"RBX::ScreenGui", "RBX::RunService", "RBX::ToggleFullscreenVerb",

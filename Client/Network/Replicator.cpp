@@ -162,7 +162,7 @@ bool Replicator::isPropertyChangedPending(const Reflection::ConstProperty& prop)
 }
 
 // FUNCTION: PLAYER 0x00591f00
-// STUB: STUDIO 0x00638330
+// FUNCTION: STUDIO 0x00638330
 FilterResult Replicator::filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) // STUDIO: byte-identical (probe); 98.8 on a shared_from twin pairing
 {
 	if (instance == removingInstance)
@@ -367,6 +367,14 @@ void Replicator::readChangedProperty(RakNet::BitStream& bitStream, Reflection::P
 void Replicator::onParentChanged(shared_ptr<Instance> instance)
 {
 	STUB(0x00591bc0);
+}
+
+// STUB: PLAYER 0x0059d0e0
+// STUB: STUDIO 0x00640430
+RakNet::PluginReceiveResult Replicator::OnReceive(RakNet::Packet* packet)
+{
+	STUB(0x0059d0e0);
+	return RakNet::RR_CONTINUE_PROCESSING;
 }
 
 // STUB: PLAYER 0x005a4de0
@@ -2700,21 +2708,13 @@ Replicator::Replicator(RakNet::SystemAddress remotePlayerId, boost::shared_ptr<C
 
 
 
+// FLog::NetworkReadItem is App's (script/ScriptContext.cpp registers it with the other Network channels).
+} } LOGGROUP(NetworkReadItem) namespace RBX { namespace Network {
 
 
 
 
 
-
-
-
-// 2013 registers it with the other Network channels in App's ScriptContext.obj (initializer PLAYER
-// 0x00a66150, after Network's 0x00a66090); defined here until that file carries it.
-} } namespace FLog {
-	// GLOBAL: PLAYER 0x00de3f85
-	// GLOBAL: STUDIO 0x00f84e5e
-	Channel NetworkReadItem = 0;
-	int NetworkReadItemIniter = RegisterLogGroup("NetworkReadItem", &NetworkReadItem, NULL, FASTVARTYPE_STATIC); } namespace RBX { namespace Network {
 
 // FUNCTION: PLAYER 0x005a4b40
 // FUNCTION: STUDIO 0x00648860
@@ -3423,6 +3423,13 @@ size_t Replicator::getAdjustedMtuSize() const
 size_t Replicator::getPhysicsMtuSize() const {
 	RBXASSERT(settings().getPhysicsMtuAdjust() <= 0);
 	return std::max(0, settings().getPhysicsMtuAdjust() + replicatorStats.rakStats.mtuSize);
+}
+
+// Out of line in 2013: ServerReplicator::filterPhysics 0x00579410 calls it. ICF folds it with every
+// `xor eax,eax; ret 4` body (PLAYER 0x005b8900), so it carries no marker.
+FilterResult Replicator::filterPhysics(PartInstance* instance)
+{
+	return Accept;
 }
 
 } // namespace Network

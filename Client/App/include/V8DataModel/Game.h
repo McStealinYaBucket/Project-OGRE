@@ -51,6 +51,8 @@ namespace RBX {
 		// UnsecuredStudioGame's (STUDIO 0x007ce200); the PDB keeps the subclass name, so they carry the markers.
 
 		boost::shared_ptr<DataModel> getDataModel() const { return dataModel; }
+		// The /GL shell's COMDAT is PLAYER 0x0041ce60 / STUDIO 0x004d5770 (hidden return slot, ret 4).
+		boost::shared_ptr<OverlayDataModel> getOverlayDataModel() const { return overlayDataModel; }
 
 		static void globalExit();
 

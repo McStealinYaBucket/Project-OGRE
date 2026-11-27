@@ -201,7 +201,7 @@ namespace Network {
 		std::string m_unk0x140;                      // 0x140
 		std::string m_unk0x15c;                      // 0x15c
 		bool m_unk0x178;                             // 0x178 ctor false
-		bool m_unk0x179;                             // 0x179 ctor true
+		bool characterAutoSpawn;                     // 0x179 ctor true (2016 name); ServerReplicator::installRemotePlayer 0x005722b0
 		boost::scoped_ptr<AbuseReporter> abuseReporter; // 0x17c dtor: ~AbuseReporter 0x0055b8b0, operator delete
 		shared_ptr<GuidItem<Instance>::Registry> m_unk0x180; // 0x180 dtor releases +0x184; Registry per the task note (IdSerializer 0x107c has the same type)
 		std::list<ChatMessage> chatHistory;          // 0x188 node dtor ~ChatMessage 0x0055a560 (clear 0x0055f320)

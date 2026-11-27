@@ -142,7 +142,7 @@ void RecordToggleVerb::stopAction()
 	if (settings.getUploadVideoSetting() == GameSettings::NEVER)
 		return;
 
-	doc.m_unk0x1c->Submit(boost::bind(&RecordToggleVerb::uploadVideo, this));
+	doc.marshaller->Submit(boost::bind(&RecordToggleVerb::uploadVideo, this));
 
 	if (!FFlag::FixStopButtonStayingOnScreen)
 		GameSettings::singleton().videoRecordingSignal(false);

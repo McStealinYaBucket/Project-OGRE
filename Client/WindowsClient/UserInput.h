@@ -191,6 +191,9 @@ namespace RBX {
 		// LTCG: `this` on the stack, uMsg in ecx, ret 0xc.
 		void PostUserInputMessage(UINT uMsg, WPARAM wParam, LPARAM lParam); // PLAYER 0x0045f1b0
 
+		// UserInputSleepingJob::stepDataModelJob (0x00462920) calls it for each queued message.
+		void ProcessUserInputMessage(UINT uMsg, WPARAM wParam, LPARAM lParam); // PLAYER 0x0045f2a0
+
 	private:
 		void createMouse();        // PLAYER 0x0045ec60
 		void createKeyboard();     // PLAYER 0x0045ecf0

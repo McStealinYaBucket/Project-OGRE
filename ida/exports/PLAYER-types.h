@@ -6107,9 +6107,7 @@ struct __cppobj RBX::Network::Player : RBX::DescribedCreatable<RBX::Network::Pla
   unsigned int m_unk0xf8;
   bool appearanceDidLoad;
   unsigned __int8 gap_FD[3];
-  unsigned int m_unk0x100;
-  unsigned __int16 m_unk0x104;
-  unsigned __int16 m_unk0x106;
+  unsigned __int8 m_unk0x100[8];        ///< RBX::SystemAddress
   bool forceEarlySpawnLocationCalculation;
   bool m_unk0x109;
   unsigned __int8 gap_10A[2];
@@ -6323,7 +6321,7 @@ struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network:
   unsigned __int8 m_unk0x140[28];       ///< std::string
   unsigned __int8 m_unk0x15c[28];       ///< std::string
   bool m_unk0x178;
-  bool m_unk0x179;
+  bool characterAutoSpawn;
   unsigned __int8 gap_17A[2];
   unsigned __int8 abuseReporter[4];     ///< boost::scoped_ptr<RBX::Network::AbuseReporter>
   unsigned __int8 m_unk0x180[8];        ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
@@ -6353,7 +6351,7 @@ struct __cppobj RBX::Network::Players : RBX::DescribedNonCreatable<RBX::Network:
 /* 763 */
 struct __cppobj RBX::Network::IdSerializer : RBX::Instance
 {
-  unsigned __int8 scopeNames[4124];     ///< RBX::Network::SharedScopeDictionary
+  RBX::Network::SharedScopeDictionary scopeNames;
   unsigned __int8 guidRegistry[8];      ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
   unsigned __int8 waitItems[12];        ///< std::map<RBX::Guid::Data,std::vector<RBX::Network::IdSerializer::WaitItem>>
   int guidIndexBits;
@@ -6529,7 +6527,7 @@ struct __cppobj RBX::Network::Replicator : RBX::DescribedNonCreatable<RBX::Netwo
   unsigned __int8 m_unk0x216c[8];       ///< boost::shared_ptr<void>
   unsigned __int8 m_unk0x2174[8];       ///< boost::shared_ptr<void>
   unsigned __int8 processPacketsJob[8]; ///< boost::shared_ptr<RBX::Network::Replicator::ProcessPacketsJob>
-  unsigned __int8 m_unk0x2184[8];       ///< boost::shared_ptr<void>
+  unsigned __int8 streamJob[8];         ///< boost::shared_ptr<RBX::Network::Replicator::StreamJob>
   unsigned __int8 m_unk0x218c[8];       ///< boost::shared_ptr<void>
   RBX::Network::ItemQueue pendingItems;
   unsigned __int8 pendingChangedPropertyItems[24]; ///< boost::unordered::unordered_set<RBX::Reflection::ConstProperty,boost::hash<RBX::Reflection::ConstProperty>,std::equal_to<RBX::Reflection::ConstProperty>,boost::fast_pool_allocator<RBX::Reflection::ConstProperty,boost::default_user_allocator_new_delete,boost::mutex,32,0> >
@@ -6861,5 +6859,159 @@ struct __cppobj RBX::UserInputSleepingJob : RBX::SleepingJob
   void *userInput;                      ///< RBX::UserInput *
   unsigned __int8 messages[36];         ///< rbx::safe_queue<RBX::UserInputSleepingJob::Message>
   unsigned __int8 gap_25C[4];
+};
+
+/* 822 */
+struct __cppobj RBX::CommonVerbs
+{
+  unsigned __int8 playDeleteSelectionVerb[40]; ///< RBX::PlayDeleteSelectionVerb
+  unsigned __int8 deleteSelectionVerb[40]; ///< RBX::DeleteSelectionVerb
+  unsigned __int8 selectAllCommand[28]; ///< RBX::SelectAllCommand
+  unsigned __int8 groupSelectionVerb[36]; ///< RBX::GroupSelectionVerb
+  unsigned __int8 ungroupSelectionVerb[36]; ///< RBX::UngroupSelectionVerb
+  unsigned __int8 selectChildrenVerb[36]; ///< RBX::SelectChildrenVerb
+  unsigned __int8 snapSelectionVerb[36]; ///< RBX::SnapSelectionVerb
+  unsigned __int8 unlockAllVerb[28];    ///< RBX::UnlockAllVerb
+  unsigned __int8 anchorVerb[40];       ///< RBX::AnchorVerb
+  unsigned __int8 translucentVerb[40];  ///< RBX::TranslucentVerb
+  unsigned __int8 canCollideVerb[40];   ///< RBX::CanCollideVerb
+  unsigned __int8 canNotSelectCommand[36]; ///< RBX::CanNotSelectCommand
+  unsigned __int8 allCanSelectCommand[28]; ///< RBX::AllCanSelectCommand
+  unsigned __int8 moveUpPlateVerb[40];  ///< RBX::MoveUpPlateVerb
+  unsigned __int8 moveUpBrickVerb[40];  ///< RBX::MoveUpBrickVerb
+  unsigned __int8 moveDownSelectionVerb[36]; ///< RBX::MoveDownSelectionVerb
+  unsigned __int8 rotateSelectionVerb[36]; ///< RBX::RotateSelectionVerb
+  unsigned __int8 tiltSelectionVerb[36]; ///< RBX::TiltSelectionVerb
+  unsigned __int8 runCommand[28];       ///< RBX::RunCommand
+  unsigned __int8 stopCommand[28];      ///< RBX::StopCommand
+  unsigned __int8 resetCommand[28];     ///< RBX::ResetCommand
+  unsigned __int8 firstPersonCommand[16]; ///< RBX::FirstPersonCommand
+  unsigned __int8 statsCommand[16];     ///< RBX::StatsCommand
+  unsigned __int8 renderStatsCommand[16]; ///< RBX::RenderStatsCommand
+  unsigned __int8 engineStatsCommand[16]; ///< RBX::EngineStatsCommand
+  unsigned __int8 networkStatsCommand[20]; ///< RBX::NetworkStatsCommand
+  unsigned __int8 physicsStatsCommand[16]; ///< RBX::PhysicsStatsCommand
+  unsigned __int8 summaryStatsCommand[16]; ///< RBX::SummaryStatsCommand
+  unsigned __int8 customStatsCommand[16]; ///< RBX::CustomStatsCommand
+  unsigned __int8 joinCommand[16];      ///< RBX::JoinCommand
+  unsigned __int8 turnOnManualJointCreation[16]; ///< RBX::TurnOnManualJointCreation
+  unsigned __int8 setGridToOne[16];     ///< RBX::SetGridToOne
+  unsigned __int8 setGridToOneFifth[16]; ///< RBX::SetGridToOneFifth
+  unsigned __int8 setGridToOff[16];     ///< RBX::SetGridToOff
+  unsigned __int8 setManualJointToWeak[16]; ///< RBX::SetManualJointToWeak
+  unsigned __int8 setManualJointToStrong[16]; ///< RBX::SetManualJointToStrong
+  unsigned __int8 setManualJointToInfinite[16]; ///< RBX::SetManualJointToInfinite
+  unsigned __int8 axisRotateToolVerb[32]; ///< RBX::TToolVerb<RBX::AxisRotateTool,RBX::RunStateVerb>
+  unsigned __int8 advMoveToolVerb[32];  ///< RBX::TToolVerb<RBX::AdvMoveTool,RBX::RunStateVerb>
+  unsigned __int8 advRotateToolVerb[32]; ///< RBX::TToolVerb<RBX::AdvRotateTool,RBX::RunStateVerb>
+  unsigned __int8 advArrowToolVerb[32]; ///< RBX::TToolVerb<RBX::AdvArrowTool,RBX::RunStateVerb>
+  unsigned __int8 moveResizeJoinToolVerb[32]; ///< RBX::TToolVerb<RBX::MoveResizeJoinTool,RBX::RunStateVerb>
+  unsigned __int8 flatToolVerb[32];     ///< RBX::TToolVerb<RBX::FlatTool,RBX::RunStateVerb>
+  unsigned __int8 glueToolVerb[32];     ///< RBX::TToolVerb<RBX::GlueTool,RBX::RunStateVerb>
+  unsigned __int8 weldToolVerb[32];     ///< RBX::TToolVerb<RBX::WeldTool,RBX::RunStateVerb>
+  unsigned __int8 studsToolVerb[32];    ///< RBX::TToolVerb<RBX::StudsTool,RBX::RunStateVerb>
+  unsigned __int8 inletToolVerb[32];    ///< RBX::TToolVerb<RBX::InletTool,RBX::RunStateVerb>
+  unsigned __int8 universalToolVerb[32]; ///< RBX::TToolVerb<RBX::UniversalTool,RBX::RunStateVerb>
+  unsigned __int8 hingeToolVerb[32];    ///< RBX::TToolVerb<RBX::HingeTool,RBX::RunStateVerb>
+  unsigned __int8 rightMotorToolVerb[32]; ///< RBX::TToolVerb<RBX::RightMotorTool,RBX::RunStateVerb>
+  unsigned __int8 leftMotorToolVerb[32]; ///< RBX::TToolVerb<RBX::LeftMotorTool,RBX::RunStateVerb>
+  unsigned __int8 oscillateMotorToolVerb[32]; ///< RBX::TToolVerb<RBX::OscillateMotorTool,RBX::RunStateVerb>
+  unsigned __int8 smoothNoOutlinesToolVerb[32]; ///< RBX::TToolVerb<RBX::SmoothNoOutlinesTool,RBX::RunStateVerb>
+  unsigned __int8 anchorToolVerb[32];   ///< RBX::TToolVerb<RBX::AnchorTool,RBX::RunStateVerb>
+  unsigned __int8 lockToolVerb[32];     ///< RBX::TToolVerb<RBX::LockTool,RBX::RunStateVerb>
+  unsigned __int8 fillToolVerb[32];     ///< RBX::TToolVerb<RBX::FillTool,RBX::RunStateVerb>
+  unsigned __int8 materialToolVerb[32]; ///< RBX::TToolVerb<RBX::MaterialTool,RBX::RunStateVerb>
+  unsigned __int8 dropperToolVerb[32];  ///< RBX::TToolVerb<RBX::DropperTool,RBX::RunStateVerb>
+  unsigned __int8 nullToolVerb[32];     ///< RBX::TToolVerb<RBX::NullTool,RBX::RunStateVerb>
+  unsigned __int8 gameToolVerb[32];     ///< RBX::TToolVerb<RBX::GameTool,RBX::RunStateVerb>
+  unsigned __int8 grabToolVerb[32];     ///< RBX::TToolVerb<RBX::GrabTool,RBX::RunStateVerb>
+  unsigned __int8 cloneToolVerb[32];    ///< RBX::TToolVerb<RBX::CloneTool,RBX::RunStateVerb>
+  unsigned __int8 hammerToolVerb[32];   ///< RBX::TToolVerb<RBX::HammerTool,RBX::RunStateVerb>
+};
+
+/* 823 */
+struct __cppobj RBX::RunStateVerb : RBX::Verb
+{
+  RBX::DataModel *dataModel;
+  unsigned __int8 runService[12];       ///< RBX::ServiceClient<RBX::RunService>
+};
+
+/* 824 */
+struct __cppobj RBX::EditSelectionVerb : RBX::Verb
+{
+  unsigned __int8 workspace[8];         ///< boost::shared_ptr<RBX::Workspace>
+  unsigned __int8 selection[12];        ///< RBX::ServiceClient<RBX::Selection>
+  RBX::DataModel *dataModel;
+};
+
+/* 825 */
+struct __cppobj RBX::DeleteBase : RBX::EditSelectionVerb
+{
+  bool rewardHopper;
+  unsigned __int8 gap_25[3];
+};
+
+/* 826 */
+struct __cppobj RBX::RotateAxisCommand : RBX::EditSelectionVerb
+{
+};
+
+/* 827 */
+struct __cppobj RBX::ToggleViewMode : RBX::Verb
+{
+  RBX::DataModel *dataModel;
+};
+
+/* 828 */
+struct __cppobj RBX::Network::ConcurrentRakPeer::StatsUpdateJob : RBX::DataModelJob
+{
+  unsigned __int8 mapMutex[8];          ///< boost::mutex
+  unsigned __int8 statsMap[24];         ///< boost::unordered::unordered_map<RakNet::SystemAddress,RBX::Network::ConcurrentRakPeerStats,RBX::Network::ConcurrentRakPeer::StatsUpdateJob::SystemAddressHasher,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,RBX::Network::ConcurrentRakPeerStats> > >
+  unsigned __int8 updateCallbackMap[24]; ///< boost::unordered::unordered_map<RakNet::SystemAddress,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)>,boost::hash<RakNet::SystemAddress>,std::equal_to<RakNet::SystemAddress>,std::allocator<std::pair<RakNet::SystemAddress const,boost::function<void __cdecl(RBX::Network::ConcurrentRakPeerStats const &)> > > >
+  RBX::RunningAverage<double,double> bufferHealth;
+  int prevBufferSize;
+  unsigned __int8 peer[8];              ///< boost::weak_ptr<RakNet::RakPeerInterface>
+  unsigned __int8 gap_28C[4];
+};
+
+/* 829 */
+struct __cppobj RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService> : RBX::Instance
+{
+};
+
+/* 830 */
+struct __cppobj RBX::Reflection::Described<RBX::Network::GuidRegistryService, char const *const RBX::Network::sGuidRegistryService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>, 27, 0> : RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>
+{
+};
+
+/* 831 */
+struct __cppobj RBX::DescribedNonCreatable<RBX::Network::GuidRegistryService, RBX::Instance, char const *const RBX::Network::sGuidRegistryService, 27, 0> : RBX::Reflection::Described<RBX::Network::GuidRegistryService, char const *const RBX::Network::sGuidRegistryService, RBX::NonFactoryProduct<RBX::Instance, char const *const RBX::Network::sGuidRegistryService>, 27, 0>
+{
+};
+
+/* 832 */
+struct __cppobj RBX::Network::GuidRegistryService : RBX::DescribedNonCreatable<RBX::Network::GuidRegistryService, RBX::Instance, char const *const RBX::Network::sGuidRegistryService, 27, 0>, RBX::Service
+{
+  unsigned __int8 gap_61[3];
+  unsigned __int8 registry[8];          ///< boost::shared_ptr<RBX::GuidItem<RBX::Instance>::Registry>
+};
+
+/* 833 */
+struct __cppobj RBX::Network::SenderDictionary<RBX::Name const *>
+{
+  unsigned __int8 dictionary[24];       ///< boost::unordered::unordered_map<RBX::Name const *,unsigned char,boost::hash<RBX::Name const *>,std::equal_to<RBX::Name const *>,std::allocator<std::pair<RBX::Name const * const,unsigned char> > >
+  unsigned __int8 items[512];           ///< array
+  int nextIndex;
+};
+
+/* 834 */
+struct __cppobj RBX::Network::ReceiverDictionary<std::string >
+{
+  unsigned __int8 dictionary[3584];     ///< array
+};
+
+/* 835 */
+struct __cppobj RBX::Network::SharedScopeDictionary : RBX::Network::SenderDictionary<RBX::Name const *>, RBX::Network::ReceiverDictionary<std::string >
+{
 };
 

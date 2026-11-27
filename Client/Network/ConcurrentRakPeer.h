@@ -14,6 +14,8 @@
 #include "rbx/threadsafe.h"
 #include <boost/function.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/unordered_map.hpp>
+#include "rbx/RunningAverage.h"
 #include <string>
 
 namespace RBX {
@@ -91,23 +93,28 @@ namespace Network {
 	};
 
 	// RTTI ConcurrentRakPeer::StatsUpdateJob : DataModelJob. Vftable PLAYER 0x00b208c0 (operator new(0x290)
-	// in the ConcurrentRakPeer ctor). Layout proven by the ctor 0x005c5f60 (STUDIO 0x006211c0), which a probe
-	// compile reproduces byte for byte with (2016 names and map types):
-	//   boost::mutex mapMutex 0x218; boost::unordered_map<SystemAddress, ConcurrentRakPeerStats,
-	//   SystemAddressHasher (ToInteger)> statsMap 0x220; boost::unordered_map<SystemAddress,
-	//   boost::function<void(const ConcurrentRakPeerStats&)> > updateCallbackMap 0x238; RunningAverage<>
-	//   bufferHealth 0x250 (mean 0x268); int prevBufferSize 0x280 (ctor 0); weak_ptr<RakPeerInterface> peer 0x284.
-	// Not declared that way yet: the two unordered_map ctors make ConcurrentRakPeer.obj the first Network
-	// object to supply boost's prime_list, and our link then puts the "circular_buffer" literal at its
-	// one-past-end address, which costs ~15 prime_list users their 100% (wave 18; layout luck, not code).
+	// in the ConcurrentRakPeer ctor). Layout proven by the ctor 0x005c5f60 (STUDIO 0x006211c0); names and map
+	// types are 2016's. The two maps' ctors instantiate boost's prime_list; 2013's copy comes from the /GL
+	// shell (Client/Win/placeholder.cpp stand-in), so ConcurrentRakPeer.obj does not supply it.
 	// SIZE 0x290
 	class ConcurrentRakPeer::StatsUpdateJob : public DataModelJob
 	{
+		struct SystemAddressHasher
+		{
+			size_t operator()(const RakNet::SystemAddress& key) const
+			{
+				return RakNet::SystemAddress::ToInteger(key);
+			}
+		};
 	public:
 		boost::mutex mapMutex;                              // 0x218
-		undefined m_unk0x220[0x268 - 0x220];                // 0x220
-		double bufferHealth;                                // 0x268 RunningAverage<>'s mean (see above)
-		undefined m_unk0x270[0x290 - 0x270];                // 0x270
+		typedef boost::unordered_map<RakNet::SystemAddress, ConcurrentRakPeerStats, SystemAddressHasher> StatsMap;
+		StatsMap statsMap;                                  // 0x220
+		typedef boost::unordered_map<RakNet::SystemAddress, boost::function<void(const ConcurrentRakPeerStats&)> > UpdateCallbackMap;
+		UpdateCallbackMap updateCallbackMap;                // 0x238
+		RunningAverage<> bufferHealth;                      // 0x250 (mean 0x268)
+		int prevBufferSize;                                 // 0x280
+		weak_ptr<RakNet::RakPeerInterface> peer;            // 0x284
 
 		StatsUpdateJob(boost::shared_ptr<RakNet::RakPeerInterface> peer, DataModel* dataModel);
 		/*override*/ Time::Interval sleepTime(const Stats& stats);                       // vtable+0x04

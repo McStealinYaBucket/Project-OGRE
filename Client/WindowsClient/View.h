@@ -23,6 +23,7 @@
 
 #include <windows.h>
 
+#include <string>
 #include <vector>
 
 #include "G3D/Vector2int16.h"
@@ -31,6 +32,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "rbx/TaskScheduler.h"
+#include "rbx/signal.h"
 
 #include "UserInput.h"
 
@@ -58,17 +60,37 @@ namespace RBX {
 		virtual void VTable0x28(); // vtable+0x28
 		virtual void VTable0x2c(); // vtable+0x2c
 		virtual void onResize(int cx, int cy) = 0; // vtable+0x30 (WndProc's WM_SIZE, PLAYER 0x00442718)
+		virtual void VTable0x34(); // vtable+0x34
+		virtual void VTable0x38(); // vtable+0x38
+		virtual void VTable0x3c(); // vtable+0x3c
+		virtual void VTable0x40(); // vtable+0x40
+		virtual void VTable0x44(); // vtable+0x44
+		virtual void VTable0x48(); // vtable+0x48
+		virtual void VTable0x4c(); // vtable+0x4c
+		virtual void VTable0x50(); // vtable+0x50
+		virtual void VTable0x54(); // vtable+0x54
+		virtual void VTable0x58(); // vtable+0x58
+		virtual void VTable0x5c(); // vtable+0x5c
+		virtual void VTable0x60(); // vtable+0x60
+		virtual void VTable0x64(); // vtable+0x64
+		virtual void VTable0x68(); // vtable+0x68
+		virtual void VTable0x6c(); // vtable+0x6c
+		virtual void VTable0x70(); // vtable+0x70
+		virtual ~ViewBase();       // vtable+0x74 (~View 0x00465b90 deletes the gfx view through it)
 
 		// A non-virtual RbxOgre call UploadSessionLogs (0x00403f40) makes on the gfx view: unnamed.
 		void FUN_00487d50(); // PLAYER 0x00487d50
 	};
 
+	// Members with destructors from ~View (0x00465b90), which destroys them in reverse order.
 	class View
 	{
-		undefined4 m_unk0x00;                         // 0x00
+		rbx::signal<void()> m_unk0x00;                // 0x00 ~View's last call (~signal 0x00460d60)
 		boost::shared_ptr<Game> game;                 // 0x04 initializeInput passes it to UserInput
 		HWND hWnd;                                    // 0x0c
-		undefined m_unk0x10[0x45 - 0x10];             // 0x10
+		undefined m_unk0x10[0x18 - 0x10];             // 0x10
+		std::string m_unk0x18;                        // 0x18
+		undefined m_unk0x34[0x45 - 0x34];             // 0x34
 		bool fullscreen;                              // 0x45
 		bool desireFullscreen;                        // 0x46
 		bool changedResolution;                       // 0x47
@@ -78,12 +100,12 @@ namespace RBX {
 		DWORD restoreWindowStyle;                     // 0x94
 		bool changingResolution;                      // 0x98
 		HMONITOR hMonitor;                            // 0x9c
-		ViewBase* view;                               // 0xa0 (2016: scoped_ptr<ViewBase>)
+		boost::scoped_ptr<ViewBase> view;             // 0xa0 (~View deletes it through vtable+0x74)
 		undefined m_unk0xa4[0xa8 - 0xa4];             // 0xa4
 		// The three jobs resetScheduler (0x00466460) adds and RemoveJobs (0x00466a30) removes.
 		boost::shared_ptr<TaskScheduler::Job> m_unk0xa8; // 0xa8
 		boost::scoped_ptr<UserInput> userInput;       // 0xb0 HandleWindowsMessage forwards to it
-		undefined m_unk0xb4[0xbc - 0xb4];             // 0xb4
+		boost::shared_ptr<void> m_unk0xb4;            // 0xb4 type not proven (only ~View releases it)
 		boost::shared_ptr<TaskScheduler::Job> m_unk0xbc; // 0xbc
 		boost::shared_ptr<TaskScheduler::Job> m_unk0xc4; // 0xc4
 
@@ -99,8 +121,10 @@ namespace RBX {
 		void resetScheduler();
 
 	public:
+		~View(); // PLAYER 0x00465b90 (LTCG: `this` pushed)
+
 		HWND GetHWnd() const { return hWnd; }
-		ViewBase* GetGfxView() const { return view; }
+		ViewBase* GetGfxView() const { return view.get(); }
 		void CloseWindow() { ::PostMessage(GetHWnd(), WM_CLOSE, 0, 0); }
 		bool IsFullscreen() const { return fullscreen; }
 		void SetFullscreen(bool value);

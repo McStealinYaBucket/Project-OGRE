@@ -182,7 +182,7 @@ protected:
 		const Guid::Data& id, RakNet::BitStream& outBitStream);                       // vtable+0xcc
 	virtual FilterResult filterReceivedChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc) { return Accept; } // vtable+0xd0
 	virtual FilterResult filterReceivedParent(Instance* instance, Instance* parent) { return Accept; } // vtable+0xd4
-	virtual FilterResult filterPhysics(PartInstance* instance) { return Accept; }      // vtable+0xd8
+	virtual FilterResult filterPhysics(PartInstance* instance);                        // vtable+0xd8 out of line: ServerReplicator::filterPhysics calls it
 	virtual FilterResult filterChangedProperty(Instance* instance, const Reflection::PropertyDescriptor& desc); // vtable+0xdc
 	virtual void onPropertyChanged(Instance* instance, const Reflection::PropertyDescriptor* descriptor); // vtable+0xe0
 	virtual shared_ptr<Stats> createStatsItem() = 0;                                   // vtable+0xe4
@@ -207,7 +207,9 @@ protected:
 	virtual void deserializeSFFlags(RakNet::BitStream& inBitStream) {}                 // vtable+0x124
 	virtual bool remoteDeleteOnDisconnect(const Instance* instance) const;             // vtable+0x128 0x0059cd20
 
-	// RakNet::PluginInterface2 (this = Replicator+0x1094): counts split/unsplit sends.
+	// RakNet::PluginInterface2 (this = Replicator+0x1094). OnReceive: PLAYER 0x0059d0e0, not written yet.
+	/*override*/ RakNet::PluginReceiveResult OnReceive(RakNet::Packet* packet);
+	// Counts split/unsplit sends.
 	/*override*/ void OnInternalPacket(RakNet::InternalPacket* internalPacket, unsigned frameNumber,
 		RakNet::SystemAddress remoteSystemAddress, RakNet::TimeMS time, int isSend);
 
@@ -277,7 +279,7 @@ protected:
 	shared_ptr<void> m_unk0x216c;                          // 0x216c pointee unproven
 	shared_ptr<void> m_unk0x2174;                          // 0x2174 pointee unproven
 	shared_ptr<ProcessPacketsJob> processPacketsJob;       // 0x217c
-	shared_ptr<void> m_unk0x2184;                          // 0x2184 pointee unproven
+	shared_ptr<StreamJob> streamJob;                       // 0x2184 (2016 name) ServerReplicator::readItem 0x0057b210, onSentMarker 0x00572270
 	shared_ptr<void> m_unk0x218c;                          // 0x218c pointee unproven
 
 	ItemQueue pendingItems;                                // 0x2194

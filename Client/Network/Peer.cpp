@@ -80,7 +80,7 @@ public:
 	weak_ptr<ConcurrentRakPeer> rakPeer;	// 0x228
 
 	// FUNCTION: PLAYER 0x005b92c0
-	// STUB: STUDIO 0x0064b030
+	// FUNCTION: STUDIO 0x0064b030
 	PacketReceiveJob(shared_ptr<ConcurrentRakPeer> rakPeer, DataModel* dataModel)
 		:DataModelJob("Net PacketReceive", DataModelJob::DataIn, false, shared_from(dataModel), Time::Interval(0))
 		,dataModel(shared_from(dataModel))

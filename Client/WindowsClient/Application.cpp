@@ -149,14 +149,15 @@ namespace RBX {
 
 		if (Document* document = m_unk0x24.get())
 		{
-			if (View* view = document->m_unk0x00)
+			if (View* view = document->m_unk0x00.get())
 				view->AboutToShutdown();
 		}
 	}
 
 	// Against 2016: no mainWindow or web view to tear down; the Document is shut down and deleted here,
-	// and the marshaller's window released last.
-	// STUB: PLAYER 0x00404f10
+	// and the marshaller's window released last. Effective 100: the one register left is the stub
+	// Document::Shutdown's `this` (2013 eax, ours ecx).
+	// FUNCTION: PLAYER 0x00404f10
 	void Application::Shutdown()
 	{
 		if (processLocal_stopWaitForVideoPrerollThread)

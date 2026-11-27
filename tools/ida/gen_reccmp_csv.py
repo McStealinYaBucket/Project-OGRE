@@ -153,7 +153,16 @@ MATCH_FIX = {("PLAYER", 0x008b2ea0): _GUIMAIN_E28, ("STUDIO", 0x00961180): _GUIM
 # weak_ptr<Instance> binds and left the engine originals 0x0098a310/0x0098a120 unpaired (sweep22: 100). Drop an
 # entry once the STUDIO shell instantiates the symbol.
 # Wave 18: emptied; Client/ClientShared/placeholder.cpp now instantiates the STUDIO shell bind (shell-5k-9).
-MATCH_DROP = set()
+# Wave 20: STUDIO 0x00445440 is the shell's folded shared_from<T> body (match: shared_from<RunService>), which
+# 2013's engine callers of shared_from<DataModel> reach (59 call-site votes for our engine body 0x00539ef0,
+# 1 for our shell shared_from<RunService>). Our STUDIO shell does not instantiate shared_from<DataModel>, so
+# the name kept the original on the shell copy and left filterChangedProperty 0x00638330, the PacketJob ctor
+# 0x00620870 and the StatsUpdateJob ctor 0x006211c0 below 100. Measured +8/-2 (RunService::start 0x0079af80 now
+# calls the unpaired shell twin). Drop it once the shell instantiates DataModel's.
+# PLAYER 0x0070fb30 is the engine's shared_ptr<RunService>(p, Creatable<Instance>::Deleter); our link keeps only the
+# shell's /GS copy (UserInput::setGame creates the RunService in the shell, as 2013 does), whose original is
+# the shell's 0x00462100 (called by the shell's create<RunService> 0x00461f60). Measured +1/-0. Drop it once the engine copy returns.
+MATCH_DROP = {("STUDIO", 0x00445440), ("PLAYER", 0x0070fb30)}
 
 
 THIRD_PARTY = ("std::", "stdext::", "boost::", "G3D::", "RakNet::", "DataStructures::", "ATL::", "C:gpc_")

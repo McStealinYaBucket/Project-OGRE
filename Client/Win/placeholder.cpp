@@ -32,7 +32,13 @@
    create chain), the Http temporary (its dtor) and RunningAverage<double>::sample. Tried and left out:
    Security::Context::current (it pulls the engine's own out-of-line current() into the shell, -1) and
    ServiceProvider::find/create<T> plus FactoryProduct<T>::className() for 13 services (-620: find<T>'s
-   shared helpers and Described<T>::classDescriptor move into the shell). */
+   shared helpers and Described<T>::classDescriptor move into the shell).
+   Added 2026-11-26 (wave 20): prime_list_template<unsigned>::value (the users unchanged; it keeps an
+   engine TU that declares an unordered_map from supplying it). Tried and left out: a shell ~SoundId
+   (a local from SoundChannel::getSoundId): +2 (the ContentId descriptor vftables 0x00b3388c/0x00b33904
+   fold again) but equalValues<SoundId> 0x006bc870 then folds into equalValues<ContentId> and loses its
+   100. 2013 sends equalValues<SoundId>'s funclets to a second thunk 0x004a2390, so only copyValue<SoundId>
+   reaches the shell's 0x0041c8a0 (through ~ContentId, it seems: App's copyValue<SoundId> source). */
 
 #include "V8Tree/Instance.h"
 #include "V8DataModel/DataModel.h"
@@ -47,6 +53,7 @@
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/recursive_mutex.hpp>
+#include <boost/unordered/detail/util.hpp>
 
 #include <atlstr.h>
 
@@ -91,6 +98,10 @@ namespace OgreShellStandIn {
 		RBX::DebugSettings::singleton();                                     // 7/0 0x00407700
 		RBX::Http http("");                                                  // ctor 5/0 0x00402b50
 		static_cast<RBX::RunningAverage<double, double>*>(raw)->sample(1.0); // 5/0 0x004612a0
+		// boost::unordered's prime_list_template<unsigned>::value: 2013's /GL shell supplies it (PLAYER
+		// 0x00bdafe8, among the shell's LTCG data, after Document's slot vftables; STUDIO 0x00d10920),
+		// so the engine's unordered containers (StatsUpdateJob's maps) do not decide where it lands.
+		*static_cast<std::size_t*>(raw) = boost::unordered::detail::next_prime(*static_cast<std::size_t*>(raw));
 		// function0<void>::swap 2/0: the engine's 0x00540fd0 and 0x0069c690 call the shell copy
 		// 0x0043b140, so LTCG keeps it __thiscall (ecx + stack). Those engine functions are not
 		// written; taking the address stands in for them (RecordToggleVerb::doIt's operator=).

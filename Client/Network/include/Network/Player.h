@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "Util/SystemAddress.h"
 #include "V8Tree/Instance.h"
 #include "Util/BrickColor.h"
 #include "V8DataModel/FriendService.h"
@@ -79,9 +80,8 @@ namespace Network {
 		int personalServerRank;             // 0xf4  ctor 0; getPersonalServerRank 0x005273b0
 		undefined4 m_unk0xf8;               // 0xf8  ctor 0
 		bool appearanceDidLoad;             // 0xfc  ctor false; getAppearanceDidLoad 0x00527460
-		undefined4 m_unk0x100;              // 0x100 ctor -1
-		undefined2 m_unk0x104;              // 0x104 ctor 0xffff
-		undefined2 m_unk0x106;              // 0x106 not stored by the ctor
+		RBX::SystemAddress m_unk0x100;      // 0x100 ctor default (-1, 0xffff); ServerReplicator::installRemotePlayer
+			// 0x005722b0 stores RakNetToRbxAddress(remotePlayerId) (2016 keeps a RakNet address as remoteAddress)
 		bool forceEarlySpawnLocationCalculation; // 0x108 ctor false; src2016:, confirmed by 0x00527890/0x005278a0
 		bool m_unk0x109;                    // 0x109 ctor false
 		std::string m_unk0x10c;             // 0x10c
@@ -130,9 +130,14 @@ namespace Network {
 		void setCanLoadCharacterAppearance(bool value);
 		int getPersonalServerRank() const;
 		std::string getCharacterAppearance() const;
+		// iOS: loadCharacter(bool, std::string); PLAYER 0x00555820, not written yet.
+		void loadCharacter(bool inGame, std::string preferedSpawnName);
 		bool getUnder13();
 		void setUnder13(bool value);
-		int getUserID() const;
+		// Inline in 2013 (Players::friendServiceRequest 0x0056b960 inlines it); prop_userId's address-take
+		// emits the out-of-line copy.
+		// FUNCTION: PLAYER 0x00527420
+		int getUserID() const { return userId; }
 		bool isGuest() const;
 		MembershipType getMembershipType() const;
 		void setMembershipType(MembershipType value);

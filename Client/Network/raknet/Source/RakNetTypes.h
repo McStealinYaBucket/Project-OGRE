@@ -253,6 +253,9 @@ struct RAK_DLL_EXPORT SystemAddress
 	/// Returns if two system addresses have the same IP (port is not checked)
 	bool EqualsExcludingPort( const SystemAddress& right ) const;
 
+	/// Roblox 2013 edit (iOS 10-29 symbol): the IPv4 address word. PLAYER folds it into 0x008291e0.
+	unsigned int GetBinaryAddress(void) const;
+
 	/// Returns the port in host order (this is what you normally use)
 	unsigned short GetPort(void) const;
 

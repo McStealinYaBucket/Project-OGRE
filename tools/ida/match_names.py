@@ -891,7 +891,140 @@ FACTS = [
     (0x00bc3a2c, 0, "data24", "_c_dfDIKeyboard", "lib:",
      "c_dfDIKeyboard (dinput8.lib dilib2.obj): DIDATAFORMAT {0x18, 0x10, 2, 0x100, 256 objects, 0x009f0a90} | "
      "pushed at 0x0045ed21 by createKeyboard (shell-5k-10)"),
+    # wave20 sync (shell-5k-11.md / app-20.md / network-5f-11.md "IDA owner"; sweep27). Each checked from the exe bytes.
+    (0x00436c70, 0, "rename", "?safe_static_do_get_staticData@FunctionMarshaller@RBX@@CAPAUStaticData@12@XZ", "prior:",
+     "RBX::FunctionMarshaller::safe_static_do_get_staticData() (our FunctionMarshaller.cpp) | guard bit 0x00e2500c, "
+     "calls the StaticData ctor 0x00436d70, atexit(0x00a8f980), returns &value 0x00e25010; safe_static_init_staticData "
+     "0x00436ce0 (reccmp 100%) is `jmp` here (shell-5k-11)"),
+    (0x00436d70, 0, "rename", "??0StaticData@FunctionMarshaller@RBX@@QAE@XZ", "prior:",
+     "RBX::FunctionMarshaller::StaticData::StaticData() (our tree's name) | the /GL copy with this = &value 0x00e25010 "
+     "propagated: map head from 0x0045b020 stored to 0x00e25014 (isnil +0x15, self links), 0x00e25018..0x00e25028 "
+     "zeroed, returns 0x00e25010; only caller 0x00436c70 (shell-5k-11)"),
+    (0x00437690, 0, "rename", "??1StaticData@FunctionMarshaller@RBX@@QAE@XZ", "ios:",
+     "RBX::FunctionMarshaller::StaticData::~StaticData() (iOS 1029 D1/D2) | /GL copy on the static 0x00e25010: walks "
+     "the window map at 0x00e25014; the atexit thunk 0x00a8f980 is `jmp` here (shell-5k-11)"),
+    (0x00a8f980, 0, "rename",
+     "??__Fvalue@?1??safe_static_do_get_staticData@FunctionMarshaller@RBX@@CAPAUStaticData@12@XZ@YAXXZ", "prior:",
+     "the atexit destructor of safe_static_do_get_staticData's `value` (our link's name) | `jmp 0x00437690`, pushed "
+     "by 0x00436cb0"),
+    (0x0045f2a0, 0, "rename", "?ProcessUserInputMessage@UserInput@RBX@@QAEXIIJ@Z", "str:",
+     "RBX::UserInput::ProcessUserInputMessage(UINT, WPARAM, LPARAM) | RobloxCritSecLoc on the string "
+     "\"ProcessUserInputMessage\" 0x00be49e4 (0x0045f2cf); UserInput.cpp assert 479 inside; LTCG: this in edx, uMsg "
+     "in ecx; our UserInput.cpp STUB (shell-5k-11)"),
+    (0x0045e0c0, 0, "rename", "??1UserInputBase@RBX@@QAE@XZ", "ios:",
+     "RBX::UserInputBase::~UserInputBase() (iOS 1029 D2; our tree's decoration) | the shell's out-of-line copy: "
+     "destroys the signal at +0x34 (0x00460d60), the shared_ptr at +0x30, the cursors and a ContentId; ~UserInput "
+     "0x0045e990 calls it with this in ecx. Was the ios: scoped_ptr<VirtualHardwareDevice>::~scoped_ptr, which "
+     "does not fit the body (shell-5k-11)"),
+    (0x00462a50, 0, "rename",
+     "?pop_if_present@?$safe_queue@UMessage@UserInputSleepingJob@RBX@@@rbx@@QAE_NAAUMessage@UserInputSleepingJob@RBX@@@Z",
+     "prior:", "rbx::safe_queue<UserInputSleepingJob::Message>::pop_if_present (our link's name) | shell-5k-11"),
+    (0x00462b00, 0, "rename",
+     "?peek_if_present@?$safe_queue@UMessage@UserInputSleepingJob@RBX@@@rbx@@QAE_NAAUMessage@UserInputSleepingJob@RBX@@@Z",
+     "prior:", "rbx::safe_queue<UserInputSleepingJob::Message>::peek_if_present (our link's name) | out of line in "
+     "2013 (queue in eax, value in ebx); ours inlines it (shell-5k-11)"),
+    (0x0045edf0, 0, "rename", "?setKeyboardDesiredInternal@UserInput@RBX@@AAEX_N@Z", "src2016:",
+     "RBX::UserInput::setKeyboardDesiredInternal(bool) (2016 WindowsClient/UserInput.h, private) | calls "
+     "acquireKeyboard 0x0045f120, falls into setKeyboardDesired (shell-5k-11)"),
+    (0x0045ee20, 0, "rename", "?setKeyboardDesired@UserInput@RBX@@QAEX_N@Z", "str:",
+     "RBX::UserInput::setKeyboardDesired(bool) (2016 public) | RobloxCritSecLoc on \"setKeyboardDesired\" "
+     "0x00be4858, LTCG propagated the `true` argument; caller View 0x00466cf0 (shell-5k-11)"),
+    (0x0045eec0, 0, "rename", "?acquireMouseInternal@UserInput@RBX@@AAEXXZ", "src2016:",
+     "RBX::UserInput::acquireMouseInternal() (2016 private) | calls acquireMouseInternalBase 0x0045ef20 (shell-5k-11)"),
+    (0x0045ef20, 0, "rename", "?acquireMouseInternalBase@UserInput@RBX@@AAEXABVVector2@G3D@@@Z", "str:",
+     "RBX::UserInput::acquireMouseInternalBase(const Vector2&) (2016 private) | assert \"!isMouseAcquired\" "
+     "UserInput.cpp:269 (shell-5k-11)"),
+    (0x0045f050, 0, "rename", "?unAcquireMouse@UserInput@RBX@@AAEXXZ", "str:",
+     "RBX::UserInput::unAcquireMouse() (2016 private) | assert \"isMouseAcquired\" UserInput.cpp:300, then "
+     "Unacquire (shell-5k-11)"),
+    (0x0045f120, 0, "rename", "?acquireKeyboard@UserInput@RBX@@AAEXXZ", "str:",
+     "RBX::UserInput::acquireKeyboard() (2016 private) | assert \"!isKeyboardAcquired\" UserInput.cpp:340 "
+     "(shell-5k-11)"),
+    (0x00643100, 0x00760980, "rename", "??0scoped_write_request@DataModel@RBX@@QAE@PAVInstance@2@@Z", "ios:",
+     "RBX::DataModel::scoped_write_request::scoped_write_request(Instance*) (iOS 1029) | finds the DataModel of the "
+     "Instance, stores it at +0, locks its critical section +0xd50 and bumps +0xca0; built at DualLegacyLock+4 by "
+     "0x0068c262 (shell-5k-11)"),
+    (0x0062daf0, 0x0074dd60, "rename", "??1scoped_write_request@DataModel@RBX@@QAE@XZ", "ios:",
+     "RBX::DataModel::scoped_write_request::~scoped_write_request() (iOS 1029) | undoes the ctor 0x00643100: locks "
+     "+0xd50, clears +0xca8, swaps +0xca0 back (0x009b8f20), unlocks; the DualLegacyLock dtor 0x0041d550 calls it "
+     "on +4, the member the ctor builds with 0x00643100; 18 stepDataModelJob bodies call it (PhysicsJob 0x0072b880, "
+     "HeartbeatTask 0x0072dc30, GcJob 0x00679e60 ...) together with the ctor. STUDIO 0x0074dd60 / ctor 0x00760980: "
+     "the common callees of STUDIO's HeartbeatTask / PhysicsJob / GcJob / WaitingScriptsJob steps, sizes equal"),
+    (0x0068c1f0, None, "rename",
+     "_ZN3RBX16OverlayDataModel14DualLegacyLockC2EPS0_PNS_9DataModelENS_12DataModelJob8TaskTypeE", "ios:",
+     "RBX::OverlayDataModel::DualLegacyLock::DualLegacyLock (iOS 1029 spelling with pointers; Windows 2013 takes "
+     "two shared_ptrs by value and the TaskType) | LegacyLock(shared_ptr<DataModel>, type) 0x006421c0 at +0, "
+     "scoped_write_request 0x00643100 at +4 and 0x006431d0 at +8, each on `type == Write ? p : NULL` (shell-5k-11)"),
+    (0x0041d550, 0, "rename", "??1DualLegacyLock@OverlayDataModel@RBX@@QAE@XZ", "ios:",
+     "RBX::OverlayDataModel::DualLegacyLock::~DualLegacyLock() (class from iOS 1029; inline there) | the shell's "
+     "/GS copy: destroys +8 (0x0062db70), +4 (~scoped_write_request 0x0062daf0), +0 (~LegacyLock 0x00642370), the "
+     "three members the ctor 0x0068c1f0 builds (shell-5k-11)"),
+    (0x0041dfd0, 0, "rename", "RBX::Document::executeScript", "str:",
+     "RBX::Document::executeScript (string \"Exception occured in Document::executeScript: %s\"; 2013 parameters "
+     "unknown) | body 0x0041dfd0-0x0041e63c with a VMProtect marker region from 0x0041e0d9 (notes/vmprotect-player.csv), "
+     "so IDA cut it at 270 bytes and the mutated code shows up as fragments such as sub_41E302; it inlines the "
+     "Impersonator dtor (`call ptr; call reset` at 0x0041e4ef and 0x0041e5c8) (app-20)"),
+    (0x00859130, None, "rename",
+     "??0BoolPropertyVerb@RBX@@IAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVDataModel@1@PBD@Z",
+     "rtti:", "RBX::BoolPropertyVerb::BoolPropertyVerb(const std::string&, DataModel*, const char*) (our "
+     "CommonVerbs.h) | stores ??_7BoolPropertyVerb@RBX@@6B@ 0x00b7c454; calls Name::lookup 0x006138c0 (app-20)"),
+    (0x0071b970, None, "rename", "_ZN3RBX12PartInstance13fromPrimitiveEPNS_9PrimitiveE", "ios:",
+     "RBX::PartInstance::fromPrimitive(Primitive*) (iOS 1029; fromConstPrimitive has the same body, folded) | "
+     "`p ? (p->owner +0x10c ? owner - 0x68 : 0) : 0`; called by ServerReplicator::checkDistributedReceive "
+     "(network-5f-11)"),
+    (0x007fa010, None, "rename", "_ZN3RBX9Mechanism22getRootMovingPrimitiveEPNS_9PrimitiveE", "ios:",
+     "RBX::Mechanism::getRootMovingPrimitive(Primitive*) (iOS 1029) | `jmp getConstRootMovingPrimitive 0x007f9f90`; "
+     "the ida: name was the jump target's (network-5f-11)"),
+    (0x0058b260, 0x0062f8d0, "rename",
+     "_ZN3RBX7Network10Replicator19createPhysicsSenderENS_15NetworkSettings17PhysicsSendMethodE", "ios:",
+     "RBX::Network::Replicator::createPhysicsSender(NetworkSettings::PhysicsSendMethod) (iOS 1029) | a switch "
+     "that news one of three senders; ServerReplicator::onSentMarker 0x00572270 passes NetworkSettings+0xcc "
+     "(network-5f-11)"),
+    (0x00574f90, 0x006502d0, "rename",
+     "?expireItems@?$Base@VMasterItem@detail@PropSync@Network@RBX@@@detail@PropSync@Network@RBX@@QAEXXZ", "ios:",
+     "RBX::Network::PropSync::detail::Base<MasterItem>::expireItems() (iOS 1029) | out-of-line copy in "
+     "ServerReplicator.obj, called by dataOutStep 0x00576990 (reccmp 100%) (network-5f-11)"),
+    (0x00578e70, None, "rename",
+     "?onReceivedPropertyChanged@Master@PropSync@Network@RBX@@QAE?AW4FilterResult@34@VConstProperty@Reflection@4@@Z",
+     "ios:", "RBX::Network::PropSync::Master::onReceivedPropertyChanged(ConstProperty) (iOS 1029) | out-of-line copy "
+     "in ServerReplicator.obj next to Master::onPropertyChanged 0x00578a70 (network-5f-11)"),
+    (0x005becb0, 0x00650210, "rename",
+     "_ZN3RBX7Network8PropSync6detail4BaseINS2_10MasterItemEEC2ENS_4Time8IntervalE", "ios:",
+     "RBX::Network::PropSync::detail::Base<MasterItem>::Base(Time::Interval) (iOS 1029) | a prime_list user; called by "
+     "the ServerReplicator ctor 0x0057c48f and the ClientReplicator ctor 0x005bfd70 (Base<SlaveItem> folds here); "
+     "STUDIO 0x00650210 is the one common callee of its two ctors of the same size (network-5f-11)"),
+    (0x005d29f0, None, "rename",
+     "?readInstanceRemoval@StreamJob@Replicator@Network@RBX@@QAEXAAVBitStream@RakNet@@@Z", "ios:",
+     "RBX::Network::Replicator::StreamJob::readInstanceRemoval(BitStream&) (iOS 1029) | ServerReplicator::readItem "
+     "case 15 (network-5f-11)"),
+    (0x00572050, None, "rename",
+     "_ZN3RBX7Network16ServerReplicator23checkDistributedReceiveEPNS_12PartInstanceE", "ios:",
+     "RBX::Network::ServerReplicator::checkDistributedReceive(PartInstance*) (iOS 1029) | calls "
+     "getRootMovingPrimitive 0x007fa010, fromPrimitive 0x0071b970, RakNetToRbxAddress 0x005c6c50; next to "
+     "checkDistributedSend 0x005720c0 (network-5f-11)"),
 ]
+
+# wave20 sync (app-20.md): the 26 TToolVerb<T, RunStateVerb> ctors, each identified by the RTTI-named vftable it
+# stores (PLAYER 0x00b7da38.., STUDIO 0x00c5da00..); iOS 1029 gives the signature (DataModel*, bool).
+TTOOLS = [
+    ("AxisRotateTool", 0x00861c70, 0x009d37a0), ("AdvMoveTool", 0x00861ea0, 0x009d3a20),
+    ("AdvRotateTool", 0x00861fd0, 0x009d3b50), ("AdvArrowTool", 0x00862100, 0x009d3cf0),
+    ("MoveResizeJoinTool", 0x008621a0, 0x009d3d90), ("FlatTool", 0x008624e0, 0x009d40e0),
+    ("GlueTool", 0x00862640, 0x009d4270), ("WeldTool", 0x008627f0, 0x009d4400),
+    ("StudsTool", 0x008629b0, 0x009d4590), ("InletTool", 0x00862b40, 0x009d4720),
+    ("UniversalTool", 0x00862cd0, 0x009d48b0), ("HingeTool", 0x00862e60, 0x009d4a70),
+    ("RightMotorTool", 0x00863010, 0x009d4c00), ("LeftMotorTool", 0x008631e0, 0x009d4d60),
+    ("OscillateMotorTool", 0x00863340, 0x009d4ec0), ("SmoothNoOutlinesTool", 0x00863500, 0x009d5050),
+    ("AnchorTool", 0x00863690, 0x009d51b0), ("LockTool", 0x00863820, 0x009d5310),
+    ("FillTool", 0x00863980, 0x009d54a0), ("MaterialTool", 0x00863b10, 0x009d5540),
+    ("DropperTool", 0x00863ca0, 0x009d56f0), ("NullTool", 0x00863e60, 0x009d5880),
+    ("GameTool", 0x00863f90, 0x009d59b0), ("GrabTool", 0x008640c0, 0x009d5ae0),
+    ("CloneTool", 0x008641f0, 0x009d5c30), ("HammerTool", 0x00864320, 0x009d5d60),
+]
+for tool, pa, sa in TTOOLS:
+    FACTS.append((pa, sa, "rename", f"_ZN3RBX9TToolVerbINS_{len(tool)}{tool}ENS_12RunStateVerbEEC2EPNS_9DataModelEb",
+                  "rtti:", f"RBX::TToolVerb<{tool}, RunStateVerb>::TToolVerb(DataModel*, bool) (iOS 1029) | stores "
+                  f".?AV?$TToolVerb@V{tool}@RBX@@VRunStateVerb@2@@RBX@@'s vftable (app-20)"))
 
 # wave18 sync (integrate.md: the Lua::*Bridge::classLibrary data rows pair the wrong arrays): each 2013
 # Bridge<T>::registerClassLibrary body is `mov eax,[className]; push esi; mov esi,[esp+8]; push classLibrary; ...`,

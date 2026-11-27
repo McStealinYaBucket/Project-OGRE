@@ -110,6 +110,10 @@ bool SystemAddress::EqualsExcludingPort( const SystemAddress& right ) const
 #endif
 		;
 }
+unsigned int SystemAddress::GetBinaryAddress(void) const
+{
+	return address.addr4.sin_addr.s_addr;
+}
 unsigned short SystemAddress::GetPort(void) const
 {
 	return ntohs(address.addr4.sin_port);

@@ -864,12 +864,29 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
-	// mac: 0x16BE02 (90B, batch421): standard library-table registration.
-	// FUNCTION: PLAYER 0x00882130
-	// FUNCTION: STUDIO 0x0092c1d0
-	void FacesBridge::registerClassLibrary(lua_State* L)
+	// mac: 0x16FD5C (394B, batch366): index/newindex/gc/eq/tostring only.
+	// FUNCTION: PLAYER 0x008807f0
+	// FUNCTION: STUDIO 0x009e4e70
+	void Bridge<RBX::Axes, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
-		luaL_register(L, className, classLibrary);
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
 		lua_setreadonly(L, -1, 1);
 		lua_pop(L, 1);
 	}
@@ -898,10 +915,10 @@ namespace RBX { namespace Lua {
 	// Bridge<RBX::Axes,1>::className
 	const char* Bridge<RBX::Axes, true>::className = "Axes";
 
-	// mac: 0x16FD5C (394B, batch366): index/newindex/gc/eq/tostring only.
-	// FUNCTION: PLAYER 0x008807f0
-	// FUNCTION: STUDIO 0x009e4e70
-	void Bridge<RBX::Axes, true>::registerClass(lua_State* L,
+	// mac: 0x16FFC6 (394B, batch367): index/newindex/gc/eq/tostring only.
+	// FUNCTION: PLAYER 0x008808d0
+	// FUNCTION: STUDIO 0x009e4f50
+	void Bridge<RBX::CellID, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
 		luaL_newmetatable(L, className);
@@ -925,10 +942,10 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x16FFC6 (394B, batch367): index/newindex/gc/eq/tostring only.
-	// FUNCTION: PLAYER 0x008808d0
-	// FUNCTION: STUDIO 0x009e4f50
-	void Bridge<RBX::CellID, true>::registerClass(lua_State* L,
+	// mac: 0x16FAEE (394B, batch370): index/newindex/gc/eq/tostring only.
+	// FUNCTION: PLAYER 0x008809b0
+	// FUNCTION: STUDIO 0x009e5030
+	void Bridge<RBX::InputObject, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
 		luaL_newmetatable(L, className);
@@ -960,10 +977,11 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16FAEE (394B, batch370): index/newindex/gc/eq/tostring only.
-	// FUNCTION: PLAYER 0x008809b0
-	// FUNCTION: STUDIO 0x009e5030
-	void Bridge<RBX::InputObject, true>::registerClass(lua_State* L,
+	// mac: 0x170986 (Region3) / 0x170C46 (Region3int16): index/newindex/gc/eq/
+	// tostring only (both batches 380-381).
+	// FUNCTION: PLAYER 0x00880a90
+	// FUNCTION: STUDIO 0x009e5110
+	void Bridge<RBX::Region3, true>::registerClass(lua_State* L,
 		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
 	{
 		luaL_newmetatable(L, className);
@@ -1005,34 +1023,6 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x170986 (Region3) / 0x170C46 (Region3int16): index/newindex/gc/eq/
-	// tostring only (both batches 380-381).
-	// FUNCTION: PLAYER 0x00880a90
-	// FUNCTION: STUDIO 0x009e5110
-	void Bridge<RBX::Region3, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
-	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
 	// mac: 0x165EEA (391B, batch539): tolstring-or-throw, with the
 	// super-long-string guard (200000 chars) behind DFFlag::
 	// ShutdownScriptsThatGenerateSuperLongStrings (BSS-false default).
@@ -1072,15 +1062,23 @@ namespace RBX { namespace Lua {
 		return (float)value;
 	}
 
+	// FUNCTION: PLAYER 0x008819c0
+	// FUNCTION: STUDIO 0x0092ba90
+	void Color3Bridge::registerClassLibrary(lua_State* L)
+	{
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
 	const luaL_reg AxesBridge::classLibrary[] = {
 		{ "new", newAxes },
 		{ NULL, NULL }
 	};
 
-	// mac: 0x16C1C0 (90B, batch422): standard library-table registration.
-	// FUNCTION: PLAYER 0x00882370
-	// FUNCTION: STUDIO 0x0092c440
-	void AxesBridge::registerClassLibrary(lua_State* L)
+	// FUNCTION: PLAYER 0x00881b20
+	// FUNCTION: STUDIO 0x0092bbf0
+	void RbxRayBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
 		lua_setreadonly(L, -1, 1);
@@ -1104,6 +1102,15 @@ namespace RBX { namespace Lua {
 	// Bridge<RBX::CellID,1>::className
 	const char* Bridge<RBX::CellID, true>::className = "CellId";
 
+	// FUNCTION: PLAYER 0x00881b50
+	// FUNCTION: STUDIO 0x0092bc20
+	void Region3Bridge::registerClassLibrary(lua_State* L)
+	{
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
 	// mac: 0x167CB2 (102B, batch352): always throws, with the name. The original's linker folded every
 	// "%s cannot be assigned to" thrower onto this one body (the generic on_newindex wrappers all call it).
 	// FUNCTION: PLAYER 0x00881b80
@@ -1115,32 +1122,6 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16B6E6 (298B, batch360). offset is int16 @+4 (movsx + pushinteger;
-	// matches UDim.h G3D::int16). Failure arms are isupper-gated exactly
-	// like 2016 (NULL or uppercase-first -> plain; lowercase-first ->
-	// capitalize hint).
-	// FUNCTION: PLAYER 0x00881ff0
-	// FUNCTION: STUDIO 0x0092c090
-	template<>
-	int Bridge<RBX::UDim, true>::on_index(const RBX::UDim& object,
-		const char* name, lua_State* L)
-	{
-		if (strcmp(name, "Scale") == 0)
-		{
-			lua_pushnumber(L, object.scale);
-			return 1;
-		}
-		if (strcmp(name, "Offset") == 0)
-		{
-			lua_pushinteger(L, object.offset);
-			return 1;
-		}
-		if (name && !isupper(name[0]))
-			throw RBX::runtime_error(
-				"%s is not a valid member, did you forget to capitalize the first letter?", name);
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
 	// mac: 0x16C7C0 (102B, batch367): always throws, with the name.
 	template<>
 	void Bridge<RBX::CellID, true>::on_newindex(RBX::CellID& object,
@@ -1149,50 +1130,13 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16BE5C (443B, batch365). NormalId immediates match NormalId.h
-	// (X=0 Y=1 Z=2 X_NEG=3 Y_NEG=4 Z_NEG=5). Failure text lists the valid
-	// members (unlike UDim's plain form).
-	// FUNCTION: PLAYER 0x00882160
-	// FUNCTION: STUDIO 0x0092c200
-	template<>
-	int Bridge<RBX::Faces, true>::on_index(const RBX::Faces& object,
-		const char* name, lua_State* L)
+	// FUNCTION: PLAYER 0x00881bb0
+	// FUNCTION: STUDIO 0x0092bc50
+	void Region3int16Bridge::registerClassLibrary(lua_State* L)
 	{
-		if (strcmp(name, "Top") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_Y));
-			return 1;
-		}
-		if (strcmp(name, "Bottom") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_Y_NEG));
-			return 1;
-		}
-		if (strcmp(name, "Back") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_Z));
-			return 1;
-		}
-		if (strcmp(name, "Front") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_Z_NEG));
-			return 1;
-		}
-		if (strcmp(name, "Right") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_X));
-			return 1;
-		}
-		if (strcmp(name, "Left") == 0)
-		{
-			lua_pushboolean(L, object.getNormalId(RBX::NORM_X_NEG));
-			return 1;
-		}
-		if (name && !isupper(name[0]))
-			throw RBX::runtime_error(
-				"%s is not a valid member, did you forget to capitalize the first letter?", name);
-		throw RBX::runtime_error(
-			"%s is not a valid member. Valid members are Top,Bottom,Left,Right,Back,Front", name);
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 
@@ -1255,77 +1199,22 @@ namespace RBX { namespace Lua {
 	// Bridge<RBX::KeyCode,1>::className
 	const char* Bridge<RBX::KeyCode, true>::className = "KeyCode";
 
-	// mac: 0x16C21A (589B, batch366). X/Y/Z go through getAxis (axis 0/1/2);
-	// the face names through getAxisByNormalId. Failure text uses
-	// lowercase "valid members" (Faces' uses uppercase "Valid").
-	// FUNCTION: PLAYER 0x008823a0
-	// FUNCTION: STUDIO 0x0092c470
-	template<>
-	int Bridge<RBX::Axes, true>::on_index(const RBX::Axes& object,
-		const char* name, lua_State* L)
+	// FUNCTION: PLAYER 0x00881be0
+	// FUNCTION: STUDIO 0x0092bc80
+	void Vector3Bridge::registerClassLibrary(lua_State* L)
 	{
-		if (strcmp(name, "X") == 0)
-		{
-			lua_pushboolean(L, object.getAxis(G3D::Vector3::X_AXIS));
-			return 1;
-		}
-		if (strcmp(name, "Y") == 0)
-		{
-			lua_pushboolean(L, object.getAxis(G3D::Vector3::Y_AXIS));
-			return 1;
-		}
-		if (strcmp(name, "Z") == 0)
-		{
-			lua_pushboolean(L, object.getAxis(G3D::Vector3::Z_AXIS));
-			return 1;
-		}
-		if (strcmp(name, "Top") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Y));
-			return 1;
-		}
-		if (strcmp(name, "Bottom") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Y_NEG));
-			return 1;
-		}
-		if (strcmp(name, "Back") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Z));
-			return 1;
-		}
-		if (strcmp(name, "Front") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Z_NEG));
-			return 1;
-		}
-		if (strcmp(name, "Right") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_X));
-			return 1;
-		}
-		if (strcmp(name, "Left") == 0)
-		{
-			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_X_NEG));
-			return 1;
-		}
-		if (name && !isupper(name[0]))
-			throw RBX::runtime_error(
-				"%s is not a valid member, did you forget to capitalize the first letter?", name);
-		throw RBX::runtime_error(
-			"%s is not a valid member, valid members are X,Y,Z,Top,Bottom,Left,Right,Front,Back", name);
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
-	// mac: 0x16EB42 (144B, batch352): NaN-aware lane == (ucomiss+jp per lane;
-	// plain == chain is exactly equivalent).
-	// FUNCTION: PLAYER 0x008827e0
-	// FUNCTION: STUDIO 0x0092c8b0
-	template<>
-	int Bridge<G3D::Vector3, true>::on_eq(lua_State* L)
+	// FUNCTION: PLAYER 0x00881c10
+	// FUNCTION: STUDIO 0x0092bcb0
+	void Vector3int16Bridge::registerClassLibrary(lua_State* L)
 	{
-		// 2013: getObject(L, 2) first, the operator=='s argument.
-		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
-		return 1;
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// mac: 0x16CB9A (102B, batch370): always throws, with the name.
@@ -1336,16 +1225,13 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16EC3E (131B, batch357): 2-lane NaN-aware == (plain && chain
-	// is exactly equivalent).
-	// FUNCTION: PLAYER 0x00882950
-	// FUNCTION: STUDIO 0x0092ca20
-	template<>
-	int Bridge<G3D::Vector2, true>::on_eq(lua_State* L)
+	// FUNCTION: PLAYER 0x00881de0
+	// FUNCTION: STUDIO 0x0092be80
+	void Vector2int16Bridge::registerClassLibrary(lua_State* L)
 	{
-		// 2013: getObject(L, 2) first, the operator=='s argument.
-		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
-		return 1;
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 
@@ -1384,41 +1270,14 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 	static int closestPointVector3(lua_State* L); static int distanceVector3(lua_State* L); // defined below (2013 .obj order)
-	// mac: 0x166538 (556B, batch387). RbxRay carries a vtable (binary writes
-	// vptr into the unit-copy); Origin @+4, Direction @+16. unit arm
-	// pushes object.unit() (same bytes: vptr + origin + normalized dir).
-	// FUNCTION: PLAYER 0x00883480
-	// FUNCTION: STUDIO 0x0092d480
-	template<>
-	int Bridge<RBX::RbxRay, true>::on_index(const RBX::RbxRay& object,
-		const char* name, lua_State* L)
+	// mac: 0x168B3A (batch355-banked shape): luaL_register + readonly + pop.
+	// FUNCTION: PLAYER 0x00881f30
+	// FUNCTION: STUDIO 0x0092bfd0
+	void Vector2Bridge::registerClassLibrary(lua_State* L)
 	{
-		if (strcmp(name, "Origin") == 0)
-		{
-			Bridge<G3D::Vector3>::pushNewObject(L, object.origin());
-			return 1;
-		}
-		if (strcmp(name, "Direction") == 0)
-		{
-			Bridge<G3D::Vector3>::pushNewObject(L, object.direction());
-			return 1;
-		}
-		if (strcmp(name, "unit") == 0 || strcmp(name, "Unit") == 0)
-		{
-			pushNewObject(L, object.unit());	// 2013 0x00883665: by value, no temp
-			return 1;
-		}
-		if (strcmp(name, "ClosestPoint") == 0)
-		{
-			lua_pushcfunction(L, closestPointVector3);
-			return 1;
-		}
-		if (strcmp(name, "Distance") == 0)
-		{
-			lua_pushcfunction(L, distanceVector3);
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	const luaL_reg InputObjectBridge::classLibrary[] = {
@@ -1426,10 +1285,9 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
-	// mac: 0x16CA10 (90B, batch423): standard library-table registration.
-	// FUNCTION: PLAYER 0x008826d0
-	// FUNCTION: STUDIO 0x0092c7a0
-	void InputObjectBridge::registerClassLibrary(lua_State* L)
+	// FUNCTION: PLAYER 0x00881f60
+	// FUNCTION: STUDIO 0x0092c000
+	void BrickColorBridge::registerClassLibrary(lua_State* L)
 	{
 		luaL_register(L, className, classLibrary);
 		lua_setreadonly(L, -1, 1);
@@ -1453,18 +1311,13 @@ namespace RBX { namespace Lua {
 	// Bridge<G3D::Color3,1>::className
 	const char* Bridge<G3D::Color3, true>::className = "Color3";
 
-	// mac: 0x1668BC (321B, batch401): up-to-2 Vector3 args (min, max;
-	// zero-fill); Region3(min, max) + push.
-	// STUB: PLAYER 0x00883680
-	// STUB: STUDIO 0x0092d680
-	int Region3Bridge::newRegion3(lua_State* L)
+	// FUNCTION: PLAYER 0x00881f90
+	// FUNCTION: STUDIO 0x0092c030
+	void CoordinateFrameBridge::registerClassLibrary(lua_State* L)
 	{
-		int count = std::min(2, lua_gettop(L));
-		G3D::Vector3 v[2] = { G3D::Vector3::zero(), G3D::Vector3::zero() };
-		for (int i = 0; i < count; ++i)
-			v[i] = Bridge<G3D::Vector3>::getObject(L, i + 1);
-		pushRegion3(L, RBX::Region3(v[0], v[1]));
-		return 1;
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// pushColor3 lives inline in the header (like pushVector3); the
@@ -1527,25 +1380,13 @@ namespace RBX { namespace Lua {
 		return 0;
 	}
 
-	// mac: 0x166A58 (240B, batch380): CFrame (full 48B copy) + Size (lanes
-	// +48/+52/+56); plain failure. NO ExpandToGrid (2016-only).
-	// FUNCTION: PLAYER 0x00883780
-	// FUNCTION: STUDIO 0x0092d780
-	template<>
-	int Bridge<RBX::Region3, true>::on_index(const RBX::Region3& object,
-		const char* name, lua_State* L)
+	// FUNCTION: PLAYER 0x00881fc0
+	// FUNCTION: STUDIO 0x0092c060
+	void UDimBridge::registerClassLibrary(lua_State* L)
 	{
-		if (strcmp(name, "CFrame") == 0)
-		{
-			Bridge<G3D::CoordinateFrame>::pushNewObject(L, object.getCFrame());
-			return 1;
-		}
-		if (strcmp(name, "Size") == 0)
-		{
-			Vector3Bridge::pushVector3(L, object.getSize());	// 2013 0x0088383a: out of line
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// mac: 0x171130 (67B, batch373): checkudata + forward.
@@ -1555,17 +1396,30 @@ namespace RBX { namespace Lua {
 		return on_tostring(getObject(L, 1), L);
 	}
 
-	// mac: 0x166F5C (240B, batch421): Enum.NormalId item -> unit vector.
-	// FUNCTION: PLAYER 0x00884000
-	// FUNCTION: STUDIO 0x0092e000
-	int Vector3Bridge::newVector3FromNormalId(lua_State* L)
+	// mac: 0x16B6E6 (298B, batch360). offset is int16 @+4 (movsx + pushinteger;
+	// matches UDim.h G3D::int16). Failure arms are isupper-gated exactly
+	// like 2016 (NULL or uppercase-first -> plain; lowercase-first ->
+	// capitalize hint).
+	// FUNCTION: PLAYER 0x00881ff0
+	// FUNCTION: STUDIO 0x0092c090
+	template<>
+	int Bridge<RBX::UDim, true>::on_index(const RBX::UDim& object,
+		const char* name, lua_State* L)
 	{
-		EnumDescriptorItemPtr item;
-		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {	// two throw sites (0x0088403e, 0x00884091)
-			if (!enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE")) throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
-			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3((RBX::NormalId)item->value));
-			return 1; }
-		throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
+		if (strcmp(name, "Scale") == 0)
+		{
+			lua_pushnumber(L, object.scale);
+			return 1;
+		}
+		if (strcmp(name, "Offset") == 0)
+		{
+			lua_pushinteger(L, object.offset);
+			return 1;
+		}
+		if (name && !isupper(name[0]))
+			throw RBX::runtime_error(
+				"%s is not a valid member, did you forget to capitalize the first letter?", name);
+		throw RBX::runtime_error("%s is not a valid member", name);
 	}
 
 	// VS2012 odr-use holders (openState names these at 0x18B993).
@@ -1582,36 +1436,23 @@ namespace RBX { namespace Lua {
 	// Bridge<RBX::BrickColor,1>::className
 	const char* Bridge<RBX::BrickColor, true>::className = "BrickColor";
 
-	// mac: 0x16704C (248B, batch421): Enum.Axis item -> NormalId -> unit vector.
-	// FUNCTION: PLAYER 0x008840c0
-	// FUNCTION: STUDIO 0x0092e0c0
-	int Vector3Bridge::newVector3FromAxis(lua_State* L)
+	// FUNCTION: PLAYER 0x00882100
+	// FUNCTION: STUDIO 0x0092c1a0
+	void UDim2Bridge::registerClassLibrary(lua_State* L)
 	{
-		EnumDescriptorItemPtr item;
-		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {
-			if (!enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE")) throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
-			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3(
-				RBX::Axes::axisToNormalId((G3D::Vector3::Axis)item->value))); return 1; }
-		throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
-		
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
-	// FUNCTION: PLAYER 0x00884380
-	// FUNCTION: STUDIO 0x0092e380
-	static int isCloseVector3(lua_State* L)
+	// mac: 0x16BE02 (90B, batch421): standard library-table registration.
+	// FUNCTION: PLAYER 0x00882130
+	// FUNCTION: STUDIO 0x0092c1d0
+	void FacesBridge::registerClassLibrary(lua_State* L)
 	{
-		int count = lua_gettop(L);
-		const G3D::Vector3& a = Bridge<G3D::Vector3>::getObject(L, 1);
-		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
-		// Binary default epsilon bits 0x3727C5AC == 1.0e-5f (== the
-		// Math::fuzzyEq default); explicit arg passes fabsf(arg3).
-		bool result;	// 2013 0x008843b2: cmp count,2; jle -> the default (the two calls merge)
-		if (count > 2)
-			result = Math::fuzzyEq(a, b, fabsf(lua_tofloat(L, 3)));
-		else
-			result = Math::fuzzyEq(a, b, 1.0e-5f);
-		lua_pushboolean(L, result);
-		return 1;
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// mac: 0x1698B8 (102B, batch375): always throws, with the name.
@@ -1622,66 +1463,50 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x1676B8 (784B, batch352). Member order + case variants replicated:
-	// x/X y/Y z/Z unit/Unit magnitude/Magnitude lerp/Lerp Cross Dot
-	// isClose, else runtime_error with the name. unit/magnitude use
-	// sqrtf(z*z + ((x*x) + (y*y))) lane order -- NOT G3D::magnitude()'s
-	// ((x*x)+(y*y))+(z*z).
-	// FUNCTION: PLAYER 0x00884400
-	// FUNCTION: STUDIO 0x0092e400
+	// mac: 0x16BE5C (443B, batch365). NormalId immediates match NormalId.h
+	// (X=0 Y=1 Z=2 X_NEG=3 Y_NEG=4 Z_NEG=5). Failure text lists the valid
+	// members (unlike UDim's plain form).
+	// FUNCTION: PLAYER 0x00882160
+	// FUNCTION: STUDIO 0x0092c200
 	template<>
-	int Bridge<G3D::Vector3, true>::on_index(const G3D::Vector3& object,
+	int Bridge<RBX::Faces, true>::on_index(const RBX::Faces& object,
 		const char* name, lua_State* L)
 	{
-		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
+		if (strcmp(name, "Top") == 0)
 		{
-			lua_pushnumber(L, object.x);
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_Y));
 			return 1;
 		}
-		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
+		if (strcmp(name, "Bottom") == 0)
 		{
-			lua_pushnumber(L, object.y);
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_Y_NEG));
 			return 1;
 		}
-		if (strcmp(name, "z") == 0 || strcmp(name, "Z") == 0)
+		if (strcmp(name, "Back") == 0)
 		{
-			lua_pushnumber(L, object.z);
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_Z));
 			return 1;
 		}
-		if (strcmp(name, "unit") == 0 || strcmp(name, "Unit") == 0)
+		if (strcmp(name, "Front") == 0)
 		{
-			// 2013 0x008847f8 calls Vector3::unit() out of line (0x004908d0).
-			pushNewObject(L, object.unit());
-
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_Z_NEG));
 			return 1;
 		}
-		if (strcmp(name, "magnitude") == 0 || strcmp(name, "Magnitude") == 0)
+		if (strcmp(name, "Right") == 0)
 		{
-			lua_pushnumber(L, object.magnitude());
-
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_X));
 			return 1;
 		}
-		if (strcmp(name, "lerp") == 0 || strcmp(name, "Lerp") == 0)
+		if (strcmp(name, "Left") == 0)
 		{
-			lua_pushcfunction(L, lerpVector3);
+			lua_pushboolean(L, object.getNormalId(RBX::NORM_X_NEG));
 			return 1;
 		}
-		if (strcmp(name, "Cross") == 0)
-		{
-			lua_pushcfunction(L, crossVector3);
-			return 1;
-		}
-		if (strcmp(name, "Dot") == 0)
-		{
-			lua_pushcfunction(L, dotVector3);
-			return 1;
-		}
-		if (strcmp(name, "isClose") == 0)
-		{
-			lua_pushcfunction(L, isCloseVector3);
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
+		if (name && !isupper(name[0]))
+			throw RBX::runtime_error(
+				"%s is not a valid member, did you forget to capitalize the first letter?", name);
+		throw RBX::runtime_error(
+			"%s is not a valid member. Valid members are Top,Bottom,Left,Right,Back,Front", name);
 	}
 
 	// mac: 0x1988C4 (98B, batch375): same verbatim.
@@ -1763,32 +1588,14 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x167F66 (310B, batch393). No-throw shape; scalar converts via
-	// (int)lua_tofloat (cvttss2si truncation); int lane products narrowed
-	// to int16 (wrap). Matches G3D operator*(int) lane-for-lane.
-	// FUNCTION: PLAYER 0x008849c0
-	// FUNCTION: STUDIO 0x0092e9c0
-	int Vector3int16Bridge::on_mul(lua_State* L)
+	// mac: 0x16C1C0 (90B, batch422): standard library-table registration.
+	// FUNCTION: PLAYER 0x00882370
+	// FUNCTION: STUDIO 0x0092c440
+	void AxesBridge::registerClassLibrary(lua_State* L)
 	{
-		G3D::Vector3int16 a;
-		if (getValue(L, 1, a))
-		{
-			G3D::Vector3int16 b;
-			if (getValue(L, 2, b))
-				pushVector3int16(L, a * b);
-			else
-			{
-				int c = (int)lua_tofloat(L, 2);
-				pushVector3int16(L, G3D::Vector3int16(a.x * c, a.y * c, a.z * c));
-			}
-		}
-		else
-		{
-			a = getObject(L, 2);
-			int c = (int)lua_tofloat(L, 1);
-			pushVector3int16(L, G3D::Vector3int16(c * a.x, c * a.y, c * a.z));
-		}
-		return 1;
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
 	}
 
 	// Color thunks (batch404: pushBrickColor(constant); White=1 Gray=194
@@ -1851,13 +1658,65 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
-	// FUNCTION: PLAYER 0x00881f60
-	// FUNCTION: STUDIO 0x0092c000
-	void BrickColorBridge::registerClassLibrary(lua_State* L)
+	// mac: 0x16C21A (589B, batch366). X/Y/Z go through getAxis (axis 0/1/2);
+	// the face names through getAxisByNormalId. Failure text uses
+	// lowercase "valid members" (Faces' uses uppercase "Valid").
+	// FUNCTION: PLAYER 0x008823a0
+	// FUNCTION: STUDIO 0x0092c470
+	template<>
+	int Bridge<RBX::Axes, true>::on_index(const RBX::Axes& object,
+		const char* name, lua_State* L)
 	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		if (strcmp(name, "X") == 0)
+		{
+			lua_pushboolean(L, object.getAxis(G3D::Vector3::X_AXIS));
+			return 1;
+		}
+		if (strcmp(name, "Y") == 0)
+		{
+			lua_pushboolean(L, object.getAxis(G3D::Vector3::Y_AXIS));
+			return 1;
+		}
+		if (strcmp(name, "Z") == 0)
+		{
+			lua_pushboolean(L, object.getAxis(G3D::Vector3::Z_AXIS));
+			return 1;
+		}
+		if (strcmp(name, "Top") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Y));
+			return 1;
+		}
+		if (strcmp(name, "Bottom") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Y_NEG));
+			return 1;
+		}
+		if (strcmp(name, "Back") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Z));
+			return 1;
+		}
+		if (strcmp(name, "Front") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_Z_NEG));
+			return 1;
+		}
+		if (strcmp(name, "Right") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_X));
+			return 1;
+		}
+		if (strcmp(name, "Left") == 0)
+		{
+			lua_pushboolean(L, object.getAxisByNormalId(RBX::NORM_X_NEG));
+			return 1;
+		}
+		if (name && !isupper(name[0]))
+			throw RBX::runtime_error(
+				"%s is not a valid member, did you forget to capitalize the first letter?", name);
+		throw RBX::runtime_error(
+			"%s is not a valid member, valid members are X,Y,Z,Top,Bottom,Left,Right,Front,Back", name);
 	}
 
 	// mac: 0x16C4CE (341B, batch403): count=min(4,top); isNil = count>0 ?
@@ -1904,6 +1763,266 @@ namespace RBX { namespace Lua {
 	// Bridge<G3D::CoordinateFrame,1>::className
 	const char* Bridge<G3D::CoordinateFrame, true>::className = "CFrame";
 
+	// mac: 0x16CA10 (90B, batch423): standard library-table registration.
+	// FUNCTION: PLAYER 0x008826d0
+	// FUNCTION: STUDIO 0x0092c7a0
+	void InputObjectBridge::registerClassLibrary(lua_State* L)
+	{
+		luaL_register(L, className, classLibrary);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
+	// mac: 0x169F2A (217B, batch377): CFrame + Vector3 (translation add,
+	// rotation copied). Matches G3D operator+(CFrame, Vector3).
+	int CoordinateFrameBridge::on_add(lua_State* L)
+	{
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
+		pushCoordinateFrame(L, a + b);
+		return 1;
+	}
+
+	// mac: 0x16A004 (217B, batch377): same with subtract.
+	int CoordinateFrameBridge::on_sub(lua_State* L)
+	{
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
+		pushCoordinateFrame(L, a - b);
+		return 1;
+	}
+
+	// mac: 0x16EB42 (144B, batch352): NaN-aware lane == (ucomiss+jp per lane;
+	// plain == chain is exactly equivalent).
+	// FUNCTION: PLAYER 0x008827e0
+	// FUNCTION: STUDIO 0x0092c8b0
+	template<>
+	int Bridge<G3D::Vector3, true>::on_eq(lua_State* L)
+	{
+		// 2013: getObject(L, 2) first, the operator=='s argument.
+		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
+		return 1;
+	}
+
+	// mac: 0x16EC3E (131B, batch357): 2-lane NaN-aware == (plain && chain
+	// is exactly equivalent).
+	// FUNCTION: PLAYER 0x00882950
+	// FUNCTION: STUDIO 0x0092ca20
+	template<>
+	int Bridge<G3D::Vector2, true>::on_eq(lua_State* L)
+	{
+		// 2013: getObject(L, 2) first, the operator=='s argument.
+		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
+		return 1;
+	}
+
+	// mac: 0x166538 (556B, batch387). RbxRay carries a vtable (binary writes
+	// vptr into the unit-copy); Origin @+4, Direction @+16. unit arm
+	// pushes object.unit() (same bytes: vptr + origin + normalized dir).
+	// FUNCTION: PLAYER 0x00883480
+	// FUNCTION: STUDIO 0x0092d480
+	template<>
+	int Bridge<RBX::RbxRay, true>::on_index(const RBX::RbxRay& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "Origin") == 0)
+		{
+			Bridge<G3D::Vector3>::pushNewObject(L, object.origin());
+			return 1;
+		}
+		if (strcmp(name, "Direction") == 0)
+		{
+			Bridge<G3D::Vector3>::pushNewObject(L, object.direction());
+			return 1;
+		}
+		if (strcmp(name, "unit") == 0 || strcmp(name, "Unit") == 0)
+		{
+			pushNewObject(L, object.unit());	// 2013 0x00883665: by value, no temp
+			return 1;
+		}
+		if (strcmp(name, "ClosestPoint") == 0)
+		{
+			lua_pushcfunction(L, closestPointVector3);
+			return 1;
+		}
+		if (strcmp(name, "Distance") == 0)
+		{
+			lua_pushcfunction(L, distanceVector3);
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x1668BC (321B, batch401): up-to-2 Vector3 args (min, max;
+	// zero-fill); Region3(min, max) + push.
+	// STUB: PLAYER 0x00883680
+	// STUB: STUDIO 0x0092d680
+	int Region3Bridge::newRegion3(lua_State* L)
+	{
+		int count = std::min(2, lua_gettop(L));
+		G3D::Vector3 v[2] = { G3D::Vector3::zero(), G3D::Vector3::zero() };
+		for (int i = 0; i < count; ++i)
+			v[i] = Bridge<G3D::Vector3>::getObject(L, i + 1);
+		pushRegion3(L, RBX::Region3(v[0], v[1]));
+		return 1;
+	}
+
+	// mac: 0x166A58 (240B, batch380): CFrame (full 48B copy) + Size (lanes
+	// +48/+52/+56); plain failure. NO ExpandToGrid (2016-only).
+	// FUNCTION: PLAYER 0x00883780
+	// FUNCTION: STUDIO 0x0092d780
+	template<>
+	int Bridge<RBX::Region3, true>::on_index(const RBX::Region3& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "CFrame") == 0)
+		{
+			Bridge<G3D::CoordinateFrame>::pushNewObject(L, object.getCFrame());
+			return 1;
+		}
+		if (strcmp(name, "Size") == 0)
+		{
+			Vector3Bridge::pushVector3(L, object.getSize());	// 2013 0x0088383a: out of line
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x166F5C (240B, batch421): Enum.NormalId item -> unit vector.
+	// FUNCTION: PLAYER 0x00884000
+	// FUNCTION: STUDIO 0x0092e000
+	int Vector3Bridge::newVector3FromNormalId(lua_State* L)
+	{
+		EnumDescriptorItemPtr item;
+		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {	// two throw sites (0x0088403e, 0x00884091)
+			if (!enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE")) throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
+			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3((RBX::NormalId)item->value));
+			return 1; }
+		throw RBX::runtime_error("Vector3.FromNormalId expects Enum.NormalId input");
+	}
+
+	// mac: 0x16704C (248B, batch421): Enum.Axis item -> NormalId -> unit vector.
+	// FUNCTION: PLAYER 0x008840c0
+	// FUNCTION: STUDIO 0x0092e0c0
+	int Vector3Bridge::newVector3FromAxis(lua_State* L)
+	{
+		EnumDescriptorItemPtr item;
+		if (Bridge<EnumDescriptorItemPtr, true>::getValue(L, 1, item)) {
+			if (!enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE")) throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
+			Bridge<G3D::Vector3>::pushNewObject(L, RBX::normalIdToVector3(
+				RBX::Axes::axisToNormalId((G3D::Vector3::Axis)item->value))); return 1; }
+		throw RBX::runtime_error("Vector3.FromAxis expects Enum.Axis input");
+		
+	}
+
+	// FUNCTION: PLAYER 0x00884380
+	// FUNCTION: STUDIO 0x0092e380
+	static int isCloseVector3(lua_State* L)
+	{
+		int count = lua_gettop(L);
+		const G3D::Vector3& a = Bridge<G3D::Vector3>::getObject(L, 1);
+		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
+		// Binary default epsilon bits 0x3727C5AC == 1.0e-5f (== the
+		// Math::fuzzyEq default); explicit arg passes fabsf(arg3).
+		bool result;	// 2013 0x008843b2: cmp count,2; jle -> the default (the two calls merge)
+		if (count > 2)
+			result = Math::fuzzyEq(a, b, fabsf(lua_tofloat(L, 3)));
+		else
+			result = Math::fuzzyEq(a, b, 1.0e-5f);
+		lua_pushboolean(L, result);
+		return 1;
+	}
+
+	// mac: 0x1676B8 (784B, batch352). Member order + case variants replicated:
+	// x/X y/Y z/Z unit/Unit magnitude/Magnitude lerp/Lerp Cross Dot
+	// isClose, else runtime_error with the name. unit/magnitude use
+	// sqrtf(z*z + ((x*x) + (y*y))) lane order -- NOT G3D::magnitude()'s
+	// ((x*x)+(y*y))+(z*z).
+	// FUNCTION: PLAYER 0x00884400
+	// FUNCTION: STUDIO 0x0092e400
+	template<>
+	int Bridge<G3D::Vector3, true>::on_index(const G3D::Vector3& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
+		{
+			lua_pushnumber(L, object.x);
+			return 1;
+		}
+		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
+		{
+			lua_pushnumber(L, object.y);
+			return 1;
+		}
+		if (strcmp(name, "z") == 0 || strcmp(name, "Z") == 0)
+		{
+			lua_pushnumber(L, object.z);
+			return 1;
+		}
+		if (strcmp(name, "unit") == 0 || strcmp(name, "Unit") == 0)
+		{
+			// 2013 0x008847f8 calls Vector3::unit() out of line (0x004908d0).
+			pushNewObject(L, object.unit());
+
+			return 1;
+		}
+		if (strcmp(name, "magnitude") == 0 || strcmp(name, "Magnitude") == 0)
+		{
+			lua_pushnumber(L, object.magnitude());
+
+			return 1;
+		}
+		if (strcmp(name, "lerp") == 0 || strcmp(name, "Lerp") == 0)
+		{
+			lua_pushcfunction(L, lerpVector3);
+			return 1;
+		}
+		if (strcmp(name, "Cross") == 0)
+		{
+			lua_pushcfunction(L, crossVector3);
+			return 1;
+		}
+		if (strcmp(name, "Dot") == 0)
+		{
+			lua_pushcfunction(L, dotVector3);
+			return 1;
+		}
+		if (strcmp(name, "isClose") == 0)
+		{
+			lua_pushcfunction(L, isCloseVector3);
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x167F66 (310B, batch393). No-throw shape; scalar converts via
+	// (int)lua_tofloat (cvttss2si truncation); int lane products narrowed
+	// to int16 (wrap). Matches G3D operator*(int) lane-for-lane.
+	// FUNCTION: PLAYER 0x008849c0
+	// FUNCTION: STUDIO 0x0092e9c0
+	int Vector3int16Bridge::on_mul(lua_State* L)
+	{
+		G3D::Vector3int16 a;
+		if (getValue(L, 1, a))
+		{
+			G3D::Vector3int16 b;
+			if (getValue(L, 2, b))
+				pushVector3int16(L, a * b);
+			else
+			{
+				int c = (int)lua_tofloat(L, 2);
+				pushVector3int16(L, G3D::Vector3int16(a.x * c, a.y * c, a.z * c));
+			}
+		}
+		else
+		{
+			a = getObject(L, 2);
+			int c = (int)lua_tofloat(L, 1);
+			pushVector3int16(L, G3D::Vector3int16(c * a.x, c * a.y, c * a.z));
+		}
+		return 1;
+	}
+
 	// mac: 0x16809C (362B, batch393). DELTA vs 2016 (which throws on zero
 	// divisors): the binary idivs directly (SIGFPE on zero, like the
 	// binary). vec/vec: int idiv lanes; vec/scalar: (int)((float)lane /
@@ -1937,23 +2056,12 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x169F2A (217B, batch377): CFrame + Vector3 (translation add,
-	// rotation copied). Matches G3D operator+(CFrame, Vector3).
-	int CoordinateFrameBridge::on_add(lua_State* L)
+	// mac: 0x16B410 (batch377: 102B-pattern newindex, always throws).
+	template<>
+	void Bridge<G3D::CoordinateFrame, true>::on_newindex(G3D::CoordinateFrame& object,
+		const char* name, lua_State* L)
 	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
-		pushCoordinateFrame(L, a + b);
-		return 1;
-	}
-
-	// mac: 0x16A004 (217B, batch377): same with subtract.
-	int CoordinateFrameBridge::on_sub(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, 2);
-		pushCoordinateFrame(L, a - b);
-		return 1;
+		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
 	// mac: 0x16861C (336B, batch395): same no-throw int-cast-scalar shape as
@@ -1984,287 +2092,6 @@ namespace RBX { namespace Lua {
 			pushNewObject(L, G3D::Vector2int16(G3D::Vector2(b) * c));
 		}
 		return 1;
-	}
-
-	// mac: 0x16876C (337B, batch395): vec/vec idiv; vec/scalar
-	// float-div-truncate; scalar/vec lua_tointeger + idiv. No throws.
-	// FUNCTION: PLAYER 0x008850b0
-	// FUNCTION: STUDIO 0x0092f0b0
-	int Vector2int16Bridge::on_div(lua_State* L)
-	{
-		G3D::Vector2int16 a;
-		if (getValue(L, 1, a))
-		{
-			G3D::Vector2int16 b;
-			if (getValue(L, 2, b))
-				pushVector2int16(L, G3D::Vector2int16(a.x / b.x, a.y / b.y));
-			else
-			{
-				float c = lua_tofloat(L, 2);
-				pushVector2int16(L, G3D::Vector2int16(
-					(G3D::int16)(int)((float)a.x / c),
-					(G3D::int16)(int)((float)a.y / c)));
-			}
-		}
-		else
-		{
-			a = getObject(L, 2);
-			int c = (G3D::int16)lua_tointeger(L, 1);
-			pushVector2int16(L, G3D::Vector2int16(c / a.x, c / a.y));
-		}
-		return 1;
-	}
-
-	// mac: 0x1696AA (526B, batch375): number/Number (int@0), Color (Color3
-	// push via the Color3 bridge -- register it first), r/g/b (via
-	// color3()), name/Name (pushlstring), plain failure. Matches 2016
-	// member-for-member.
-	// FUNCTION: PLAYER 0x00885fa0
-	// FUNCTION: STUDIO 0x0092ffa0
-	template<>
-	int Bridge<RBX::BrickColor, true>::on_index(const RBX::BrickColor& object,
-		const char* name, lua_State* L)
-	{
-		// 2013 0x00886027: "Number" jumps back into "number"'s block: two ifs the compiler tail-merged.
-		if (strcmp(name, "number") == 0)
-		{
-			lua_pushinteger(L, object.asInt());
-			return 1;
-		}
-		if (strcmp(name, "Number") == 0)
-		{
-			lua_pushinteger(L, object.asInt());
-			return 1;
-		}
-		if (strcmp(name, "Color") == 0)
-		{
-			Bridge<G3D::Color3>::pushNewObject(L, object.color3());
-			return 1;
-		}
-		if (strcmp(name, "r") == 0)
-		{
-			lua_pushnumber(L, object.color3().r);
-			return 1;
-		}
-		if (strcmp(name, "g") == 0)
-		{
-			lua_pushnumber(L, object.color3().g);
-			return 1;
-		}
-		if (strcmp(name, "b") == 0)
-		{
-			lua_pushnumber(L, object.color3().b);
-			return 1;
-		}
-		if (strcmp(name, "name") == 0)
-		{
-			// 2013 0x008861d8: the std::string push is out of line (0x0066f9f0).
-			lua_pushstring(L, object.name());
-			return 1;
-		}
-		if (strcmp(name, "Name") == 0)
-		{
-			lua_pushstring(L, object.name());
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
-	// mac: 0x16991E (868B, batch402). Arg-count dispatch, verbatim vs 2016
-	// (0/1/2/3/7/12/default-throw with the count).
-	// STUB: PLAYER 0x00886260
-	// STUB: STUDIO 0x00930260
-	int CoordinateFrameBridge::newCoordinateFrame(lua_State* L)
-	{
-		G3D::CoordinateFrame cf;
-		const int count = lua_gettop(L);
-		switch (count)
-		{
-		case 0:
-			break;
-		case 1:
-			cf.translation = Bridge<G3D::Vector3>::getObject(L, 1);
-			break;
-		case 2:
-			cf.translation = Bridge<G3D::Vector3>::getObject(L, 1);
-			cf.lookAt(Bridge<G3D::Vector3>::getObject(L, 2));
-			break;
-		case 3:
-			for (int i = 0; i < 3; ++i)
-				cf.translation[i] = lua_tofloat(L, i + 1);
-			break;
-		case 7:
-			{
-				for (int i = 0; i < 3; ++i)
-					cf.translation[i] = lua_tofloat(L, i + 1);
-				G3D::Quat q;
-				q.x = lua_tofloat(L, 3 + 1);
-				q.y = lua_tofloat(L, 4 + 1);
-				q.z = lua_tofloat(L, 5 + 1);
-				q.w = lua_tofloat(L, 6 + 1);
-				cf.rotation = G3D::Matrix3(q);
-			}
-			break;
-		case 12:
-			for (int i = 0; i < 3; ++i)
-				cf.translation[i] = lua_tofloat(L, i + 1);
-			for (int i = 0; i < 3; ++i)
-				for (int j = 0; j < 3; ++j)
-					cf.rotation[i][j] = lua_tofloat(L, 3 + 3 * i + j + 1);
-			break;
-		default:
-			throw RBX::runtime_error("Invalid number of arguments: %d", count);
-		}
-		pushNewObject(L, cf);
-		return 1;
-	}
-
-	// mac: 0x16A2A2 (345B, batch377): rotation^T + -(R^T t). Matches
-	// G3D::CoordinateFrame::inverse() (binary inlines it).
-	// FUNCTION: PLAYER 0x008865b0
-	// FUNCTION: STUDIO 0x009305b0
-	int CoordinateFrameBridge::on_inverse(lua_State* L)
-	{
-		pushCoordinateFrame(L, getObject(L, 1).inverse());
-		return 1;
-	}
-
-	// Space helpers (batch378): self is arg 1 (colon-call convention;
-	// the upvalue closure carries the same self). Count-loop shape with
-	// count==0 fast paths, verbatim vs 2016.
-	// FUNCTION: PLAYER 0x00886620
-	// FUNCTION: STUDIO 0x00930620
-	int CoordinateFrameBridge::on_toWorldSpace(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
-		{
-			pushCoordinateFrame(L, a);
-			return 1;
-		}
-		for (int i = 0; i < count; ++i)
-		{
-			const G3D::CoordinateFrame& b = getObject(L, i + 2);
-			pushCoordinateFrame(L, a * b);
-		}
-		return count;
-	}
-
-	// FUNCTION: PLAYER 0x00886710
-	// FUNCTION: STUDIO 0x00930710
-	int CoordinateFrameBridge::on_toObjectSpace(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
-		{
-			pushCoordinateFrame(L, a.inverse());
-			return 1;
-		}
-		for (int i = 0; i < count; ++i)
-		{
-			const G3D::CoordinateFrame& b = getObject(L, i + 2);
-			pushCoordinateFrame(L, a.toObjectSpace(b));
-		}
-		return count;
-	}
-
-	// FUNCTION: PLAYER 0x00886800
-	// FUNCTION: STUDIO 0x00930800
-	int CoordinateFrameBridge::on_pointToWorldSpace(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
-		{
-			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
-				a.pointToWorldSpace(G3D::Vector3::zero()));
-			return 1;
-		}
-		for (int i = 0; i < count; ++i)
-		{
-			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
-			Bridge<G3D::Vector3>::pushNewObject(L, a.pointToWorldSpace(b));
-		}
-		return count;
-	}
-
-	// FUNCTION: PLAYER 0x008869e0
-	// FUNCTION: STUDIO 0x009309e0
-	int CoordinateFrameBridge::on_pointToObjectSpace(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
-		{
-			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
-				a.pointToObjectSpace(G3D::Vector3::zero()));
-			return 1;
-		}
-		for (int i = 0; i < count; ++i)
-		{
-			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
-			Bridge<G3D::Vector3>::pushNewObject(L, a.pointToObjectSpace(b));
-		}
-		return count;
-	}
-
-	// FUNCTION: PLAYER 0x00886bd0
-	// FUNCTION: STUDIO 0x00930bd0
-	int CoordinateFrameBridge::on_vectorToWorldSpace(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
-		{
-			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
-				a.vectorToWorldSpace(G3D::Vector3::zero()));
-			return 1;
-		}
-		for (int i = 0; i < count; ++i)
-		{
-			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
-			Bridge<G3D::Vector3>::pushNewObject(L, a.vectorToWorldSpace(b));
-		}
-		return count;
-	}
-
-	// mac: 0x16AD9E (173B, batch378): translation xyz then rotation rows.
-	// FUNCTION: PLAYER 0x00886d90
-	// FUNCTION: STUDIO 0x00930d90
-	int CoordinateFrameBridge::on_components(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		lua_pushnumber(L, a.translation.x);
-		lua_pushnumber(L, a.translation.y);
-		lua_pushnumber(L, a.translation.z);
-		for (int i = 0; i < 3; ++i)
-			for (int j = 0; j < 3; ++j)
-				lua_pushnumber(L, a.rotation[i][j]);
-		return 12;
-	}
-
-	// mac: 0x16B410 (batch377: 102B-pattern newindex, always throws).
-	template<>
-	void Bridge<G3D::CoordinateFrame, true>::on_newindex(G3D::CoordinateFrame& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
-	// mac: 0x16AE4C (139B, batch378): Matrix3::toEulerAnglesXYZ.
-	// FUNCTION: PLAYER 0x00886e20
-	// FUNCTION: STUDIO 0x00930e20
-	int CoordinateFrameBridge::on_toEulerAnglesXYZ(lua_State* L)
-	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		float x, y, z;
-		a.rotation.toEulerAnglesXYZ(x, y, z);
-		lua_pushnumber(L, x);
-		lua_pushnumber(L, y);
-		lua_pushnumber(L, z);
-		return 3;
 	}
 
 
@@ -2324,24 +2151,33 @@ namespace RBX { namespace Lua {
 	// below; it was first defined here for the Region3int16 Min/Max link
 	// and moved to avoid C2086.)
 
-	// FUNCTION: PLAYER 0x00886e90
-	// FUNCTION: STUDIO 0x00930e90
-	int CoordinateFrameBridge::on_vectorToObjectSpace(lua_State* L)
+	// mac: 0x16876C (337B, batch395): vec/vec idiv; vec/scalar
+	// float-div-truncate; scalar/vec lua_tointeger + idiv. No throws.
+	// FUNCTION: PLAYER 0x008850b0
+	// FUNCTION: STUDIO 0x0092f0b0
+	int Vector2int16Bridge::on_div(lua_State* L)
 	{
-		const G3D::CoordinateFrame& a = getObject(L, 1);
-		int count = lua_gettop(L) - 1;
-		if (count == 0)
+		G3D::Vector2int16 a;
+		if (getValue(L, 1, a))
 		{
-			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
-				a.vectorToObjectSpace(G3D::Vector3::zero()));
-			return 1;
+			G3D::Vector2int16 b;
+			if (getValue(L, 2, b))
+				pushVector2int16(L, G3D::Vector2int16(a.x / b.x, a.y / b.y));
+			else
+			{
+				float c = lua_tofloat(L, 2);
+				pushVector2int16(L, G3D::Vector2int16(
+					(G3D::int16)(int)((float)a.x / c),
+					(G3D::int16)(int)((float)a.y / c)));
+			}
 		}
-		for (int i = 0; i < count; ++i)
+		else
 		{
-			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
-			Bridge<G3D::Vector3>::pushNewObject(L, a.vectorToObjectSpace(b));
+			a = getObject(L, 2);
+			int c = (G3D::int16)lua_tointeger(L, 1);
+			pushVector2int16(L, G3D::Vector2int16(c / a.x, c / a.y));
 		}
-		return count;
+		return 1;
 	}
 
 	void Bridge<RBX::Region3int16, true>::registerClass(lua_State* L,
@@ -2368,17 +2204,59 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x169DE4 (236B, batch402): identity + fromAxisAngle(Vector3, angle).
-	// FUNCTION: PLAYER 0x00887100
-	// FUNCTION: STUDIO 0x00931100
-	int CoordinateFrameBridge::fromAxisAngle(lua_State* L)
+	// mac: 0x1696AA (526B, batch375): number/Number (int@0), Color (Color3
+	// push via the Color3 bridge -- register it first), r/g/b (via
+	// color3()), name/Name (pushlstring), plain failure. Matches 2016
+	// member-for-member.
+	// FUNCTION: PLAYER 0x00885fa0
+	// FUNCTION: STUDIO 0x0092ffa0
+	template<>
+	int Bridge<RBX::BrickColor, true>::on_index(const RBX::BrickColor& object,
+		const char* name, lua_State* L)
 	{
-		G3D::CoordinateFrame cf;
-		cf.rotation = G3D::Matrix3::fromAxisAngle(
-			Bridge<G3D::Vector3>::getObject(L, 1),
-			(float)luaL_checknumber(L, 2));
-		pushNewObject(L, cf);
-		return 1;
+		// 2013 0x00886027: "Number" jumps back into "number"'s block: two ifs the compiler tail-merged.
+		if (strcmp(name, "number") == 0)
+		{
+			lua_pushinteger(L, object.asInt());
+			return 1;
+		}
+		if (strcmp(name, "Number") == 0)
+		{
+			lua_pushinteger(L, object.asInt());
+			return 1;
+		}
+		if (strcmp(name, "Color") == 0)
+		{
+			Bridge<G3D::Color3>::pushNewObject(L, object.color3());
+			return 1;
+		}
+		if (strcmp(name, "r") == 0)
+		{
+			lua_pushnumber(L, object.color3().r);
+			return 1;
+		}
+		if (strcmp(name, "g") == 0)
+		{
+			lua_pushnumber(L, object.color3().g);
+			return 1;
+		}
+		if (strcmp(name, "b") == 0)
+		{
+			lua_pushnumber(L, object.color3().b);
+			return 1;
+		}
+		if (strcmp(name, "name") == 0)
+		{
+			// 2013 0x008861d8: the std::string push is out of line (0x0066f9f0).
+			lua_pushstring(L, object.name());
+			return 1;
+		}
+		if (strcmp(name, "Name") == 0)
+		{
+			lua_pushstring(L, object.name());
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
 	}
 
 	// mac: 0x166B48 (102B-pattern): always throws, with the name.
@@ -2389,59 +2267,53 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16B044 (971B, batch377). lookVector = -rotation.column(2);
-	// methods bind as 1-upvalue closures over self; x/X y/Y z/Z read the
-	// translation lanes; NO lerp member (unlike 2016's static).
-	// FUNCTION: PLAYER 0x008871a0
-	// FUNCTION: STUDIO 0x009311a0
-	template<>
-	int Bridge<G3D::CoordinateFrame, true>::on_index(const G3D::CoordinateFrame& object,
-		const char* name, lua_State* L)
+	// mac: 0x16991E (868B, batch402). Arg-count dispatch, verbatim vs 2016
+	// (0/1/2/3/7/12/default-throw with the count).
+	// STUB: PLAYER 0x00886260
+	// STUB: STUDIO 0x00930260
+	int CoordinateFrameBridge::newCoordinateFrame(lua_State* L)
 	{
-		if (strcmp(name, "p") == 0)
+		G3D::CoordinateFrame cf;
+		const int count = lua_gettop(L);
+		switch (count)
 		{
-			Vector3Bridge::pushVector3(L, object.translation);
-			return 1;
+		case 0:
+			break;
+		case 1:
+			cf.translation = Bridge<G3D::Vector3>::getObject(L, 1);
+			break;
+		case 2:
+			cf.translation = Bridge<G3D::Vector3>::getObject(L, 1);
+			cf.lookAt(Bridge<G3D::Vector3>::getObject(L, 2));
+			break;
+		case 3:
+			for (int i = 0; i < 3; ++i)
+				cf.translation[i] = lua_tofloat(L, i + 1);
+			break;
+		case 7:
+			{
+				for (int i = 0; i < 3; ++i)
+					cf.translation[i] = lua_tofloat(L, i + 1);
+				G3D::Quat q;
+				q.x = lua_tofloat(L, 3 + 1);
+				q.y = lua_tofloat(L, 4 + 1);
+				q.z = lua_tofloat(L, 5 + 1);
+				q.w = lua_tofloat(L, 6 + 1);
+				cf.rotation = G3D::Matrix3(q);
+			}
+			break;
+		case 12:
+			for (int i = 0; i < 3; ++i)
+				cf.translation[i] = lua_tofloat(L, i + 1);
+			for (int i = 0; i < 3; ++i)
+				for (int j = 0; j < 3; ++j)
+					cf.rotation[i][j] = lua_tofloat(L, 3 + 3 * i + j + 1);
+			break;
+		default:
+			throw RBX::runtime_error("Invalid number of arguments: %d", count);
 		}
-		if (strcmp(name, "lookVector") == 0)
-		{
-			// lookVector = -rotation.column(2)
-			Vector3Bridge::pushVector3(L, -object.rotation.column(2));
-			return 1;
-		}
-#define CF_METHOD(m) \
-		if (strcmp(name, #m) == 0) \
-		{ \
-			lua_pushvalue(L, -1); \
-			lua_pushcclosure(L, CoordinateFrameBridge::on_##m, 1); \
-			return 1; \
-		}
-		CF_METHOD(inverse)
-		CF_METHOD(toWorldSpace)
-		CF_METHOD(toObjectSpace)
-		CF_METHOD(pointToWorldSpace)
-		CF_METHOD(pointToObjectSpace)
-		CF_METHOD(vectorToWorldSpace)
-		CF_METHOD(vectorToObjectSpace)
-		CF_METHOD(toEulerAnglesXYZ)
-		CF_METHOD(components)
-#undef CF_METHOD
-		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
-		{
-			lua_pushnumber(L, object.translation.x);
-			return 1;
-		}
-		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
-		{
-			lua_pushnumber(L, object.translation.y);
-			return 1;
-		}
-		if (strcmp(name, "z") == 0 || strcmp(name, "Z") == 0)
-		{
-			lua_pushnumber(L, object.translation.z);
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
+		pushNewObject(L, cf);
+		return 1;
 	}
 
 
@@ -2576,29 +2448,14 @@ namespace RBX { namespace Lua {
 	// Bridge<RBX::RbxRay,1>::className
 	const char* Bridge<RBX::RbxRay, true>::className = "Ray";
 
-	// mac: 0x16BB50 (336B, batch361): X/Width -> UDim copy @+0, Y/Height ->
-	// UDim @+8 (UDim2 is two packed UDims per UDim.h); same isupper-gated
-	// errors as UDim.
-	// FUNCTION: PLAYER 0x00887be0
-	// FUNCTION: STUDIO 0x00931be0
-	template<>
-	int Bridge<RBX::UDim2, true>::on_index(const RBX::UDim2& object,
-		const char* name, lua_State* L)
+	// mac: 0x16A2A2 (345B, batch377): rotation^T + -(R^T t). Matches
+	// G3D::CoordinateFrame::inverse() (binary inlines it).
+	// FUNCTION: PLAYER 0x008865b0
+	// FUNCTION: STUDIO 0x009305b0
+	int CoordinateFrameBridge::on_inverse(lua_State* L)
 	{
-		if (strcmp(name, "X") == 0 || strcmp(name, "Width") == 0)
-		{
-			UDimBridge::pushUDim(L, object.x);
-			return 1;
-		}
-		if (strcmp(name, "Y") == 0 || strcmp(name, "Height") == 0)
-		{
-			UDimBridge::pushUDim(L, object.y);
-			return 1;
-		}
-		if (name && !isupper(name[0]))
-			throw RBX::runtime_error(
-				"%s is not a valid member, did you forget to capitalize the first letter?", name);
-		throw RBX::runtime_error("%s is not a valid member", name);
+		pushCoordinateFrame(L, getObject(L, 1).inverse());
+		return 1;
 	}
 
 	// File-static helpers (no binary names; EAs 0x166764/0x1667E9,
@@ -2620,29 +2477,26 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x16BD06 (251B, batch421): up-to-6 Enum.NormalId items ORed into a
-	// mask. Non-Item args are SKIPPED (a failed getValue is not an
-	// error); a mistyped Item throws. Extra args past 6 are ignored
-	// (count = top<7 ? top : 6).
-	// STUB: PLAYER 0x00887d80
-	// STUB: STUDIO 0x00931d80
-	int FacesBridge::newFaces(lua_State* L)
+	// Space helpers (batch378): self is arg 1 (colon-call convention;
+	// the upvalue closure carries the same self). Count-loop shape with
+	// count==0 fast paths, verbatim vs 2016.
+	// FUNCTION: PLAYER 0x00886620
+	// FUNCTION: STUDIO 0x00930620
+	int CoordinateFrameBridge::on_toWorldSpace(lua_State* L)
 	{
-		int count = lua_gettop(L);
-		if (count > 6)
-			count = 6;
-		int mask = 0;
-		for (int i = 1; i <= count; ++i)
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
 		{
-			EnumDescriptorItemPtr item = NULL;
-			if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, i, item))
-				continue;
-			if (!enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE"))
-				throw RBX::runtime_error("Faces.new expects Enum.NormalId inputs");
-			mask |= RBX::normalIdToMask((RBX::NormalId)item->value);
+			pushCoordinateFrame(L, a);
+			return 1;
 		}
-		pushFaces(L, RBX::Faces(mask));
-		return 1;
+		for (int i = 0; i < count; ++i)
+		{
+			const G3D::CoordinateFrame& b = getObject(L, i + 2);
+			pushCoordinateFrame(L, a * b);
+		}
+		return count;
 	}
 
 	// mac: 0x166856 (102B-pattern): always throws, with the name.
@@ -2653,33 +2507,23 @@ namespace RBX { namespace Lua {
 		throw RBX::runtime_error("%s cannot be assigned to", name);
 	}
 
-	// mac: 0x16C07E (321B, batch422): up-to-6 Enum.Axis-or-NormalId items ORed
-	// into a mask. Axis values pass straight through; NormalId values
-	// convert via normalIdToAxis. Non-Items skipped; mistyped Items throw.
-	// STUB: PLAYER 0x00887e70
-	// STUB: STUDIO 0x00931e70
-	int AxesBridge::newAxes(lua_State* L)
+	// FUNCTION: PLAYER 0x00886710
+	// FUNCTION: STUDIO 0x00930710
+	int CoordinateFrameBridge::on_toObjectSpace(lua_State* L)
 	{
-		int count = lua_gettop(L);
-		if (count > 6)
-			count = 6;
-		int mask = 0;
-		for (int i = 1; i <= count; ++i)
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
 		{
-			EnumDescriptorItemPtr item = NULL;
-			if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, i, item))
-				continue;
-			G3D::Vector3::Axis axis;
-			if (enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE"))
-				axis = (G3D::Vector3::Axis)item->value;
-			else if (enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE"))
-				axis = RBX::Axes::normalIdToAxis((RBX::NormalId)item->value);
-			else
-				throw RBX::runtime_error("Axes.new expects Enum.Axis or Enum.NormalId inputs");
-			mask |= RBX::Axes::axisToMask(axis);
+			pushCoordinateFrame(L, a.inverse());
+			return 1;
 		}
-		pushAxes(L, RBX::Axes(mask));
-		return 1;
+		for (int i = 0; i < count; ++i)
+		{
+			const G3D::CoordinateFrame& b = getObject(L, i + 2);
+			pushCoordinateFrame(L, a.toObjectSpace(b));
+		}
+		return count;
 	}
 
 	// mac: 0x198740 (98B-pattern): same verbatim.
@@ -2736,38 +2580,24 @@ namespace RBX { namespace Lua {
 	// Bridge<G3D::Vector2int16,1>::className
 	const char* Bridge<G3D::Vector2int16, true>::className = "Vector2int16";
 
-	// mac: 0x16CA6A (304B, batch370). Members pushed by value through their
-	// own Bridges (nested enums + KeyCode land as bare userdata until
-	// their registerClass calls land -- pushNewObject with an
-	// unregistered metatable name leaves the userdata bare, no crash).
-	// FUNCTION: PLAYER 0x00887fc0
-	// FUNCTION: STUDIO 0x00931fc0
-	template<>
-	int Bridge<RBX::InputObject, true>::on_index(const RBX::InputObject& object,
-		const char* name, lua_State* L)
+	// FUNCTION: PLAYER 0x00886800
+	// FUNCTION: STUDIO 0x00930800
+	int CoordinateFrameBridge::on_pointToWorldSpace(lua_State* L)
 	{
-		if (strcmp(name, "UserInputType") == 0)
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
 		{
-			Bridge<InputObject::UserInputType>::pushNewObject(L, object.inputType);
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
+				a.pointToWorldSpace(G3D::Vector3::zero()));
 			return 1;
 		}
-		if (strcmp(name, "UserInputState") == 0)
+		for (int i = 0; i < count; ++i)
 		{
-			Bridge<InputObject::UserInputState>::pushNewObject(L, object.inputState);
-			return 1;
+			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
+			Bridge<G3D::Vector3>::pushNewObject(L, a.pointToWorldSpace(b));
 		}
-		if (strcmp(name, "ScreenPosition") == 0)
-		{
-			Bridge<G3D::Vector2>::pushNewObject(L, object.screenPosition);
-			return 1;
-		}
-		if (strcmp(name, "KeyCode") == 0)
-		{
-			Bridge<RBX::KeyCode>::pushNewObject(L, object.keyCode);
-			return 1;
-		}
-		throw RBX::runtime_error(
-			"%s is not a valid member, valid members are UserInputType, UserInputState, ScreenPosition, KeyCode", name);
+		return count;
 	}
 
 	void Bridge<G3D::Vector2int16, true>::registerClass(lua_State* L,
@@ -2826,93 +2656,44 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	// mac: 0x16CC00 / 0x16CEB4: index/newindex/gc/eq/tostring/add/sub/mul/
-	// div/unm + readonly + pop (both batches 394/396).
-	// FUNCTION: PLAYER 0x00888160
-	// FUNCTION: STUDIO 0x00932160
-	void Bridge<G3D::Vector3int16, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	// FUNCTION: PLAYER 0x008869e0
+	// FUNCTION: STUDIO 0x009309e0
+	int CoordinateFrameBridge::on_pointToObjectSpace(lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__add");
-		lua_pushcfunction(L, Vector3int16Bridge::on_add);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__sub");
-		lua_pushcfunction(L, Vector3int16Bridge::on_sub);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__mul");
-		lua_pushcfunction(L, Vector3int16Bridge::on_mul);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__div");
-		lua_pushcfunction(L, Vector3int16Bridge::on_div);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__unm");
-		lua_pushcfunction(L, Vector3int16Bridge::on_unm);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
+		{
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
+				a.pointToObjectSpace(G3D::Vector3::zero()));
+			return 1;
+		}
+		for (int i = 0; i < count; ++i)
+		{
+			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
+			Bridge<G3D::Vector3>::pushNewObject(L, a.pointToObjectSpace(b));
+		}
+		return count;
 	}
 
-	// mac: 0x16D168 (692B, batch347). No "__type" entry (2016 adds one); __gc
-	// IS registered (2016 Vector3 specialization omits it); __index /
-	// __newindex are the caller-passed lua_CFunctions (openState passes
-	// Bridge<Vector3>::on_index/on_newindex 0x19855C/0x1985BC); arithmetic
-	// is this type's Vector3Bridge metamethods. Ends readonly + pop.
-	// FUNCTION: PLAYER 0x00888460
-	// FUNCTION: STUDIO 0x00932460
-	void Bridge<G3D::Vector3, true>::registerClass(lua_State* L,
-		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	// FUNCTION: PLAYER 0x00886bd0
+	// FUNCTION: STUDIO 0x00930bd0
+	int CoordinateFrameBridge::on_vectorToWorldSpace(lua_State* L)
 	{
-		luaL_newmetatable(L, className);
-		protect_metatable(L, -1);
-		lua_pushstring(L, "__index");
-		lua_pushcfunction(L, on_indexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__newindex");
-		lua_pushcfunction(L, on_newindexFn);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__gc");
-		lua_pushcfunction(L, on_gc);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__eq");
-		lua_pushcfunction(L, on_eq);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__tostring");
-		lua_pushcfunction(L, on_tostring);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__add");
-		lua_pushcfunction(L, Vector3Bridge::on_add);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__sub");
-		lua_pushcfunction(L, Vector3Bridge::on_sub);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__mul");
-		lua_pushcfunction(L, Vector3Bridge::on_mul);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__div");
-		lua_pushcfunction(L, Vector3Bridge::on_div);
-		lua_settable(L, -3);
-		lua_pushstring(L, "__unm");
-		lua_pushcfunction(L, Vector3Bridge::on_unm);
-		lua_settable(L, -3);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
+		{
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
+				a.vectorToWorldSpace(G3D::Vector3::zero()));
+			return 1;
+		}
+		for (int i = 0; i < count; ++i)
+		{
+			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
+			Bridge<G3D::Vector3>::pushNewObject(L, a.vectorToWorldSpace(b));
+		}
+		return count;
 	}
 
 	// mac: 0x168206 (108B, batch393): 16-bit lane negate.
@@ -3023,6 +2804,519 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
+	// mac: 0x16AD9E (173B, batch378): translation xyz then rotation rows.
+	// FUNCTION: PLAYER 0x00886d90
+	// FUNCTION: STUDIO 0x00930d90
+	int CoordinateFrameBridge::on_components(lua_State* L)
+	{
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		lua_pushnumber(L, a.translation.x);
+		lua_pushnumber(L, a.translation.y);
+		lua_pushnumber(L, a.translation.z);
+		for (int i = 0; i < 3; ++i)
+			for (int j = 0; j < 3; ++j)
+				lua_pushnumber(L, a.rotation[i][j]);
+		return 12;
+	}
+
+	// mac: 0x16AE4C (139B, batch378): Matrix3::toEulerAnglesXYZ.
+	// FUNCTION: PLAYER 0x00886e20
+	// FUNCTION: STUDIO 0x00930e20
+	int CoordinateFrameBridge::on_toEulerAnglesXYZ(lua_State* L)
+	{
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		float x, y, z;
+		a.rotation.toEulerAnglesXYZ(x, y, z);
+		lua_pushnumber(L, x);
+		lua_pushnumber(L, y);
+		lua_pushnumber(L, z);
+		return 3;
+	}
+
+	// mac: 0x1688BE (90B, batch395): 16-bit lane negate.
+	int Vector2int16Bridge::on_unm(lua_State* L)
+	{
+		const G3D::Vector2int16& a = getObject(L, 1);
+		pushVector2int16(L, G3D::Vector2int16(-a.x, -a.y));
+		return 1;
+	}
+
+	// mac: 0x168918 (231B, batch395): x/X y/Y via pushinteger; plain failure.
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_index(const G3D::Vector2int16& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
+		{
+			lua_pushinteger(L, object.x);
+			return 1;
+		}
+		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
+		{
+			lua_pushinteger(L, object.y);
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x168A00 (102B-pattern): always throws, with the name.
+	template<>
+	void Bridge<G3D::Vector2int16, true>::on_newindex(G3D::Vector2int16& object,
+		const char* name, lua_State* L)
+	{
+		throw RBX::runtime_error("%s cannot be assigned to", name);
+	}
+
+	// mac: 0x19849A (96B-pattern): luaL_checklstring wrapper verbatim.
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_index(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		return on_index(getObject(L, 1), name, L);
+	}
+
+	// mac: 0x1984FA (98B-pattern): same verbatim.
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_newindex(lua_State* L)
+	{
+		const char* name = luaL_checklstring(L, 2, NULL);
+		on_newindex(getObject(L, 1), name, L);
+		return 0;
+	}
+
+	// mac: 0x16EA3A (48B-pattern): checkudata + return 0 (no dtor, POD).
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_gc(lua_State* L)
+	{
+		luaL_checkudata(L, 1, className);
+		return 0;
+	}
+
+	// mac: 0x16EA6A (107B, batch396): whole-dword compare (== operator==).
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_eq(lua_State* L)
+	{
+		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
+		return 1;
+	}
+
+	// mac: 0x16EAD6 (60B-pattern): checkudata + forward.
+	template<>
+	int Bridge<G3D::Vector2int16, true>::on_tostring(lua_State* L)
+	{
+		return on_tostring(getObject(L, 1), L);
+	}
+
+	// FUNCTION: PLAYER 0x00886e90
+	// FUNCTION: STUDIO 0x00930e90
+	int CoordinateFrameBridge::on_vectorToObjectSpace(lua_State* L)
+	{
+		const G3D::CoordinateFrame& a = getObject(L, 1);
+		int count = lua_gettop(L) - 1;
+		if (count == 0)
+		{
+			Vector3Bridge::pushVector3(L,	// out of line here (0x008868cf), inline in the loop
+				a.vectorToObjectSpace(G3D::Vector3::zero()));
+			return 1;
+		}
+		for (int i = 0; i < count; ++i)
+		{
+			const G3D::Vector3& b = Bridge<G3D::Vector3>::getObject(L, i + 2);
+			Bridge<G3D::Vector3>::pushNewObject(L, a.vectorToObjectSpace(b));
+		}
+		return count;
+	}
+
+	// mac: 0x168A66 (211B, batch401): up-to-2 floats (tofloat), zero-fill,
+	// pushNewObject<float*>.
+	int Vector2Bridge::newVector2(lua_State* L)
+	{
+		int count = std::min(2, lua_gettop(L));
+		float v[2] = { 0.0f, 0.0f };
+		for (int i = 0; i < count; ++i)
+			v[i] = lua_tofloat(L, i + 1);
+		pushNewObject(L, v);
+		return 1;
+	}
+
+	const luaL_reg Vector2Bridge::classLibrary[] = {
+		{ "new", newVector2 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x169DE4 (236B, batch402): identity + fromAxisAngle(Vector3, angle).
+	// FUNCTION: PLAYER 0x00887100
+	// FUNCTION: STUDIO 0x00931100
+	int CoordinateFrameBridge::fromAxisAngle(lua_State* L)
+	{
+		G3D::CoordinateFrame cf;
+		cf.rotation = G3D::Matrix3::fromAxisAngle(
+			Bridge<G3D::Vector3>::getObject(L, 1),
+			(float)luaL_checknumber(L, 2));
+		pushNewObject(L, cf);
+		return 1;
+	}
+
+	// mac: 0x166108 (211B, batch401): up-to-3 floats (tofloat), zero-fill,
+	// pushNewObject<float*>.
+	int Color3Bridge::newColor3(lua_State* L)
+	{
+		int count = std::min(3, lua_gettop(L));
+		float v[3] = { 0.0f, 0.0f, 0.0f };
+		for (int i = 0; i < count; ++i)
+			v[i] = lua_tofloat(L, i + 1);
+		pushNewObject(L, v);
+		return 1;
+	}
+
+	const luaL_reg Color3Bridge::classLibrary[] = {
+		{ "new", newColor3 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16B044 (971B, batch377). lookVector = -rotation.column(2);
+	// methods bind as 1-upvalue closures over self; x/X y/Y z/Z read the
+	// translation lanes; NO lerp member (unlike 2016's static).
+	// FUNCTION: PLAYER 0x008871a0
+	// FUNCTION: STUDIO 0x009311a0
+	template<>
+	int Bridge<G3D::CoordinateFrame, true>::on_index(const G3D::CoordinateFrame& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "p") == 0)
+		{
+			Vector3Bridge::pushVector3(L, object.translation);
+			return 1;
+		}
+		if (strcmp(name, "lookVector") == 0)
+		{
+			// lookVector = -rotation.column(2)
+			Vector3Bridge::pushVector3(L, -object.rotation.column(2));
+			return 1;
+		}
+#define CF_METHOD(m) \
+		if (strcmp(name, #m) == 0) \
+		{ \
+			lua_pushvalue(L, -1); \
+			lua_pushcclosure(L, CoordinateFrameBridge::on_##m, 1); \
+			return 1; \
+		}
+		CF_METHOD(inverse)
+		CF_METHOD(toWorldSpace)
+		CF_METHOD(toObjectSpace)
+		CF_METHOD(pointToWorldSpace)
+		CF_METHOD(pointToObjectSpace)
+		CF_METHOD(vectorToWorldSpace)
+		CF_METHOD(vectorToObjectSpace)
+		CF_METHOD(toEulerAnglesXYZ)
+		CF_METHOD(components)
+#undef CF_METHOD
+		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
+		{
+			lua_pushnumber(L, object.translation.x);
+			return 1;
+		}
+		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
+		{
+			lua_pushnumber(L, object.translation.y);
+			return 1;
+		}
+		if (strcmp(name, "z") == 0 || strcmp(name, "Z") == 0)
+		{
+			lua_pushnumber(L, object.translation.z);
+			return 1;
+		}
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x1663C0 (285B, batch401): up-to-2 Vector3 args (origin, direction;
+	// missing become zero); builds RbxRay(origin, dir) + pushes.
+	int RbxRayBridge::newRbxRay(lua_State* L)
+	{
+		int count = std::min(2, lua_gettop(L));
+		G3D::Vector3 v[2] = { G3D::Vector3::zero(), G3D::Vector3::zero() };
+		for (int i = 0; i < count; ++i)
+			v[i] = Bridge<G3D::Vector3>::getObject(L, i + 1);
+		pushRbxRay(L, RBX::RbxRay(v[0], v[1]));
+		return 1;
+	}
+
+	const luaL_reg RbxRayBridge::classLibrary[] = {
+		{ "new", newRbxRay },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16BB50 (336B, batch361): X/Width -> UDim copy @+0, Y/Height ->
+	// UDim @+8 (UDim2 is two packed UDims per UDim.h); same isupper-gated
+	// errors as UDim.
+	// FUNCTION: PLAYER 0x00887be0
+	// FUNCTION: STUDIO 0x00931be0
+	template<>
+	int Bridge<RBX::UDim2, true>::on_index(const RBX::UDim2& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "X") == 0 || strcmp(name, "Width") == 0)
+		{
+			UDimBridge::pushUDim(L, object.x);
+			return 1;
+		}
+		if (strcmp(name, "Y") == 0 || strcmp(name, "Height") == 0)
+		{
+			UDimBridge::pushUDim(L, object.y);
+			return 1;
+		}
+		if (name && !isupper(name[0]))
+			throw RBX::runtime_error(
+				"%s is not a valid member, did you forget to capitalize the first letter?", name);
+		throw RBX::runtime_error("%s is not a valid member", name);
+	}
+
+	// mac: 0x16BD06 (251B, batch421): up-to-6 Enum.NormalId items ORed into a
+	// mask. Non-Item args are SKIPPED (a failed getValue is not an
+	// error); a mistyped Item throws. Extra args past 6 are ignored
+	// (count = top<7 ? top : 6).
+	// STUB: PLAYER 0x00887d80
+	// STUB: STUDIO 0x00931d80
+	int FacesBridge::newFaces(lua_State* L)
+	{
+		int count = lua_gettop(L);
+		if (count > 6)
+			count = 6;
+		int mask = 0;
+		for (int i = 1; i <= count; ++i)
+		{
+			EnumDescriptorItemPtr item = NULL;
+			if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, i, item))
+				continue;
+			if (!enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE"))
+				throw RBX::runtime_error("Faces.new expects Enum.NormalId inputs");
+			mask |= RBX::normalIdToMask((RBX::NormalId)item->value);
+		}
+		pushFaces(L, RBX::Faces(mask));
+		return 1;
+	}
+
+	const luaL_reg Region3Bridge::classLibrary[] = {
+		{ "new", newRegion3 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16C07E (321B, batch422): up-to-6 Enum.Axis-or-NormalId items ORed
+	// into a mask. Axis values pass straight through; NormalId values
+	// convert via normalIdToAxis. Non-Items skipped; mistyped Items throw.
+	// STUB: PLAYER 0x00887e70
+	// STUB: STUDIO 0x00931e70
+	int AxesBridge::newAxes(lua_State* L)
+	{
+		int count = lua_gettop(L);
+		if (count > 6)
+			count = 6;
+		int mask = 0;
+		for (int i = 1; i <= count; ++i)
+		{
+			EnumDescriptorItemPtr item = NULL;
+			if (!Bridge<EnumDescriptorItemPtr, true>::getValue(L, i, item))
+				continue;
+			G3D::Vector3::Axis axis;
+			if (enumItemIsA(item, typeid(G3D::Vector3::Axis), "N3G3D7Vector34AxisE"))
+				axis = (G3D::Vector3::Axis)item->value;
+			else if (enumItemIsA(item, typeid(RBX::NormalId), "N3RBX8NormalIdE"))
+				axis = RBX::Axes::normalIdToAxis((RBX::NormalId)item->value);
+			else
+				throw RBX::runtime_error("Axes.new expects Enum.Axis or Enum.NormalId inputs");
+			mask |= RBX::Axes::axisToMask(axis);
+		}
+		pushAxes(L, RBX::Axes(mask));
+		return 1;
+	}
+
+	// mac: 0x166BAE (285B-pattern, batch401): up-to-2 Vector3int16 args;
+	// Region3int16(min, max) + push.
+	int Region3int16Bridge::newRegion3int16(lua_State* L)
+	{
+		int count = std::min(2, lua_gettop(L));
+		G3D::Vector3int16 v[2];
+		for (int i = 0; i < count; ++i)
+			v[i] = Bridge<G3D::Vector3int16>::getObject(L, i + 1);
+		pushRegion3int16(L, RBX::Region3int16(v[0], v[1]));
+		return 1;
+	}
+
+	const luaL_reg Region3int16Bridge::classLibrary[] = {
+		{ "new", newRegion3int16 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16CA6A (304B, batch370). Members pushed by value through their
+	// own Bridges (nested enums + KeyCode land as bare userdata until
+	// their registerClass calls land -- pushNewObject with an
+	// unregistered metatable name leaves the userdata bare, no crash).
+	// FUNCTION: PLAYER 0x00887fc0
+	// FUNCTION: STUDIO 0x00931fc0
+	template<>
+	int Bridge<RBX::InputObject, true>::on_index(const RBX::InputObject& object,
+		const char* name, lua_State* L)
+	{
+		if (strcmp(name, "UserInputType") == 0)
+		{
+			Bridge<InputObject::UserInputType>::pushNewObject(L, object.inputType);
+			return 1;
+		}
+		if (strcmp(name, "UserInputState") == 0)
+		{
+			Bridge<InputObject::UserInputState>::pushNewObject(L, object.inputState);
+			return 1;
+		}
+		if (strcmp(name, "ScreenPosition") == 0)
+		{
+			Bridge<G3D::Vector2>::pushNewObject(L, object.screenPosition);
+			return 1;
+		}
+		if (strcmp(name, "KeyCode") == 0)
+		{
+			Bridge<RBX::KeyCode>::pushNewObject(L, object.keyCode);
+			return 1;
+		}
+		throw RBX::runtime_error(
+			"%s is not a valid member, valid members are UserInputType, UserInputState, ScreenPosition, KeyCode", name);
+	}
+
+	// mac: 0x167D18 (211B, batch401): up-to-3 lua_tointeger, zero-fill.
+	// Binary pushes via pushNewObject<int*> (Vector3int16(int*) ctor,
+	// whose TU is not in the build); lanes here are bitwise-identical.
+	int Vector3int16Bridge::newVector3int16(lua_State* L)
+	{
+		int count = std::min(3, lua_gettop(L));
+		int v[3] = { 0, 0, 0 };
+		for (int i = 0; i < count; ++i)
+			v[i] = lua_tointeger(L, i + 1);
+		pushVector3int16(L, G3D::Vector3int16(v[0], v[1], v[2]));
+		return 1;
+	}
+
+	const luaL_reg Vector3int16Bridge::classLibrary[] = {
+		{ "new", newVector3int16 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16CC00 / 0x16CEB4: index/newindex/gc/eq/tostring/add/sub/mul/
+	// div/unm + readonly + pop (both batches 394/396).
+	// FUNCTION: PLAYER 0x00888160
+	// FUNCTION: STUDIO 0x00932160
+	void Bridge<G3D::Vector3int16, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__add");
+		lua_pushcfunction(L, Vector3int16Bridge::on_add);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__sub");
+		lua_pushcfunction(L, Vector3int16Bridge::on_sub);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__mul");
+		lua_pushcfunction(L, Vector3int16Bridge::on_mul);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__div");
+		lua_pushcfunction(L, Vector3int16Bridge::on_div);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__unm");
+		lua_pushcfunction(L, Vector3int16Bridge::on_unm);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
+	// mac: 0x1683F2 (211B, batch401): up-to-2 lua_tointeger, zero-fill
+	// (same int*-ctor note as newVector3int16).
+	int Vector2int16Bridge::newVector2int16(lua_State* L)
+	{
+		int count = std::min(2, lua_gettop(L));
+		int v[2] = { 0, 0 };
+		for (int i = 0; i < count; ++i)
+			v[i] = lua_tointeger(L, i + 1);
+		pushVector2int16(L, G3D::Vector2int16(v[0], v[1]));
+		return 1;
+	}
+
+	const luaL_reg Vector2int16Bridge::classLibrary[] = {
+		{ "new", newVector2int16 },
+		{ NULL, NULL }
+	};
+
+	// mac: 0x16D168 (692B, batch347). No "__type" entry (2016 adds one); __gc
+	// IS registered (2016 Vector3 specialization omits it); __index /
+	// __newindex are the caller-passed lua_CFunctions (openState passes
+	// Bridge<Vector3>::on_index/on_newindex 0x19855C/0x1985BC); arithmetic
+	// is this type's Vector3Bridge metamethods. Ends readonly + pop.
+	// FUNCTION: PLAYER 0x00888460
+	// FUNCTION: STUDIO 0x00932460
+	void Bridge<G3D::Vector3, true>::registerClass(lua_State* L,
+		int (*on_indexFn)(lua_State*), int (*on_newindexFn)(lua_State*))
+	{
+		luaL_newmetatable(L, className);
+		protect_metatable(L, -1);
+		lua_pushstring(L, "__index");
+		lua_pushcfunction(L, on_indexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__newindex");
+		lua_pushcfunction(L, on_newindexFn);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__gc");
+		lua_pushcfunction(L, on_gc);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__eq");
+		lua_pushcfunction(L, on_eq);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__tostring");
+		lua_pushcfunction(L, on_tostring);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__add");
+		lua_pushcfunction(L, Vector3Bridge::on_add);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__sub");
+		lua_pushcfunction(L, Vector3Bridge::on_sub);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__mul");
+		lua_pushcfunction(L, Vector3Bridge::on_mul);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__div");
+		lua_pushcfunction(L, Vector3Bridge::on_div);
+		lua_settable(L, -3);
+		lua_pushstring(L, "__unm");
+		lua_pushcfunction(L, Vector3Bridge::on_unm);
+		lua_settable(L, -3);
+		lua_setreadonly(L, -1, 1);
+		lua_pop(L, 1);
+	}
+
+	// mac: 0x166E88 (211B, batch350): up-to-3 floats (tofloat), zero-fill,
+	// pushNewObject<float*>.
+	int Vector3Bridge::newVector3(lua_State* L)
+	{
+		int count = std::min(3, lua_gettop(L));
+		float v[3] = { 0.0f, 0.0f, 0.0f };
+		for (int i = 0; i < count; ++i)
+			v[i] = lua_tofloat(L, i + 1);
+		pushNewObject(L, v);
+		return 1;
+	}
+
 	// mac: 0x16D41C (692B, batch357): same 3-arg shape as Vector3 (no __type,
 	// __gc kept, arithmetic is Vector2Bridge's).
 	// FUNCTION: PLAYER 0x008885e0
@@ -3100,79 +3394,12 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x1688BE (90B, batch395): 16-bit lane negate.
-	int Vector2int16Bridge::on_unm(lua_State* L)
-	{
-		const G3D::Vector2int16& a = getObject(L, 1);
-		pushVector2int16(L, G3D::Vector2int16(-a.x, -a.y));
-		return 1;
-	}
-
-	// mac: 0x168918 (231B, batch395): x/X y/Y via pushinteger; plain failure.
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_index(const G3D::Vector2int16& object,
-		const char* name, lua_State* L)
-	{
-		if (strcmp(name, "x") == 0 || strcmp(name, "X") == 0)
-		{
-			lua_pushinteger(L, object.x);
-			return 1;
-		}
-		if (strcmp(name, "y") == 0 || strcmp(name, "Y") == 0)
-		{
-			lua_pushinteger(L, object.y);
-			return 1;
-		}
-		throw RBX::runtime_error("%s is not a valid member", name);
-	}
-
-	// mac: 0x168A00 (102B-pattern): always throws, with the name.
-	template<>
-	void Bridge<G3D::Vector2int16, true>::on_newindex(G3D::Vector2int16& object,
-		const char* name, lua_State* L)
-	{
-		throw RBX::runtime_error("%s cannot be assigned to", name);
-	}
-
-	// mac: 0x19849A (96B-pattern): luaL_checklstring wrapper verbatim.
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_index(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		return on_index(getObject(L, 1), name, L);
-	}
-
-	// mac: 0x1984FA (98B-pattern): same verbatim.
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_newindex(lua_State* L)
-	{
-		const char* name = luaL_checklstring(L, 2, NULL);
-		on_newindex(getObject(L, 1), name, L);
-		return 0;
-	}
-
-	// mac: 0x16EA3A (48B-pattern): checkudata + return 0 (no dtor, POD).
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_gc(lua_State* L)
-	{
-		luaL_checkudata(L, 1, className);
-		return 0;
-	}
-
-	// mac: 0x16EA6A (107B, batch396): whole-dword compare (== operator==).
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_eq(lua_State* L)
-	{
-		lua_pushboolean(L, getObject(L, 1) == getObject(L, 2));
-		return 1;
-	}
-
-	// mac: 0x16EAD6 (60B-pattern): checkudata + forward.
-	template<>
-	int Bridge<G3D::Vector2int16, true>::on_tostring(lua_State* L)
-	{
-		return on_tostring(getObject(L, 1), L);
-	}
+	const luaL_reg Vector3Bridge::classLibrary[] = {
+		{ "new", newVector3 },
+		{ "FromNormalId", newVector3FromNormalId },
+		{ "FromAxis", newVector3FromAxis },
+		{ NULL, NULL }
+	};
 
 	// mac: 0x16DB48 (512B, batch361): same set as UDim (add/sub/unm; no
 	// tostring/mul/div).
@@ -3208,84 +3435,17 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	// mac: 0x168A66 (211B, batch401): up-to-2 floats (tofloat), zero-fill,
-	// pushNewObject<float*>.
-	int Vector2Bridge::newVector2(lua_State* L)
-	{
-		int count = std::min(2, lua_gettop(L));
-		float v[2] = { 0.0f, 0.0f };
-		for (int i = 0; i < count; ++i)
-			v[i] = lua_tofloat(L, i + 1);
-		pushNewObject(L, v);
-		return 1;
-	}
+	// VS2012 odr-use holders (openState names these at 0x18B907/0x18B923).
+	int (*volatile g_bridgeV3int16Index)(lua_State*) =
+		(int (*)(lua_State*))&Bridge<G3D::Vector3int16>::on_index;
+	int (*volatile g_bridgeV3int16NewIndex)(lua_State*) =
+		(int (*)(lua_State*))&Bridge<G3D::Vector3int16>::on_newindex;
+	int (*volatile g_bridgeV2int16Index)(lua_State*) =
+		(int (*)(lua_State*))&Bridge<G3D::Vector2int16>::on_index;
+	int (*volatile g_bridgeV2int16NewIndex)(lua_State*) =
+		(int (*)(lua_State*))&Bridge<G3D::Vector2int16>::on_newindex;
 
-	const luaL_reg Vector2Bridge::classLibrary[] = {
-		{ "new", newVector2 },
-		{ NULL, NULL }
-	};
-
-	// mac: 0x168B3A (batch355-banked shape): luaL_register + readonly + pop.
-	// FUNCTION: PLAYER 0x00881f30
-	// FUNCTION: STUDIO 0x0092bfd0
-	void Vector2Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x166108 (211B, batch401): up-to-3 floats (tofloat), zero-fill,
-	// pushNewObject<float*>.
-	int Color3Bridge::newColor3(lua_State* L)
-	{
-		int count = std::min(3, lua_gettop(L));
-		float v[3] = { 0.0f, 0.0f, 0.0f };
-		for (int i = 0; i < count; ++i)
-			v[i] = lua_tofloat(L, i + 1);
-		pushNewObject(L, v);
-		return 1;
-	}
-
-	const luaL_reg Color3Bridge::classLibrary[] = {
-		{ "new", newColor3 },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x008819c0
-	// FUNCTION: STUDIO 0x0092ba90
-	void Color3Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x1663C0 (285B, batch401): up-to-2 Vector3 args (origin, direction;
-	// missing become zero); builds RbxRay(origin, dir) + pushes.
-	int RbxRayBridge::newRbxRay(lua_State* L)
-	{
-		int count = std::min(2, lua_gettop(L));
-		G3D::Vector3 v[2] = { G3D::Vector3::zero(), G3D::Vector3::zero() };
-		for (int i = 0; i < count; ++i)
-			v[i] = Bridge<G3D::Vector3>::getObject(L, i + 1);
-		pushRbxRay(L, RBX::RbxRay(v[0], v[1]));
-		return 1;
-	}
-
-	const luaL_reg RbxRayBridge::classLibrary[] = {
-		{ "new", newRbxRay },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881b20
-	// FUNCTION: STUDIO 0x0092bbf0
-	void RbxRayBridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
+	// ---- Library batch 2 (section 237) ----
 
 	// mac: 0x16A0DE (451B, batch377). CFrame*CFrame via operator* (called
 	// directly by the binary); else CFrame*Vector3 = pointToWorldSpace
@@ -3307,108 +3467,15 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
-	const luaL_reg Region3Bridge::classLibrary[] = {
-		{ "new", newRegion3 },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881b50
-	// FUNCTION: STUDIO 0x0092bc20
-	void Region3Bridge::registerClassLibrary(lua_State* L)
+	// mac: 0x169CB8 (300B, batch402): identity + rotation from 3 checknumbers.
+	int CoordinateFrameBridge::fromEulerAnglesXYZ(lua_State* L)
 	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x166BAE (285B-pattern, batch401): up-to-2 Vector3int16 args;
-	// Region3int16(min, max) + push.
-	int Region3int16Bridge::newRegion3int16(lua_State* L)
-	{
-		int count = std::min(2, lua_gettop(L));
-		G3D::Vector3int16 v[2];
-		for (int i = 0; i < count; ++i)
-			v[i] = Bridge<G3D::Vector3int16>::getObject(L, i + 1);
-		pushRegion3int16(L, RBX::Region3int16(v[0], v[1]));
-		return 1;
-	}
-
-	const luaL_reg Region3int16Bridge::classLibrary[] = {
-		{ "new", newRegion3int16 },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881bb0
-	// FUNCTION: STUDIO 0x0092bc50
-	void Region3int16Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x167D18 (211B, batch401): up-to-3 lua_tointeger, zero-fill.
-	// Binary pushes via pushNewObject<int*> (Vector3int16(int*) ctor,
-	// whose TU is not in the build); lanes here are bitwise-identical.
-	int Vector3int16Bridge::newVector3int16(lua_State* L)
-	{
-		int count = std::min(3, lua_gettop(L));
-		int v[3] = { 0, 0, 0 };
-		for (int i = 0; i < count; ++i)
-			v[i] = lua_tointeger(L, i + 1);
-		pushVector3int16(L, G3D::Vector3int16(v[0], v[1], v[2]));
-		return 1;
-	}
-
-	const luaL_reg Vector3int16Bridge::classLibrary[] = {
-		{ "new", newVector3int16 },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881c10
-	// FUNCTION: STUDIO 0x0092bcb0
-	void Vector3int16Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x1683F2 (211B, batch401): up-to-2 lua_tointeger, zero-fill
-	// (same int*-ctor note as newVector3int16).
-	int Vector2int16Bridge::newVector2int16(lua_State* L)
-	{
-		int count = std::min(2, lua_gettop(L));
-		int v[2] = { 0, 0 };
-		for (int i = 0; i < count; ++i)
-			v[i] = lua_tointeger(L, i + 1);
-		pushVector2int16(L, G3D::Vector2int16(v[0], v[1]));
-		return 1;
-	}
-
-	const luaL_reg Vector2int16Bridge::classLibrary[] = {
-		{ "new", newVector2int16 },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881de0
-	// FUNCTION: STUDIO 0x0092be80
-	void Vector2int16Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// mac: 0x166E88 (211B, batch350): up-to-3 floats (tofloat), zero-fill,
-	// pushNewObject<float*>.
-	int Vector3Bridge::newVector3(lua_State* L)
-	{
-		int count = std::min(3, lua_gettop(L));
-		float v[3] = { 0.0f, 0.0f, 0.0f };
-		for (int i = 0; i < count; ++i)
-			v[i] = lua_tofloat(L, i + 1);
-		pushNewObject(L, v);
+		G3D::CoordinateFrame cf;
+		cf.rotation = G3D::Matrix3::fromEulerAnglesXYZ(
+			(float)luaL_checknumber(L, 1),
+			(float)luaL_checknumber(L, 2),
+			(float)luaL_checknumber(L, 3));
+		pushNewObject(L, cf);
 		return 1;
 	}
 
@@ -3456,6 +3523,14 @@ namespace RBX { namespace Lua {
 		return 1;
 	}
 
+	const luaL_reg CoordinateFrameBridge::classLibrary[] = {
+		{ "new", newCoordinateFrame },
+		{ "fromEulerAnglesXYZ", fromEulerAnglesXYZ },
+		{ "Angles", fromEulerAnglesXYZ },
+		{ "fromAxisAngle", fromAxisAngle },
+		{ NULL, NULL }
+	};
+
 	// mac: 0x16D6D0 (632B, batch377): index/newindex/gc/eq/tostring/add/sub/
 	// mul + named "inverse" entry (NOT __unm -- body-proven DELTA).
 	// FUNCTION: PLAYER 0x008890a0
@@ -3496,109 +3571,6 @@ namespace RBX { namespace Lua {
 		lua_pop(L, 1);
 	}
 
-	const luaL_reg Vector3Bridge::classLibrary[] = {
-		{ "new", newVector3 },
-		{ "FromNormalId", newVector3FromNormalId },
-		{ "FromAxis", newVector3FromAxis },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881be0
-	// FUNCTION: STUDIO 0x0092bc80
-	void Vector3Bridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
-	// VS2012 odr-use holders (openState names these at 0x18B907/0x18B923).
-	int (*volatile g_bridgeV3int16Index)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::Vector3int16>::on_index;
-	int (*volatile g_bridgeV3int16NewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::Vector3int16>::on_newindex;
-	int (*volatile g_bridgeV2int16Index)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::Vector2int16>::on_index;
-	int (*volatile g_bridgeV2int16NewIndex)(lua_State*) =
-		(int (*)(lua_State*))&Bridge<G3D::Vector2int16>::on_newindex;
-
-	// ---- Library batch 2 (section 237) ----
-
-	// mac: 0x169494 (206B, batch403): index = top>0 ? tointeger(1) : 0;
-	// throw "palette index out of bounds (%d)" when negative or past the
-	// end; push(palette.at(index)).
-	// STUB: PLAYER 0x00889200
-	// STUB: STUDIO 0x009330d0
-	int BrickColorBridge::paletteBrickColor(lua_State* L)
-	{
-		// 2013 0x00889216: std::min(1, top) by reference, and colorPalette() fetched per use.
-		int count = lua_gettop(L);
-		int index = 0;
-		if (std::min(1, count) == 1)
-			index = lua_tointeger(L, 1);
-		if (index < 0 || index >= (int)RBX::BrickColor::colorPalette().size())
-			throw RBX::runtime_error("palette index out of bounds (%d)", index);
-		pushNewObject(L, RBX::BrickColor::colorPalette().at(index));	// by value (0x0088926e)
-		return 1;
-	}
-
-	// mac: 0x169CB8 (300B, batch402): identity + rotation from 3 checknumbers.
-	int CoordinateFrameBridge::fromEulerAnglesXYZ(lua_State* L)
-	{
-		G3D::CoordinateFrame cf;
-		cf.rotation = G3D::Matrix3::fromEulerAnglesXYZ(
-			(float)luaL_checknumber(L, 1),
-			(float)luaL_checknumber(L, 2),
-			(float)luaL_checknumber(L, 3));
-		pushNewObject(L, cf);
-		return 1;
-	}
-
-	// mac: 0x16C67E (322B, batch367). TerrainPart goes through
-	// SharedPtrBridge<Instance>::push (by-value shared_ptr: same
-	// addref/push/release dance as the binary's manual copy).
-	// FUNCTION: PLAYER 0x008892b0
-	// FUNCTION: STUDIO 0x00933180
-	template<>
-	int Bridge<RBX::CellID, true>::on_index(const RBX::CellID& object,
-		const char* name, lua_State* L)
-	{
-		if (strcmp(name, "IsNil") == 0)
-		{
-			lua_pushboolean(L, object.getIsNil());
-			return 1;
-		}
-		if (strcmp(name, "Location") == 0)
-		{
-			Vector3Bridge::pushVector3(L, object.getLocation());	// 2013 0x0088935c: out of line
-			return 1;
-		}
-		if (strcmp(name, "TerrainPart") == 0)
-		{
-			SharedPtrBridge<Instance>::push(L, object.getTerrainPart());
-			return 1;
-		}
-		throw RBX::runtime_error(
-			"%s is not a valid member, valid members are IsNil,Location,TerrainPart", name);
-	}
-
-	const luaL_reg CoordinateFrameBridge::classLibrary[] = {
-		{ "new", newCoordinateFrame },
-		{ "fromEulerAnglesXYZ", fromEulerAnglesXYZ },
-		{ "Angles", fromEulerAnglesXYZ },
-		{ "fromAxisAngle", fromAxisAngle },
-		{ NULL, NULL }
-	};
-
-	// FUNCTION: PLAYER 0x00881f90
-	// FUNCTION: STUDIO 0x0092c030
-	void CoordinateFrameBridge::registerClassLibrary(lua_State* L)
-	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
-	}
-
 	// mac: 0x16B476 (203B, batch402). Quirk (body-proven): count==0 pushes a
 	// dead UDim(0,0) FIRST, then falls through and pushes again (stack
 	// grows by 2, return 1). Replicated exactly.
@@ -3622,13 +3594,22 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
-	// FUNCTION: PLAYER 0x00881fc0
-	// FUNCTION: STUDIO 0x0092c060
-	void UDimBridge::registerClassLibrary(lua_State* L)
+	// mac: 0x169494 (206B, batch403): index = top>0 ? tointeger(1) : 0;
+	// throw "palette index out of bounds (%d)" when negative or past the
+	// end; push(palette.at(index)).
+	// STUB: PLAYER 0x00889200
+	// STUB: STUDIO 0x009330d0
+	int BrickColorBridge::paletteBrickColor(lua_State* L)
 	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		// 2013 0x00889216: std::min(1, top) by reference, and colorPalette() fetched per use.
+		int count = lua_gettop(L);
+		int index = 0;
+		if (std::min(1, count) == 1)
+			index = lua_tointeger(L, 1);
+		if (index < 0 || index >= (int)RBX::BrickColor::colorPalette().size())
+			throw RBX::runtime_error("palette index out of bounds (%d)", index);
+		pushNewObject(L, RBX::BrickColor::colorPalette().at(index));	// by value (0x0088926e)
+		return 1;
 	}
 
 	// mac: 0x16B876 (237B, batch402): fallthrough switch (5/4 -> 3 -> 2 -> 1),
@@ -3665,13 +3646,32 @@ namespace RBX { namespace Lua {
 		{ NULL, NULL }
 	};
 
-	// FUNCTION: PLAYER 0x00882100
-	// FUNCTION: STUDIO 0x0092c1a0
-	void UDim2Bridge::registerClassLibrary(lua_State* L)
+	// mac: 0x16C67E (322B, batch367). TerrainPart goes through
+	// SharedPtrBridge<Instance>::push (by-value shared_ptr: same
+	// addref/push/release dance as the binary's manual copy).
+	// FUNCTION: PLAYER 0x008892b0
+	// FUNCTION: STUDIO 0x00933180
+	template<>
+	int Bridge<RBX::CellID, true>::on_index(const RBX::CellID& object,
+		const char* name, lua_State* L)
 	{
-		luaL_register(L, className, classLibrary);
-		lua_setreadonly(L, -1, 1);
-		lua_pop(L, 1);
+		if (strcmp(name, "IsNil") == 0)
+		{
+			lua_pushboolean(L, object.getIsNil());
+			return 1;
+		}
+		if (strcmp(name, "Location") == 0)
+		{
+			Vector3Bridge::pushVector3(L, object.getLocation());	// 2013 0x0088935c: out of line
+			return 1;
+		}
+		if (strcmp(name, "TerrainPart") == 0)
+		{
+			SharedPtrBridge<Instance>::push(L, object.getTerrainPart());
+			return 1;
+		}
+		throw RBX::runtime_error(
+			"%s is not a valid member, valid members are IsNil,Location,TerrainPart", name);
 	}
 
 } }

@@ -53,7 +53,14 @@ public:
 		ItemTypePing = 5,
 		ItemTypePingBack = 6,
 		ItemTypeEventInvocation = 7,
+		ItemTypeRequestCharacter = 8,       // 8-10, 12-15: ServerReplicator::readItem 0x0057b210 (2016 names)
+		ItemTypeRocky = 9,
+		ItemTypePropAcknowledgement = 10,
 		ItemTypeJoinData = 11,
+		ItemTypeUpdateClientQuota = 12,
+		ItemTypeStreamData = 13,
+		ItemTypeRegionRemoval = 14,
+		ItemTypeInstanceRemoval = 15,
 	};
 	static void writeItemType(RakNet::BitStream& bitStream, ItemType type);
 

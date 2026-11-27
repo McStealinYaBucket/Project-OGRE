@@ -38,13 +38,11 @@ namespace RBX {
 
 
 
-	// CommonVerbs' implicit destructor, emitted here in 2013 (Game.obj). STUB until CommonVerbs.h has
-	// its members (CommonVerbs.h).
-	// STUB: PLAYER 0x006531e0
-	// STUB: STUDIO 0x007cbbb0
+	// CommonVerbs' destructor, emitted here in 2013 (Game.obj): the members' destructors, last first.
+	// FUNCTION: PLAYER 0x006531e0
+	// FUNCTION: STUDIO 0x007cbbb0
 	CommonVerbs::~CommonVerbs()
 	{
-		STUB(0x006531e0);
 	}
 
 	// iOS 10-29: void RBX::shutdownDM<DataModel>(shared_ptr<DataModel>&) and <OverlayDataModel>; the two
@@ -102,11 +100,11 @@ namespace RBX {
 			doClearVerbs();
 	}
 
-	// View::resetScheduler calls it (PLAYER 0x00466ed9); STUDIO has no copy.
-	// STUB: PLAYER 0x00654400
+	// View::resetScheduler calls it (PLAYER 0x00466ed9); STUDIO has no copy. clearVerbs(false) inlines with its dead LegacyLock branch, which leaves the EH frame.
+	// FUNCTION: PLAYER 0x00654400
 	void Game::shutdownGameDataModel()
 	{
-		doClearVerbs();
+		clearVerbs(false);
 		if (dataModel)
 		{
 			DataModel::closeDataModel(dataModel, false);

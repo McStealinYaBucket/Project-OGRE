@@ -36,6 +36,8 @@ namespace Network {
 	// CanLoadCharacterAppearance (SCRIPTING), then the ones below.
 	static Reflection::PropDescriptor<Player, bool> prop_HasBuildTools("HasBuildTools", category_Data, &Player::getHasGroupBuildTools, &Player::setHasGroupBuildTools, Reflection::PropertyDescriptor::SCRIPTING, Security::RobloxScript);
 	static Reflection::PropDescriptor<Player, bool> prop_CanLoadCharacterAppearance("CanLoadCharacterAppearance", category_Behavior, &Player::getCanLoadCharacterAppearance, &Player::setCanLoadCharacterAppearance, Reflection::PropertyDescriptor::SCRIPTING);
+	// 0x00a5ffe0: STANDARD, security None. Its getter's address-take emits getUserID's out-of-line copy.
+	static Reflection::PropDescriptor<Player, int> prop_userId("userId", category_Data, &Player::getUserID, &Player::setUserId);
 	// 0x00a60290: REPLICATE_ONLY, LocalUser.
 	// Descriptor object PLAYER 0x00dd8e44, STUDIO 0x00f5b554 (getset +0x28); no GLOBAL marker, as for
 	// the other descriptors (decomplint reads a constructor-call definition as a function).
@@ -90,12 +92,6 @@ namespace Network {
 	bool Player::getUnder13()
 	{
 		return under13;
-	}
-
-	// FUNCTION: PLAYER 0x00527420
-	int Player::getUserID() const
-	{
-		return userId;
 	}
 
 	// FUNCTION: PLAYER 0x00527430
@@ -397,8 +393,8 @@ namespace Network {
 		, personalServerRank(0)
 		, m_unk0xf8(0)
 		, appearanceDidLoad(false)
-		, m_unk0x100(-1)
-		, m_unk0x104(0xffff)
+		, m_unk0x100()
+
 		, forceEarlySpawnLocationCalculation(false)
 		, m_unk0x109(false)
 		, m_unk0x140(Time::now<Time::Fast>())
@@ -508,6 +504,10 @@ template RBX::JointsService* RBX::ServiceProvider::find<RBX::JointsService>() co
 template RBX::ScriptService* RBX::ServiceProvider::find<RBX::ScriptService>() const;
 template RBX::MarketplaceService* RBX::ServiceProvider::create<RBX::MarketplaceService>() const;
 template RBX::Lighting* RBX::ServiceProvider::create<RBX::Lighting>() const;
+
+
+
+
 
 // 2013's assert in registerLocalPlayerNotIdle sits on Player.cpp line 838 (string PLAYER 0x00b12158);
 // the blank lines hold it there until the functions between are written.
@@ -837,6 +837,14 @@ namespace Network {
 	{
 		RBXASSERT(Players::frontendProcessing(this));
 		lastActivityTime = Time::now<Time::Fast>();
+	}
+
+	// Not written yet; sits after registerLocalPlayerNotIdle's line-838 assert (descent).
+	// STUB: PLAYER 0x00555820
+	// STUB: STUDIO 0x00601aa0
+	void Player::loadCharacter(bool inGame, std::string preferedSpawnName)
+	{
+		STUB(0x00555820);
 	}
 
 } // namespace Network

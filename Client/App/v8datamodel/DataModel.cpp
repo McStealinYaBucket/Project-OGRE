@@ -1952,10 +1952,10 @@ RBXASSERT(dataModel->onlyJobsLeftForThisArbiterAreGenericJobs());
 
 		RBXASSERT(isInitialized);
 	}
-
-/* mac: 0x2D2EB2 — creates Write/Read/None GenericJobs + singleton().add, LegacyLock(Write),
-	   initializeContents(bool), isInitialized=true (+3005), clears +3237, FastLogs
-	   "DataModel created: %p". The Mac build has no mainThreadId store; PLAYER does. No loading screen. */
+	// STUB: PLAYER 0x0064f630
+	// STUB: STUDIO 0x0076c0e0
+	void DataModel::switchViewMode()
+	{ STUB(0x0064f630); }
 	// FUNCTION: PLAYER 0x0064f7f0
 	// FUNCTION: STUDIO 0x0076c2a0
 	void DataModel::doDataModelSetup(shared_ptr<DataModel> dataModel, bool startHeartbeat)

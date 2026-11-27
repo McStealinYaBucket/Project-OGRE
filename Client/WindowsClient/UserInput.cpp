@@ -79,13 +79,11 @@ namespace RBX {
 	{
 	}
 
-	// Against 2016: the job runs on the overlay DataModel when there is one. The written body needs
-	// Game::getOverlayDataModel (App, the shell's copy 0x0041ce60); until App declares it, the stand-in
-	// below is compiled (it must use `this`, or LTCG drops it).
+	// Against 2016: the job runs on the overlay DataModel when there is one (Game::getOverlayDataModel,
+	// the shell's copy 0x0041ce60).
 	// STUB: PLAYER 0x0045e630
 	void UserInput::setGame(boost::shared_ptr<RBX::Game> game)
 	{
-#ifdef OGRE_APP_INPUT_ACCESSORS
 		this->game = game;
 		runService = shared_from(ServiceProvider::create<RunService>(game->getDataModel().get()));
 
@@ -95,11 +93,6 @@ namespace RBX {
 
 		m_unk0x38.reset(new UserInputSleepingJob(this, dataModel));
 		TaskScheduler::singleton().add(m_unk0x38);
-#else
-		STUB(0x0045e630);
-		this->game = game;
-		m_unk0x38.reset();
-#endif
 	}
 
 	// FUNCTION: PLAYER 0x0045e900
@@ -111,6 +104,13 @@ namespace RBX {
 			m_unk0x38.reset();
 		}
 	}
+
+
+
+
+
+
+
 
 
 
@@ -242,6 +242,15 @@ namespace RBX {
 		}
 	}
 
+	// The handler for one queued message (2016's name, the string it passes to the critical section's
+	// caller record). LTCG: `this` in edx, uMsg in ecx, ret 8.
+	// STUB: PLAYER 0x0045f2a0
+	__declspec(noinline) void UserInput::ProcessUserInputMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{
+		STUB(0x0045f2a0);
+		externallyForcedKeyDown = uMsg + wParam + lParam;
+	}
+
 	// STUB: PLAYER 0x004603e0
 	TextureProxyBaseRef UserInput::getGameCursor(Adorn* adorn)
 	{
@@ -278,12 +287,26 @@ namespace RBX {
 	{
 	}
 
-	// Handles the queued messages on the DataModel's write job.
+	// Handles the queued messages under a write request; a WM_MOUSEMOVE followed by another one is
+	// dropped. LTCG: pop_if_present (0x00462a50) and peek_if_present (0x00462b00) stay out of line.
 	// STUB: PLAYER 0x00462920
 	TaskScheduler::StepResult UserInputSleepingJob::stepDataModelJob(const Stats& stats)
 	{
-		STUB(0x00462920);
-		messages.clear();
+		DataModel::scoped_write_request request(userInput->game->getDataModel().get());
+
+		Message message;
+		while (messages.pop_if_present(message))
+		{
+			if (message.uMsg == WM_MOUSEMOVE)
+			{
+				Message next;
+				if (messages.peek_if_present(next) && next.uMsg == message.uMsg)
+					continue;
+			}
+			userInput->ProcessUserInputMessage(message.uMsg, message.wParam, message.lParam);
+		}
+
+		sleep();
 		return TaskScheduler::Stepped;
 	}
 

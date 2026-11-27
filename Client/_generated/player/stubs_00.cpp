@@ -59,6 +59,14 @@ extern "C" void ogre_stub_00704a00()
 }
 #pragma comment(linker, "/alternatename:?writeValue@?$TypedPropertyDescriptor@VVector2int16@G3D@@@Reflection@RBX@@EBEXPBVDescribedBase@23@PAVXmlElement@@@Z=_ogre_stub_00704a00")
 
+// class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>> __cdecl RBX::rot13(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char>>)
+// STUB: PLAYER 0x0074fcc0
+extern "C" void ogre_stub_0074fcc0()
+{
+	STUB(0x0074fcc0);
+}
+#pragma comment(linker, "/alternatename:?rot13@RBX@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@@Z=_ogre_stub_0074fcc0")
+
 // void __cdecl RBX::registerNewLightAPI(void)
 // STUB: PLAYER 0x0075ed40
 extern "C" void ogre_stub_0075ed40()
